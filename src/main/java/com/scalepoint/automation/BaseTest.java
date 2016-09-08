@@ -109,7 +109,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     private static User getRequestedUser(Method method) {
-        CompanyCode companyCode = CompanyCode.SCALEPOINT1;
+        CompanyCode companyCode = CompanyCode.FUTURE1;
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         if (parameterAnnotations[0].length > 0) {
             Annotation annotation = parameterAnnotations[0][0];
