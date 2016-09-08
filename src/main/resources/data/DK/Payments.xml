@@ -1,0 +1,18 @@
+<payments>
+    <masterCard>
+        <cardNumber>5555555555554444</cardNumber>
+        <expMonth>05</expMonth>
+        <expYear>18</expYear>
+        <cardHolderName>Name</cardHolderName>
+        <cvc>033</cvc>
+    </masterCard>
+    <dankort>
+        <number>5019100000000000</number>
+        <expMonth>06</expMonth>
+        <expYear>24</expYear>
+        <cvc>684</cvc>
+    </dankort>
+    <rabobank>
+        <cardNumber>4111111111111111</cardNumber>
+    </rabobank>
+</payments>

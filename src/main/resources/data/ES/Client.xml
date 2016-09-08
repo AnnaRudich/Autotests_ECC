@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<client>
+    <cellNumber>34687568734</cellNumber>
+    <email>ecc_auto@scalepoint.com</email>
+    <statusSaved>Guardado</statusSaved>
+    <statusCancelled>Cancelled</statusCancelled>
+    <statusClosedEx>Closed externally</statusClosedEx>
+    <statusCompleted>Finalizado</statusCompleted>
+    <zipCode>28002</zipCode>
+    <accessMailSSText>Self Service</accessMailSSText>
+    <oldClaimDate>08-07-2013</oldClaimDate>
+</client>

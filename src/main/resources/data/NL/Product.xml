@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<product>
+    <description>auto</description>
+    <category>bikes</category>
+    <acquired></acquired>
+    <purchase_price></purchase_price>
+    <new_price></new_price>
+    <your_demand></your_demand>
+    <select_gi></select_gi>
+    <price></price>
+    <quantity></quantity>
+    <age></age>
+    <deprication></deprication>
+    <supplier></supplier>
+    <face_value></face_value>
+    <cash_value></cash_value>
+    <to_company></to_company>
+    <to_customer></to_customer>
+    <postal_code></postal_code>
+    <note></note>
+    <custom_amount_new_price>3</custom_amount_new_price>
+    <voucher_workflow_new_price>1000</voucher_workflow_new_price>
+</product>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<priceRule>
+    <productCategory1>All</productCategory1>
+    <productCategory2>Smykker</productCategory2>
+    <bikeCategory>Cykler</bikeCategory>
+    <brandName1>All</brandName1>
+    <brandName2>Georg Jensen</brandName2>
+    <bikeBrand>Scott</bikeBrand>
+    <priceSource1>Scalepoint Price Catalog</priceSource1>
+    <discount1>50</discount1>
+    <discount2>20</discount2>
+    <discount3>70</discount3>
+    <priceSource2>Default</priceSource2>
+    <startdate>15/10/2014</startdate>
+    <enddate>15/10/2114</enddate>
+    <supplier1>Fri BikeShop</supplier1>
+    <supplier2>Christina Guld</supplier2>
+    <bikeSupplier>Fri BikeShop</bikeSupplier>
+    <subsupplier2>Pia Ure og Guld [6104]</subsupplier2>
+    <product1>Georg Jensen Marguerit / Daisy ørestikkere forgyldt sølv emalje</product1>
+    <bikeProduct>Scott Aspect 910 30G Herre - 2014 (Herre)</bikeProduct>
+    <computerProduct>Cykelcomputere</computerProduct>>
+    <posotivePrices>50 02 17 100</posotivePrices>
+    <negativePrices>-23 101 230</negativePrices>
+</priceRule>

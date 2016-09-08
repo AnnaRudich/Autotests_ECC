@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<textSearch>
+    <simpleQuery>samsung</simpleQuery>
+    <complexQuery>samsung E172</complexQuery>
+    <spec_characters><![CDATA[&*^]]></spec_characters>
+    <shortQuery>sam</shortQuery>
+    <sql_query>Select * from customers</sql_query>
+    <link_query>http://www.google.com.ua/</link_query>
+    <tags_query><![CDATA[<div>]]></tags_query>
+    <xss_query><![CDATA['';!--"<XSS>=&{()}]]></xss_query>
+    <maxQuery>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut non lectus libero. Suspendisse eu lacus
+        gravida purus ultricies placerat. Phasellus congue sodales tellus, sed pulvinar quam placerat ut. Phasellus
+        adipiscing massa a tellus posuere hendrerit. In ut urna nec lectus elementum elementum. Ut aliquet augue sit
+        amet lorem congue in
+    </maxQuery>
+    <maxQueryLength>100</maxQueryLength>
+    <attribute_text>supplier</attribute_text>
+    <brand_option>Philips</brand_option>
+    <type_option>Earphones</type_option>
+    <supplier_option>Argos Electrical</supplier_option>
+    <catLevel2>Audio-Visual</catLevel2>
+    <catLevel3>Portable Audio</catLevel3>
+    <catLevel4>MP3 Players</catLevel4>
+    <attribute>Type</attribute>
+    <popProduct1>BPDP42HD 42"</popProduct1>
+    <catProduct1>Samsung I9505 Galaxy S4</catProduct1>
+    <catProduct1Category>Telefoni</catProduct1Category>
+    <nonorderableProduct1>ChatMax HS-420</nonorderableProduct1>
+    <dndProduct1>Honeywell Vita-Air Odour</dndProduct1>
+    <dndProductVoucher1>Samsung 15.6" Laptop Bag - Black</dndProductVoucher1>
+    <dndProductVoucher2>Samsung Slim Pouch 13.3" Synthetic Leather Case - Black</dndProductVoucher2>
+    <queriesWithMistake>aple iphone,HTC Decire mobile</queriesWithMistake>
+    <fixedQueries>apple iphone,HTC Desire Mobile</fixedQueries>
+    <queryWithSymbols>iphone iphone ~!@#$%^&amp;*()_+[]{}:'"|\,. ?</queryWithSymbols>
+    <fixedQueryWithSymbols>iphone ~!@#$%^&amp;*()_+[]{}:'"|\,. ?</fixedQueryWithSymbols>
+    <queryWithOriginalLetters>Strykjärn Strykjärn,Smörgåsgrillar Smörgåsgrillar</queryWithOriginalLetters>
+    <fixedQueryWithOriginalLetters>strykjärn,smörgåsgrillar</fixedQueryWithOriginalLetters>
+    <synonyms>hewlett packard,hewlett-packard,hp</synonyms>
+    <manualProduct>Ring</manualProduct>
+    <benchmarkQueries>Apple iPhone, Apple MacBook, Apollo, Canon Eos, Canon kamera, Christiania cykel, Garmin GPS,
+             GHD Plattång, go pro, GoPro, Gram kylskåp,HP dv6-21, HP Pavilion, HP Pavilion PC, HTC Desire mobil, iPad, iPhone, iPhone 5, iPod 32GB, iPod Shuffle,
+             Kaffebryggare, Kenwood matberedare, Kona Cykel, Macbook Air, Macbook Pro 16, Macbook Pro dator, Miele dammsugare,
+        Nintendo DS, Nishiki redskap, Nokia 1616, Debatt 13, Philips 32pfl, phillips hårtrimmer,
+             Playstation, PS4, samsung galaxy, Samsung Galaxy 3, Samsung Galaxy S4,
+             Samsung-TV, Samsung UE46D8005, Skagen klocka, Sony PlayStation, Sony Xperia, Strykjärn, Trek cykel,
+             Nordica grill, Whirlpool aw, Whirlpool torktumlare, Xbox spelkonsol, iphone 5s, Samsung 32", galaxy s4</benchmarkQueries>
+</textSearch>

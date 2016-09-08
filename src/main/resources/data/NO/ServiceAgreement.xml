@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<serviceAgreement>
+
+    <category>Home Entertainment - Miscellaneous</category>
+    <category2>Telephones - Mobile Accessories</category2>
+    <defaultPostalCode>AB10</defaultPostalCode>
+    <updPostalCode>L19 - Grassendale</updPostalCode>
+    <postalCodeFrom>AB12</postalCodeFrom>
+    <postalCodeTo>AB14</postalCodeTo>
+    <testRnVShop>Test shop SCALEPOINT</testRnVShop>
+    <testSePa>Test supplier SCALEPOINT</testSePa>
+
+    <!-->Test data <-->
+    <testRnVShop>Test shop SCALEPOINT</testRnVShop>
+    <testSePa>Test supplier SCALEPOINT</testSePa>
+    <testAgrName>Test agreement SCALEPOINT</testAgrName>
+    <testAgrNameForRnV>Test agreement for Wizard</testAgrNameForRnV>
+    <templateName>AUTO_temp</templateName>
+
+    <!-->Service Agreement Details<-->
+    <!--agreementEmail>ecc_auto@scalepoint.com</agreementEmail>
+    <locationEmail>ecc_auto@scalepoint.com</locationEmail-->
+    <agreementEmail>ecc_auto@scalepoint.com</agreementEmail>
+    <locationEmail>ecc_auto_loc@scalepoint.com</locationEmail>
+    <tags>testTag1, testTag2, testTag3</tags>
+    <category>Lyd og bilde - TV</category>
+    <lineCategory>Lyd og bilde</lineCategory>
+    <lineSubCategory>TV</lineSubCategory>
+    <category2>Telephones - Mobile Accessories</category2>
+    <defaultPostalCode>AB10</defaultPostalCode>
+    <updPostalCode>AB23</updPostalCode>
+    <postalCode1>AB12</postalCode1>
+    <postalCode2>AB13</postalCode2>
+    <postalCode3>AB14</postalCode3>
+    <postalCode4>AB15</postalCode4>
+
+
+    <!-->Service agreement grid<-->
+    <agrIdColumnName>Agreement ID</agrIdColumnName>
+    <agrNameColumnName>Agreement name</agrNameColumnName>
+    <agrSupplierColumnName>Supplier name</agrSupplierColumnName>
+    <agrTypeColumnName>Agreement type</agrTypeColumnName>
+    <agrStatusColumnName>Active</agrStatusColumnName>
+
+    <!-->Templates<-->
+    <defaultTemplateLoc>C:\Pictures\bw.jpg</defaultTemplateLoc>
+    <saveTemplateTo>\\ecc-build\Xlsm</saveTemplateTo>
+    <templateSpecialName>!@#$%^&amp;*()_+[]{}'|\./,&gt;&lt; Name</templateSpecialName>
+
+    <!-->Mails section<-->
+    <mailBoxAddress>https://home.scalepoint.com/owa</mailBoxAddress>
+    <newTaskMailSubj>New Repair/Valuation task. Claim#</newTaskMailSubj>
+    <cancelledTaskMailSubj>Repair/Valuation task was cancelled by claim handler</cancelledTaskMailSubj>
+    <cancelledMessageText>was cancelled by claims handler</cancelledMessageText>
+    <!-->Claim data<-->
+    <clName>Test line for RnV</clName>
+    <clNewPrice></clNewPrice>
+
+    <!-->Task Types<-->
+    <repair>Reparasjon</repair>
+    <valuation>Vurdering</valuation>
+    <matchService>Match Service</matchService>
+    <repairEstimate>Reparasjonsestimate</repairEstimate>
+    <!-->Task Statuses<-->
+    <sent>Oppgaven er sendt.</sent>
+    <waitingStatus>Avventer svar fra servicepartner</waitingStatus>
+    <cancelledStatus>Cancelled</cancelledStatus>
+    <feedbackReceivedStatus>Received</feedbackReceivedStatus>
+    <feedbackCompletedStatus>Completed</feedbackCompletedStatus>
+    <feedbackPartlyCompletedStatus>Partially completed</feedbackPartlyCompletedStatus>
+
+    <noAgrText>No service agreement selected</noAgrText>
+    <!-->Invoices status<-->
+    <unpaidInvoiceStatusName>Unpaid</unpaidInvoiceStatusName>
+    <paidInvoiceStatusName>Paid</paidInvoiceStatusName>
+    <manuallyPaidByOwnSystem>Own claims system - Manual</manuallyPaidByOwnSystem>
+    <!-->for Excel<-->
+    <macroName>!testOutlookIsOpenDK</macroName>>
+    <CLSheetName>Template</CLSheetName>
+    <updDesc>updated line</updDesc>
+    <updCat>Miscellaneous</updCat>
+    <updSubcat>Miscellaneous</updSubcat>
+    <updQuantity>2</updQuantity>
+    <updYear>2</updYear>
+    <updMonth>2</updMonth>
+    <updNewPrice>333</updNewPrice>
+    <updRepairPrice></updRepairPrice>
+
+    <invoiceSheetName>Invoice</invoiceSheetName>
+    <invoiceType>Invoice</invoiceType>
+    <invoiceDate>12/12/2014</invoiceDate>
+    <paymentDue>12/12/2015</paymentDue>
+    <unitQuantity>1</unitQuantity>
+    <units>units_Text</units>
+    <unitNetAmount>0.3</unitNetAmount>
+    <creditNoteType>Credit Note</creditNoteType>
+    <creditNoteNumber>4321</creditNoteNumber>
+
+
+    <fikType>A3</fikType>
+    <fikId>12</fikId>
+    <fikCreditCode>123456</fikCreditCode>
+</serviceAgreement>

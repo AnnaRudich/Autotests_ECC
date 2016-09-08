@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<errors>
+    <me_wrong_login>
+        <![CDATA[Log-in information is incorrect.<BR>Please re-submit newSystemUser-ID and password.]]></me_wrong_login>
+    <me_empty_login>Please submit newSystemUser-ID and password</me_empty_login>
+    <ss_wrong_login>Log-in information is incorrect. Please enter newSystemUser-ID and password again.</ss_wrong_login>
+    <ss_empty_login>Please enter newSystemUser-ID and password.</ss_empty_login>
+    <ss_empty_claim>You must submit at least one claim line.</ss_empty_claim>
+    <ss_incorrect_field>
+        <![CDATA[Some fields are not filled out correctly.\nPlease correct before submitting.]]></ss_incorrect_field>
+    <ic_empty_common_email>Email address is invalid, should be in xxxxx@xxx.xxx format.</ic_empty_common_email>
+    <ic_empty_contact_number>Contact number should not be null or empty.</ic_empty_contact_number>
+    <ss_empty_office_hours>Office hour should not be null or empty.</ss_empty_office_hours>
+    <voucher_rebate_error>Invoice Rebate Percentage may NOT be smaller than Customer Rebate Percentage
+    </voucher_rebate_error>
+    <invalid_voucher_amount_adjusted>thefacevalueof</invalid_voucher_amount_adjusted>
+    <shop_amount_less_minimum>Voucher optionText is less than the minimum allowed optionText. Minimum amount is
+    </shop_amount_less_minimum>
+    <shopAmountDivisibilityAlert>The amount must be divisible by</shopAmountDivisibilityAlert>
+    <cancelledClaim>Customer Claim has been cancelled.</cancelledClaim>
+    <invalidBestFitNumber>The number of best fit results displayed per page must be between 1-5.</invalidBestFitNumber>
+</errors>

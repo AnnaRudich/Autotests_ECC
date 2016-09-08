@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<claimItem>
+    <newPriceSP>2000</newPriceSP>
+    <purchasePriceSP>500</purchasePriceSP>
+    <ssDescriptionSP>APPLE</ssDescriptionSP>
+    <existingCat1>Cyklar &amp; Tillbehör</existingCat1>
+    <existingCat2>Smycken</existingCat2>
+    <existingSubCat1>Cyklar</existingSubCat1>
+    <existingSubCat2>Smycken</existingSubCat2>
+    <existingVoucher1>SPVoucher24463</existingVoucher1>
+    <existingVoucher2>Smycka AB</existingVoucher2>
+    <excelPath1>C:\ExcelImport\ClaimSheetDK2003.xls</excelPath1>
+    <xlsDescr1>samsung</xlsDescr1>
+    <depTypePolicy>Policy</depTypePolicy>
+    <depTypeDisc>Discretionary</depTypeDisc>
+    <depAmount1>10</depAmount1>
+    <depAmount2>15</depAmount2>
+    <policyExcess1>200</policyExcess1>
+    <policyExcess2>50</policyExcess2>
+    <fileLoc>C:\Pictures\bw.jpg</fileLoc>
+    <file2Loc>C:\Pictures\bw1.jpg</file2Loc>
+    <zeroDistance>0 km</zeroDistance>
+    <validDistance1>3 km</validDistance1>
+    <setDialogTextMatch>Matchad med</setDialogTextMatch>
+    <procuraLimitPrice>2100</procuraLimitPrice>
+    <customerDemand>500</customerDemand>
+    <usedPrice>500</usedPrice>
+    <month>månader</month>
+    <integrationCategory>B7CA3709-3D97-495F-904A-B09CCB0000B7</integrationCategory>
+    <yes>Ja</yes>
+    <no>Nej</no>
+</claimItem>

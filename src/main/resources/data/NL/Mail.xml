@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<mail>
+    <reminderSubj>regarding residual compensation</reminderSubj>
+    <accessClosedSubj>claims compensation has been closed</accessClosedSubj>
+    <onlineReplacementSubj>schademelding</onlineReplacementSubj>
+    <customerMailSSConfirmation>Bevestiging online schademelding</customerMailSSConfirmation>
+    <icMailSSConfirmation2CH>Bevesting schademelding</icMailSSConfirmation2CH>
+    <ssAccess>Toegang tot Online Schademelding</ssAccess>
+    <settlementNotificationCH>Claim afhandeling</settlementNotificationCH>
+    <orderConfirmationCustomer>Orderbevestiging van</orderConfirmationCustomer>
+</mail>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<claimItem>
+    <newPriceSP>1000</newPriceSP>
+    <purchasePriceSP>500</purchasePriceSP>
+    <ssDescriptionSP>Apple</ssDescriptionSP>
+    <existingCat1>Barn</existingCat1>
+    <existingCat2>Vesker</existingCat2>
+    <existingSubCat1>Babyutstyr</existingSubCat1>
+    <existingSubCat2>Vesker</existingSubCat2>
+    <existingVoucher1>SPVoucher24463</existingVoucher1>
+    <existingVoucher2>Debenhams</existingVoucher2>
+    <excelPath1>C:\ExcelImport\ClaimSheetGB2007.xlsx</excelPath1>
+    <xlsDescr1>samsung</xlsDescr1>
+    <depTypePolicy>Policy</depTypePolicy>
+    <depTypeDisc>Discretionary</depTypeDisc>
+    <depAmount1>10</depAmount1>
+    <depAmount2>15</depAmount2>
+    <policyExcess1>200</policyExcess1>
+    <policyExcess2>50</policyExcess2>
+    <fileLoc>C:\Pictures\bw.jpg</fileLoc>
+    <file2Loc>C:\Pictures\bw1.jpg</file2Loc>
+    <zeroDistance>0 km</zeroDistance>
+    <validDistance1>58 km</validDistance1>
+    <setDialogTextMatch>Matchet med</setDialogTextMatch>
+    <customerDemand>500</customerDemand>
+    <usedPrice>500</usedPrice>
+    <month>Måneder</month>
+    <integrationCategory>17349964-1B8E-4F62-A25B-EBF8BBB96089</integrationCategory>
+    <yes>Ja</yes>
+    <no>Nei</no>
+</claimItem>

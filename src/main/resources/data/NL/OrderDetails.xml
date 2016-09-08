@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<orderDetails>
+    <totalText>Totaal</totalText>
+    <indemnity>Scalepoint heeft betaald aan Scalepoint (schadebedrag) :</indemnity>
+    <orderedItems>Scalepoint heeft betaald aan leverancier (Bestelde goederen) :</orderedItems>
+    <withdrawalls>Scalepoint heeft betaald aan klant (opnamen) :</withdrawalls>
+    <deposits>Klant heeft betaald aan Scalepoint (storting) :</deposits>
+    <remainingIdemnity>Openstaand schadebedrag :</remainingIdemnity>
+</orderDetails>

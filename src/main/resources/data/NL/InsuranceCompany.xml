@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<insuranceCompany>
+    <zipCode>123 123</zipCode>
+    <companyCommonMail>ecc_auto@scalepoint.com</companyCommonMail>
+    <functionTemplate>Default</functionTemplate>
+    <ftIC>Interpolis</ftIC>
+    <ftTryg>Tryg</ftTryg>
+    <icCulture>en-GB</icCulture>
+    <guiTemplate>en</guiTemplate>
+    <claimNotificationMail>IC Common Mail Inbox</claimNotificationMail>
+    <contactNumber>00447788998877</contactNumber>
+    <officeHours>8a.m. - 4p.m.</officeHours>
+    <spFTName>Default</spFTName>
+    <dkCompanyDepartment>Ålborg - B/E</dkCompanyDepartment>
+</insuranceCompany>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<claim>
+    <cellNumber>+4520123804</cellNumber>
+    <email>ecc_auto@scalepoint.com</email>
+    <statusSaved>Åben</statusSaved>
+    <statusCancelled>Annulleret</statusCancelled>
+    <statusClosedEx>Lukket eksternt</statusClosedEx>
+    <statusCompleted>Afsluttet</statusCompleted>
+    <zipCode>2000</zipCode>
+    <accessMailSSText>Selvbetjening</accessMailSSText>
+    <oldClaimDate>08-07-2013</oldClaimDate>
+    <companyName>Tryg</companyName>
+    <policyTypeTrygUser>Ny</policyTypeTrygUser>
+    <policyTypeAF>AF-01</policyTypeAF>
+    <policyTypeFF>FF-04</policyTypeFF>
+</claim>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<reductionRule>
+    <description1>Description1</description1>
+    <ageFrom1>0</ageFrom1>
+    <ageTo1>18</ageTo1>
+    <ageFrom2>19</ageFrom2>
+    <ageTo2>36</ageTo2>
+    <claimReduction1>10</claimReduction1>
+    <claimReduction2>12</claimReduction2>
+    <priceRangeFrom0>0</priceRangeFrom0>
+    <priceRangeTo0>1000</priceRangeTo0>
+    <priceRangeFrom1>1001</priceRangeFrom1>
+    <priceRangeTo1>2000</priceRangeTo1>
+    <policyAssignmentAny>Any policy</policyAssignmentAny>
+    <policyAssignmentAddNew>add new</policyAssignmentAddNew>
+    <priceRangeFrom1>1000</priceRangeFrom1>
+    <priceRangeFrom2>4000</priceRangeFrom2>
+    <priceRangeTo1>3000</priceRangeTo1>
+    <priceRangeTo2>7000</priceRangeTo2>
+    <policyAssignment></policyAssignment>
+</reductionRule>
+

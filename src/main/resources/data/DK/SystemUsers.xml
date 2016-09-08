@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<systemUsers>
+    <user login="autotest-user-sp1" password="12341234" company="SCALEPOINT-1" companyId="51" ftId="51" basic="true"/>
+    <user login="autotest-user-sp2" password="12341234" company="SCALEPOINT-2" companyId="52" ftId="52" basic="true"/>
+    <user login="autotest-user-sp3" password="12341234" company="SCALEPOINT-3" companyId="53" ftId="53" basic="true"/>
+    <user login="autotest-user-sp4" password="12341234" company="SCALEPOINT-4" companyId="54" ftId="54" basic="true"/>
+    <user login="autotest-user-sp5" password="12341234" company="SCALEPOINT-5" companyId="55" ftId="55" basic="true"/>
+
+    <user login="autotest-user-sp"       password="12341234" company="SCALEPOINT" companyId="7"     ftId="1"/>
+    <user login="autotest-user-lb"       password="12341234" company="LB"         companyId="12"    ftId="140052"/>
+    <user login="autotest-user-bauta"    password="12341234" company="BAUTA"      companyId="14"    ftId="140052"/>
+    <user login="autotest-user-trygfors" password="12341234" company="TRYGFORSIKRING" companyId="17" ftId="140053"/>
+    <user login="autotest-user-alka"     password="12341234" company="ALKA"       companyId="6"     ftId="5"/>
+</systemUsers>

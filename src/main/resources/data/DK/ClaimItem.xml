@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<claimItem>
+    <newPriceSP>2400</newPriceSP>
+    <purchasePriceSP>500</purchasePriceSP>
+    <ssDescriptionSP>APPLE</ssDescriptionSP>
+    <existingCat1>Børn</existingCat1>
+    <existingCat2>Smykker</existingCat2>
+    <existingCat3>Telefoni</existingCat3>
+    <alkaCategory>Smykker, Ure &amp; Tilbehør</alkaCategory>
+    <alkaSubCategory>Luksusure</alkaSubCategory>
+    <alkaCategoryUnpublishedPolicy>Briller, Linser &amp; Hørelse</alkaCategoryUnpublishedPolicy>
+    <alkaSubCategoryUnpublishedPolicy>Høreapparater</alkaSubCategoryUnpublishedPolicy>
+    <existingSubCat1>Babyudstyr</existingSubCat1>
+    <existingSubCat2>Smykker</existingSubCat2>
+    <existingSubCat3>Mobiltelefoner</existingSubCat3>
+    <existingVoucher1>SPVoucher24463</existingVoucher1>
+    <existingVoucher2>BabySam A/S</existingVoucher2>
+    <existingVoucher3>SPVoucher24463 (ukendt km-10%)</existingVoucher3>
+    <existingVoucher4>Dreams for kids (ukendt km-25%)</existingVoucher4>
+    <brandLinkVoucher4>Dreams for kids</brandLinkVoucher4>
+    <excelPath1>C:\ExcelImport\ClaimSheetDK2003.xls</excelPath1>
+    <xlsDescr1>samsung</xlsDescr1>
+    <depTypePolicy>Policy</depTypePolicy>
+    <depTypeDisc>Discretionary</depTypeDisc>
+    <depAmount1>10</depAmount1>
+    <depAmount2>15</depAmount2>
+    <policyExcess1>200</policyExcess1>
+    <policyExcess2>50</policyExcess2>
+    <fileLoc>C:\Pictures\bw.jpg</fileLoc>
+    <file2Loc>C:\Pictures\bw1.jpg</file2Loc>
+    <zeroDistance>0 km</zeroDistance>
+    <validDistance1>3 km</validDistance1>
+    <setDialogTextMatch>samsung</setDialogTextMatch>
+    <procuraLimitPrice>2100</procuraLimitPrice>
+    <customerDemand>500</customerDemand>
+    <usedPrice>500</usedPrice>
+    <lowerPrice>300</lowerPrice>
+    <bigCustomDemandPrice>100000</bigCustomDemandPrice>
+    <valuationType1>Nypris</valuationType1>
+    <valuationType2>Kundens krav</valuationType2>
+    <valuationType3>Brugtpris</valuationType3>
+    <valuationType4>Anden vurdering</valuationType4>
+    <valuationType5>Reparationsestimat</valuationType5>
+    <ageStatus>Ikke defineret</ageStatus>
+    <month>måneder</month>
+    <integrationCategory>A758E0B9-66E5-4229-A5BB-1D86FA1B2AC8</integrationCategory>
+    <blueColor>color: rgb(30, 144, 255);</blueColor>
+    <pinkColor>rgba(221, 170, 170, 1)</pinkColor>
+    <reductionRule>30</reductionRule>
+    <alkaUserReductionRule>25</alkaUserReductionRule>
+    <alkaUserReductionRule40>40</alkaUserReductionRule40>
+    <yes>Ja</yes>
+    <no>Nej</no>
+</claimItem>

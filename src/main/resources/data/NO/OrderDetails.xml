@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<orderDetails>
+    <totalText>Total</totalText>
+    <indemnity>Scalepoint har betalt til Scalepoint (Erstatning) :</indemnity>
+    <orderedItems>Scalepoint har betalt til leverandør (Varekjøp) :</orderedItems>
+    <withdrawalls>Scalepoint har betalt til kunde (utbetalinger) :</withdrawalls>
+    <deposits>Kunde har betalt til Scalepoint (innbetalinger) :</deposits>
+    <remainingIdemnity>Resterende erstatning :</remainingIdemnity>
+</orderDetails>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<voucher>
+    <existing_supplier>Argos Electrical</existing_supplier>
+    <discount>10</discount>
+    <discountUpdate>15</discountUpdate>
+    <claimantDiscountDD>5.5</claimantDiscountDD>
+    <voucherURL>http://www.test.co.uk</voucherURL>
+    <logoPath>C:\Pictures\bw.jpg</logoPath>
+    <minFV>50</minFV>
+    <stepFV>50</stepFV>
+    <custom_min_amount>5</custom_min_amount>
+    <custom_step_amount>5</custom_step_amount>
+    <culture>en-GB</culture>
+    <invoice_rebate>9</invoice_rebate>
+    <customer_rebate>9</customer_rebate>
+    <customCustomerRebate>5</customCustomerRebate>
+    <customValueOfVoucher>105</customValueOfVoucher>
+    <customInvoicePrice>95</customInvoicePrice>
+    <customGainPercentage>3</customGainPercentage>
+    <customValueOfVoucherGain>103</customValueOfVoucherGain>
+    <customInvoicePriceGain>93</customInvoicePriceGain>
+    <large_customer_rebate>15</large_customer_rebate>
+    <discount_mode>Rebate</discount_mode>
+    <discountModeGain>Gain</discountModeGain>
+    <workflow_voucher>Kharkiv324</workflow_voucher>
+    <voucherListDebateDescription>givesyouadiscountof</voucherListDebateDescription>
+    <voucherListGainDescription>morevalueforyourmoney</voucherListGainDescription>
+    <customLogo>customLogo</customLogo>
+    <simpleAgreementDiscount>18</simpleAgreementDiscount>
+    <simpleCustomerDiscount>6</simpleCustomerDiscount>
+    <agreementEnabled>Enabled</agreementEnabled>
+    <agreementDisabled>Disabled</agreementDisabled>
+    <otherOrderEmail>ecc_auto@scalepoint.com</otherOrderEmail>
+    <deliveryCost>20</deliveryCost>
+    <legalGermanConditions>conditionsGerman</legalGermanConditions>
+    <legalGermanLimitations>limitationsGerman</legalGermanLimitations>
+    <legalFrenchConditions>conditionsFrench</legalFrenchConditions>
+    <legalFrenchLimitations>limitationsFrench</legalFrenchLimitations>
+    <legalItalianConditions>conditionsItalian</legalItalianConditions>
+    <legalItalianLimitations>limitationsItalian</legalItalianLimitations>
+    <legalEnglishConditions>conditionsEnglish</legalEnglishConditions>
+    <legalEnglishLimitations>limitationsEnglish</legalEnglishLimitations>
+</voucher>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<functional_templates>
+    <scalepoint_ft>
+        <pprice_col_text>Claimed amount</pprice_col_text>
+        <nprice_col_text>New Price</nprice_col_text>
+        <cust_demand_col_text>Your demand</cust_demand_col_text>
+        <uprice_col_text>Acquired</uprice_col_text>
+        <new_item_text>New</new_item_text>
+        <used_item_text>Used</used_item_text>
+        <heritage_item_text>Heritage</heritage_item_text>
+        <gift_item_text>Gift</gift_item_text>
+        <vat>20</vat>
+        <customVAT>20</customVAT>
+    </scalepoint_ft>
+</functional_templates>

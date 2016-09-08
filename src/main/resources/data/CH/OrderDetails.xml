@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<orderDetails>
+    <totalText>Total</totalText>
+    <indemnity>Scalepoint Switzerland GmbH zahlte an Scalepoint (Vers.leistung) :</indemnity>
+    <orderedItems>Zahlungen an Lieferanten (Bestellte Artikel) :</orderedItems>
+    <withdrawalls>Scalepoint zahlte dem Kunden (Bargeldbezüge) :</withdrawalls>
+    <deposits>Kunde bezahlte an Scalepoint (Restschuld) :</deposits>
+    <remainingIdemnity>Restguthaben :</remainingIdemnity>
+</orderDetails>

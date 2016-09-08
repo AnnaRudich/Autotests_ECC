@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<serviceAgreement>
+    <!-->Test data <-->
+    <testRnVShop>Barbara Maria - Kongevejen 11</testRnVShop>
+    <testSePa>Barbara Maria</testSePa>
+    <testAgrName>Test agreement SCALEPOINT</testAgrName>
+    <testAgrNameForRnV>Test agreement for Wizard</testAgrNameForRnV>
+    <templateName>Jacobsen Plus</templateName>
+
+    <!-->Service Agreement Details<-->
+    <!--agreementEmail>ecc_auto@scalepoint.com</agreementEmail>
+    <locationEmail>ecc_auto@scalepoint.com</locationEmail-->
+    <agreementEmail>ecc_auto@scalepoint.com</agreementEmail>
+    <locationEmail>ecc_auto_loc@scalepoint.com</locationEmail>
+    <tags>testTag1, testTag2, testTag3</tags>
+    <category>Personlig Pleje - Medicin</category>
+    <lineCategory>Personlig Pleje</lineCategory>
+    <lineSubCategory>Medicin</lineSubCategory>
+    <category2>Telefoni - Mobiltelefoner</category2>
+    <defaultPostalCode>1001</defaultPostalCode>
+    <updPostalCode>1009 - København K</updPostalCode>
+    <postalCode1>1001</postalCode1>
+    <postalCode2>1002</postalCode2>
+    <postalCode3>1003</postalCode3>
+    <postalCode4>1004</postalCode4>
+
+    <!-->Service agreement grid<-->
+    <agrIdColumnName>5</agrIdColumnName>
+    <agrNameColumnName>Bona Dea</agrNameColumnName>
+    <agrSupplierColumnName>Bona Dea</agrSupplierColumnName>
+    <agrTypeColumnName>Valuation</agrTypeColumnName>
+    <agrStatusColumnName>Active</agrStatusColumnName>
+
+    <!-->Templates<-->
+    <defaultTemplateLoc>C:\Pictures\bw.jpg</defaultTemplateLoc>
+    <saveTemplateTo>\\ecc-build\Xlsm</saveTemplateTo>
+    <templateSpecialName>!@#$%^&amp;*()_+[]{}'|\./,&gt;&lt; Name</templateSpecialName>
+
+    <!-->Mails section<-->
+    <mailBoxAddress>https://home.scalepoint.com/owa</mailBoxAddress>
+    <newTaskMailSubj>New Repair/Valuation task. Claim#</newTaskMailSubj>
+    <cancelledTaskMailSubj>Opgave annulleret</cancelledTaskMailSubj>
+    <cancelledMessageText>er annulleret</cancelledMessageText>
+    <!-->Claim data<-->
+    <clName>Test line for RnV</clName>
+    <clNewPrice></clNewPrice>
+
+    <!-->Task Types<-->
+    <repair>Reparation</repair>
+    <valuation>Vurdering</valuation>
+    <matchService>Match Service</matchService>
+    <repairEstimate>Reparationsestimat</repairEstimate>
+    <!-->Task Statuses<-->
+    <sent>Opgave(r) er sendt. Luk dette vindue for at vende tilbage til ECC.</sent>
+    <waitingStatus>Afventer svar fra servicepartner</waitingStatus>
+    <cancelledStatus>Annulleret</cancelledStatus>
+    <feedbackReceivedStatus>Svar modtaget</feedbackReceivedStatus>
+    <feedbackCompletedStatus>Afsluttet</feedbackCompletedStatus>
+    <feedbackPartlyCompletedStatus>Delvist afsluttet</feedbackPartlyCompletedStatus>
+
+    <noAgrText>Der er ikke valgt en serviceaftale.</noAgrText>
+    <!-->Invoices status<-->
+    <unpaidInvoiceStatusName>IKKE betalt</unpaidInvoiceStatusName>
+    <paidInvoiceStatusName>Betalt</paidInvoiceStatusName>
+    <manuallyPaidByOwnSystem>eget skadessystem / manuel</manuallyPaidByOwnSystem>
+    <!-->for Excel<-->
+    <macroName>!testOutlookIsOpenDK</macroName>>
+    <CLSheetName>Template</CLSheetName>
+    <updDesc>updated line</updDesc>
+    <updCat>Telefoni</updCat>
+    <updSubcat>Mobiltelefoner</updSubcat>
+    <updQuantity>2</updQuantity>
+    <updYear>2</updYear>
+    <updMonth>2</updMonth>
+    <updNewPrice>333</updNewPrice>
+    <updRepairPrice></updRepairPrice>
+
+    <invoiceSheetName>Invoice</invoiceSheetName>
+    <invoiceType>Faktura</invoiceType>
+    <invoiceDate>12/12/2014</invoiceDate>
+    <paymentDue>12/12/2015</paymentDue>
+    <unitQuantity>1</unitQuantity>
+    <units>units_Text</units>
+    <unitNetAmount>13</unitNetAmount>
+    <creditNoteType>kreditnota</creditNoteType>
+    <creditNoteNumber>4321</creditNoteNumber>
+
+    <fikType>A3</fikType>
+    <fikId>12</fikId>
+    <fikCreditCode>123456</fikCreditCode>
+</serviceAgreement>

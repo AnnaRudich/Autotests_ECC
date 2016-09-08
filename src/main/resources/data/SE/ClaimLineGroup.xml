@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<claimLineGroup>
+    <defaultGroupName>Øvrige</defaultGroupName>
+    <customerDemand>111</customerDemand>
+    <newPrice>222</newPrice>
+    <valuation>333</valuation>
+    <filePath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</filePath>
+</claimLineGroup>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<mail>
+    <reminderSubj>regarding residual compensation</reminderSubj>
+    <accessClosedSubj>claims compensation has been closed</accessClosedSubj>
+    <onlineReplacementSubj>Online Skadeerstatning</onlineReplacementSubj>
+    <customerMailSSConfirmation>Bekreftelse fra Self Service</customerMailSSConfirmation>
+    <icMailSSConfirmation2CH>Self service request completed for Customer Number</icMailSSConfirmation2CH>
+    <ssAccess>Adgang til Self Service</ssAccess>
+    <settlementNotificationCH>Skadeavslut</settlementNotificationCH>
+    <orderConfirmationCustomer>Ordrebekreftelse</orderConfirmationCustomer>
+</mail>
