@@ -38,11 +38,18 @@ public class Window {
 
         public void openDialog(WebElement openButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
-            openButton.click();
+            if (openButton.isDisplayed()) {
+                int i = 0;
+                while (driver.getWindowHandles().size() < 2 && i < 2) {
+                    openButton.click();
+                    i++;
+                }
+            } else {
+                logger.error("Button is not displayed");
+            }
             Wait.waitForNewModalWindow(windowHandlesBefore);
             switchToLast();
         }
-
         public void openDialogWithJavascriptHelper(WebElement openButton) {
             openDialog(openButton);
             JavascriptHelper.initializeCommonFunctions(driver);
