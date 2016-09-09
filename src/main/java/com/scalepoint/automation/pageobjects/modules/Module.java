@@ -7,10 +7,10 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 public abstract class Module extends Actions {
 
-    protected WebDriver browser;
+    protected WebDriver driver;
 
     public Module() {
-        this.browser = Browser.current();
-        HtmlElementLoader.populatePageObject(this, this.browser);
+        this.driver = Browser.driver();
+        HtmlElementLoader.populatePageObject(this, this.driver);
     }
 }

@@ -7,16 +7,12 @@ public class Browser {
 
     private static ThreadLocal<DriverData> holder = new ThreadLocal<>();
 
-    public static void init(WebDriver browser) {
-        holder.set(new DriverData(browser));
+    public static void init(WebDriver driver) {
+        holder.set(new DriverData(driver));
     }
 
-    public static WebDriver current() {
-        return holder.get().getBrowser();
-    }
-
-    public static boolean isPresent() {
-        return holder.get() != null;
+    public static WebDriver driver() {
+        return holder.get().getDriver();
     }
 
     public static String getMainWindowHandle() {
@@ -26,7 +22,7 @@ public class Browser {
     public static void quit() {
         try {
             DriverData data = holder.get();
-            data.getBrowser().switchTo().window(getMainWindowHandle()).quit();
+            data.getDriver().switchTo().window(getMainWindowHandle()).quit();
             holder.remove();
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,7 +31,7 @@ public class Browser {
 
     public static void open(String url) {
         DriverData data = holder.get();
-        data.getBrowser().get(url);
+        data.getDriver().get(url);
     }
 }
 

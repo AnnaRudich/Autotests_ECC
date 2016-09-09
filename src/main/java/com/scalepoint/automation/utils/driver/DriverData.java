@@ -4,16 +4,16 @@ import org.openqa.selenium.WebDriver;
 
 class DriverData {
 
-    private WebDriver browser;
+    private WebDriver driver;
     private String windowHandle;
 
-    public DriverData(WebDriver browser) {
-        this.browser = browser;
-        this.windowHandle = browser.getWindowHandle();
+    public DriverData(WebDriver driver) {
+        this.driver = driver;
+        this.windowHandle = driver.getWindowHandle();
     }
 
-    public WebDriver getBrowser() {
-        return browser;
+    public WebDriver getDriver() {
+        return driver;
     }
 
     public String getWindowHandle() {

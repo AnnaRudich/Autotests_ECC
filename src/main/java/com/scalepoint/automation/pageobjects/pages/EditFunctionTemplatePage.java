@@ -39,7 +39,7 @@ public class EditFunctionTemplatePage extends Page {
     }
 
     public EditFunctionTemplatePage enableFeature(String _function) {
-        WebElement checkBox = browser.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]"));
+        WebElement checkBox = driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]"));
         if (!checkBox.isSelected()) {
             checkBox.click();
         }
@@ -47,7 +47,7 @@ public class EditFunctionTemplatePage extends Page {
     }
 
     public EditFunctionTemplatePage disableFeature(String _function) {
-        WebElement checkBox = browser.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]"));
+        WebElement checkBox = driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]"));
         if (checkBox.isSelected()) {
             checkBox.click();
         }
@@ -55,13 +55,13 @@ public class EditFunctionTemplatePage extends Page {
     }
 
     public EditFunctionTemplatePage selectComboboxValue(String _function, String option) {
-        Select combobox = new Select(browser.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/select)[1]")));
+        Select combobox = new Select(driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/select)[1]")));
         combobox.selectByVisibleText(option);
         return this;
     }
 
     public EditFunctionTemplatePage updateValue(String _function, String _value) {
-        TextInput textInput = new TextInput(browser.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]")));
+        TextInput textInput = new TextInput(driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]")));
         textInput.clear();
         textInput.sendKeys(_value);
         return this;

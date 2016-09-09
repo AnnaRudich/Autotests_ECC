@@ -25,9 +25,9 @@ public class ExtComboBox extends ExtElement {
                         "cmp = Ext.getCmp(id)," +
                         "store = cmp.getStore()," +
                         "option = arguments[1]," +
-                        "index = store.findBy(function(rec){ return rec.current(cmp.displayField).indexOf(option) > -1 });" +
+                        "index = store.findBy(function(rec){ return rec.driver(cmp.displayField).indexOf(option) > -1 });" +
                         "cmp.select(store.getAt(index));";
-        ((JavascriptExecutor) Browser.current()).executeScript(js, args);
+        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ExtComboBox extends ExtElement {
                         "store = cmp.getStore()," +
                         "index = arguments[1];" +
                         "cmp.select(store.getAt(index));";
-        ((JavascriptExecutor) Browser.current()).executeScript(js, args);
+        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }
 
     public List<String> getComboBoxOptions() {
@@ -53,9 +53,9 @@ public class ExtComboBox extends ExtElement {
                         "cmp = Ext.getCmp(id)," +
                         "store = cmp.getStore()," +
                         "options = [];" +
-                        "store.each(function(rec){ options.push(rec.current(cmp.displayField)) });" +
+                        "store.each(function(rec){ options.push(rec.driver(cmp.displayField)) });" +
                         "return options;";
-        return (List) ((JavascriptExecutor) Browser.current()).executeScript(js, args);
+        return (List) ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }
 
     private WebElement getInput() {

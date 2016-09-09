@@ -70,7 +70,7 @@ public class VoucherAgreementApi extends ServerApi {
                     id = String.valueOf(hashMap.get("voucherId"));
             }
         } catch (IOException e) {
-            log.error("Can't current voucher by id", e);
+            log.error("Can't driver voucher by id", e);
             throw new ServerApiException(e);
         }
         return id;

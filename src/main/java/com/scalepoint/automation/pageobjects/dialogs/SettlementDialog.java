@@ -121,7 +121,7 @@ public class SettlementDialog extends Page {
     @FindBy(id = "automatic-depreciation-checkbox")
     private ExtCheckbox automaticDepreciation;
 
-    EccActions eccActions = new EccActions(Browser.current());
+    EccActions eccActions = new EccActions(Browser.driver());
 
     @Override
     protected String geRelativeUrl() {
@@ -342,7 +342,7 @@ public class SettlementDialog extends Page {
         for (Table table : valuations) {
             row.addAll(table.getRows());
         }
-//        row.stream().filter(valuation -> valuation.current(2).getText().contains(_valuation));
+//        row.stream().filter(valuation -> valuation.driver(2).getText().contains(_valuation));
         for (List<WebElement> list : row) {
             String valuation = list.get(2).getText();
             if (valuation.equals(_valuation)) {
@@ -353,7 +353,7 @@ public class SettlementDialog extends Page {
 //        for (Table table: valuations) {
 //            rows.addAll(table.getColumnByIndex(2));
 //        }
-//        rows.stream().filter(valuation -> valuation.getText().equals(_valuation)).findFirst().current().click();
+//        rows.stream().filter(valuation -> valuation.getText().equals(_valuation)).findFirst().driver().click();
 
         return this;
     }

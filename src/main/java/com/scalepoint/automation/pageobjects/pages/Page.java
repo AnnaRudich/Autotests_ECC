@@ -43,11 +43,11 @@ public abstract class Page extends Actions {
 
     protected Logger logger = LogManager.getLogger(Page.class);
 
-    protected WebDriver browser;
+    protected WebDriver driver;
 
     public Page() {
-        this.browser = Browser.current();
-        HtmlElementLoader.populatePageObject(this, this.browser);
+        this.driver = Browser.driver();
+        HtmlElementLoader.populatePageObject(this, this.driver);
     }
 
     protected abstract Page ensureWeAreOnPage();
@@ -55,9 +55,9 @@ public abstract class Page extends Actions {
     protected abstract String geRelativeUrl();
 
     protected void waitForUrl(String expectedUrl) {
-        logger.info("Current url: {}", browser.getCurrentUrl());
+        logger.info("Current url: {}", driver.getCurrentUrl());
         logger.info(" Expected: {}", expectedUrl);
-        Wait.For(webDriver -> browser.getCurrentUrl().contains(expectedUrl));
+        Wait.For(webDriver -> driver.getCurrentUrl().contains(expectedUrl));
     }
 
     public static <T extends Page> T to(Class<T> pageClass) {

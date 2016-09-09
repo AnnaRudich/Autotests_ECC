@@ -20,7 +20,7 @@ public abstract class Actions {
     private static Logger log = LoggerFactory.getLogger(Actions.class);
 
     public static void MouseOver(WebElement webElement) {
-        new org.openqa.selenium.interactions.Actions(Browser.current()).moveToElement(webElement, 5, 5).perform();
+        new org.openqa.selenium.interactions.Actions(Browser.driver()).moveToElement(webElement, 5, 5).perform();
 
     }
 
@@ -172,7 +172,7 @@ public abstract class Actions {
 
     private boolean isAlertPresent() {
         try {
-            Browser.current().switchTo().alert();
+            Browser.driver().switchTo().alert();
             return true;
         }   // try
         catch (NoAlertPresentException Ex) {
@@ -181,13 +181,13 @@ public abstract class Actions {
     }
 
     protected void doubleClick(By byElement) {
-        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.current());
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         action.doubleClick(find(byElement));
         action.perform();
     }
 
     protected void doubleClick(WebElement element) {
-        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.current());
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         action.doubleClick(element);
         action.perform();
     }
@@ -250,7 +250,7 @@ public abstract class Actions {
 
 
     protected WebElement find(By by) {
-        return Browser.current().findElement(by);
+        return Browser.driver().findElement(by);
     }
 
     protected WebElement find(String xpath, String... params) {
@@ -261,23 +261,23 @@ public abstract class Actions {
     }
 
     protected List<WebElement> findMany(By by) {
-        return Browser.current().findElements(by);
+        return Browser.driver().findElements(by);
     }
 
     protected void pressKeys(Keys... keys) {
-        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.current());
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         action.sendKeys(keys);
         action.perform();
     }
 
     protected void acceptAlert() {
-        Alert alert = Browser.current().switchTo().alert();
+        Alert alert = Browser.driver().switchTo().alert();
         alert.accept();
         Wait.waitForModalWindowDisappear();
     }
 
     protected String getAlertTextAndAccept() {
-        Alert alert = Browser.current().switchTo().alert();
+        Alert alert = Browser.driver().switchTo().alert();
         String alertText = alert.getText();
         alert.accept();
         Wait.waitForModalWindowDisappear();
@@ -285,26 +285,26 @@ public abstract class Actions {
     }
 
     protected String getAlertText() {
-        Alert alert = Browser.current().switchTo().alert();
+        Alert alert = Browser.driver().switchTo().alert();
         return alert.getText();
     }
 
     protected void dismissAlert() {
-        Alert alert = Browser.current().switchTo().alert();
+        Alert alert = Browser.driver().switchTo().alert();
         alert.dismiss();
     }
 
     protected void scrollTo(WebElement element) {
         ((Locatable) element).getCoordinates();
-        ((JavascriptExecutor) Browser.current()).executeScript("arguments[0].scrollIntoView();", element);
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView();", element);
     }
 
     protected void setImplicitlyWait(long seconds) {
-        Browser.current().manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
+        Browser.driver().manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
     }
 
     public String getCookies() {
-        Set<Cookie> cookies = Browser.current().manage().getCookies();
+        Set<Cookie> cookies = Browser.driver().manage().getCookies();
         StringBuilder cookieString = new StringBuilder();
         for (Cookie cookie : cookies) {
             cookieString.append(cookie.getName());
@@ -323,8 +323,8 @@ public abstract class Actions {
     }
 
     public void switchToLastWindow() {
-        for (String winHandle : Browser.current().getWindowHandles()) {
-            Browser.current().switchTo().window(winHandle);
+        for (String winHandle : Browser.driver().getWindowHandles()) {
+            Browser.driver().switchTo().window(winHandle);
         }
     }
 
@@ -335,14 +335,14 @@ public abstract class Actions {
     }
 
     public void enterToHiddenUploadFileField(WebElement element, String text) {
-        JavascriptExecutor js = (JavascriptExecutor) Browser.current();
+        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
         js.executeScript("arguments[0].setAttribute('class', ' ');", element);
         element.sendKeys(text);
 
     }
 
     public void dragAndDrop(WebElement element, WebElement elementWhereToMove) {
-        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.current());
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         Action dragAndDrop = action.clickAndHold(element).moveToElement(elementWhereToMove).release(elementWhereToMove).build();
         dragAndDrop.perform();
     }
@@ -357,7 +357,7 @@ public abstract class Actions {
     }
 
     public void updateElementValue(WebElement element, String value) {
-        JavascriptExecutor js = (JavascriptExecutor) Browser.current();
+        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
         js.executeScript("arguments[0].setAttribute('value', '" + value + "');", element, "");
     }
 

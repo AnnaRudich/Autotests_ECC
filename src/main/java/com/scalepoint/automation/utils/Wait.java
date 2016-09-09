@@ -28,12 +28,12 @@ public class Wait {
     private static StopWatch watch = new StopWatch();
 
     public static void waitForAjaxComplete() {
-        new WebDriverWait(Browser.current(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
+        new WebDriverWait(Browser.driver(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }
 
     public static void waitForPageLoaded() {
-        new WebDriverWait(Browser.current(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
+        new WebDriverWait(Browser.driver(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
 
@@ -54,11 +54,11 @@ public class Wait {
     }
 
     public static WebDriverWait Wait() {
-        return new WebDriverWait(Browser.current(), TIME_OUT_IN_SECONDS, POLL_IN_MS);
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS);
     }
 
     public static void waitForReindexation(final By elementLocator) {
-        FluentWait<WebDriver> wait = new FluentWait<>(Browser.current())
+        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
                 .withTimeout(TIME_OUT_IN_MINUTES_REINDEXATION, TimeUnit.MINUTES)
                 .pollingEvery(10, TimeUnit.SECONDS)
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
@@ -69,7 +69,7 @@ public class Wait {
     public static void waitForModalWindowAppear() {
         Set<String> wh = wrap(presenceOfWindowCount(2));
         wh.remove(Browser.getMainWindowHandle());
-        wh.stream().forEach(h -> Browser.current().switchTo().window(h));
+        wh.stream().forEach(h -> Browser.driver().switchTo().window(h));
     }
 
     public static String waitForNewModalWindow(final Set<String> oldWindows) {
@@ -89,12 +89,7 @@ public class Wait {
 
     public static void waitForModalWindowDisappear() {
         wrap(presenceOfWindowCount(1));
-        Browser.current().switchTo().window(Browser.getMainWindowHandle());
-    }
-
-    public static void waitForModalWindowDisappear1() {
-        wrap(presenceOfWindowCount(1));
-        Browser.current().switchTo().window(Browser.getMainWindowHandle());
+        Browser.driver().switchTo().window(Browser.getMainWindowHandle());
     }
 
     private static Function<WebDriver, WebElement> presenceOfElementLocated(final By locator) {
@@ -169,7 +164,7 @@ public class Wait {
     }
 
     public static void waitForElementWithPageReload(final By locator) {
-        FluentWait<WebDriver> wait = new FluentWait<>(Browser.current()).withTimeout(10, TimeUnit.MINUTES).pollingEvery(10, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(10, TimeUnit.MINUTES).pollingEvery(10, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
         wait.until((WebDriver driver) -> {
             driver.navigate().refresh();
             return driver.findElement(locator);
@@ -192,18 +187,18 @@ public class Wait {
     private static <T> T wrap(Function<WebDriver, T> condition) {
         offImplicit();
         try {
-            return new WebDriverWait(Browser.current(), TIME_OUT_IN_SECONDS, POLL_IN_MS).until(condition);
+            return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).until(condition);
         } finally {
             onImplicit();
         }
     }
 
     private static void offImplicit() {
-        Browser.current().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     }
 
     private static void onImplicit() {
-        Browser.current().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        Browser.driver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
     public static <E extends ExtElement> E waitForVisible(E element) {
@@ -268,7 +263,7 @@ public class Wait {
     }
 
     public static Alert waitForAlert(int timeout) {
-        return new WebDriverWait(Browser.current(), timeout).until((ExpectedCondition<Alert>) d -> {
+        return new WebDriverWait(Browser.driver(), timeout).until((ExpectedCondition<Alert>) d -> {
             try {
                 return d.switchTo().alert();
             } catch (NoAlertPresentException e) {
@@ -278,7 +273,7 @@ public class Wait {
     }
 
     public static <V> V wrapWait(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.current(), 30, 1000).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), 30, 1000).until(expectedCondition);
     }
 
     public static void waitUntilCountOfWindow(int windowCount) {

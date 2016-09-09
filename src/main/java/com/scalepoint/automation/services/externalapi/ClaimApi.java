@@ -59,7 +59,7 @@ public class ClaimApi extends ServerApi {
             log.info("CreateUser redirected to: " + location);
             log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
-            if (location != null && !location.getValue().equals(Configuration.getEccUrl())) {
+            if (location != null && !location.getValue().endsWith("/")) {
                 String leaveCaseRedirectUrl = location.getValue() + Page.getUrl(SettlementPage.class);
                 log.info("Leaving the case: " + leaveCaseRedirectUrl);
                 String query = new URL(leaveCaseRedirectUrl).getQuery();

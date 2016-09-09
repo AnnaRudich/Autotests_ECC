@@ -41,7 +41,7 @@ public class FunctionalTemplatesApi extends ServerApi {
     }
 
     public <T extends Page> T updateTemplate(Integer functionalTemplateId, Class<T> returnPageClass, FtOperation... operations) {
-        String currentUrl = Browser.current().getCurrentUrl();
+        String currentUrl = Browser.driver().getCurrentUrl();
 
         if (!shouldUpdateFuncTemplates(functionalTemplateId, operations)) {
             return detectPage(currentUrl, returnPageClass);

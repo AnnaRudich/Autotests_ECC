@@ -133,8 +133,6 @@ public class TestData {
             Unmarshaller u = data.context.createUnmarshaller();
             InputStream resourceAsStream = TestData.class.getClassLoader()
                     .getResourceAsStream(xmlPath);
-            log.info(xmlPath);
-            log.info(resourceAsStream.available()+"");
             Object resultObject = (u.unmarshal(resourceAsStream));
             preprocess(resultObject, buildParams());
             return (T) resultObject;

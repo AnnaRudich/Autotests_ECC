@@ -8,16 +8,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Set;
 
 public class Window {
 
     private static ThreadLocal<WindowManager> holder = new ThreadLocal<>();
 
-    public static void init(WebDriver browser) {
-        holder.set(new WindowManager(browser.getWindowHandle()));
+    public static void init(WebDriver driver) {
+        holder.set(new WindowManager(driver));
     }
 
     public static WindowManager get() {
@@ -32,74 +30,56 @@ public class Window {
 
         private static Logger logger = Logger.getLogger(WindowManager.class);
 
-        private Deque<String> deque = new LinkedList<>();
+        private WebDriver driver;
 
-        WindowManager(String mainWindowHandle) {
-            deque.push(mainWindowHandle);
+        WindowManager(WebDriver driver) {
+            this.driver = driver;
         }
 
         public void openDialog(WebElement openButton) {
-            WebDriver driver = Browser.current();
-            Set<String> windowHandlesBefore = driver.getWindowHandles();
-            if (openButton.isDisplayed()) {
-                int i = 0;
-                while (driver.getWindowHandles().size() < 2 && i < 2) {
-                    openButton.click();
-                    i++;
-                }
-            } else {
-                logger.error("Button is not displayed");
-            }
-            String newWindowHandle = Wait.waitForNewModalWindow(windowHandlesBefore);
-            driver.switchTo().window(newWindowHandle);
-            deque.push(newWindowHandle);
-        }
-
-        public void openDialogWithJavascriptHelper(WebElement openButton)  {
-            WebDriver driver = Browser.current();
             Set<String> windowHandlesBefore = driver.getWindowHandles();
             openButton.click();
-            String newWindowHandle = Wait.waitForNewModalWindow(windowHandlesBefore);
-            driver.switchTo().window(newWindowHandle);
-            deque.push(newWindowHandle);
+            Wait.waitForNewModalWindow(windowHandlesBefore);
+            switchToLast();
+        }
+
+        public void openDialogWithJavascriptHelper(WebElement openButton) {
+            openDialog(openButton);
             JavascriptHelper.initializeCommonFunctions(driver);
         }
 
         public void openDialogWithAlert(WebElement openButton) {
             openButton.click();
             try {
-                Alert alert = Browser.current().switchTo().alert();
+                Alert alert = driver.switchTo().alert();
                 alert.accept();
-                Wait.waitForModalWindowDisappear1();
+                Wait.waitForModalWindowDisappear();
             } catch (Exception ignored) {
             }
             Wait.waitForModalWindowAppear();
         }
 
         public void closeDialog() {
-            deque.pop();
-            Browser.current().close();
-            Browser.current().switchTo().window(deque.peek());
+            Set<String> windowHandles = driver.getWindowHandles();
+            driver.close();
+            Wait.waitForCloseModalWindow(windowHandles);
+            switchToLast();
         }
 
         public void closeDialog(WebElement closeButton) {
-            deque.pop();
-            WebDriver driver = Browser.current();
             Set<String> windowHandlesBefore = driver.getWindowHandles();
             closeButton.click();
             Wait.waitForCloseModalWindow(windowHandlesBefore);
-            driver.switchTo().window(deque.peek());
+            switchToLast();
         }
 
         public void switchToLast() {
-            WebDriver driver = Browser.current();
             for (String winHandle : driver.getWindowHandles()) {
-                driver.switchTo().window(winHandle); // switch focus of WebDriver to the next found window handle (that's your newly opened window)
+                driver.switchTo().window(winHandle);
             }
         }
 
         public void waitForNewWindowAndSwithToIt() {
-            WebDriver driver = Browser.current();
             WebDriverWait wait = new WebDriverWait(driver, 5, 300);
             wait.until((WebDriver d) -> d.getWindowHandles().size() > 1);
             for (String winHandle : driver.getWindowHandles()) {
@@ -109,19 +89,14 @@ public class Window {
         }
 
         public void closeAllButMain() {
-            WebDriver driver = Browser.current();
             for (String winHandle : driver.getWindowHandles()) {
                 if (!Browser.getMainWindowHandle().equals(winHandle))
                     try {
                         driver.switchTo().window(winHandle).close();
                     } catch (NoSuchWindowException ignored) {
-
                     }
             }
-            driver.switchTo().window(Browser.getMainWindowHandle());
-
-            deque.clear();
-            deque.add(driver.getWindowHandle());
+            switchToLast();
         }
     }
 }

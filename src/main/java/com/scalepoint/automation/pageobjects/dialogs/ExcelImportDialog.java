@@ -25,7 +25,7 @@ public class ExcelImportDialog extends Page {
 
     public SettlementPage cancel() {
         Window.get().switchToLast();
-        String buttonId = browser.getCurrentUrl().contains("ExcelImport") ? "Cancel_button" : "_Cancel_button";
+        String buttonId = driver.getCurrentUrl().contains("ExcelImport") ? "Cancel_button" : "_Cancel_button";
         cancelDialogWindow(buttonId);
         return at(SettlementPage.class);
     }
@@ -33,7 +33,7 @@ public class ExcelImportDialog extends Page {
     private void cancelDialogWindow(String buttonId) {
         By cancelButton = By.id(buttonId);
         Wait.waitForElement(cancelButton);
-        Window.get().closeDialog(browser.findElement(cancelButton));
+        Window.get().closeDialog(driver.findElement(cancelButton));
 
         Wait.waitForLoaded();
     }

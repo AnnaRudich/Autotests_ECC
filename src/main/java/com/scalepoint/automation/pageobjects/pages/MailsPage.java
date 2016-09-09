@@ -41,7 +41,7 @@ public class MailsPage extends Page {
             //old one
             By oldViewLastMail = By.xpath("(.//*[text()='Vis mail'])[last()]");
             Wait.waitForElementDisplaying(oldViewLastMail);
-            browser.findElement(oldViewLastMail).click();
+            driver.findElement(oldViewLastMail).click();
         } catch (Exception e) {
             //new one
             Wait.waitForVisible(viewLastMail);
@@ -64,6 +64,6 @@ public class MailsPage extends Page {
 
     public void ClickVisMail(String localeName) {
         int numberOfRow = findRowNumber(localeName) + 2;
-        browser.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(@onclick, 'openEmailDetails')][last()]")).click();
+        driver.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(@onclick, 'openEmailDetails')][last()]")).click();
     }
 }

@@ -91,7 +91,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public void AddManually() {
         functionalMenu.addManually();
-        browser.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
         String js =
                 "var callback = arguments[arguments.length - 1];" +
                         "function groupsLoaded() {" +
@@ -104,7 +104,7 @@ public class SettlementPage extends BaseClaimPage {
                         "}" +
                         "groupsLoaded();";
 //        js = "var callback = arguments[arguments.length - 1]; callback(arguments.length);";
-        System.out.println(((JavascriptExecutor) browser).executeAsyncScript(js));
+        System.out.println(((JavascriptExecutor) driver).executeAsyncScript(js));
     }
 
     public String FetchPriceByPoint(String point) {
@@ -125,7 +125,7 @@ public class SettlementPage extends BaseClaimPage {
     public CompleteClaimPage completeClaim() {
         bottomMenu.completeClaim();
         try {
-            browser.switchTo().alert().accept();
+            driver.switchTo().alert().accept();
         } catch (NoAlertPresentException e) {
 
         }
@@ -206,7 +206,7 @@ public class SettlementPage extends BaseClaimPage {
             String claim = list.get(4).getText();
             if (claim.equals(_claimDescr)) {
                 list.get(3).click();
-                browser.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
+                driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
                 String js =
                         "var callback = arguments[arguments.length - 1];" +
                                 "function groupsLoaded() {" +
@@ -218,7 +218,7 @@ public class SettlementPage extends BaseClaimPage {
                                 "}" +
                                 "}" +
                                 "groupsLoaded();";
-                System.out.println(((JavascriptExecutor) browser).executeAsyncScript(js));
+                System.out.println(((JavascriptExecutor) driver).executeAsyncScript(js));
             }
         }
     }

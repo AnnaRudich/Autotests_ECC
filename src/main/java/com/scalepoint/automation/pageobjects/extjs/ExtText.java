@@ -18,7 +18,7 @@ public class ExtText extends ExtElement {
                         "cmp = Ext.getCmp(id);" +
                         "cmp.setValue(value);" +
                         "cmp.fireEvent('blur', cmp);";
-        ((JavascriptExecutor) Browser.current()).executeScript(js, args);
+        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
         /*getWrappedElement().clear();
         getWrappedElement().sendKeys(text);*/
     }

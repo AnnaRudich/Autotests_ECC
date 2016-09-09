@@ -47,7 +47,7 @@ public class PseudoCategoryApi extends ServerApi {
             JsonNode item = data.path("allItems").path(0);
             return new BasicNameValuePair(item.path("text").asText(), item.path("value").asText());
         } catch (IOException e) {
-            log.error("Can't current Categories", e);
+            log.error("Can't driver Categories", e);
             throw new RuntimeException(e);
         }
     }

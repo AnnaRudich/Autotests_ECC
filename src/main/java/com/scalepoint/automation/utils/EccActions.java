@@ -48,7 +48,7 @@ public class EccActions {
         for (int i = 0; i < 5; i++) {
             if (isAlertPresent())
                 try {
-                    Alert alert = Browser.current().switchTo().alert();
+                    Alert alert = Browser.driver().switchTo().alert();
                     alert.accept();
                 } catch (NoAlertPresentException e) {
                     System.out.println("No Alert Present");
@@ -65,7 +65,7 @@ public class EccActions {
 
     public static boolean isAlertPresent() {
         try {
-            Browser.current().switchTo().alert();
+            Browser.driver().switchTo().alert();
             return true;
         } catch (NoAlertPresentException Ex) {
             return false;

@@ -38,8 +38,8 @@ public class EditCustomerNoteDialog extends Page {
 
     public NotesPage addCustomerNote(String note){
         Wait.waitForLoaded();
-        ((JavascriptExecutor)browser).executeScript("populateRichTextEditorWithText('noteHtmlEditorId-inputCmp-iframeEl', '"+ note+"');");
-        browser.switchTo().defaultContent();
+        ((JavascriptExecutor)driver).executeScript("populateRichTextEditorWithText('noteHtmlEditorId-inputCmp-iframeEl', '"+ note+"');");
+        driver.switchTo().defaultContent();
         Window.get().closeDialog(ok);
         return at(NotesPage.class);
     }

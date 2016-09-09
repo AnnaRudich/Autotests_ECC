@@ -40,7 +40,7 @@ public class FunctionalMenu extends Module {
     }
 
     public ImportLossInformationDialog openImportExcelDialog() {
-        Window.get().openDialog(browser.findElement(By.id("excelImportBtn")));
+        Window.get().openDialog(driver.findElement(By.id("excelImportBtn")));
         return at(ImportLossInformationDialog.class);
     }
 }

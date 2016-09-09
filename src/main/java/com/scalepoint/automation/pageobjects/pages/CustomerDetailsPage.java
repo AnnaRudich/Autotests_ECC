@@ -74,7 +74,7 @@ public class CustomerDetailsPage extends Page {
     }
 
     public void ReopenClaim() {
-        EccActions eccActions = new EccActions(Browser.current());
+        EccActions eccActions = new EccActions(Browser.driver());
         reopenClaim.click();
 
         if (EccActions.isAlertPresent()) {
@@ -99,8 +99,8 @@ public class CustomerDetailsPage extends Page {
      */
     public SettlementPage reopenClaim() {
         Window.WindowManager windowManager = Window.get();
-        windowManager.openDialog(browser.findElement(By.id("genoptag")));
-        windowManager.closeDialog(browser.findElement(By.id("btn_reopen")));
+        windowManager.openDialog(driver.findElement(By.id("genoptag")));
+        windowManager.closeDialog(driver.findElement(By.id("btn_reopen")));
         return at(SettlementPage.class);
     }
 

@@ -22,7 +22,7 @@ public class ExtRadioGroup extends ExtElement {
     }
 
     public boolean isSelected() {
-        JavascriptExecutor executor = (JavascriptExecutor) Browser.current();
+        JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
         Object[] args = {getRootElement()};
         return (Boolean) executor.executeScript(
                 "var id = arguments[0].id;" +

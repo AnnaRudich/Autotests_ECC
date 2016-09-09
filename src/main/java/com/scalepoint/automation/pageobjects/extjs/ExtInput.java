@@ -28,6 +28,6 @@ public class ExtInput extends ExtElement {
     }
 
     public void setValue(String value) {
-        ((JavascriptExecutor) Browser.current()).executeScript("arguments[0].value=arguments[1];", getWrappedElement(), value);
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].value=arguments[1];", getWrappedElement(), value);
     }
 }

@@ -32,7 +32,7 @@ public class UsersManager {
             logger.info("Taken: {}", taken.getLogin());
             return taken;
         } catch (Exception e) {
-            logger.error("Can't current user for {} cause {}", companyCode.name(), e.toString());
+            logger.error("Can't driver user for {} cause {}", companyCode.name(), e.toString());
             throw new RuntimeException(e);
         }
     }

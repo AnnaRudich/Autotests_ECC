@@ -73,7 +73,7 @@ public enum DriversFactory {
         capabilities.setJavascriptEnabled(true);
         capabilities.setCapability("nativeEvents", false);
         capabilities.setCapability("requireWindowFocus", true);
-        capabilities.setCapability("browserAttachTimeout", 60000);
+        capabilities.setCapability("driverAttachTimeout", 60000);
         capabilities.setCapability("unexpectedAlertBehaviour", "accept");
         capabilities.setCapability("ie.ensureCleanSession", true);
         return capabilities;

@@ -51,11 +51,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     private Environment environment;
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
+        Page.to(LoginPage.class);
+
         ClaimApi claimApi = new ClaimApi(user);
         claimApi.createClaim(claim);
 
-        Browser.open(Page.getUrl(SettlementPage.class));
-        return Page.to(LoginPage.class).login(user);
+        return Page.to(SettlementPage.class);
     }
 
     protected MyPage login(User user) {
@@ -69,13 +70,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             throw new IllegalStateException("Profile must be specified");
         }
 
-        WebDriver browser = DriversFactory.getDriver(DriverType.findByProfile(activeProfiles));
+        WebDriver driver = DriversFactory.getDriver(DriverType.findByProfile(activeProfiles));
 
-        Browser.init(browser);
-        Window.init(browser);
+        Browser.init(driver);
+        Window.init(driver);
 
-        JavascriptHelper.initializeCommonFunctions(browser);
-        browser.manage().window().maximize();
+        JavascriptHelper.initializeCommonFunctions(driver);
+        driver.manage().window().maximize();
     }
 
     @AfterMethod

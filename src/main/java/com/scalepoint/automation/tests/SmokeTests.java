@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -57,17 +58,16 @@ public class SmokeTests extends BaseTest {
     @Test(description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email", dataProvider = "testDataProvider")
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-        SettlementPage settlementPage = functionalTemplatesApi.updateTemplate(user.getFtId(),
-                SettlementPage.class,
+        functionalTemplatesApi.updateTemplate(user.getFtId(),
+                LoginPage.class,
                 disable(FTSetting.USE_SELF_SERVICE2),
                 enable(FTSetting.ENABLE_SELF_SERVICE),
                 enable(FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
         );
 
-        loginAndCreateClaim(user, claim);
 
         String password = "12341234";
-        settlementPage.
+        loginAndCreateClaim(user, claim).
                 requestSelfService(claim, password).
                 toMailsPage().
                 viewLastMail().

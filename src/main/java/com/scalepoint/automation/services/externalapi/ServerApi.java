@@ -34,6 +34,11 @@ public class ServerApi {
         this.executor = executor;
     }
 
+    public ServerApi(User user, Executor executor) {
+        this.executor = executor;
+        login(user, null);
+    }
+
     private ServerApi() {
     }
 
@@ -75,21 +80,7 @@ public class ServerApi {
             HttpResponse httpResponse = get(successUrl, executor).returnResponse();
             ensure200Code(httpResponse.getStatusLine().getStatusCode());
 
-            for (Cookie cookie : cookieStore.getCookies()) {
-                try {
-                    if (!cookie.getPath().contains(Configuration.getEccContext())) {
-                        continue;
-                    }
-                    Browser.current().manage().addCookie(new org.openqa.selenium.Cookie(
-                            cookie.getName(),
-                            cookie.getValue(),
-                            "/",
-                            cookie.getExpiryDate()
-                    ));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            copyCookiesToBrowser(cookieStore);
 
         } catch (Exception e) {
             log.error("Can't login", e);
@@ -102,5 +93,29 @@ public class ServerApi {
         }
 
         return null;
+    }
+
+    private void copyCookiesToBrowser(CookieStore cookieStore) {
+        for (Cookie cookie : cookieStore.getCookies()) {
+            try {
+                if (!cookie.getPath().contains(Configuration.getEccContext())) {
+                    continue;
+                }
+                Browser.driver().manage().addCookie(new org.openqa.selenium.Cookie(
+                        cookie.getName(),
+                        cookie.getValue(),
+                        //ie will not set cookies if domain name is incorrect (localhost, nb-ian)
+                        cookie.getDomain().contains(".") ? cookie.getDomain() : null,
+                        cookie.getPath(),
+                        cookie.getExpiryDate()
+                ));
+            } catch (Exception e) {
+                log.info(e.getMessage());
+            }
+        }
+    }
+
+    public Executor getExecutor() {
+        return executor;
     }
 }
