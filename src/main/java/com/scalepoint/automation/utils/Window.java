@@ -39,11 +39,7 @@ public class Window {
         public void openDialog(WebElement openButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
             if (openButton.isDisplayed()) {
-                int i = 0;
-                while (driver.getWindowHandles().size() < 2 && i < 2) {
-                    openButton.click();
-                    i++;
-                }
+                openButton.click();
             } else {
                 logger.error("Button is not displayed");
             }

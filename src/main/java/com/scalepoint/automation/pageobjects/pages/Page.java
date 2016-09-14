@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.EccAdminPage;
 import com.scalepoint.automation.utils.annotations.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
@@ -55,9 +56,16 @@ public abstract class Page extends Actions {
     protected abstract String geRelativeUrl();
 
     protected void waitForUrl(String expectedUrl) {
-        logger.info("Current url: {}", driver.getCurrentUrl());
+        int totalTimeoutInSeconds = 10;
+        int pollingMs = 1000;
+
         logger.info(" Expected: {}", expectedUrl);
-        Wait.For(webDriver -> driver.getCurrentUrl().contains(expectedUrl));
+        Wait.For(webDriver -> {
+            String currentUrl = driver.getCurrentUrl();
+            logger.info("Current url: {}", currentUrl);
+            Window.get().switchToLast();
+            return currentUrl.contains(expectedUrl);
+        }, totalTimeoutInSeconds, pollingMs);
     }
 
     public static <T extends Page> T to(Class<T> pageClass) {

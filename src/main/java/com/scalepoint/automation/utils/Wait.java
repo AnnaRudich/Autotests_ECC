@@ -184,6 +184,10 @@ public class Wait {
         return wrap(condition);
     }
 
+    public static <T> T For(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
+        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).until(condition);
+    }
+
     private static <T> T wrap(Function<WebDriver, T> condition) {
         offImplicit();
         try {
