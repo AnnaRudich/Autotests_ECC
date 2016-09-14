@@ -19,7 +19,7 @@ public class Claim {
     private String fullName = firstName + " " + lastName;
     private String fullNameWithTitle = title + " " + firstName + " " + lastName;
     private String policyNumber = Integer.toString(RandomUtils.randomInt());
-    private String policyType;
+    private String policyType = "ECC";
     private String claimNumber = Integer.toString(RandomUtils.randomInt());
     private String phoneNumber = Integer.toString(RandomUtils.randomInt());
     @XmlElement

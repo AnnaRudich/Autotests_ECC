@@ -1,15 +1,21 @@
 package com.scalepoint.automation;
 
+import com.google.common.base.Function;
+import com.scalepoint.automation.pageobjects.dialogs.EditPolicyDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
+import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ServerApi;
+import com.scalepoint.automation.services.externalapi.ftemplates.FT;
+import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
@@ -38,6 +44,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.scalepoint.automation.pageobjects.pages.Page.at;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG;
+
 @SpringApplicationConfiguration(classes = Application.class)
 @IntegrationTest
 @TestExecutionListeners(inheritListeners = false, listeners = {
@@ -49,19 +58,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private Environment environment;
-
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
-        Page.to(LoginPage.class);
-
-        ClaimApi claimApi = new ClaimApi(user);
-        claimApi.createClaim(claim);
-
-        return Page.to(SettlementPage.class);
-    }
-
-    protected MyPage login(User user) {
-        return ServerApi.createServerApi().login(user, MyPage.class);
-    }
 
     @BeforeMethod
     public void baseInit() throws Exception {
@@ -87,6 +83,44 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Window.cleanUp();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
+    }
+
+    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
+        Page.to(LoginPage.class);
+
+        ClaimApi claimApi = new ClaimApi(user);
+        claimApi.createClaim(claim);
+
+        Page.toWithNoAt(SettlementPage.class);
+
+        try {
+            Wait.For((Function<WebDriver, Object>) webDriver -> {
+                assert webDriver != null;
+                return webDriver.getWindowHandles().size() > 1;
+            }, 5, 1000);
+            processPolicyType();
+        } catch (Exception ignored) {
+        }
+
+        return Page.at(SettlementPage.class);
+    }
+
+    private void processPolicyType() {
+        EditPolicyDialog editPolicyDialog = at(EditPolicyDialog.class);
+        editPolicyDialog.chooseAny();
+    }
+
+    protected MyPage login(User user) {
+        return ServerApi.createServerApi().login(user, MyPage.class);
+    }
+
+    protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
+        return functionalTemplatesApi.updateTemplate(user.getFtId(), returnPageClass, operations);
+    }
+
+    protected <T extends Page> T updateFT(User user, FtOperation... operations) {
+        return updateFT(user, null, operations);
     }
 
     @DataProvider(name = "testDataProvider")
@@ -138,5 +172,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             UsersManager.returnUser(get());
             holder.get();
         }
+    }
+
+    protected void enableNewSid(User user) {
+        updateFT(user, FT.enable(ENABLE_NEW_SETTLEMENT_ITEM_DIALOG));
     }
 }

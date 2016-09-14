@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="SmokeTests" configfailurepolicy="continue" >
+    <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>
+            <class name="com.scalepoint.automation.tests.sid.SettlementDialogShowVoucherDetails"/>
+            <class name="com.scalepoint.automation.tests.sid.SettlementDialogSmokeTests"/>
+            <class name="com.scalepoint.automation.tests.sid.SettlementDialogTest"/>
+            <class name="com.scalepoint.automation.tests.sid.DeprecationDeductedTests"/>
+            <class name="com.scalepoint.automation.tests.sid.ReductionRulesInSettlementItemDialogTests"/>
+        </classes>
+    </test>
+</suite>

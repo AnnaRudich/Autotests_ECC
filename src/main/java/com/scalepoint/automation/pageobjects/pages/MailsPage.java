@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.scalepoint.automation.pageobjects.dialogs.SelfServiceMailViewDialog;
+import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.EccPage;
 import org.openqa.selenium.By;
@@ -18,10 +18,10 @@ public class MailsPage extends Page {
 
     private static final String URL = "webshop/jsp/matching_engine/customer_mails.jsp";
 
-    @FindBy(css = ".fit-last-column tbody")
+    @FindBy(css = ".x-grid-item tbody")
     private Table sentMails;
 
-    @FindBy(xpath = "(//a[contains(@class, 'viewMailButtonCls')])[last()]")
+    @FindBy(xpath = "//table[last()]//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail']")
     private Button viewLastMail;
 
     @Override
@@ -36,7 +36,7 @@ public class MailsPage extends Page {
         return this;
     }
 
-    public SelfServiceMailViewDialog viewLastMail() {
+    public MailViewDialog viewLastMail() {
         try {
             //old one
             By oldViewLastMail = By.xpath("(.//*[text()='Vis mail'])[last()]");
@@ -47,23 +47,22 @@ public class MailsPage extends Page {
             Wait.waitForVisible(viewLastMail);
             viewLastMail.click();
         }
-        return at(SelfServiceMailViewDialog.class);
+        return at(MailViewDialog.class);
     }
 
     private int findRowNumber(String localeName) {
-        List<List<WebElement>> rowsNames = sentMails.getRows();
-        for (int i = 0; i < rowsNames.size(); i++) {
-            String typeName = rowsNames.get(i).get(1).getText();
-            if (typeName.contains(localeName)) {
-                return i;
-            }
+        List<WebElement> rows = driver.findElements(By.cssSelector(".x-grid-item tr"));
+        for (int i = 0; i < rows.size(); i++) {
+             if (rows.get(i).getText().contains(localeName)) {
+                 return i;
+             }
         }
-
         return -1;
     }
 
-    public void ClickVisMail(String localeName) {
-        int numberOfRow = findRowNumber(localeName) + 2;
-        driver.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(@onclick, 'openEmailDetails')][last()]")).click();
+    public MailViewDialog clickVisMail(String localeName) {
+        int numberOfRow = findRowNumber(localeName) + 1;
+        driver.findElement(By.xpath("(//tr//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail'])["+numberOfRow+"]")).click();
+        return at(MailViewDialog.class);
     }
 }

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.scalepoint.automation.utils.Http.post;
 
@@ -34,7 +33,7 @@ public class VoucherAgreementApi extends ServerApi {
         super(executor);
     }
 
-    public Map<String, String> createVoucher(Voucher voucher) {
+    public AssignedCategory createVoucher(Voucher voucher) {
         SupplierApi supplierApi = new SupplierApi(executor);
         PseudoCategoryApi pseudoCategoryApi = new PseudoCategoryApi(executor);
 
@@ -46,10 +45,7 @@ public class VoucherAgreementApi extends ServerApi {
         String[] categories = category.getName().split("(?<=.)(?=(- +\\p{Lu}))");
         categories[1] = categories[1].replaceFirst("-", "");
 
-        Map<String, String> categoriesMap = new HashMap<>();
-        categoriesMap.put("Category", categories[0].trim());
-        categoriesMap.put("SubCategory", categories[1].trim());
-        return categoriesMap;
+        return new AssignedCategory(categories[0].trim(), categories[1].trim());
     }
 
     public String getVoucherIdByName(String name) {
@@ -86,6 +82,8 @@ public class VoucherAgreementApi extends ServerApi {
                 add("agreementDiscount", voucher.getDiscount()).
                 add("minimumAmount", "1").
                 add("stepAmount", "1").
+                add("brands", voucher.getBrandsText()).
+                add("tags", voucher.getTagsText()).
                 add("orderFeeId", "-1").get();
 
         try {
@@ -99,6 +97,24 @@ public class VoucherAgreementApi extends ServerApi {
         } catch (IOException e) {
             log.error("Can't create New Voucher Agreement", e);
             throw new ServerApiException(e);
+        }
+    }
+
+    public static class AssignedCategory {
+        private String category;
+        private String subCategory;
+
+        public AssignedCategory(String category, String subCategory) {
+            this.category = category;
+            this.subCategory = subCategory;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public String getSubCategory() {
+            return subCategory;
         }
     }
 }

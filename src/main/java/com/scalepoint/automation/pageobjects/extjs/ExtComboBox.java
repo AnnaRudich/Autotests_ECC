@@ -25,7 +25,7 @@ public class ExtComboBox extends ExtElement {
                         "cmp = Ext.getCmp(id)," +
                         "store = cmp.getStore()," +
                         "option = arguments[1]," +
-                        "index = store.findBy(function(rec){ return rec.driver(cmp.displayField).indexOf(option) > -1 });" +
+                        "index = store.findBy(function(rec){ return rec.get(cmp.displayField).indexOf(option) > -1 });" +
                         "cmp.select(store.getAt(index));";
         ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }
@@ -53,7 +53,7 @@ public class ExtComboBox extends ExtElement {
                         "cmp = Ext.getCmp(id)," +
                         "store = cmp.getStore()," +
                         "options = [];" +
-                        "store.each(function(rec){ options.push(rec.driver(cmp.displayField)) });" +
+                        "store.each(function(rec){ options.push(rec.get(cmp.displayField)) });" +
                         "return options;";
         return (List) ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }

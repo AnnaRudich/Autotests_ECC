@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.*;
 import com.scalepoint.automation.utils.annotations.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
@@ -14,7 +15,7 @@ import java.util.Set;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class CustomerDetailsPage extends Page {
+public class CustomerDetailsPage extends BaseClaimPage {
 
     private static final String URL = "webshop/jsp/matching_engine/customer_details.jsp";
 
@@ -60,6 +61,8 @@ public class CustomerDetailsPage extends Page {
     @FindBy(xpath = "//fieldset[@id='field2']//tr[10]/td[2]")
     private WebElement damageDateValue;
 
+    private CustomerDetails customerDetails = new CustomerDetails();
+
     @Override
     protected String geRelativeUrl() {
         return URL;
@@ -71,19 +74,6 @@ public class CustomerDetailsPage extends Page {
         waitForVisible(reopenClaim);
         waitForVisible(cancelClaimButton);
         return this;
-    }
-
-    public void ReopenClaim() {
-        EccActions eccActions = new EccActions(Browser.driver());
-        reopenClaim.click();
-
-        if (EccActions.isAlertPresent()) {
-            EccActions.AcceptAlert();
-        } else if (!EccActions.isAlertPresent()) {
-            eccActions.switchToWindow();
-        }
-        Wait.waitForPageLoaded();
-        eccActions.switchToWindow();
     }
 
     /**
@@ -168,5 +158,9 @@ public class CustomerDetailsPage extends Page {
                 return getText(damageDateValue);
         }
 
+    }
+
+    public CustomerDetails getCustomerDetails() {
+        return customerDetails;
     }
 }

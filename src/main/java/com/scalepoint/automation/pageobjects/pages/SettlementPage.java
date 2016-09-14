@@ -1,9 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.scalepoint.automation.pageobjects.modules.BottomMenu;
-import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
-import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
-import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.*;
@@ -60,6 +60,8 @@ public class SettlementPage extends BaseClaimPage {
 
     private ClaimOperationsMenu claimOperationsMenu = new ClaimOperationsMenu();
 
+    private MainMenu mainMenu = new MainMenu();
+
     @Override
     protected String geRelativeUrl() {
         return URL;
@@ -89,9 +91,18 @@ public class SettlementPage extends BaseClaimPage {
         return toolBarMenu;
     }
 
-    public void AddManually() {
+    public BottomMenu getBottomMenu() {
+        return bottomMenu;
+    }
+
+    public TextSearchPage findInCatalogue() {
+        functionalMenu.findInCatalogue();
+        return Page.at(TextSearchPage.class);
+    }
+
+    public SettlementDialog addManually() {
         functionalMenu.addManually();
-        driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
+        Wait.waitForAjaxComplete();
         String js =
                 "var callback = arguments[arguments.length - 1];" +
                         "function groupsLoaded() {" +
@@ -105,6 +116,7 @@ public class SettlementPage extends BaseClaimPage {
                         "groupsLoaded();";
 //        js = "var callback = arguments[arguments.length - 1]; callback(arguments.length);";
         System.out.println(((JavascriptExecutor) driver).executeAsyncScript(js));
+        return BaseDialog.at(SettlementDialog.class);
     }
 
     public String FetchPriceByPoint(String point) {
@@ -157,7 +169,11 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public boolean isSettlementPagePresent() {
-        return firstClaim.isDisplayed();
+        try {
+            return driver.findElement(By.cssSelector("#settlementGrid-body div[id*='tableview']")).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public SettlementPage selectClaimItemByDescription(String _item) {
@@ -165,12 +181,10 @@ public class SettlementPage extends BaseClaimPage {
         for (Table table : claims) {
             rows.addAll(table.getColumnByIndex(5));
         }
-        for (int i = 0; i < 5; i++) {
-            try {
-                rows.stream().filter(claim -> claim.getText().contains(_item)).findFirst().get().click();
-            } catch (StaleElementReferenceException e) {
-                logger.info("Trying to recover from a stale element :" + e.getMessage());
-            }
+        try {
+            rows.stream().filter(claim -> claim.getText().contains(_item)).findFirst().get().click();
+        } catch (StaleElementReferenceException e) {
+            logger.info("Trying to recover from a stale element :" + e.getMessage());
         }
         return this;
     }
@@ -196,7 +210,7 @@ public class SettlementPage extends BaseClaimPage {
         return false;
     }
 
-    public void OpenEditSettlementDialogByClaimDescr(String _claimDescr) {
+    public SettlementDialog openEditSettlementDialogByClaimDescr(String _claimDescr) {
         selectClaimItemByDescription(_claimDescr);
         List<List<WebElement>> rowsNames = new ArrayList<>();
         for (Table table : claims) {
@@ -221,6 +235,7 @@ public class SettlementPage extends BaseClaimPage {
                 System.out.println(((JavascriptExecutor) driver).executeAsyncScript(js));
             }
         }
+        return BaseDialog.at(SettlementDialog.class);
     }
 
     public boolean getClaimColorByDescription(String _item, String _color) {
@@ -265,5 +280,9 @@ public class SettlementPage extends BaseClaimPage {
         return functionalMenu.
                 openImportExcelDialog().
                 uploadExcel(filePath);
+    }
+
+    public MainMenu getMainMenu() {
+        return mainMenu;
     }
 }

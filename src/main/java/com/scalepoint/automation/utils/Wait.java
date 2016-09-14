@@ -184,6 +184,10 @@ public class Wait {
         return wrap(condition);
     }
 
+    public static <T> T For(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
+        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).until(condition);
+    }
+
     private static <T> T wrap(Function<WebDriver, T> condition) {
         offImplicit();
         try {
@@ -273,7 +277,7 @@ public class Wait {
     }
 
     public static <V> V wrapWait(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), 30, 1000).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), 15, 1000).until(expectedCondition);
     }
 
     public static void waitUntilCountOfWindow(int windowCount) {

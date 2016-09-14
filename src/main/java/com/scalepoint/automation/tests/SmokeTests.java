@@ -121,13 +121,13 @@ public class SmokeTests extends BaseTest {
 
     @Test(description = "ECC-2631 It's possible to match product via Quick match icon for Excel imported claim lines", dataProvider = "testDataProvider")
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
-
         loginAndCreateClaim(user, claim);
 
         SettlementPage settlementPage = new FunctionalTemplatesApi(user)
                 .updateTemplate(user.getFtId(), SettlementPage.class,
                         enable(FTSetting.BEST_FIT_FOR_NONORDERABLE_PRODUCTS),
                         enable(FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT),
+                        enable(FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG),
                         setValue(FTSetting.NUMBER_BEST_FIT_RESULTS, "5"),
                         select(FTSetting.ALLOW_NONORDERABLE_PRODUCTS, "Yes, Always")
                 );

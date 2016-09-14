@@ -23,7 +23,7 @@ public class FunctionalMenu extends Module {
     @FindBy(id = "excelImportBtn")
     private Button importExcel;
 
-    public void FindInCatalogue() {
+    public void findInCatalogue() {
         findInCatalogue.click();
     }
 

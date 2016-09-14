@@ -49,7 +49,7 @@ public class MyPage extends Page {
         return this;
     }
 
-    public void SelectActiveClient() {
+    public void selectActiveClient() {
         activeCustomerLink.click();
     }
 
@@ -66,8 +66,9 @@ public class MyPage extends Page {
         return latestCustomerStatus.getText().contains(claim.getStatusSaved());
     }
 
-    public void clickCreateNewCase() {
+    public NewCustomerPage clickCreateNewCase() {
         createNewCase.click();
+        return Page.at(NewCustomerPage.class);
     }
 
     public MainMenu getMainMenu() {

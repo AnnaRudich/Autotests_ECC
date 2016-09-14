@@ -1,11 +1,12 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -79,12 +80,16 @@ public class CompleteClaimPage extends Page {
         enterPhone(claim.getPhoneNumber()).
                 enterCellPhone(claim.getCellNumber()).
                 enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode()).
-                enterEmail(claim.getEmail());
+                enterEmail(claim.getEmail()).
+                sendSMS(false);
         return this;
     }
 
+    public CompleteClaimPage fillClaimFormWithPassword(Claim claim, String password) {
+        return fillClaimForm(claim).enterPassword(password);
+    }
+
     public CompleteClaimPage enterPhone(String phone) {
-        Wait.waitForElementDisplaying(By.name("phone"));
         phoneField.setValue(phone);
         return this;
     }
@@ -107,17 +112,17 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
-    public CompleteClaimPage EnterPassword(String pass) {
+    public CompleteClaimPage enterPassword(String pass) {
         customerPasswordField.setValue(pass);
         return this;
     }
 
-    public CompleteClaimPage SetSendSMS(boolean state) {
+    public CompleteClaimPage sendSMS(boolean state) {
         spSMSCheckBOX.set(state);
         return this;
     }
 
-    public CompleteClaimPage EnterPolicyNumber(String _policyNumber) {
+    public CompleteClaimPage enterPolicyNumber(String _policyNumber) {
         policyNumber.enter(_policyNumber);
         return this;
     }
@@ -137,8 +142,8 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public void ReplaceClaim() {
+    public ReplacementDialog replaceClaim(){
         replace.click();
-        Wait.waitForPageLoaded();
+        return BaseDialog.at(ReplacementDialog.class);
     }
 }

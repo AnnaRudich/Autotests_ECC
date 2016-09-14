@@ -42,8 +42,8 @@ public class LoginShopPage extends Page {
         return this;
     }
 
-    public void login() {
+    public ShopWelcomePage login() {
         login.click();
-        Wait.waitForLoaded();
+        return at(ShopWelcomePage.class);
     }
 }

@@ -21,7 +21,7 @@ public class BottomMenu extends Module {
     @FindBy(id = "finishCaseBtn")
     private Button completeClaim;
 
-    @FindBy(xpath = "//img[contains(@class, 'x-tool-expand-top')]")
+    @FindBy(xpath = "//div[contains(@class, 'x-tool-expand-top')]")
     private WebElement expand;
 
     @FindBy(id = "total_indemnity_replacement_amount-inputEl")

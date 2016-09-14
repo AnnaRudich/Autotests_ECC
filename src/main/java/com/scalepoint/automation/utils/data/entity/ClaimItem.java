@@ -13,9 +13,9 @@ public class ClaimItem {
 
     private String textFieldSP = RandomUtils.randomName("ClaimItem");
     @XmlElement
-    private String newPriceSP;
+    private Integer newPriceSP;
     @XmlElement
-    private String purchasePriceSP;
+    private Integer purchasePriceSP;
     @XmlElement
     private String ssDescriptionSP;
     @XmlElement
@@ -35,7 +35,7 @@ public class ClaimItem {
     @XmlElement
     private String depTypeDisc;
     @XmlElement
-    private String depAmount1;
+    private Integer depAmount1;
     @XmlElement
     private String policyExcess1;
     @XmlElement
@@ -55,9 +55,9 @@ public class ClaimItem {
     @XmlElement
     private String procuraLimitPrice;
     @XmlElement
-    private String customerDemand;
+    private Integer customerDemand;
     @XmlElement
-    private String usedPrice;
+    private Integer usedPrice;
     @XmlElement
     private String depAmount2;
     @XmlElement
@@ -75,7 +75,7 @@ public class ClaimItem {
     @XmlElement
     private String pinkColor;
     @XmlElement
-    private String lowerPrice;
+    private Integer lowerPrice;
     @XmlElement
     private String valuationType1;
     @XmlElement
@@ -89,7 +89,7 @@ public class ClaimItem {
     @XmlElement
     private String ageStatus;
     @XmlElement
-    private String bigCustomDemandPrice;
+    private Integer bigCustomDemandPrice;
     @XmlElement
     private String existingCat3;
     @XmlElement
@@ -120,11 +120,11 @@ public class ClaimItem {
         return textFieldSP;
     }
 
-    public String getNewPriceSP() {
+    public Integer getNewPriceSP() {
         return newPriceSP;
     }
 
-    public String getPurchasePriceSP() {
+    public Integer getPurchasePriceSP() {
         return purchasePriceSP;
     }
 
@@ -172,7 +172,7 @@ public class ClaimItem {
         return depTypeDisc;
     }
 
-    public String getDepAmount1() {
+    public Integer getDepAmount1() {
         return depAmount1;
     }
 
@@ -198,8 +198,7 @@ public class ClaimItem {
 
     public String getFileName(String fileLocation) {
         String[] splitedString = fileLocation.split("\\\\");
-        String fileName = splitedString[splitedString.length - 1];
-        return fileName;
+        return splitedString[splitedString.length - 1];
     }
 
     public String getExistingVoucher2() {
@@ -223,11 +222,11 @@ public class ClaimItem {
 
     }
 
-    public String getCustomerDemand() {
+    public Integer getCustomerDemand() {
         return customerDemand;
     }
 
-    public String getUsedPrice() {
+    public Integer getUsedPrice() {
         return usedPrice;
     }
 
@@ -256,7 +255,7 @@ public class ClaimItem {
         return pinkColor;
     }
 
-    public String getLowerPrice() {
+    public Integer getLowerPrice() {
         return lowerPrice;
     }
 
@@ -284,7 +283,7 @@ public class ClaimItem {
         return ageStatus;
     }
 
-    public String getBigCustomDemandPrice() {
+    public Integer getBigCustomDemandPrice() {
         return bigCustomDemandPrice;
     }
 

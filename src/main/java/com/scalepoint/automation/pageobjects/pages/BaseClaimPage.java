@@ -13,8 +13,11 @@ public abstract class BaseClaimPage extends Page {
     }
 
     public MailsPage toMailsPage() {
-        claimNavigationMenu.clickMails();
-        return at(MailsPage.class);
+        return claimNavigationMenu.clickMails();
+    }
+
+    public CustomerDetailsPage toCustomerDetails() {
+        return claimNavigationMenu.clickCustomerDetails();
     }
 
     public AdminPage toAdminPage() {

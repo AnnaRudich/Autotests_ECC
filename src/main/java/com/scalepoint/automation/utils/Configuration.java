@@ -61,5 +61,8 @@ public class Configuration {
         return eccAdminBaseUrl;
     }
 
+    public static boolean isDK() {
+        return locale.equalsIgnoreCase("dk");
+    }
 }
 

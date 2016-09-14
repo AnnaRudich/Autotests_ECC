@@ -43,8 +43,9 @@ public class ClaimApi extends ServerApi {
                 add("policytype", claim.getPolicyType()).
                 add("damageDate", new SimpleDateFormat(DATE_FORMAT).format(new Date())).
                 add("last_name", claim.getLastName()).
+                add("a", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
-                add("policy_number", null).
+                add("policy_number", claim.getPolicyNumber()).
                 add("claim_number", claim.getClaimNumber()).
                 add("url", "").get();
 
@@ -64,7 +65,7 @@ public class ClaimApi extends ServerApi {
                 log.info("Leaving the case: " + leaveCaseRedirectUrl);
                 String query = new URL(leaveCaseRedirectUrl).getQuery();
                 log.info("Extracted query: " + query);
-                String saveCustomerJsp = URL_SAVE_CUSTOMER_PAGE + query;
+                String saveCustomerJsp = URL_SAVE_CUSTOMER_PAGE + query+"&policytype="+claim.getPolicyType();
                 log.info("To saveCustomer.jsp: " + saveCustomerJsp);
 
                 String content = get(saveCustomerJsp, executor).returnContent().asString();

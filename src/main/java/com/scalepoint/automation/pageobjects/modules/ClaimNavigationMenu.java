@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import org.openqa.selenium.support.FindBy;
@@ -44,6 +45,11 @@ public class ClaimNavigationMenu extends Module {
     public MailsPage clickMails() {
         mails.click();
         return at(MailsPage.class);
+    }
+
+    public CustomerDetailsPage clickCustomerDetails() {
+        details.click();
+        return at(CustomerDetailsPage.class);
     }
 
     public void ClickImports() {

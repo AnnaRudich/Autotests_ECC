@@ -28,7 +28,7 @@ public class SendSelfServiceRequestDialog extends Page {
     @FindBy(id = "sendPasswordSmsCheckbox-bodyEl")
     private ExtCheckbox sendSms;
 
-    @FindBy(xpath = "//span[contains(@class,'x-btn-inner-center')][contains(text(),'Ok')]")
+    @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
     private Button ok;
 
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-center')][contains(text(),'Annuller')]")

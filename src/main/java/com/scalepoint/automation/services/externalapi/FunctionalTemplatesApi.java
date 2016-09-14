@@ -46,13 +46,16 @@ public class FunctionalTemplatesApi extends ServerApi {
         if (!shouldUpdateFuncTemplates(functionalTemplateId, operations)) {
             return detectPage(currentUrl, returnPageClass);
         }
-        EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId.toString());
+        EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId.toString()+"&showHidden=true");
         Arrays.stream(operations).forEach(ftOperation -> ftOperation.updateSetting(templatePage));
         templatePage.saveTemplate();
         return detectPage(currentUrl, returnPageClass);
     }
 
     private <T extends Page> T detectPage(String initialUrl, Class<T> returnPageClass) {
+        if (returnPageClass == null) {
+            return null;
+        }
         String url = Page.getUrl(returnPageClass);
         log.info("Initial page: {}", initialUrl);
         log.info("Requested page: {}", url);

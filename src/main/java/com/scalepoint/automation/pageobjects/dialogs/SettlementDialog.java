@@ -1,29 +1,30 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.extjs.*;
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.utils.EccActions;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.annotations.EccPage;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
-@EccPage
-public class SettlementDialog extends Page {
-
-    private static final String URL = "webshop/jsp/matching_engine/dialog/settlement_item_dialog.jsp";
+public class SettlementDialog extends BaseDialog {
 
     @FindBy(id = "description-textfield-inputEl")
     private ExtInput description;
@@ -94,7 +95,7 @@ public class SettlementDialog extends Page {
     @FindBy(css = "#valuations-grid-body table:first-child")
     private Table firstValuation;
 
-    @FindBy(id = "btn_cancel")
+    @FindBy(id = "cancel-button")
     private Button cancel;
 
     @FindBy(id = "manual-valuation-card-edit-valuation")
@@ -124,18 +125,13 @@ public class SettlementDialog extends Page {
     EccActions eccActions = new EccActions(Browser.driver());
 
     @Override
-    protected String geRelativeUrl() {
-        return URL;
-    }
-
-    @Override
-    public SettlementDialog ensureWeAreOnPage() {
-        waitForUrl(URL);
+    public SettlementDialog ensureWeAreAt() {
+        Wait.waitForAjaxComplete();
         waitForVisible(cancel);
         return this;
     }
 
-    public SettlementDialog EnterDescription(String descriptionText) {
+    public SettlementDialog fillDescription(String descriptionText) {
         description.enter(descriptionText);
         return this;
     }
@@ -145,66 +141,76 @@ public class SettlementDialog extends Page {
         return this;
     }
 
-    public SettlementDialog EnterNewPriceAmount(int amount) {
+    public SettlementDialog fillNewPrice(int amount) {
         newPrice.enter(String.valueOf(amount));
         return this;
     }
 
-    public SettlementDialog EnterCustomerDemandAmount(int amount) {
+    public SettlementDialog fillCustomerDemand(int amount) {
         customerDemand.clear();
         customerDemand.sendKeys(String.valueOf(amount));
         newPrice.getWrappedElement().click();
         return this;
     }
 
-    public SettlementDialog EnterDepreciationAmount(int amount) {
+    public SettlementDialog fillDepreciation(int amount) {
         depreciation.clear();
         depreciation.sendKeys(String.valueOf(amount));
         description.getWrappedElement().click();
         return this;
     }
 
-    public SettlementDialog SelectCategory(String categoryName) {
+    public SettlementDialog fillCategory(String categoryName) {
         category.select(categoryName);
         return this;
     }
 
-    public SettlementDialog SelectSubCategory(String subCategoryName) {
+    public SettlementDialog fillSubCategory(String subCategoryName) {
         subCategory.select(subCategoryName);
+        return this;
+    }
+
+    public SettlementDialog fillCategory(VoucherAgreementApi.AssignedCategory categoryInfo) {
+        fillCategory(categoryInfo.getCategory());
+        fillSubCategory(categoryInfo.getSubCategory());
         return this;
     }
 
     /**
      * @param monthName should be digit
      */
-    public SettlementDialog SelectMonth(String monthName) {
+    public SettlementDialog selectMonth(String monthName) {
         month.select(monthName);
         return this;
     }
 
-    public SettlementDialog SelectVoucher(String voucherName) {
-        if (voucher.isDisplayed())
+    public SettlementDialog fillVoucher(String voucherName) {
+        if (voucher.isDisplayed()) {
             voucher.select(voucherName);
-        else
-            Wait.waitUntilVisible((WebElement) avoucher);
+        } else {
+            Wait.waitUntilVisible(avoucher);
+            avoucher.select(voucherName);
+        }
+        return this;
+    }
+
+    public SettlementDialog fillVoucher(int voucherName) {
         avoucher.select(voucherName);
         return this;
     }
 
-    public SettlementDialog SelectVoucher(int voucherName) {
-        avoucher.select(voucherName);
+    public SettlementDialog enableAge() {
+        age.select(1);
+        return this;
+    }
+    public SettlementDialog enableAge(String years) {
+        enableAge();
+        enterAgeYears(years);
         return this;
     }
 
-    public SettlementDialog EnableAge(ClaimItem claimItem, String def) {
-        if (def.equals(claimItem.getAgeStatus())) age.select(1);
-        else age.select(0);
-        return this;
-    }
-
-    public SettlementDialog DisableAge(ClaimItem claimItem, String def) {
-        if (def.equals(claimItem.getAgeStatus())) age.select(0);
-        else age.select(1);
+    public SettlementDialog disableAge() {
+        age.select(0);
         return this;
     }
 
@@ -223,11 +229,11 @@ public class SettlementDialog extends Page {
 
     public SettlementDialog FillInItem(ClaimItem claimItem) {
         Wait.waitForLoaded();
-        EnterDescription(claimItem.getTextFieldSP());
-        SelectCategory(claimItem.getExistingCat1());
-        SelectSubCategory(claimItem.getExistingSubCat1());
-        EnterNewPriceAmount(Integer.valueOf(claimItem.getNewPriceSP()));
-        SetReviewed(true);
+        fillDescription(claimItem.getTextFieldSP());
+        fillCategory(claimItem.getExistingCat1());
+        fillSubCategory(claimItem.getExistingSubCat1());
+        fillNewPrice(claimItem.getNewPriceSP());
+        setReviewed(true);
         return this;
     }
 
@@ -235,13 +241,13 @@ public class SettlementDialog extends Page {
         return cashCompensationValue.getText();
     }
 
-    public Double FetchDepreciation() {
+    public Double fetchDepreciation() {
         Wait.waitForLoaded();
         waitForVisible(deprecationValue);
         return getDoubleValue(deprecationValue.getText());
     }
 
-    public SettlementDialog SetReviewed(boolean state) {
+    public SettlementDialog setReviewed(boolean state) {
         reviewed.set(state);
         return this;
     }
@@ -254,6 +260,15 @@ public class SettlementDialog extends Page {
         return reviewed.isEnabled();
     }
 
+    public boolean isReviewedPresent() {
+        try {
+            reviewed.isEnabled();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public SettlementDialog SelectValuation(int index) {
         valuation.select(index);
         return this;
@@ -263,7 +278,7 @@ public class SettlementDialog extends Page {
         return valuation.getSelected();
     }
 
-    public void OK() {
+    public void ok() {
         waitForVisible(ok);
         ok.click();
     }
@@ -288,33 +303,53 @@ public class SettlementDialog extends Page {
         return this;
     }
 
-    public SettlementDialog SetIncludeInClaim(Boolean state) {
+    public SettlementDialog includeInClaim(Boolean state) {
         Wait.waitForLoaded();
         Wait.waitForEnabled(includeInClaim);
         includeInClaim.set(state);
         return this;
     }
 
-    public boolean isValuationPresent(String _valuation) {
+    public boolean isValuationPresent(Integer expectedValue) {
         Wait.waitForLoaded();
         waitForVisible(firstValuation);
         List<WebElement> rows = new ArrayList<>();
         for (Table table : valuations) {
             rows.addAll(table.getColumnByIndex(3));
         }
-        Double expectedValue = doubleString(_valuation);
-        return rows.stream().anyMatch(row -> OperationalUtils.toNumber(row.getText()).equals(expectedValue));
+        for (WebElement row : rows) {
+            System.out.println("--" + row.getText());
+        }
+        return rows.stream().anyMatch(row -> {
+            Double aDouble = OperationalUtils.toNumber(row.getText());
+            System.out.println("FieldValue: " + aDouble);
+            System.out.println("ExpectedValue: " + expectedValue);
+            return aDouble.equals(expectedValue.doubleValue());
+        });
     }
 
-    public boolean isNewValuationPresent(String _valuation) {
+    public boolean isNewValuationPresent(Integer valuation) {
+        return isNewValuationPresent(valuation.toString());
+    }
+
+    public boolean isNewValuationPresent(String valuation) {
         Wait.waitForLoaded();
         waitForVisible(firstValuation);
         List<WebElement> rows = new ArrayList<>();
         for (Table table : valuations) {
             rows.addAll(table.getColumnByIndex(5));
         }
-        Double expectedValue = doubleString(_valuation);
-        return rows.stream().anyMatch(row -> OperationalUtils.toNumber(row.getText()).equals(expectedValue));
+        return rows.stream().anyMatch(row -> OperationalUtils.toNumber(row.getText()).equals(doubleString(valuation)));
+    }
+
+    public boolean isDepreciationPercentPresent(String columnName, String percentage) {
+        Wait.waitForLoaded();
+        waitForVisible(firstValuation);
+        List<WebElement> rows = new ArrayList<>();
+        for (Table table : valuations) {
+            rows.addAll(table.getColumnByIndex(5));
+        }
+        return rows.stream().anyMatch(row -> OperationalUtils.toNumber(row.getText()).equals(doubleString(percentage)));
     }
 
     public boolean isIncludeInClaimSet() {
@@ -335,37 +370,46 @@ public class SettlementDialog extends Page {
         return stringList;
     }
 
-    public SettlementDialog SelectValuation(String _valuation) {
-        Wait.waitForLoaded();
-        waitForVisible(firstValuation);
-        List<List<WebElement>> row = new ArrayList<>();
-        for (Table table : valuations) {
-            row.addAll(table.getRows());
-        }
-//        row.stream().filter(valuation -> valuation.driver(2).getText().contains(_valuation));
-        for (List<WebElement> list : row) {
-            String valuation = list.get(2).getText();
-            if (valuation.equals(_valuation)) {
-                list.get(1).findElement(By.className("x-form-radio-default")).click();
+    public SettlementDialog selectValuation(Valuation valuation) {
+        for (int i = 0; i < 5; i++) {
+            driver.findElement(By.cssSelector("tr." + valuation.className + " .x-form-radio-default")).click();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-//        List<WebElement> rows = new ArrayList<>();
-//        for (Table table: valuations) {
-//            rows.addAll(table.getColumnByIndex(2));
-//        }
-//        rows.stream().filter(valuation -> valuation.getText().equals(_valuation)).findFirst().driver().click();
-
         return this;
     }
 
+    private void waitTillValuationRecalculated(Valuation valuation) {
+        String valuationName = driver.findElement(By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td[2]//div")).getText();
+        List<String> valuationNameParts = splitByWord(valuationName);
+        try {
+            Wait.For((Function<WebDriver, Object>) webDriver -> {
+                String assessmentBasedOn = driver.findElement(By.xpath(".//div[contains(@class, 'assessmentBaseManualText')]//div[@role='textbox']")).getText();
+                System.out.println("Valuation: "+valuationName);
+                System.out.println("Assessment: "+assessmentBasedOn);
+                List<String> assessmentTextParts = splitByWord(assessmentBasedOn);
+                return  !Collections.disjoint(valuationNameParts, assessmentTextParts);
+            });
+        } catch (Exception e) {
+            logger.info("Couldn't compare current valuation with assessmentText");
+        }
+    }
 
-    public Double VoucherFaceValueFieldText() {
+    private List<String> splitByWord(String valuationName) {
+        return Arrays.stream(valuationName.split(" ")).map(String::toLowerCase).collect(Collectors.toList());
+    }
+
+
+    public Double voucherFaceValueFieldText() {
         Wait.waitForLoaded();
         waitForVisible(voucherFaceValue);
         return getDoubleValue(voucherFaceValue.getText());
     }
 
-    public Double VoucherCashValueFieldText() {
+    public Double voucherCashValueFieldText() {
         Wait.waitForLoaded();
         waitForVisible(voucherCashValue);
         return getDoubleValue(voucherCashValue.getText());
@@ -377,7 +421,7 @@ public class SettlementDialog extends Page {
         return getDoubleValue(customerDemand.getText());
     }
 
-    public Double CashCompensationValue() {
+    public Double cashCompensationValue() {
         waitForVisible(cashCompensationValue);
         return getDoubleValue(cashCompensationValue.getText());
     }
@@ -405,12 +449,12 @@ public class SettlementDialog extends Page {
         return description.getText();
     }
 
-    public void AddValuation() {
-        waitForVisible(addValuation);
+    public AddValuationDialog addValuation() {
         addValuation.click();
+        return at(AddValuationDialog.class);
     }
 
-    public SettlementDialog EnterAgeYears(String _ageYears) {
+    public SettlementDialog enterAgeYears(String _ageYears) {
         waitForVisible(ageYears);
         ageYears.enter(_ageYears);
         ageYears.sendKeys(Keys.TAB);
@@ -444,19 +488,19 @@ public class SettlementDialog extends Page {
         return brand.getText();
     }
 
-    public SettlementDialog OpenVoucherValuationCard() {
+    public EditVoucherValuationDialog openVoucherValuationCard() {
         waitForVisible(voucherValuationCard);
         voucherValuationCard.click();
-        return this;
+        return BaseDialog.at(EditVoucherValuationDialog.class);
     }
 
-    public SettlementDialog OpenVoucherTermAndConditions() {
+    public VoucherTermsAndConditionsDialog openVoucherTermAndConditions() {
         waitForVisible(voucherTermAndConditions);
         voucherTermAndConditions.click();
-        return this;
+        return at(VoucherTermsAndConditionsDialog.class);
     }
 
-    public SettlementDialog ApplyReductionRuleByValue(String _reductionRule) {
+    public SettlementDialog applyReductionRuleByValue(String _reductionRule) {
         Wait.waitForLoaded();
         List<List<WebElement>> rowsNames = ruleSuggestion.getRows();
         for (List<WebElement> list : rowsNames) {
@@ -468,7 +512,7 @@ public class SettlementDialog extends Page {
         return this;
     }
 
-    public SettlementDialog AutomaticDepreciation(boolean state) {
+    public SettlementDialog automaticDepreciation(boolean state) {
         Wait.waitForEnabled(automaticDepreciation);
         automaticDepreciation.set(state);
         Wait.waitForLoaded();
@@ -490,4 +534,17 @@ public class SettlementDialog extends Page {
         return Double.parseDouble(s);
     }
 
+
+    public static enum Valuation {
+        NOT_SELECTED("valuation-type-NOT_SELECTED"),
+        CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
+        VOUCHER("valuation-type-VOUCHER"),
+        NEW_PRICE("valuation-type-NEW_PRICE");
+
+        private String className;
+
+        Valuation(String className) {
+            this.className = className;
+        }
+    }
 }

@@ -1,17 +1,21 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
+
+import static com.scalepoint.automation.utils.Wait.waitForElement;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class TextSearchPage extends Page {
@@ -39,6 +43,9 @@ public class TextSearchPage extends Page {
     @FindBy(css = "#categoryFieldSet table:first-child")
     private Table firstCategoriesList;
 
+    @FindBy(xpath = "(//img[@id='sortMarketPriceImg']/parent::td/a[@class='darkBlueUL'])")
+    private Link marketPrice;
+
     @Override
     protected String geRelativeUrl() {
         return URL;
@@ -47,6 +54,8 @@ public class TextSearchPage extends Page {
     @Override
     public TextSearchPage ensureWeAreOnPage() {
         waitForUrl(URL);
+        waitForElement(By.id("categoryLegend"));
+        waitForPageLoaded();
         return this;
     }
 
@@ -79,16 +88,19 @@ public class TextSearchPage extends Page {
         List<List<WebElement>> product = productsList.getRows();
         product.stream().filter(products -> products.get(3).getText().contains(pproduct))
                 .filter(webElements -> webElements.get(9).getAttribute("class").contains("matchbutton"));
-        Window.get().openDialog(match);
-        return at(SettlementDialog.class);
+        match.click();
+        return BaseDialog.at(SettlementDialog.class);
     }
 
-    public TextSearchPage ChooseCategory(String _category) {
-        Wait.waitForPageLoaded();
-        Wait.waitForElement(By.id("#categoryFieldSet table:first-child"));
+    public TextSearchPage chooseCategory(String _category) {
+        Wait.waitForElement(By.cssSelector("#categoryFieldSet table:first-child"));
         List<WebElement> categories = categoriesList;
         categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get().click();
         return this;
+    }
+
+    public boolean isMarketPriceVisible(){
+        return marketPrice.exists();
     }
 }
 
