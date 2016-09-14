@@ -12,6 +12,7 @@ import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import org.apache.log4j.MDC;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -22,11 +23,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FT.*;
 import static org.testng.Assert.assertTrue;
 
 public class SmokeTests extends BaseTest {
-
-    @BeforeMethod
-    public void init(Method method) {
-        logger.info("Starting "+method.getName());
-    }
 
     @Test(description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim", dataProvider = "testDataProvider")
     public void ecc3032_reopenSavedClaim(User user, Claim claim) {

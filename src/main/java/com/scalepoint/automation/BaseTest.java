@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
+import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     @BeforeMethod
-    public void baseInit() throws Exception {
+    public void baseInit(Method method) throws Exception {
+        MDC.put("sessionid", method.getName());
+        logger.info("Starting "+method.getName());
+
         String[] activeProfiles = environment.getActiveProfiles();
         if (activeProfiles.length == 0) {
             throw new IllegalStateException("Profile must be specified");
@@ -87,6 +91,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Window.cleanUp();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
+        MDC.clear();
     }
 
     @DataProvider(name = "testDataProvider")
