@@ -77,9 +77,12 @@ public class Window {
         }
 
         public void switchToLast() {
+            logger.info("switchToLast");
             for (String winHandle : driver.getWindowHandles()) {
+                logger.info(winHandle);
                 driver.switchTo().window(winHandle);
             }
+            logger.info("url after switch: "+driver.getCurrentUrl());
         }
 
         public void waitForNewWindowAndSwithToIt() {

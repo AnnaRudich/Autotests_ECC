@@ -63,6 +63,7 @@ public abstract class Page extends Actions {
         Wait.For(webDriver -> {
             String currentUrl = driver.getCurrentUrl();
             logger.info("Current url: {}", currentUrl);
+            logger.info("Windows count: {}", webDriver.getWindowHandles().size());
             Window.get().switchToLast();
             return currentUrl.contains(expectedUrl);
         }, totalTimeoutInSeconds, pollingMs);

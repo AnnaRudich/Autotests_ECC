@@ -45,7 +45,7 @@ import java.util.List;
         DirtiesContextTestExecutionListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
-    private static Logger logger = LoggerFactory.getLogger(BaseTest.class);
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private Environment environment;
@@ -104,7 +104,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             }
             return new Object[][]{instances.toArray()};
         } catch (Exception e) {
-            logger.error(method.getName() + " : " + e.getMessage(), e);
+            e.printStackTrace();
             return new Object[][]{{}};
         }
     }
