@@ -158,4 +158,11 @@ public class User {
         this.basic = value;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", company='" + company + '\'' +
+                '}';
+    }
 }

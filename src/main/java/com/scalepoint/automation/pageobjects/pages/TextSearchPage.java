@@ -76,7 +76,7 @@ public class TextSearchPage extends Page {
     public SettlementDialog match(String pproduct) {
         Wait.waitForAjaxComplete();
         Wait.waitForElement(By.cssSelector("#productsTable table td"));
-        List<List<WebElement>> product = productsList.getRows();
+        List<List<WebElement>> product = Wait.doAndGet(productsList, Table::getRows);
         product.stream().filter(products -> products.get(3).getText().contains(pproduct))
                 .filter(webElements -> webElements.get(9).getAttribute("class").contains("matchbutton"));
         Window.get().openDialog(match);

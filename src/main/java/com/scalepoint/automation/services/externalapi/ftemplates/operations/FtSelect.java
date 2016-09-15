@@ -1,15 +1,17 @@
 package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
 import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import org.jsoup.nodes.Document;
 
-public class FtSelectOperation extends FtOperation {
+public class FtSelect extends FtOperation {
 
     private FTSetting setting;
     private String newOptionText;
+    private FtOperation rollbackOperation;
 
-    public FtSelectOperation(FTSetting setting, String newOptionText) {
+    public FtSelect(FTSetting setting, String newOptionText) {
         this.setting = setting;
         this.newOptionText = newOptionText;
     }
@@ -18,7 +20,14 @@ public class FtSelectOperation extends FtOperation {
     public boolean hasSameState(Document document) {
         String text = document.select(setting.getLocator()).text();
         logger.info("Setting: {} Current: {} Change to: {}", setting.name(), text, newOptionText);
+
+        rollbackOperation = FTSettings.select(setting, text);
         return newOptionText.equals(text);
+    }
+
+    @Override
+    public FtOperation getRollbackOperation() {
+        return rollbackOperation;
     }
 
     @Override
@@ -28,8 +37,8 @@ public class FtSelectOperation extends FtOperation {
 
     @Override
     public String toString() {
-        return "FtSelectOperation{" +
-                "setting=" + setting.getDescription() +
+        return "FtSelect{" +
+                "type=" + setting.getDescription() +
                 ", newOptionText='" + newOptionText + '\'' +
                 '}';
     }

@@ -3,12 +3,14 @@ package com.scalepoint.automation.spring;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.data.TestData;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableAutoConfiguration
 public class BeansConfiguration {
 
     @Value("${"+ com.scalepoint.automation.utils.Configuration.KEY_LOCALE+"}")

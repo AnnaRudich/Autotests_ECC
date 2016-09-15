@@ -53,10 +53,6 @@ public class Wait {
         return wrap(focusingOfElementLocated(elementLocator));
     }
 
-    public static WebDriverWait Wait() {
-        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS);
-    }
-
     public static void waitForReindexation(final By elementLocator) {
         FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
                 .withTimeout(TIME_OUT_IN_MINUTES_REINDEXATION, TimeUnit.MINUTES)
@@ -64,6 +60,25 @@ public class Wait {
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
         wait.until(displayingOfElementLocated(elementLocator));
         log.info("Reindexation was performed after " + watch.toString());
+    }
+
+
+    public static <T, U extends WebElement> T doAndGet(U element, java.util.function.Function<U, T> action) {
+        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
+                .withTimeout(30, TimeUnit.SECONDS)
+                .pollingEvery(2, TimeUnit.SECONDS)
+                .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
+        return wait.until(new Function<WebDriver, T>() {
+            @Override
+            public T apply(WebDriver webDriver) {
+                try {
+                    return action.apply(element);
+                } catch (Exception e) {
+                    System.out.println("ERROR:"+e.getMessage());
+                    throw e;
+                }
+            }
+        });
     }
 
     public static void waitForModalWindowAppear() {

@@ -335,4 +335,11 @@ public class ClaimItem {
     public String getBrandLinkVoucher4() {
         return brandLinkVoucher4;
     }
+
+    @Override
+    public String toString() {
+        return "ClaimItem{" +
+                "ssDescriptionSP='" + ssDescriptionSP + '\'' +
+                '}';
+    }
 }

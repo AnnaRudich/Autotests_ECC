@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -9,19 +8,20 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.Bug;
+import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.apache.log4j.MDC;
+import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import java.lang.reflect.Method;
-
-import static com.scalepoint.automation.services.externalapi.ftemplates.FT.*;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static org.testng.Assert.assertTrue;
 
+@Listeners({FuncTemplatesListener.class})
 public class SmokeTests extends BaseTest {
 
     @Test(description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim", dataProvider = "testDataProvider")
@@ -34,7 +34,6 @@ public class SmokeTests extends BaseTest {
 
         assertTrue(settlementPage.isSettlementPagePresent(), "Settlement page is not loaded");
     }
-
 
     @Test(description = "ECC-3032, ECC-2629 It's possible to complete claim with mail. Completed " +
             "claim is added to the latest claims list with Completed status", dataProvider = "testDataProvider")
@@ -61,15 +60,10 @@ public class SmokeTests extends BaseTest {
     }
 
     @Test(description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email", dataProvider = "testDataProvider")
+    @SettingRequired(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
+    @SettingRequired(type = FTSetting.ENABLE_SELF_SERVICE)
+    @SettingRequired(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
-        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-        functionalTemplatesApi.updateTemplate(user.getFtId(),
-                LoginPage.class,
-                disable(FTSetting.USE_SELF_SERVICE2),
-                enable(FTSetting.ENABLE_SELF_SERVICE),
-                enable(FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-        );
-
 
         String password = "12341234";
         loginAndCreateClaim(user, claim).
@@ -125,19 +119,14 @@ public class SmokeTests extends BaseTest {
     }
 
     @Test(description = "ECC-2631 It's possible to match product via Quick match icon for Excel imported claim lines", dataProvider = "testDataProvider")
+    @SettingRequired(type = FTSetting.BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
+    @SettingRequired(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
+    @SettingRequired(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
+    @SettingRequired(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim);
-
-        SettlementPage settlementPage = new FunctionalTemplatesApi(user)
-                .updateTemplate(user.getFtId(), SettlementPage.class,
-                        enable(FTSetting.BEST_FIT_FOR_NONORDERABLE_PRODUCTS),
-                        enable(FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT),
-                        setValue(FTSetting.NUMBER_BEST_FIT_RESULTS, "5"),
-                        select(FTSetting.ALLOW_NONORDERABLE_PRODUCTS, "Yes, Always")
-                );
-
-        settlementPage.importExcelFile(claimItem.getExcelPath1());
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim).
+                importExcelFile(claimItem.getExcelPath1());
 
         assertTrue(settlementPage.isItemPresent(claimItem.getXlsDescr1()), "The claim item is not found");
 

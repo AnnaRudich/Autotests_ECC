@@ -44,7 +44,7 @@ public class MyPage extends Page {
     @Override
     public MyPage ensureWeAreOnPage() {
         waitForUrl(URL);
-        waitForVisible(createNewCase);
+        waitForVisible(editPreferences);
         waitForVisible(lastClaims);
         return this;
     }

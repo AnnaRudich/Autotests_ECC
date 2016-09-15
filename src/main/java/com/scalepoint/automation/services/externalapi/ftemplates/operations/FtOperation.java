@@ -11,5 +11,13 @@ public abstract class FtOperation {
 
     public abstract boolean hasSameState(Document document);
 
+    public abstract FtOperation getRollbackOperation();
+
     public abstract void updateSetting(EditFunctionTemplatePage page);
+
+    public enum OperationType {
+        CHECKBOX,
+        INPUT,
+        SELECT
+    }
 }

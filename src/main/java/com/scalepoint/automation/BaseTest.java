@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
+import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
 import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -30,9 +31,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -44,6 +47,7 @@ import java.util.List;
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
+@Listeners({ FuncTemplatesListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -65,7 +69,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     @BeforeMethod
-    public void baseInit(Method method) throws Exception {
+    public void baseInit(Method method, ITestContext context) throws Exception {
         MDC.put("sessionid", method.getName());
         logger.info("Starting "+method.getName());
 

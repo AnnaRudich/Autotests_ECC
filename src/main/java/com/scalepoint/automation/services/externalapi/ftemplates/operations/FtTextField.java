@@ -1,15 +1,17 @@
 package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
 import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import org.jsoup.nodes.Document;
 
-public class FtInputOperation extends FtOperation {
+public class FtTextField extends FtOperation {
 
     private FTSetting setting;
     private String newValue;
+    private FtOperation rollbackOperation;
 
-    public FtInputOperation(FTSetting setting, String newValue) {
+    public FtTextField(FTSetting setting, String newValue) {
         this.setting = setting;
         this.newValue = newValue;
     }
@@ -18,7 +20,14 @@ public class FtInputOperation extends FtOperation {
     public boolean hasSameState(Document document) {
         String currentValue = document.select(setting.getLocator()).val();
         logger.info("Setting: {} Current: {} Change to: {}", setting.name(), currentValue, newValue);
+
+        rollbackOperation = FTSettings.setValue(setting, currentValue);
         return currentValue.equals(newValue);
+    }
+
+    @Override
+    public FtOperation getRollbackOperation() {
+        return rollbackOperation;
     }
 
     @Override
@@ -28,8 +37,8 @@ public class FtInputOperation extends FtOperation {
 
     @Override
     public String toString() {
-        return "FtInputOperation{" +
-                "setting=" + setting.getDescription() +
+        return "FtTextField{" +
+                "type=" + setting.getDescription() +
                 ", newValue='" + newValue + '\'' +
                 '}';
     }

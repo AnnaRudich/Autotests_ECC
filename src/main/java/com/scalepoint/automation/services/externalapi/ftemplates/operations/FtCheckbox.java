@@ -1,15 +1,17 @@
 package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
 import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import org.jsoup.nodes.Document;
 
-public class FtCheckBoxOperation extends FtOperation {
+public class FtCheckbox extends FtOperation {
 
     private FTSetting setting;
     private OperationType operationType;
+    private FtOperation rollbackOperation;
 
-    public FtCheckBoxOperation(FTSetting setting, OperationType operationType) {
+    public FtCheckbox(FTSetting setting, OperationType operationType) {
         this.setting = setting;
         this.operationType = operationType;
     }
@@ -18,7 +20,14 @@ public class FtCheckBoxOperation extends FtOperation {
     public boolean hasSameState(Document document) {
         boolean checked = document.select(setting.getLocator()).hasAttr("checked");
         logger.info("Setting: {} Current: {} Change to: {}", setting.name(), checked, (operationType == OperationType.ENABLE));
+
+        rollbackOperation = checked ? FTSettings.enable(setting) : FTSettings.disable(setting);
         return (operationType == OperationType.ENABLE) == checked;
+    }
+
+    @Override
+    public FtOperation getRollbackOperation() {
+        return rollbackOperation;
     }
 
     @Override
@@ -30,15 +39,15 @@ public class FtCheckBoxOperation extends FtOperation {
         }
     }
 
-    public static enum OperationType {
+    public enum OperationType {
         ENABLE,
         DISABLE,
     }
 
     @Override
     public String toString() {
-        return "FtCheckBoxOperation {" +
-                "setting=" + setting.getDescription() +
+        return "FtCheckbox {" +
+                "type=" + setting.getDescription() +
                 ", operationType=" + operationType +
                 '}';
     }
