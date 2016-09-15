@@ -81,6 +81,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         JavascriptHelper.initializeCommonFunctions(driver);
         driver.manage().window().maximize();
+        logger.info("MainHandle "+Browser.driver().getWindowHandle());
     }
 
     @AfterMethod
@@ -140,8 +141,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         static void cleanUp() {
-            UsersManager.returnUser(get());
-            holder.get();
+            if (get()!=null) {
+                UsersManager.returnUser(get());
+            }
+            holder.remove();
         }
     }
 }
