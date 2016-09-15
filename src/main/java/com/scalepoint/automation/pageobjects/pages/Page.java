@@ -45,10 +45,11 @@ public abstract class Page extends Actions {
         int totalTimeoutInSeconds = 10;
         int pollingMs = 1000;
 
-        logger.info("Expected: {}", expectedUrl);
+        logger.info(" Expected: {}", expectedUrl);
         Wait.For(webDriver -> {
             String currentUrl = driver.getCurrentUrl();
             logger.info("Current url: {}", currentUrl);
+            logger.info("Windows count: {}", webDriver.getWindowHandles().size());
             Window.get().switchToLast();
             return currentUrl.contains(expectedUrl);
         }, totalTimeoutInSeconds, pollingMs);

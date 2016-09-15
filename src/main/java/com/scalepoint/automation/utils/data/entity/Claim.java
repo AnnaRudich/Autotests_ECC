@@ -213,7 +213,7 @@ public class Claim {
     @Override
     public String toString() {
         return "Client{" +
-                "fullNameWithTitle='" + fullNameWithTitle + '\'' +
+                "name='" + fullNameWithTitle + '\'' +
                 ", claimNumber='" + claimNumber + '\'' +
                 '}';
     }

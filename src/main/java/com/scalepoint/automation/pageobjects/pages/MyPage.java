@@ -44,7 +44,7 @@ public class MyPage extends Page {
     @Override
     public MyPage ensureWeAreOnPage() {
         waitForUrl(URL);
-        waitForVisible(createNewCase);
+        waitForVisible(editPreferences);
         waitForVisible(lastClaims);
         return this;
     }
@@ -55,7 +55,7 @@ public class MyPage extends Page {
 
     public CustomerDetailsPage openRecentClient() {
         recentCustomer.click();
-        return new CustomerDetailsPage();
+        return at(CustomerDetailsPage.class);
     }
 
     public boolean isRecentClaimCompleted(Claim claim) {

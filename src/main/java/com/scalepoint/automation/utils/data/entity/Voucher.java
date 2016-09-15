@@ -325,6 +325,14 @@ public class Voucher {
     public String getExistingVoucher() {
         return existingVoucher;
     }
+
+    @Override
+    public String toString() {
+        return "Voucher{" +
+                "name='" + voucherNameSP + '\'' +
+                ", discount='" + discount + '\'' +
+                '}';
+    }
 }
 
 

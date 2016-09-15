@@ -24,6 +24,8 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
+import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +37,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -52,15 +56,19 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
+@Listeners({ FuncTemplatesListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
-    private static Logger logger = LoggerFactory.getLogger(BaseTest.class);
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private Environment environment;
 
     @BeforeMethod
-    public void baseInit() throws Exception {
+    public void baseInit(Method method, ITestContext context) throws Exception {
+        MDC.put("sessionid", method.getName());
+        logger.info("Starting "+method.getName());
+
         String[] activeProfiles = environment.getActiveProfiles();
         if (activeProfiles.length == 0) {
             throw new IllegalStateException("Profile must be specified");
@@ -73,6 +81,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         JavascriptHelper.initializeCommonFunctions(driver);
         driver.manage().window().maximize();
+        logger.info("MainHandle "+Browser.driver().getWindowHandle());
     }
 
     @AfterMethod
@@ -83,6 +92,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Window.cleanUp();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
+        MDC.clear();
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
@@ -138,7 +148,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             }
             return new Object[][]{instances.toArray()};
         } catch (Exception e) {
-            logger.error(method.getName() + " : " + e.getMessage(), e);
+            e.printStackTrace();
             return new Object[][]{{}};
         }
     }
@@ -169,8 +179,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         static void cleanUp() {
-            UsersManager.returnUser(get());
-            holder.get();
+            if (get()!=null) {
+                UsersManager.returnUser(get());
+            }
+            holder.remove();
         }
     }
 

@@ -23,7 +23,7 @@ public class SettlementPage extends BaseClaimPage {
     private static String URL = "webshop/jsp/matching_engine/settlement.jsp";
 
     @FindBy(css = "#settlementGrid-body table")
-    private List<Table> claims;
+    private Table claim;
 
     @FindBy(css = "#settlementGrid-body table:first-child")
     private Table firstClaim;
@@ -196,14 +196,11 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public boolean isDepreciationPercentPresent(String _claim, String _depreciationPercent) {
-        List<List<WebElement>> rowsNames = new ArrayList<>();
-        for (Table table : claims) {
-            rowsNames.addAll(table.getRows());
-        }
+        List<List<WebElement>> rowsNames = claim.getRows();
         for (List<WebElement> list : rowsNames) {
             String claim = list.get(4).getText();
             if (claim.equals(_claim)) {
-                String actualDepreciationPercent = list.get(10).getText();
+                String actualDepreciationPercent = list.get(9).getText();
                 return actualDepreciationPercent.equals(_depreciationPercent);
             }
         }
@@ -212,10 +209,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public SettlementDialog openEditSettlementDialogByClaimDescr(String _claimDescr) {
         selectClaimItemByDescription(_claimDescr);
-        List<List<WebElement>> rowsNames = new ArrayList<>();
-        for (Table table : claims) {
-            rowsNames.addAll(table.getRows());
-        }
+        List<List<WebElement>> rowsNames = claim.getRows();
         for (List<WebElement> list : rowsNames) {
             String claim = list.get(4).getText();
             if (claim.equals(_claimDescr)) {
@@ -240,10 +234,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public boolean getClaimColorByDescription(String _item, String _color) {
         selectClaimItemByDescription(_item);
-        List<List<WebElement>> rowsNames = new ArrayList<>();
-        for (Table table : claims) {
-            rowsNames.addAll(table.getRows());
-        }
+        List<List<WebElement>> rowsNames = claim.getRows();
         for (List<WebElement> list : rowsNames) {
             String claim = list.get(4).getText();
             if (claim.equals(_item)) {
@@ -256,10 +247,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public boolean getComputedClaimColorByDescription(String _item, String _color) {
         selectClaimItemByDescription(_item);
-        List<List<WebElement>> rowsNames = new ArrayList<>();
-        for (Table table : claims) {
-            rowsNames.addAll(table.getRows());
-        }
+        List<List<WebElement>> rowsNames = claim.getRows();
         for (List<WebElement> list : rowsNames) {
             String claim = list.get(4).getText();
             if (claim.equals(_item)) {
