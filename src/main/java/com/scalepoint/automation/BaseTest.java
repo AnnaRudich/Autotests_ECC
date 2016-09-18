@@ -62,7 +62,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
-@Listeners({ FuncTemplatesListener.class})
+@Listeners({ InvokedMethodListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -73,7 +73,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
         MDC.put("sessionid", method.getName());
-        logger.info("Starting "+method.getName());
+        logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
         String[] activeProfiles = environment.getActiveProfiles();
         if (activeProfiles.length == 0) {

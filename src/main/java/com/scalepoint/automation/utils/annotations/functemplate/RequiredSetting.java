@@ -6,8 +6,8 @@ import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-@Repeatable(value = SettingsRequired.class)
-public @interface SettingRequired {
+@Repeatable(value = RequiredSettings.class)
+public @interface RequiredSetting {
 
     String UNDEFINED = "undefined";
 

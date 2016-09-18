@@ -19,4 +19,12 @@ class DriverData {
     public String getWindowHandle() {
         return windowHandle;
     }
+
+    @Override
+    public String toString() {
+        return "DriverData{" +
+                "driver=" + driver +
+                ", windowHandle='" + windowHandle + '\'' +
+                '}';
+    }
 }

@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.annotations;
+package com.scalepoint.automation.utils.annotations.functemplate;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface RVPage {
+@Target({ElementType.METHOD, ElementType.TYPE})
+public @interface RequiredSettings {
+    RequiredSetting[] value();
 }
