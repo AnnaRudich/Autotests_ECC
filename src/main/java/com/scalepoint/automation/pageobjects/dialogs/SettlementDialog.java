@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.driver.Browser;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +27,9 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementDialog extends BaseDialog {
 
+    public static final int DEPRECIATION_COLUMN = 4;
+    public static final int TOTAL_AMOUNT_OF_VALUATION = 5;
+    public static final int AMOUNT_OF_VALUATION = 3;
     @FindBy(id = "description-textfield-inputEl")
     private ExtInput description;
 
@@ -124,6 +128,8 @@ public class SettlementDialog extends BaseDialog {
 
     EccActions eccActions = new EccActions(Browser.driver());
 
+    private String enteredDescription;
+
     @Override
     public SettlementDialog ensureWeAreAt() {
         Wait.waitForAjaxComplete();
@@ -132,7 +138,8 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillDescription(String descriptionText) {
-        description.enter(descriptionText);
+        this.enteredDescription = descriptionText;
+        description.setValue(descriptionText);
         return this;
     }
 
@@ -194,6 +201,16 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    /*we can't control SID recalculation/redraw, so just wait*/
+    public SettlementDialog waitASecond() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
     public SettlementDialog fillVoucher(int voucherName) {
         avoucher.select(voucherName);
         return this;
@@ -230,9 +247,9 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog FillInItem(ClaimItem claimItem) {
         Wait.waitForLoaded();
         fillDescription(claimItem.getTextFieldSP());
-        fillCategory(claimItem.getExistingCat1());
-        fillSubCategory(claimItem.getExistingSubCat1());
-        fillNewPrice(claimItem.getNewPriceSP());
+        fillNewPrice(claimItem.getNewPriceSP_2400());
+        fillCategory(claimItem.getExistingCat1_Born());
+        fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
         setReviewed(true);
         return this;
     }
@@ -280,7 +297,12 @@ public class SettlementDialog extends BaseDialog {
 
     public void ok() {
         waitForVisible(ok);
+        if (StringUtils.isBlank(description.getText())) {
+            description.setValue(enteredDescription);
+        }
         ok.click();
+        Wait.waitForElementDisappear(ok);
+        Wait.waitForAjaxComplete();
     }
 
     public boolean isVoucherListed(Voucher _voucher) {
@@ -297,7 +319,7 @@ public class SettlementDialog extends BaseDialog {
         cancel.click();
     }
 
-    public SettlementDialog SetDiscountAndDepreciation(Boolean state) {
+    public SettlementDialog setDiscountAndDepreciation(Boolean state) {
         waitForVisible(combineDiscountDepreciation);
         combineDiscountDepreciation.set(state);
         return this;
@@ -310,46 +332,29 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public boolean isValuationPresent(Integer expectedValue) {
-        Wait.waitForLoaded();
-        waitForVisible(firstValuation);
-        List<WebElement> rows = new ArrayList<>();
-        for (Table table : valuations) {
-            rows.addAll(table.getColumnByIndex(3));
-        }
-        for (WebElement row : rows) {
-            System.out.println("--" + row.getText());
-        }
-        return rows.stream().anyMatch(row -> {
-            Double aDouble = OperationalUtils.toNumber(row.getText());
-            System.out.println("FieldValue: " + aDouble);
-            System.out.println("ExpectedValue: " + expectedValue);
-            return aDouble.equals(expectedValue.doubleValue());
-        });
+    public boolean isAmountOfValuationEqualTo(Integer amount, Valuation valuation) {
+        return anyMatchFromValuationsTable(amount.toString(), valuation, AMOUNT_OF_VALUATION);
     }
 
-    public boolean isNewValuationPresent(Integer valuation) {
-        return isNewValuationPresent(valuation.toString());
+    public boolean isTotalAmountOfValuationEqualTo(String amount, Valuation valuation) {
+        return anyMatchFromValuationsTable(amount, valuation, TOTAL_AMOUNT_OF_VALUATION);
     }
 
-    public boolean isNewValuationPresent(String valuation) {
-        Wait.waitForLoaded();
-        waitForVisible(firstValuation);
-        List<WebElement> rows = new ArrayList<>();
-        for (Table table : valuations) {
-            rows.addAll(table.getColumnByIndex(5));
-        }
-        return rows.stream().anyMatch(row -> OperationalUtils.toNumber(row.getText()).equals(doubleString(valuation)));
+    public boolean isTotalAmountOfValuationEqualTo(Integer amount, Valuation valuation) {
+        return anyMatchFromValuationsTable(amount.toString(), valuation, TOTAL_AMOUNT_OF_VALUATION);
     }
 
-    public boolean isDepreciationPercentPresent(String columnName, String percentage) {
+    public boolean isDepreciationPercentEqualTo(String amount, Valuation valuation) {
+        return anyMatchFromValuationsTable(amount, valuation, DEPRECIATION_COLUMN);
+    }
+
+    private boolean anyMatchFromValuationsTable(String value, Valuation valuation, int column) {
         Wait.waitForLoaded();
         waitForVisible(firstValuation);
-        List<WebElement> rows = new ArrayList<>();
-        for (Table table : valuations) {
-            rows.addAll(table.getColumnByIndex(5));
-        }
-        return rows.stream().anyMatch(row -> OperationalUtils.toNumber(row.getText()).equals(doubleString(percentage)));
+        String foundText = driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td["+column+"]")).getText();
+        boolean equals = OperationalUtils.toNumber(foundText).equals(doubleString(value));
+        logger.info("Valuation requested: {} found: {} matched: {}", value, foundText, equals);
+        return equals;
     }
 
     public boolean isIncludeInClaimSet() {
@@ -388,8 +393,6 @@ public class SettlementDialog extends BaseDialog {
         try {
             Wait.For((Function<WebDriver, Object>) webDriver -> {
                 String assessmentBasedOn = driver.findElement(By.xpath(".//div[contains(@class, 'assessmentBaseManualText')]//div[@role='textbox']")).getText();
-                System.out.println("Valuation: "+valuationName);
-                System.out.println("Assessment: "+assessmentBasedOn);
                 List<String> assessmentTextParts = splitByWord(assessmentBasedOn);
                 return  !Collections.disjoint(valuationNameParts, assessmentTextParts);
             });
@@ -415,7 +418,7 @@ public class SettlementDialog extends BaseDialog {
         return getDoubleValue(voucherCashValue.getText());
     }
 
-    public Double CustomerDemandValue() {
+    public Double customerDemandValue() {
         Wait.waitForLoaded();
         waitForVisible(customerDemand);
         return getDoubleValue(customerDemand.getText());
@@ -500,15 +503,30 @@ public class SettlementDialog extends BaseDialog {
         return at(VoucherTermsAndConditionsDialog.class);
     }
 
-    public SettlementDialog applyReductionRuleByValue(String _reductionRule) {
+    public SettlementDialog applyReductionRuleByValue(String reductionRuleValue) {
         Wait.waitForLoaded();
+        boolean foundRule = false;
         List<List<WebElement>> rowsNames = ruleSuggestion.getRows();
         for (List<WebElement> list : rowsNames) {
             String reduction = list.get(1).getText().replaceAll("%", "");
-            if (reduction.equals(_reductionRule)) {
-                list.get(2).click();
+            if (reduction.equals(reductionRuleValue)) {
+                list.get(2).findElement(By.tagName("img")).click();
+                foundRule = true;
             }
         }
+        if (!foundRule) {
+            throw new IllegalStateException("Reduction rule with value: "+reductionRuleValue+" not found");
+        }
+        Wait.For(webDriver -> {
+            try {
+                String valuationDepreciation = Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.NEW_PRICE + "')]//td[4]//div")).getText();
+                return reductionRuleValue.equals(valuationDepreciation);
+            } catch (Exception e) {
+                logger.error("Can't compare reduction and depreciation! " + e.getMessage(), e);
+            }
+            return true;
+        });
+
         return this;
     }
 

@@ -9,7 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ServerApi;
-import com.scalepoint.automation.services.externalapi.ftemplates.FT;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -25,7 +25,10 @@ import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.MDC;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +41,14 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -85,8 +91,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     @AfterMethod
-    public void cleanup(Method method) {
+    public void cleanup(Method method, ITestResult iTestResult) {
         logger.info("Clean up after: {}", method.toString());
+
+        takeScreenshot(method, iTestResult);
 
         Browser.quit();
         Window.cleanUp();
@@ -95,7 +103,21 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         MDC.clear();
     }
 
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
+    @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
+    private void takeScreenshot(Method method, ITestResult iTestResult) {
+        if (iTestResult.getThrowable() != null) {
+            try {
+                File screenshotAs = ((TakesScreenshot) Browser.driver()).getScreenshotAs(OutputType.FILE);
+                File destFolder = new File("c:\\tmp");
+                destFolder.mkdirs();
+                FileUtils.copyFile(screenshotAs, new File(destFolder, method.getName()+".jpg"));
+            } catch (IOException e) {
+                logger.error("Can't take screenshot: "+e.getMessage());
+            }
+        }
+    }
+
+    protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
         Page.to(LoginPage.class);
 
         ClaimApi claimApi = new ClaimApi(user);
@@ -108,16 +130,24 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 assert webDriver != null;
                 return webDriver.getWindowHandles().size() > 1;
             }, 5, 1000);
-            processPolicyType();
+            processPolicyType(policyType);
         } catch (Exception ignored) {
         }
 
         return Page.at(SettlementPage.class);
     }
 
-    private void processPolicyType() {
+    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
+        return loginAndCreateClaim(user, claim, null);
+    }
+
+    private void processPolicyType(String policyType) {
         EditPolicyDialog editPolicyDialog = at(EditPolicyDialog.class);
-        editPolicyDialog.chooseAny();
+        if (policyType == null) {
+            editPolicyDialog.chooseAny();
+        } else {
+            editPolicyDialog.choose(policyType);
+        }
     }
 
     protected MyPage login(User user) {
@@ -187,6 +217,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     protected void enableNewSid(User user) {
-        updateFT(user, FT.enable(ENABLE_NEW_SETTLEMENT_ITEM_DIALOG));
+        updateFT(user, FTSettings.enable(ENABLE_NEW_SETTLEMENT_ITEM_DIALOG));
     }
 }

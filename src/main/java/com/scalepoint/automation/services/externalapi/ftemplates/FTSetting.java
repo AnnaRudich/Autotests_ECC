@@ -25,6 +25,8 @@ public enum FTSetting {
     SHOW_POLICY_TYPE("input[name=ftfunctionflag][value=64]", "Show policy type", CHECKBOX),
     SHOW_MARKET_PRICE("input[name=ftfunctionflag5][value=128]", "Show Market Price in ME catalog", CHECKBOX),
     ENABLE_NEW_SETTLEMENT_ITEM_DIALOG("input[name=ftEnableNewSettlementItemDialog]", "Enable new Settlement Item Dialog", CHECKBOX),
+    USE_UCOMMERCE_SHOP("input[name=ftfunctionflag5][value=16777216]", "Use Ucommerce shop", CHECKBOX),
+    FUNC_ENABLE_MARK_REVIEWED_REQUIRED("input[name=ftfunctionflag4][value=1073741824]", "Allow users to mark settlement items as reviewed", CHECKBOX),
 
     //Match FTSetting
     BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value=1]", "Allow BestFit for nonorderable products if possible", CHECKBOX),

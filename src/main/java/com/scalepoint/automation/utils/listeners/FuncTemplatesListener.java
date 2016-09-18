@@ -6,6 +6,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,9 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
 
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
-
         try {
             if (invokedMethod.isTestMethod()) {
-                Optional<User> optionalUser = findUserInParameters(iTestResult);
+                Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
 
@@ -57,6 +57,12 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
                         logger.info("--> {} ", ftOperation.toString());
                     }
                     iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, operationsToRollback));
+
+                    Optional<Claim> optionalClaim = findMethodParameter(iTestResult, Claim.class);
+                    if (optionalClaim.isPresent()) {
+
+                    }
+
                 }
             }
         } catch (Exception e) {
@@ -123,10 +129,11 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
         return requiredSettings;
     }
 
-    private Optional<User> findUserInParameters(ITestResult iTestResult) {
+    @SuppressWarnings("unchecked")
+    private <T> Optional<T> findMethodParameter(ITestResult iTestResult, Class<T> tClass) {
         return Arrays.stream(iTestResult.getParameters()).
-                filter(sc -> sc instanceof User).
-                map(sc -> (User) sc).findFirst();
+                filter(sc -> sc.getClass().equals(tClass)).
+                map(sc -> (T) sc).findFirst();
     }
 
 }

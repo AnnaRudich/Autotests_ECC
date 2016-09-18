@@ -40,10 +40,9 @@ public class ClaimApi extends ServerApi {
         log.info("Create client: " + claim.getClaimNumber());
 
         List<NameValuePair> clientParams = ParamsBuilder.create().
-                add("policytype", claim.getPolicyType()).
+                add("policytype", claim.getPolicyTypeFF()).
                 add("damageDate", new SimpleDateFormat(DATE_FORMAT).format(new Date())).
                 add("last_name", claim.getLastName()).
-                add("a", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
                 add("policy_number", claim.getPolicyNumber()).
                 add("claim_number", claim.getClaimNumber()).

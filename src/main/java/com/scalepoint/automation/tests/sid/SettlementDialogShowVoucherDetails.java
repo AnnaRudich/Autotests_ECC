@@ -6,21 +6,25 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.VoucherTermsAndConditionsDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
-import com.scalepoint.automation.services.externalapi.ftemplates.FT;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
+@Listeners({FuncTemplatesListener.class})
+@SettingRequired(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@SettingRequired(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogShowVoucherDetails extends BaseTest {
-
 
     /**
      * WHEN: Create claim
@@ -101,15 +105,13 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
     }
 
     private void checkBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        enableNewSid(user);
-
         VoucherAgreementApi.AssignedCategory assignedCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
         EditVoucherValuationDialog editVoucherValuationDialog = loginAndCreateClaim(user, claim).addManually().
                 fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP()).
-                fillDepreciation(claimItem.getDepAmount1()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillDepreciation(claimItem.getDepAmount1_10()).
                 fillCategory(assignedCategory).
                 fillVoucher(voucher.getVoucherNameSP()).
                 openVoucherValuationCard();
@@ -129,14 +131,13 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
      */
     @Test(description = "ECC-5519 Verify 'Trade and conditions' buttons and window", dataProvider = "testDataProvider")
     public void ecc5519_2_voucherTradeTermsAndConditions(User user, Claim claim, ClaimItem claimItem) {
-        enableNewSid(user);
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
                 addManually().
                 fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP()).
-                fillDepreciation(claimItem.getDepAmount1()).
-                fillCategory(claimItem.getExistingCat1()).fillSubCategory(claimItem.getExistingSubCat1()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillDepreciation(claimItem.getDepAmount1_10()).
+                fillCategory(claimItem.getExistingCat1_Born()).fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
                 fillVoucher(claimItem.getExistingVoucher2());
 
         VoucherTermsAndConditionsDialog voucherTermsAndConditionsDialog = settlementDialog.openVoucherTermAndConditions();
@@ -165,27 +166,21 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
      * THEN: Check that another voucher is displayed
      */
     @Test(description = "ECC-5519 Verify that Brands and Tags are visible in compact mode", dataProvider = "testDataProvider")
+    @SettingRequired(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
     public void ecc5519_3_voucherBrandTagInSIDCompactMode(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        enableNewSid(user);
-        updateFT(user, FT.enable(FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG));
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementDialog settlementDialog = settlementPage.
+                addManually().
+                fillDescription(claimItem.getTextFieldSP()).
+                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillDepreciation(claimItem.getDepAmount1_10()).
+                fillCategory(claimItem.getExistingCat1_Born()).
+                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillVoucher(claimItem.getExistingVoucher2());
 
-        try {
-            SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-            SettlementDialog settlementDialog = settlementPage.
-                    addManually().
-                    fillDescription(claimItem.getTextFieldSP()).
-                    fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                    fillNewPrice(claimItem.getNewPriceSP()).
-                    fillDepreciation(claimItem.getDepAmount1()).
-                    fillCategory(claimItem.getExistingCat1()).
-                    fillSubCategory(claimItem.getExistingSubCat1()).
-                    fillVoucher(claimItem.getExistingVoucher2());
-
-            assertEquals(settlementDialog.getBrandText(), voucher.getBrandLink(), "Wrong Brand is Displayed");
-            settlementDialog.cancel();
-        } finally {
-            updateFT(user, FT.disable(FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG));
-        }
+        assertEquals(settlementDialog.getBrandText(), voucher.getBrandLink(), "Wrong Brand is Displayed");
+        settlementDialog.cancel();
     }
 
 
@@ -204,14 +199,13 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
      */
     @Test(description = "ECC-5519 Verify that discount distribution can be changed", dataProvider = "testDataProvider")
     public void ecc5519_4_discountDistributionIsChanged(User user, Claim claim, ClaimItem claimItem) {
-        enableNewSid(user);
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
                 addManually().
                 fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP()).
-                fillCategory(claimItem.getExistingCat1()).
-                fillSubCategory(claimItem.getExistingSubCat1()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillCategory(claimItem.getExistingCat1_Born()).
+                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
                 fillVoucher(claimItem.getExistingVoucher2());
 
         EditVoucherValuationDialog editVoucherValuationDialog = settlementDialog.
@@ -238,10 +232,10 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
                 addManually().
                 fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP()).
-                fillDepreciation(claimItem.getDepAmount1()).
-                fillCategory(claimItem.getExistingCat1()).
-                fillSubCategory(claimItem.getExistingSubCat1()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillDepreciation(claimItem.getDepAmount1_10()).
+                fillCategory(claimItem.getExistingCat1_Born()).
+                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
                 fillVoucher(claimItem.getExistingVoucher2());
 
         assertEquals(settlementDialog.getBrandText(), claimItem.getExistingVoucher2(), "Wrong voucher is displayed");

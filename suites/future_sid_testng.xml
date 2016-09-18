@@ -7,7 +7,9 @@
             <class name="com.scalepoint.automation.tests.sid.SettlementDialogSmokeTests"/>
             <class name="com.scalepoint.automation.tests.sid.SettlementDialogTest"/>
             <class name="com.scalepoint.automation.tests.sid.DeprecationDeductedTests"/>
+            <class name="com.scalepoint.automation.tests.sid.DepreciationDeductedCombinedTests"/>
             <class name="com.scalepoint.automation.tests.sid.ReductionRulesInSettlementItemDialogTests"/>
+            <class name="com.scalepoint.automation.tests.sid.ReductionRulesDiscretionaryTypeSIDTests"/>
         </classes>
     </test>
 </suite>

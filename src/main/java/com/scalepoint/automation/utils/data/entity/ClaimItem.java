@@ -120,7 +120,7 @@ public class ClaimItem {
         return textFieldSP;
     }
 
-    public Integer getNewPriceSP() {
+    public Integer getNewPriceSP_2400() {
         return newPriceSP;
     }
 
@@ -136,7 +136,7 @@ public class ClaimItem {
         return ssDescriptionSP;
     }
 
-    public String getExistingCat1() {
+    public String getExistingCat1_Born() {
         return existingCat1;
     }
 
@@ -144,7 +144,7 @@ public class ClaimItem {
         return existingCat2;
     }
 
-    public String getExistingSubCat1() {
+    public String getExistingSubCat1_Babyudstyr() {
         return existingSubCat1;
     }
 
@@ -172,7 +172,7 @@ public class ClaimItem {
         return depTypeDisc;
     }
 
-    public Integer getDepAmount1() {
+    public Integer getDepAmount1_10() {
         return depAmount1;
     }
 
@@ -222,7 +222,7 @@ public class ClaimItem {
 
     }
 
-    public Integer getCustomerDemand() {
+    public Integer getCustomerDemand_500() {
         return customerDemand;
     }
 
@@ -287,11 +287,11 @@ public class ClaimItem {
         return bigCustomDemandPrice;
     }
 
-    public String getExistingCat3() {
+    public String getExistingCat3_Telefoni() {
         return existingCat3;
     }
 
-    public String getExistingSubCat3() {
+    public String getExistingSubCat3_Mobiltelefoner() {
         return existingSubCat3;
     }
 

@@ -40,4 +40,9 @@ public class EditPolicyDialog extends Page {
         policyType.selectByIndex(1);
         Window.get().closeDialog(ok);
     }
+
+    public void choose(String policyTypeValue) {
+        policyType.selectByValue(policyTypeValue);
+        Window.get().closeDialog(ok);
+    }
 }

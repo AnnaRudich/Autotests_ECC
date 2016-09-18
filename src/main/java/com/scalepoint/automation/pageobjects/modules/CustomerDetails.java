@@ -5,13 +5,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class CustomerDetails extends Module {
 
-    @FindBy(xpath = "//td[4][contains(@class,'rejected-text')]")
+    @FindBy(xpath = "//td[9][contains(@class,'rejected-text')]")
     private WebElement cashValue;
 
     @FindBy(xpath = "//td[8][contains(@class,'rejected-text')]")
     private WebElement depreciation;
 
-    @FindBy(xpath = "//td[9][contains(@class,'rejected-text')]")
+    @FindBy(xpath = "//td[4][contains(@class,'rejected-text')]")
     private WebElement faceValue;
 
     @FindBy(xpath = "//td[contains(@class,'rejected-text')]//img")

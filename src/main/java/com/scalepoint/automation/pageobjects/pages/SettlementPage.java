@@ -114,8 +114,7 @@ public class SettlementPage extends BaseClaimPage {
                         "}" +
                         "}" +
                         "groupsLoaded();";
-//        js = "var callback = arguments[arguments.length - 1]; callback(arguments.length);";
-        System.out.println(((JavascriptExecutor) driver).executeAsyncScript(js));
+        ((JavascriptExecutor) driver).executeAsyncScript(js);
         return BaseDialog.at(SettlementDialog.class);
     }
 
@@ -177,15 +176,8 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementPage selectClaimItemByDescription(String _item) {
-        List<WebElement> rows = new ArrayList<>();
-        for (Table table : claims) {
-            rows.addAll(table.getColumnByIndex(5));
-        }
-        try {
+        List<WebElement> rows = claim.getColumnByIndex(5);
             rows.stream().filter(claim -> claim.getText().contains(_item)).findFirst().get().click();
-        } catch (StaleElementReferenceException e) {
-            logger.info("Trying to recover from a stale element :" + e.getMessage());
-        }
         return this;
     }
 
@@ -226,7 +218,7 @@ public class SettlementPage extends BaseClaimPage {
                                 "}" +
                                 "}" +
                                 "groupsLoaded();";
-                System.out.println(((JavascriptExecutor) driver).executeAsyncScript(js));
+                ((JavascriptExecutor) driver).executeAsyncScript(js);
             }
         }
         return BaseDialog.at(SettlementDialog.class);

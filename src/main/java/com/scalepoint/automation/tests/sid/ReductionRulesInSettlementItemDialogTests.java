@@ -2,20 +2,24 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.services.externalapi.ftemplates.FT;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
+@Listeners({FuncTemplatesListener.class})
+@SettingRequired(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@SettingRequired(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
 public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
-
 
     /**
      * GIVEN: User logs in as tryg user
@@ -38,18 +42,17 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
      * THEN: Value generated according rule settings added to the field
      * THEN: Value in depreciation field is changed to value of reduction rule
      */
-
     @Test(description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button", dataProvider = "testDataProvider")
     public void ecc3031_1_reductionRulePolicyType(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
                 addManually().
                 fillDescription(claimItem.getTextFieldSP()).
-                fillCategory(claimItem.getExistingCat3()).
-                fillSubCategory(claimItem.getExistingSubCat3()).
-                fillNewPrice(claimItem.getNewPriceSP()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillDepreciation(claimItem.getDepAmount1()).
+                fillCategory(claimItem.getExistingCat3_Telefoni()).
+                fillSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner()).
+                fillDepreciation(claimItem.getDepAmount1_10()).
                 enableAge("2").
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
@@ -58,7 +61,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
         assertEquals(fetchedDepreciation, calculateDepreciation(claimItem), "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1().toString());
+        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1_10().toString());
 
         settlementDialog.applyReductionRuleByValue(claimItem.getReductionRule());
         String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
@@ -81,20 +84,17 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
      * THEN: Value generated according rule settings added to the field
      * THEN: Value in depreciation field is changed to value of reduction rule
      */
-
-
     @Test(description = "ECC-3031 Verify reduction rule policy type after ticking Depreciation automatically updated checkbox", dataProvider = "testDataProvider")
+    @SettingRequired(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     public void ecc3031_2_reductionRulePolicyTypeAutomatic(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        enableNewSid(user);
-        updateFT(user, FT.disable(FTSetting.SHOW_POLICY_TYPE));
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
                 addManually().
-                fillCategory(claimItem.getExistingCat3()).
-                fillSubCategory(claimItem.getExistingSubCat3()).
                 fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP()).
-                fillDepreciation(claimItem.getDepAmount1()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillCategory(claimItem.getExistingCat3_Telefoni()).
+                fillSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner()).
+                fillDepreciation(claimItem.getDepAmount1_10()).
                 enableAge().
                 enterAgeYears("2").
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
@@ -104,7 +104,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
         String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem)));
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
         assertEquals(fetchedDepreciation, calculateDepreciation(claimItem), "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1().toString());
+        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1_10().toString());
 
         settlementDialog.automaticDepreciation(true);
         String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
@@ -116,22 +116,22 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
     }
 
     private String calculateCashCompensation(ClaimItem claimItem) {
-        Double cashCompensation = Double.valueOf(claimItem.getNewPriceSP()) - Double.valueOf(calculateDepreciation(claimItem));
+        Double cashCompensation = Double.valueOf(claimItem.getNewPriceSP_2400()) - Double.valueOf(calculateDepreciation(claimItem));
         return String.valueOf(cashCompensation);
     }
 
     private String calculateCashCompensationWithReduction(ClaimItem claimItem) {
-        Double cashCompensation = Double.valueOf(claimItem.getNewPriceSP()) - Double.valueOf(calculatedReduction(claimItem));
+        Double cashCompensation = Double.valueOf(claimItem.getNewPriceSP_2400()) - Double.valueOf(calculatedReduction(claimItem));
         return String.format("%.2f", cashCompensation);
     }
 
     private String calculateDepreciation(ClaimItem claimItem) {
-        Double depreciation = Double.valueOf(claimItem.getNewPriceSP()) * Double.valueOf(claimItem.getDepAmount1()) / 100;
+        Double depreciation = Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(claimItem.getDepAmount1_10()) / 100;
         return String.format("%.2f", depreciation);
     }
 
     private String calculatedReduction(ClaimItem claimItem) {
-        Double depreciation = Double.valueOf(claimItem.getNewPriceSP()) * Double.valueOf(claimItem.getReductionRule()) / 100;
+        Double depreciation = Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(claimItem.getReductionRule()) / 100;
         return String.format("%.2f", depreciation);
     }
 }

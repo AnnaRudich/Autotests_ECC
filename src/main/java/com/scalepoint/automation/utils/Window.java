@@ -77,13 +77,11 @@ public class Window {
         }
 
         public void switchToLast() {
-            logger.info("switchToLast");
             Set<String> windowHandles = driver.getWindowHandles();
             if (windowHandles.size() > 1) {
                 windowHandles.remove(Browser.getMainWindowHandle());
             }
             for (String winHandle : windowHandles) {
-                logger.info(winHandle);
                 driver.switchTo().window(winHandle);
             }
             logger.info("url after switch: "+driver.getCurrentUrl());

@@ -74,7 +74,6 @@ public class Wait {
                 try {
                     return action.apply(element);
                 } catch (Exception e) {
-                    System.out.println("ERROR:"+e.getMessage());
                     throw e;
                 }
             }
@@ -191,6 +190,22 @@ public class Wait {
         wrap(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
+    public static void waitForElementDisappear(WebElement element) {
+        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(10, TimeUnit.SECONDS).
+                pollingEvery(1, TimeUnit.SECONDS).
+                ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
+        wait.until(new Function<WebDriver, Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                try {
+                    return !element.isDisplayed();
+                } catch (Exception e) {
+                    return true;
+                }
+            }
+        });
+    }
+
     public static void waitForDialog() {
         wrap((WebDriver d) -> ((JavascriptExecutor) d).executeScript("Ext.WindowManager.getActive();"));
     }
@@ -269,7 +284,6 @@ public class Wait {
         wrapWait(d -> element.isEnabled());
         return element;
     }
-
     public static void waitForLoaded() {
         wrapWait(d -> {
             try {
