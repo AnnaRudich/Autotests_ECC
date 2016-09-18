@@ -79,7 +79,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
         MDC.put("sessionid", method.getName());
-        logger.info("Starting {}, thread {}"+method.getName(), Thread.currentThread().getId());
+        logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
         String[] activeProfiles = environment.getActiveProfiles();
         if (activeProfiles.length == 0) {

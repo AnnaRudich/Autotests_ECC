@@ -1,9 +1,13 @@
 package com.scalepoint.automation.utils.driver;
 
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Browser {
+
+    private static final Logger logger = LoggerFactory.getLogger(Browser.class);
 
     private static ThreadLocal<DriverData> holder = new ThreadLocal<>();
 
@@ -21,11 +25,13 @@ public class Browser {
 
     public static void quit() {
         try {
+            logger.info("Quit requested");
             DriverData data = holder.get();
-            data.getDriver().switchTo().window(getMainWindowHandle()).quit();
+            logger.info("Data found {}", data);
+            data.getDriver().switchTo().window(data.getWindowHandle()).quit();
             holder.remove();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
