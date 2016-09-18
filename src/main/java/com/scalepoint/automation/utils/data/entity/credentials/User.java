@@ -45,6 +45,8 @@ public class User {
     protected Integer ftId;
     @XmlAttribute(name = "basic")
     protected boolean basic;
+    @XmlAttribute(name = "system")
+    protected boolean system;
 
     /**
      * Gets the value of the login property.
@@ -156,6 +158,14 @@ public class User {
      */
     public void setBasic(boolean value) {
         this.basic = value;
+    }
+
+    public boolean isSystem() {
+        return system;
+    }
+
+    public void setSystem(boolean system) {
+        this.system = system;
     }
 
     @Override

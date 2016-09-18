@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.annotations.EccAdminPage;
+import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

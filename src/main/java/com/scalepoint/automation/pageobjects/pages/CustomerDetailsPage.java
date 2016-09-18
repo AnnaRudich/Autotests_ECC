@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.utils.*;
-import com.scalepoint.automation.utils.annotations.EccPage;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

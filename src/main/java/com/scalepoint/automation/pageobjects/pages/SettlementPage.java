@@ -4,14 +4,16 @@ import com.scalepoint.automation.pageobjects.modules.BottomMenu;
 import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
 import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
 import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
-import com.scalepoint.automation.utils.annotations.EccPage;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

@@ -14,13 +14,19 @@ public class UsersManager {
 
     private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
+    private static User systemUser;
 
     public static void initManager(SystemUsers systemUsers) {
         systemUsers.getUsers().forEach(user -> {
+            if (user.isSystem()) {
+                systemUser = user;
+                return;
+            }
             if (user.isBasic()) {
                 basicUsersQueue.add(user);
             } else {
-                exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompany()), new ArrayBlockingQueue<>(1, true, Collections.singleton(user)));
+                exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompany()),
+                        new ArrayBlockingQueue<>(1, true, Collections.singleton(user)));
             }
         });
     }
@@ -44,5 +50,9 @@ public class UsersManager {
             return;
         }
         exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompany())).add(user);
+    }
+
+    public static User getSystemUser() {
+        return systemUser;
     }
 }

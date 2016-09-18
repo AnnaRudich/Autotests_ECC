@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.Window;
-import com.scalepoint.automation.utils.annotations.EccPage;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 
 @EccPage

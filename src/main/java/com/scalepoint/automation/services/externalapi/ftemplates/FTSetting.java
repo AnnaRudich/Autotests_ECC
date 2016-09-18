@@ -2,9 +2,7 @@ package com.scalepoint.automation.services.externalapi.ftemplates;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 
-import static com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation.OperationType.CHECKBOX;
-import static com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation.OperationType.INPUT;
-import static com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation.OperationType.SELECT;
+import static com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation.OperationType.*;
 
 public enum FTSetting {
     //Various function around the system

@@ -2,10 +2,11 @@ package com.scalepoint.automation.utils.listeners;
 
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
+import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,46 +18,22 @@ import org.testng.ITestResult;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class FuncTemplatesListener implements IInvokedMethodListener {
+public class InvokedMethodListener implements IInvokedMethodListener {
 
     private static final String ROLLBACK_CONTEXT = "rollback_context";
 
-    private static Logger logger = LoggerFactory.getLogger(FuncTemplatesListener.class);
+    private static Logger logger = LoggerFactory.getLogger(InvokedMethodListener.class);
 
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
 
         try {
             if (invokedMethod.isTestMethod()) {
-                Optional<User> optionalUser = findUserInParameters(iTestResult);
+                logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
+                Optional<User> optionalUser = findObjectInParameters(iTestResult, User.class);
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
-
-                    List<FtOperation> ftOperations = new ArrayList<>();
-                    Set<SettingRequired> allSettings = getAllSettings(invokedMethod.getTestMethod());
-                    for (SettingRequired setting : allSettings) {
-                        FTSetting settingType = setting.type();
-                        switch (settingType.getOperationType()) {
-                            case CHECKBOX:
-                                ftOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
-                                break;
-                            case INPUT:
-                                ftOperations.add(FTSettings.setValue(settingType, setting.value()));
-                                break;
-                            case SELECT:
-                                ftOperations.add(FTSettings.select(settingType, setting.value()));
-                        }
-                    }
-
-                    FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-                    functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
-
-                    List<FtOperation> operationsToRollback = functionalTemplatesApi.getOperationsToRollback();
-                    logger.info("Found settings to rollback: ");
-                    for (FtOperation ftOperation : operationsToRollback) {
-                        logger.info("--> {} ", ftOperation.toString());
-                    }
-                    iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, operationsToRollback));
+                    updateFunctionalTemplate(invokedMethod, iTestResult, user);
                 }
             }
         } catch (Exception e) {
@@ -68,6 +45,7 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
     @Override
     public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
         if (iInvokedMethod.isTestMethod()) {
+            logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
             printErrorStackTraceIfAny(iTestResult);
 
             RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
@@ -75,9 +53,39 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
                 logger.info("No ft settings found to rollback");
                 return;
             }
-            FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(rollbackContext.user);
+            FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
             functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, rollbackContext.operations.toArray(new FtOperation[0]));
         }
+    }
+
+
+    private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
+        List<FtOperation> ftOperations = new ArrayList<>();
+        Set<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
+        for (RequiredSetting setting : allSettings) {
+            FTSetting settingType = setting.type();
+            switch (settingType.getOperationType()) {
+                case CHECKBOX:
+                    ftOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                    break;
+                case INPUT:
+                    ftOperations.add(FTSettings.setValue(settingType, setting.value()));
+                    break;
+                case SELECT:
+                    ftOperations.add(FTSettings.select(settingType, setting.value()));
+            }
+        }
+
+        User systemUser = UsersManager.getSystemUser();
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(systemUser);
+        functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
+
+        List<FtOperation> operationsToRollback = functionalTemplatesApi.getOperationsToRollback();
+        logger.info("Found settings to rollback: ");
+        for (FtOperation ftOperation : operationsToRollback) {
+            logger.info("--> {} ", ftOperation.toString());
+        }
+        iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, operationsToRollback));
     }
 
     private void printErrorStackTraceIfAny(ITestResult iTestResult) {
@@ -97,14 +105,14 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
         }
     }
 
-    private Set<SettingRequired> getAllSettings(ITestNGMethod testMethod) {
-        Set<SettingRequired> requiredSettings = new HashSet<>();
+    private Set<RequiredSetting> getAllSettings(ITestNGMethod testMethod) {
+        Set<RequiredSetting> requiredSettings = new HashSet<>();
         Set<FTSetting> methodSettings = new HashSet<>();
 
         Class realClass = testMethod.getRealClass();
         Method method = testMethod.getConstructorOrMethod().getMethod();
 
-        SettingRequired[] methodAnnotations = method.getDeclaredAnnotationsByType(SettingRequired.class);
+        RequiredSetting[] methodAnnotations = method.getDeclaredAnnotationsByType(RequiredSetting.class);
         if (methodAnnotations != null) {
             Arrays.stream(methodAnnotations).
                     forEach(annotation -> {
@@ -113,7 +121,7 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
                     });
         }
 
-        SettingRequired[] classAnnotations = (SettingRequired[]) realClass.getDeclaredAnnotationsByType(SettingRequired.class);
+        RequiredSetting[] classAnnotations = (RequiredSetting[]) realClass.getDeclaredAnnotationsByType(RequiredSetting.class);
         if (classAnnotations != null) {
             Arrays.stream(classAnnotations).
                     filter(classAnnotation -> !methodSettings.contains(classAnnotation.type())).
@@ -123,10 +131,10 @@ public class FuncTemplatesListener implements IInvokedMethodListener {
         return requiredSettings;
     }
 
-    private Optional<User> findUserInParameters(ITestResult iTestResult) {
+    private <T> Optional<T> findObjectInParameters(ITestResult iTestResult, Class<T> tClass) {
         return Arrays.stream(iTestResult.getParameters()).
-                filter(sc -> sc instanceof User).
-                map(sc -> (User) sc).findFirst();
+                filter(sc -> sc.getClass().equals(tClass)).
+                map(sc -> (T) sc).findFirst();
     }
 
 }

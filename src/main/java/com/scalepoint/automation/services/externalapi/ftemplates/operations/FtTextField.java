@@ -1,8 +1,8 @@
 package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
 import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import org.jsoup.nodes.Document;
 
 public class FtTextField extends FtOperation {

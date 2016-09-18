@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.EccActions;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.annotations.EccPage;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.driver.Browser;

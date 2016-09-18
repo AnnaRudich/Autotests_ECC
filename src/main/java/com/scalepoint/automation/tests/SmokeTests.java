@@ -8,11 +8,11 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.Bug;
-import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -21,12 +21,12 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static org.testng.Assert.assertTrue;
 
-@Listeners({FuncTemplatesListener.class})
+@Listeners({InvokedMethodListener.class})
+@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SmokeTests extends BaseTest {
 
     @Test(description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim", dataProvider = "testDataProvider")
     public void ecc3032_reopenSavedClaim(User user, Claim claim) {
-
         SettlementPage settlementPage = loginAndCreateClaim(user, claim).
                 saveClaim().
                 openRecentClient().
@@ -60,9 +60,9 @@ public class SmokeTests extends BaseTest {
     }
 
     @Test(description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email", dataProvider = "testDataProvider")
-    @SettingRequired(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
-    @SettingRequired(type = FTSetting.ENABLE_SELF_SERVICE)
-    @SettingRequired(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
+    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
 
         String password = "12341234";
@@ -119,10 +119,10 @@ public class SmokeTests extends BaseTest {
     }
 
     @Test(description = "ECC-2631 It's possible to match product via Quick match icon for Excel imported claim lines", dataProvider = "testDataProvider")
-    @SettingRequired(type = FTSetting.BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
-    @SettingRequired(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
-    @SettingRequired(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
-    @SettingRequired(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
+    @RequiredSetting(type = FTSetting.BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
+    @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
+    @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
+    @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim).

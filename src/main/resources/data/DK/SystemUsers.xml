@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <systemUsers>
+    <user login="system-user-scalepoint" password="12341234" company="SCALEPOINT" companyId="7" ftId="1" system="true"/>
+
     <user login="autotest-user-future1" password="12341234" company="FUTURE-1" companyId="51" ftId="51" basic="true"/>
     <user login="autotest-user-future2" password="12341234" company="FUTURE-2" companyId="52" ftId="52" basic="true"/>
     <user login="autotest-user-future3" password="12341234" company="FUTURE-3" companyId="53" ftId="53" basic="true"/>
