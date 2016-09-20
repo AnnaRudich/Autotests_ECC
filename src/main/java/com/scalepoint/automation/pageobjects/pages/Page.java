@@ -7,18 +7,16 @@ import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public abstract class Page extends Actions {
 
@@ -39,19 +37,30 @@ public abstract class Page extends Actions {
 
     protected abstract Page ensureWeAreOnPage();
 
-    protected abstract String geRelativeUrl();
+    protected abstract String getRelativeUrl();
 
     protected void waitForUrl(String expectedUrl) {
+        if (StringUtils.isBlank(expectedUrl)) {
+            return;
+        }
+
         int totalTimeoutInSeconds = 10;
         int pollingMs = 1000;
 
         logger.info(" Expected: {}", expectedUrl);
         Wait.For(webDriver -> {
-            String currentUrl = driver.getCurrentUrl();
-            logger.info("Current url: {}", currentUrl);
-            logger.info("Windows count: {}", webDriver.getWindowHandles().size());
-            Window.get().switchToLast();
-            return currentUrl.contains(expectedUrl);
+            try {
+                String currentUrl = driver.getCurrentUrl();
+                logger.info("Current url: {}", currentUrl);
+
+                assert webDriver != null;
+                logger.info("Windows count: {}", webDriver.getWindowHandles().size());
+                Window.get().switchToLast();
+                return currentUrl.contains(expectedUrl);
+            } catch (UnhandledAlertException e) {
+                Window.get().closeAlert();
+            }
+            return false;
         }, totalTimeoutInSeconds, pollingMs);
     }
 
@@ -61,7 +70,7 @@ public abstract class Page extends Actions {
 
     public static <T extends Page> String getUrl(Class<T> pageClass) {
         try {
-            String relativeUrl = PagesCache.get(pageClass).geRelativeUrl();
+            String relativeUrl = PagesCache.get(pageClass).getRelativeUrl();
             String baseUrl = null;
             if (relativeUrl != null) {
                 for (Map.Entry<Class, String> entry : pageAnnotationToBaseUrl.entrySet()) {

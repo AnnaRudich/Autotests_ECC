@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -10,6 +11,7 @@ import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.openqa.selenium.By;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -48,8 +50,18 @@ public class FunctionalTemplatesApi extends ServerApi {
         if (operationsToRollback.isEmpty()) {
             return detectPage(currentUrl, returnPageClass);
         }
-        EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId.toString()+"&showHidden=true");
+
+        EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId.toString() + "&showHidden=true");
         Arrays.stream(operations).forEach(ftOperation -> ftOperation.updateSetting(templatePage));
+
+        List<FtOperation> notUpdateTemplates = templatePage.findDifferences(operations);
+        if (!notUpdateTemplates.isEmpty()) {
+            for (FtOperation notUpdatedSetting : notUpdateTemplates) {
+                log.error("Couldn't update settings: " + notUpdatedSetting.toString());
+            }
+            throw new IllegalStateException("Couldn't update setting! Probably some of them interconnected and undo changes!");
+        }
+
         templatePage.saveTemplate();
         return detectPage(currentUrl, returnPageClass);
     }

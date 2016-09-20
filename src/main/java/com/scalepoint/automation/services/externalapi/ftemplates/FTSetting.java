@@ -18,7 +18,7 @@ public enum FTSetting {
     SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED("input[name=ftfunctionflag5][value=32768]", "Show \"Depreciation is automatically updated\" checkbox on Settlement Item Dialog", CHECKBOX),
     SHOW_SUGGESTED_DEPRECIATION_SECTION("input[name=ftfunctionflag5][value=4096]", "Show suggested depreciation section", CHECKBOX),
     ALLOW_MARK_SETTLEMENT_REVIEWED("input[name=ftfunctionflag4][value=1073741824]", "Allow users to mark settlement items as reviewed", CHECKBOX),
-    REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM("input[name=ftfunctionflag4][value=1073741824]", "Review of all claim lines are required to complete claim", CHECKBOX),
+    REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM("input[name=ftfunctionflag4][value=262144]", "Review of all claim lines are required to complete claim", CHECKBOX),
     SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG("input[name=ftfunctionflag2][value=128]", "Show compact settlement item dialog", CHECKBOX),
     SHOW_POLICY_TYPE("input[name=ftfunctionflag][value=64]", "Show policy type", CHECKBOX),
     SHOW_MARKET_PRICE("input[name=ftfunctionflag5][value=128]", "Show Market Price in ME catalog", CHECKBOX),

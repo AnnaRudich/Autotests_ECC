@@ -53,13 +53,17 @@ public class Window {
 
         public void openDialogWithAlert(WebElement openButton) {
             openButton.click();
+            closeAlert();
+            Wait.waitForModalWindowAppear();
+        }
+
+        public void closeAlert() {
             try {
                 Alert alert = driver.switchTo().alert();
                 alert.accept();
                 Wait.waitForModalWindowDisappear();
             } catch (Exception ignored) {
             }
-            Wait.waitForModalWindowAppear();
         }
 
         public void closeDialog() {

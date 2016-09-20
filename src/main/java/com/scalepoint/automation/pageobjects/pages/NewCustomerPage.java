@@ -43,7 +43,7 @@ public class NewCustomerPage extends Page {
     private Button continueButton;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

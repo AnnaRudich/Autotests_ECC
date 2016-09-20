@@ -30,7 +30,7 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     public void closeReplacementDialog() {
-        cancelButton.click();
+        Window.get().closeDialog(cancelButton);
     }
 
     public Double getVoucherFaceValue() {

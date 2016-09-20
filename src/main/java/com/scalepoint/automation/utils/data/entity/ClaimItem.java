@@ -95,13 +95,13 @@ public class ClaimItem {
     @XmlElement
     private String existingSubCat3;
     @XmlElement
-    private String reductionRule;
+    private Integer reductionRule;
     @XmlElement
     private String alkaCategory;
     @XmlElement
     private String alkaSubCategory;
     @XmlElement
-    private String alkaUserReductionRule;
+    private Integer alkaUserReductionRule;
     @XmlElement
     private String alkaCategoryUnpublishedPolicy;
     @XmlElement
@@ -295,7 +295,7 @@ public class ClaimItem {
         return existingSubCat3;
     }
 
-    public String getReductionRule() {
+    public Integer getReductionRule_30() {
         return reductionRule;
     }
 
@@ -307,7 +307,7 @@ public class ClaimItem {
         return alkaSubCategory;
     }
 
-    public String getAlkaUserReductionRule() {
+    public Integer getAlkaUserReductionRule_25() {
         return alkaUserReductionRule;
     }
 

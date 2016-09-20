@@ -4,21 +4,21 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-@Listeners({FuncTemplatesListener.class})
-@SettingRequired(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
-@SettingRequired(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
+@Listeners({InvokedMethodListener.class})
+@RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogTest extends BaseTest {
 
     @Test(description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialog", dataProvider = "testDataProvider")
@@ -42,7 +42,7 @@ public class SettlementDialogTest extends BaseTest {
      */
     @Test(description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
             " - depreciation percent if voucher selected in Add settlement dialog", dataProvider = "testDataProvider")
-    @SettingRequired(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION, enabled = false)
+    @RequiredSetting(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, ClaimItem item, Voucher voucher) {
 
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
@@ -55,25 +55,18 @@ public class SettlementDialogTest extends BaseTest {
                 .fillCategory(categoryInfo)
                 .fillVoucher(item.getExistingVoucher1());
 
+        SidCalculations.VoucherValuation expectedCalculations = SidCalculations.calculate(item.getNewPriceSP_2400(), voucher.getDiscount(), item.getDepAmount1_10());
+
         String fetchedCashValue = toString(settlementDialog.cashCompensationValue());
-        String calculatedCashValue = toString(calculateCashCompensation(item, voucher) - calculateDepreciation(item, voucher));
+        String calculatedCashValue = toString(expectedCalculations.voucherValue);
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
 
         String fetchedDepreciationValue = toString(settlementDialog.DeprecationValue());
-        String calculatedDepreciationValue = toString(calculateDepreciation(item, voucher));
+        String calculatedDepreciationValue = toString(expectedCalculations.depreciationValue);
         assertEquals(fetchedDepreciationValue, calculatedDepreciationValue, "Depreciation incorrect");
     }
 
     private String toString(Double value) {
         return String.format("%.2f", value);
     }
-
-    private Double calculateCashCompensation(ClaimItem claimItem, Voucher voucher) {
-        return Double.valueOf(claimItem.getNewPriceSP_2400()) - (Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(voucher.getDiscount())) / 100;
-    }
-
-    private Double calculateDepreciation(ClaimItem claimItem, Voucher voucher) {
-        return calculateCashCompensation(claimItem, voucher) * Double.valueOf(claimItem.getDepAmount1_10()) / 100;
-    }
-
 }

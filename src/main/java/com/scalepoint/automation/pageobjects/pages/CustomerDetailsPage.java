@@ -64,7 +64,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
     private CustomerDetails customerDetails = new CustomerDetails();
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

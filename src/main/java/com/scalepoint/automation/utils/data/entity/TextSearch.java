@@ -5,9 +5,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * NewSystemUser: kke
- */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TextSearch {
@@ -174,6 +171,10 @@ public class TextSearch {
         fixedQueries = fixedQueries.toLowerCase();
         String[] didYouMeanFixedQueriesList = fixedQueries.split(",");
         return didYouMeanFixedQueriesList;
+    }
+
+    public String getFixedQueries() {
+        return fixedQueries;
     }
 
     public String[] getSynonymList() {

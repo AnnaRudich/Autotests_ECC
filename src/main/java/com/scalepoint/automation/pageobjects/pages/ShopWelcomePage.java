@@ -32,7 +32,7 @@ public class ShopWelcomePage extends Page {
     }
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

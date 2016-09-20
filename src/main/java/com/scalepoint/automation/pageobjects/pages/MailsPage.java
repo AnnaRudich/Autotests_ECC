@@ -25,7 +25,7 @@ public class MailsPage extends Page {
     private Button viewLastMail;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

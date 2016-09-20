@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.annotations.EccPage;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -63,7 +63,7 @@ public class SettlementPage extends BaseClaimPage {
     private MainMenu mainMenu = new MainMenu();
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 
@@ -98,6 +98,10 @@ public class SettlementPage extends BaseClaimPage {
     public TextSearchPage findInCatalogue() {
         functionalMenu.findInCatalogue();
         return Page.at(TextSearchPage.class);
+    }
+
+    public TextSearchPage findInCatalogue(String text) {
+        return findInCatalogue().searchByProductName(text);
     }
 
     public SettlementDialog addManually() {

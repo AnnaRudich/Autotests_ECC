@@ -34,7 +34,7 @@ public class NotesPage extends BaseClaimPage {
     private MainMenu mainMenu = new MainMenu();
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

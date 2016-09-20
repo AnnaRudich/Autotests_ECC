@@ -64,7 +64,7 @@ public class CompleteClaimPage extends Page {
     private Button replace;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

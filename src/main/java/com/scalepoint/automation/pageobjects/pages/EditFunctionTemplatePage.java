@@ -1,12 +1,18 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
 import ru.yandex.qatools.htmlelements.element.TextInput;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -22,7 +28,7 @@ public class EditFunctionTemplatePage extends Page {
     private Button showHidden;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 
@@ -38,36 +44,72 @@ public class EditFunctionTemplatePage extends Page {
         return at(AdminPage.class);
     }
 
-    public EditFunctionTemplatePage enableFeature(String _function) {
-        WebElement checkBox = driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]"));
-        if (!checkBox.isSelected()) {
-            checkBox.click();
+    public List<FtOperation> findDifferences(FtOperation... operations) {
+        List<FtOperation> notAppliedOperations = new ArrayList<>();
+        for (FtOperation operation : operations) {
+            if(!operation.isOperationApplied(this)) {
+                notAppliedOperations.add(operation);
+            }
         }
+        return notAppliedOperations;
+    }
+
+    public boolean isSettingEnabled(FTSetting ftSetting) {
+        return driver.findElement(By.cssSelector(ftSetting.getLocator())).isSelected();
+    }
+
+    public boolean isSettingHasSameValue(FTSetting ftSetting, String text) {
+        return driver.findElement(By.cssSelector(ftSetting.getLocator())).getText().equalsIgnoreCase(text);
+    }
+
+    public boolean isSettingHasSameOptionSelected(FTSetting ftSetting, String text) {
+        Select comboBox = new Select(driver.findElement(By.cssSelector(ftSetting.getLocator())));
+        WebElement firstSelectedOption = comboBox.getFirstSelectedOption();
+        return firstSelectedOption.getText().equalsIgnoreCase(text);
+    }
+
+    public EditFunctionTemplatePage enableFeature(FTSetting ftSetting) {
+        updateCheckBox(ftSetting, true);
         return this;
     }
 
-    public EditFunctionTemplatePage disableFeature(String _function) {
-        WebElement checkBox = driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]"));
-        if (checkBox.isSelected()) {
-            checkBox.click();
+    public EditFunctionTemplatePage disableFeature(FTSetting ftSetting) {
+        updateCheckBox(ftSetting, false);
+        return this;
+    }
+
+    private void updateCheckBox(FTSetting ftSetting, boolean enable) {
+        CheckBox checkBox = new CheckBox(driver.findElement(By.cssSelector(ftSetting.getLocator())));
+        String description = ftSetting.getDescription();
+
+        if (enable && !checkBox.isSelected()) {
+            logger.info("Enabling: " + description);
+            checkBox.select();
         }
+
+        if (!enable && checkBox.isSelected()) {
+            logger.info("Disabling: " + description);
+            checkBox.deselect();
+        }
+        logger.info("CheckBox state is: " + checkBox.isSelected());
+    }
+
+    public EditFunctionTemplatePage selectComboBoxValue(FTSetting ftSetting, String option) {
+        Select comboBox = new Select(driver.findElement(By.cssSelector(ftSetting.getLocator())));
+        comboBox.selectByVisibleText(option);
+        logger.info("Selecting {} with option {}", ftSetting.getDescription(), option);
         return this;
     }
 
-    public EditFunctionTemplatePage selectComboboxValue(String _function, String option) {
-        Select combobox = new Select(driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/select)[1]")));
-        combobox.selectByVisibleText(option);
-        return this;
-    }
-
-    public EditFunctionTemplatePage updateValue(String _function, String _value) {
-        TextInput textInput = new TextInput(driver.findElement(By.xpath("(//td[text()='" + _function + "']/following::td/input)[1]")));
+    public EditFunctionTemplatePage updateValue(FTSetting ftSetting, String value) {
+        TextInput textInput = new TextInput(driver.findElement(By.cssSelector(ftSetting.getLocator())));
         textInput.clear();
-        textInput.sendKeys(_value);
+        textInput.sendKeys(value);
+        logger.info("Update value {} with {}", ftSetting.getDescription(), value);
         return this;
     }
 
-    public EditFunctionTemplatePage ShowHidden() {
+    public EditFunctionTemplatePage showHidden() {
         showHidden.click();
         return this;
     }

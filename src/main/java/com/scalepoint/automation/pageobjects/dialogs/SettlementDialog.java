@@ -30,6 +30,7 @@ public class SettlementDialog extends BaseDialog {
     public static final int DEPRECIATION_COLUMN = 4;
     public static final int TOTAL_AMOUNT_OF_VALUATION = 5;
     public static final int AMOUNT_OF_VALUATION = 3;
+
     @FindBy(id = "description-textfield-inputEl")
     private ExtInput description;
 
@@ -126,7 +127,11 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "automatic-depreciation-checkbox")
     private ExtCheckbox automaticDepreciation;
 
-    EccActions eccActions = new EccActions(Browser.driver());
+    @FindBy(id = "marketprice-card-price-inputEl")
+    private TextBlock marketPrice;
+
+    @FindBy(id = "marketprice-card-supplier-inputEl")
+    private TextBlock marketPriceSupplier;
 
     private String enteredDescription;
 
@@ -351,10 +356,14 @@ public class SettlementDialog extends BaseDialog {
     private boolean anyMatchFromValuationsTable(String value, Valuation valuation, int column) {
         Wait.waitForLoaded();
         waitForVisible(firstValuation);
-        String foundText = driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td["+column+"]")).getText();
+        String foundText = getValuationColumnValue(valuation, column);
         boolean equals = OperationalUtils.toNumber(foundText).equals(doubleString(value));
         logger.info("Valuation requested: {} found: {} matched: {}", value, foundText, equals);
         return equals;
+    }
+
+    private String getValuationColumnValue(Valuation valuation, int column) {
+        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td["+column+"]")).getText();
     }
 
     public boolean isIncludeInClaimSet() {
@@ -541,6 +550,26 @@ public class SettlementDialog extends BaseDialog {
         return depreciation.getText();
     }
 
+    public boolean isMarketPriceVisible(){
+        try {
+            return getValuationColumnValue(Valuation.MARKET_PRICE, 1) != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String marketPriceSupplier(){
+        return marketPriceSupplier.getText();
+    }
+
+    public boolean isMarketPriceSupplierVisible(){
+        try {
+            return marketPriceSupplier.exists();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     public static double getDoubleValue(String input) {
         String[] array = input.split(" ");
@@ -557,7 +586,8 @@ public class SettlementDialog extends BaseDialog {
         NOT_SELECTED("valuation-type-NOT_SELECTED"),
         CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
         VOUCHER("valuation-type-VOUCHER"),
-        NEW_PRICE("valuation-type-NEW_PRICE");
+        NEW_PRICE("valuation-type-NEW_PRICE"),
+        MARKET_PRICE("valuation-type-MARKET_PRICE");
 
         private String className;
 

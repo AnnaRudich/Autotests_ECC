@@ -24,7 +24,7 @@ public class ImportLossInformationDialog extends Page {
     private Button importButton;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

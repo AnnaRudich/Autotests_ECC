@@ -10,20 +10,20 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-@Listeners({FuncTemplatesListener.class})
-@SettingRequired(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
-@SettingRequired(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
+@Listeners({InvokedMethodListener.class})
+@RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogShowVoucherDetails extends BaseTest {
 
     /**
@@ -166,7 +166,7 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
      * THEN: Check that another voucher is displayed
      */
     @Test(description = "ECC-5519 Verify that Brands and Tags are visible in compact mode", dataProvider = "testDataProvider")
-    @SettingRequired(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
+    @RequiredSetting(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
     public void ecc5519_3_voucherBrandTagInSIDCompactMode(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.

@@ -9,13 +9,13 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-@Listeners({FuncTemplatesListener.class})
+@Listeners({InvokedMethodListener.class})
 public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
     /**
@@ -76,28 +76,38 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                                                                ClaimItem claimItem,
                                                                ReductionRule reductionRule) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF()).addManually().
-                automaticDepreciation(false)
-                .fillDescription(claimItem.getTextFieldSP()).
-                        fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                        fillNewPrice(claimItem.getNewPriceSP_2400())
-                .fillCategory(claimItem.getAlkaCategory())
-                .fillSubCategory(claimItem.getAlkaSubCategory())
-                .enableAge(claimItem.getAgeStatus())
-                .enterAgeYears(reductionRule.getAgeFrom2())
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+                automaticDepreciation(false).
+                fillDescription(claimItem.getTextFieldSP()).
+                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillCategory(claimItem.getAlkaCategory()).
+                fillSubCategory(claimItem.getAlkaSubCategory()).
+                enableAge(claimItem.getAgeStatus()).
+                enterAgeYears(reductionRule.getAgeFrom2()).
+                selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+
+        Integer depreciationValue = Integer.valueOf(settlementDialog.getDepreciationValue());
+        SidCalculations.ValuationWithReduction valuationWithReduction =
+                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciationValue, claimItem.getAlkaUserReductionRule_25());
+
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem, settlementDialog)));
+        String calculatedCashValue = String.format("%.2f",valuationWithReduction.cashCompensation);
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
+        String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
+
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculateDepreciation(claimItem, settlementDialog), "Depreciation incorrect");
+        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
         assertEquals(settlementDialog.getDepreciationValue(), "0");
-        settlementDialog
-                .applyReductionRuleByValue(claimItem.getAlkaUserReductionRule());
+
+        settlementDialog.applyReductionRuleByValue(claimItem.getAlkaUserReductionRule_25().toString());
         String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
         String fetchedDepreciationWithReduction = String.format("%.2f", settlementDialog.fetchDepreciation());
-        assertEquals(fetchedCashValueWithReduction, calculateCashCompensationWithReduction(claimItem), "Cash compensation incorrect");
-        assertEquals(fetchedDepreciationWithReduction, calculatedReduction(claimItem), "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getAlkaUserReductionRule());
+        String calculatedCashWithReduction = String.format("%.2f", valuationWithReduction.getCashCompensationWithReduction());
+        String calculatedReduction = String.format("%.2f", valuationWithReduction.getReduction());
+
+        assertEquals(fetchedCashValueWithReduction, calculatedCashWithReduction, "Cash compensation incorrect");
+        assertEquals(fetchedDepreciationWithReduction, calculatedReduction, "Depreciation incorrect");
+        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getAlkaUserReductionRule_25().toString());
         settlementDialog.cancel();
     }
 
@@ -127,20 +137,34 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .enableAge(claimItem.getAgeStatus())
                 .enterAgeYears(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+
+        int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
+        SidCalculations.ValuationWithReduction valuationWithReduction =
+                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
+
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem, settlementDialog)));
+        String calculatedCashValue = String.format("%.2f", valuationWithReduction.cashCompensation);
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
+        String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
+
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculateDepreciation(claimItem, settlementDialog), "Depreciation incorrect");
+        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
         assertEquals(settlementDialog.getDepreciationValue(), "0");
+
         settlementDialog
                 .automaticDepreciation(true)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+
         String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
-        assertEquals(fetchedCashValueWithReduction, calculateCashCompensationWithReduction(claimItem), "Cash compensation incorrect");
+        String calculatedCashWithReduction = String.format("%.2f", valuationWithReduction.cashCompensationWithReduction);
+
+        assertEquals(fetchedCashValueWithReduction, calculatedCashWithReduction, "Cash compensation incorrect");
+
         String fetchedDepreciationWithReduction = String.format("%.2f", settlementDialog.fetchDepreciation());
-        assertEquals(fetchedDepreciationWithReduction, calculatedReduction(claimItem), "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getAlkaUserReductionRule());
+        String calculatedReduction = String.format("%.2f", valuationWithReduction.getReduction());
+
+        assertEquals(fetchedDepreciationWithReduction, calculatedReduction, "Depreciation incorrect");
+        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getAlkaUserReductionRule_25().toString());
         settlementDialog.cancel();
     }
 
@@ -168,11 +192,18 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .enableAge(claimItem.getAgeStatus())
                 .enterAgeYears(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+
+        int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
+        SidCalculations.ValuationWithReduction valuationWithReduction =
+                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciation, 0);
+
+        String calculatedCashValue = String.format("%.2f", valuationWithReduction.cashCompensation);
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem, settlementDialog)));
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
+        String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
+
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculateDepreciation(claimItem, settlementDialog), "Depreciation incorrect");
+        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
         assertEquals(settlementDialog.getDepreciationValue(), "0");
         settlementDialog.cancel();
     }
@@ -206,11 +237,16 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .enableAge(claimItem.getAgeStatus())
                 .enterAgeYears(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+        int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
+        SidCalculations.ValuationWithReduction valuationWithReduction =
+                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
+
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem, settlementDialog)));
+        String calculatedCashValue = String.format("%.2f", valuationWithReduction.cashCompensation);
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
+        String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculateDepreciation(claimItem, settlementDialog), "Depreciation incorrect");
+        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
         assertEquals(settlementDialog.getDepreciationValue(), "0");
         settlementDialog.applyReductionRuleByValue(claimItem.getAlkaUserReductionRule40());
         String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
@@ -251,11 +287,14 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .enableAge(claimItem.getAgeStatus())
                 .enterAgeYears(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+
+        int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
+
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem, settlementDialog)));
+        String calculatedCashValue = String.format("%.2f", OperationalUtils.doubleString(calculateCashCompensation(claimItem, depreciation)));
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculateDepreciation(claimItem, settlementDialog), "Depreciation incorrect");
+        assertEquals(fetchedDepreciation, calculateDepreciation(claimItem, depreciation), "Depreciation incorrect");
         assertEquals(settlementDialog.getDepreciationValue(), "0");
         settlementDialog
                 .automaticDepreciation(true)
@@ -268,8 +307,8 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
         settlementDialog.cancel();
     }
 
-    private String calculateCashCompensation(ClaimItem claimItem, SettlementDialog settlementDialog) {
-        Double cashCompensation = Double.valueOf(claimItem.getNewPriceSP_2400()) - Double.valueOf(calculateDepreciation(claimItem, settlementDialog));
+    private String calculateCashCompensation(ClaimItem claimItem, int depreciationValue) {
+        Double cashCompensation = Double.valueOf(claimItem.getNewPriceSP_2400()) - Double.valueOf(calculateDepreciation(claimItem, depreciationValue));
         return String.valueOf(cashCompensation);
     }
 
@@ -278,13 +317,13 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
         return String.format("%.2f", cashCompensation);
     }
 
-    private String calculateDepreciation(ClaimItem claimItem, SettlementDialog settlementDialog) {
-        Double depreciation = Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(settlementDialog.getDepreciationValue()) / 100;
+    private String calculateDepreciation(ClaimItem claimItem, double depreciationValue) {
+        Double depreciation = claimItem.getNewPriceSP_2400() * depreciationValue / 100;
         return String.format("%.2f", depreciation);
     }
 
     private String calculatedReduction(ClaimItem claimItem) {
-        Double depreciation = Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(claimItem.getAlkaUserReductionRule()) / 100;
+        Double depreciation = Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(claimItem.getAlkaUserReductionRule_25()) / 100;
         return String.format("%.2f", depreciation);
     }
 

@@ -14,7 +14,7 @@ public class Voucher {
 
     private String voucherNameSP = RandomUtils.randomName("SPVoucher");
     @XmlElement
-    private String discount;
+    private Integer discount;
     @XmlElement
     private String discount2;
     @XmlElement
@@ -118,7 +118,7 @@ public class Voucher {
         return voucherNameSP;
     }
 
-    public String getDiscount() {
+    public Integer getDiscount() {
         return discount;
     }
 

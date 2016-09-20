@@ -25,7 +25,7 @@ public class FunctionalTemplatesPage extends Page {
     private Button edit;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

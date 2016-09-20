@@ -5,8 +5,6 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
-import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -32,7 +30,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             if (invokedMethod.isTestMethod()) {
                 Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
                 logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
-                Optional<User> optionalUser = findObjectInParameters(iTestResult, User.class);
                 if (optionalUser.isPresent()) {
                     User user = optionalUser.get();
                     updateFunctionalTemplate(invokedMethod, iTestResult, user);

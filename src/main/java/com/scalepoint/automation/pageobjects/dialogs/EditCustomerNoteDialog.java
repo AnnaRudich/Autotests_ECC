@@ -24,7 +24,7 @@ public class EditCustomerNoteDialog extends Page {
     private WebElement note;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

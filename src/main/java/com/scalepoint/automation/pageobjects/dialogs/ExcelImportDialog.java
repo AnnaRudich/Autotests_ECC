@@ -13,7 +13,7 @@ public class ExcelImportDialog extends Page {
     private static final String URL = "ImportLossLines";
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

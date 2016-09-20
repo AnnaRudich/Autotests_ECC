@@ -32,7 +32,7 @@ public class LoginPage extends Page {
     private Link signOut;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

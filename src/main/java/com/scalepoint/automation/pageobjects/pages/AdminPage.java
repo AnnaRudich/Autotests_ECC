@@ -36,13 +36,12 @@ public class AdminPage extends Page {
     private EditFunctionTemplatePage editFunctionTemplatePage;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 
     @Override
     public AdminPage ensureWeAreOnPage() {
-        waitForUrl(URL);
         waitForVisible(matchingEngine);
         return this;
     }

@@ -37,7 +37,7 @@ public class MyPage extends Page {
     private WebElement latestCustomerStatus;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import org.jsoup.nodes.Document;
+import org.openqa.selenium.WebElement;
 
 public class FtSelect extends FtOperation {
 
@@ -26,13 +27,18 @@ public class FtSelect extends FtOperation {
     }
 
     @Override
+    public boolean isOperationApplied(EditFunctionTemplatePage page) {
+        return page.isSettingHasSameOptionSelected(setting, newOptionText);
+    }
+
+    @Override
     public FtOperation getRollbackOperation() {
         return rollbackOperation;
     }
 
     @Override
     public void updateSetting(EditFunctionTemplatePage page) {
-        page.selectComboboxValue(setting.getDescription(), newOptionText);
+        page.selectComboBoxValue(setting, newOptionText);
     }
 
     @Override

@@ -9,12 +9,12 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.Bug;
-import com.scalepoint.automation.utils.annotations.functemplate.SettingRequired;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.FuncTemplatesListener;
+import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.testng.annotations.*;
 
 import static org.testng.Assert.assertEquals;
@@ -64,14 +64,14 @@ import com.scalepoint.automation.BaseTest;
   * THAN: Face value = New Price , Cash Value = New Price - VD1%
  */
 
-@Listeners(value = {FuncTemplatesListener.class})
+@Listeners(value = {InvokedMethodListener.class})
 public class DepreciationDeductedCombinedTests extends BaseTest {
 
     @Bug(bug = "CHARLIE-417,CHARLIE-772")
     @Test(description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED", dataProvider = "testDataProvider")
-    @SettingRequired(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
-    @SettingRequired(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION)
-    @SettingRequired(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_1_verifyDndD2AndFTRelationCombineDnDOFF(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.
@@ -147,9 +147,9 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
     @Bug(bug = "CHARLIE-417")
     @Test(description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
-    @SettingRequired(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
-    @SettingRequired(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION)
-    @SettingRequired(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.
@@ -258,11 +258,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
     private String calculatedVoucherDiscount(ClaimItem claimItem, Voucher voucher) {
         Double voucherDiscount = (Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(voucher.getDiscount())) / 100;
         return String.valueOf(voucherDiscount);
-    }
-
-    private String calculatedDepreciation(ClaimItem claimItem) {
-        Double depreciation = Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(claimItem.getDepAmount1_10()) / 100;
-        return String.valueOf(depreciation);
     }
 
     // Face value = New Price - D1%

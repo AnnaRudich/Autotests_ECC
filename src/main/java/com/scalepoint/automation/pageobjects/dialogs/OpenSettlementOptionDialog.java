@@ -22,7 +22,7 @@ public class OpenSettlementOptionDialog extends Page {
     private Button cancel;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

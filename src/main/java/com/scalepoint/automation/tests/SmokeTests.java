@@ -118,7 +118,7 @@ public class SmokeTests extends BaseTest {
         Assert.assertTrue(notesPage.isAddInternalNoteButtonDisplayed(), "Add Internal Note button is not visible");
     }
 
-    @Test(description = "ECC-2631 It's possible to match product via Quick match icon for Excel imported claim lines", dataProvider = "testDataProvider")
+    @Test(description = "ECC-2631 It's possible to matchFirst product via Quick matchFirst icon for Excel imported claim lines", dataProvider = "testDataProvider")
     @RequiredSetting(type = FTSetting.BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
     @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
     @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")

@@ -21,7 +21,7 @@ public class AddInternalNoteDialog extends Page {
     private Button ok;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

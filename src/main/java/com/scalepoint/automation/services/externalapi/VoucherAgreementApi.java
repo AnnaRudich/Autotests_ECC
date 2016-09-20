@@ -79,7 +79,7 @@ public class VoucherAgreementApi extends ServerApi {
                 add("agreementStatus", "ACTIVE").
                 add("useSupplierLogo", "true").
                 add("useSupplierUrl", "true").
-                add("agreementDiscount", voucher.getDiscount()).
+                add("agreementDiscount", voucher.getDiscount().toString()).
                 add("minimumAmount", "1").
                 add("stepAmount", "1").
                 add("brands", voucher.getBrandsText()).

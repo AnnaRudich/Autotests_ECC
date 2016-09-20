@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.scalepoint.automation.utils.annotations.EccPage;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
@@ -31,7 +31,7 @@ public class PseudoCategoryGroupPage extends Page {
     }
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 }

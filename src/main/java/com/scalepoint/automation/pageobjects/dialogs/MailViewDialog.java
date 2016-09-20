@@ -27,7 +27,7 @@ public class MailViewDialog extends Page {
     private Link loginToShopLink;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 

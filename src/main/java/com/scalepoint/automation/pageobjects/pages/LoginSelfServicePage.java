@@ -24,7 +24,7 @@ public class LoginSelfServicePage extends Page {
     private Button save;
 
     @Override
-    protected String geRelativeUrl() {
+    protected String getRelativeUrl() {
         return URL;
     }
 
