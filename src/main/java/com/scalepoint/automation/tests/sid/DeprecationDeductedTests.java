@@ -23,11 +23,11 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 @Listeners({InvokedMethodListener.class})
-@RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
-@RequiredSetting(type = FTSetting.FUNC_ENABLE_MARK_REVIEWED_REQUIRED)
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-@RequiredSetting(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+@RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
+@RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
 public class DeprecationDeductedTests extends BaseTest {
     /**
      * GIVEN: FT "Display voucher value with depreciation deducted" OFF
@@ -63,9 +63,9 @@ public class DeprecationDeductedTests extends BaseTest {
                 fillCategory(categoryInfo).
                 fillVoucher(claimItem.getExistingVoucher1());
 
-        SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculate(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
+        SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
 
-        String calculatedCashValue = String.format("%.2f", expectedCalculation.calculatedCashValue);
+        String calculatedCashValue = String.format("%.2f", expectedCalculation.getCashCompensationOfVoucher());
         String faceValue = String.format("%.2f", settlementDialog.voucherFaceValueFieldText());
         String cashValue = String.format("%.2f", settlementDialog.voucherCashValueFieldText());
         String newPrice = String.format("%.2f", Double.valueOf(claimItem.getNewPriceSP_2400()));
@@ -85,7 +85,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 completeWithEmail().
                 openRecentClient().
                 toMailsPage().
-                clickVisMail("Kundemail").
+                openWelcomeCustomerMail().
                 findLoginToShopLinkAndOpenIt().
                 enterPassword(password).
                 login();
@@ -102,7 +102,8 @@ public class DeprecationDeductedTests extends BaseTest {
         String fetchedCustomerCashValue = String.format("%.2f", customerDetails.getCashValue());
         String fetchedCustomerFaceTooltipValue = String.format("%.2f", customerDetails.getFaceTooltipValue());
 
-        assertEquals(fetchedCustomerCashValue, calculatedCashValue, "Voucher cash value should be equal to calculatedCashValue");
+        String voucherValue = String.format("%.2f", expectedCalculation.getCashCompensationWithDepreciation());
+        assertEquals(fetchedCustomerCashValue, voucherValue, "Voucher cash value should be equal to calculatedCashValue");
         assertEquals(fetchedCustomerFaceTooltipValue, newPrice, "Voucher face value should be equal to new Price");
 
         ReplacementDialog replacementDialog = customerDetailsPage.
@@ -156,10 +157,10 @@ public class DeprecationDeductedTests extends BaseTest {
                 fillVoucher(claimItem.getExistingVoucher1()).
                 waitASecond();
 
-        SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculate(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
+        SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
 
-        String calculatedFaceValue = String.format("%.2f", expectedCalculation.calculatedCashValue);
-        String calculatedCashValue = String.format("%.2f", expectedCalculation.voucherValue);
+        String calculatedFaceValue = String.format("%.2f", expectedCalculation.getCashCompensationOfVoucher());
+        String calculatedCashValue = String.format("%.2f", expectedCalculation.getCashCompensationWithDepreciation());
 
         String faceValue = String.format("%.2f", settlementDialog.voucherFaceValueFieldText());
         String cashValue = String.format("%.2f", settlementDialog.voucherCashValueFieldText());
@@ -179,7 +180,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 completeWithEmail().
                 openRecentClient().
                 toMailsPage().
-                clickVisMail("Kundemail").
+                openWelcomeCustomerMail().
                 findLoginToShopLinkAndOpenIt().
                 enterPassword(password).
                 login();

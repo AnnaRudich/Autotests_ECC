@@ -4,6 +4,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -79,19 +80,21 @@ public class EditFunctionTemplatePage extends Page {
     }
 
     private void updateCheckBox(FTSetting ftSetting, boolean enable) {
-        CheckBox checkBox = new CheckBox(driver.findElement(By.cssSelector(ftSetting.getLocator())));
+        WebElement element = driver.findElement(By.cssSelector(ftSetting.getLocator()));
+        CheckBox checkBox = new CheckBox(element);
         String description = ftSetting.getDescription();
 
         if (enable && !checkBox.isSelected()) {
             logger.info("Enabling: " + description);
+            ((JavascriptExecutor)driver).executeScript("arguments[0].click();", element);
             checkBox.select();
         }
 
         if (!enable && checkBox.isSelected()) {
             logger.info("Disabling: " + description);
-            checkBox.deselect();
+            ((JavascriptExecutor)driver).executeScript("arguments[0].click();", element);
         }
-        logger.info("CheckBox state is: " + checkBox.isSelected());
+        logger.info("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }
 
     public EditFunctionTemplatePage selectComboBoxValue(FTSetting ftSetting, String option) {

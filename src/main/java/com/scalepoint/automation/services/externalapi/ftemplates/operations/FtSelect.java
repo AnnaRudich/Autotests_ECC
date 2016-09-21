@@ -42,6 +42,11 @@ public class FtSelect extends FtOperation {
     }
 
     @Override
+    public FTSetting getSetting() {
+        return setting;
+    }
+
+    @Override
     public String toString() {
         return "FtSelect{" +
                 "type=" + setting.getDescription() +

@@ -52,7 +52,9 @@ public class FunctionalTemplatesApi extends ServerApi {
         }
 
         EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId.toString() + "&showHidden=true");
-        Arrays.stream(operations).forEach(ftOperation -> ftOperation.updateSetting(templatePage));
+        Arrays.stream(operations).
+                sorted((o1, o2) -> o2.getSetting().hasDependency().compareTo(o1.getSetting().hasDependency())).
+                forEach(ftOperation -> ftOperation.updateSetting(templatePage));
 
         List<FtOperation> notUpdateTemplates = templatePage.findDifferences(operations);
         if (!notUpdateTemplates.isEmpty()) {

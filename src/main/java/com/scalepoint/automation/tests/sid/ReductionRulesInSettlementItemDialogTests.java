@@ -55,7 +55,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
                 enableAge("2").
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
+        SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
         String calculatedCashValue = String.format("%.2f", valuationWithReduction.getCashCompensation());
@@ -105,7 +105,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
                 enterAgeYears("2").
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
+        SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());

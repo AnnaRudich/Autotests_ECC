@@ -9,7 +9,7 @@
             <class name="com.scalepoint.automation.tests.sid.SettlementDialogTest"/>
             <class name="com.scalepoint.automation.tests.sid.ReductionRulesDiscretionaryTypeSIDTests"/>
             <class name="com.scalepoint.automation.tests.sid.ReductionRulesInSettlementItemDialogTests"/>
-            <class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>
+            <!--<class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>-->
         </classes>
     </test>
 </suite>

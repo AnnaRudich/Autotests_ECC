@@ -4,10 +4,10 @@ import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.tests.sid.SidCalculations.VoucherValuation;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -65,13 +65,15 @@ import com.scalepoint.automation.BaseTest;
  */
 
 @Listeners(value = {InvokedMethodListener.class})
+@RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
+@RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+@RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
+@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class DepreciationDeductedCombinedTests extends BaseTest {
 
     @Bug(bug = "CHARLIE-417,CHARLIE-772")
     @Test(description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED", dataProvider = "testDataProvider")
-    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
-    @RequiredSetting(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION)
-    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3288_1_verifyDndD2AndFTRelationCombineDnDOFF(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.
@@ -82,10 +84,12 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 fillDepreciation(claimItem.getDepAmount1_10()).
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillVoucher(claimItem.getExistingVoucher1()).
-                setDiscountAndDepreciation(false);
+                fillVoucher(claimItem.getExistingVoucher1());
 
-        String calculatedCashValue = String.format("%.2f", Double.valueOf(calculatedCashValue(claimItem, voucher)));
+        VoucherValuation voucherValuation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
+                voucher.getDiscount(), claimItem.getDepAmount1_10());
+
+        String calculatedCashValue = String.format("%.2f", voucherValuation.getCashCompensationOfVoucher());
         String faceValue = String.format("%.2f", settlementDialog.voucherFaceValueFieldText());
         String cashValue = String.format("%.2f", settlementDialog.voucherCashValueFieldText());
         String newPrice = String.format("%.2f", Double.valueOf(claimItem.getNewPriceSP_2400()));
@@ -106,7 +110,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 completeWithEmail().
                 openRecentClient().
                 toMailsPage().
-                viewLastMail().
+                openWelcomeCustomerMail().
                 findLoginToShopLinkAndOpenIt().
                 enterPassword("12341234").
                 login();
@@ -146,9 +150,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
 
     @Bug(bug = "CHARLIE-417")
-    @Test(description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
-    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
-    @RequiredSetting(type = FTSetting.COMPARISON_DISCOUNT_DEPRECATION)
+    @Test(description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED", dataProvider = "testDataProvider")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
@@ -161,12 +163,13 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
                 fillVoucher(claimItem.getExistingVoucher1()).
-                setDiscountAndDepreciation(false).
                 setDiscountAndDepreciation(true);
 
+        VoucherValuation voucherValuation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
+                voucher.getDiscount(), claimItem.getDepAmount1_10());
 
-        String calculatedFaceValue = String.format("%.2f", Double.valueOf(calculatedNewPrice(claimItem)));
-        String calculatedCashValue = String.format("%.2f", Double.valueOf(calculatedVoucherValue(claimItem, voucher)));
+        String calculatedFaceValue = String.format("%.2f", voucherValuation.getCashCompensationOfVoucher());
+        String calculatedCashValue = String.format("%.2f", voucherValuation.getCashCompensationWithDepreciation());
         String faceValue = String.format("%.2f", settlementDialog.voucherFaceValueFieldText());
         String cashValue = String.format("%.2f", settlementDialog.voucherCashValueFieldText());
 
@@ -175,18 +178,17 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         assertEquals(cashValue, calculatedCashValue,
                 "Voucher cash value " + cashValue + " should be equal to depreciated voucher cash value " + calculatedCashValue);
 
-        settlementDialog
-                .ok();
+        settlementDialog.ok();
 
         String fetchedFaceTooltipValue = String.format("%.2f", settlementPage.getFaceTooltipValue());
-        assertEquals(fetchedFaceTooltipValue, calculatedVoucherValue(claimItem, voucher),
+        assertEquals(fetchedFaceTooltipValue, calculatedFaceValue,
                 "Tooltip face value " + fetchedFaceTooltipValue + " should be equal to depreciated new price " + calculatedFaceValue);
         ShopWelcomePage shopWelcomePage = settlementPage.completeClaim().
                 fillClaimFormWithPassword(claim, "12341234").
                 completeWithEmail().
                 openRecentClient().
                 toMailsPage().
-                viewLastMail().
+                openWelcomeCustomerMail().
                 findLoginToShopLinkAndOpenIt().
                 enterPassword("12341234").
                 login();
@@ -208,62 +210,15 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 fillClaimFormWithPassword(claim, "12341234").
                 replaceClaim();
 
-        String fetchedCustomerCashValue = String.format("%.2f", customerDetails.getCashValue());
-        String fetchedCustomerFaceTooltipValue = String.format("%.2f", customerDetails.getFaceTooltipValue());
 
-        assertEquals(fetchedCustomerCashValue, calculatedCashValue,
-                "Voucher cash value " + fetchedCustomerCashValue + " should be equal to depreciated voucher cash value " + calculatedCashValue);
-        assertEquals(fetchedCustomerFaceTooltipValue, calculatedFaceValue,
-                "Voucher face value " + fetchedFaceTooltipValue + " should be equal to depreciated new price " + calculatedFaceValue);
-
-        /*claimInfoPage
-                .ReopenClaim();
-        settlementPage
-                .CompleteClaim();
-        completeClaimPage
-                .EnterPhone(client.getPhoneNumber())
-                .EnterCellPhone(client.getCellNumber())
-                .EnterAddress(client.getAddress(), client.getAddress2(), client.getCity(), client.getZipCode())
-                .EnterEmail(recipientEmail)
-                .enterPassword(password)
-                .sendSMS(false)
-                .replaceClaim();
-        eccActions
-                .switchToLast();
-
-        String fetchedReplacementDialogVoucherFaceValue = String.format("%.2f", replacementDialog.getVoucherFaceValue());
-        String fetchedReplacementDialogItemPriceValue = String.format("%.2f", replacementDialog.getItemPriceValue());
+        String fetchedReplacementDialogVoucherFaceValue = String.format("%.2f",replacementDialog.getVoucherFaceValue());
+        String fetchedReplacementDialogItemPriceValue = String.format("%.2f",replacementDialog.getItemPriceValue());
 
         assertEquals(fetchedReplacementDialogVoucherFaceValue, calculatedFaceValue,
                 "Voucher face value " + fetchedReplacementDialogVoucherFaceValue + " should be equal to depreciated new price " + calculatedCashValue);
-        assertEquals(fetchedReplacementDialogItemPriceValue, calculatedCashValue,
+        assertEquals(fetchedReplacementDialogItemPriceValue,calculatedCashValue,
                 "Voucher cash value " + fetchedReplacementDialogItemPriceValue + " should be equal to depreciated voucher cash value " + calculatedCashValue);
         replacementDialog
-                .closeReplacementDialog();*/
-    }
-
-    // Cash Value = New Price - VD1%
-    private String calculatedCashValue(ClaimItem claimItem, Voucher voucher) {
-        Double calculatedCashValue = Double.valueOf(claimItem.getNewPriceSP_2400()) - Double.valueOf(calculatedVoucherDiscount(claimItem, voucher));
-        return String.valueOf(calculatedCashValue);
-    }
-
-    // Cash Value = New Price - VD1% - D1%
-    private String calculatedVoucherValue(ClaimItem claimItem, Voucher voucher) {
-        Double cashValue = Double.valueOf(calculatedCashValue(claimItem, voucher)) -
-                (Double.valueOf(calculatedCashValue(claimItem, voucher)) * Double.valueOf(claimItem.getDepAmount1_10()) / 100);
-        return String.valueOf(cashValue);
-    }
-
-    private String calculatedVoucherDiscount(ClaimItem claimItem, Voucher voucher) {
-        Double voucherDiscount = (Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(voucher.getDiscount())) / 100;
-        return String.valueOf(voucherDiscount);
-    }
-
-    // Face value = New Price - D1%
-    private String calculatedNewPrice(ClaimItem claimItem) {
-        Double calculatedNewPrice = Double.valueOf(claimItem.getNewPriceSP_2400()) -
-                (Double.valueOf(claimItem.getNewPriceSP_2400()) * Double.valueOf(claimItem.getDepAmount1_10())) / 100;
-        return String.valueOf(calculatedNewPrice);
+                .closeReplacementDialog();
     }
 }

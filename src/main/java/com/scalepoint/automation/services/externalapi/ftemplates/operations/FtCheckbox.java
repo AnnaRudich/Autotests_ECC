@@ -48,6 +48,11 @@ public class FtCheckbox extends FtOperation {
         }
     }
 
+    @Override
+    public FTSetting getSetting() {
+        return setting;
+    }
+
     public enum OperationType {
         ENABLE,
         DISABLE,

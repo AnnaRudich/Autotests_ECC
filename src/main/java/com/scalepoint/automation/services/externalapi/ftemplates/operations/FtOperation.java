@@ -19,6 +19,8 @@ public abstract class FtOperation {
 
     public abstract boolean isOperationApplied(EditFunctionTemplatePage page);
 
+    public abstract FTSetting getSetting();
+
     public enum OperationType {
         CHECKBOX,
         INPUT,

@@ -29,6 +29,7 @@ import static org.testng.Assert.*;
 @RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogSmokeTests extends BaseTest {
+
     /**
      * WHEN: Include in claim option is ON
      * THEN:Amount of claim line is summed up to the total amount of claim
@@ -111,7 +112,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 .fillDepreciation(claimItem.getDepAmount1_10())
                 .selectValuation(CUSTOMER_DEMAND);
 
-        SidCalculations.PriceValuation expectedCalculations = SidCalculations.calculate(claimItem.getCustomerDemand_500(), claimItem.getDepAmount1_10());
+        SidCalculations.PriceValuation expectedCalculations = SidCalculations.calculatePriceValuation(claimItem.getCustomerDemand_500(), claimItem.getDepAmount1_10());
 
         String fetchedCashValue = toString(settlementDialog.cashCompensationValue());
         String calculatedCashValue = toString(expectedCalculations.getCashValue());
@@ -210,7 +211,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
      * THEN: New valuation appears in SID
      */
     @Test(description = "ECC-3144 Verify it is possible to add new valuation", dataProvider = "testDataProvider")
-    @RequiredSetting(type = ALLOW_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_8_addNewValuation(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
@@ -237,7 +238,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
      */
     @Test(description = "ECC-3144 Verify Claim line description is displayed in blue if the options \"Include in claim\" disabled" +
             "- Claim line value is not added to Total claims sum", dataProvider = "testDataProvider")
-    @RequiredSetting(type = ALLOW_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_9_disableIncludeInClaim(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.
@@ -288,7 +289,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
      */
     @Test(description = "ECC-3144 Verify that second claim line value is not added to Total claims sum if the options " +
             "'Include in claim' and 'Reviewed' enabled", dataProvider = "testDataProvider")
-    @RequiredSetting(type = ALLOW_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_11_enableIncludeInClaimSecondClaim(User user, Claim claim, ClaimItem claimItem) {
         String secondClaimDescription = claimItem.getTextFieldSP().concat("second");
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
@@ -327,7 +328,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
      * THEN: "Complete claim" button is enabled
      */
     @Test(description = "ECC-3144 Verify 'Complete claim' is enable if 'Reviewed' is disabled in SID", dataProvider = "testDataProvider")
-    @RequiredSetting(type = ALLOW_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_12_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.addManually().
@@ -351,13 +352,10 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Bug(bug = "CHARLIE-391")
     @Test(description = "ECC-3144 Verify 'Reviewed' box is not displayed", dataProvider = "testDataProvider")
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
-    @RequiredSetting(type = ALLOW_MARK_SETTLEMENT_REVIEWED, enabled = false)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED, enabled = false)
     public void ecc3144_14_ReviewedBoxNotDisplayed(User user, Claim claim) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).addManually();
         boolean reviewedPresent = settlementDialog.isReviewedPresent();
-        if (reviewedPresent) {
-            System.out.println("stop");
-        }
         assertFalse(reviewedPresent, "Reviewed checkbox is enabled");
     }
 
@@ -368,7 +366,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
      * THEN: "Complete claim" button is enabled
      */
     @Test(description = "ECC-3144 Verify 'Complete claim' is enabled if 'Reviewed' is disabled in SID", dataProvider = "testDataProvider")
-    @RequiredSetting(type = ALLOW_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM)
     public void ecc3144_13_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);

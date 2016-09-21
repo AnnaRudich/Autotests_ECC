@@ -24,6 +24,9 @@ public class MailsPage extends Page {
     @FindBy(xpath = "//table[last()]//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail']")
     private Button viewLastMail;
 
+    @FindBy(xpath = "//tr[..//div[text()[contains(.,'Kundemail')]]]//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail']")
+    private Button viewLastWelcomeMail;
+
     @Override
     protected String getRelativeUrl() {
         return URL;
@@ -36,33 +39,9 @@ public class MailsPage extends Page {
         return this;
     }
 
-    public MailViewDialog viewLastMail() {
-        try {
-            //old one
-            By oldViewLastMail = By.xpath("(.//*[text()='Vis mail'])[last()]");
-            Wait.waitForElementDisplaying(oldViewLastMail);
-            driver.findElement(oldViewLastMail).click();
-        } catch (Exception e) {
-            //new one
-            Wait.waitForVisible(viewLastMail);
-            viewLastMail.click();
-        }
-        return at(MailViewDialog.class);
-    }
-
-    private int findRowNumber(String localeName) {
-        List<WebElement> rows = driver.findElements(By.cssSelector(".x-grid-item tr"));
-        for (int i = 0; i < rows.size(); i++) {
-             if (rows.get(i).getText().contains(localeName)) {
-                 return i;
-             }
-        }
-        return -1;
-    }
-
-    public MailViewDialog clickVisMail(String localeName) {
-        int numberOfRow = findRowNumber(localeName) + 1;
-        driver.findElement(By.xpath("(//tr//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail'])["+numberOfRow+"]")).click();
+    public MailViewDialog openWelcomeCustomerMail() {
+        Wait.waitForVisible(viewLastWelcomeMail);
+        viewLastWelcomeMail.click();
         return at(MailViewDialog.class);
     }
 }

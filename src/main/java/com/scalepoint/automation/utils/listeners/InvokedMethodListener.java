@@ -8,6 +8,10 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.Browser;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;
@@ -15,8 +19,11 @@ import org.testng.IInvokedMethodListener;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
 
@@ -44,6 +51,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @Override
     public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
         if (iInvokedMethod.isTestMethod()) {
+            takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
+
             logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
             printErrorStackTraceIfAny(iTestResult);
 
@@ -53,14 +62,30 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 return;
             }
             FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-            functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, rollbackContext.operations.toArray(new FtOperation[0]));
+            List<FtOperation> operations = rollbackContext.operations;
+            functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
         }
     }
 
+    @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
+    private void takeScreenshot(Method method, ITestResult iTestResult) {
+        if (iTestResult.getThrowable() != null) {
+            try {
+                File screenshotAs = ((TakesScreenshot) Browser.driver()).getScreenshotAs(OutputType.FILE);
+                File destFolder = new File("c:\\tmp");
+                destFolder.mkdirs();
+                FileUtils.copyFile(screenshotAs, new File(destFolder, method.getName()+".jpg"));
+            } catch (IOException e) {
+                logger.error("Can't take screenshot: "+e.getMessage());
+            }
+        }
+    }
 
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
         List<FtOperation> ftOperations = new ArrayList<>();
-        Set<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
+
+        List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
+
         for (RequiredSetting setting : allSettings) {
             FTSetting settingType = setting.type();
             switch (settingType.getOperationType()) {
@@ -104,8 +129,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         }
     }
 
-    private Set<RequiredSetting> getAllSettings(ITestNGMethod testMethod) {
-        Set<RequiredSetting> requiredSettings = new HashSet<>();
+    private List<RequiredSetting> getAllSettings(ITestNGMethod testMethod) {
+        List<RequiredSetting> requiredSettings = new ArrayList<>();
         Set<FTSetting> methodSettings = new HashSet<>();
 
         Class realClass = testMethod.getRealClass();
@@ -126,6 +151,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     filter(classAnnotation -> !methodSettings.contains(classAnnotation.type())).
                     forEach(requiredSettings::add);
         }
+
 
         return requiredSettings;
     }

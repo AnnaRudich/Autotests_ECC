@@ -2,9 +2,12 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSettings;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
@@ -16,6 +19,7 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 @Listeners({InvokedMethodListener.class})
+@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
     /**
@@ -88,10 +92,10 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         Integer depreciationValue = Integer.valueOf(settlementDialog.getDepreciationValue());
         SidCalculations.ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciationValue, claimItem.getAlkaUserReductionRule_25());
+                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationValue, claimItem.getAlkaUserReductionRule_25());
 
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f",valuationWithReduction.cashCompensation);
+        String calculatedCashValue = String.format("%.2f",valuationWithReduction.getCashCompensation());
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
         String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
 
@@ -140,10 +144,10 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
         SidCalculations.ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
+                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
 
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", valuationWithReduction.cashCompensation);
+        String calculatedCashValue = String.format("%.2f", valuationWithReduction.getCashCompensation());
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
         String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
 
@@ -156,7 +160,7 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
         String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashWithReduction = String.format("%.2f", valuationWithReduction.cashCompensationWithReduction);
+        String calculatedCashWithReduction = String.format("%.2f", valuationWithReduction.getCashCompensationWithReduction());
 
         assertEquals(fetchedCashValueWithReduction, calculatedCashWithReduction, "Cash compensation incorrect");
 
@@ -195,9 +199,9 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
         SidCalculations.ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciation, 0);
+                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, 0);
 
-        String calculatedCashValue = String.format("%.2f", valuationWithReduction.cashCompensation);
+        String calculatedCashValue = String.format("%.2f", valuationWithReduction.getCashCompensation());
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
         String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
@@ -239,10 +243,10 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
         int depreciation = Integer.valueOf(settlementDialog.getDepreciationValue());
         SidCalculations.ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculateWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
+                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
 
         String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", valuationWithReduction.cashCompensation);
+        String calculatedCashValue = String.format("%.2f", valuationWithReduction.getCashCompensation());
         String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
         String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
         assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");

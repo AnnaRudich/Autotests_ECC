@@ -42,6 +42,11 @@ public class FtTextField extends FtOperation {
     }
 
     @Override
+    public FTSetting getSetting() {
+        return setting;
+    }
+
+    @Override
     public String toString() {
         return "FtTextField{" +
                 "type=" + setting.getDescription() +
