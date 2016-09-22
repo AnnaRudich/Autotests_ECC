@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.listeners;
 
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
@@ -38,8 +39,10 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
                 logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
                 if (optionalUser.isPresent()) {
-                    User user = optionalUser.get();
-                    updateFunctionalTemplate(invokedMethod, iTestResult, user);
+
+                    Page.to(LoginPage.class);
+                    updateFunctionalTemplate(invokedMethod, iTestResult, optionalUser.get());
+                    Browser.driver().manage().deleteAllCookies();
                 }
             }
         } catch (Exception e) {
@@ -61,6 +64,9 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 logger.info("No ft settings found to rollback");
                 return;
             }
+
+            Page.to(LoginPage.class);
+
             FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
             List<FtOperation> operations = rollbackContext.operations;
             functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
@@ -100,8 +106,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             }
         }
 
-        User systemUser = UsersManager.getSystemUser();
-        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(systemUser);
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
 
         List<FtOperation> operationsToRollback = functionalTemplatesApi.getOperationsToRollback();

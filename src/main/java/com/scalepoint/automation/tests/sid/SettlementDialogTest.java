@@ -18,7 +18,7 @@ import static org.testng.Assert.assertTrue;
 
 @Listeners({InvokedMethodListener.class})
 @RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
-@RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
+@RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
 public class SettlementDialogTest extends BaseTest {
 
     @Test(description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialog", dataProvider = "testDataProvider")
