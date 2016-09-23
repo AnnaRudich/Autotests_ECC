@@ -199,8 +199,4 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             holder.remove();
         }
     }
-
-    protected void enableNewSid(User user) {
-        updateFT(user, FTSettings.enable(ENABLE_NEW_SETTLEMENT_ITEM_DIALOG));
-    }
 }

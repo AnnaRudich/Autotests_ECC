@@ -60,7 +60,8 @@ public class EditFunctionTemplatePage extends Page {
     }
 
     public boolean isSettingHasSameValue(FTSetting ftSetting, String text) {
-        return driver.findElement(By.cssSelector(ftSetting.getLocator())).getText().equalsIgnoreCase(text);
+        TextInput textInput = new TextInput(driver.findElement(By.cssSelector(ftSetting.getLocator())));
+        return textInput.getText().equalsIgnoreCase(text);
     }
 
     public boolean isSettingHasSameOptionSelected(FTSetting ftSetting, String text) {

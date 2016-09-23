@@ -2,6 +2,7 @@ package com.scalepoint.automation.utils;
 
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.Browser;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.Locatable;
@@ -65,8 +66,8 @@ public class EccActions {
 
     public static boolean isAlertPresent() {
         try {
-            Browser.driver().switchTo().alert();
-            return true;
+            String text = Browser.driver().switchTo().alert().getText();
+            return StringUtils.isNotBlank(text);
         } catch (NoAlertPresentException Ex) {
             return false;
         }

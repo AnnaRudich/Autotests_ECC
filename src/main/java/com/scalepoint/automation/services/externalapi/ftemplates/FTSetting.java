@@ -12,7 +12,7 @@ public enum FTSetting {
     ENABLE_REGISTRATION_LINE_SELF_SERVICE("input[name=ftSelfServiceFlag][value=2048]", CHECKBOX),
     USE_INTERNAL_NOTES("input[name=ftfunctionflag][value=2048]", CHECKBOX),
     SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON("input[name=ftfunctionflag][value=4096]", CHECKBOX),
-    SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON("input[name=ftnoselflags][value=8192]", CHECKBOX),
+    SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON("input[name=ftfunctionflag][value=8192]", CHECKBOX),
     DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION("input[name=ftfunctionflag5][value=512]", CHECKBOX),
     ENABLE_DEPRECIATION_COLUMN("input[name=ftfunctionflag5][value=131072]", CHECKBOX),
     SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED("input[name=ftfunctionflag5][value=32768]", CHECKBOX),
@@ -28,7 +28,7 @@ public enum FTSetting {
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value=1]", CHECKBOX),
-    ALLOW_NONORDERABLE_PRODUCTS("select[name=ftnoselflags] option[selected]", SELECT),
+    ALLOW_NONORDERABLE_PRODUCTS("select[name=ftnoselflags]", SELECT),
     NUMBER_BEST_FIT_RESULTS("input[name=ftnumberbestfitresults]", INPUT),
     USE_BRAND_LOYALTY_BY_DEFAULT("input[name=ftfunctionflag3][value=2048]", CHECKBOX),
 

@@ -22,7 +22,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 import static org.testng.Assert.assertTrue;
 
 @Listeners({InvokedMethodListener.class})
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG, enabled = false)
+@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class SmokeTests extends BaseTest {
 
     @Test(description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim", dataProvider = "testDataProvider")
