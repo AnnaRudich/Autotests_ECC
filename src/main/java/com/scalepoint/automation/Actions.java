@@ -315,13 +315,6 @@ public abstract class Actions {
         return cookieString.toString();
     }
 
-    protected void clickAndAcceptAlert(WebElement element) {
-        element.click();
-        //acceptAlert();
-        getAlertTextAndAccept();
-        Wait.waitForModalWindowDisappear();
-    }
-
     public void switchToLastWindow() {
         for (String winHandle : Browser.driver().getWindowHandles()) {
             Browser.driver().switchTo().window(winHandle);

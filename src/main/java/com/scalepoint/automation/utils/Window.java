@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
+import static com.scalepoint.automation.utils.EccActions.isAlertPresent;
+
 public class Window {
 
     private static ThreadLocal<WindowManager> holder = new ThreadLocal<>();
@@ -36,19 +38,36 @@ public class Window {
             this.driver = driver;
         }
 
-        public void openDialog(WebElement openButton) {
+        public boolean openDialog(WebElement openButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
             if (openButton.isDisplayed()) {
                 openButton.click();
             } else {
                 logger.error("Button is not displayed");
             }
-            Wait.waitForNewModalWindow(windowHandlesBefore);
-            switchToLast();
+            if (isAlertPresent()) {
+                getAlertTextAndAccept();
+                return false;
+            } else {
+                Wait.waitForNewModalWindow(windowHandlesBefore);
+                switchToLast();
+            }
+            return true;
         }
         public void openDialogWithJavascriptHelper(WebElement openButton) {
             openDialog(openButton);
             JavascriptHelper.initializeCommonFunctions(driver);
+        }
+
+        protected void acceptAlertIfPresent() {
+            if (isAlertPresent()) {
+                getAlertTextAndAccept();
+            }
+        }
+
+        protected String getAlertTextAndAccept() {
+            Alert alert = Browser.driver().switchTo().alert();
+            return alert.getText();
         }
 
         public void openDialogWithAlert(WebElement openButton) {

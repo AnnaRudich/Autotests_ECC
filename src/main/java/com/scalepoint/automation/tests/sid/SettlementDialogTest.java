@@ -53,7 +53,7 @@ public class SettlementDialogTest extends BaseTest {
                 .fillNewPrice(item.getNewPriceSP_2400())
                 .fillDepreciation(item.getDepAmount1_10())
                 .fillCategory(categoryInfo)
-                .fillVoucher(item.getExistingVoucher1());
+                .fillVoucher(voucher.getVoucherNameSP());
 
         SidCalculations.VoucherValuation expectedCalculations = SidCalculations.calculateVoucherValuation(item.getNewPriceSP_2400(), voucher.getDiscount(), item.getDepAmount1_10());
 

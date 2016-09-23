@@ -89,8 +89,10 @@ public class CustomerDetailsPage extends BaseClaimPage {
      */
     public SettlementPage reopenClaim() {
         Window.WindowManager windowManager = Window.get();
-        windowManager.openDialog(driver.findElement(By.id("genoptag")));
-        windowManager.closeDialog(driver.findElement(By.id("btn_reopen")));
+        boolean opened = windowManager.openDialog(driver.findElement(By.id("genoptag")));
+        if (opened) {
+            windowManager.closeDialog(driver.findElement(By.id("btn_reopen")));
+        }
         return at(SettlementPage.class);
     }
 

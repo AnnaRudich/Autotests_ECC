@@ -61,7 +61,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 fillNewPrice(claimItem.getNewPriceSP_2400()).
                 fillDepreciation(claimItem.getDepAmount1_10()).
                 fillCategory(categoryInfo).
-                fillVoucher(claimItem.getExistingVoucher1());
+                fillVoucher(voucher.getVoucherNameSP());
 
         SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
 
