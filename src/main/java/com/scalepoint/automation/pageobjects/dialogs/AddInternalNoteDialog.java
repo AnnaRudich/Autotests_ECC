@@ -12,8 +12,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class AddInternalNoteDialog extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/dialog/add_note_dialog.jsp";
-
     @FindBy(name = "internal_note")
     private ExtInput internalNote;
 
@@ -22,13 +20,13 @@ public class AddInternalNoteDialog extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/dialog/add_note_dialog.jsp";
     }
 
     @Override
     public AddInternalNoteDialog ensureWeAreOnPage() {
-        Window.get().switchToLast();
-        waitForUrl(URL);
+        switchToLast();
+        waitForUrl(getRelativeUrl());
         waitForVisible(internalNote);
         return this;
     }
@@ -36,7 +34,7 @@ public class AddInternalNoteDialog extends Page {
     public AddInternalNoteDialog addInternalNote(String note) {
         waitForVisible(internalNote);
         internalNote.sendKeys(note);
-        Window.get().closeDialog(ok);
+        closeDialog(ok);
         return this;
     }
 }

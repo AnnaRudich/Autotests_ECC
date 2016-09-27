@@ -92,6 +92,10 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
+        if (allSettings.isEmpty()) {
+            return;
+        }
+
         for (RequiredSetting setting : allSettings) {
             FTSetting settingType = setting.type();
             switch (settingType.getOperationType()) {

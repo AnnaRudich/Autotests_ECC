@@ -25,7 +25,7 @@ public class UsersManager {
             if (user.isBasic()) {
                 basicUsersQueue.add(user);
             } else {
-                exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompany()),
+                exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompanyCode()),
                         new ArrayBlockingQueue<>(1, true, Collections.singleton(user)));
             }
         });
@@ -49,7 +49,7 @@ public class UsersManager {
             basicUsersQueue.add(user);
             return;
         }
-        exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompany())).add(user);
+        exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
     }
 
     public static User getSystemUser() {

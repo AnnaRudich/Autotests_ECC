@@ -12,8 +12,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class EditPolicyDialog extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/dialog/edit_policy_dialog.jsp";
-
     @FindBy(id = "_OK_button")
     private Button ok;
 
@@ -25,24 +23,24 @@ public class EditPolicyDialog extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/dialog/edit_policy_dialog.jsp";
     }
 
     @Override
     public EditPolicyDialog ensureWeAreOnPage() {
-        Window.get().switchToLast();
-         waitForUrl(URL);
+        switchToLast();
+        waitForUrl(getRelativeUrl());
         waitForVisible(policyType);
         return this;
     }
 
-    public void chooseAny(){
+    public void chooseAny() {
         policyType.selectByIndex(1);
-        Window.get().closeDialog(ok);
+        closeDialog(ok);
     }
 
     public void choose(String policyTypeValue) {
         policyType.selectByValue(policyTypeValue);
-        Window.get().closeDialog(ok);
+        closeDialog(ok);
     }
 }

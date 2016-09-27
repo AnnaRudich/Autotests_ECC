@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -16,8 +17,6 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxComplete;
 @EccPage
 public class MailsPage extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/customer_mails.jsp";
-
     @FindBy(css = ".x-grid-item tbody")
     private Table sentMails;
 
@@ -29,19 +28,20 @@ public class MailsPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/customer_mails.jsp";
     }
 
     @Override
     public MailsPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForAjaxComplete();
         return this;
     }
 
     public MailViewDialog openWelcomeCustomerMail() {
         Wait.waitForVisible(viewLastWelcomeMail);
+
         viewLastWelcomeMail.click();
-        return at(MailViewDialog.class);
+        return BaseDialog.at(MailViewDialog.class);
     }
 }

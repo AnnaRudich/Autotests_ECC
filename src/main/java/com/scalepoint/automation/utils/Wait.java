@@ -20,12 +20,11 @@ import java.util.concurrent.TimeUnit;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class Wait {
-    public static final int STABLE_ELEMENT_TIMEOUT = 60;
     private static final int TIME_OUT_IN_SECONDS = 60;
     private static final int POLL_IN_MS = 1000;
     private static final int TIME_OUT_IN_MINUTES_REINDEXATION = 20;
+
     private static Logger log = LoggerFactory.getLogger(Wait.class);
-    private static StopWatch watch = new StopWatch();
 
     public static void waitForAjaxComplete() {
         new WebDriverWait(Browser.driver(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
@@ -49,44 +48,16 @@ public class Wait {
         return wrap(displayingOfElementLocated(elementLocator));
     }
 
-    public static WebElement waitForElementFocusing(By elementLocator) {
-        return wrap(focusingOfElementLocated(elementLocator));
-    }
-
     public static void waitForReindexation(final By elementLocator) {
         FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
                 .withTimeout(TIME_OUT_IN_MINUTES_REINDEXATION, TimeUnit.MINUTES)
                 .pollingEvery(10, TimeUnit.SECONDS)
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
         wait.until(displayingOfElementLocated(elementLocator));
-        log.info("Reindexation was performed after " + watch.toString());
     }
 
 
-    public static <T, U extends WebElement> T doAndGet(U element, java.util.function.Function<U, T> action) {
-        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
-                .withTimeout(30, TimeUnit.SECONDS)
-                .pollingEvery(2, TimeUnit.SECONDS)
-                .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
-        return wait.until(new Function<WebDriver, T>() {
-            @Override
-            public T apply(WebDriver webDriver) {
-                try {
-                    return action.apply(element);
-                } catch (Exception e) {
-                    throw e;
-                }
-            }
-        });
-    }
-
-    public static void waitForModalWindowAppear() {
-        Set<String> wh = wrap(presenceOfWindowCount(2));
-        wh.remove(Browser.getMainWindowHandle());
-        wh.stream().forEach(h -> Browser.driver().switchTo().window(h));
-    }
-
-    public static String waitForNewModalWindow(final Set<String> oldWindows) {
+    static String waitForNewModalWindow(final Set<String> oldWindows) {
         return wrap((WebDriver driver) -> {
             Set<String> allWindows = driver.getWindowHandles();
             allWindows.removeAll(oldWindows);
@@ -94,7 +65,7 @@ public class Wait {
         });
     }
 
-    public static void waitForCloseModalWindow(final Set<String> oldWindows) {
+    static void waitForCloseModalWindow(final Set<String> oldWindows) {
         wrap((WebDriver driver) -> {
             Set<String> allWindows = driver.getWindowHandles();
             return oldWindows.size() > allWindows.size();
@@ -118,7 +89,6 @@ public class Wait {
                     return element;
                 }
             } catch (Exception e) {
-//                logger.error("enablingOfElementLocated: " + e.getMessage() + " for: " + locator.toString());
                 return null;
             }
             return null;
@@ -135,14 +105,6 @@ public class Wait {
             }
         };
     }
-
-    private static Function<WebDriver, WebElement> focusingOfElementLocated(final By locator) {
-        return driver -> {
-            WebElement element = driver.findElement(locator);
-            return element.equals(driver.switchTo().activeElement()) ? element : null;
-        };
-    }
-
 
     private static Function<WebDriver, Set<String>> presenceOfWindowCount(final int count) {
         return webDriver -> {
@@ -177,19 +139,6 @@ public class Wait {
         });
     }
 
-    public static void waitForElementWithPageReload(final By locator) {
-        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(10, TimeUnit.MINUTES).pollingEvery(10, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
-        wait.until((WebDriver driver) -> {
-            driver.navigate().refresh();
-            return driver.findElement(locator);
-        });
-        watch.stop();
-    }
-
-    public static void waitForElementDisappear(By locator) {
-        wrap(ExpectedConditions.invisibilityOfElementLocated(locator));
-    }
-
     public static void waitForElementDisappear(WebElement element) {
         FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(10, TimeUnit.SECONDS).
                 pollingEvery(1, TimeUnit.SECONDS).
@@ -204,10 +153,6 @@ public class Wait {
                 }
             }
         });
-    }
-
-    public static void waitForDialog() {
-        wrap((WebDriver d) -> ((JavascriptExecutor) d).executeScript("Ext.WindowManager.getActive();"));
     }
 
     public static <T> T For(Function<WebDriver, T> condition) {
@@ -272,7 +217,6 @@ public class Wait {
                 return true;
             }
         });
-
     }
 
     public static <E extends TypifiedElement> E waitForEnabled(E element) {
@@ -280,13 +224,15 @@ public class Wait {
         return element;
     }
 
-    public static WebElement waitForEnabled(WebElement element) {
+    private static WebElement waitForEnabled(WebElement element) {
         wrapWait(d -> element.isEnabled());
         return element;
     }
+
     public static void waitForLoaded() {
         wrapWait(d -> {
             try {
+                assert d != null;
                 return !d.findElements(By.xpath("//div[@class='x-mask-msg-text' and text()='Loading...']")).stream()
                         .anyMatch(WebElement::isDisplayed);
             } catch (NoSuchElementException | StaleElementReferenceException e) {
@@ -295,21 +241,7 @@ public class Wait {
         });
     }
 
-    public static Alert waitForAlert(int timeout) {
-        return new WebDriverWait(Browser.driver(), timeout).until((ExpectedCondition<Alert>) d -> {
-            try {
-                return d.switchTo().alert();
-            } catch (NoAlertPresentException e) {
-                return null;
-            }
-        });
-    }
-
-    public static <V> V wrapWait(ExpectedCondition<V> expectedCondition) {
+    private static <V> V wrapWait(ExpectedCondition<V> expectedCondition) {
         return new WebDriverWait(Browser.driver(), 15, 1000).until(expectedCondition);
-    }
-
-    public static void waitUntilCountOfWindow(int windowCount) {
-        wrapWait(ExpectedConditions.numberOfWindowsToBe(windowCount));
     }
 }

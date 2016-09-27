@@ -24,13 +24,13 @@ public class ReplacementDialog extends BaseDialog {
     @Override
     public ReplacementDialog ensureWeAreAt() {
         Wait.waitForAjaxComplete();
-        Window.get().switchToLast();
+        switchToLast();
         waitForVisible(cancelButton);
         return this;
     }
 
     public void closeReplacementDialog() {
-        Window.get().closeDialog(cancelButton);
+        closeDialog(cancelButton);
     }
 
     public Double getVoucherFaceValue() {

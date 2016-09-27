@@ -1,12 +1,13 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
-public abstract class BaseDialog {
+public abstract class BaseDialog implements Actions {
 
     protected Logger logger = LogManager.getLogger(BaseDialog.class);
 

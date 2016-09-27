@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
 import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -20,7 +21,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-@Listeners({InvokedMethodListener.class})
 public class ShowMarketPricesTests extends BaseTest {
     /**
      * GIVEN: FT "Show Market Price" OFF
@@ -31,7 +31,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price is unavailable on the Product's Best Fit page
      * THEN: Market Price supplier not displays on Product Details page
      */
-    @Test(description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
 
@@ -40,10 +40,12 @@ public class ShowMarketPricesTests extends BaseTest {
                 chooseCategory(claimItem.getExistingCat1_Born());
 
         assertFalse(textSearchPage.isMarketPriceVisible(), "Market Price is Visible");
+
         BestFitPage bestFitPage = textSearchPage.
                 sortSearchResults().
                 sortSearchResults().
                 bestFit();
+
         assertFalse(bestFitPage.isMarketPriceVisible(), "Market Price is not visible");
     }
 
@@ -57,7 +59,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price supplier not displays on Product Details page
      */
 
-    @Test(description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Product Details Page", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Product Details Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_2_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
@@ -65,6 +67,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 chooseCategory(claimItem.getExistingCat1_Born());
 
         assertFalse(textSearchPage.isMarketPriceVisible(), "Market Price is Visible");
+
         ProductDetailsPage productDetailsPage = textSearchPage.
                 sortSearchResults().
                 sortSearchResults().
@@ -72,6 +75,7 @@ public class ShowMarketPricesTests extends BaseTest {
 
         assertFalse(productDetailsPage.isMarketPriceVisible(), "Market price is not visible");
         assertFalse(productDetailsPage.isMarketPriceSupplierVisible(), "Supplier is visible");
+
         productDetailsPage.closeWindow();
     }
 
@@ -83,7 +87,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price valuation exists in the SID
      * THEN: Market Price Supplier name not displays in the SID
      */
-    @Test(description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
@@ -92,7 +96,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults().
                 matchFirst().
-                selectValuation(SettlementDialog.Valuation.MARKET_PRICE);
+                selectValuation(Valuation.MARKET_PRICE);
 
         assertTrue(settlementDialog.isMarketPriceVisible(), "Market price is not visible");
         assertFalse(settlementDialog.isMarketPriceSupplierVisible(), "Supplier is visible");
@@ -107,7 +111,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price value not displays on Product Details page
      * THEN: Market Price supplier not displays on Product Details page
      */
-    @Test(description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify Product Info Page", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify Product Info Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_4_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
@@ -134,7 +138,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price supplier displays on Product Details page
      */
     @Bug(bug = "CHARLIE-1033")
-    @Test(description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_6_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
@@ -161,7 +165,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price valuation exists in the SID
      * THEN: Market Price Supplier name displays in the SID
      */
-    @Test(description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_7_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
@@ -169,7 +173,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults().
                 matchFirst().
-                selectValuation(SettlementDialog.Valuation.MARKET_PRICE);
+                selectValuation(Valuation.MARKET_PRICE);
 
         assertTrue(settlementDialog.isMarketPriceVisible(), "Market price is not visible");
     }
@@ -184,7 +188,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price Supplier displays on Product Info page
      */
     @Bug(bug = "CHARLIE-1033")
-    @Test(description = "CHARLIE-588 Show Market Price (on), add Product from catalog, verify Product info page", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), add Product from catalog, verify Product info page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_8_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         ProductDetailsPage productDetailsPage = loginAndCreateClaim(user, claim).

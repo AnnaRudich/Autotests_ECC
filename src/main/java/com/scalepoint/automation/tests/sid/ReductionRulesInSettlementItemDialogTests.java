@@ -41,7 +41,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
      * THEN: Value generated according rule settings added to the field
      * THEN: Value in depreciation field is changed to value of reduction rule
      */
-    @Test(description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button")
     public void ecc3031_1_reductionRulePolicyType(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
@@ -57,24 +57,25 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
 
         SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
-        String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String calculatedCashValue = String.format("%.2f", valuationWithReduction.getCashCompensation());
-        String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
-        String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
+        Double fetchedCashValue = settlementDialog.cashCompensationValue();
+        Double calculatedCashValue = valuationWithReduction.getCashCompensation();
+        Double fetchedDepreciation = settlementDialog.fetchDepreciation();
+        Double calculatedDepreciation = valuationWithReduction.getDepreciation();
 
-        assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1_10().toString());
+        assertEqualsDouble(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
+        assertEqualsDouble(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
+        assertEqualsDouble(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1_10().doubleValue(), "Depreciation percentage incorrect");
 
-        settlementDialog.applyReductionRuleByValue(claimItem.getReductionRule_30().toString());
-        String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String fetchedDepreciationWithReduction = String.format("%.2f", settlementDialog.fetchDepreciation());
-        String calculatedReduction = String.format("%.2f", valuationWithReduction.getReduction());
-        String calculatedCashValueReduction = String.format("%.2f", valuationWithReduction.getCashCompensationWithReduction());
+        settlementDialog.applyReductionRuleByValue(claimItem.getReductionRule_30());
 
-        assertEquals(fetchedCashValueWithReduction, calculatedCashValueReduction, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciationWithReduction, calculatedReduction, "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getReductionRule_30().toString());
+        Double fetchedCashValueWithReduction = settlementDialog.cashCompensationValue();
+        Double fetchedDepreciationWithReduction = settlementDialog.fetchDepreciation();
+        Double calculatedReduction = valuationWithReduction.getReduction();
+        Double calculatedCashValueReduction = valuationWithReduction.getCashCompensationWithReduction();
+
+        assertEqualsDouble(fetchedCashValueWithReduction, calculatedCashValueReduction, "Cash compensation incorrect");
+        assertEqualsDouble(fetchedDepreciationWithReduction, calculatedReduction, "Depreciation incorrect");
+        assertEqualsDouble(settlementDialog.getDepreciationValue(), claimItem.getReductionRule_30().doubleValue(), "Reduction percentage incorrect");
         settlementDialog.cancel();
     }
 
@@ -90,7 +91,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
      * THEN: Value generated according rule settings added to the field
      * THEN: Value in depreciation field is changed to value of reduction rule
      */
-    @Test(description = "ECC-3031 Verify reduction rule policy type after ticking Depreciation automatically updated checkbox", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule policy type after ticking Depreciation automatically updated checkbox")
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     public void ecc3031_2_reductionRulePolicyTypeAutomatic(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
@@ -107,24 +108,25 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
 
         SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
-        String fetchedCashValue = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String fetchedDepreciation = String.format("%.2f", settlementDialog.fetchDepreciation());
-        String calculatedCashValue = String.format("%.2f", valuationWithReduction.getCashCompensation());
-        String calculatedDepreciation = String.format("%.2f", valuationWithReduction.getDepreciation());
+        Double fetchedCashValue = settlementDialog.cashCompensationValue();
+        Double fetchedDepreciation = settlementDialog.fetchDepreciation();
+        Double calculatedCashValue = valuationWithReduction.getCashCompensation();
+        Double calculatedDepreciation = valuationWithReduction.getDepreciation();
 
-        assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1_10().toString());
+        assertEqualsDouble(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
+        assertEqualsDouble(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
+        assertEqualsDouble(settlementDialog.getDepreciationValue(), claimItem.getDepAmount1_10().doubleValue(), "Depreciation percentage incorrect");
 
         settlementDialog.automaticDepreciation(true);
-        String fetchedCashValueWithReduction = String.format("%.2f", settlementDialog.cashCompensationValue());
-        String fetchedDepreciationWithReduction = String.format("%.2f", settlementDialog.fetchDepreciation());
-        String calculatedReduction = String.format("%.2f", valuationWithReduction.getReduction());
-        String calculatedCashValueReduction = String.format("%.2f", valuationWithReduction.getCashCompensationWithReduction());
 
-        assertEquals(fetchedCashValueWithReduction, calculatedCashValueReduction, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciationWithReduction, calculatedReduction, "Depreciation incorrect");
-        assertEquals(settlementDialog.getDepreciationValue(), claimItem.getReductionRule_30().toString());
+        Double fetchedCashValueWithReduction = settlementDialog.cashCompensationValue();
+        Double fetchedDepreciationWithReduction = settlementDialog.fetchDepreciation();
+        Double calculatedReduction = valuationWithReduction.getReduction();
+        Double calculatedCashValueReduction = valuationWithReduction.getCashCompensationWithReduction();
+
+        assertEqualsDouble(fetchedCashValueWithReduction, calculatedCashValueReduction, "Cash compensation incorrect");
+        assertEqualsDouble(fetchedDepreciationWithReduction, calculatedReduction, "Depreciation incorrect");
+        assertEqualsDouble(settlementDialog.getDepreciationValue(), claimItem.getReductionRule_30().doubleValue(), "Reduction percentage incorrect");
         settlementDialog.cancel();
     }
 }

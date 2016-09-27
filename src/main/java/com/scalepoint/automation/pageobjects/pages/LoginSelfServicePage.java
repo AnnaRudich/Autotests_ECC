@@ -11,8 +11,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class LoginSelfServicePage extends Page {
 
-    private static final String URL = "shop/LoginToShop?selfService";
-
     @FindBy(id = "password")
     private ExtInput passwordField;
 
@@ -25,12 +23,12 @@ public class LoginSelfServicePage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "shop/LoginToShop?selfService";
     }
 
     @Override
     public LoginSelfServicePage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(passwordField);
         waitForVisible(login);
         return this;

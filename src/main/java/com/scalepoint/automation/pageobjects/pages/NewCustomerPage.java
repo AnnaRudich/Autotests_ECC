@@ -13,8 +13,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class NewCustomerPage extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/indtast_kunde.jsp";
-
     @FindBy(id = "damageDate-inputEl")
     private WebElement damageDate;
 
@@ -44,12 +42,12 @@ public class NewCustomerPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/indtast_kunde.jsp";
     }
 
     @Override
     public NewCustomerPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(title);
         waitForVisible(surname);
         return this;
@@ -59,49 +57,49 @@ public class NewCustomerPage extends Page {
         return continueButton.getWrappedElement();
     }
 
-    public NewCustomerPage EnterTitle(String titleName) {
+    public NewCustomerPage enterTitle(String titleName) {
         Wait.waitForPageLoaded();
         title.enter(titleName);
         return this;
     }
 
-    public NewCustomerPage EnterSurname(String surnameText) {
+    public NewCustomerPage enterSurname(String surnameText) {
         surname.enter(surnameText);
         return this;
     }
 
-    public NewCustomerPage EnterFirstName(String firstNameText) {
+    public NewCustomerPage enterFirstName(String firstNameText) {
         firstNames.enter(firstNameText);
         return this;
     }
 
-    public NewCustomerPage EnterPolicyNumber(String policyNumberText) {
+    public NewCustomerPage enterPolicyNumber(String policyNumberText) {
         policyNumber.enter(policyNumberText);
         return this;
     }
 
-    public NewCustomerPage EnterClaimNumber(String claimNumberText) {
+    public NewCustomerPage enterClaimNumber(String claimNumberText) {
         claimsNumber.enter(claimNumberText);
         return this;
     }
 
-    public NewCustomerPage SelectPolicyType(String _policyType) {
-        policyType.selectByVisibleText(_policyType);
+    public NewCustomerPage selectPolicyType(String policyType) {
+        this.policyType.selectByVisibleText(policyType);
         return this;
     }
 
-    public NewCustomerPage SelectPolicyType(int index) {
+    public NewCustomerPage selectPolicyType(int index) {
         policyType.selectByIndex(index);
         return this;
     }
 
-    public void Continue() {
+    public void create() {
         continueButton.click();
         Wait.waitForPageLoaded();
     }
 
-    public NewCustomerPage SelectCompany(String _company) {
-        selectCompany.selectByVisibleText(_company);
+    public NewCustomerPage selectCompany(String company) {
+        selectCompany.selectByVisibleText(company);
         return this;
     }
 }

@@ -77,7 +77,7 @@ public class ReductionRulesApi extends ServerApi {
                     "&Policy=" + policyName +
                     "&ActSelected=A" +
                     "&RuleRefNum=" + rrId +
-                    "&company=" + psCatNum +
+                    "&companyCode=" + psCatNum +
                     "&categorygroup=" + psGroupNum +
                     "&category=" + psCatNum +
                     "&policy=0" +
@@ -109,7 +109,7 @@ public class ReductionRulesApi extends ServerApi {
                     "&Policy=null" +
                     "&ActSelected=A" +
                     "&RuleRefNum=" + rrId +
-                    "&company=7" +
+                    "&companyCode=7" +
                     "&categorygroup=" + psGroupNum +
                     "&category=" + psCatNum +
                     "&policy=null";
@@ -260,7 +260,7 @@ public class ReductionRulesApi extends ServerApi {
         rrParams.add(new BasicNameValuePair("ruleNumber", ""));
         rrParams.add(new BasicNameValuePair("ruleREFNUM", ruleId));
         rrParams.add(new BasicNameValuePair("sqlSTATUS", ""));
-        rrParams.add(new BasicNameValuePair("company", "-1"));
+        rrParams.add(new BasicNameValuePair("companyCode", "-1"));
         rrParams.add(new BasicNameValuePair("policy", "Any"));
         rrParams.add(new BasicNameValuePair("categorygroup", "-1"));
         rrParams.add(new BasicNameValuePair("category", "-1"));

@@ -14,8 +14,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class MyPage extends Page {
 
-    private static String URL = "webshop/jsp/matching_engine/my_page.jsp";
-
     private MainMenu mainMenu = new MainMenu();
 
     @FindBy(id = "EditPreferences")
@@ -38,12 +36,12 @@ public class MyPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/my_page.jsp";
     }
 
     @Override
     public MyPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(editPreferences);
         waitForVisible(lastClaims);
         return this;
@@ -53,7 +51,7 @@ public class MyPage extends Page {
         activeCustomerLink.click();
     }
 
-    public CustomerDetailsPage openRecentClient() {
+    public CustomerDetailsPage openRecentClaim() {
         recentCustomer.click();
         return at(CustomerDetailsPage.class);
     }

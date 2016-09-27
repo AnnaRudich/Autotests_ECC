@@ -14,8 +14,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccAdminPage
 public class LoginPage extends Page {
 
-    private static final String URL = "";
-
     @FindBy(css = "#loginFormBlock .login-button")
     private Button loginButton;
 
@@ -33,12 +31,12 @@ public class LoginPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "";
     }
 
     @Override
     public LoginPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(username);
         waitForVisible(password);
         waitForVisible(loginButton);
@@ -50,6 +48,7 @@ public class LoginPage extends Page {
         username.sendKeys(user.getLogin());
         password.sendKeys(user.getPassword());
         loginButton.click();
+
         Wait.waitForElement(By.id("signOutButton"));
         return at(SettlementPage.class);
     }

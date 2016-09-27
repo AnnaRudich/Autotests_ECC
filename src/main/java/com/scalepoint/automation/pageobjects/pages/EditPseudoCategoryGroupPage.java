@@ -14,30 +14,29 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class EditPseudoCategoryGroupPage extends Page {
 
-    private static final String URL = "webshop/jsp/Admin/pseudocategory_group_edit.jsp?pseudocatgroupid=";
-
     @FindBy(name = "pseudoCategoryList")
     private Select pseudoCategoryList;
+
     @FindBy(id = "btnEdit")
     private Button editButton;
 
     @Override
     protected Page ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(editButton);
         return this;
     }
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/Admin/pseudocategory_group_edit.jsp?pseudocatgroupid=";
     }
 
-    public List<String> getAllPseudoCategories(){
+    public List<String> getAllPseudoCategories() {
         List<String> stringList = new ArrayList<>();
         List<WebElement> allCategories = pseudoCategoryList.getOptions();
         for (WebElement allCategory : allCategories) {
-            String normalizedString =  allCategory.getText().replaceAll("[\\s\\.:,%]", "").replaceAll("(\\[)?(.+?)(\\])?", "$2").trim();
+            String normalizedString = allCategory.getText().replaceAll("[\\s\\.:,%]", "").replaceAll("(\\[)?(.+?)(\\])?", "$2").trim();
             stringList.add(normalizedString);
         }
         return stringList;

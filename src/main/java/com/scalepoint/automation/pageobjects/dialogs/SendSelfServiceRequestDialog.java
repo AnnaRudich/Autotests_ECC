@@ -11,10 +11,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
-@EccPage
-public class SendSelfServiceRequestDialog extends Page {
-
-    private static final String URL = "webshop/jsp/matching_engine/settlement.jsp";
+public class SendSelfServiceRequestDialog extends BaseDialog {
 
     @FindBy(name = "email")
     private ExtInput email;
@@ -35,41 +32,35 @@ public class SendSelfServiceRequestDialog extends Page {
     private Button cancel;
 
     @Override
-    protected String getRelativeUrl() {
-        return URL;
-    }
-
-    @Override
-    public SendSelfServiceRequestDialog ensureWeAreOnPage() {
-        waitForUrl(URL);
+    public SendSelfServiceRequestDialog ensureWeAreAt() {
         waitForVisible(email);
         waitForVisible(ok);
         return this;
     }
 
     public SendSelfServiceRequestDialog fill(Claim claim, String password) {
-        return EnterEmail(claim.getEmail())
-                .EnterMobileNumber(claim.getCellNumber())
-                .EnterPassword(password)
-                .UncheckSendSms();
+        return enterEmail(claim.getEmail())
+                .enterMobileNumber(claim.getCellNumber())
+                .enterPassword(password)
+                .disableSendSms();
     }
 
-    public SendSelfServiceRequestDialog EnterEmail(String _email) {
-        email.enter(_email);
+    private SendSelfServiceRequestDialog enterEmail(String email) {
+        this.email.enter(email);
         return this;
     }
 
-    public SendSelfServiceRequestDialog EnterPassword(String _password) {
-        password.enter(_password);
+    private SendSelfServiceRequestDialog enterPassword(String password) {
+        this.password.enter(password);
         return this;
     }
 
-    public SendSelfServiceRequestDialog EnterMobileNumber(String _mobileNumber) {
-        mobileNumber.enter(_mobileNumber);
+    private SendSelfServiceRequestDialog enterMobileNumber(String mobileNumber) {
+        this.mobileNumber.enter(mobileNumber);
         return this;
     }
 
-    public SendSelfServiceRequestDialog UncheckSendSms() {
+    private SendSelfServiceRequestDialog disableSendSms() {
         if (sendSms.isSelected()) {
             sendSms.set(false);
         }
@@ -78,6 +69,6 @@ public class SendSelfServiceRequestDialog extends Page {
 
     public SettlementPage send() {
         ok.click();
-        return at(SettlementPage.class);
+        return Page.at(SettlementPage.class);
     }
 }

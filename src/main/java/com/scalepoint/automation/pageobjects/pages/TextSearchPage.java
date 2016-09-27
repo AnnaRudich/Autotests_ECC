@@ -27,8 +27,6 @@ import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 @EccPage
 public class TextSearchPage extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/TextSearch.jsp";
-
     @FindBy(id = "brandsButton")
     private Button brands;
 
@@ -76,37 +74,26 @@ public class TextSearchPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/TextSearch.jsp";
     }
 
     @Override
     public TextSearchPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForElement(By.id("categoryLegend"));
         waitForPageLoaded();
         return this;
     }
 
-    /**
-     * select brand from combobox
-     *
-     * @param _option is brand option
-     * @return
-     */
-
-    public TextSearchPage SelectBrand(String _option) {
+    public TextSearchPage selectBrand(String _option) {
         brands.click();
         brandSelection.select(_option);
         return this;
     }
 
-    /**
-     * This method sorts search results by FtSelect option
-     */
     public TextSearchPage sortSearchResults() {
-        Wait.waitForPageLoaded();
         selectOption.click();
-        Wait.waitForPageLoaded();
+        Wait.waitForAjaxComplete();
         return this;
     }
 
@@ -128,19 +115,6 @@ public class TextSearchPage extends Page {
         return false;
     }
 
-    public boolean isMarketPrice(String _marketPrice){
-        Wait.waitForPageLoaded();
-        List<WebElement> marketPrices = productsList.getColumnByIndex(4);
-        Double expectedValue = Double.parseDouble(_marketPrice);
-        for(WebElement value : marketPrices){
-            if (OperationalUtils.toNumber(value.getText()).equals(expectedValue)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     public boolean isSortingMarketPriceAscendant(){
         return ascendantMarketPrice.isDisplayed();
     }
@@ -156,7 +130,7 @@ public class TextSearchPage extends Page {
     }
 
     public ProductDetailsPage productDetails(){
-        Window.get().openDialog(productDetails);
+        openDialog(productDetails);
         return at(ProductDetailsPage.class);
     }
 

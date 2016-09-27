@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.support.FindBy;
@@ -9,8 +10,6 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 @EccPage
 public class ProductDetailsPage extends Page {
-
-    private static final String URL = "webshop/jsp/matching_engine/product_details_popup.jsp";
 
     @FindBy(id = "luk")
     private Button closeWindow;
@@ -23,18 +22,18 @@ public class ProductDetailsPage extends Page {
 
     @Override
     protected Page ensureWeAreOnPage() {
-        Window.get().switchToLast();
-        waitForUrl(URL);
+        switchToLast();
+        waitForUrl(getRelativeUrl());
         return this;
     }
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/product_details_popup.jsp";
     }
 
     public void closeWindow(){
-        Window.get().closeDialog(closeWindow);
+        closeDialog(closeWindow);
     }
 
     public boolean isMarketPriceSupplierVisible(){
@@ -46,15 +45,10 @@ public class ProductDetailsPage extends Page {
     }
 
     public Double marketPriceValue(){
-        return getDoubleValue(marketPriceValue.getText());
+        return OperationalUtils.getDoubleValue(marketPriceValue.getText());
     }
 
     public String marketPriceSupplier(){
         return marketPriceSupplier.getText();
-    }
-
-    public static double getDoubleValue(String input) {
-        String[] array = input.split(" ");
-        return Double.parseDouble((array[array.length-1]).replaceAll("\\.", "").replace(",", "."));
     }
 }

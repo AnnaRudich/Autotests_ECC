@@ -30,7 +30,7 @@ public class InsuranceCompanyApi extends ServerApi {
     public void createInsuranceCompany(InsuranceCompany insuranceCompany) {
         try {
             ensure302Code(post(URL_CREATE_IC, toParams(insuranceCompany), executor).returnResponse().getStatusLine().getStatusCode());
-            log.info("Insurance company was created. IC name: " + insuranceCompany.getIcName());
+            log.info("Insurance companyCode was created. IC name: " + insuranceCompany.getIcName());
         } catch (IOException e) {
             log.error("Can't create IC", e);
             throw new ServerApiException(e);

@@ -11,8 +11,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class LoginShopPage extends Page {
 
-    private static final String URL = "shop/LoginToShop?login";
-
     @FindBy(id = "password")
     private ExtInput password;
 
@@ -25,12 +23,12 @@ public class LoginShopPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "shop/LoginToShop?login";
     }
 
     @Override
     public LoginShopPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(password);
         waitForVisible(login);
         return this;

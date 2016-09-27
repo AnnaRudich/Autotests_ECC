@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
-public abstract class Module extends Actions {
+public abstract class Module implements Actions {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 

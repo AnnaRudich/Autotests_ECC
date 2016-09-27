@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -19,24 +20,18 @@ public class CustomerDetails extends Module {
 
     public Double getCashValue() {
         String value = cashValue.getText().replaceAll("[^0-9.,]+", "");
-        return getDoubleValue(value);
+        return OperationalUtils.getDoubleValue(value);
     }
 
     public Double getFaceValue() {
         String value = faceValue.getText().replaceAll("[^0-9.,]+", "");
-        return getDoubleValue(value);
+        return OperationalUtils.getDoubleValue(value);
     }
 
     public Double getFaceTooltipValue() {
         String tooltipText = (iconToolTip.getAttribute("title")).split("\\(")[0];
         String value = tooltipText.replaceAll("[^\\.,0123456789]", "");
-        return getDoubleValue(value);
-    }
-
-    public static double getDoubleValue(String input) {
-        String[] array = input.split(" ");
-        double result = Double.parseDouble((array[array.length - 1]).replaceAll("\\.", "").replace(",", "."));
-        return result;
+        return OperationalUtils.getDoubleValue(value);
     }
 
     public static Double doubleString(String s) throws NumberFormatException {

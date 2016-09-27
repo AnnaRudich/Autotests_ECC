@@ -3,15 +3,18 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,8 +22,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
 public class SettlementPage extends BaseClaimPage {
-
-    private static String URL = "webshop/jsp/matching_engine/settlement.jsp";
 
     @FindBy(css = "#settlementGrid-body table")
     private Table claim;
@@ -64,12 +65,12 @@ public class SettlementPage extends BaseClaimPage {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/settlement.jsp";
     }
 
     @Override
     public SettlementPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(ok);
         return this;
     }
@@ -78,6 +79,12 @@ public class SettlementPage extends BaseClaimPage {
         claimOperationsMenu.requestSelfService().
                 fill(claim, password).
                 send();
+        return this;
+    }
+
+    public SettlementPage addGenericItem(String genericItemName, String categoryGroup, String category) {
+        claimOperationsMenu.addGenericItem().
+                chooseItem(genericItemName, categoryGroup, category);
         return this;
     }
 
@@ -122,13 +129,13 @@ public class SettlementPage extends BaseClaimPage {
         return BaseDialog.at(SettlementDialog.class);
     }
 
-    public String FetchPriceByPoint(String point) {
+    public String fetchPriceByPoint(String point) {
         List<List<String>> priceConclusions = settlementConclusion.getClaimsResult().getRowsAsString();
         String line = priceConclusions.stream().filter(points -> point.contains(point)).findFirst().toString();
         return line.split(" ")[line.split(" ").length - 1].replaceAll("[\\]]]", "");
     }
 
-    public void CancelClaim() {
+    public void cancelClaim() {
         bottomMenu.cancel();
     }
 
@@ -147,25 +154,12 @@ public class SettlementPage extends BaseClaimPage {
         return at(CompleteClaimPage.class);
     }
 
-    /**
-     * Checks by Description column
-     *
-     * @param _item
-     * @return
-     */
     public boolean isItemPresent(String _item) {
         List<WebElement> claims = claimDescription;
         return claims.stream().anyMatch(claim -> claim.getText().equals(_item));
     }
 
-    /**
-     * FtSelect claim item by name
-     *
-     * @param _item is claim name
-     * @return
-     */
-
-    public SettlementPage SelectClaimItemByName(String _item) {
+    public SettlementPage selectClaimItemByName(String _item) {
         List<WebElement> claim = claimLineID;
         claim.stream().filter(claims -> claims.getText().contains(_item)).findFirst().get().click();
         return this;
@@ -188,7 +182,7 @@ public class SettlementPage extends BaseClaimPage {
     public Double getFaceTooltipValue() {
         String tooltipText = (iconToolTip.getAttribute("title")).split("\\(")[0];
         String value = tooltipText.replaceAll("[^\\.,0123456789]", "");
-        return getDoubleValue(value);
+        return OperationalUtils.getDoubleValue(value);
     }
 
     public boolean isDepreciationPercentPresent(String _claim, String _depreciationPercent) {
@@ -252,12 +246,6 @@ public class SettlementPage extends BaseClaimPage {
             }
         }
         return false;
-    }
-
-    public static double getDoubleValue(String input) {
-        String[] array = input.split(" ");
-        double result = Double.parseDouble((array[array.length - 1]).replaceAll("\\.", "").replace(",", "."));
-        return result;
     }
 
     public SettlementPage importExcelFile(String filePath) {

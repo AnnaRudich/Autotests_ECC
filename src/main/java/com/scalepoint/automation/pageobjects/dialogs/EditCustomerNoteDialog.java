@@ -15,8 +15,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class EditCustomerNoteDialog extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/dialog/edit_note_dialog.jsp";
-
     @FindBy(id = "_OK_button")
     private Button ok;
 
@@ -25,22 +23,22 @@ public class EditCustomerNoteDialog extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/dialog/edit_note_dialog.jsp";
     }
 
     @Override
     public EditCustomerNoteDialog ensureWeAreOnPage() {
-        Window.get().switchToLast();
-        waitForUrl(URL);
+        switchToLast();
+        waitForUrl(getRelativeUrl());
         waitForVisible(note);
         return this;
     }
 
-    public NotesPage addCustomerNote(String note){
+    public NotesPage addCustomerNote(String note) {
         Wait.waitForLoaded();
-        ((JavascriptExecutor)driver).executeScript("populateRichTextEditorWithText('noteHtmlEditorId-inputCmp-iframeEl', '"+ note+"');");
+        ((JavascriptExecutor) driver).executeScript("populateRichTextEditorWithText('noteHtmlEditorId-inputCmp-iframeEl', '" + note + "');");
         driver.switchTo().defaultContent();
-        Window.get().closeDialog(ok);
+        closeDialog(ok);
         return at(NotesPage.class);
     }
 }

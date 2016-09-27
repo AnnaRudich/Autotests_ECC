@@ -16,8 +16,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class CompleteClaimPage extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/enter_base_info.jsp";
-
     @FindBy(name = "policy_number")
     private ExtInput policyNumber;
 
@@ -65,12 +63,12 @@ public class CompleteClaimPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/enter_base_info.jsp";
     }
 
     @Override
     public CompleteClaimPage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(emailField);
         waitForVisible(saveClaim);
         return this;
@@ -122,13 +120,13 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
-    public CompleteClaimPage enterPolicyNumber(String _policyNumber) {
-        policyNumber.enter(_policyNumber);
+    public CompleteClaimPage enterPolicyNumber(String policyNumber) {
+        this.policyNumber.enter(policyNumber);
         return this;
     }
 
-    public CompleteClaimPage enterClaimNumber(String _claimNumber) {
-        claimNumber.enter(_claimNumber);
+    public CompleteClaimPage enterClaimNumber(String claimNumber) {
+        this.claimNumber.enter(claimNumber);
         return this;
     }
 
@@ -142,7 +140,7 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public ReplacementDialog replaceClaim(){
+    public ReplacementDialog replaceClaim() {
         replace.click();
         return BaseDialog.at(ReplacementDialog.class);
     }

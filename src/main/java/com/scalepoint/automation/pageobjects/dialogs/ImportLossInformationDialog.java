@@ -15,8 +15,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class ImportLossInformationDialog extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/dialog/upload_excel_import.jsp";
-
     @FindBy(id = "upfile")
     private TextInput browseControl;
 
@@ -25,13 +23,13 @@ public class ImportLossInformationDialog extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/dialog/upload_excel_import.jsp";
     }
 
     @Override
     public ImportLossInformationDialog ensureWeAreOnPage() {
-        Window.get().switchToLast();
-        waitForUrl(URL);
+        switchToLast();
+        waitForUrl(getRelativeUrl());
         waitForVisible(importButton);
         return this;
     }

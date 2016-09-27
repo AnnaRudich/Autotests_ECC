@@ -12,13 +12,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Page extends Actions {
+public abstract class Page implements Actions {
 
     private static Map<Class, String> pageAnnotationToBaseUrl = new HashMap<>();
 
@@ -55,10 +56,10 @@ public abstract class Page extends Actions {
 
                 assert webDriver != null;
                 logger.info("Windows count: {}", webDriver.getWindowHandles().size());
-                Window.get().switchToLast();
+                switchToLast();
                 return currentUrl.contains(expectedUrl);
             } catch (UnhandledAlertException e) {
-                Window.get().closeAlert();
+                closeAlert();
             }
             return false;
         }, totalTimeoutInSeconds, pollingMs);
@@ -114,6 +115,7 @@ public abstract class Page extends Actions {
 
     @SuppressWarnings("unchecked")
     public static class PagesCache {
+        
         private static ThreadLocal<Map<Class<? extends Page>, Page>> holder = new ThreadLocal<>();
 
         public static <T extends Page> T get(Class<T> pageClass) {

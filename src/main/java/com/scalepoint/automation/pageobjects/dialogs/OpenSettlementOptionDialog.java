@@ -10,8 +10,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class OpenSettlementOptionDialog extends Page {
 
-    private static final String URL = "webshop/jsp/matching_engine/dialog/open_claim_option_dialog.jsp";
-
     @FindBy(id = "btn_reopen")
     private Button reopen;
 
@@ -23,12 +21,12 @@ public class OpenSettlementOptionDialog extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/matching_engine/dialog/open_claim_option_dialog.jsp";
     }
 
     @Override
     public OpenSettlementOptionDialog ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(reopen);
         waitForVisible(cancel);
         return null;

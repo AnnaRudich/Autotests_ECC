@@ -12,31 +12,31 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-@Listeners({InvokedMethodListener.class})
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class SmokeTests extends BaseTest {
 
-    @Test(description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void ecc3032_reopenSavedClaim(User user, Claim claim) {
+
         SettlementPage settlementPage = loginAndCreateClaim(user, claim).
                 saveClaim().
-                openRecentClient().
+                openRecentClaim().
                 reopenClaim();
 
         assertTrue(settlementPage.isSettlementPagePresent(), "Settlement page is not loaded");
     }
 
-    @Test(description = "ECC-3032, ECC-2629 It's possible to complete claim with mail. Completed " +
-            "claim is added to the latest claims list with Completed status", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3032, ECC-2629 It's possible to complete claim with mail. " +
+                    "Completed claim is added to the latest claims list with Completed status")
     public void ecc3032_2629_completeClaimWithMail(User user, Claim claim) {
 
         MyPage myPage = loginAndCreateClaim(user, claim).
@@ -47,8 +47,9 @@ public class SmokeTests extends BaseTest {
         assertTrue(myPage.isRecentClaimCompleted(claim), "Claim should have completed status");
     }
 
-    @Test(description = "ECC-3032 It's possible to save claim without completing from Enter base info page. " +
-            "Saved claim is added to the latest claims list with Saved status", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3032 It's possible to save claim without completing from Enter base info page. " +
+                    "Saved claim is added to the latest claims list with Saved status")
     public void ecc3032_saveClaimFromBaseInfo(User user, Claim claim) {
 
         MyPage myPage = loginAndCreateClaim(user, claim).
@@ -59,13 +60,14 @@ public class SmokeTests extends BaseTest {
         assertTrue(myPage.isRecentClaimSaved(claim), "Claim should have status saved");
     }
 
-    @Test(description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
-
         String password = "12341234";
+
         loginAndCreateClaim(user, claim).
                 requestSelfService(claim, password).
                 toMailsPage().
@@ -76,7 +78,8 @@ public class SmokeTests extends BaseTest {
     }
 
     @Bug(bug = "CHARLIE-479")
-    @Test(description = "ECC-3256, ECC-3050 It's possible add note on Settlement page", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3256, ECC-3050 It's possible add note on Settlement page")
     public void ecc3256_3050_addInternalAndCustomerNotes(User user, Claim claim) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
 
@@ -102,41 +105,39 @@ public class SmokeTests extends BaseTest {
                 addCustomerNote(customerNote).
                 addInternalNote(internalNote);
 
-        Assert.assertTrue(notesPage.isCustomerNotesPresent(customerNote), "Customer Note has not been added");
-        Assert.assertTrue(notesPage.isInternalNotesPresent(internalNote), "Internal note has not been added");
+        assertTrue(notesPage.isCustomerNotesPresent(customerNote), "Customer Note has not been added");
+        assertTrue(notesPage.isInternalNotesPresent(internalNote), "Internal note has not been added");
 
         functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class, disableOperations);
 
-        Assert.assertTrue(notesPage.isEditCustomerNoteButtonPresent(), "Edit Customer Note button is not visible");
-        Assert.assertFalse(notesPage.isInternalNoteHeaderPresent(), "Internal Note field is visible");
-        Assert.assertFalse(notesPage.isAddInternalNoteButtonPresent(), "Add Internal Note button is visible");
+        assertTrue(notesPage.isEditCustomerNoteButtonPresent(), "Edit Customer Note button is not visible");
+        assertFalse(notesPage.isInternalNoteHeaderPresent(), "Internal Note field is visible");
+        assertFalse(notesPage.isAddInternalNoteButtonPresent(), "Add Internal Note button is visible");
 
         functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class, enableOperations);
 
-        Assert.assertTrue(notesPage.isEditCustomerNoteButtonPresent(), "Edit Customer Note button is not visible");
-        Assert.assertTrue(notesPage.isInternalNotePresent(), "Internal Note field is not visible");
-        Assert.assertTrue(notesPage.isAddInternalNoteButtonDisplayed(), "Add Internal Note button is not visible");
+        assertTrue(notesPage.isEditCustomerNoteButtonPresent(), "Edit Customer Note button is not visible");
+        assertTrue(notesPage.isInternalNotePresent(), "Internal Note field is not visible");
+        assertTrue(notesPage.isAddInternalNoteButtonDisplayed(), "Add Internal Note button is not visible");
     }
 
-    @Test(description = "ECC-2631 It's possible to matchFirst product via Quick matchFirst icon for Excel imported claim lines", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-2631 It's possible to matchFirst product via Quick matchFirst icon for Excel imported claim lines")
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
     @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
     @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim).
-                importExcelFile(claimItem.getExcelPath1());
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim).importExcelFile(claimItem.getExcelPath1());
 
         assertTrue(settlementPage.isItemPresent(claimItem.getXlsDescr1()), "The claim item is not found");
 
-        settlementPage.
-                selectClaimItemByDescription(claimItem.getSetDialogTextMatch()).
+        settlementPage.selectClaimItemByDescription(claimItem.getSetDialogTextMatch()).
                 getToolBarMenu().
                 productMatch().
                 sortSearchResults().
                 match(claimItem.getSetDialogTextMatch()).
                 cancel();
     }
-
 }

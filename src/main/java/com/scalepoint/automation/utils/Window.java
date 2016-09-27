@@ -1,16 +1,10 @@
 package com.scalepoint.automation.utils;
 
 import com.scalepoint.automation.utils.driver.Browser;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.openqa.selenium.*;
 import java.util.Set;
-
-import static com.scalepoint.automation.utils.EccActions.isAlertPresent;
 
 public class Window {
 
@@ -46,7 +40,8 @@ public class Window {
                 logger.error("Button is not displayed");
             }
             if (isAlertPresent()) {
-                getAlertTextAndAccept();
+                String alertText = getAlertTextAndAccept();
+                logger.info("Text of alert: " + alertText);
                 return false;
             } else {
                 Wait.waitForNewModalWindow(windowHandlesBefore);
@@ -54,29 +49,22 @@ public class Window {
             }
             return true;
         }
+
+        public static boolean isAlertPresent() {
+            try {
+                String text = Browser.driver().switchTo().alert().getText();
+                return StringUtils.isNotBlank(text);
+            } catch (NoAlertPresentException Ex) {
+                return false;
+            }
+        }
+
         public void openDialogWithJavascriptHelper(WebElement openButton) {
             openDialog(openButton);
             JavascriptHelper.initializeCommonFunctions(driver);
         }
 
-        protected void acceptAlertIfPresent() {
-            if (isAlertPresent()) {
-                getAlertTextAndAccept();
-            }
-        }
-
-        protected String getAlertTextAndAccept() {
-            Alert alert = Browser.driver().switchTo().alert();
-            return alert.getText();
-        }
-
-        public void openDialogWithAlert(WebElement openButton) {
-            openButton.click();
-            closeAlert();
-            Wait.waitForModalWindowAppear();
-        }
-
-        public void closeAlert() {
+        public void acceptAlert() {
             try {
                 Alert alert = driver.switchTo().alert();
                 alert.accept();
@@ -107,27 +95,13 @@ public class Window {
             for (String winHandle : windowHandles) {
                 driver.switchTo().window(winHandle);
             }
-            logger.info("url after switch: "+driver.getCurrentUrl());
+            logger.info("url after switch: " + driver.getCurrentUrl());
         }
 
-        public void waitForNewWindowAndSwithToIt() {
-            WebDriverWait wait = new WebDriverWait(driver, 5, 300);
-            wait.until((WebDriver d) -> d.getWindowHandles().size() > 1);
-            for (String winHandle : driver.getWindowHandles()) {
-                if (!Browser.getMainWindowHandle().equals(winHandle))
-                    driver.switchTo().window(winHandle);
-            }
+        private String getAlertTextAndAccept() {
+            Alert alert = Browser.driver().switchTo().alert();
+            return alert.getText();
         }
 
-        public void closeAllButMain() {
-            for (String winHandle : driver.getWindowHandles()) {
-                if (!Browser.getMainWindowHandle().equals(winHandle))
-                    try {
-                        driver.switchTo().window(winHandle).close();
-                    } catch (NoSuchWindowException ignored) {
-                    }
-            }
-            switchToLast();
-        }
     }
 }

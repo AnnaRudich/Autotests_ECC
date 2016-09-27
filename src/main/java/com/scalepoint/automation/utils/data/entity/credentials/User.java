@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="login" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="password" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="company" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="companyCode" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="role" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "user", propOrder = {
-    "company"
+        "companyCode"
 })
 public class User {
 
@@ -37,8 +37,10 @@ public class User {
     protected String login;
     @XmlAttribute(name = "password")
     protected String password;
-    @XmlAttribute(name = "company")
-    protected String company;
+    @XmlAttribute(name = "companyCode")
+    protected String companyCode;
+    @XmlAttribute(name = "companyName")
+    protected String companyName;
     @XmlAttribute(name = "companyId")
     protected Integer companyId;
     @XmlAttribute(name = "ftId")
@@ -97,27 +99,27 @@ public class User {
     }
 
     /**
-     * Gets the value of the company property.
+     * Gets the value of the companyCode property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCompany() {
-        return company;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
     /**
-     * Sets the value of the company property.
+     * Sets the value of the companyCode property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCompany(String value) {
-        this.company = value;
+    public void setCompanyCode(String value) {
+        this.companyCode = value;
     }
 
     public Integer getCompanyId() {
@@ -168,11 +170,19 @@ public class User {
         this.system = system;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "login='" + login + '\'' +
-                ", company='" + company + '\'' +
+                ", companyCode='" + companyCode + '\'' +
                 '}';
     }
 }

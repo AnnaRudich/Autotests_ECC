@@ -20,8 +20,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class EditFunctionTemplatePage extends Page {
 
-    private static final String URL = "webshop/jsp/Admin/func_template_edit.jsp?ftrfnbr=";
-
     @FindBy(xpath = "//input[@value='Save values']")
     private Button saveValues;
 
@@ -30,12 +28,12 @@ public class EditFunctionTemplatePage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "webshop/jsp/Admin/func_template_edit.jsp?ftrfnbr=";
     }
 
     @Override
     public EditFunctionTemplatePage ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(saveValues);
         return this;
     }
@@ -48,7 +46,7 @@ public class EditFunctionTemplatePage extends Page {
     public List<FtOperation> findDifferences(FtOperation... operations) {
         List<FtOperation> notAppliedOperations = new ArrayList<>();
         for (FtOperation operation : operations) {
-            if(!operation.isOperationApplied(this)) {
+            if (!operation.isOperationApplied(this)) {
                 notAppliedOperations.add(operation);
             }
         }
@@ -87,13 +85,13 @@ public class EditFunctionTemplatePage extends Page {
 
         if (enable && !checkBox.isSelected()) {
             logger.info("Enabling: " + description);
-            ((JavascriptExecutor)driver).executeScript("arguments[0].click();", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             checkBox.select();
         }
 
         if (!enable && checkBox.isSelected()) {
             logger.info("Disabling: " + description);
-            ((JavascriptExecutor)driver).executeScript("arguments[0].click();", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         }
         logger.info("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }

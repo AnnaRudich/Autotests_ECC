@@ -10,16 +10,19 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class PseudoCategoryGroupPage extends Page {
 
-    private static final String URL = "webshop/jsp/Admin/pseudocategory_group.jsp";
-
     @FindBy(name = "pseudoCategoryGroupList")
     private Select pseudoCategoryGroupList;
     @FindBy(id = "btnEdit")
     private Button edit;
 
     @Override
+    protected String getRelativeUrl() {
+        return "webshop/jsp/Admin/pseudocategory_group.jsp";
+    }
+
+    @Override
     protected Page ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         waitForVisible(edit);
         return this;
     }
@@ -30,8 +33,5 @@ public class PseudoCategoryGroupPage extends Page {
         return at(EditPseudoCategoryGroupPage.class);
     }
 
-    @Override
-    protected String getRelativeUrl() {
-        return URL;
-    }
+
 }

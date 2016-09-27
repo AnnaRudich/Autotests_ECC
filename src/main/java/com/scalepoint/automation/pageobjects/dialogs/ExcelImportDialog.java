@@ -10,21 +10,19 @@ import org.openqa.selenium.By;
 @EccPage
 public class ExcelImportDialog extends Page {
 
-    private static final String URL = "ImportLossLines";
-
     @Override
     protected String getRelativeUrl() {
-        return URL;
+        return "ImportLossLines";
     }
 
     @Override
     public ExcelImportDialog ensureWeAreOnPage() {
-        waitForUrl(URL);
+        waitForUrl(getRelativeUrl());
         return this;
     }
 
     public SettlementPage cancel() {
-        Window.get().switchToLast();
+        switchToLast();
         String buttonId = driver.getCurrentUrl().contains("ExcelImport") ? "Cancel_button" : "_Cancel_button";
         cancelDialogWindow(buttonId);
         return at(SettlementPage.class);
@@ -33,8 +31,7 @@ public class ExcelImportDialog extends Page {
     private void cancelDialogWindow(String buttonId) {
         By cancelButton = By.id(buttonId);
         Wait.waitForElement(cancelButton);
-        Window.get().closeDialog(driver.findElement(cancelButton));
-
+        closeDialog(driver.findElement(cancelButton));
         Wait.waitForLoaded();
     }
 }

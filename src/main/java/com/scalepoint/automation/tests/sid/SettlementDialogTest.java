@@ -21,7 +21,7 @@ import static org.testng.Assert.assertTrue;
 @RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
 public class SettlementDialogTest extends BaseTest {
 
-    @Test(description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialog", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialog")
     public void ecc3025_selectVoucherExistingCatAddDialog(User user, Claim claim, Voucher voucher) {
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
 
@@ -40,8 +40,8 @@ public class SettlementDialogTest extends BaseTest {
      * THAN: Cash compensation is P1 - V1 discount - D1
      * THAN: Depreciation is D1 amount of Cash Compensation
      */
-    @Test(description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
-            " - depreciation percent if voucher selected in Add settlement dialog", dataProvider = "testDataProvider")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
+            " - depreciation percent if voucher selected in Add settlement dialog")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, ClaimItem item, Voucher voucher) {
 
@@ -57,16 +57,12 @@ public class SettlementDialogTest extends BaseTest {
 
         SidCalculations.VoucherValuation expectedCalculations = SidCalculations.calculateVoucherValuation(item.getNewPriceSP_2400(), voucher.getDiscount(), item.getDepAmount1_10());
 
-        String fetchedCashValue = toString(settlementDialog.cashCompensationValue());
-        String calculatedCashValue = toString(expectedCalculations.getCashCompensationWithDepreciation());
-        assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
+        Double fetchedCashValue = settlementDialog.cashCompensationValue();
+        Double calculatedCashValue = expectedCalculations.getCashCompensationWithDepreciation();
+        assertEqualsDouble(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
 
-        String fetchedDepreciationValue = toString(settlementDialog.DeprecationValue());
-        String calculatedDepreciationValue = toString(expectedCalculations.getDepreciatedAmount());
-        assertEquals(fetchedDepreciationValue, calculatedDepreciationValue, "Depreciation incorrect");
-    }
-
-    private String toString(Double value) {
-        return String.format("%.2f", value);
+        Double fetchedDepreciationValue = settlementDialog.DeprecationValue();
+        Double calculatedDepreciationValue = expectedCalculations.getDepreciatedAmount();
+        assertEqualsDouble(fetchedDepreciationValue, calculatedDepreciationValue, "Depreciation incorrect");
     }
 }

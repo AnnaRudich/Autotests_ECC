@@ -17,7 +17,7 @@ class SidCalculations {
         return new VoucherValuation(cashCompensationOfVoucher, discountedAmountByVoucher, cashCompensationWithDepreciation, depreciatedAmount);
     }
 
-    public static ValuationWithReduction calculatePriceValuationWithReduction(double price, int depreciationPercentage, int reductionPercentage) {
+    public static ValuationWithReduction calculatePriceValuationWithReduction(double price, double depreciationPercentage, int reductionPercentage) {
         double depreciation = price * depreciationPercentage / 100;
         double cashCompensation = price - depreciation;
         double reduction = price * reductionPercentage/100;

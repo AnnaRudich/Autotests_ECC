@@ -107,7 +107,7 @@ public class ClaimItem {
     @XmlElement
     private String alkaSubCategoryUnpublishedPolicy;
     @XmlElement
-    private String alkaUserReductionRule40;
+    private Integer alkaUserReductionRule40;
     @XmlElement
     private String existingVoucher3;
     @XmlElement
@@ -319,7 +319,7 @@ public class ClaimItem {
         return alkaSubCategoryUnpublishedPolicy;
     }
 
-    public String getAlkaUserReductionRule40() {
+    public Integer getAlkaUserReductionRule40() {
         return alkaUserReductionRule40;
     }
 

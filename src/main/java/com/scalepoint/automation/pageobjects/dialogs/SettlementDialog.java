@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
-import com.scalepoint.automation.utils.EccActions;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -266,7 +265,7 @@ public class SettlementDialog extends BaseDialog {
     public Double fetchDepreciation() {
         Wait.waitForLoaded();
         waitForVisible(deprecationValue);
-        return getDoubleValue(deprecationValue.getText());
+        return OperationalUtils.getDoubleValue(deprecationValue.getText());
     }
 
     public SettlementDialog setReviewed(boolean state) {
@@ -418,29 +417,29 @@ public class SettlementDialog extends BaseDialog {
     public Double voucherFaceValueFieldText() {
         Wait.waitForLoaded();
         waitForVisible(voucherFaceValue);
-        return getDoubleValue(voucherFaceValue.getText());
+        return OperationalUtils.getDoubleValue(voucherFaceValue.getText());
     }
 
     public Double voucherCashValueFieldText() {
         Wait.waitForLoaded();
         waitForVisible(voucherCashValue);
-        return getDoubleValue(voucherCashValue.getText());
+        return OperationalUtils.getDoubleValue(voucherCashValue.getText());
     }
 
     public Double customerDemandValue() {
         Wait.waitForLoaded();
         waitForVisible(customerDemand);
-        return getDoubleValue(customerDemand.getText());
+        return OperationalUtils.getDoubleValue(customerDemand.getText());
     }
 
     public Double cashCompensationValue() {
         waitForVisible(cashCompensationValue);
-        return getDoubleValue(cashCompensationValue.getText());
+        return OperationalUtils.getDoubleValue(cashCompensationValue.getText());
     }
 
     public Double DeprecationValue() {
         waitForVisible(deprecationValue);
-        return getDoubleValue(deprecationValue.getText());
+        return OperationalUtils.getDoubleValue(deprecationValue.getText());
     }
 
     public String getCategoryText() {
@@ -512,13 +511,13 @@ public class SettlementDialog extends BaseDialog {
         return at(VoucherTermsAndConditionsDialog.class);
     }
 
-    public SettlementDialog applyReductionRuleByValue(String reductionRuleValue) {
+    public SettlementDialog applyReductionRuleByValue(Integer reductionRuleValue) {
         Wait.waitForLoaded();
         boolean foundRule = false;
         List<List<WebElement>> rowsNames = ruleSuggestion.getRows();
         for (List<WebElement> list : rowsNames) {
             String reduction = list.get(1).getText().replaceAll("%", "");
-            if (reduction.equals(reductionRuleValue)) {
+            if (reduction.equals(reductionRuleValue.toString())) {
                 list.get(2).findElement(By.tagName("img")).click();
                 foundRule = true;
             }
@@ -529,7 +528,7 @@ public class SettlementDialog extends BaseDialog {
         Wait.For(webDriver -> {
             try {
                 String valuationDepreciation = Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.NEW_PRICE + "')]//td[4]//div")).getText();
-                return reductionRuleValue.equals(valuationDepreciation);
+                return reductionRuleValue.toString().equals(valuationDepreciation);
             } catch (Exception e) {
                 logger.error("Can't compare reduction and depreciation! " + e.getMessage(), e);
             }
@@ -546,8 +545,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public String getDepreciationValue() {
-        return depreciation.getText();
+    public Double getDepreciationValue() {
+        return Double.valueOf(depreciation.getText());
     }
 
     public boolean isMarketPriceVisible(){
@@ -570,17 +569,9 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-
-    public static double getDoubleValue(String input) {
-        String[] array = input.split(" ");
-        double result = Double.parseDouble((array[array.length - 1]).replaceAll("\\.", "").replace(",", "."));
-        return result;
-    }
-
     public static Double doubleString(String s) {
         return Double.parseDouble(s);
     }
-
 
     public static enum Valuation {
         NOT_SELECTED("valuation-type-NOT_SELECTED"),

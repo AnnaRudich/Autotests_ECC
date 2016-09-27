@@ -168,8 +168,7 @@ public class OperationalUtils {
 
     public static double getDoubleValue(String input) {
         String[] array = input.split(" ");
-        double result = Double.parseDouble((array[array.length - 1]).replaceAll("\\.", "").replace(",", "."));
-        return result;
+        return Double.parseDouble((array[array.length - 1]).replaceAll("\\.", "").replace(",", "."));
     }
 }
 

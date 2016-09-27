@@ -9,7 +9,6 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ServerApi;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -25,10 +24,7 @@ import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.MDC;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,22 +36,18 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
-import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG;
+import static org.testng.Assert.assertEquals;
 
 @SpringApplicationConfiguration(classes = Application.class)
 @IntegrationTest
@@ -198,5 +190,22 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             }
             holder.remove();
         }
+    }
+
+    protected void assertEqualsDouble(Double actualAmount, Double expectedAmount, String message) {
+        assertEqualsDouble(toString(actualAmount), toString(expectedAmount), message);
+    }
+
+    protected void assertEqualsDouble(String actualAmount, Double expectedAmount, String message) {
+        String expected = toString(expectedAmount);
+        assertEqualsDouble(actualAmount, expected, String.format(message, actualAmount, expected));
+    }
+
+    protected void assertEqualsDouble(String actualAmount, String expectedAmount, String message) {
+        Assert.assertEquals(actualAmount, expectedAmount, String.format(message, actualAmount, expectedAmount));
+    }
+
+    protected String toString(Double actualAmount) {
+        return String.format("%.2f", actualAmount);
     }
 }
