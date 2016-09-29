@@ -49,7 +49,7 @@ public class EccUserApi extends ServerApi {
 
     private List<NameValuePair> toParams(NewSystemUser newSystemUser, String companyId) {
         BasicNameValuePair userCulture;
-        String locale = Configuration.getLocale();
+        String locale = Configuration.getLocale().getValue();
         switch (locale) {
             case "dk":
             default:

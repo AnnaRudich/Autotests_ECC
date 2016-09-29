@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils;
 
+import com.scalepoint.automation.domain.Locale;
 import org.springframework.util.Assert;
 
 public class Configuration {
@@ -11,7 +12,7 @@ public class Configuration {
 
     private static final String SLASH = "/";
 
-    private static String locale;
+    private static Locale locale;
     private static String serverUrl;
     private static String eccContext;
     private static String eccAdminContext;
@@ -24,7 +25,7 @@ public class Configuration {
         Assert.notNull(eccContext, errorMessage(KEY_ECC_CONTEXT));
         Assert.notNull(eccAdminContext, errorMessage(KEY_ECC_ADMIN_CONTEXT));
 
-        Configuration.locale = locale;
+        Configuration.locale = Locale.get(locale);
         Configuration.serverUrl = serverUrl;
         Configuration.eccContext = eccContext;
         Configuration.eccAdminContext = eccAdminContext;
@@ -37,7 +38,7 @@ public class Configuration {
         return parameter + "is mandatory field. Must be set in application.properties or passed as system variable";
     }
 
-    public static String getLocale() {
+    public static Locale getLocale() {
         return locale;
     }
 
@@ -62,7 +63,7 @@ public class Configuration {
     }
 
     public static boolean isDK() {
-        return locale.equalsIgnoreCase("dk");
+        return locale.equals(Locale.DK);
     }
 }
 

@@ -127,7 +127,7 @@ public class TestData {
     }
 
     private static <T> T getData(Data data) {
-        String locale = Configuration.getLocale();
+        String locale = Configuration.getLocale().getValue();
         String xmlPath = buildXmlFilePath(locale, data.fileName);
         try {
             Unmarshaller u = data.context.createUnmarshaller();

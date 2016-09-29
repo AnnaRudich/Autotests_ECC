@@ -4,17 +4,13 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.tests.sid.SidCalculations.ValuationWithReduction;
-import com.scalepoint.automation.utils.OperationalUtils;
+import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSettings;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -92,7 +88,7 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         Double depreciationValue = settlementDialog.getDepreciationValue();
         ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationValue, claimItem.getAlkaUserReductionRule_25());
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationValue, claimItem.getAlkaUserReductionRule_25());
 
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
@@ -144,7 +140,7 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         double depreciation = settlementDialog.getDepreciationValue();
         ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
 
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
@@ -199,7 +195,7 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         double depreciation = settlementDialog.getDepreciationValue();
         ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, 0);
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, 0);
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
@@ -243,7 +239,7 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
         double depreciation = settlementDialog.getDepreciationValue();
         ValuationWithReduction valuationWithReduction =
-                SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
                         depreciation, claimItem.getAlkaUserReductionRule40());
 
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
@@ -297,7 +293,7 @@ public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 
         double depreciation = settlementDialog.getDepreciationValue();
 
-        ValuationWithReduction calculation = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
+        ValuationWithReduction calculation = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
                 depreciation,
                 claimItem.getAlkaUserReductionRule40());
 

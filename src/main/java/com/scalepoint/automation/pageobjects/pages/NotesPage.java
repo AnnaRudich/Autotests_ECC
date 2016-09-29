@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 @EccPage
@@ -53,6 +54,11 @@ public class NotesPage extends BaseClaimPage {
         return this;
     }
 
+    public NotesPage addCustomerNote(String customerNote) {
+        return editCustomerNote().
+                addCustomerNote(customerNote);
+    }
+
     public boolean isCustomerNotesPresent(String _customerNote) {
         Wait.waitForVisible(customerNote);
         return customerNote.getText().contains(_customerNote);
@@ -76,20 +82,39 @@ public class NotesPage extends BaseClaimPage {
         }
     }
 
-    public boolean isInternalNoteHeaderPresent() {
-        try {
-            Wait.waitForInvisible(headerInternalNote);
-            return false;
-        } catch (NoSuchElementException e) {
-            return true;
-        }
-    }
-
     public boolean isInternalNotePresent() {
         return internalNote.isDisplayed();
     }
 
     public boolean isAddInternalNoteButtonDisplayed() {
         return addInternalNote.isDisplayed();
+    }
+
+    /*------------------------------ ASSERTS ---------------------------------------*/
+    /*------------------------------ ------- ---------------------------------------*/
+    public NotesPage assertCustomerNotePresent(String customerNote) {
+        Assert.assertTrue(isCustomerNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
+        return this;
+    }
+
+    public NotesPage assertInternalNotePresent(String internalNote) {
+        Assert.assertTrue(isInternalNotesPresent(internalNote), errorMessage("Internal Note has not been added"));
+        return this;
+    }
+
+    public NotesPage assertEditCustomerNoteButtonPresent() {
+        Assert.assertTrue(isEditCustomerNoteButtonPresent(), errorMessage("Edit Customer Note button is not visible"));
+        return this;
+    }
+
+    public NotesPage assertInternalNoteButtonNotPresent() {
+        Assert.assertFalse(isAddInternalNoteButtonPresent(), errorMessage("Add Internal Note button is visible"));
+        return this;
+    }
+
+    public NotesPage assertInternalNoteFieldsPresent() {
+        Assert.assertTrue(isInternalNotePresent(), errorMessage("Internal Note field is not visible"));
+        Assert.assertTrue(isAddInternalNoteButtonDisplayed(), errorMessage("Add Internal Note button is not visible"));
+        return this;
     }
 }

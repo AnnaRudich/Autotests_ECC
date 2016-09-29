@@ -37,8 +37,13 @@ public class ExtCheckboxColumn extends ExtElement {
                         "checkboxFieldName = arguments[3]," +
                         "record = store.findRecord(textFieldName, text);" +
                         "record.set(checkboxFieldName, "+enable+");" +
-                        "cmp.fireEvent('checkchangedEvent', cmp.getColumns()["+columnIndex+"], store.indexOf(record)-1);";
-        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
+                        "cmp.fireEvent('checkchangedEvent', cmp.getColumns()["+columnIndex+"], store.indexOf(record), true);";
+        try {
+            ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public boolean isSelected(String visibleText) {

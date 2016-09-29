@@ -28,7 +28,7 @@ public class Browser {
             logger.info("Quit requested");
             DriverData data = holder.get();
             logger.info("Data found {}", data);
-            data.getDriver().switchTo().window(data.getWindowHandle()).quit();
+            data.getDriver().quit();
             holder.remove();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

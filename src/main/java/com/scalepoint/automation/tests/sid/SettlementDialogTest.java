@@ -4,19 +4,17 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuation;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-@Listeners({InvokedMethodListener.class})
 @RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
 public class SettlementDialogTest extends BaseTest {
@@ -27,7 +25,8 @@ public class SettlementDialogTest extends BaseTest {
 
         boolean voucherListed = loginAndCreateClaim(user, claim).
                 addManually().
-                fillCategory(categoryInfo).isVoucherListed(voucher);
+                fillCategory(categoryInfo).
+                isVoucherListed(voucher);
 
         assertTrue(voucherListed);
     }
@@ -47,15 +46,18 @@ public class SettlementDialogTest extends BaseTest {
 
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).addManually()
-                .fillDescription(item.getTextFieldSP())
-                .fillCustomerDemand(item.getBigCustomDemandPrice())
-                .fillNewPrice(item.getNewPriceSP_2400())
-                .fillDepreciation(item.getDepAmount1_10())
-                .fillCategory(categoryInfo)
-                .fillVoucher(voucher.getVoucherNameSP());
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
+                addManually().
+                fillDescription(item.getTextFieldSP()).
+                fillCustomerDemand(item.getBigCustomDemandPrice()).
+                fillNewPrice(item.getNewPriceSP_2400()).
+                fillDepreciation(item.getDepAmount1_10()).
+                fillCategory(categoryInfo).
+                fillVoucher(voucher.getVoucherNameSP());
 
-        SidCalculations.VoucherValuation expectedCalculations = SidCalculations.calculateVoucherValuation(item.getNewPriceSP_2400(), voucher.getDiscount(), item.getDepAmount1_10());
+        VoucherValuation expectedCalculations = SidCalculator.calculateVoucherValuation(item.getNewPriceSP_2400(),
+                voucher.getDiscount(),
+                item.getDepAmount1_10());
 
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
         Double calculatedCashValue = expectedCalculations.getCashCompensationWithDepreciation();

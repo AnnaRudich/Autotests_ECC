@@ -50,7 +50,7 @@ public class ToolBarMenu extends Module {
     @FindBy(xpath = "//span[contains(@style, 'claimLineNotesIcon')]/ancestor::a")
     private Button claimLineNote;
 
-    public TextSearchPage productMatch() {
+    public TextSearchPage toProductMatchPage() {
         productMatch.click();
         return at(TextSearchPage.class);
     }

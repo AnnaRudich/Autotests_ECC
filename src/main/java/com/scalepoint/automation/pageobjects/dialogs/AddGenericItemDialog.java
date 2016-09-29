@@ -4,6 +4,8 @@ import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxColumn;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -37,5 +39,17 @@ public class AddGenericItemDialog extends BaseDialog {
         ok.click();
 
         Wait.waitForAjaxComplete();
+    }
+
+    public void assertGenericItemIsNotPresent(String itemName, String categoryGroup, String category) {
+        this.category.select(categoryGroup +" - "+category);
+        Wait.waitForAjaxComplete();
+        try {
+            WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '"+itemName+"']"));
+            if (element != null && element.isDisplayed()) {
+                throw new AssertionError("Item is present but shouldn't be: "+itemName);
+            }
+        } catch (NoSuchElementException e) {
+        }
     }
 }

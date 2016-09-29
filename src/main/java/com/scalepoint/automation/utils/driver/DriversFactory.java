@@ -24,6 +24,7 @@ public enum DriversFactory {
                 System.setProperty("webdriver.ie.driver", ieDriver.getAbsolutePath());
             }
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
+
             return new InternetExplorerDriver(capabilities);
         }
     },

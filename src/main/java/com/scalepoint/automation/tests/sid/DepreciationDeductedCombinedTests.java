@@ -8,7 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.tests.sid.SidCalculations.VoucherValuation;
+import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuation;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -82,7 +82,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
                 fillVoucher(claimItem.getExistingVoucher1());
 
-        VoucherValuation voucherValuation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
+        VoucherValuation voucherValuation = SidCalculator.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
                 voucher.getDiscount(), claimItem.getDepAmount1_10());
 
         Double expectedCashValue = voucherValuation.getCashCompensationOfVoucher();
@@ -97,7 +97,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
         assertEqualsDouble(settlementPage.getFaceTooltipValue(), expectedNewPrice, "Tooltip face value %s should be assertEqualsDouble to not  depreciated new price %s");
 
-        ShopWelcomePage shopWelcomePage = settlementPage.completeClaim().
+        ShopWelcomePage shopWelcomePage = settlementPage.toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, "12341234").
                 completeWithEmail().
                 openRecentClaim().
@@ -125,7 +125,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
         ReplacementDialog replacementDialog = customerDetailsPage.
                 reopenClaim().
-                completeClaim().
+                toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, "12341234").
                 replaceClaim();
 
@@ -154,7 +154,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 fillVoucher(claimItem.getExistingVoucher1()).
                 setDiscountAndDepreciation(true);
 
-        VoucherValuation voucherValuation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
+        VoucherValuation voucherValuation = SidCalculator.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
                 voucher.getDiscount(), claimItem.getDepAmount1_10());
 
         double calculatedFaceValue = voucherValuation.getCashCompensationOfVoucher();
@@ -170,7 +170,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         Double fetchedFaceTooltipValue = settlementPage.getFaceTooltipValue();
         assertEqualsDouble(fetchedFaceTooltipValue, calculatedFaceValue, "Tooltip face value %s should be assertEqualsDouble to depreciated new price %s");
 
-        ShopWelcomePage shopWelcomePage = settlementPage.completeClaim().
+        ShopWelcomePage shopWelcomePage = settlementPage.toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, "12341234").
                 completeWithEmail().
                 openRecentClaim().
@@ -190,7 +190,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
         ReplacementDialog replacementDialog = customerDetailsPage.
                 reopenClaim().
-                completeClaim().
+                toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, "12341234").
                 replaceClaim();
 

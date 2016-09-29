@@ -193,16 +193,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     protected void assertEqualsDouble(Double actualAmount, Double expectedAmount, String message) {
-        assertEqualsDouble(toString(actualAmount), toString(expectedAmount), message);
-    }
-
-    protected void assertEqualsDouble(String actualAmount, Double expectedAmount, String message) {
+        String actual = toString(actualAmount);
         String expected = toString(expectedAmount);
-        assertEqualsDouble(actualAmount, expected, String.format(message, actualAmount, expected));
-    }
-
-    protected void assertEqualsDouble(String actualAmount, String expectedAmount, String message) {
-        Assert.assertEquals(actualAmount, expectedAmount, String.format(message, actualAmount, expectedAmount));
+        assertEquals(actual, expected, String.format(message, actualAmount, expectedAmount));
     }
 
     protected String toString(Double actualAmount) {

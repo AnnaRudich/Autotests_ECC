@@ -2,12 +2,15 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.testng.Assert.assertTrue;
 
 @EccPage
 public class GenericItemsAdminPage extends Page {
@@ -48,7 +51,7 @@ public class GenericItemsAdminPage extends Page {
         return this;
     }
 
-    public GenericItemsEditAdminPage selectNewOption() {
+    public GenericItemsEditAdminPage clickCreateNewItem() {
         clickAndWaitForDisplaying(newButton, By.name("ispublished"));
         return at(GenericItemsEditAdminPage.class);
     }
@@ -69,20 +72,20 @@ public class GenericItemsAdminPage extends Page {
         return this;
     }
 
-    public GenericItemsAdminPage selectRefreshOption() {
+    public GenericItemsAdminPage refreshList() {
         clickAndWaitForStable(refreshButton, By.id("btnNew"));
         return this;
     }
 
-    public GenericItemsAdminPage filterItems(String company, String group, String category) {
+    public GenericItemsAdminPage filterItems(GenericItem genericItem, String company) {
         return selectCompany(company).
-                selectGroup(group).
-                selectCategory(category).
-                selectRefreshOption();
+                selectGroup(genericItem.getGroup()).
+                selectCategory(genericItem.getCategory()).
+                refreshList();
     }
 
     private GenericItemsAdminPage selectGenericItem(String description, String companyName) {
-        genericItemsList.selectByVisibleText(description+" ("+companyName+")");
+        genericItemsList.selectByVisibleText(description + " (" + companyName + ")");
         return this;
     }
 
@@ -93,18 +96,47 @@ public class GenericItemsAdminPage extends Page {
         return this;
     }
 
-    public GenericItemsAdminPage deleteItem(String description, String companyName) {
-        return selectGenericItem(description, companyName).
+    public GenericItemsAdminPage deleteItem(GenericItem genericItem, String company) {
+        return filterItems(genericItem, company).
+                selectGenericItem(genericItem.getName(), company).
                 selectDeleteOptionAndAccept();
     }
 
-    public GenericItemsEditAdminPage editItem(String description, String companyName) {
-        selectGenericItem(description, companyName);
+    public GenericItemsEditAdminPage editItem(GenericItem genericItem, String company) {
+        filterItems(genericItem, company);
+        selectGenericItem(genericItem.getName(), company);
         editButton.click();
         return at(GenericItemsEditAdminPage.class);
     }
 
-    public int genericItemsListSize() {
+    private int genericItemsListSize() {
         return genericItemsList.getOptions().size();
     }
+
+    /*------------------------------ ASSERTS ---------------------------------------*/
+    /*------------------------------ ------- ---------------------------------------*/
+    public GenericItemsAdminPage assertItemsListIsNotEmpty() {
+        assertTrue(genericItemsListSize() > 0, "List of generic items is empty");
+        return this;
+    }
+
+    public GenericItemsAdminPage assertGenericItemInList(String genericItem) {
+        try {
+            genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
+        } catch (Exception e) {
+            throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
+        }
+        return this;
+    }
+
+    public GenericItemsAdminPage assertGenericItemNotInList(String genericItem) {
+        try {
+            genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
+            throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
 }

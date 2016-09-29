@@ -9,13 +9,10 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-@Listeners({InvokedMethodListener.class})
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
 public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
@@ -55,7 +52,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
                 enableAge("2").
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
+        SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
@@ -106,7 +103,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
                 enterAgeYears("2").
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        SidCalculations.ValuationWithReduction valuationWithReduction = SidCalculations.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
+        SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
         Double fetchedCashValue = settlementDialog.cashCompensationValue();
         Double fetchedDepreciation = settlementDialog.fetchDepreciation();

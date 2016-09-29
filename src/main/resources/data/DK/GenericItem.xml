@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <genericItem>
-    <companySP>Scalepoint</companySP>
-    <group1>Børn</group1>
-    <category1>Babyudstyr</category1>
+    <company>Scalepoint</company>
+    <group>Børn</group>
+    <category>Babyudstyr</category>
 </genericItem>

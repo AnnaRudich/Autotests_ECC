@@ -11,28 +11,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenericItem {
 
-    private String itemDescription = RandomUtils.randomName("GenericItem");
+    private String name = RandomUtils.randomName("GenericItem");
     @XmlElement
-    private String group1;
+    private String group;
     @XmlElement
-    private String category1;
-    @XmlElement
-    private String companySP;
+    private String category;
 
+    private String price = "100";
 
-    public String getItemDescription() {
-        return itemDescription;
+    public String getName() {
+        return name;
     }
 
-    public String getCompanySP() {
-        return companySP;
+    public String getCategory() {
+        return category;
     }
 
-    public String getCategory1() {
-        return category1;
+    public String getGroup() {
+        return group;
     }
 
-    public String getGroup1() {
-        return group1;
+    public String getPrice() {
+        return price;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

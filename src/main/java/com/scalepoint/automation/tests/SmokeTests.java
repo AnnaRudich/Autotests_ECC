@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
@@ -26,12 +25,11 @@ public class SmokeTests extends BaseTest {
             description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void ecc3032_reopenSavedClaim(User user, Claim claim) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim).
+        loginAndCreateClaim(user, claim).
                 saveClaim().
                 openRecentClaim().
-                reopenClaim();
-
-        assertTrue(settlementPage.isSettlementPagePresent(), "Settlement page is not loaded");
+                reopenClaim().
+                assertSettlementPagePresent("Settlement page is not loaded");
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -39,12 +37,11 @@ public class SmokeTests extends BaseTest {
                     "Completed claim is added to the latest claims list with Completed status")
     public void ecc3032_2629_completeClaimWithMail(User user, Claim claim) {
 
-        MyPage myPage = loginAndCreateClaim(user, claim).
-                completeClaim().
+        loginAndCreateClaim(user, claim).
+                toCompleteClaimPage().
                 fillClaimForm(claim).
-                completeWithEmail();
-
-        assertTrue(myPage.isRecentClaimCompleted(claim), "Claim should have completed status");
+                completeWithEmail().
+                assertClaimHasStatus(claim.getStatusCompleted());
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -52,12 +49,11 @@ public class SmokeTests extends BaseTest {
                     "Saved claim is added to the latest claims list with Saved status")
     public void ecc3032_saveClaimFromBaseInfo(User user, Claim claim) {
 
-        MyPage myPage = loginAndCreateClaim(user, claim).
-                completeClaim().
+        loginAndCreateClaim(user, claim).
+                toCompleteClaimPage().
                 fillClaimForm(claim).
-                saveClaim();
-
-        assertTrue(myPage.isRecentClaimSaved(claim), "Claim should have status saved");
+                saveClaim().
+                assertClaimHasStatus(claim.getStatusSaved());
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -95,30 +91,27 @@ public class SmokeTests extends BaseTest {
                 disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)
         };
 
+        loginAndCreateClaim(user, claim);
+
         String customerNote = "Customer note!";
         String internalNote = "Internal note!";
 
-        loginAndCreateClaim(user, claim);
-
-        NotesPage notesPage = functionalTemplatesApi.
+        functionalTemplatesApi.
                 updateTemplate(user.getFtId(), SettlementPage.class, enableOperations).
+                toNotesPage().
                 addCustomerNote(customerNote).
-                addInternalNote(internalNote);
+                addInternalNote(internalNote).
+                assertCustomerNotePresent(customerNote).
+                assertInternalNotePresent(internalNote);
 
-        assertTrue(notesPage.isCustomerNotesPresent(customerNote), "Customer Note has not been added");
-        assertTrue(notesPage.isInternalNotesPresent(internalNote), "Internal note has not been added");
+        functionalTemplatesApi.
+                updateTemplate(user.getFtId(), NotesPage.class, disableOperations).
+                assertEditCustomerNoteButtonPresent().
+                assertInternalNoteButtonNotPresent();
 
-        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class, disableOperations);
-
-        assertTrue(notesPage.isEditCustomerNoteButtonPresent(), "Edit Customer Note button is not visible");
-        assertFalse(notesPage.isInternalNoteHeaderPresent(), "Internal Note field is visible");
-        assertFalse(notesPage.isAddInternalNoteButtonPresent(), "Add Internal Note button is visible");
-
-        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class, enableOperations);
-
-        assertTrue(notesPage.isEditCustomerNoteButtonPresent(), "Edit Customer Note button is not visible");
-        assertTrue(notesPage.isInternalNotePresent(), "Internal Note field is not visible");
-        assertTrue(notesPage.isAddInternalNoteButtonDisplayed(), "Add Internal Note button is not visible");
+        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class, enableOperations).
+                assertEditCustomerNoteButtonPresent().
+                assertInternalNoteFieldsPresent();
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -129,15 +122,16 @@ public class SmokeTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim).importExcelFile(claimItem.getExcelPath1());
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
 
-        assertTrue(settlementPage.isItemPresent(claimItem.getXlsDescr1()), "The claim item is not found");
-
-        settlementPage.selectClaimItemByDescription(claimItem.getSetDialogTextMatch()).
+        loginAndCreateClaim(user, claim).
+                importExcelFile(claimItem.getExcelPath1()).
+                assertItemIsPresent(claimItem.getXlsDescr1()).
+                selectClaimItemByDescription(claimLineDescription).
                 getToolBarMenu().
-                productMatch().
+                toProductMatchPage().
                 sortSearchResults().
-                match(claimItem.getSetDialogTextMatch()).
+                match(claimLineDescription).
                 cancel();
     }
 }

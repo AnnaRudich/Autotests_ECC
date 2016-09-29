@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-class SidCalculations {
+class SidCalculator {
 
     public static PriceValuation calculatePriceValuation(int price, int depreciationPercentage) {
         double depreciation = price * ((double)depreciationPercentage) / 100;

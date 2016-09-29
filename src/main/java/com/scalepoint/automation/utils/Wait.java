@@ -199,7 +199,7 @@ public class Wait {
         waitForInvisible(element.getWrappedElement());
     }
 
-    public static void waitForInvisible(final WebElement element) {
+    private static void waitForInvisible(final WebElement element) {
         wrapWait(d -> {
             try {
                 return !element.isDisplayed();

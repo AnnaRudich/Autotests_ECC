@@ -264,7 +264,7 @@ public class ReductionRulesApi extends ServerApi {
         rrParams.add(new BasicNameValuePair("policy", "Any"));
         rrParams.add(new BasicNameValuePair("categorygroup", "-1"));
         rrParams.add(new BasicNameValuePair("category", "-1"));
-        rrParams.add(new BasicNameValuePair("published", "-1"));
+        rrParams.add(new BasicNameValuePair("publish", "-1"));
         rrParams.add(new BasicNameValuePair("searchText", ""));
         rrParams.add(new BasicNameValuePair("ruleItemsList", ruleId));
 
@@ -279,7 +279,7 @@ public class ReductionRulesApi extends ServerApi {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<Rule id=\"0\" ")
                 .append("name=\"" + rrName + "\"  ")
-                .append("published=\"true\" ");
+                .append("publish=\"true\" ");
         if (isPolicy) {
             stringBuilder.append("depreciation_type=\"" + "1\" ");
         } else {
@@ -321,7 +321,7 @@ public class ReductionRulesApi extends ServerApi {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<Rule id=\"0\" ")
                 .append("name=\"" + rrName + "\"  ")
-                .append("published=\"true\" ");
+                .append("publish=\"true\" ");
         if (isPolicy) {
             stringBuilder.append("depreciation_type=\"" + "1\" ");
         } else {

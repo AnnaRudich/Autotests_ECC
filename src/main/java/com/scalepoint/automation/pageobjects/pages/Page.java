@@ -137,4 +137,8 @@ public abstract class Page implements Actions {
             holder.remove();
         }
     }
+
+    protected String errorMessage(String text, Object... params) {
+        return String.format(text, params);
+    }
 }

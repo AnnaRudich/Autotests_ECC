@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -46,7 +47,7 @@ public class GenericItemsEditAdminPage extends Page {
         return this;
     }
 
-    public void selectSaveOption() {
+    public void save() {
         clickAndWaitForDisplaying(saveOption, By.id("btnEdit"));
     }
 
@@ -65,7 +66,7 @@ public class GenericItemsEditAdminPage extends Page {
         return this;
     }
 
-    public GenericItemsEditAdminPage addDescription(String description) {
+    public GenericItemsEditAdminPage setDescription(String description) {
         clear(descriptionField);
         sendKeys(descriptionField, description);
         return this;
@@ -77,28 +78,22 @@ public class GenericItemsEditAdminPage extends Page {
         return this;
     }
 
-    public GenericItemsAdminPage addNewGenericItem(String group, String category, String company, String description, String price) {
-        selectGroup(group).
-                selectCategory(category).
+    public GenericItemsAdminPage addNewGenericItem(GenericItem genericItem, String company, boolean published) {
+        selectGroup(genericItem.getGroup()).
+                selectCategory(genericItem.getCategory()).
                 selectCompany(company).
-                addDescription(description).
-                addPrice(price).
-                selectSaveOption();
+                setDescription(genericItem.getName()).
+                addPrice(genericItem.getPrice()).
+                publish(published).
+                save();
         return at(GenericItemsAdminPage.class);
     }
 
-    public GenericItemsEditAdminPage enablePublishedOption() {
-        if (!isSelected(publishedCheckBox)) {
+    public GenericItemsEditAdminPage publish(boolean published) {
+        if (published && !isSelected(publishedCheckBox) ||
+                !published && isSelected(publishedCheckBox)) {
             publishedCheckBox.click();
         }
         return this;
     }
-
-    public GenericItemsEditAdminPage disablePublishedOption() {
-        if (isSelected(publishedCheckBox)) {
-            publishedCheckBox.click();
-        }
-        return this;
-    }
-
 }

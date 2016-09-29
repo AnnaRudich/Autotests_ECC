@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.PseudoCategoryGroupPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -14,8 +15,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -23,9 +22,9 @@ import java.util.List;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.*;
+import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static org.testng.Assert.*;
 
-@Listeners({InvokedMethodListener.class})
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogSmokeTests extends BaseTest {
@@ -36,21 +35,21 @@ public class SettlementDialogSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Include in claim option is ON")
     public void ecc3144_1_setIncludeInClaimCheckbox(User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
+        SettlementDialog dialog = loginAndCreateClaim(user, claim).
                 addManually().
                 fillNewPrice(claimItem.getDepAmount1_10()).
                 includeInClaim(true);
 
-        assertTrue(settlementDialog.isIncludeInClaimSet(), "The 'Include in Claim is not set'");
-        settlementDialog.includeInClaim(false);
-        assertFalse(settlementDialog.isIncludeInClaimSet(), "The 'Include in Claim is set'");
+        assertTrue(dialog.isIncludeInClaimSet(), "The 'Include in Claim is not set'");
+
+        dialog.includeInClaim(false);
+        assertFalse(dialog.isIncludeInClaimSet(), "The 'Include in Claim is set'");
     }
 
     /**
      * WHEN: Select category
      * THEN: Categories are selected according to Pseudocategories mapping on Admin page
      */
-
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to select categories")
     public void ecc3144_2_selectCategory(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim);
@@ -59,9 +58,9 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 editPseudoCategory(claimItem.getExistingCat1_Born()).
                 getAllPseudoCategories();
 
-        List<String> subCategories = Page.to(SettlementPage.class).addManually()
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .getCategoriesList();
+        List<String> subCategories = Page.to(SettlementPage.class).addManually().
+                fillCategory(claimItem.getExistingCat1_Born()).
+                getCategoriesList();
 
         assertEqualsNoOrder(allPseudoCategories.toArray(), subCategories.toArray(), "Category is not selected");
     }
@@ -73,10 +72,10 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to input Customer demand")
     public void ecc3144_3_inputCustomDemand(User user, Claim claim, ClaimItem claimItem) {
         Integer customerDemand = claimItem.getCustomerDemand_500();
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
+        SettlementDialog dialog = loginAndCreateClaim(user, claim).
                 addManually().
                 fillCustomerDemand(customerDemand);
-        assertTrue((settlementDialog.isAmountOfValuationEqualTo(customerDemand, CUSTOMER_DEMAND)), "The Customer Demand has not been added");
+        assertTrue(dialog.isAmountOfValuationEqualTo(customerDemand, CUSTOMER_DEMAND), "The Customer Demand has not been added");
     }
 
 
@@ -87,8 +86,10 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to input New price")
     public void ecc3144_4_inputNewPrice(User user, Claim claim, ClaimItem claimItem) {
         Integer newPrice = claimItem.getNewPriceSP_2400();
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).addManually().fillNewPrice(newPrice);
-        assertTrue((settlementDialog.isAmountOfValuationEqualTo(newPrice, SettlementDialog.Valuation.NEW_PRICE)), "The New Price has not been added");
+        SettlementDialog dialog = loginAndCreateClaim(user, claim).
+                addManually().
+                fillNewPrice(newPrice);
+        assertTrue(dialog.isAmountOfValuationEqualTo(newPrice, SettlementDialog.Valuation.NEW_PRICE), "The New Price has not been added");
     }
 
     /**
@@ -104,7 +105,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_5_manualDepreciation(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).addManually()
+        SettlementDialog dialog = loginAndCreateClaim(user, claim).addManually()
                 .fillDescription(claimItem.getTextFieldSP())
                 .fillCustomerDemand(claimItem.getCustomerDemand_500())
                 .fillCategory(categoryInfo)
@@ -112,17 +113,17 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 .fillDepreciation(claimItem.getDepAmount1_10())
                 .selectValuation(CUSTOMER_DEMAND);
 
-        SidCalculations.PriceValuation expectedCalculations = SidCalculations.calculatePriceValuation(claimItem.getCustomerDemand_500(), claimItem.getDepAmount1_10());
+        PriceValuation expectedCalculations = SidCalculator.calculatePriceValuation(claimItem.getCustomerDemand_500(), claimItem.getDepAmount1_10());
 
-        Double fetchedCashValue = settlementDialog.cashCompensationValue();
-        Double calculatedCashValue = expectedCalculations.getCashValue();
-        Double fetchedDepreciation = settlementDialog.fetchDepreciation();
-        Double calculatedDepreciation = expectedCalculations.getDepreciation();
+        Double expectedCashValue = expectedCalculations.getCashValue();
+        Double expectedDepreciation = expectedCalculations.getDepreciation();
+        Double fetchedCashValue = dialog.cashCompensationValue();
+        Double fetchedDepreciation = dialog.fetchDepreciation();
 
-        assertEquals(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
-        assertEquals(fetchedDepreciation, calculatedDepreciation, "Depreciation incorrect");
-        assertTrue(settlementDialog.isTotalAmountOfValuationEqualTo(toString(calculatedCashValue), CUSTOMER_DEMAND), "Depreciation is incorrect");
-        assertTrue(settlementDialog.isDepreciationPercentEqualTo("10", CUSTOMER_DEMAND), "Depreciation Percent is not displayed");
+        assertEquals(fetchedCashValue, expectedCashValue, "Cash compensation incorrect");
+        assertEquals(fetchedDepreciation, expectedDepreciation, "Depreciation incorrect");
+        assertTrue(dialog.isTotalAmountOfValuationEqualTo(toString(expectedCashValue), CUSTOMER_DEMAND), "Depreciation is incorrect");
+        assertTrue(dialog.isDepreciationPercentEqualTo("10", CUSTOMER_DEMAND), "Depreciation Percent is not displayed");
     }
 
     /**
@@ -135,20 +136,18 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_6_SaveAllEnteredResults(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+        settlementPage.
+                addManually().
+                fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog settlementDialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
-        assertEquals(settlementDialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not saved");
-        assertEquals(settlementDialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
-        assertEquals(settlementDialog.getSubCategoryText(), claimItem.getExistingSubCat1_Babyudstyr(), "The SubCategory is not Saved");
-        assertTrue(settlementDialog.isAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND), "The Customer Demand price is not Saved");
-        assertTrue(settlementDialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE), "The New Price is not Saved");
+        SettlementDialog dialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+
+        assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not saved");
+        assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
+        assertEquals(dialog.getSubCategoryText(), claimItem.getExistingSubCat1_Babyudstyr(), "The SubCategory is not Saved");
+        assertTrue(dialog.isAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND), "The Customer Demand price is not Saved");
+        assertTrue(dialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE), "The New Price is not Saved");
     }
 
     /**
@@ -164,42 +163,29 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
-        String newClaimDescription = claimItem.getTextFieldSP().concat("new");
-
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.
                 addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog settlementDialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
 
-        assertEquals(settlementDialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not Saved");
-        assertEquals(settlementDialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
-        assertEquals(settlementDialog.getSubCategoryText(), claimItem.getExistingSubCat1_Babyudstyr(), "The SubCategory is not Saved");
-        assertTrue(settlementDialog.isAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND), "The Customer Demand price is not Saved");
-        assertTrue(settlementDialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE), "The New Price is not Saved");
+        assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not Saved");
+        assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
+        assertEquals(dialog.getSubCategoryText(), claimItem.getExistingSubCat1_Babyudstyr(), "The SubCategory is not Saved");
+        assertTrue(dialog.isAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND), "The Customer Demand price is not Saved");
+        assertTrue(dialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE), "The New Price is not Saved");
 
-        settlementDialog.
-                fillDescription(newClaimDescription).
-                fillCustomerDemand(claimItem.getDepAmount1_10()).
-                fillNewPrice(Integer.valueOf(claimItem.getDepAmount2())).
-                fillCategory(claimItem.getExistingCat2()).
-                fillSubCategory(claimItem.getExistingSubCat2()).
-                cancel();
+        dialog.fillBaseData(claimItem).cancel();
 
         settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
 
-        assertEquals(settlementDialog.getDescriptionText(), claimItem.getTextFieldSP());
-        assertEquals(settlementDialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The New Category is Saved");
-        assertEquals(settlementDialog.getSubCategoryText(), claimItem.getExistingSubCat1_Babyudstyr(), "The New SubCategory is Saved");
-        assertTrue(settlementDialog.isAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND), "The New Customer Demand price is Saved");
-        assertTrue(settlementDialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE), "The New Price is Saved");
-        settlementDialog.ok();
+        assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP());
+        assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The New Category is Saved");
+        assertEquals(dialog.getSubCategoryText(), claimItem.getExistingSubCat1_Babyudstyr(), "The New SubCategory is Saved");
+        assertTrue(dialog.isAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND), "The New Customer Demand price is Saved");
+        assertTrue(dialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE), "The New Price is Saved");
     }
 
 
@@ -214,18 +200,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_8_addNewValuation(User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
+        SettlementDialog dialog = loginAndCreateClaim(user, claim).
                 addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 setReviewed(true).
                 includeInClaim(false).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 waitASecond();
-        assertTrue(settlementDialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), NEW_PRICE), "New valuation has been not added");
+        assertTrue(dialog.isTotalAmountOfValuationEqualTo(claimItem.getNewPriceSP_2400(), NEW_PRICE), "New valuation has been not added");
     }
 
     /**
@@ -241,18 +223,13 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_9_disableIncludeInClaim(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+        settlementPage.addManually().
+                fillBaseData(claimItem).
                 setReviewed(true).
                 includeInClaim(false).
                 ok();
         assertTrue(settlementPage.getClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getBlueColor()), "Claim is not in blue color");
-        assertEquals(OperationalUtils.toNumber(settlementPage.getBottomMenu().getClaimSumValue()), 0.00, "Claim sum is not assertEqualsDouble zero");
+        assertEquals(toNumber(settlementPage.getBottomMenu().getClaimSumValue()), 0.00, "Claim sum is not assertEqualsDouble zero");
     }
 
     /**
@@ -266,13 +243,8 @@ public class SettlementDialogSmokeTests extends BaseTest {
             "and 'Reviewed' disabled")
     public void ecc3144_10_disableIncludeInClaimAndReviewed(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+        settlementPage.addManually().
+                fillBaseData(claimItem).
                 setReviewed(false).
                 includeInClaim(false).
                 ok();
@@ -294,31 +266,24 @@ public class SettlementDialogSmokeTests extends BaseTest {
         String secondClaimDescription = claimItem.getTextFieldSP().concat("second");
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 setReviewed(false).
                 includeInClaim(false).
                 ok();
         assertTrue(settlementPage.getComputedClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getPinkColor()));
 
-        SettlementDialog settlementDialog = settlementPage.addManually().
+        SettlementDialog dialog = settlementPage.addManually().
+                fillBaseData(claimItem).
                 fillDescription(secondClaimDescription).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
                 setReviewed(true).
                 includeInClaim(true);
 
-        Double claimValue = settlementDialog.customerDemandValue();
+        Double claimValue = dialog.customerDemandValue();
 
-        settlementDialog.ok();
+        dialog.ok();
 
-        assertEquals(OperationalUtils.toNumber(settlementPage.getBottomMenu().getClaimSumValue()), claimValue, "Claim sum value is not incremented");
-        assertEquals(OperationalUtils.toNumber(settlementPage.getBottomMenu().getSubtotalSumValue()), claimValue, "Subtotal Sum Value is not correct");
+        assertEquals(toNumber(settlementPage.getBottomMenu().getClaimSumValue()), claimValue, "Claim sum value is not incremented");
+        assertEquals(toNumber(settlementPage.getBottomMenu().getSubtotalSumValue()), claimValue, "Subtotal Sum Value is not correct");
     }
 
     /**
@@ -332,14 +297,9 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_12_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 setReviewed(false).
                 ok();
-
 
         assertTrue(settlementPage.getBottomMenu().isCompleteClaimEnabled(), "Complete Claim button is disabled");
     }
@@ -354,9 +314,8 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED, enabled = false)
     public void ecc3144_14_ReviewedBoxNotDisplayed(User user, Claim claim) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).addManually();
-        boolean reviewedPresent = settlementDialog.isReviewedPresent();
-        assertFalse(reviewedPresent, "Reviewed checkbox is enabled");
+        SettlementDialog dialog = loginAndCreateClaim(user, claim).addManually();
+        assertFalse(dialog.isReviewedPresent(), "Reviewed checkbox is enabled");
     }
 
     /**
@@ -371,11 +330,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_13_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 setReviewed(false).ok();
 
         assertTrue(settlementPage.getBottomMenu().isCompleteClaimEnabled(), "Complete Claim button is disabled");
@@ -390,11 +345,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_15_cancelledClaimNotAdded(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 cancel();
 
         assertFalse(settlementPage.isItemPresent(claimItem.getTextFieldSP()), "The claim has been was added");
@@ -406,16 +357,11 @@ public class SettlementDialogSmokeTests extends BaseTest {
      * WHEN: U1 adds New price amount V1
      * THEN: Cash compensation CC is assertEqualsDouble to V1
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Cash compensation CC is assertEqualsDouble to V1")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Cash compensation CC is equal to V1")
     public void ecc3144_16_cashCompensationEqualV1(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), settlementDialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
+        SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Customer price is not equal to cash compensation value");
     }
 
     /**
@@ -428,13 +374,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to open Add Valuation dialog in SID")
     public void ecc3144_17_openAddValuationDialogInSID(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                addValuation();
+        settlementPage.addManually().fillBaseData(claimItem).addValuation();
     }
 
     /**
@@ -452,19 +392,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
             "valuation dialog (user selects 3d type)")
     public void ecc3144_18_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), settlementDialog.cashCompensationValue(), "Cash Compensation value is not assertEqualsDouble to Customer Price");
+        SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Cash Compensation value is not assertEqualsDouble to Customer Price");
 
-        settlementDialog.addValuation().
+        dialog.addValuation().
                 addValuationType(claimItem.getValuationType3()).
                 addValuationPrice(claimItem.getLowerPrice()).
                 ok();
-        assertEquals(settlementDialog.cashCompensationValue(), Double.valueOf(claimItem.getLowerPrice()), "Cash Compensation Value is not assertEqualsDouble Valuation price");
+        assertEquals(dialog.cashCompensationValue(), Double.valueOf(claimItem.getLowerPrice()), "Cash Compensation Value is not assertEqualsDouble Valuation price");
     }
 
     /**
@@ -481,19 +416,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialog (user selects 4th type)")
     public void ecc3144_19_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), settlementDialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
+        SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
 
-        settlementDialog.addValuation().
+        dialog.addValuation().
                 addValuationType(claimItem.getValuationType4()).
                 addValuationPrice(claimItem.getLowerPrice()).
                 ok();
-        assertEquals(Double.valueOf(claimItem.getLowerPrice()), settlementDialog.cashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
+        assertEquals(Double.valueOf(claimItem.getLowerPrice()), dialog.cashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
     }
 
 
@@ -512,19 +442,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
             "add valuation dialog (user selects 5th type)")
     public void ecc3144_20_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), settlementDialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
+        SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
 
-        settlementDialog.addValuation().
+        dialog.addValuation().
                 addValuationType(claimItem.getValuationType5()).
                 addValuationPrice(claimItem.getLowerPrice()).
                 ok();
-        assertEquals(Double.valueOf(claimItem.getLowerPrice()), settlementDialog.cashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
+        assertEquals(Double.valueOf(claimItem.getLowerPrice()), dialog.cashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
     }
 
 
@@ -537,15 +462,11 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to enable age option")
     public void ecc3144_22_enableAgeOption(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+        SettlementDialog dialog = settlementPage.addManually().
+                fillBaseData(claimItem).
                 enableAge();
-        assertTrue(settlementDialog.ageYearsIsEnabled(), "Age Years field is disabled");
-        assertTrue(settlementDialog.monthMenuIsEnabled(), "Month DropDown is disabled");
+        assertTrue(dialog.ageYearsIsEnabled(), "Age Years field is disabled");
+        assertTrue(dialog.monthMenuIsEnabled(), "Month DropDown is disabled");
     }
 
 
@@ -564,19 +485,15 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_23_addYearsAndMonthAndSave(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+                fillBaseData(claimItem).
                 enableAge("10").
                 selectMonth("6 " + claimItem.getMonths()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 ok();
 
-        SettlementDialog settlementDialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
-        assertEquals(settlementDialog.getAgeYears(), "10", "The age year is not saved");
-        assertEquals(settlementDialog.getMonthValue().trim(), "6 " + claimItem.getMonths(), "The month is not saved");
+        SettlementDialog dialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        assertEquals(dialog.getAgeYears(), "10", "The age year is not saved");
+        assertEquals(dialog.getMonthValue().trim(), "6 " + claimItem.getMonths(), "The month is not saved");
     }
 
 
@@ -589,22 +506,18 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to disable age checkbox")
     public void ecc3144_24_disableAgeAndSave(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
+        SettlementDialog dialog = settlementPage.addManually().
+                fillBaseData(claimItem).
                 enableAge();
 
-        assertTrue(settlementDialog.ageYearsIsEnabled(), "Age Years field is disabled");
-        assertTrue(settlementDialog.monthMenuIsEnabled(), "Month DropDown is disabled");
+        assertTrue(dialog.ageYearsIsEnabled(), "Age Years field is disabled");
+        assertTrue(dialog.monthMenuIsEnabled(), "Month DropDown is disabled");
 
-        settlementDialog.disableAge().ok();
+        dialog.disableAge().ok();
         settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
 
-        assertFalse(settlementDialog.ageYearsIsEnabled(), "Age Years field is enabled");
-        assertFalse(settlementDialog.monthMenuIsEnabled(), "Month DropDown is enabled");
+        assertFalse(dialog.ageYearsIsEnabled(), "Age Years field is enabled");
+        assertFalse(dialog.monthMenuIsEnabled(), "Month DropDown is enabled");
     }
 
 }

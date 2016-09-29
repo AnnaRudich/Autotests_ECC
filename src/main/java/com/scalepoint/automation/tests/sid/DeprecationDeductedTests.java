@@ -9,6 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuation;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 
@@ -16,13 +17,10 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-@Listeners({InvokedMethodListener.class})
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -51,6 +49,7 @@ public class DeprecationDeductedTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (off)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION, enabled = false)
     public void ecc3288_1_displayVoucherValueWithDeprecationDeductedOFF(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
@@ -63,24 +62,27 @@ public class DeprecationDeductedTests extends BaseTest {
                 fillCategory(categoryInfo).
                 fillVoucher(voucher.getVoucherNameSP());
 
-        SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
+        VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
+                voucher.getDiscount(),
+                claimItem.getDepAmount1_10());
 
-        Double calculatedCashValue = expectedCalculation.getCashCompensationOfVoucher();
-        Double faceValue = settlementDialog.voucherFaceValueFieldText();
-        Double cashValue = settlementDialog.voucherCashValueFieldText();
-        Double newPrice = Double.valueOf(claimItem.getNewPriceSP_2400());
+        Double expectedCashValue = expectedCalculation.getCashCompensationOfVoucher();
+        Double expectedNewPrice = Double.valueOf(claimItem.getNewPriceSP_2400());
 
-        assertEqualsDouble(faceValue, newPrice, "Face value should be assertEqualsDouble to new price");
-        assertEqualsDouble(cashValue, calculatedCashValue, "Voucher cash value should be assertEqualsDouble to calculatedCashValue");
+        Double actualFaceValue = settlementDialog.voucherFaceValueFieldText();
+        Double actualCashValue = settlementDialog.voucherCashValueFieldText();
+
+        assertEqualsDouble(actualFaceValue, expectedNewPrice, "Face value should be equals to new price");
+        assertEqualsDouble(actualCashValue, expectedCashValue, "Voucher cash value should be equals to expectedCashValue");
         settlementDialog.ok();
 
         Double fetchedFaceTooltipValue = settlementPage.getFaceTooltipValue();
-        assertEqualsDouble(fetchedFaceTooltipValue, newPrice, "Face tooltip should be assertEqualsDouble new Price");
+        assertEqualsDouble(fetchedFaceTooltipValue, expectedNewPrice, "Face tooltip should be equals new Price");
 
         String password = "12341234";
 
         ShopWelcomePage shopWelcomePage = settlementPage.
-                completeClaim().
+                toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, password).
                 completeWithEmail().
                 openRecentClaim().
@@ -93,8 +95,8 @@ public class DeprecationDeductedTests extends BaseTest {
         Double fetchedProductCashValue = shopWelcomePage.getProductCashValue();
         Double fetchedProductFaceValue = shopWelcomePage.getProductFaceValue();
 
-        assertEqualsDouble(fetchedProductCashValue, calculatedCashValue, "Voucher cash value should be assertEqualsDouble to calculated calculatedCashValue");
-        assertEqualsDouble(fetchedProductFaceValue, newPrice, "Voucher face value should be assertEqualsDouble to entered new Price ");
+        assertEqualsDouble(fetchedProductCashValue, expectedCashValue, "Voucher cash value should be equals to calculated expectedCashValue");
+        assertEqualsDouble(fetchedProductFaceValue, expectedNewPrice, "Voucher face value should be equals to entered new Price ");
         shopWelcomePage.logout();
 
         CustomerDetailsPage customerDetailsPage = login(user).openRecentClaim();
@@ -103,21 +105,21 @@ public class DeprecationDeductedTests extends BaseTest {
         Double fetchedCustomerFaceTooltipValue = customerDetails.getFaceTooltipValue();
 
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
-        assertEqualsDouble(fetchedCustomerCashValue, voucherValue, "Voucher cash value should be assertEqualsDouble to calculatedCashValue");
-        assertEqualsDouble(fetchedCustomerFaceTooltipValue, newPrice, "Voucher face value should be assertEqualsDouble to new Price");
+        assertEqualsDouble(fetchedCustomerCashValue, voucherValue, "Voucher cash value should be equals to expectedCashValue");
+        assertEqualsDouble(fetchedCustomerFaceTooltipValue, expectedNewPrice, "Voucher face value should be equals to new Price");
 
         ReplacementDialog replacementDialog = customerDetailsPage.
                 reopenClaim().
-                completeClaim().
+                toCompleteClaimPage().
                 fillClaimForm(claim).
                 replaceClaim();
 
         Double fetchedReplacementDialogVoucherFaceValue = replacementDialog.getVoucherFaceValue();
         Double fetchedReplacementDialogItemPriceValue = replacementDialog.getItemPriceValue();
 
-        assertEqualsDouble(fetchedReplacementDialogVoucherFaceValue, newPrice, "Voucher face value %s should be assertEqualsDouble to new Price %s");
+        assertEqualsDouble(fetchedReplacementDialogVoucherFaceValue, expectedNewPrice, "Voucher face value %s should be equals to new Price %s");
 
-        assertEqualsDouble(fetchedReplacementDialogItemPriceValue, calculatedCashValue, "Voucher cash value %s should be assertEqualsDouble to calculated %s");
+        assertEqualsDouble(fetchedReplacementDialogItemPriceValue, expectedCashValue, "Voucher cash value %s should be equals to calculated %s");
         replacementDialog.closeReplacementDialog();
     }
 
@@ -155,7 +157,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 fillVoucher(claimItem.getExistingVoucher1()).
                 waitASecond();
 
-        SidCalculations.VoucherValuation expectedCalculation = SidCalculations.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
+        VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
 
         Double calculatedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
         Double calculatedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
@@ -163,17 +165,17 @@ public class DeprecationDeductedTests extends BaseTest {
         Double faceValue = settlementDialog.voucherFaceValueFieldText();
         Double cashValue = settlementDialog.voucherCashValueFieldText();
 
-        assertEquals(faceValue, calculatedFaceValue, "Voucher face value %s should be assertEqualsDouble to depreciated new Price %s");
-        assertEquals(cashValue, calculatedCashValue, "Voucher cash value %s should be assertEqualsDouble to depreciated voucher cash value %s");
+        assertEquals(faceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new Price %s");
+        assertEquals(cashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
 
         settlementDialog.ok();
 
         Double fetchedFaceTooltipValue = settlementPage.getFaceTooltipValue();
 
-        assertEqualsDouble(fetchedFaceTooltipValue, calculatedFaceValue, "Tooltip face value %s should be assertEqualsDouble to depreciated new price %s");
+        assertEqualsDouble(fetchedFaceTooltipValue, calculatedFaceValue, "Tooltip face value %s should be equals to depreciated new price %s");
 
         String password = "12341234";
-        ShopWelcomePage shopWelcomePage = settlementPage.completeClaim().
+        ShopWelcomePage shopWelcomePage = settlementPage.toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, password).
                 completeWithEmail().
                 openRecentClaim().
@@ -186,8 +188,8 @@ public class DeprecationDeductedTests extends BaseTest {
         Double fetchedProductCashValue = shopWelcomePage.getProductCashValue();
         Double fetchedProductFaceValue = shopWelcomePage.getProductFaceValue();
 
-        assertEqualsDouble(fetchedProductCashValue, calculatedCashValue, "Voucher cash value %s should be assertEqualsDouble to depreciated voucher cash value %s");
-        assertEqualsDouble(fetchedProductFaceValue, calculatedFaceValue, "Voucher face value %s should be assertEqualsDouble to depreciated new price %s");
+        assertEqualsDouble(fetchedProductCashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
+        assertEqualsDouble(fetchedProductFaceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new price %s");
 
         shopWelcomePage.logout();
 
@@ -197,20 +199,20 @@ public class DeprecationDeductedTests extends BaseTest {
         Double fetchedCustomerCashValue = customerDetails.getCashValue();
         Double fetchedCustomerFaceTooltipValue = customerDetails.getFaceTooltipValue();
 
-        assertEqualsDouble(fetchedCustomerCashValue, calculatedCashValue, "Voucher cash value %s should be assertEqualsDouble to depreciated voucher cash value %s");
-        assertEqualsDouble(fetchedCustomerFaceTooltipValue, calculatedFaceValue, "Voucher face value %s should be assertEqualsDouble to depreciated new price %s");
+        assertEqualsDouble(fetchedCustomerCashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
+        assertEqualsDouble(fetchedCustomerFaceTooltipValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new price %s");
 
         ReplacementDialog replacementDialog = customerDetailsPage.
                 reopenClaim().
-                completeClaim().
+                toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, password).
                 replaceClaim();
 
         Double fetchedReplacementDialogVoucherFaceValue = replacementDialog.getVoucherFaceValue();
         Double fetchedReplacementDialogItemPriceValue = replacementDialog.getItemPriceValue();
 
-        assertEqualsDouble(fetchedReplacementDialogVoucherFaceValue, calculatedFaceValue, "Voucher face value %s should be assertEqualsDouble to depreciated new price %s");
-        assertEqualsDouble(fetchedReplacementDialogItemPriceValue, calculatedCashValue, "Voucher cash value %s should be assertEqualsDouble to depreciated voucher cash value %s");
+        assertEqualsDouble(fetchedReplacementDialogVoucherFaceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new price %s");
+        assertEqualsDouble(fetchedReplacementDialogItemPriceValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
 
         replacementDialog.closeReplacementDialog();
     }

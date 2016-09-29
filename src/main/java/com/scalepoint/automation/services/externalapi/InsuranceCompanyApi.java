@@ -42,7 +42,7 @@ public class InsuranceCompanyApi extends ServerApi {
         String funcTemplateParam;
         String guiTemplateParam;
 
-        switch (Configuration.getLocale()) {
+        switch (Configuration.getLocale().getValue()) {
             case "dk":
             default:
                 cultureParam = "da-DK";
@@ -52,7 +52,7 @@ public class InsuranceCompanyApi extends ServerApi {
                 break;
         }
 
-        if (Configuration.getLocale().equals("dk")) {
+        if (Configuration.getLocale().getValue().equals("dk")) {
             funcTemplateParam = "140053";
             guiTemplateParam = "16";
         } else {

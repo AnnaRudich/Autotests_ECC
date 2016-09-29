@@ -4,61 +4,90 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.GenericItemsAdminPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static org.testng.Assert.assertTrue;
 
+@SuppressWarnings("AccessStaticViaInstance")
 public class GenericItemsTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "Admin tab opens without errors")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
-        String genericItemName = genericItem.getItemDescription();
-        String categoryGroup = genericItem.getGroup1();
-        String category = genericItem.getCategory1();
         String companyName = user.getCompanyName();
-        String price = "100";
 
         GenericItemsAdminPage genericItemsAdminPage = loginAndCreateClaim(user, claim).
-                getMainMenu().
-                toAdminPage().
-                toGenericItemsPage().
-                selectRefreshOption();
-        assertTrue(genericItemsAdminPage.genericItemsListSize() > 0, "List of generic items is empty");
+                to(GenericItemsAdminPage.class).
+                refreshList().
+                assertItemsListIsNotEmpty();
 
         //Create new item and check we are able to add it to settlement
-        genericItemsAdminPage.
-                selectNewOption().
-                addNewGenericItem(categoryGroup, category, companyName, genericItemName, price);
-
-        SettlementPage settlementPage = Page.to(SettlementPage.class).
-                addGenericItem(genericItemName, categoryGroup, category);
-        assertTrue(settlementPage.isItemPresent(genericItemName), "Generic item is not found");
+        SettlementPage settlementPage = genericItemsAdminPage.
+                clickCreateNewItem().
+                addNewGenericItem(genericItem, companyName, true).
+                to(SettlementPage.class).
+                addGenericItemToClaim(genericItem).
+                assertItemIsPresent(genericItem.getName());
 
         //Update generic item name and make sure the update is visible in settlement
-        String description = genericItemName + "-UPDATED";
+        String newDescription = genericItem.getName() + "-UPDATED";
+
         settlementPage.
-                toAdminPage().
-                toGenericItemsPage().
-                filterItems(companyName, categoryGroup, category).
-                editItem(genericItemName, companyName).
-                addDescription(description).
-                selectSaveOption();
+                to(GenericItemsAdminPage.class).
+                editItem(genericItem, companyName).
+                setDescription(newDescription).
+                save();
 
-        settlementPage = Page.to(SettlementPage.class).
-                addGenericItem(description, categoryGroup, category);
-        assertTrue(settlementPage.isItemPresent(description), "Generic item is not found");
+        genericItem.setName(newDescription);
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        to(SettlementPage.class).
+                addGenericItemToClaim(genericItem).
+                assertItemIsPresent(genericItem.getName());
+
     }
 
-    private String test() {
-        return "aaaaa";
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Publish/Unpublish generic item")
+    public void charlie535_testWeCanPublishGenericItems(User user, Claim claim, GenericItem genericItem) {
+        String companyName = user.getCompanyName();
+
+        loginAndCreateClaim(user, claim).
+                to(GenericItemsAdminPage.class).
+                clickCreateNewItem().
+                addNewGenericItem(genericItem, companyName, false).
+                to(SettlementPage.class).
+                assertGenericItemIsNotPresent(genericItem).
+                to(GenericItemsAdminPage.class).
+                editItem(genericItem, companyName).
+                publish(true).
+                save();
+
+        Page.to(SettlementPage.class).
+                addGenericItemToClaim(genericItem).
+                assertItemIsPresent(genericItem.getName());
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Delete generic item")
+    public void charlie535_testWeCanDeleteGenericItem(User user, Claim claim, GenericItem genericItem) {
+        String companyName = user.getCompanyName();
+
+        GenericItem genericItemToDelete = TestData.getGenericItem();
+
+        loginAndCreateClaim(user, claim).
+                to(GenericItemsAdminPage.class).
+                clickCreateNewItem().
+                addNewGenericItem(genericItem, companyName, true).
+                to(SettlementPage.class).
+                addGenericItemToClaim(genericItem).
+                to(GenericItemsAdminPage.class).
+                deleteItem(genericItem, companyName).
+                assertGenericItemInList(genericItem.getName()).
+                clickCreateNewItem().
+                addNewGenericItem(genericItemToDelete, companyName, true).
+                deleteItem(genericItemToDelete, companyName).
+                assertGenericItemNotInList(genericItemToDelete.getName());
     }
 }

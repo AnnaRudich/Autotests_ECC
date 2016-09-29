@@ -1,13 +1,16 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.domain.ClaimStatus;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Table;
+
+import java.util.function.Supplier;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -56,12 +59,12 @@ public class MyPage extends Page {
         return at(CustomerDetailsPage.class);
     }
 
-    public boolean isRecentClaimCompleted(Claim claim) {
-        return latestCustomerStatus.getText().contains(claim.getStatusCompleted());
+    public boolean isRecentClaimCompleted() {
+        return latestCustomerStatus.getText().contains(ClaimStatus.completed());
     }
 
-    public boolean isRecentClaimSaved(Claim claim) {
-        return latestCustomerStatus.getText().contains(claim.getStatusSaved());
+    public boolean isRecentClaimSaved() {
+        return latestCustomerStatus.getText().contains(ClaimStatus.saved());
     }
 
     public NewCustomerPage clickCreateNewCase() {
@@ -71,5 +74,12 @@ public class MyPage extends Page {
 
     public MainMenu getMainMenu() {
         return mainMenu;
+    }
+
+    /*------------------------------ ASSERTS ---------------------------------------*/
+    /*------------------------------ ------- ---------------------------------------*/
+    public MyPage assertClaimHasStatus(String status) {
+        Assert.assertTrue(latestCustomerStatus.getText().contains(status), errorMessage("Claim should have [%s] status", status));
+        return this;
     }
 }

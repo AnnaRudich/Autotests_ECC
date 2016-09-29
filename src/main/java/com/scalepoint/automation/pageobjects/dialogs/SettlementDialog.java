@@ -141,14 +141,17 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog fillBaseData(ClaimItem claimItem) {
+        return fillDescription(claimItem.getTextFieldSP()).
+                fillCustomerDemand(claimItem.getCustomerDemand_500()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
+                fillCategory(claimItem.getExistingCat1_Born()).
+                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
+    }
+
     public SettlementDialog fillDescription(String descriptionText) {
         this.enteredDescription = descriptionText;
         description.setValue(descriptionText);
-        return this;
-    }
-
-    public SettlementDialog EnterQuantityAmount(int amount) {
-        quantity.enter(String.valueOf(amount));
         return this;
     }
 
@@ -224,6 +227,7 @@ public class SettlementDialog extends BaseDialog {
         age.select(1);
         return this;
     }
+
     public SettlementDialog enableAge(String years) {
         enableAge();
         enterAgeYears(years);
@@ -356,13 +360,13 @@ public class SettlementDialog extends BaseDialog {
         Wait.waitForLoaded();
         waitForVisible(firstValuation);
         String foundText = getValuationColumnValue(valuation, column);
-        boolean equals = OperationalUtils.toNumber(foundText).equals(doubleString(value));
+        boolean equals = OperationalUtils.toNumber(foundText).equals(Double.parseDouble(value));
         logger.info("Valuation requested: {} found: {} matched: {}", value, foundText, equals);
         return equals;
     }
 
     private String getValuationColumnValue(Valuation valuation, int column) {
-        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td["+column+"]")).getText();
+        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column + "]")).getText();
     }
 
     public boolean isIncludeInClaimSet() {
@@ -402,7 +406,7 @@ public class SettlementDialog extends BaseDialog {
             Wait.For((Function<WebDriver, Object>) webDriver -> {
                 String assessmentBasedOn = driver.findElement(By.xpath(".//div[contains(@class, 'assessmentBaseManualText')]//div[@role='textbox']")).getText();
                 List<String> assessmentTextParts = splitByWord(assessmentBasedOn);
-                return  !Collections.disjoint(valuationNameParts, assessmentTextParts);
+                return !Collections.disjoint(valuationNameParts, assessmentTextParts);
             });
         } catch (Exception e) {
             logger.info("Couldn't compare current valuation with assessmentText");
@@ -523,7 +527,7 @@ public class SettlementDialog extends BaseDialog {
             }
         }
         if (!foundRule) {
-            throw new IllegalStateException("Reduction rule with value: "+reductionRuleValue+" not found");
+            throw new IllegalStateException("Reduction rule with value: " + reductionRuleValue + " not found");
         }
         Wait.For(webDriver -> {
             try {
@@ -549,7 +553,7 @@ public class SettlementDialog extends BaseDialog {
         return Double.valueOf(depreciation.getText());
     }
 
-    public boolean isMarketPriceVisible(){
+    public boolean isMarketPriceVisible() {
         try {
             return getValuationColumnValue(Valuation.MARKET_PRICE, 1) != null;
         } catch (Exception e) {
@@ -557,11 +561,11 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-    public String marketPriceSupplier(){
+    public String marketPriceSupplier() {
         return marketPriceSupplier.getText();
     }
 
-    public boolean isMarketPriceSupplierVisible(){
+    public boolean isMarketPriceSupplierVisible() {
         try {
             return marketPriceSupplier.exists();
         } catch (Exception e) {
@@ -569,11 +573,7 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-    public static Double doubleString(String s) {
-        return Double.parseDouble(s);
-    }
-
-    public static enum Valuation {
+    public enum Valuation {
         NOT_SELECTED("valuation-type-NOT_SELECTED"),
         CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
         VOUCHER("valuation-type-VOUCHER"),

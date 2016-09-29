@@ -7,11 +7,13 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
@@ -82,16 +84,15 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
-    public SettlementPage addGenericItem(String genericItemName, String categoryGroup, String category) {
+    public SettlementPage addGenericItemToClaim(GenericItem genericItem) {
         claimOperationsMenu.addGenericItem().
-                chooseItem(genericItemName, categoryGroup, category);
+                chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
         return this;
     }
 
-    public NotesPage addCustomerNote(String customerNote) {
-        return toNotesPage().
-                editCustomerNote().
-                addCustomerNote(customerNote);
+    public SettlementPage assertGenericItemIsNotPresent(GenericItem genericItem) {
+        claimOperationsMenu.addGenericItem().assertGenericItemIsNotPresent(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
+        return this;
     }
 
     public ToolBarMenu getToolBarMenu() {
@@ -144,7 +145,7 @@ public class SettlementPage extends BaseClaimPage {
         return at(MyPage.class);
     }
 
-    public CompleteClaimPage completeClaim() {
+    public CompleteClaimPage toCompleteClaimPage() {
         bottomMenu.completeClaim();
         try {
             driver.switchTo().alert().accept();
@@ -171,6 +172,11 @@ public class SettlementPage extends BaseClaimPage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public SettlementPage assertSettlementPagePresent(String message) {
+        Assert.assertTrue(isSettlementPagePresent(), message);
+        return this;
     }
 
     public SettlementPage selectClaimItemByDescription(String _item) {
@@ -256,5 +262,13 @@ public class SettlementPage extends BaseClaimPage {
 
     public MainMenu getMainMenu() {
         return mainMenu;
+    }
+
+    /*------------------------------ ASSERTS ---------------------------------------*/
+    /*------------------------------ ------- ---------------------------------------*/
+    public SettlementPage assertItemIsPresent(String claimLineDescription) {
+        Assert.assertTrue(isItemPresent(claimLineDescription),
+                errorMessage("The claim item [%s] is not found", claimLineDescription));
+        return this;
     }
 }

@@ -21,7 +21,6 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-@Listeners({InvokedMethodListener.class})
 @RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogShowVoucherDetails extends BaseTest {
@@ -111,8 +110,8 @@ public class SettlementDialogShowVoucherDetails extends BaseTest {
                 fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
                 fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillDepreciation(claimItem.getDepAmount1_10()).
                 fillCategory(assignedCategory).
+                fillDepreciation(claimItem.getDepAmount1_10()).
                 fillVoucher(voucher.getVoucherNameSP()).
                 openVoucherValuationCard();
         assertEquals(editVoucherValuationDialog.getBrands(), voucher.getBrandsText(), "Wrong Brand is displayed");
