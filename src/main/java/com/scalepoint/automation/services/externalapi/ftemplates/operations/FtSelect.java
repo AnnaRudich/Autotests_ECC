@@ -19,7 +19,7 @@ public class FtSelect extends FtOperation {
 
     @Override
     public boolean hasSameState(Document document) {
-        String text = document.select(setting.getLocator()).text();
+        String text = document.select(setting.getLocator()).select("option[selected]").text();
         logger.info("Setting: {} Current: {} Change to: {}", setting.name(), text, newOptionText);
 
         rollbackOperation = FTSettings.select(setting, text);

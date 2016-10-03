@@ -10,6 +10,9 @@
             <class name="com.scalepoint.automation.tests.sid.ReductionRulesDiscretionaryTypeSIDTests"/>
             <class name="com.scalepoint.automation.tests.sid.ReductionRulesInSettlementItemDialogTests"/>
             <class name="com.scalepoint.automation.tests.genericitems.GenericItemsTests"/>
+            <class name="com.scalepoint.automation.tests.FuncTemplatesTests"/>
+            <class name="com.scalepoint.automation.tests.LoginTests"/>
+            <class name="com.scalepoint.automation.tests.BasicTests"/>
             <!--<class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>-->
         </classes>
     </test>
