@@ -26,6 +26,9 @@ public class EditFunctionTemplatePage extends Page {
     @FindBy(xpath = "//button[(text() = 'show hidden')]")
     private Button showHidden;
 
+    @FindBy(xpath = "//input[@name='fttmplname']")
+    private WebElement name;
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/Admin/func_template_edit.jsp?ftrfnbr=";
@@ -38,9 +41,9 @@ public class EditFunctionTemplatePage extends Page {
         return this;
     }
 
-    public AdminPage saveTemplate() {
+    public FunctionalTemplatesPage saveTemplate() {
         saveValues.click();
-        return at(AdminPage.class);
+        return at(FunctionalTemplatesPage.class);
     }
 
     public List<FtOperation> findDifferences(FtOperation... operations) {
@@ -108,6 +111,12 @@ public class EditFunctionTemplatePage extends Page {
         textInput.clear();
         textInput.sendKeys(value);
         logger.info("Update value {} with {}", ftSetting.getDescription(), value);
+        return this;
+    }
+
+    public EditFunctionTemplatePage setName(String ftName) {
+        name.clear();
+        name.sendKeys(ftName);
         return this;
     }
 

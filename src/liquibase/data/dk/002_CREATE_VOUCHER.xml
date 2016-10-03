@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="ipo" runOnChange="true">
+
+        <comment>Create Vouchers</comment>
+
+        <sql>
+
+            /*
+            ---Category:---
+            22 - Babyudstyr
+            200018 - Hardware
+            */
+
+            /* 10socks.com.com supplier */
+            EXEC autotests_create_agreement 'SPVoucher24463', '17', '22', '10', '7'
+            /* ComputerCity */
+            EXEC autotests_create_agreement 'DNDVoucher1', '1663', '22', '10', '7'
+            /* Cool Shop */
+            EXEC autotests_create_agreement 'DNDVoucher2', '3921', '200018', '10', '7'
+            /* Webhallen */
+            EXEC autotests_create_agreement 'Voucher handling products', '24398', '200018', '6', '7'
+        </sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

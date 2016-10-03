@@ -165,8 +165,8 @@ public class DeprecationDeductedTests extends BaseTest {
         Double faceValue = settlementDialog.voucherFaceValueFieldText();
         Double cashValue = settlementDialog.voucherCashValueFieldText();
 
-        assertEquals(faceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new Price %s");
-        assertEquals(cashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
+        assertEqualsDouble(faceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new Price %s");
+        assertEqualsDouble(cashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
 
         settlementDialog.ok();
 

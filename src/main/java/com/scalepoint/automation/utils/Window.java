@@ -1,12 +1,13 @@
 package com.scalepoint.automation.utils;
 
+import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
 import java.util.Set;
 
-public class Window {
+public class Window implements Actions {
 
     private static ThreadLocal<WindowManager> holder = new ThreadLocal<>();
 
@@ -22,7 +23,7 @@ public class Window {
         holder.remove();
     }
 
-    public static class WindowManager {
+    public static class WindowManager implements Actions {
 
         private static Logger logger = Logger.getLogger(WindowManager.class);
 
@@ -48,15 +49,6 @@ public class Window {
                 switchToLast();
             }
             return true;
-        }
-
-        public static boolean isAlertPresent() {
-            try {
-                String text = Browser.driver().switchTo().alert().getText();
-                return StringUtils.isNotBlank(text);
-            } catch (NoAlertPresentException Ex) {
-                return false;
-            }
         }
 
         public void openDialogWithJavascriptHelper(WebElement openButton) {
@@ -96,11 +88,6 @@ public class Window {
                 driver.switchTo().window(winHandle);
             }
             logger.info("url after switch: " + driver.getCurrentUrl());
-        }
-
-        private String getAlertTextAndAccept() {
-            Alert alert = Browser.driver().switchTo().alert();
-            return alert.getText();
         }
 
     }

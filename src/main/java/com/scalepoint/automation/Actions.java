@@ -4,6 +4,7 @@ import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.driver.Browser;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.internal.Locatable;
@@ -36,6 +37,19 @@ public interface Actions {
 
     default void acceptAlert() {
         Window.get().acceptAlert();
+    }
+
+    default boolean isAlertPresent() {
+        try {
+            String text = Browser.driver().switchTo().alert().getText();
+            return StringUtils.isNotBlank(text);
+        } catch (NoAlertPresentException Ex) {
+            return false;
+        }
+    }
+
+    default String getAlertTextAndAccept() {
+        return Browser.driver().switchTo().alert().getText();
     }
 
     default void pressKeys(Keys... keys) {

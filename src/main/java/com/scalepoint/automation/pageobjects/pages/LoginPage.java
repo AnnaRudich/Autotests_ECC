@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.exceptions.LoginInvalidException;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -49,7 +50,21 @@ public class LoginPage extends Page {
         password.sendKeys(user.getPassword());
         loginButton.click();
 
+        boolean loginError = isLoginErrorPresent();
+        if (loginError) {
+            throw new LoginInvalidException();
+        }
+
         Wait.waitForElement(By.id("signOutButton"));
         return at(SettlementPage.class);
+    }
+
+    private boolean isLoginErrorPresent() {
+        try {
+            driver.findElement(By.id("loginError"));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

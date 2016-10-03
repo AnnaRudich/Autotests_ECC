@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="ipo" runOnChange="true">
+
+        <comment>Create ICs/Users</comment>
+
+        <sql>
+            declare @adminUserRights int = 14 -- admin/claims handler/supply manager
+            declare @chUserRights int = 10 -- claims handler/supply manager
+            declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
+
+            --
+            update [User] set UserName = concat(UserName,'-old-',UserID) where Email = 'ecc_auto@scalepoint.com' and UserName like 'autotest-%'
+
+            --
+            EXEC autotests_create_user 'autotest-system-scalepoint', @scalepointCompany, @adminUserRights
+            EXEC autotests_create_user 'autotest-user-sp',           @scalepointCompany, @adminUserRights
+
+            -- there are no companies/fts in the range 50-60 across all the countries, so lets grab those ids
+            declare @companyId int = 51
+            EXEC autotests_create_ic @companyId, 'Future-1'
+            EXEC autotests_create_user 'autotest-user-future1', @companyId, @adminUserRights
+
+            SET @companyId = 52
+            EXEC autotests_create_ic @companyId, 'Future-2'
+            EXEC autotests_create_user 'autotest-user-future2', @companyId, @adminUserRights
+
+            SET @companyId = 53
+            EXEC autotests_create_ic @companyId, 'Future-3'
+            EXEC autotests_create_user 'autotest-user-future3', @companyId, @adminUserRights
+
+            SET @companyId = 54
+            EXEC autotests_create_ic @companyId, 'Future-4'
+            EXEC autotests_create_user 'autotest-user-future4', @companyId, @adminUserRights
+
+            SET @companyId = 55
+            EXEC autotests_create_ic @companyId, 'Future-5'
+            EXEC autotests_create_user 'autotest-user-future5', @companyId, @adminUserRights
+
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
+            EXEC autotests_create_user 'autotest-user-lb', @lb_id, @chUserRights
+
+            declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'BAUTA')
+            EXEC autotests_create_user 'autotest-user-bauta', @bauta_id, @chUserRights
+
+            declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
+            EXEC autotests_create_user 'autotest-user-trygfors', @tryg_id, @chUserRights
+
+            declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'ALKA')
+            EXEC autotests_create_user 'autotest-user-alka', @alka_id, @chUserRights
+        </sql>
+
+        <sql>
+            -- switch off password validation
+            UPDATE [FUNCTEMPLATE] SET [ftUserPasswordValidationStrategy] = 0
+        </sql>
+
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

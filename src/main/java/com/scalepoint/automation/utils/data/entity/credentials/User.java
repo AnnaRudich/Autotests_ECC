@@ -50,6 +50,14 @@ public class User {
     @XmlAttribute(name = "system")
     protected boolean system;
 
+    public User() {
+    }
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
     /**
      * Gets the value of the login property.
      * 
