@@ -11,6 +11,7 @@ public class Configuration {
     public static final String KEY_ECC_ADMIN_CONTEXT = "eccAdminContext";
 
     private static final String SLASH = "/";
+    private static final String HTTP = "http://";
 
     private static Locale locale;
     private static String serverUrl;
@@ -25,13 +26,15 @@ public class Configuration {
         Assert.notNull(eccContext, errorMessage(KEY_ECC_CONTEXT));
         Assert.notNull(eccAdminContext, errorMessage(KEY_ECC_ADMIN_CONTEXT));
 
+        String httpServerUrl = HTTP +serverUrl;
+
         Configuration.locale = Locale.get(locale);
-        Configuration.serverUrl = serverUrl;
+        Configuration.serverUrl =  httpServerUrl;
         Configuration.eccContext = eccContext;
         Configuration.eccAdminContext = eccAdminContext;
 
-        Configuration.eccBaseUrl = serverUrl + SLASH + eccContext + SLASH + locale + SLASH;
-        Configuration.eccAdminBaseUrl = serverUrl + SLASH + eccAdminContext + SLASH + locale + SLASH;
+        Configuration.eccBaseUrl = httpServerUrl + SLASH + eccContext + SLASH + locale + SLASH;
+        Configuration.eccAdminBaseUrl = httpServerUrl + SLASH + eccAdminContext + SLASH + locale + SLASH;
     }
 
     private static String errorMessage(String parameter) {
