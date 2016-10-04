@@ -366,7 +366,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private String getValuationColumnValue(Valuation valuation, int column) {
-        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column + "]")).getText();
+            return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column + "]")).getText();
     }
 
     public boolean isIncludeInClaimSet() {

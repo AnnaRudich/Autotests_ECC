@@ -162,7 +162,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
+    public void     ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.
                 addManually().

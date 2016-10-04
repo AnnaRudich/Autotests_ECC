@@ -13,8 +13,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -36,7 +34,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat1_Born());
 
         assertFalse(textSearchPage.isMarketPriceVisible(), "Market Price is Visible");
@@ -63,7 +61,7 @@ public class ShowMarketPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_2_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat1_Born());
 
         assertFalse(textSearchPage.isMarketPriceVisible(), "Market Price is Visible");
@@ -92,7 +90,7 @@ public class ShowMarketPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults().
                 matchFirst().
@@ -115,7 +113,7 @@ public class ShowMarketPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_4_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults();
         assertFalse(textSearchPage.isMarketPriceVisible(), "Market Price is not visible");
@@ -142,7 +140,7 @@ public class ShowMarketPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_6_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults().sortMarketPrices();
         assertTrue(textSearchPage.isSortingMarketPriceAscendant(), "Ascendant sorting of Market Price does not work");
@@ -169,7 +167,7 @@ public class ShowMarketPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_7_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults().
                 matchFirst().
@@ -192,7 +190,7 @@ public class ShowMarketPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_8_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         ProductDetailsPage productDetailsPage = loginAndCreateClaim(user, claim).
-                findInCatalogue().
+                toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortSearchResults().
                 productDetails();

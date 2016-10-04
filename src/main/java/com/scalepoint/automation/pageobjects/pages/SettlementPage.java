@@ -103,13 +103,13 @@ public class SettlementPage extends BaseClaimPage {
         return bottomMenu;
     }
 
-    public TextSearchPage findInCatalogue() {
+    public TextSearchPage toTextSearchPage() {
         functionalMenu.findInCatalogue();
         return Page.at(TextSearchPage.class);
     }
 
-    public TextSearchPage findInCatalogue(String text) {
-        return findInCatalogue().searchByProductName(text);
+    public TextSearchPage toTextSearchPage(String text) {
+        return toTextSearchPage().searchByProductName(text);
     }
 
     public SettlementDialog addManually() {
