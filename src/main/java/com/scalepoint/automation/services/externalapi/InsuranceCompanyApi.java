@@ -15,7 +15,7 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.Http.ensure302Code;
 import static com.scalepoint.automation.utils.Http.post;
 
-public class InsuranceCompanyApi extends ServerApi {
+public class InsuranceCompanyApi extends EccServerApi {
 
     public static String URL_CREATE_IC = getEccUrl() + "SaveInsuranceCompany";
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.post;
 
-public class SupplierApi extends ServerApi {
+public class SupplierApi extends EccServerApi {
 
     public static final String SUPPLIER_LIST = Configuration.getEccAdminUrl() + "supplier/list.json";
 

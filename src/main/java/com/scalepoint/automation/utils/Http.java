@@ -1,10 +1,13 @@
 package com.scalepoint.automation.utils;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 
@@ -19,6 +22,17 @@ public class Http {
 
     public static int CONNECTION_TIMEOUT = 90000;
     public static int SOCKET_TIMEOUT = 90000;
+
+    public static Response get(String url) throws IOException {
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        Executor executor = Executor.newInstance(httpClient);
+        logger.info("Get to: " + url);
+        return executor.execute(
+                Request.Get(url)
+                        .useExpectContinue()
+                        .connectTimeout(CONNECTION_TIMEOUT)
+                        .socketTimeout(SOCKET_TIMEOUT));
+    }
 
     public static Response get(String url, Executor executor) throws IOException {
         logger.info("Get to: " + url);

@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.*;
 
-public class PseudoCategoryApi extends ServerApi {
+public class PseudoCategoryApi extends EccServerApi {
 
     private static final String URL_ASSIGN_CATEGORY = Configuration.getEccAdminUrl() + "category/allCategories.json?voucherId=";
     private static final String URL_ALL_CATEGORIES = Configuration.getEccAdminUrl() + "category/allCategories.json?voucherId=";

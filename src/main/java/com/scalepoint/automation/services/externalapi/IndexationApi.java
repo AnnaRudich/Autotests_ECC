@@ -10,7 +10,7 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.Http.ensure302Code;
 import static com.scalepoint.automation.utils.Http.post;
 
-public class IndexationApi extends ServerApi {
+public class IndexationApi extends EccServerApi {
 
     public static String URL_REINDEX_CLAIMS = getEccUrl() + "ClaimReindex";
 

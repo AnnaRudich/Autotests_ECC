@@ -131,7 +131,7 @@ public class BasicTests extends BaseTest {
                 selectClaimItemByDescription(claimLineDescription).
                 getToolBarMenu().
                 toProductMatchPage().
-                sortSearchResults().
+                sortOrderableFirst().
                 match(claimLineDescription).
                 cancel();
     }

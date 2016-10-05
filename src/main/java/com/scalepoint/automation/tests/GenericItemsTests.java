@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.genericitems;
+package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.GenericItemsAdminPage;

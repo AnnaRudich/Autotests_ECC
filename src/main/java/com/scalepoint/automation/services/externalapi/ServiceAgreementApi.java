@@ -17,7 +17,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Http.get;
 import static com.scalepoint.automation.utils.Http.post;
 
-public class ServiceAgreementApi extends ServerApi {
+public class ServiceAgreementApi extends EccServerApi {
 
     public static final String URL_LIST = Configuration.getEccAdminUrl() + "serviceAgreement/list.json?page=1&start=0&limit=25&sort=name&direction=ASC&supplierId=";
     public static final String URL_BY_COMPANY = Configuration.getEccAdminUrl() + "serviceAgreement/templatesForCompany.json?page=1&start=0&limit=25";

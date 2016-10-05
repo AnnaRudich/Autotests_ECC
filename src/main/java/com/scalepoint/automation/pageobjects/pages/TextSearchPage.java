@@ -1,17 +1,16 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -34,7 +33,7 @@ public class TextSearchPage extends Page {
     private ExtComboBox brandSelection;
 
     @FindBy(xpath = "(//div[@id='productsTable']//a[@class='darkBlueUL'])[last()]")
-    private Button selectOption;
+    private Link sortByOrderable;
 
     @FindBy(css = ".matchbutton")
     private Button match;
@@ -54,8 +53,8 @@ public class TextSearchPage extends Page {
     @FindBy(css = "#categoryFieldSet table:first-child")
     private Table firstCategoriesList;
 
-    @FindBy(xpath = "(//img[@id='sortMarketPriceImg']/parent::td/a[@class='darkBlueUL'])")
-    private Link sortMarketPrice;
+    @FindBy(xpath = "//a[contains(@onclick,'market_price')]")
+    private Link sortByMarketPrice;
 
     @FindBy(id = "textSearchInput")
     private ExtInput searchInput;
@@ -63,14 +62,15 @@ public class TextSearchPage extends Page {
     @FindBy(id = "searchButton")
     private Button search;
 
-    @FindBy(xpath = "//a[contains(@onclick,'market_price')]")
-    private Link showMarketPrice;
-
     @FindBy(xpath = "//img[@id='sortMarketPriceImg' and contains(@src,'text_search\\icon_order_az.gif')]")
     private Image ascendantMarketPrice;
-
     @FindBy(xpath = "//img[@id='sortMarketPriceImg' and contains(@src,'text_search\\icon_order_za.gif')]")
     private Image descendantMarketPrice;
+
+    @FindBy(xpath = "//img[@id='sortOrderableImg' and contains(@src,'text_search\\icon_order_za.gif')]")
+    private Image descendingOrderable;
+    @FindBy(xpath = "//img[@id='sortOrderableImg' and contains(@src,'text_search\\icon_order_az.gif')]")
+    private Image ascendingOrderable;
 
     @Override
     protected String getRelativeUrl() {
@@ -91,17 +91,35 @@ public class TextSearchPage extends Page {
         return this;
     }
 
-    public TextSearchPage sortSearchResults() {
-        selectOption.click();
-        Wait.waitForAjaxComplete();
+    public TextSearchPage sortOrderableFirst() {
+        return sort(sortByOrderable, ascendingOrderable);
+    }
+
+    public TextSearchPage sortOrderableLast() {
+        return sort(sortByOrderable, descendingOrderable);
+    }
+
+    private TextSearchPage sort(Link sortLink, Image sortIconToWait) {
+        int totalAttempts = 2;
+        int currentAttempt = 0;
+        while (currentAttempt < totalAttempts) {
+            sortLink.click();
+            Wait.waitForAjaxComplete();
+            Boolean isDisplayed = Wait.For(webDriver -> sortIconToWait.isDisplayed());
+            if (isDisplayed) {
+                break;
+            }
+            currentAttempt++;
+        }
         return this;
     }
 
-    public TextSearchPage sortMarketPrices(){
-        showMarketPrice.click();
-        Wait.waitForAjaxComplete();
-        Wait.waitForStableElement(By.id("sortMarketPriceImg"));
-        return this;
+    public TextSearchPage sortMarketPricesAscending(){
+        return sort(sortByMarketPrice, ascendantMarketPrice);
+    }
+
+    public TextSearchPage sortMarketPricesDescending(){
+        return sort(sortByMarketPrice, descendantMarketPrice);
     }
 
     public boolean isMarketPriceSupplierPresent(String _supplier){
@@ -123,7 +141,7 @@ public class TextSearchPage extends Page {
         return descendantMarketPrice.isDisplayed();
     }
 
-    public BestFitPage bestFit(){
+    public BestFitPage toBestFitPage(){
         Wait.waitForPageLoaded();
         bestFit.click();
         return at(BestFitPage.class);
@@ -161,7 +179,7 @@ public class TextSearchPage extends Page {
     }
 
     public boolean isMarketPriceVisible(){
-        return sortMarketPrice.exists();
+        return sortByMarketPrice.exists();
     }
 
     public TextSearchPage searchByProductName(String productName){

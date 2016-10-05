@@ -8,7 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
-import com.scalepoint.automation.services.externalapi.ServerApi;
+import com.scalepoint.automation.services.externalapi.EccServerApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -36,7 +36,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -127,7 +126,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     protected MyPage login(User user) {
-        return ServerApi.createServerApi().login(user, MyPage.class);
+        return EccServerApi.createServerApi().login(user, MyPage.class);
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {

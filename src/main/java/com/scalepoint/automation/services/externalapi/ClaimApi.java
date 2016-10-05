@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.utils.Http.*;
 
-public class ClaimApi extends ServerApi {
+public class ClaimApi extends EccServerApi {
 
     private static String DATE_FORMAT = "yyyy-MM-dd";
 

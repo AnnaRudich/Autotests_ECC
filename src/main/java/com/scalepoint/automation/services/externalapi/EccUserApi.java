@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.*;
 
-public class EccUserApi extends ServerApi {
+public class EccUserApi extends EccServerApi {
 
     public static final String URL_USER_ADD_PAGE = Configuration.getEccUrl() + "webshop/jsp/toAdminPage/user_edit.jsp?shrfnbr=-1&url=/webshop/jsp/toAdminPage/users.jsp";
     public static final String URL_CREATE_USER = Configuration.getEccUrl() + "SaveUser";

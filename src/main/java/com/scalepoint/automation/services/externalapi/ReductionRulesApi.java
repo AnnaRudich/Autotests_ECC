@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.*;
 
-public class ReductionRulesApi extends ServerApi {
+public class ReductionRulesApi extends EccServerApi {
 
     public static final String URL_CREATE_UPDATE_RR = Configuration.getEccUrl() + "webshop/jsp/toAdminPage/AddEditReductionRule";
     public static final String URL_ASSIGN_RR_TO_IC_PAGE = Configuration.getEccUrl() + "webshop/jsp/toAdminPage/reduction_rule_assignment_edit.jsp";

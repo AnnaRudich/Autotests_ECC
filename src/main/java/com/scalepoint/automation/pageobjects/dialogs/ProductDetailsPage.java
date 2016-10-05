@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -14,7 +15,7 @@ public class ProductDetailsPage extends Page {
     @FindBy(id = "luk")
     private Button closeWindow;
 
-    @FindBy(id = "")
+    @FindBy(id = "market_price")
     private TextBlock marketPriceValue;
 
     @FindBy(id = "market_price_supplier")
@@ -32,8 +33,9 @@ public class ProductDetailsPage extends Page {
         return "webshop/jsp/matching_engine/product_details_popup.jsp";
     }
 
-    public void closeWindow(){
+    public TextSearchPage closeWindow(){
         closeDialog(closeWindow);
+        return at(TextSearchPage.class);
     }
 
     public boolean isMarketPriceSupplierVisible(){

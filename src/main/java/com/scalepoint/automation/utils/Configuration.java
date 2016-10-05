@@ -3,6 +3,9 @@ package com.scalepoint.automation.utils;
 import com.scalepoint.automation.domain.Locale;
 import org.springframework.util.Assert;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 public class Configuration {
 
     public static final String KEY_LOCALE = "locale";
@@ -12,6 +15,7 @@ public class Configuration {
 
     private static final String SLASH = "/";
     private static final String HTTP = "http://";
+    public static final String SOLR_PRODUCTS = "solr_products";
 
     private static Locale locale;
     private static String serverUrl;
@@ -19,6 +23,8 @@ public class Configuration {
     private static String eccAdminContext;
     private static String eccBaseUrl;
     private static String eccAdminBaseUrl;
+
+    private static Properties props = new Properties();
 
     public static void init(String locale, String serverUrl, String eccContext, String eccAdminContext) {
         Assert.notNull(locale, errorMessage(KEY_LOCALE));
@@ -35,6 +41,18 @@ public class Configuration {
 
         Configuration.eccBaseUrl = httpServerUrl + SLASH + eccContext + SLASH + locale + SLASH;
         Configuration.eccAdminBaseUrl = httpServerUrl + SLASH + eccAdminContext + SLASH + locale + SLASH;
+
+
+    }
+
+    private static void loadProperties(String serverUrl) {
+        String file = "props/" + serverUrl + ".properties";
+        InputStream resourceAsStream = Configuration.class.getClassLoader().getResourceAsStream(file);
+        try {
+            props.load(resourceAsStream);
+        } catch (Exception e) {
+            throw new RuntimeException("Can't load f");
+        }
     }
 
     private static String errorMessage(String parameter) {
@@ -67,6 +85,10 @@ public class Configuration {
 
     public static boolean isDK() {
         return locale.equals(Locale.DK);
+    }
+
+    public static String getSolrProductsUrl() {
+        return props.getProperty(SOLR_PRODUCTS);
     }
 }
 

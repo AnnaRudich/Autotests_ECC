@@ -2,7 +2,6 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -11,7 +10,6 @@ import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.openqa.selenium.By;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,7 +17,7 @@ import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.post;
 
-public class FunctionalTemplatesApi extends ServerApi {
+public class FunctionalTemplatesApi extends EccServerApi {
 
     private List<FtOperation> operationsToRollback;
 
