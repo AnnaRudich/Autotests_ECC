@@ -126,6 +126,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     protected MyPage login(User user) {
+        Page.to(LoginPage.class);
         return EccServerApi.createServerApi().login(user, MyPage.class);
     }
 
