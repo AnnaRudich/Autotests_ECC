@@ -1,10 +1,12 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.exceptions.LoginInvalidException;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -61,7 +63,14 @@ public class LoginPage extends Page {
 
     private boolean isLoginErrorPresent() {
         try {
-            driver.findElement(By.id("loginError"));
+            Wait.For((Function<WebDriver, Object>) webDriver -> {
+                try {
+                    driver.findElement(By.id("loginError"));
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            });
             return true;
         } catch (Exception e) {
             return false;
