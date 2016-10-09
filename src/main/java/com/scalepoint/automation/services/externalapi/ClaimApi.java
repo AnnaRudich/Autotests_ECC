@@ -23,6 +23,7 @@ import static com.scalepoint.automation.utils.Http.*;
 
 public class ClaimApi extends EccServerApi {
 
+    private static final int ATTEMPTS_LIMIT = 1;
     private static String DATE_FORMAT = "yyyy-MM-dd";
 
     public static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
@@ -37,6 +38,9 @@ public class ClaimApi extends EccServerApi {
     }
 
     public void createClaim(Claim claim) {
+        createClaim(claim, 0);
+    }
+    private void createClaim(Claim claim, int attempt) {
         log.info("Create client: " + claim.getClaimNumber());
 
         List<NameValuePair> clientParams = ParamsBuilder.create().
@@ -76,7 +80,11 @@ public class ClaimApi extends EccServerApi {
             }
         } catch (IOException e) {
             log.error("Can't create claim", e);
-            throw new ServerApiException(e);
+            if (e.getMessage().contains("Internal Server Error") && attempt < ATTEMPTS_LIMIT) {
+                createClaim(claim, ++attempt);
+            } else {
+                throw new ServerApiException(e);
+            }
         }
     }
 

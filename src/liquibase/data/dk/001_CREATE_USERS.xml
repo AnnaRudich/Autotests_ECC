@@ -58,6 +58,9 @@
         <sql>
             -- switch off password validation
             UPDATE [FUNCTEMPLATE] SET [ftUserPasswordValidationStrategy] = 0
+
+            -- enable new settlement item dialog
+            UPDATE [FUNCTEMPLATE] SET [ftEnableNewSettlementItemDialog] = 1
         </sql>
 
         <rollback/>

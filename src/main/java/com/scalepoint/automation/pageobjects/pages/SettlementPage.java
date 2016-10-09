@@ -115,6 +115,7 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementDialog addManually() {
         functionalMenu.addManually();
         Wait.waitForAjaxComplete();
+        SettlementDialog dialog = BaseDialog.at(SettlementDialog.class);
         String js =
                 "var callback = arguments[arguments.length - 1];" +
                         "function groupsLoaded() {" +
@@ -127,7 +128,7 @@ public class SettlementPage extends BaseClaimPage {
                         "}" +
                         "groupsLoaded();";
         ((JavascriptExecutor) driver).executeAsyncScript(js);
-        return BaseDialog.at(SettlementDialog.class);
+        return dialog;
     }
 
     public String fetchPriceByPoint(String point) {
