@@ -44,7 +44,7 @@ public class ShowMarketPricesTests extends BaseTest {
         try {
             assertFalse(productDetailsPage.isMarketPriceVisible(), "Market price is visible");
             assertFalse(productDetailsPage.isMarketPriceSupplierVisible(), "Supplier is visible");
-        } catch (Exception e) {
+        } catch (Throwable e) {
             takeScreenshot("charlie_588_1_showMarketPriceDisabled_help1");
             productDetailsPage.closeWindow();
             takeScreenshot("charlie_588_1_showMarketPriceDisabled_help12");
