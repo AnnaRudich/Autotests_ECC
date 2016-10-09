@@ -24,7 +24,10 @@ import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.MDC;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +43,8 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -53,7 +58,7 @@ import static org.testng.Assert.assertEquals;
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
-@Listeners({ InvokedMethodListener.class})
+@Listeners({InvokedMethodListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -78,7 +83,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         JavascriptHelper.initializeCommonFunctions(driver);
         driver.manage().window().maximize();
-        logger.info("MainHandle "+Browser.driver().getWindowHandle());
+        logger.info("MainHandle " + Browser.driver().getWindowHandle());
     }
 
     @AfterMethod
@@ -185,7 +190,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         static void cleanUp() {
-            if (get()!=null) {
+            if (get() != null) {
                 UsersManager.returnUser(get());
             }
             holder.remove();
@@ -196,6 +201,17 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         String actual = toString(actualAmount);
         String expected = toString(expectedAmount);
         assertEquals(actual, expected, String.format(message, actualAmount, expectedAmount));
+    }
+
+    protected void takeScreenshot(String name) {
+        try {
+            File screenshotAs = ((TakesScreenshot) Browser.driver()).getScreenshotAs(OutputType.FILE);
+            File destFolder = new File("c:\\tmp");
+            destFolder.mkdirs();
+            FileUtils.copyFile(screenshotAs, new File(destFolder, name + ".jpg"));
+        } catch (IOException e) {
+            logger.error("Can't take screenshot: " + e.getMessage());
+        }
     }
 
     protected String toString(Double actualAmount) {
