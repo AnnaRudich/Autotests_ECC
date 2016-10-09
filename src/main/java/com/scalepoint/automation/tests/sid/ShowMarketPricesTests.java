@@ -41,15 +41,8 @@ public class ShowMarketPricesTests extends BaseTest {
         ProductDetailsPage productDetailsPage = textSearchPage.
                 sortOrderableFirst().
                 productDetails();
-        try {
             assertFalse(productDetailsPage.isMarketPriceVisible(), "Market price is visible");
             assertFalse(productDetailsPage.isMarketPriceSupplierVisible(), "Supplier is visible");
-        } catch (Throwable e) {
-            takeScreenshot("charlie_588_1_showMarketPriceDisabled_help1");
-            productDetailsPage.closeWindow();
-            takeScreenshot("charlie_588_1_showMarketPriceDisabled_help12");
-            throw e;
-        }
 
         BestFitPage bestFitPage = productDetailsPage.
                 closeWindow().
