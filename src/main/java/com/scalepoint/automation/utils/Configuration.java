@@ -42,7 +42,7 @@ public class Configuration {
         Configuration.eccBaseUrl = httpServerUrl + SLASH + eccContext + SLASH + locale + SLASH;
         Configuration.eccAdminBaseUrl = httpServerUrl + SLASH + eccAdminContext + SLASH + locale + SLASH;
 
-
+        loadProperties(serverUrl);
     }
 
     private static void loadProperties(String serverUrl) {
