@@ -132,6 +132,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "marketprice-card-supplier-inputEl")
     private TextBlock marketPriceSupplier;
 
+    @FindBy(id = "productmatch-card-supplier")
+    private TextBlock statusSupplier;
+
     private String enteredDescription;
 
     @Override
@@ -585,5 +588,13 @@ public class SettlementDialog extends BaseDialog {
         Valuation(String className) {
             this.className = className;
         }
+    }
+
+    public boolean isScalepointSupplierNotVisible(){
+        return (!statusSupplier.exists());
+    }
+
+    public boolean isScalepointSupplierVisible(String _supplier){
+        return statusSupplier.getText().contains(_supplier);
     }
 }

@@ -23,6 +23,7 @@ public enum FTSetting {
     SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG("input[name=ftfunctionflag2][value=128]", CHECKBOX),
     SHOW_POLICY_TYPE("input[name=ftfunctionflag][value=64]", CHECKBOX),
     SHOW_MARKET_PRICE("input[name=ftfunctionflag5][value=128]", CHECKBOX),
+    SHOW_SCALEPOINT_SUPPLIER("input[name=ftfunctionflag5][value=1024]", CHECKBOX),
     ENABLE_NEW_SETTLEMENT_ITEM_DIALOG("input[name=ftEnableNewSettlementItemDialog]", CHECKBOX),
     USE_UCOMMERCE_SHOP("input[name=ftfunctionflag5][value=16777216]", CHECKBOX),
 
