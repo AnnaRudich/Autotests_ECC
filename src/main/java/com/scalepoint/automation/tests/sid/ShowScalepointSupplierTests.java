@@ -40,8 +40,9 @@ public class ShowScalepointSupplierTests extends BaseTest {
                 toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortOrderableFirst();
-
-        ProductInfo product = SolrApi.findProduct("3875621");
+        String productId = textSearchPage.
+                getProductId();
+        ProductInfo product = SolrApi.findProduct(productId);
         System.out.println(product.getSupplierName());
         SettlementDialog settlementDialog = textSearchPage.
                 matchFirst();
@@ -63,8 +64,9 @@ public class ShowScalepointSupplierTests extends BaseTest {
                 toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortOrderableFirst();
-
-        ProductInfo product = SolrApi.findProduct("3875621");
+        String productId = textSearchPage.
+                getProductId();
+        ProductInfo product = SolrApi.findProduct(productId);
         System.out.println(product.getSupplierName());
         SettlementDialog settlementDialog = textSearchPage.
                 matchFirst();
