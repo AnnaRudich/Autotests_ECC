@@ -104,6 +104,10 @@ public interface Actions {
         element.sendKeys(keys);
     }
 
+    default void sendKeys(By byElement, String keys) {
+        find(byElement).sendKeys(keys);
+    }
+
     default String getText(By byElement) {
         return find(byElement).getText();
     }
@@ -116,6 +120,11 @@ public interface Actions {
         element.click();
         Wait.waitForElementDisplaying(byWaitForElement);
     }
+
+    default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
+        clickAndWaitForDisplaying(find(byElement), byWaitForElement);
+    }
+
 
     default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
         element.click();

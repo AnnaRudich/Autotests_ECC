@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils;
 
+import com.codeborne.selenide.Selenide;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
@@ -58,8 +59,7 @@ public class Window implements Actions {
 
         public void acceptAlert() {
             try {
-                Alert alert = driver.switchTo().alert();
-                alert.accept();
+                Selenide.confirm();
                 Wait.waitForModalWindowDisappear();
             } catch (Exception ignored) {
             }

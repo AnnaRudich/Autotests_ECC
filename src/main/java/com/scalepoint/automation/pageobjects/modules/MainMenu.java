@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.scalepoint.automation.pageobjects.pages.AdminPage;
+import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;

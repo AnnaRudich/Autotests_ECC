@@ -15,6 +15,7 @@
             <class name="com.scalepoint.automation.tests.BasicTests"/>
             <class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>
             <class name="com.scalepoint.automation.tests.sid.ShowScalepointSupplierTests"/>
+            <class name="com.scalepoint.automation.tests.sid.ReductionRulesTest"/>
         </classes>
     </test>
 </suite>

@@ -1,10 +1,9 @@
 package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
-import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
+import com.scalepoint.automation.pageobjects.pages.admin.EditFunctionTemplatePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import org.jsoup.nodes.Document;
-import org.openqa.selenium.WebElement;
 
 public class FtSelect extends FtOperation {
 

@@ -15,8 +15,6 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
@@ -37,7 +35,6 @@ public class BasicTests extends BaseTest {
             description = "ECC-3032, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void ecc3032_2629_completeClaimWithMail(User user, Claim claim) {
-
         loginAndCreateClaim(user, claim).
                 toCompleteClaimPage().
                 fillClaimForm(claim).

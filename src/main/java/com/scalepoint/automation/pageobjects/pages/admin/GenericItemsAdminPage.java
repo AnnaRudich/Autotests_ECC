@@ -1,5 +1,6 @@
-package com.scalepoint.automation.pageobjects.pages;
+package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.GenericItem;

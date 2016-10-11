@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
+import com.scalepoint.automation.pageobjects.pages.admin.EditFunctionTemplatePage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;

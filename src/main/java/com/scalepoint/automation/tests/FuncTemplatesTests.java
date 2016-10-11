@@ -1,7 +1,7 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.pages.FunctionalTemplatesPage;
+import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

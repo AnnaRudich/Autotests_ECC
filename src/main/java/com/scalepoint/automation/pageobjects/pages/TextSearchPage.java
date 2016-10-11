@@ -20,6 +20,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForElement;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
@@ -200,17 +201,10 @@ public class TextSearchPage extends Page {
         return this;
     }
 
-    public String getProductId() {
+    public String getFirstProductId() {
         Wait.waitForAjaxComplete();
         Wait.waitForElement(By.cssSelector("#productsTable table td"));
-        List<WebElement> productId = driver.findElements(By.xpath(".//*[@id='productsTable']//../..//button[@class='matchbutton']"));
-        if (productId == null || productId.isEmpty()) {
-            throw new IllegalStateException("No text search results found!");
-        }
-
-        WebElement matchButton = productId.get(0);
-        String prodId = matchButton.getAttribute("id").replaceAll("btnSelect", "");
-        return prodId;
+        return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
     }
 }
 

@@ -1,5 +1,7 @@
-package com.scalepoint.automation.pageobjects.pages;
+package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.admin.EditPseudoCategoryGroupPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;

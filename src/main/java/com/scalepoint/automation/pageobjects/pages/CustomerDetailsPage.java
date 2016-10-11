@@ -2,13 +2,13 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
@@ -77,9 +77,9 @@ public class CustomerDetailsPage extends BaseClaimPage {
      * The method selects reopen Claim option and waits for settlement page is displayed
      */
     public SettlementPage reopenClaim() {
-        boolean opened = openDialog(driver.findElement(By.id("genoptag")));
+        boolean opened = openDialog($(By.id("genoptag")));
         if (opened) {
-            closeDialog(driver.findElement(By.id("btn_reopen")));
+            closeDialog($(By.id("btn_reopen")));
         }
         return at(SettlementPage.class);
     }

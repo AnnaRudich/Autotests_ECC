@@ -1,5 +1,6 @@
 package com.scalepoint.automation;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.dialogs.EditPolicyDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
@@ -26,6 +27,7 @@ import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.MDC;
+import org.openqa.jetty.jetty.servlet.WebApplicationContext;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -80,6 +82,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         Browser.init(driver);
         Window.init(driver);
+        WebDriverRunner.setWebDriver(driver);
 
         JavascriptHelper.initializeCommonFunctions(driver);
         driver.manage().window().maximize();
@@ -89,8 +92,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @AfterMethod
     public void cleanup(Method method, ITestResult iTestResult) {
         logger.info("Clean up after: {}", method.toString());
-
         Browser.quit();
+        WebDriverRunner.closeWebDriver();
         Window.cleanUp();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
@@ -133,6 +136,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected MyPage login(User user) {
         Page.to(LoginPage.class);
         return EccServerApi.createServerApi().login(user, MyPage.class);
+    }
+
+    protected <T extends Page> T login(User user, Class<T> returnPageClass) {
+        Page.to(LoginPage.class);
+        return EccServerApi.createServerApi().login(user, returnPageClass);
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
@@ -201,17 +209,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         String actual = toString(actualAmount);
         String expected = toString(expectedAmount);
         assertEquals(actual, expected, String.format(message, actualAmount, expectedAmount));
-    }
-
-    protected void takeScreenshot(String name) {
-        try {
-            File screenshotAs = ((TakesScreenshot) Browser.driver()).getScreenshotAs(OutputType.FILE);
-            File destFolder = new File("c:\\tmp");
-            destFolder.mkdirs();
-            FileUtils.copyFile(screenshotAs, new File(destFolder, name + ".jpg"));
-        } catch (IOException e) {
-            logger.error("Can't take screenshot: " + e.getMessage());
-        }
     }
 
     protected String toString(Double actualAmount) {

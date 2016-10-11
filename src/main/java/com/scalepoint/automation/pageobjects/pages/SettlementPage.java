@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Selenide;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
@@ -149,9 +150,9 @@ public class SettlementPage extends BaseClaimPage {
     public CompleteClaimPage toCompleteClaimPage() {
         bottomMenu.completeClaim();
         try {
-            driver.switchTo().alert().accept();
-        } catch (NoAlertPresentException e) {
-
+            Selenide.confirm();
+        } catch (NoAlertPresentException ignored) {
+            logger.info("No alert is present");
         }
         return at(CompleteClaimPage.class);
     }

@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
+import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 
 public abstract class BaseClaimPage extends Page {
 

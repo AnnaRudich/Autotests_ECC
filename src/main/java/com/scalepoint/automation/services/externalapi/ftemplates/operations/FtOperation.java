@@ -1,9 +1,8 @@
 package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
-import com.scalepoint.automation.pageobjects.pages.EditFunctionTemplatePage;
+import com.scalepoint.automation.pageobjects.pages.admin.EditFunctionTemplatePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import org.jsoup.nodes.Document;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

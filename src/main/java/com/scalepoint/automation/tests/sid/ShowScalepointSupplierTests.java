@@ -13,8 +13,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
-import static org.testng.Assert.assertTrue;
 
+import static org.testng.Assert.assertTrue;
 
 
 /**
@@ -31,22 +31,18 @@ public class ShowScalepointSupplierTests extends BaseTest {
      * WHEN: CH add Product from the Catalog
      * THEN: Scalepoint Supplier name is not displayed in the SID
      */
-
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-589 FT 'Show Scalepoint Supplier' is OFF, Scalepoint Supplier name is not displayed in the SID")
     @RequiredSetting(type = FTSetting.SHOW_SCALEPOINT_SUPPLIER, enabled = false)
     public void charlie_589_1_showScalepointSupplierNameDisabled(User user, Claim claim, ClaimItem claimItem) throws Exception {
 
-        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
+        boolean visible = loginAndCreateClaim(user, claim).
                 toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
-                sortOrderableFirst();
-        String productId = textSearchPage.
-                getProductId();
-        ProductInfo product = SolrApi.findProduct(productId);
-        System.out.println(product.getSupplierName());
-        SettlementDialog settlementDialog = textSearchPage.
-                matchFirst();
-        assertTrue(settlementDialog.isScalepointSupplierNotVisible(),"Scalepoint supplier should be NOT visible");
+                sortOrderableFirst().
+                matchFirst().
+                isScalepointSupplierNotVisible();
+
+        assertTrue(visible, "Scalepoint supplier should be NOT visible");
     }
 
     /**
@@ -56,7 +52,6 @@ public class ShowScalepointSupplierTests extends BaseTest {
      * WHEN: CH add Product from the Catalog
      * THEN: Scalepoint Supplier name is displayed in the SID
      */
-
     @RequiredSetting(type = FTSetting.SHOW_SCALEPOINT_SUPPLIER)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-589 FT 'Show Scalepoint Supplier' is ON, Scalepoint Supplier name is displayed in the SID")
     public void charlie_589_2_showScalepointSupplierNameEnabled(User user, Claim claim, ClaimItem claimItem) throws Exception {
@@ -64,12 +59,10 @@ public class ShowScalepointSupplierTests extends BaseTest {
                 toTextSearchPage().
                 chooseCategory(claimItem.getExistingCat3_Telefoni()).
                 sortOrderableFirst();
-        String productId = textSearchPage.
-                getProductId();
-        ProductInfo product = SolrApi.findProduct(productId);
-        System.out.println(product.getSupplierName());
-        SettlementDialog settlementDialog = textSearchPage.
-                matchFirst();
-        assertTrue(settlementDialog.isScalepointSupplierVisible(product.getSupplierName()),"Scalepoint supplier should be visible");
+        ProductInfo product = SolrApi.findProduct(textSearchPage.getFirstProductId());
+        boolean visible = textSearchPage.
+                matchFirst().
+                isScalepointSupplierVisible(product.getSupplierName());
+        assertTrue(visible, "Scalepoint supplier should be visible");
     }
 }

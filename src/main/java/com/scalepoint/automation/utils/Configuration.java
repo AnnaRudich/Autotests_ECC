@@ -46,6 +46,9 @@ public class Configuration {
     }
 
     private static void loadProperties(String serverUrl) {
+        if (serverUrl.contains(":")) {
+            serverUrl = serverUrl.substring(0, serverUrl.indexOf(":"));
+        }
         String file = "props/" + serverUrl + ".properties";
         InputStream resourceAsStream = Configuration.class.getClassLoader().getResourceAsStream(file);
         try {

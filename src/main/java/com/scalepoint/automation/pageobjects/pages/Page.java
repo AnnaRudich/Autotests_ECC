@@ -12,8 +12,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
+
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.*;
+
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -41,6 +46,10 @@ public abstract class Page implements Actions {
     protected abstract String getRelativeUrl();
 
     protected void waitForUrl(String expectedUrl) {
+        waitForUrl(expectedUrl, null);
+    }
+
+    protected void waitForUrl(String expectedUrl, String alternativeUrl) {
         if (StringUtils.isBlank(expectedUrl)) {
             return;
         }
@@ -57,7 +66,8 @@ public abstract class Page implements Actions {
                 assert webDriver != null;
                 logger.info("Windows count: {}", webDriver.getWindowHandles().size());
                 switchToLast();
-                return currentUrl.contains(expectedUrl);
+
+                return currentUrl.contains(expectedUrl) || (alternativeUrl != null && currentUrl.contains(alternativeUrl));
             } catch (UnhandledAlertException e) {
                 closeAlert();
             }
@@ -70,25 +80,21 @@ public abstract class Page implements Actions {
     }
 
     public static <T extends Page> String getUrl(Class<T> pageClass) {
-        try {
-            String relativeUrl = PagesCache.get(pageClass).getRelativeUrl();
-            String baseUrl = null;
-            if (relativeUrl != null) {
-                for (Map.Entry<Class, String> entry : pageAnnotationToBaseUrl.entrySet()) {
-                    Annotation annotation = pageClass.getAnnotation(entry.getKey());
-                    if (annotation != null) {
-                        baseUrl = entry.getValue();
-                        break;
-                    }
+        String relativeUrl = PagesCache.get(pageClass).getRelativeUrl();
+        String baseUrl = null;
+        if (relativeUrl != null) {
+            for (Map.Entry<Class, String> entry : pageAnnotationToBaseUrl.entrySet()) {
+                Annotation annotation = pageClass.getAnnotation(entry.getKey());
+                if (annotation != null) {
+                    baseUrl = entry.getValue();
+                    break;
                 }
             }
-            if (baseUrl == null) {
-                throw new IllegalArgumentException("No page type annotation found for " + pageClass);
-            }
-            return baseUrl + relativeUrl;
-        } catch (Exception e) {
-            return "";
         }
+        if (baseUrl == null) {
+            throw new IllegalArgumentException("No page type annotation found for " + pageClass);
+        }
+        return baseUrl + relativeUrl;
     }
 
     public static <T extends Page> T to(Class<T> pageClass, String parameters) {
@@ -115,7 +121,7 @@ public abstract class Page implements Actions {
 
     @SuppressWarnings("unchecked")
     public static class PagesCache {
-        
+
         private static ThreadLocal<Map<Class<? extends Page>, Page>> holder = new ThreadLocal<>();
 
         public static <T extends Page> T get(Class<T> pageClass) {

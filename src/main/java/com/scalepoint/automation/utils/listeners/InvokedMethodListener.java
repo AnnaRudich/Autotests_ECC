@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.listeners;
 
+import com.codeborne.selenide.Selenide;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
@@ -76,14 +77,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
         if (iTestResult.getThrowable() != null) {
-            try {
-                File screenshotAs = ((TakesScreenshot) Browser.driver()).getScreenshotAs(OutputType.FILE);
-                File destFolder = new File("c:\\tmp");
-                destFolder.mkdirs();
-                FileUtils.copyFile(screenshotAs, new File(destFolder, method.getName()+".jpg"));
-            } catch (IOException e) {
-                logger.error("Can't take screenshot: "+e.getMessage());
-            }
+            Selenide.screenshot(method.getName());
         }
     }
 
