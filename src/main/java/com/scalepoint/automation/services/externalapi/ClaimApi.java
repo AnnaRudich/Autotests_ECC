@@ -80,7 +80,7 @@ public class ClaimApi extends EccServerApi {
             }
         } catch (IOException e) {
             log.error("Can't create claim", e);
-            if (e.getMessage().contains("Internal Server Error") && attempt < ATTEMPTS_LIMIT) {
+            if (attempt < ATTEMPTS_LIMIT) {
                 createClaim(claim, ++attempt);
             } else {
                 throw new ServerApiException(e);
