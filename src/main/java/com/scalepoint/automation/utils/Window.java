@@ -59,7 +59,7 @@ public class Window implements Actions {
 
         public void acceptAlert() {
             try {
-                Selenide.confirm();
+                driver.switchTo().alert().accept();
                 Wait.waitForModalWindowDisappear();
             } catch (Exception ignored) {
             }

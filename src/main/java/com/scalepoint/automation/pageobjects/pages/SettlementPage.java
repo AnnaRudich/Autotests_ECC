@@ -150,7 +150,7 @@ public class SettlementPage extends BaseClaimPage {
     public CompleteClaimPage toCompleteClaimPage() {
         bottomMenu.completeClaim();
         try {
-            Selenide.confirm();
+            driver.switchTo().alert().accept();
         } catch (NoAlertPresentException ignored) {
             logger.info("No alert is present");
         }
