@@ -9,6 +9,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.internal.Locatable;
 
+import java.sql.Driver;
 import java.util.Set;
 
 public interface Actions {
@@ -30,7 +31,6 @@ public interface Actions {
         Window.get().switchToLast();
     }
 
-
     default void closeAlert() {
         Window.get().acceptAlert();
     }
@@ -49,7 +49,14 @@ public interface Actions {
     }
 
     default String getAlertTextAndAccept() {
-        return Browser.driver().switchTo().alert().getText();
+        try {
+            Alert alert = Browser.driver().switchTo().alert();
+            String text = alert.getText();
+            alert.accept();
+            return text;
+        } catch (NoAlertPresentException Ex) {
+            return "";
+        }
     }
 
     default void pressKeys(Keys... keys) {
@@ -158,5 +165,11 @@ public interface Actions {
         }
         return Wait.waitForElementDisplaying(By.xpath(xpath)); //find(By.xpath(xpath));
     }
+
+    default void setValue(WebElement element, String value) {
+        JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
+        executor.executeScript("arguments[0].value=arguments[1];", element, value);
+    }
+
 }
 
