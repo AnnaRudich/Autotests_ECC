@@ -9,7 +9,11 @@
     <alkaCategory>Smykker, Ure &amp; Tilbehør</alkaCategory>
     <alkaSubCategory>Luksusure</alkaSubCategory>
     <alkaCategoryUnpublishedPolicy>Briller, Linser &amp; Hørelse</alkaCategoryUnpublishedPolicy>
+    <trygCategory>Cykler &amp; Tilbehør</trygCategory>
     <alkaSubCategoryUnpublishedPolicy>Høreapparater</alkaSubCategoryUnpublishedPolicy>
+    <trygSubCategory>Cykler</trygSubCategory>
+    <trygCat1>Personlig Pleje</trygCat1>
+    <trygSubCat1>Medicin</trygSubCat1>
     <existingSubCat1>Babyudstyr</existingSubCat1>
     <existingSubCat2>Smykker</existingSubCat2>
     <existingSubCat3>Mobiltelefoner</existingSubCat3>
@@ -35,6 +39,7 @@
     <customerDemand>500</customerDemand>
     <usedPrice>500</usedPrice>
     <lowerPrice>300</lowerPrice>
+    <trygNewPrice>200</trygNewPrice>
     <bigCustomDemandPrice>100000</bigCustomDemandPrice>
     <valuationType1>Nypris</valuationType1>
     <valuationType2>Kundens krav</valuationType2>

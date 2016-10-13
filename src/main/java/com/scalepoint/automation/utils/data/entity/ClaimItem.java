@@ -114,7 +114,37 @@ public class ClaimItem {
     private String existingVoucher4;
     @XmlElement
     private String brandLinkVoucher4;
+    @XmlElement
+    private String trygCategory;
+    @XmlElement
+    private String trygSubCategory;
+    @XmlElement
+    private Integer trygNewPrice;
+    @XmlElement
+    private String trygCat1;
+    @XmlElement
+    private String trygSubCat1;
 
+
+    public String getTrygCat1(){
+        return trygCat1;
+    }
+
+    public String getTrygSubCat1(){
+        return trygSubCat1;
+    }
+
+    public String getTrygCategory(){
+        return trygCategory;
+    }
+
+    public String getTrygSubCategory(){
+        return trygSubCategory;
+    }
+
+    public Integer getTrygNewPrice(){
+        return trygNewPrice;
+    }
 
     public String getTextFieldSP() {
         return textFieldSP;
@@ -237,7 +267,6 @@ public class ClaimItem {
     public String getIntegrationCategory() {
         return integrationCategory;
     }
-
 
     public String getYesOption() {
         return yes;

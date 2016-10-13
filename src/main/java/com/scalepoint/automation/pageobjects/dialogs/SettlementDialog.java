@@ -556,6 +556,10 @@ public class SettlementDialog extends BaseDialog {
         return Double.valueOf(depreciation.getText());
     }
 
+    public String getDepreciation(){
+        return depreciation.getText();
+    }
+
     public boolean isMarketPriceVisible() {
         try {
             return getValuationColumnValue(Valuation.MARKET_PRICE, 1) != null;
