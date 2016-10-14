@@ -224,4 +224,3 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
         assertEquals(newlyFetchedDepreciation, newExpectedDepreciation, "Depreciation is not updated");
     }
 }
-
