@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.NewSystemUser;
+import com.scalepoint.automation.utils.data.entity.SystemUser;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -29,25 +29,25 @@ public class EccUserApi extends EccServerApi {
     }
 
 
-    public void createEccUser(NewSystemUser newSystemUser) {
+    public void createEccUser(SystemUser systemUser) {
         try {
             Content content = get(URL_USER_ADD_PAGE, executor).returnContent();
             String cont = content.toString();
-            String[] contSplit = cont.split(newSystemUser.getCompanyIC())[0].split("<option value=\"");
+            String[] contSplit = cont.split(systemUser.getCompanyIC())[0].split("<option value=\"");
             String companyId = contSplit[contSplit.length - 1].replaceAll("[\",<> ']", "");
 
-            List<NameValuePair> userParams = toParams(newSystemUser, companyId);
+            List<NameValuePair> userParams = toParams(systemUser, companyId);
 
             HttpResponse httpResponse = post(URL_CREATE_USER, userParams, executor).returnResponse();
             ensure302Code(httpResponse.getStatusLine().getStatusCode());
 
-            log.info("NewSystemUser " + newSystemUser.getFirstName() + " was created");
+            log.info("SystemUser " + systemUser.getFirstName() + " was created");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<NameValuePair> toParams(NewSystemUser newSystemUser, String companyId) {
+    private List<NameValuePair> toParams(SystemUser systemUser, String companyId) {
         BasicNameValuePair userCulture;
         String locale = Configuration.getLocale().getValue();
         switch (locale) {
@@ -64,14 +64,14 @@ public class EccUserApi extends EccServerApi {
                 add("url", URL_ALL_USERS_PAGE).
                 add("shrfnbr", "-1").
                 add("userCompanyId", companyId).
-                add("userLogin", newSystemUser.getLogin()).
-                add("userPassword1", newSystemUser.getPassword()).
+                add("userLogin", systemUser.getLogin()).
+                add("userPassword1", systemUser.getPassword()).
                 add("btnGenerate", "-&lt;&lt; <U>G</U>enerate").
-                add("userPassword2", newSystemUser.getPassword()).
-                add("userFirstName", newSystemUser.getFirstName()).
+                add("userPassword2", systemUser.getPassword()).
+                add("userFirstName", systemUser.getFirstName()).
                 add("userMiddleName", "").
-                add("userLastName", newSystemUser.getLastName()).
-                add("userEmail", newSystemUser.getEmail()).
+                add("userLastName", systemUser.getLastName()).
+                add("userEmail", systemUser.getEmail()).
                 add("address1", "").
                 add("address2", "").
                 add("city", "").

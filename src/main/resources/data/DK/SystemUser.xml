@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<newSystemUser>
+<systemUser>
     <!--<companyCode>Scalepoint</companyCode>-->
     <!--<companyIC>Allianz Insurance plc</companyIC>-->
     <!--<department>Technical</department>-->
@@ -7,4 +7,4 @@
     <companyIC>Lærerstandens Brandforsikring</companyIC>
     <department>Department</department>
     <departmentIC>Øvrige</departmentIC>
-</newSystemUser>
+</systemUser>

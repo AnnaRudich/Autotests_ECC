@@ -2,7 +2,7 @@ package com.scalepoint.automation.utils.data;
 
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.*;
-import com.scalepoint.automation.utils.data.entity.credentials.SystemUsers;
+import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +38,12 @@ public class TestData {
         return (Voucher) getData(Data.VOUCHER);
     }
 
-    public static SystemUsers getSystemUsers() {
-        return (SystemUsers) getData(Data.SYSTEMCREDENTIALS);
+    public static ExistingUsers getSystemUsers() {
+        return (ExistingUsers) getData(Data.SYSTEMCREDENTIALS);
     }
 
-    public static NewSystemUser getUser() {
-        return (NewSystemUser) getData(Data.NEWSYSTEMUSER);
+    public static SystemUser getSystemUser() {
+        return (SystemUser) getData(Data.NEWSYSTEMUSER);
     }
 
     public static Category getCategories() {
@@ -183,8 +183,8 @@ public class TestData {
         LINKS("Links.xml", Links.class),
         SHOP("Shop.xml", Shop.class),
         VOUCHER("Voucher.xml", Voucher.class),
-        SYSTEMCREDENTIALS("SystemUsers.xml", SystemUsers.class),
-        NEWSYSTEMUSER("NewSystemUser.xml", NewSystemUser.class),
+        SYSTEMCREDENTIALS("ExistingUsers.xml", ExistingUsers.class),
+        NEWSYSTEMUSER("SystemUser.xml", SystemUser.class),
         CATEGORIES("Category.xml", Category.class),
         INSURANCECOMPANY("InsuranceCompany.xml", InsuranceCompany.class),
         REDUCTIONRULE("ReductionRule.xml", ReductionRule.class),

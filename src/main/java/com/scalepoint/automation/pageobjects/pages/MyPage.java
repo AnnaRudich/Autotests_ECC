@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.domain.ClaimStatus;
+import com.scalepoint.automation.pageobjects.modules.ClaimMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
@@ -18,6 +19,8 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 public class MyPage extends Page {
 
     private MainMenu mainMenu = new MainMenu();
+
+    private ClaimMenu claimMenu = new ClaimMenu();
 
     @FindBy(id = "EditPreferences")
     private Button editPreferences;
@@ -44,9 +47,12 @@ public class MyPage extends Page {
 
     @Override
     public MyPage ensureWeAreOnPage() {
+        long start = System.currentTimeMillis();
         waitForUrl(getRelativeUrl());
         waitForVisible(editPreferences);
         waitForVisible(lastClaims);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
         return this;
     }
 
@@ -74,6 +80,10 @@ public class MyPage extends Page {
 
     public MainMenu getMainMenu() {
         return mainMenu;
+    }
+
+    public ClaimMenu getClaimMenu() {
+        return claimMenu;
     }
 
     /*------------------------------ ASSERTS ---------------------------------------*/

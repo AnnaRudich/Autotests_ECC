@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.usersmanagement;
 
-import com.scalepoint.automation.utils.data.entity.credentials.SystemUsers;
+import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +16,8 @@ public class UsersManager {
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
     private static User systemUser;
 
-    public static void initManager(SystemUsers systemUsers) {
-        systemUsers.getUsers().forEach(user -> {
+    public static void initManager(ExistingUsers existingUsers) {
+        existingUsers.getUsers().forEach(user -> {
             if (user.isSystem()) {
                 systemUser = user;
                 return;

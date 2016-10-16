@@ -47,18 +47,24 @@ public class LoginPage extends Page {
     }
 
     public SettlementPage login(User user) {
+        return login(user.getLogin(), user.getPassword());
+    }
+
+    public SettlementPage login(String userLogin, String userPassword) {
+        return login(userLogin, userPassword, SettlementPage.class);
+    }
+
+    public <T extends Page> T login(String userLogin, String userPassword, Class<T> pageClass) {
         Wait.waitForElement(By.id("j_username"));
-        username.sendKeys(user.getLogin());
-        password.sendKeys(user.getPassword());
+        username.sendKeys(userLogin);
+        password.sendKeys(userPassword);
         loginButton.click();
 
         boolean loginError = isLoginErrorPresent();
         if (loginError) {
             throw new LoginInvalidException();
         }
-
-        Wait.waitForElement(By.id("signOutButton"));
-        return at(SettlementPage.class);
+        return at(pageClass);
     }
 
     private boolean isLoginErrorPresent() {
@@ -70,7 +76,7 @@ public class LoginPage extends Page {
                 } catch (Exception e) {
                     return false;
                 }
-            });
+            }, 5, 1000);
             return true;
         } catch (Exception e) {
             return false;

@@ -154,9 +154,22 @@ public interface Actions {
         }
     }
 
+    default void doubleClick(WebElement element) {
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
+        action.doubleClick(element);
+        action.perform();
+    }
+
+    default void doubleClick(By by) {
+        doubleClick(Browser.driver().findElement(by));
+    }
 
     default WebElement find(By by) {
         return Browser.driver().findElement(by);
+    }
+
+    default String getInputValue(WebElement webElement) {
+        return webElement.getAttribute("value");
     }
 
     default WebElement find(String xpath, String... params) {

@@ -26,11 +26,11 @@ import java.util.List;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "systemUsers", propOrder = {
+@XmlType(name = "existingUsers", propOrder = {
     "users"
 })
-@XmlRootElement(name="systemUsers")
-public class SystemUsers {
+@XmlRootElement(name="existingUsers")
+public class ExistingUsers {
 
     @XmlElement(name = "user")
     protected List<User> users;

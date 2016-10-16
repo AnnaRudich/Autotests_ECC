@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<systemUsers>
+<existingUsers>
     <user login="autotest-system-scalepoint" password="12341234" company="SCALEPOINT" companyId="7" ftId="1" system="true"/>
 
     <user login="autotest-user-future1" password="12341234" companyCode="FUTURE-1" companyName="Future-1" companyId="51" ftId="51" basic="true"/>
@@ -13,4 +13,4 @@
     <user login="autotest-user-bauta"    password="12341234" companyCode="BAUTA"      companyName="Bauta Forsikring" companyId="14"    ftId="140052"/>
     <user login="autotest-user-trygfors" password="12341234" companyCode="TRYGFORSIKRING" companyId="17" companyName="Tryg" ftId="140053"/>
     <user login="autotest-user-alka"     password="12341234" companyCode="ALKA"       companyId="6" companyName="ALKA"     ftId="5"/>
-</systemUsers>
+</existingUsers>
