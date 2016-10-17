@@ -60,10 +60,10 @@
             UPDATE [FUNCTEMPLATE] SET [ftUserPasswordValidationStrategy] = 0
 
             -- switch off password expiration
-            UPDATE [FUNCTEMPLATE] SET ftfunctionflags5 = ~1
+            UPDATE [FUNCTEMPLATE] SET ftfunctionflags5 = ftfunctionflags5 &amp; ~1
 
             -- switch off password change on first login
-            UPDATE [FUNCTEMPLATE] SET ftfunctionflags5 = ~2
+            UPDATE [FUNCTEMPLATE] SET ftfunctionflags5 = ftfunctionflags5 &amp; ~2
 
             -- enable new settlement item dialog
             UPDATE [FUNCTEMPLATE] SET [ftEnableNewSettlementItemDialog] = 1
