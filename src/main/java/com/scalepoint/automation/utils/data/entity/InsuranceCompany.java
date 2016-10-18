@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class InsuranceCompany {
 
     private String icID = Integer.toString(RandomUtils.randomInt());
-    private String icCode = Integer.toString(RandomUtils.randomInt());
-    private String icName = RandomUtils.randomName("IC");
+    private String icName = RandomUtils.randomName("Autotest-IC");
+    private String icCode = icName.toUpperCase();
     private String address = RandomUtils.randomName("addr");
     @XmlElement
     private String zipCode;
