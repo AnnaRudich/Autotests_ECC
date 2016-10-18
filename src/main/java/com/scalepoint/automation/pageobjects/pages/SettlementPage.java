@@ -205,12 +205,12 @@ public class SettlementPage extends BaseClaimPage {
         return false;
     }
 
-    public SettlementDialog openEditSettlementDialogByClaimDescr(String _claimDescr) {
-        selectClaimItemByDescription(_claimDescr);
+    public SettlementDialog editClaimLine(String claimDescription) {
+        selectClaimItemByDescription(claimDescription);
         List<List<WebElement>> rowsNames = claim.getRows();
         for (List<WebElement> list : rowsNames) {
             String claim = list.get(4).getText();
-            if (claim.equals(_claimDescr)) {
+            if (claim.equals(claimDescription)) {
                 list.get(3).click();
                 driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
                 String js =

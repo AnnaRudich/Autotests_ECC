@@ -35,19 +35,30 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
-        try {
-            if (invokedMethod.isTestMethod()) {
-                Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
-                logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
-                if (optionalUser.isPresent()) {
-
-                    Page.to(LoginPage.class);
-                    updateFunctionalTemplate(invokedMethod, iTestResult, optionalUser.get());
-                    Browser.driver().manage().deleteAllCookies();
+        if (invokedMethod.isTestMethod()) {
+            int attempt = 0;
+            /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
+            while (attempt <= 1) {
+                try {
+                    updateTemplate(invokedMethod, iTestResult);
+                    break;
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                    logger.error("Next attempt");
+                    attempt++;
                 }
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+        }
+
+    }
+
+    private void updateTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult) {
+        Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
+        logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
+        if (optionalUser.isPresent()) {
+            Page.to(LoginPage.class);
+            updateFunctionalTemplate(invokedMethod, iTestResult, optionalUser.get());
+            Browser.driver().manage().deleteAllCookies();
         }
     }
 

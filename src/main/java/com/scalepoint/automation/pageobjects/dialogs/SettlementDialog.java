@@ -2,6 +2,8 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.extjs.*;
+import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -265,10 +267,6 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public String FetchCashCompensation() {
-        return cashCompensationValue.getText();
-    }
-
     public Double fetchDepreciation() {
         Wait.waitForLoaded();
         waitForVisible(deprecationValue);
@@ -306,14 +304,21 @@ public class SettlementDialog extends BaseDialog {
         return valuation.getSelected();
     }
 
-    public void ok() {
+    public SettlementPage ok() {
+       return ok(SettlementPage.class);
+    }
+
+    public <T extends Page> T ok(Class<T> pageClass) {
         waitForVisible(ok);
         if (StringUtils.isBlank(description.getText())) {
             description.setValue(enteredDescription);
         }
         ok.click();
+
         Wait.waitForElementDisappear(ok);
         Wait.waitForAjaxComplete();
+
+        return Page.at(pageClass);
     }
 
     public boolean isVoucherListed(Voucher _voucher) {

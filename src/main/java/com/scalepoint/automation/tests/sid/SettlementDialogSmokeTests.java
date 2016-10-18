@@ -140,7 +140,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog dialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not saved");
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
@@ -168,7 +168,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog dialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not Saved");
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
@@ -178,7 +178,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
 
         dialog.fillBaseData(claimItem).cancel();
 
-        settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        settlementPage.editClaimLine(claimItem.getTextFieldSP());
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP());
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The New Category is Saved");
@@ -490,7 +490,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 ok();
 
-        SettlementDialog dialog = settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
         assertEquals(dialog.getAgeYears(), "10", "The age year is not saved");
         assertEquals(dialog.getMonthValue().trim(), "6 " + claimItem.getMonths(), "The month is not saved");
     }
@@ -513,7 +513,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
         assertTrue(dialog.monthMenuIsEnabled(), "Month DropDown is disabled");
 
         dialog.disableAge().ok();
-        settlementPage.openEditSettlementDialogByClaimDescr(claimItem.getTextFieldSP());
+        settlementPage.editClaimLine(claimItem.getTextFieldSP());
 
         assertFalse(dialog.ageYearsIsEnabled(), "Age Years field is enabled");
         assertFalse(dialog.monthMenuIsEnabled(), "Month DropDown is enabled");
