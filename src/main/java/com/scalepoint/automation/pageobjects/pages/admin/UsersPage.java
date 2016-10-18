@@ -75,7 +75,7 @@ public class UsersPage extends Page {
         return item.getText().contains(user.getLogin());
     }
 
-    public boolean isNewICUserDisplayed(SystemUser user) {
+    public boolean isUserDisplayed(SystemUser user) {
         filterByIC(user.getCompany());
         makeUserSearchByName(user.getLogin());
         waitForStableElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));

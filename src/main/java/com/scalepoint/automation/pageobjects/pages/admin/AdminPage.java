@@ -41,6 +41,10 @@ public class AdminPage extends Page {
         return adminMenu.toGenericItemsPage();
     }
 
+    public UsersPage toUsersPage() {
+        return adminMenu.toUsers();
+    }
+
     public MyPage toMatchingEngine() {
         return adminMenu.toMatchingEngine();
     }

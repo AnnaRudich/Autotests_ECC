@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
+import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -28,6 +29,9 @@ public class AdminMenu extends Module {
     @FindBy(xpath = "//a[contains(@href, 'matching_engine')]")
     private Link matchingEngineLink;
 
+    @FindBy(xpath = "//a[text()='Users']")
+    private Link usersLink;
+
     public SettlementPage toSettlement() {
         matchingEngine.click();
         return at(SettlementPage.class);
@@ -46,6 +50,11 @@ public class AdminMenu extends Module {
     public MyPage toMatchingEngine() {
         matchingEngineLink.click();
         return at(MyPage.class);
+    }
+
+    public UsersPage toUsers() {
+        usersLink.click();
+        return at(UsersPage.class);
     }
 
     public Link getMatchingEngine() {

@@ -322,20 +322,21 @@ public class UserAddEditPage extends Page {
     /**
      * This method checks if new role proposed for new user or not
      */
-    public boolean isNewRoleDisplayed(Roles roles) {
-        WebElement option = find(byRolesXpath, roles.getRoleName());
-        return option.getText().contains(roles.getRoleName());
+    public boolean isNewRoleDisplayed(String roleName) {
+        WebElement option = find(byRolesXpath, roleName);
+        return option.getText().contains(roleName);
     }
 
     /**
      * The method selects ScalePoint Company. The method is jest technical.
      */
-    public void selectSPCompany(SystemUser user) {
+    public UserAddEditPage selectSPCompany(SystemUser user) {
         WebElement option = find(byCompanyXpath, user.getCompany());
         if (option.getText().equals(user.getCompany())) {
             scrollTo(option);
             option.click();
         }
+        return this;
     }
 
     /**
@@ -356,7 +357,7 @@ public class UserAddEditPage extends Page {
         find(By.id("btnGenerate"));
     }
 
-    public void createNewSPAdminNewRole(SystemUser user, Roles roles) {
+    public UsersPage createNewSPAdminNewRole(SystemUser user, Roles roles) {
         WebElement option = find(byCompanyXpath, user.getCompany());
         if (option.getText().equals(user.getCompany())) {
             option.click();
@@ -369,7 +370,7 @@ public class UserAddEditPage extends Page {
 
         fillUserGeneralData(user);
         selectNewRoleSPUser(user, roles);
-        selectSaveOption();
+        return selectSaveOption();
     }
 }
 
