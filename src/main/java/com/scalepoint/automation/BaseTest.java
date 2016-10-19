@@ -84,7 +84,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Window.init(driver);
         WebDriverRunner.setWebDriver(driver);
 
-        JavascriptHelper.initializeCommonFunctions(driver);
+        JavascriptHelper.initializeCommonFunctions();
         driver.manage().window().maximize();
         logger.info("MainHandle " + Browser.driver().getWindowHandle());
     }

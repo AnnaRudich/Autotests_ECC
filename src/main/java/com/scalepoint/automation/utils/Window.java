@@ -54,7 +54,7 @@ public class Window implements Actions {
 
         public void openDialogWithJavascriptHelper(WebElement openButton) {
             openDialog(openButton);
-            JavascriptHelper.initializeCommonFunctions(driver);
+            JavascriptHelper.initializeCommonFunctions();
         }
 
         public void acceptAlert() {

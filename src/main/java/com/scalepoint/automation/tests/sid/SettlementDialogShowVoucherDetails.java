@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 
 @RequiredSetting(type=FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
-@RequiredSetting(type=FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG, enabled = false)
 public class SettlementDialogShowVoucherDetails extends BaseTest {
 
     /**

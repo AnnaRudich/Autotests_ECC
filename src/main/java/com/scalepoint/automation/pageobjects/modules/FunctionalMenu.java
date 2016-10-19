@@ -1,7 +1,8 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportLossInformationDialog;
-import com.scalepoint.automation.utils.Window;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -27,8 +28,9 @@ public class FunctionalMenu extends Module {
         findInCatalogue.click();
     }
 
-    public void addManually() {
+    public SettlementDialog addManually() {
         addManually.click();
+        return BaseDialog.at(SettlementDialog.class);
     }
 
     public void RequestSelfService() {

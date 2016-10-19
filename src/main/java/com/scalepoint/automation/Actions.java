@@ -20,7 +20,7 @@ public interface Actions {
 
     default void openDialogWithJavascriptHelper(WebElement openButton) {
         openDialog(openButton);
-        JavascriptHelper.initializeCommonFunctions(Browser.driver());
+        JavascriptHelper.initializeCommonFunctions();
     }
 
     default void closeDialog(WebElement closeButton) {
