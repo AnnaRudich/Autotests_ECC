@@ -31,6 +31,13 @@ public class Wait {
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }
 
+    public static void waitFor(int seconds) {
+        try {
+            Thread.sleep(seconds*1000);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
     public static void waitForPageLoaded() {
         new WebDriverWait(Browser.driver(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));

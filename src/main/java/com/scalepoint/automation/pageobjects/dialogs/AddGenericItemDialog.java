@@ -19,7 +19,7 @@ public class AddGenericItemDialog extends BaseDialog {
     @FindBy(id = "generic-item-dialog-add-button")
     private Button ok;
 
-    @FindBy(id = "generic-item-dialog-cancel-button")
+    @FindBy(id = "generic-item-dialog-close-button")
     private Button cancel;
 
     @Override
@@ -32,6 +32,7 @@ public class AddGenericItemDialog extends BaseDialog {
     public void chooseItem(String itemName, String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxComplete();
+        Wait.waitFor(5);
 
         ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(driver.findElement(By.id("generic-item-dialog-grid")),
                 "description", "checked", 0);
@@ -39,6 +40,17 @@ public class AddGenericItemDialog extends BaseDialog {
         ok.click();
 
         Wait.waitForAjaxComplete();
+    }
+
+    public void selectCategory(String categoryGroup, String category) {
+        this.category.select(categoryGroup +" - "+category);
+        Wait.waitForAjaxComplete();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        cancel.click();
     }
 
     public void assertGenericItemIsNotPresent(String itemName, String categoryGroup, String category) {
