@@ -5,7 +5,7 @@ import com.scalepoint.automation.domain.ProductInfo;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
-import com.scalepoint.automation.pageobjects.pages.oldshop.ShopCataloguePage;
+import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -45,18 +45,18 @@ public class RecommendedItemsTests extends BaseTest {
         ProductCashValue productInvoiceLtMarketCash = new ProductCashValue(sid, false);
 
         SettlementPage settlementPage = sid.selectValuation(SettlementDialog.Valuation.MARKET_PRICE).ok();
-        ShopCataloguePage shopCataloguePage = settlementPage.toCompleteClaimPage().
+        ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage().
                 completeWithEmailAndLoginToShop("12341234").
-                toCatalogue();
+                toProductSearchPage();
 
-        shopCataloguePage.searchForProduct(productInvoiceGtMarketCash.getName());
-        Assert.assertTrue(shopCataloguePage.isRequiredPriceDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue));
+        shopProductSearchPage.searchForProduct(productInvoiceGtMarketCash.getName());
+        Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue));
 
-        shopCataloguePage.searchForProduct(productInvoiceEqualMarketCash.getName());
-        Assert.assertTrue(shopCataloguePage.isRequiredPriceDisplayed(productInvoiceEqualMarketCash.cashCompensationFieldValue));
+        shopProductSearchPage.searchForProduct(productInvoiceEqualMarketCash.getName());
+        Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceEqualMarketCash.cashCompensationFieldValue));
 
-        shopCataloguePage.searchForProduct(productInvoiceLtMarketCash.getName());
-        Assert.assertTrue(shopCataloguePage.isRequiredPriceDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
+        shopProductSearchPage.searchForProduct(productInvoiceLtMarketCash.getName());
+        Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
     }
 
     private SettlementDialog findProductAndOpenSid(ProductInfo productInvoiceGtMarket, TextSearchPage textSearchPage) {

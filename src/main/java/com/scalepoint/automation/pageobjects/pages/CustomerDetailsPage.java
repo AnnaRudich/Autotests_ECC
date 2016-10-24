@@ -65,17 +65,12 @@ public class CustomerDetailsPage extends BaseClaimPage {
         return this;
     }
 
-    /**
-     * The method selects cancel Claim option and  confirm alert
-     */
-    public void selectCancelClaimOption() {
+    public CustomerDetailsPage cancelClaim() {
         cancelClaimButton.click();
         acceptAlert();
+        return at(CustomerDetailsPage.class);
     }
 
-    /**
-     * The method selects reopen Claim option and waits for settlement page is displayed
-     */
     public SettlementPage reopenClaim() {
         boolean opened = openDialog($(By.id("genoptag")));
         if (opened) {

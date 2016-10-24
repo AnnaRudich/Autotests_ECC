@@ -6,7 +6,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.pageobjects.pages.ShopWelcomePage;
+import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuation;

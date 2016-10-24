@@ -32,10 +32,14 @@ public class MailViewDialog extends BaseDialog {
     }
 
     public LoginShopPage findLoginToShopLinkAndOpenIt() {
-        waitForVisible(loginToShopLink);
-        String link = loginToShopLink.getWrappedElement().getAttribute("href");
+        String link = findLoginToShopLink();
         Browser.open(link);
         return Page.at(LoginShopPage.class);
+    }
+
+    public String findLoginToShopLink() {
+        waitForVisible(loginToShopLink);
+        return loginToShopLink.getWrappedElement().getAttribute("href");
     }
 
 }

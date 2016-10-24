@@ -1,15 +1,20 @@
-package com.scalepoint.automation.pageobjects.pages;
+package com.scalepoint.automation.pageobjects.pages.oldshop;
 
-import com.scalepoint.automation.pageobjects.pages.oldshop.ShopCataloguePage;
+import com.scalepoint.automation.pageobjects.modules.oldshop.AccountBox;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
+import java.util.List;
+
+@EccPage
 public class ShopWelcomePage extends Page {
 
     @FindBy(xpath = "//div[@class='product_grid']/table/tbody/tr[3]/td[1]")
@@ -24,11 +29,16 @@ public class ShopWelcomePage extends Page {
     @FindBy(css = ".LoginBox_button .button")
     private Button login;
 
+    @FindBy(xpath = "//a[@class='button_product_center']/span")
+    private List<WebElement> productGridAddCartButtons;
+
+    private AccountBox accountBox = new AccountBox();
+
+
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(productCashValue);
-        Wait.waitForVisible(productFaceValue);
+        Wait.waitForVisible(logout);
         return this;
     }
 
@@ -49,14 +59,25 @@ public class ShopWelcomePage extends Page {
         return OperationalUtils.getDoubleValue(productCashValue.getText().replaceAll("kr.", "").trim());
     }
 
-    public ShopCataloguePage toCatalogue() {
+    public ShopProductSearchPage toProductSearchPage() {
         Wait.waitForStableElement(By.xpath("//a[@id='menu_id_2']"));
         clickAndWaitForStable(By.xpath("//a[@id='menu_id_2']"), By.xpath("//input[@id='TextSearch_text']"));
-        return at(ShopCataloguePage.class);
+        return at(ShopProductSearchPage.class);
+    }
+
+    public ShopWelcomePage addFirstProductToCart() {
+        Wait.For(d -> !productGridAddCartButtons.isEmpty());
+        clickAndWaitForStable(productGridAddCartButtons.get(0),
+                By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
+        return this;
     }
 
     public void logout() {
         logout.click();
+    }
+
+    public AccountBox getAccountBox() {
+        return accountBox;
     }
 }
 

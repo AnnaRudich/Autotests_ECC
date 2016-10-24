@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
+import com.scalepoint.automation.pageobjects.modules.oldshop.AccountBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.RandomUtils;
@@ -14,7 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.$;
 
 @EccPage
-public class ShopCataloguePage extends Page {
+public class ShopProductSearchPage extends Page {
 
     private String byCategoryNameXpath = "(//*[@class='category_label'])[position() > 1]//a[contains(.,'$1')]";
     private String byCategoryNameDetailsXpath = "(//*[@class='category_label'])[position() > 1][contains(.,'$1')]";
@@ -54,6 +55,8 @@ public class ShopCataloguePage extends Page {
 
     private String byProductPricesXpath = "//td[contains(@class, 'purchase_price')][contains(.,'$1')]";
 
+    private AccountBox accountBox = new AccountBox();
+
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
@@ -70,7 +73,7 @@ public class ShopCataloguePage extends Page {
         clickAndWaitForStable(searchButton, By.xpath("//div[contains(@class,'breadcrumb_path')]/span/a"));
     }
 
-    public ShopCataloguePage searchForProduct(String query) {
+    public ShopProductSearchPage searchForProduct(String query) {
         setValue(searchField, query);
         clickSearch();
         return this;
@@ -114,15 +117,10 @@ public class ShopCataloguePage extends Page {
         return OperationalUtils.unifyStr(getText(productNames.get(n)));
     }
 
-    public void addProductToCart(Integer n) {
-        if(System.getProperty("locale").toLowerCase().equals("nl")){
-            addToCartButtonNL.get(n).click();
-            $(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']")).isDisplayed();
-        }
-        else {
-            addToCartButton.get(n).click();
-            Wait.waitForElementDisplaying(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
-        }
+    public ShopProductSearchPage addProductToCart(Integer n) {
+        addToCartButton.get(n).click();
+        Wait.waitForElementDisplaying(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
+        return this;
     }
 
     public void viewProductDetails(Integer n) {
@@ -163,4 +161,7 @@ public class ShopCataloguePage extends Page {
         clickAndWaitForStable(product, By.xpath("(//div[@class='component_headline']/span)[1]"));
     }
 
+    public AccountBox getAccountBox() {
+        return accountBox;
+    }
 }

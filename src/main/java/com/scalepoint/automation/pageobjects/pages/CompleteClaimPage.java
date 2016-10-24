@@ -4,9 +4,9 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -49,10 +49,13 @@ public class CompleteClaimPage extends Page {
     private ExtCheckbox spSMSCheckBOX;
 
     @FindBy(xpath = "//button[@onclick='sendThroughScalePoint()']")
-    private WebElement compWthMailButton;
+    private Button compWthMailButton;
+
+    @FindBy(id = "nosend")
+    private Button compWithoutMailButton;
 
     @FindBy(xpath = "//button[@onclick='endThroughScalePoint()']")
-    private WebElement compWthMailButtonWithMistakeInLocator;
+    private Button compWthMailButtonWithMistakeInLocator;
 
     @FindBy(id = "gem")
     private Button saveClaim;
@@ -131,6 +134,11 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithEmail() {
         compWthMailButton.click();
+        return at(MyPage.class);
+    }
+
+    public MyPage completeWithoutEmail() {
+        compWithoutMailButton.click();
         return at(MyPage.class);
     }
 

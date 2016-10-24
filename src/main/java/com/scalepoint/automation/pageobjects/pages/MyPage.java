@@ -71,6 +71,10 @@ public class MyPage extends Page {
         return latestCustomerStatus.getText().contains(ClaimStatus.saved());
     }
 
+    public boolean isRecentClaimCancelled() {
+        return latestCustomerStatus.getText().contains(ClaimStatus.cancelled());
+    }
+
     public NewCustomerPage clickCreateNewCase() {
         createNewCase.click();
         return Page.at(NewCustomerPage.class);

@@ -1,8 +1,8 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.pages.NotesPage;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
@@ -11,19 +11,22 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.Browser;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 
+@SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class BasicTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-3032 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void ecc3032_reopenSavedClaim(User user, Claim claim) {
-
+            description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
+    public void charlie544_reopenSavedClaim(User user, Claim claim) {
         loginAndCreateClaim(user, claim).
                 saveClaim().
                 openRecentClaim().
@@ -31,10 +34,27 @@ public class BasicTests extends BaseTest {
                 assertSettlementPagePresent("Settlement page is not loaded");
     }
 
+    /**
+     * GIVEN: SP User, saved claim C1
+     * WHEN: User cancels C1
+     * THEN: "Cancelled" is the status of C1
+     */
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-3032, ECC-2629 It's possible to complete claim with mail. " +
+            description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
+    public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
+        boolean recentClaimCancelled = loginAndCreateClaim(user, claim).
+                saveClaim().
+                openRecentClaim().
+                cancelClaim().
+                to(MyPage.class).
+                isRecentClaimCancelled();
+        Assert.assertTrue(recentClaimCancelled);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void ecc3032_2629_completeClaimWithMail(User user, Claim claim) {
+    public void charlie544_2629_completeClaimWithMail(User user, Claim claim) {
         loginAndCreateClaim(user, claim).
                 toCompleteClaimPage().
                 fillClaimForm(claim).
@@ -43,9 +63,20 @@ public class BasicTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-3032 It's possible to save claim without completing from Enter base info page. " +
+            description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
+                    "Completed claim is added to the latest claims list with Completed status")
+    public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
+        loginAndCreateClaim(user, claim).
+                toCompleteClaimPage().
+                fillClaimForm(claim).
+                completeWithoutEmail().
+                assertClaimHasStatus(claim.getStatusClosedEx());
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to save claim without completing from Enter base info page. " +
                     "Saved claim is added to the latest claims list with Saved status")
-    public void ecc3032_saveClaimFromBaseInfo(User user, Claim claim) {
+    public void charlie544_saveClaimFromBaseInfo(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim).
                 toCompleteClaimPage().
@@ -69,6 +100,30 @@ public class BasicTests extends BaseTest {
                 findSelfServiceLinkAndOpenIt().
                 enterPassword(password).
                 login();
+    }
+
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
+    public void charlie544_not_possible_login_to_cancelled_claim(User user, Claim claim) {
+        String password = "12341234";
+
+        CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim).
+                toCompleteClaimPage().
+                fillClaimForm(claim).
+                completeWithEmail().
+                openRecentClaim();
+        String loginToShopLink = customerDetailsPage.
+                toMailsPage().
+                openWelcomeCustomerMail().
+                findLoginToShopLink();
+
+        customerDetailsPage.toCustomerDetails().cancelClaim();
+
+        Browser.driver().get(loginToShopLink);
+        Page.at(LoginShopPage.class).
+                enterPassword(password).
+                loginWithFail();
     }
 
     @Bug(bug = "CHARLIE-479")
@@ -131,5 +186,59 @@ public class BasicTests extends BaseTest {
                 sortOrderableFirst().
                 match(claimLineDescription).
                 cancel();
+    }
+
+
+    /**
+     * GIVEN: SP User, active claim C1
+     * WHEN: User completes claim with wizard
+     * THEN: C1 status is "Completed"
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
+                    "Claim status is Completed in the claims list")
+    public void charlie544_2632_completeSPSimpleClaimWizard(User user, Claim claim, ClaimItem claimItem) {
+        boolean recentClaimCompleted = loginAndCreateClaim(user, claim).
+                addManually().
+                fillBaseData(claimItem).
+                ok().
+                toCompleteClaimPage().
+                fillClaimForm(claim).
+                replaceClaim().
+                completeClaimUsingCompPayment().
+                to(MyPage.class).
+                isRecentClaimCompleted();
+
+        Assert.assertTrue(recentClaimCompleted);
+    }
+
+    /**
+     * GIVEN: SP User, active claim C1
+     * WHEN: User completes claim with shop
+     * THEN: C1 status is "Completed"
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
+                    "Claim status is Completed in the claims list")
+    public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) throws Exception {
+        boolean recentClaimCompleted = loginAndCreateClaim(user, claim).
+                addManually().
+                fillBaseData(claimItem).
+                ok().
+                toCompleteClaimPage().
+                fillClaimForm(claim).
+                replaceClaim().
+                goToShop().
+                toProductSearchPage().
+                addProductToCart(1).
+                getAccountBox().
+                toShoppingCart().
+                selectCheckOutOption().
+                keepMoneyOnAccountAndProceed().
+                selectAgreeOption().
+                selectPlaceMyOrderOption().
+                to(MyPage.class).
+                isRecentClaimCompleted();
+        Assert.assertTrue(recentClaimCompleted);
     }
 }
