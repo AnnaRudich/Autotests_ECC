@@ -1,9 +1,9 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
@@ -13,15 +13,14 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -81,6 +80,9 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(id = "ok-button")
     private Button ok;
+
+    @FindBy(id = "add-button")
+    private Button addButton;
 
     @FindBy(id = "voucher-face-value-text")
     private WebElement voucherFaceValue;
@@ -181,6 +183,16 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog fillCategory(String categoryName) {
         category.select(categoryName);
+        return this;
+    }
+
+    public boolean isCategorySelected() {
+        return category.getValue().equals("-1");
+    }
+
+    public SettlementDialog selectAnyCategory() {
+        category.select(1);
+        subCategory.select(1);
         return this;
     }
 
@@ -305,17 +317,21 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementPage ok() {
-       return ok(SettlementPage.class);
+       return ok(SettlementPage.class, ok);
     }
 
-    public <T extends Page> T ok(Class<T> pageClass) {
-        waitForVisible(ok);
+    public TextSearchPage add() {
+       return ok(TextSearchPage.class, addButton);
+    }
+
+    public <T extends Page> T ok(Class<T> pageClass, Button button) {
+        waitForVisible(button);
         if (StringUtils.isBlank(description.getText())) {
             description.setValue(enteredDescription);
         }
-        ok.click();
+        button.click();
 
-        Wait.waitForElementDisappear(ok);
+        Wait.waitForElementDisappear(button);
         Wait.waitForAjaxComplete();
 
         return Page.at(pageClass);
@@ -327,7 +343,6 @@ public class SettlementDialog extends BaseDialog {
             options = voucher.getComboBoxOptions();
         else
             options = avoucher.getComboBoxOptions();
-//        reporter.reportScreenshot("Voucher Listed");
         return options.stream().anyMatch(i -> i.contains(_voucher.getVoucherNameSP()));
     }
 
@@ -407,25 +422,6 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    private void waitTillValuationRecalculated(Valuation valuation) {
-        String valuationName = driver.findElement(By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td[2]//div")).getText();
-        List<String> valuationNameParts = splitByWord(valuationName);
-        try {
-            Wait.For((Function<WebDriver, Object>) webDriver -> {
-                String assessmentBasedOn = driver.findElement(By.xpath(".//div[contains(@class, 'assessmentBaseManualText')]//div[@role='textbox']")).getText();
-                List<String> assessmentTextParts = splitByWord(assessmentBasedOn);
-                return !Collections.disjoint(valuationNameParts, assessmentTextParts);
-            });
-        } catch (Exception e) {
-            logger.info("Couldn't compare current valuation with assessmentText");
-        }
-    }
-
-    private List<String> splitByWord(String valuationName) {
-        return Arrays.stream(valuationName.split(" ")).map(String::toLowerCase).collect(Collectors.toList());
-    }
-
-
     public Double voucherFaceValueFieldText() {
         Wait.waitForLoaded();
         waitForVisible(voucherFaceValue);
@@ -484,12 +480,12 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public boolean ageYearsIsEnabled() {
+    public boolean isAgeYearsIsEnabled() {
         waitForVisible(ageYears);
         return ageYears.isEnabled();
     }
 
-    public boolean monthMenuIsEnabled() {
+    public boolean isMonthMenuIsEnabled() {
         waitForVisible(month);
         return month.isEnabled();
     }
@@ -573,10 +569,6 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-    public String marketPriceSupplier() {
-        return marketPriceSupplier.getText();
-    }
-
     public boolean isMarketPriceSupplierVisible() {
         try {
             return marketPriceSupplier.exists();
@@ -603,7 +595,7 @@ public class SettlementDialog extends BaseDialog {
         return (!statusSupplier.exists());
     }
 
-    public boolean isScalepointSupplierVisible(String _supplier){
-        return statusSupplier.getText().contains(_supplier);
+    public boolean isScalepointSupplierVisible(String supplier){
+        return statusSupplier.getText().contains(supplier);
     }
 }

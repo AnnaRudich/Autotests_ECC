@@ -1,11 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.modules.AdminMenu;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -16,7 +14,29 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class AdminPage extends Page {
 
-    private AdminMenu adminMenu = new AdminMenu();
+    @FindBy(xpath = "//a[contains(@href, 'matching_engine/start.jsp')]")
+    private Link matchingEngine;
+
+    @FindBy(xpath = "//a")
+    private List<Link> adminLinks;
+
+    @FindBy(xpath = "//a[text()='Generic Items']")
+    private Link genericItems;
+
+    @FindBy(xpath = "//a[text()='Function Templates']")
+    private Link functionalTemplateLink;
+
+    @FindBy(xpath = "//a[contains(@href, 'matching_engine')]")
+    private Link matchingEngineLink;
+
+    @FindBy(xpath = "//a[text()='Users']")
+    private Link usersLink;
+
+    @FindBy(xpath = "//a[contains(@href, 'pseudocategory_model')]")
+    private Link pseudoCategoryModels;
+
+    @FindBy(xpath = "//a[contains(@href, 'pseudocategory_group')]")
+    private Link pseudoCategoryGroup;
 
     @Override
     protected String getRelativeUrl() {
@@ -25,27 +45,42 @@ public class AdminPage extends Page {
 
     @Override
     public AdminPage ensureWeAreOnPage() {
-        waitForVisible(adminMenu.getMatchingEngine());
+        waitForVisible(matchingEngine);
         return this;
     }
 
     public SettlementPage toSettlement() {
-        return adminMenu.toSettlement();
+        matchingEngine.click();
+        return at(SettlementPage.class);
     }
 
     public FunctionalTemplatesPage toFunctionalTemplatesPage() {
-        return adminMenu.toFunctionalTemplatesPage();
+        functionalTemplateLink.click();
+        return at(FunctionalTemplatesPage.class);
     }
 
     public GenericItemsAdminPage toGenericItemsPage() {
-        return adminMenu.toGenericItemsPage();
-    }
-
-    public UsersPage toUsersPage() {
-        return adminMenu.toUsers();
+        genericItems.click();
+        return at(GenericItemsAdminPage.class);
     }
 
     public MyPage toMatchingEngine() {
-        return adminMenu.toMatchingEngine();
+        matchingEngineLink.click();
+        return at(MyPage.class);
+    }
+
+    public UsersPage toUsersPage() {
+        usersLink.click();
+        return at(UsersPage.class);
+    }
+
+    public PseudoCategoryModelPage toPseudoCategoryModelPage() {
+        pseudoCategoryModels.click();
+        return at(PseudoCategoryModelPage.class);
+    }
+
+    public PseudoCategoryGroupPage toPseudoCategoryGroupPage() {
+        pseudoCategoryGroup.click();
+        return at(PseudoCategoryGroupPage.class);
     }
 }

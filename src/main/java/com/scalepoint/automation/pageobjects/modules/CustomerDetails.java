@@ -33,8 +33,4 @@ public class CustomerDetails extends Module {
         String value = tooltipText.replaceAll("[^\\.,0123456789]", "");
         return OperationalUtils.getDoubleValue(value);
     }
-
-    public static Double doubleString(String s) throws NumberFormatException {
-        return Double.parseDouble(s);
-    }
 }

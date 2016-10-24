@@ -17,6 +17,7 @@
             <class name="com.scalepoint.automation.tests.admin.FuncTemplatesTests"/>
             <class name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
             <class name="com.scalepoint.automation.tests.admin.UserRolesTest"/>
+            <class name="com.scalepoint.automation.tests.admin.CategoryGroupsTests"/>
 
             <class name="com.scalepoint.automation.tests.LoginTests"/>
             <class name="com.scalepoint.automation.tests.BasicTests"/>

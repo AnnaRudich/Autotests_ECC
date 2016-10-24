@@ -5,12 +5,10 @@ import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StopWatch;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 import java.util.List;

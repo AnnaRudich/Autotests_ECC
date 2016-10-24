@@ -11,7 +11,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public enum DriversFactory {
@@ -50,15 +49,14 @@ public enum DriversFactory {
     },
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance() {
-            try {
-                File file = new File(this.getClass().getClassLoader().getResource("data/chromedriver.exe").toURI());
-                System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+            if (System.getProperty("webdriver.chrome.driver") == null) {
+                File ieDriver = new File("src/main/resources/drivers/chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", ieDriver.getAbsolutePath());
             }
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
             ChromeOptions options = new ChromeOptions();
             options.addArguments("operations-type");
+            options.addArguments("start-maximized");
             options.addArguments("--disable-popup-blocking");
             options.addArguments("-incognito");
             capabilities.setCapability(ChromeOptions.CAPABILITY, options);

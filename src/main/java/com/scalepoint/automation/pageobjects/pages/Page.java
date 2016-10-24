@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
@@ -12,13 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
-
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Condition.*;
-
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;

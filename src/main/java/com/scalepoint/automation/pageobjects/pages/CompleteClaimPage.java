@@ -4,7 +4,6 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.WebElement;
@@ -133,6 +132,16 @@ public class CompleteClaimPage extends Page {
     public MyPage completeWithEmail() {
         compWthMailButton.click();
         return at(MyPage.class);
+    }
+
+    public ShopWelcomePage completeWithEmailAndLoginToShop(String password) {
+        return completeWithEmail().
+                openRecentClaim().
+                toMailsPage().
+                openWelcomeCustomerMail().
+                findLoginToShopLinkAndOpenIt().
+                enterPassword(password).
+                login();
     }
 
     public MyPage saveClaim() {

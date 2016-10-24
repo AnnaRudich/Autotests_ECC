@@ -13,8 +13,6 @@ import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ReductionRulesDiscretionaryTypeSIDTests extends BaseTest {
 

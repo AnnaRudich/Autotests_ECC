@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.modules.AdminMenu;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
@@ -14,7 +13,6 @@ import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxComplete;
-import static com.scalepoint.automation.utils.Wait.waitForElementEnabling;
 import static com.scalepoint.automation.utils.Wait.waitForStableElements;
 
 @EccPage
@@ -35,8 +33,6 @@ public class UsersPage extends Page {
     private String byUserLoginXpath = "id('user-grid')//table[@class='x-grid3-row-table']//tr[contains(.,'$1')]";
 
     private String filterByIcXpath = "//select[contains(@name, 'company')]/option[contains(text(), '$1')]";
-
-    private AdminMenu adminMenu = new AdminMenu();
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -113,6 +109,6 @@ public class UsersPage extends Page {
     }
 
     public MyPage toMatchingEngine() {
-        return adminMenu.toMatchingEngine();
+        return to(AdminPage.class).toMatchingEngine();
     }
 }

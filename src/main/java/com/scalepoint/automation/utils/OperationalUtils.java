@@ -47,5 +47,9 @@ public class OperationalUtils {
         String[] array = input.split(" ");
         return Double.parseDouble((array[array.length - 1]).replaceAll("\\.", "").replace(",", "."));
     }
+
+    public static String unifyStr(String string) {
+        return string.trim().toLowerCase().replaceAll("[-\\s+/,]", "");
+    }
 }
 

@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.Window;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;

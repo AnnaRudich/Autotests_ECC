@@ -1,11 +1,11 @@
 package com.scalepoint.automation.utils;
 
-import com.codeborne.selenide.Selenide;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.driver.Browser;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import java.util.Set;
 
 public class Window implements Actions {

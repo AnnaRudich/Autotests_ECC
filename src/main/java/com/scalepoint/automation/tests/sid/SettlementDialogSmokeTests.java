@@ -3,8 +3,8 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
@@ -20,7 +20,8 @@ import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.*;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static org.testng.Assert.*;
 
@@ -53,7 +54,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim);
 
         List<String> allPseudoCategories = Page.to(PseudoCategoryGroupPage.class).
-                editPseudoCategory(claimItem.getExistingCat1_Born()).
+                editGroup(claimItem.getExistingCat1_Born()).
                 getAllPseudoCategories();
 
         List<String> subCategories = Page.to(SettlementPage.class).addManually().
@@ -231,25 +232,6 @@ public class SettlementDialogSmokeTests extends BaseTest {
     }
 
     /**
-     * WHEN: Input price
-     * WHEN: U1 fills settlement dialog with valid values
-     * WHEN: "Reviewed" option is disabled (unchecked)
-     * WHEN: "Include in claim" option is disabled
-     * THEN: description D1 of claim line CL1 is colored in pink
-     */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Claim line description is displayed in pink if the options 'Include in claim'  " +
-            "and 'Reviewed' disabled")
-    public void ecc3144_10_disableIncludeInClaimAndReviewed(User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.addManually().
-                fillBaseData(claimItem).
-                setReviewed(false).
-                includeInClaim(false).
-                ok();
-        assertTrue(settlementPage.getComputedClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getPinkColor()), "Claim is not in pink color");
-    }
-
-    /**
      * WHEN: U1 adds claim line 1 with and review and  "Include in claim" option disabled
      * WHEN: U1 adds claim line 2 CL2 with review and include to claim options are enabled
      * WHEN: CL2 value = V1
@@ -282,6 +264,25 @@ public class SettlementDialogSmokeTests extends BaseTest {
 
         assertEquals(toNumber(settlementPage.getBottomMenu().getClaimSumValue()), claimValue, "Claim sum value is not incremented");
         assertEquals(toNumber(settlementPage.getBottomMenu().getSubtotalSumValue()), claimValue, "Subtotal Sum Value is not correct");
+    }
+
+    /**
+     * WHEN: Input price
+     * WHEN: U1 fills settlement dialog with valid values
+     * WHEN: "Reviewed" option is disabled (unchecked)
+     * WHEN: "Include in claim" option is disabled
+     * THEN: description D1 of claim line CL1 is colored in pink
+     */
+    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Claim line description is displayed in pink if the options 'Include in claim'  " +
+            "and 'Reviewed' disabled")
+    public void ecc3144_10_disableIncludeInClaimAndReviewed(User user, Claim claim, ClaimItem claimItem) {
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        settlementPage.addManually().
+                fillBaseData(claimItem).
+                setReviewed(false).
+                includeInClaim(false).
+                ok();
+        assertTrue(settlementPage.getComputedClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getPinkColor()), "Claim is not in pink color");
     }
 
     /**
@@ -463,8 +464,8 @@ public class SettlementDialogSmokeTests extends BaseTest {
         SettlementDialog dialog = settlementPage.addManually().
                 fillBaseData(claimItem).
                 enableAge();
-        assertTrue(dialog.ageYearsIsEnabled(), "Age Years field is disabled");
-        assertTrue(dialog.monthMenuIsEnabled(), "Month DropDown is disabled");
+        assertTrue(dialog.isAgeYearsIsEnabled(), "Age Years field is disabled");
+        assertTrue(dialog.isMonthMenuIsEnabled(), "Month DropDown is disabled");
     }
 
 
@@ -508,14 +509,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 fillBaseData(claimItem).
                 enableAge();
 
-        assertTrue(dialog.ageYearsIsEnabled(), "Age Years field is disabled");
-        assertTrue(dialog.monthMenuIsEnabled(), "Month DropDown is disabled");
+        assertTrue(dialog.isAgeYearsIsEnabled(), "Age Years field is disabled");
+        assertTrue(dialog.isMonthMenuIsEnabled(), "Month DropDown is disabled");
 
         dialog.disableAge().ok();
         settlementPage.editClaimLine(claimItem.getTextFieldSP());
 
-        assertFalse(dialog.ageYearsIsEnabled(), "Age Years field is enabled");
-        assertFalse(dialog.monthMenuIsEnabled(), "Month DropDown is enabled");
+        assertFalse(dialog.isAgeYearsIsEnabled(), "Age Years field is enabled");
+        assertFalse(dialog.isMonthMenuIsEnabled(), "Month DropDown is enabled");
     }
 
 }

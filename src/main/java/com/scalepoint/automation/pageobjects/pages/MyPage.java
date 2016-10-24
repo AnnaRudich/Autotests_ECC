@@ -11,8 +11,6 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Table;
 
-import java.util.function.Supplier;
-
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage

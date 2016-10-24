@@ -1,9 +1,9 @@
 package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -11,7 +11,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static org.testng.Assert.assertTrue;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public class GenericItemsTests extends BaseTest {

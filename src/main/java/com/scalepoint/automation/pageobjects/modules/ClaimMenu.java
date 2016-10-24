@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
@@ -8,7 +7,6 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;

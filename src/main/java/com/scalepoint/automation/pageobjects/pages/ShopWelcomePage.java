@@ -1,8 +1,10 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.pageobjects.pages.oldshop.ShopCataloguePage;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -45,6 +47,12 @@ public class ShopWelcomePage extends Page {
 
     public Double getProductCashValue() {
         return OperationalUtils.getDoubleValue(productCashValue.getText().replaceAll("kr.", "").trim());
+    }
+
+    public ShopCataloguePage toCatalogue() {
+        Wait.waitForStableElement(By.xpath("//a[@id='menu_id_2']"));
+        clickAndWaitForStable(By.xpath("//a[@id='menu_id_2']"), By.xpath("//input[@id='TextSearch_text']"));
+        return at(ShopCataloguePage.class);
     }
 
     public void logout() {

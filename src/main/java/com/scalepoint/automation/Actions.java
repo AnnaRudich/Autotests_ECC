@@ -9,7 +9,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.internal.Locatable;
 
-import java.sql.Driver;
 import java.util.Set;
 
 public interface Actions {
@@ -136,6 +135,10 @@ public interface Actions {
     default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
         element.click();
         Wait.waitForStableElement(byWaitForElement);
+    }
+
+    default void clickAndWaitForStable(By element, By byWaitForElement) {
+        clickAndWaitForStable(Browser.driver().findElement(element), byWaitForElement);
     }
 
     default boolean isSelected(WebElement element) {
