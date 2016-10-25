@@ -89,7 +89,12 @@ public class ClaimApi extends EccServerApi {
     }
 
     private String extractUrl(String html) {
-        Pattern p = Pattern.compile("href=\"/webapp/ScalePoint/dk(.*?)\"");
+        String eccContext = Configuration.getEccContext();
+        String locale = Configuration.getLocale().toString().toLowerCase();
+
+        String regex = String.format("href=\"/%s/%s(.*?)\"", eccContext, locale);
+
+        Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(html);
         String url = null;
         if (m.find()) {
