@@ -26,6 +26,9 @@ public enum FTSetting {
     SHOW_SCALEPOINT_SUPPLIER("input[name=ftfunctionflag5][value=1024]", CHECKBOX),
     ENABLE_NEW_SETTLEMENT_ITEM_DIALOG("input[name=ftEnableNewSettlementItemDialog]", CHECKBOX),
     USE_UCOMMERCE_SHOP("input[name=ftfunctionflag5][value=16777216]", CHECKBOX),
+    SHOW_DISCREATIONARY_REASON("input[name=ftfunctionflag5][value=65536]", CHECKBOX),
+    MAKE_DISCREATIONARY_REASON_MANDATORY("input[name=ftfunctionflag5][value=262144]", CHECKBOX),
+    MAKE_REJECT_REASON_MANDATORY("input[name=ftfunctionflag5][value=67108864]", CHECKBOX),
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value=1]", CHECKBOX),
