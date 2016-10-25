@@ -45,7 +45,7 @@ public class CompleteClaimPage extends Page {
     @FindBy(name = "password")
     private ExtInput customerPasswordField;
 
-    @FindBy(name = "sendPasswordSMS")
+    @FindBy(id = "sendPasswordSMSspan")
     private ExtCheckbox spSMSCheckBOX;
 
     @FindBy(xpath = "//button[@onclick='sendThroughScalePoint()']")

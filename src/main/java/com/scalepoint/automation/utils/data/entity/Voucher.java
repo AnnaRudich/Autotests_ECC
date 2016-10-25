@@ -110,9 +110,14 @@ public class Voucher {
     private String brandLink;
     @XmlElement
     private String existingVoucher;
-
+    @XmlElement
+    private String trygVoucher;
     @XmlElement
     private String voucherTerm;
+
+    public String getTrygVoucher(){
+        return trygVoucher;
+    }
 
     public String getVoucherNameSP() {
         return voucherNameSP;
