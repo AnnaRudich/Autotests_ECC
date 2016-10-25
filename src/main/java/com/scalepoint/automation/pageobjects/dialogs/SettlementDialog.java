@@ -60,6 +60,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "depreciation-textfield-inputEl")
     private TextInput depreciation;
 
+    @FindBy(id = "discretionary-replacement-textfield")
+    private ExtText discretionaryDepreciation;
+
     @FindBy(id = "reject-checkbox")
     private ExtCheckbox rejected;
 
@@ -138,6 +141,15 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "productmatch-card-supplier")
     private TextBlock statusSupplier;
 
+    @FindBy(id = "reject-checkbox")
+    private ExtCheckbox rejectCheckbox;
+
+    @FindBy(id = "reject-reason-combobox")
+    private ExtComboBox rejectReason;
+
+    @FindBy(id = "discretionary-reason-combobox")
+    private ExtComboBox discretionaryReason;
+
     private String enteredDescription;
 
     @Override
@@ -164,6 +176,11 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog fillNewPrice(int amount) {
         newPrice.enter(String.valueOf(amount));
+        return this;
+    }
+
+    public SettlementDialog fillDepreciationValue(int amount){
+        discretionaryDepreciation.enter(String.valueOf(amount));
         return this;
     }
 
@@ -582,7 +599,8 @@ public class SettlementDialog extends BaseDialog {
         CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
         VOUCHER("valuation-type-VOUCHER"),
         NEW_PRICE("valuation-type-NEW_PRICE"),
-        MARKET_PRICE("valuation-type-MARKET_PRICE");
+        MARKET_PRICE("valuation-type-MARKET_PRICE"),
+        ANDEN_VURDERING("valuation-type-DISCRETIONARY_VALUATION");
 
         private String className;
 
@@ -597,5 +615,23 @@ public class SettlementDialog extends BaseDialog {
 
     public boolean isScalepointSupplierVisible(String supplier){
         return statusSupplier.getText().contains(supplier);
+    }
+
+    public boolean isRejectReasonVisible(){
+        return rejectReason.exists();
+    }
+
+    public boolean isRejectReasonEnabled(){
+        waitForVisible(rejectReason);
+        return rejectReason.isEnabled();
+    }
+
+    public boolean isDiscretionaryReasonVisible(){
+        return (discretionaryReason.exists());
+    }
+
+    public boolean isDiscretionaryReasonEnabled(){
+        waitForVisible(discretionaryReason);
+        return discretionaryReason.isEnabled();
     }
 }

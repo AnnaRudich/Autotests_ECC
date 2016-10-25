@@ -12,6 +12,7 @@
             <class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>
             <class name="com.scalepoint.automation.tests.sid.ShowScalepointSupplierTests"/>
             <class name="com.scalepoint.automation.tests.sid.FillCalcDepr2RulesAndDepreciationTests"/>
+            <class name="com.scalepoint.automation.tests.sid.ShowAndRejectReason4DiscretionaryValuationTests"/>
 
             <class name="com.scalepoint.automation.tests.admin.GenericItemsTests"/>
             <class name="com.scalepoint.automation.tests.admin.FuncTemplatesTests"/>

@@ -11,7 +11,7 @@ public class ExtCheckbox extends ExtElement {
 
     public void set(boolean state) {
         if (state != isSelected()) {
-            getWrappedElement().findElement(By.tagName("span")).click();
+            getWrappedElement().findElement(By.tagName("input")).click();
         }
     }
 
