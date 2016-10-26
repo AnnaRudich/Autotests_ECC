@@ -116,7 +116,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 addValuationType(claimItem.getValuationType1()).
                 ok().
                 fillDepreciationValue(claimItem.getUsedPrice()).
-                selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING);
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason drop down should be enabled");
     }
 
@@ -169,7 +169,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 fillSubCategory(claimItem.getTrygSubCategory()).
                 fillDepreciationValue(claimItem.getUsedPrice()).
                 setDiscountAndDepreciation(true).
-                fillVoucher(voucher.getTrygVoucher());
+                fillVoucher(voucher.getTrygVoucher()).
+                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING);
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason drop down should be enabled");
     }
 
