@@ -101,7 +101,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * AND: Open SID
      * AND: Add new price valuation
      * AND: Input manually discretionary depreciation
-     * AND: Select new price
+     * AND: Select Depreciation valuation
      * THEN: Drop-down for choosing reason is enabled
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
@@ -134,14 +134,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.
                 addManually().
-                addValuation().
-                addValuationPrice(claimItem.getTrygNewPrice()).
-                addValuationType(claimItem.getValuationType1()).
-                ok().
                 fillCategory(claimItem.getTrygCategory()).
                 fillSubCategory(claimItem.getTrygSubCategory()).
                 fillDepreciationValue(claimItem.getUsedPrice()).
                 setDiscountAndDepreciation(false).
+                selectValuation(SettlementDialog.Valuation.NOT_SELECTED).
                 fillVoucher(voucher.getTrygVoucher());
         assertFalse(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason drop down should be disabled");
     }
@@ -151,26 +148,20 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * AND: Create claimline which is matched with some voucher
      * AND: Add the manual discretionary depreciation
      * AND: Enable the combine checkbox
-     * THEN: Drop-down is enabled when the voucher is selected.
+     * THEN: Drop-down is enabled
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
-            " when the voucher is selected and adding the manual discretionary depreciation (combine checkbox is unchecked).FT=ON")
+            " adding the manual discretionary depreciation (combine checkbox is checked).FT=ON")
     public void charlie_508_7_verifyDiscretionaryAndRejectReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.
                 addManually().
-                addValuation().
-                addValuationPrice(claimItem.getTrygNewPrice()).
-                addValuationType(claimItem.getValuationType1()).
-                ok().
                 fillCategory(claimItem.getTrygCategory()).
                 fillSubCategory(claimItem.getTrygSubCategory()).
                 fillDepreciationValue(claimItem.getUsedPrice()).
-                setDiscountAndDepreciation(true).
-                fillVoucher(voucher.getTrygVoucher()).
-                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING);
+                setDiscountAndDepreciation(true);
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason drop down should be enabled");
     }
 

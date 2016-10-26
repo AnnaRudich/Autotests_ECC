@@ -634,4 +634,10 @@ public class SettlementDialog extends BaseDialog {
         waitForVisible(discretionaryReason);
         return discretionaryReason.isEnabled();
     }
+
+    public SettlementDialog SelectDiscretionaryReason(int index){
+        waitForVisible(discretionaryReason);
+        discretionaryReason.select(index);
+        return this;
+    }
 }
