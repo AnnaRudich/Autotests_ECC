@@ -126,6 +126,10 @@ public class TestData {
         return (Payments) getData(Data.PAYMENTS);
     }
 
+    public static DiscretionaryReason getDiscretionaryReason() {
+        return (DiscretionaryReason) getData(Data.DISCRETIONARYREASON);
+    }
+
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
         String xmlPath = buildXmlFilePath(locale, data.fileName);
@@ -205,7 +209,8 @@ public class TestData {
         PRICERULE("PriceRule.xml", PriceRule.class),
         CLGROUP("ClaimLineGroup.xml", ClaimLineGroup.class),
         PAYMENTS("Payments.xml", Payments.class),
-        ATTFILES("AttachmentFiles.xml", AttachmentFiles.class);
+        ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
+        DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class);
 
         private String fileName;
         private JAXBContext context;

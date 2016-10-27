@@ -150,6 +150,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "discretionary-reason-combobox")
     private ExtComboBox discretionaryReason;
 
+    @FindBy(id = "depreciation-type-combobox")
+    private ExtComboBox depreciationType;
+
     private String enteredDescription;
 
     @Override
@@ -640,4 +643,22 @@ public class SettlementDialog extends BaseDialog {
         discretionaryReason.select(index);
         return this;
     }
+
+    public SettlementDialog SelectDepreciationType(int index){
+        waitForVisible(depreciationType);
+        depreciationType.select(index);
+        return this;
+    }
+
+    public SettlementDialog SelectDepreciationType(String visibleText){
+        waitForVisible(depreciationType);
+        depreciationType.select(visibleText);
+        return this;
+    }
+
+    public boolean isDiscretionaryReasonSelected(String value){
+        System.out.println(discretionaryReason.getValue() + "+++++++++++++++++++++++++");
+        return discretionaryReason.getValue().equals(value);
+    }
 }
+
