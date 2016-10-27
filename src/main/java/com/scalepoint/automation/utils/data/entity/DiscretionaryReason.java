@@ -14,8 +14,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DiscretionaryReason {
     @XmlElement
     private String discretionaryReason1;
+    @XmlElement
+    private String discretionaryReason2;
 
     public String getDiscretionaryReason1(){
         return discretionaryReason1;
+    }
+
+    public String getDiscretionaryReason2(){
+        return discretionaryReason2;
     }
 }

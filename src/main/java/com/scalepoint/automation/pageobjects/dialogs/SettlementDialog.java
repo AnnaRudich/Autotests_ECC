@@ -644,6 +644,12 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog SelectDiscretionaryReason(String visibleText){
+        waitForVisible(discretionaryReason);
+        discretionaryReason.select(visibleText);
+        return this;
+    }
+
     public SettlementDialog SelectDepreciationType(int index){
         waitForVisible(depreciationType);
         depreciationType.select(index);
@@ -657,7 +663,6 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public boolean isDiscretionaryReasonSelected(String value){
-        System.out.println(discretionaryReason.getValue() + "+++++++++++++++++++++++++");
         return discretionaryReason.getValue().equals(value);
     }
 }

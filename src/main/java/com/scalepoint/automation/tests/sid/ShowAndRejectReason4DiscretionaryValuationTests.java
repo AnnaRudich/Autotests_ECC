@@ -11,6 +11,7 @@ import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -176,8 +177,57 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for New Price valuations.FT=ON")
     public void charlie_508_8_verifyDiscretionaryAndRejectReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
                                                                      DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
+
+        SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
+            settlementDialog.
+                    selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
+                    SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
+            assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
+                    " is selected not correctly");
+            settlementDialog.
+                    selectValuation(SettlementDialog.Valuation.NEW_PRICE).
+                    SelectDepreciationType(depreciationType.getDiscretionaryType()).
+                    SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
+            assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for New Price " +
+                    "is selected not correctly");
+    }
+
+    /**
+     * WHEN:FT is ON
+     * AND: Create claimline which is matched with some voucher (combine checkbox is unchecked)
+     * AND: Add the discretionary valuation
+     * AND: Add the New price and apply the manual discretionary depreciation.
+     * AND: Add Customer Demand price
+     * AND: Select 0 year, 2 month in calendar
+     * AND: Select the reason 'Max dækning' for the Customer Demand price.
+     * THEN: Verify the reason's representation for Customer Demand Valuation.
+     */
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for Customer Demand valuation.FT=ON")
+    public void charlie_508_9_verifyDiscretionaryAndRejectReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                                     DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        String month = "2 ";
+
+        SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
+        settlementDialog.
+                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
+        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
+                " is selected not correctly");
+        settlementDialog.
+                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
+                selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
+                selectMonth(month + claimItem.getMonths()).
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
+        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason2()), "Discretionary reason for Custom Demand Price " +
+                "is selected not correctly");
+    }
+
+
+    private SettlementDialog createClaimAndPrepareSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                      DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        return loginAndCreateClaim(user, claim).
                 addManually().
                 fillCategory(claimItem.getTrygCategory()).
                 fillSubCategory(claimItem.getTrygSubCategory()).
@@ -190,19 +240,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 addValuationType(claimItem.getValuationType1()).
                 addValuationPrice(claimItem.getUsedPrice()).
                 ok().
-                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason drop down should be enabled");
-        settlementDialog.
                 fillDepreciation(19).
-                SelectDepreciationType(depreciationType.getDiscretionaryType()).
-                SelectDiscretionaryReason(1);
-        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
-                " is selected not correctly");
-        settlementDialog.
-                selectValuation(SettlementDialog.Valuation.NEW_PRICE).
-                SelectDepreciationType(depreciationType.getDiscretionaryType()).
-                SelectDiscretionaryReason(1);
-        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for New Price " +
-                "is selected not correctly");
+                SelectDepreciationType(depreciationType.getDiscretionaryType());
     }
 }
