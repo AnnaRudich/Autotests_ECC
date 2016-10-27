@@ -203,10 +203,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
-        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
-                " is selected not correctly");
-        settlementDialog.
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 SelectDepreciationType(depreciationType.getDiscretionaryType()).
                 SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
@@ -235,10 +232,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
-        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
-                " is selected not correctly");
-        settlementDialog.
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
                 selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
                 selectMonth(month + claimItem.getMonths()).
@@ -268,10 +262,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
-        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
-                " is selected not correctly");
-        settlementDialog.
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
                 selectValuation(SettlementDialog.Valuation.VOUCHER).
                 selectMonth(month + claimItem.getMonths()).
