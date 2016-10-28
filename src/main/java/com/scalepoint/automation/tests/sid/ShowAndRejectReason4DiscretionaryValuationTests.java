@@ -295,6 +295,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 enterAgeYears(age).
                 selectMonth(month + claimItem.getMonths()).
                 SelectDepreciationType(depreciationType.getDiscretionaryType()).
+                fillDepreciation(20).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be enabled");
     }
