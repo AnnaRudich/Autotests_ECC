@@ -299,6 +299,34 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be enabled");
     }
 
+    /**
+     * WHEN: Create claimline
+     * AND: Add new price valuation with discretionary deducted by rules
+     * AND: Switch the depreciation manually from  discretionary to policy.
+     * THEN: Drop-down is greyed out
+     */
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
+            " with discretionary deducted by rule")
+    public void charlie_508_13_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim,
+                                                             ClaimItem claimItem, DepreciationType depreciationType) {
+        String month = "4 ";
+        String age = "1";
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementDialog settlementDialog = settlementPage.
+                addManually().
+                fillCategory(claimItem.getTrygCategory1()).
+                fillNewPrice(claimItem.getUsedPrice()).
+                enableAge().
+                enterAgeYears(age).
+                selectMonth(month + claimItem.getMonths()).
+                SelectDepreciationType(depreciationType.getDiscretionaryType()).
+                selectValuation(SettlementDialog.Valuation.NEW_PRICE).
+                SelectDepreciationType(depreciationType.getPolicyType());
+        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be disabled");
+    }
+
     private SettlementDialog createClaimAndPrepareSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
                                                       DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
         return loginAndCreateClaim(user, claim).
