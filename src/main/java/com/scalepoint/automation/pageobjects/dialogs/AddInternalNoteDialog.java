@@ -30,10 +30,9 @@ public class AddInternalNoteDialog extends Page {
         return this;
     }
 
-    public AddInternalNoteDialog addInternalNote(String note) {
+    public void addInternalNote(String note) {
         waitForVisible(internalNote);
         internalNote.sendKeys(note);
         closeDialog(ok);
-        return this;
     }
 }

@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
-import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
@@ -40,32 +39,18 @@ public class ShopOrderVerificationPage extends Page {
         return this;
     }
 
-    /**
-     * The method selects Place My Order option and waits for Customer details page is displayed
-     */
-    public void selectPlaceMyOrderOptionWithoutWait() {
-        placeMyOrderButton.click();
-    }
-
     public CustomerDetailsPage selectPlaceMyOrderOption() {
         placeMyOrderButton.click();
         return at(CustomerDetailsPage.class);
     }
 
+    public DibsPayType toDIBSPage() {
+        placeMyOrderButton.click();
+        return at(DibsPayType.class);
+    }
+
     public void selectPlaceMyOrderOptionExtraPayment() {
         // Todo something was changed. It could be that IBAN functionality was terned on
         clickAndWaitForDisplaying(placeMyOrderButton, By.xpath("//a[contains(@href, 'customer_order.jsp')]"));
-    }
-
-    /**
-     * The method selects Place My Order option and waits for Shop Order Confirmation page is displayed
-     */
-    public void selectPlaceMyOrderOptionByCustomer() {
-        clickAndWaitForDisplaying(placeMyOrderButton, By.xpath("//div[@class='checkout_button']/a"));
-    }
-
-    public void agreeAndPlaceOrderExtra() {
-        selectAgreeOption();
-        selectPlaceMyOrderOptionExtraPayment();
     }
 }

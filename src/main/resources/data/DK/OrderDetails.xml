@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <orderDetails>
     <totalText>Total</totalText>
-    <indemnity>Scalepoint har betalt til Scalepoint (Erstatning) :</indemnity>
+    <indemnity>{companyName} har betalt til Scalepoint (Erstatning) :</indemnity>
     <orderedItems>Scalepoint har betalt til leverandør (Varekøb) :</orderedItems>
     <withdrawalls>Scalepoint har betalt til kunde (Udbetalinger) :</withdrawalls>
     <deposits>Kunde har betalt til Scalepoint (Indbetalinger) :</deposits>

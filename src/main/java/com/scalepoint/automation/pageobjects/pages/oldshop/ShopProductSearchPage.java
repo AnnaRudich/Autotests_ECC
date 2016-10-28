@@ -15,7 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.$;
 
 @EccPage
-public class ShopProductSearchPage extends Page {
+public class ShopProductSearchPage extends ShopFlow {
 
     private String byCategoryNameXpath = "(//*[@class='category_label'])[position() > 1]//a[contains(.,'$1')]";
     private String byCategoryNameDetailsXpath = "(//*[@class='category_label'])[position() > 1][contains(.,'$1')]";

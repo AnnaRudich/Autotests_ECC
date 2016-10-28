@@ -15,10 +15,7 @@ public class OrderDetails {
     private String indemnity;
     @XmlElement
     private String orderedItems;
-
-
     @XmlElement
-
     private String withdrawalls;
     @XmlElement
     private String deposits;
@@ -28,8 +25,8 @@ public class OrderDetails {
     private String totalText;
 
 
-    public String getIndemnity() {
-        return indemnity;
+    public String getIndemnity(String companyName) {
+        return substituteParams(indemnity, companyName);
     }
 
     public String getOrderedItems() {
@@ -38,6 +35,10 @@ public class OrderDetails {
 
     public String getWithdrawalls() {
         return withdrawalls;
+    }
+
+    private String substituteParams(String message, String companyName) {
+        return message.replace("{companyName}", companyName);
     }
 
     public String getDeposits() {

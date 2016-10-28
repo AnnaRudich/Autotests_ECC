@@ -89,6 +89,10 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
+    public ClaimOperationsMenu getClaimOperationsMenu() {
+        return claimOperationsMenu;
+    }
+
     public SettlementPage assertGenericItemIsNotPresent(GenericItem genericItem) {
         claimOperationsMenu.addGenericItem().assertGenericItemIsNotPresent(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
         return this;

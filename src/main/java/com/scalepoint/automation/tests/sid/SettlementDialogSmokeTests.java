@@ -116,7 +116,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
 
         Double expectedCashValue = expectedCalculations.getCashValue();
         Double expectedDepreciation = expectedCalculations.getDepreciation();
-        Double fetchedCashValue = dialog.cashCompensationValue();
+        Double fetchedCashValue = dialog.getCashCompensationValue();
         Double fetchedDepreciation = dialog.fetchDepreciation();
 
         assertEquals(fetchedCashValue, expectedCashValue, "Cash compensation incorrect");
@@ -360,7 +360,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_16_cashCompensationEqualV1(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Customer price is not equal to cash compensation value");
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.getCashCompensationValue(), "Customer price is not equal to cash compensation value");
     }
 
     /**
@@ -392,13 +392,13 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_18_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Cash Compensation value is not assertEqualsDouble to Customer Price");
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.getCashCompensationValue(), "Cash Compensation value is not assertEqualsDouble to Customer Price");
 
         dialog.addValuation().
                 addValuationType(claimItem.getValuationType3()).
                 addValuationPrice(claimItem.getLowerPrice()).
                 ok();
-        assertEquals(dialog.cashCompensationValue(), Double.valueOf(claimItem.getLowerPrice()), "Cash Compensation Value is not assertEqualsDouble Valuation price");
+        assertEquals(dialog.getCashCompensationValue(), Double.valueOf(claimItem.getLowerPrice()), "Cash Compensation Value is not assertEqualsDouble Valuation price");
     }
 
     /**
@@ -416,13 +416,13 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_19_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.getCashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
 
         dialog.addValuation().
                 addValuationType(claimItem.getValuationType4()).
                 addValuationPrice(claimItem.getLowerPrice()).
                 ok();
-        assertEquals(Double.valueOf(claimItem.getLowerPrice()), dialog.cashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
+        assertEquals(Double.valueOf(claimItem.getLowerPrice()), dialog.getCashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
     }
 
 
@@ -442,13 +442,13 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_20_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.addManually().fillBaseData(claimItem);
-        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.cashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
+        assertEquals(Double.valueOf(claimItem.getCustomerDemand_500()), dialog.getCashCompensationValue(), "Customer price is not assertEqualsDouble to cash compensation value");
 
         dialog.addValuation().
                 addValuationType(claimItem.getValuationType5()).
                 addValuationPrice(claimItem.getLowerPrice()).
                 ok();
-        assertEquals(Double.valueOf(claimItem.getLowerPrice()), dialog.cashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
+        assertEquals(Double.valueOf(claimItem.getLowerPrice()), dialog.getCashCompensationValue(), "Cash Compensation Value is not assertEqualsDouble Valuation price");
     }
 
 

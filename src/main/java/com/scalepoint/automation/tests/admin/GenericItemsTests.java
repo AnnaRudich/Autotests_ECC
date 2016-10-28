@@ -1,6 +1,8 @@
 package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.pageobjects.dialogs.AddGenericItemDialog;
+import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
@@ -14,6 +16,21 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public class GenericItemsTests extends BaseTest {
+
+/*    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
+    public void test(User user, Claim claim, GenericItem genericItem) throws InterruptedException {
+        ClaimOperationsMenu claimOperationsMenu = loginAndCreateClaim(user, claim).
+                getClaimOperationsMenu();
+
+        for (int i = 0; i < 10; i++) {
+            AddGenericItemDialog  dialog = claimOperationsMenu.
+                    addGenericItem().
+                    selectCategory(genericItem.getGroup(), genericItem.getCategory());
+            Thread.sleep(3000);
+            dialog.close();
+        }
+    }*/
+
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {

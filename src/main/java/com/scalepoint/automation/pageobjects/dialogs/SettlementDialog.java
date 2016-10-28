@@ -153,6 +153,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "depreciation-type-combobox")
     private ExtComboBox depreciationType;
 
+    @FindBy(id = "not-cheapest-reason-combo")
+    private ExtComboBox notCheapestReasonCombo;
+
     private String enteredDescription;
 
     @Override
@@ -336,8 +339,16 @@ public class SettlementDialog extends BaseDialog {
         return valuation.getSelected();
     }
 
+    public Double getSelectedValuationValue() {
+        return OperationalUtils.toNumber(getText(By.xpath("//table[@class='valuationTable']//input[@checked]/ancestor::tr/td[3]/label")));
+    }
+
     public SettlementPage ok() {
        return ok(SettlementPage.class, ok);
+    }
+
+    public <T extends Page> T ok(Class<T> pageClass) {
+       return ok(pageClass, ok);
     }
 
     public TextSearchPage add() {
@@ -350,6 +361,8 @@ public class SettlementDialog extends BaseDialog {
             description.setValue(enteredDescription);
         }
         button.click();
+
+//        handleNotCheapestDialogIfPresent();
 
         Wait.waitForElementDisappear(button);
         Wait.waitForAjaxComplete();
@@ -433,13 +446,24 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog selectValuation(Valuation valuation) {
         for (int i = 0; i < 5; i++) {
             driver.findElement(By.cssSelector("tr." + valuation.className + " .x-form-radio-default")).click();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitASecond();
         }
         return this;
+    }
+
+    /* doesn't work combo selection */
+    private void handleNotCheapestDialogIfPresent() {
+        waitASecond();
+        try {
+            WebElement element = driver.findElement(By.id("not-lowest-reason-dialog"));
+            if (element.isDisplayed()) {
+                notCheapestReasonCombo.select(1);
+                driver.findElement(By.id("not-cheapest-reason-ok-button")).click();
+                waitASecond();
+            }
+        } catch (Exception e) {
+            logger.error("Can't handle not cheapest dialog: "+e.getMessage());
+        }
     }
 
     public Double voucherFaceValueFieldText() {
@@ -460,7 +484,7 @@ public class SettlementDialog extends BaseDialog {
         return OperationalUtils.getDoubleValue(customerDemand.getText());
     }
 
-    public Double cashCompensationValue() {
+    public Double getCashCompensationValue() {
         waitForVisible(cashCompensationValue);
         return OperationalUtils.getDoubleValue(cashCompensationValue.getText());
     }
@@ -638,25 +662,25 @@ public class SettlementDialog extends BaseDialog {
         return discretionaryReason.isEnabled();
     }
 
-    public SettlementDialog SelectDiscretionaryReason(int index){
+    public SettlementDialog selectDiscretionaryReason(int index){
         waitForVisible(discretionaryReason);
         discretionaryReason.select(index);
         return this;
     }
 
-    public SettlementDialog SelectDiscretionaryReason(String visibleText){
+    public SettlementDialog selectDiscretionaryReason(String visibleText){
         waitForVisible(discretionaryReason);
         discretionaryReason.select(visibleText);
         return this;
     }
 
-    public SettlementDialog SelectDepreciationType(int index){
+    public SettlementDialog selectDepreciationType(int index){
         waitForVisible(depreciationType);
         depreciationType.select(index);
         return this;
     }
 
-    public SettlementDialog SelectDepreciationType(String visibleText){
+    public SettlementDialog selectDepreciationType(String visibleText){
         waitForVisible(depreciationType);
         depreciationType.select(visibleText);
         return this;

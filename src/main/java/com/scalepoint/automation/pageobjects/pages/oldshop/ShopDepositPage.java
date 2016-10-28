@@ -11,11 +11,13 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 @EccPage
-public class ShopShoppingCartPage extends Page {
+public class ShopDepositPage extends Page {
 
     @FindBy(xpath = "//div[@class='checkout_button'][1]/a")
     private WebElement checkOutButton;
 
+    @FindBy(xpath = "//input[@id='deposit_method_external_creditcard']")
+    private WebElement creditCardBox;
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -26,25 +28,18 @@ public class ShopShoppingCartPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return "webshop/jsp/shop/shopping_cart.jsp";
+        return "webshop/jsp/shop/deposit.jsp";
     }
 
-    /**
-     * The method selects Check Out option and waits for Order Verification page is displayed
-     */
-    public ShopCashPayoutPage toCashPayoutPage() {
-        checkOutButton.click();
-        return at(ShopCashPayoutPage.class);
-    }
-
-    public ShopOrderVerificationPage toOrderVerificationPage() {
+    public ShopOrderVerificationPage selectBankTransfer() {
+        creditCardBox.click();
         checkOutButton.click();
         return at(ShopOrderVerificationPage.class);
     }
 
-    public ShopDepositPage toDepositPage() {
+    public ShopOrderVerificationPage selectCreditCard() {
+        creditCardBox.click();
         checkOutButton.click();
-        return at(ShopDepositPage.class);
+        return at(ShopOrderVerificationPage.class);
     }
 }
-

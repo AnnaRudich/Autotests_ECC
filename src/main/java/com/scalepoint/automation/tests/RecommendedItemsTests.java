@@ -68,7 +68,7 @@ public class RecommendedItemsTests extends BaseTest {
         private String name;
 
         public ProductCashValue(SettlementDialog settlementDialog, boolean addToClaim) {
-            cashCompensationFieldValue = RecommendedItemsTests.this.toString(settlementDialog.cashCompensationValue());
+            cashCompensationFieldValue = RecommendedItemsTests.this.toString(settlementDialog.getCashCompensationValue());
             name = settlementDialog.getDescriptionText();
             if (addToClaim) {
                 settlementDialog.add();
