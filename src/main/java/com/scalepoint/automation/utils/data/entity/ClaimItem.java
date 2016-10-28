@@ -124,7 +124,13 @@ public class ClaimItem {
     private String trygCat1;
     @XmlElement
     private String trygSubCat1;
+    @XmlElement
+    private String trygCategory1;
 
+
+    public String getTrygCategory1(){
+        return trygCategory1;
+    }
 
     public String getTrygCat1(){
         return trygCat1;
