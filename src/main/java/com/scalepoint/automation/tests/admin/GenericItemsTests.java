@@ -10,6 +10,7 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.testng.Retrier;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -17,7 +18,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @SuppressWarnings("AccessStaticViaInstance")
 public class GenericItemsTests extends BaseTest {
 
-/*    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
+  /*  @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void test(User user, Claim claim, GenericItem genericItem) throws InterruptedException {
         ClaimOperationsMenu claimOperationsMenu = loginAndCreateClaim(user, claim).
                 getClaimOperationsMenu();
@@ -32,7 +33,7 @@ public class GenericItemsTests extends BaseTest {
     }*/
 
 
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item", retryAnalyzer = Retrier.class)
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 
