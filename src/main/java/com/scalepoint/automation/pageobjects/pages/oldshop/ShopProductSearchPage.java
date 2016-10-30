@@ -131,29 +131,21 @@ public class ShopProductSearchPage extends ShopFlow {
         return OperationalUtils.unifyStr(getText(productHeadline));
     }
 
-    /**
-     * The method returns price of the particular product on its details page
-     */
     public Double getProductPriceDetails(Integer n) {
         return OperationalUtils.toNumber(getText(productPriceDetails));
     }
 
-    /**
-     * The method returns name of the particular 2nd level category
-     */
     public String getCategoryNameSecondLevel(Integer n) {
         return getText(categoryTreeSecondLevelDetails.get(n));
     }
 
-    /**
-     * This method selects existing Category on Catalogue page
-     */
-    public void selectCatalogueCategory(String category) {
+    public ShopProductSearchPage selectCatalogueCategory(String category) {
         WebElement item = find(byCategoryNameXpath, category);
         if (item.getText().contains(category)) {
             scrollTo(item);
             clickAndWaitForStable(item, By.xpath("//div[contains(@class,'breadcrumb_path')]/span/a"));
         }
+        return this;
     }
 
     public void openRandomProductDetails() {

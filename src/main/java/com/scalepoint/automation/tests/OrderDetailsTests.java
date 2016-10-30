@@ -30,11 +30,13 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  0,00
      */
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-4202 ME: Order page; Verify Order page existance")
-    public void ecc4202_1_2_ordersPageInfoDisplaying(User user, Claim claim, OrderDetails orderDetails) {
+            description = "CHARLIE-540 ME: Order page; Verify Order page existance")
+    public void charlie540_ordersPageIsEmpty(User user, Claim claim, OrderDetails orderDetails) {
         String companyName = user.getCompanyName();
 
-        OrderDetailsPage ordersPage = loginAndCreateClaim(user, claim).toOrdersDetailsPage();
+        OrderDetailsPage ordersPage = loginAndCreateClaim(user, claim).
+                toOrdersDetailsPage();
+
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(companyName));
         Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0d, "Idemnity value is not 0");
@@ -65,8 +67,8 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  0,00
      */
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-4202 ME: Order page; Make product order")
-    public void ecc4202_3_ordersPageAddVoucherInfoDisplaying(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+            description = "CHARLIE-540 ME: Order page; Make product order")
+    public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.
                 addManually().
@@ -118,8 +120,8 @@ public class OrderDetailsTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-4202 ME: Order page; Make voucher order")
-    public void ecc4202_4_ordersPageAddCashInfoDisplaying(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+            description = "CHARLIE-540 ME: Order page; Make voucher order")
+    public void charlie540_ordersPageWhenWeWithdrawMoney(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage.
                 addManually().
@@ -179,7 +181,7 @@ public class OrderDetailsTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount")
-    public void ecc4202_5_ordersPageAddVoucherInfoDisplaying(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
+    public void charlie540_ordersPageWhenWeUseBankAccount(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
         ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim).
                 toCompleteClaimPage().
                 fillClaimForm(claim).
@@ -192,6 +194,58 @@ public class OrderDetailsTests extends BaseTest {
         OrderDetailsPage ordersPage = shopProductSearchPage.
                 addProductToCart(0).
                 checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc()).
+                toOrdersDetailsPage();
+
+        Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
+        Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
+
+        Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is 0");
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+
+        Assert.assertEquals(ordersPage.getOrderedItemsValue() - productPrice, 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is product price=" + productPrice);
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+
+        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+
+        Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+
+        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
+    }
+
+    /**
+     * GIVEN: SP User
+     * WHEN: User navigates to Order page
+     * WHEN:  Add product on settlement page = 129
+     * WHEN: Go to shop and buy product
+     * WHEN: Complete claim with/without mail
+     * THEN: The state on Order page is the following:
+     * Tryg har betalt til Scalepoint (Erstatning) :  129,00
+     * Scalepoint har betalt til leverandør (Varekøb) :  129,00
+     * Scalepoint har betalt til kunde (Udbetalinger) :  0,00
+     * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
+     * Tilbageværende erstatning :  0,00
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-540 ME: Order page; Complete claim (2)")
+    public void charlie540_ordersPageWhenWeRecompleteAfterCreditCardPayment(User user, Claim claim, OrderDetails orderDetails, Payments payments) {
+        ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim).
+                toCompleteClaimPage().
+                fillClaimForm(claim).
+                openReplacementWizard().
+                goToShop().
+                toProductSearchPage();
+
+        Double productPrice = shopProductSearchPage.getProductPrice(0);
+        Dankort dankort = payments.getDankort();
+        OrderDetailsPage ordersPage = shopProductSearchPage.
+                addProductToCart(0).
+                checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc()).
+                reopenClaim().
+                toCompleteClaimPage().
+                completeWithEmail().
+                openRecentClaim().
                 toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
@@ -226,8 +280,8 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  0,00
      */
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-4202 ME: Order page; Cancel order")
-    public void ecc4202_6_ordersPageCancelOrderInfoDisplaying(User user, Claim claim, Payments payments, OrderDetails orderDetails, TextSearch textSearch) {
+            description = "CHARLIE-540 ME: Order page; Cancel order")
+    public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
                 toTextSearchPage(textSearch.getCatProduct1()).
                 matchFirst();
@@ -254,4 +308,52 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue() - price, 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is equal to " + price);
     }
 
+
+    /**
+     * GIVEN: SP User
+     * WHEN: User navigates to Order page
+     * WHEN:  Add product on settlement page = 129
+     * WHEN: Go to shop and buy product
+     * WHEN: Complete claim with/without mail
+     * THEN: The state on Order page is the following:
+     * Tryg har betalt til Scalepoint (Erstatning) :  129,00
+     * Scalepoint har betalt til leverandør (Varekøb) :  129,00
+     * Scalepoint har betalt til kunde (Udbetalinger) :  0,00
+     * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
+     * Tilbageværende erstatning :  0,00
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-540 ME: Order page; Complete claim (1)")
+    public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
+                toTextSearchPage(textSearch.getCatProduct1()).
+                matchFirst();
+        Double price = settlementDialog.getCashCompensationValue();
+
+        OrderDetailsPage ordersPage = settlementDialog.ok()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .toProductSearchPage()
+                .searchForProduct(textSearch.getCatProduct1())
+                .addProductToCart(0)
+                .checkoutProduct()
+                .openRecentClaim()
+                .reopenClaim()
+                .toCompleteClaimPage()
+                .completeWithEmail()
+                .openRecentClaim()
+                .toOrdersDetailsPage();
+
+        Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
+        Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
+        Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value("+ordersPage.getIdemnityValue()+") is equal to price="+price);
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value("+ordersPage.getWithdrawValue()+") is equals to 0");
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value("+ordersPage.getRemainingValue()+" is 0");
+    }
 }
