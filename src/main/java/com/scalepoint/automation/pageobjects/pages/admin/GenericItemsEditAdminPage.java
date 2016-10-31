@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.openqa.selenium.By;
@@ -59,6 +60,7 @@ public class GenericItemsEditAdminPage extends Page {
 
     public GenericItemsEditAdminPage selectCategory(String categoryName) {
         category.selectByVisibleText(categoryName);
+        Wait.waitFor(5);
         return this;
     }
 
