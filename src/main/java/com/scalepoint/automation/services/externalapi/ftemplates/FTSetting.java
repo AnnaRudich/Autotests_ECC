@@ -29,6 +29,7 @@ public enum FTSetting {
     SHOW_DISCREATIONARY_REASON("input[name=ftfunctionflag5][value=65536]", CHECKBOX),
     MAKE_DISCREATIONARY_REASON_MANDATORY("input[name=ftfunctionflag5][value=262144]", CHECKBOX),
     MAKE_REJECT_REASON_MANDATORY("input[name=ftfunctionflag5][value=67108864]", CHECKBOX),
+    SHOW_NOT_CHEAPEST_CHOICE_POPUP("input[name=ftfunctionflag5][value=16384]", CHECKBOX),
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value=1]", CHECKBOX),

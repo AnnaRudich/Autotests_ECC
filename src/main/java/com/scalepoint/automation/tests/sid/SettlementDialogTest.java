@@ -57,7 +57,7 @@ public class SettlementDialogTest extends BaseTest {
                 voucher.getDiscount(),
                 item.getDepAmount1_10());
 
-        Double fetchedCashValue = settlementDialog.cashCompensationValue();
+        Double fetchedCashValue = settlementDialog.getCashCompensationValue();
         Double calculatedCashValue = expectedCalculations.getCashCompensationWithDepreciation();
         assertEqualsDouble(fetchedCashValue, calculatedCashValue, "Cash compensation incorrect");
 

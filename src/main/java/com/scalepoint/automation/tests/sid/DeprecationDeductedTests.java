@@ -109,7 +109,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 reopenClaim().
                 toCompleteClaimPage().
                 fillClaimForm(claim).
-                replaceClaim();
+                openReplacementWizard();
 
         Double fetchedReplacementDialogVoucherFaceValue = replacementDialog.getVoucherFaceValue();
         Double fetchedReplacementDialogItemPriceValue = replacementDialog.getItemPriceValue();
@@ -203,7 +203,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 reopenClaim().
                 toCompleteClaimPage().
                 fillClaimFormWithPassword(claim, password).
-                replaceClaim();
+                openReplacementWizard();
 
         Double fetchedReplacementDialogVoucherFaceValue = replacementDialog.getVoucherFaceValue();
         Double fetchedReplacementDialogItemPriceValue = replacementDialog.getItemPriceValue();

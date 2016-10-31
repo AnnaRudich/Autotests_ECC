@@ -157,7 +157,7 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public ReplacementDialog replaceClaim() {
+    public ReplacementDialog openReplacementWizard() {
         replace.click();
         return BaseDialog.at(ReplacementDialog.class);
     }

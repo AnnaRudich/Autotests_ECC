@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -204,7 +203,7 @@ public class BasicTests extends BaseTest {
                 ok().
                 toCompleteClaimPage().
                 fillClaimForm(claim).
-                replaceClaim().
+                openReplacementWizard().
                 completeClaimUsingCompPayment().
                 to(MyPage.class).
                 isRecentClaimCompleted();
@@ -227,13 +226,13 @@ public class BasicTests extends BaseTest {
                 ok().
                 toCompleteClaimPage().
                 fillClaimForm(claim).
-                replaceClaim().
+                openReplacementWizard().
                 goToShop().
                 toProductSearchPage().
                 addProductToCart(1).
                 getAccountBox().
                 toShoppingCart().
-                selectCheckOutOption().
+                toCashPayoutPage().
                 keepMoneyOnAccountAndProceed().
                 selectAgreeOption().
                 selectPlaceMyOrderOption().

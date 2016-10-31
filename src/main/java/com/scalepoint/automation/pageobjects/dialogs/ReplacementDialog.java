@@ -6,10 +6,14 @@ import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Radio;
+
+import java.util.List;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -36,11 +40,17 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(id = "btn_finish")
     private WebElement finishButton;
 
+    @FindBy(id = "btn_cancel")
+    private WebElement okButton;
+
     @FindBy(id = "btn_close")
     private WebElement closeButton;
 
     @FindBy(xpath = "//button[@id='btn_replace_through_shop']")
     private WebElement goToShopButton;
+
+    @FindBy(name = "select_all")
+    private WebElement selectAllItemsCheckbox;
 
     @Override
     public ReplacementDialog ensureWeAreAt() {
@@ -55,11 +65,7 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     public Double getVoucherFaceValue() {
-        if (Configuration.isDK()) {
-            return OperationalUtils.toNumber(voucherFaceValue.getText().split("rdi")[1].replaceAll("[^\\.,0123456789]", ""));
-        } else {
-            return OperationalUtils.toNumber(voucherFaceValue.getText().split("£")[1].replaceAll("[^\\.,0123456789]", ""));
-        }
+        return OperationalUtils.toNumber(voucherFaceValue.getText().split("rdi")[1].replaceAll("[^\\.,0123456789]", ""));
     }
 
     public Double getItemPriceValue() {
@@ -81,4 +87,14 @@ public class ReplacementDialog extends BaseDialog {
         closeDialog(goToShopButton);
         return Page.at(ShopWelcomePage.class);
     }
+
+    public CustomerDetailsPage replaceAllItems() {
+        selectAllItemsCheckbox.click();
+        selectAllItemsCheckbox.click();
+        nextButton.click();
+        clickAndWaitForDisplaying(finishButton, By.id("btn_close"));
+        closeDialog(closeButton);
+        return Page.at(CustomerDetailsPage.class);
+    }
+
 }

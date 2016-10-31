@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 public abstract class BaseClaimPage extends Page {
 
     private ClaimNavigationMenu claimNavigationMenu = new ClaimNavigationMenu();
+
     private MainMenu mainMenu = new MainMenu();
 
     public NotesPage toNotesPage() {
@@ -15,6 +16,10 @@ public abstract class BaseClaimPage extends Page {
 
     public MailsPage toMailsPage() {
         return claimNavigationMenu.clickMails();
+    }
+
+    public OrderDetailsPage toOrdersDetailsPage() {
+        return claimNavigationMenu.clickOrder();
     }
 
     public CustomerDetailsPage toCustomerDetails() {

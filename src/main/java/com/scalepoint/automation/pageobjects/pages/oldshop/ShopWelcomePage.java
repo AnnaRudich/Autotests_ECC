@@ -15,7 +15,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.List;
 
 @EccPage
-public class ShopWelcomePage extends Page {
+public class ShopWelcomePage extends ShopFlow {
 
     @FindBy(xpath = "//div[@class='product_grid']/table/tbody/tr[3]/td[1]")
     private WebElement productCashValue;
@@ -31,6 +31,9 @@ public class ShopWelcomePage extends Page {
 
     @FindBy(xpath = "//a[@class='button_product_center']/span")
     private List<WebElement> productGridAddCartButtons;
+
+    @FindBy(xpath = "//a[@class='button_product_center']/span")
+    private WebElement firstRecommendedItem;
 
     private AccountBox accountBox = new AccountBox();
 
@@ -65,10 +68,9 @@ public class ShopWelcomePage extends Page {
         return at(ShopProductSearchPage.class);
     }
 
-    public ShopWelcomePage addFirstProductToCart() {
-        Wait.For(d -> !productGridAddCartButtons.isEmpty());
-        clickAndWaitForStable(productGridAddCartButtons.get(0),
-                By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
+    public ShopWelcomePage addFirstRecommendedItemToCart() {
+        firstRecommendedItem.click();
+        Wait.waitForElementDisplaying(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
         return this;
     }
 

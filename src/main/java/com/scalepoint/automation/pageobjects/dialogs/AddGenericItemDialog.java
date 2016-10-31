@@ -2,6 +2,8 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxColumn;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -29,10 +31,8 @@ public class AddGenericItemDialog extends BaseDialog {
         return this;
     }
 
-    public void chooseItem(String itemName, String categoryGroup, String category) {
-        this.category.select(categoryGroup +" - "+category);
-        Wait.waitForAjaxComplete();
-        Wait.waitFor(5);
+    public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {
+        selectCategory(categoryGroup, category);
 
         ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(driver.findElement(By.id("generic-item-dialog-grid")),
                 "description", "checked", 0);
@@ -40,17 +40,19 @@ public class AddGenericItemDialog extends BaseDialog {
         ok.click();
 
         Wait.waitForAjaxComplete();
+        return Page.at(SettlementPage.class);
     }
 
-    public void selectCategory(String categoryGroup, String category) {
+    public AddGenericItemDialog selectCategory(String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxComplete();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Wait.waitFor(3);
+        return this;
+    }
+
+    public SettlementPage close() {
         cancel.click();
+        return Page.at(SettlementPage.class);
     }
 
     public void assertGenericItemIsNotPresent(String itemName, String categoryGroup, String category) {

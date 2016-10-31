@@ -15,7 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.$;
 
 @EccPage
-public class ShopProductSearchPage extends Page {
+public class ShopProductSearchPage extends ShopFlow {
 
     private String byCategoryNameXpath = "(//*[@class='category_label'])[position() > 1]//a[contains(.,'$1')]";
     private String byCategoryNameDetailsXpath = "(//*[@class='category_label'])[position() > 1][contains(.,'$1')]";
@@ -131,29 +131,21 @@ public class ShopProductSearchPage extends Page {
         return OperationalUtils.unifyStr(getText(productHeadline));
     }
 
-    /**
-     * The method returns price of the particular product on its details page
-     */
     public Double getProductPriceDetails(Integer n) {
         return OperationalUtils.toNumber(getText(productPriceDetails));
     }
 
-    /**
-     * The method returns name of the particular 2nd level category
-     */
     public String getCategoryNameSecondLevel(Integer n) {
         return getText(categoryTreeSecondLevelDetails.get(n));
     }
 
-    /**
-     * This method selects existing Category on Catalogue page
-     */
-    public void selectCatalogueCategory(String category) {
+    public ShopProductSearchPage selectCatalogueCategory(String category) {
         WebElement item = find(byCategoryNameXpath, category);
         if (item.getText().contains(category)) {
             scrollTo(item);
             clickAndWaitForStable(item, By.xpath("//div[contains(@class,'breadcrumb_path')]/span/a"));
         }
+        return this;
     }
 
     public void openRandomProductDetails() {

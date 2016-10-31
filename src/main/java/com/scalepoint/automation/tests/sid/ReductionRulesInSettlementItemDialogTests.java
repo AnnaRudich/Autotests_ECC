@@ -52,7 +52,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
 
         SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
-        Double fetchedCashValue = settlementDialog.cashCompensationValue();
+        Double fetchedCashValue = settlementDialog.getCashCompensationValue();
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double fetchedDepreciation = settlementDialog.fetchDepreciation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
@@ -63,7 +63,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
 
         settlementDialog.applyReductionRuleByValue(claimItem.getReductionRule_30());
 
-        Double fetchedCashValueWithReduction = settlementDialog.cashCompensationValue();
+        Double fetchedCashValueWithReduction = settlementDialog.getCashCompensationValue();
         Double fetchedDepreciationWithReduction = settlementDialog.fetchDepreciation();
         Double calculatedReduction = valuationWithReduction.getReduction();
         Double calculatedCashValueReduction = valuationWithReduction.getCashCompensationWithReduction();
@@ -103,7 +103,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
 
         SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), claimItem.getDepAmount1_10(), claimItem.getReductionRule_30());
 
-        Double fetchedCashValue = settlementDialog.cashCompensationValue();
+        Double fetchedCashValue = settlementDialog.getCashCompensationValue();
         Double fetchedDepreciation = settlementDialog.fetchDepreciation();
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
@@ -114,7 +114,7 @@ public class ReductionRulesInSettlementItemDialogTests extends BaseTest {
 
         settlementDialog.automaticDepreciation(true);
 
-        Double fetchedCashValueWithReduction = settlementDialog.cashCompensationValue();
+        Double fetchedCashValueWithReduction = settlementDialog.getCashCompensationValue();
         Double fetchedDepreciationWithReduction = settlementDialog.fetchDepreciation();
         Double calculatedReduction = valuationWithReduction.getReduction();
         Double calculatedCashValueReduction = valuationWithReduction.getCashCompensationWithReduction();

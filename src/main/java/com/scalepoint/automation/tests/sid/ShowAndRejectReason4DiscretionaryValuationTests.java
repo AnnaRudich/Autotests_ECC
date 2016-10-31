@@ -180,7 +180,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
         assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
                 " is selected not correctly");
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "DISCRETIONARY reason field should be enabled for discretionary valuation");
@@ -203,10 +203,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
-                SelectDepreciationType(depreciationType.getDiscretionaryType()).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
+                selectDepreciationType(depreciationType.getDiscretionaryType()).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
         assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for New Price " +
                 "is selected not correctly");
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "DISCRETIONARY reason field should be enabled for new price valuation");
@@ -232,11 +232,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
                 selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
                 selectMonth(month + claimItem.getMonths()).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
         assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason2()), "Discretionary reason for Custom Demand Price " +
                 "is selected not correctly");
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "DISCRETIONARY reason field should be enabled for customer demand valuation");
@@ -262,11 +262,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
                 selectValuation(SettlementDialog.Valuation.VOUCHER).
                 selectMonth(month + claimItem.getMonths()).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
         assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason2()), "Discretionary reason for Custom Demand Price " +
                 "is selected not correctly");
         assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "DISCRETIONARY reason field should be disabled for voucher valuation");
@@ -294,7 +294,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 enableAge().
                 enterAgeYears(age).
                 selectMonth(month + claimItem.getMonths()).
-                SelectDepreciationType(depreciationType.getDiscretionaryType()).
+                selectDepreciationType(depreciationType.getDiscretionaryType()).
                 fillDepreciation(20).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be enabled");
@@ -322,9 +322,9 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 enableAge().
                 enterAgeYears(age).
                 selectMonth(month + claimItem.getMonths()).
-                SelectDepreciationType(depreciationType.getDiscretionaryType()).
+                selectDepreciationType(depreciationType.getDiscretionaryType()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
-                SelectDepreciationType(depreciationType.getPolicyType());
+                selectDepreciationType(depreciationType.getPolicyType());
         assertFalse(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be disabled");
     }
 
@@ -353,7 +353,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 selectMonth(month + claimItem.getMonths()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 applyReductionRuleByValue(reductionRule).
-                SelectDepreciationType(depreciationType.getPolicyType()).
+                selectDepreciationType(depreciationType.getPolicyType()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE);
         assertFalse(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be disabled");
     }
@@ -408,6 +408,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 addValuationPrice(claimItem.getUsedPrice()).
                 ok().
                 fillDepreciation(20).
-                SelectDepreciationType(depreciationType.getDiscretionaryType());
+                selectDepreciationType(depreciationType.getDiscretionaryType());
     }
 }
