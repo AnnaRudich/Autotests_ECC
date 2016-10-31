@@ -358,6 +358,40 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         assertFalse(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary Reason should be disabled");
     }
 
+    /**
+     * WHEN:FT is ON
+     * AND: Create claimline which is matched with some voucher (combine checkbox is unchecked)
+     * AND: Add the discretionary valuation
+     * AND: Add the New price and apply the manual discretionary depreciation.
+     * AND: Add Customer Demand price
+     * AND: Select 0 year, 2 month in calendar
+     * AND: Select the reason 'Max dækning' for the Voucher valuation.
+     * THEN: Verify the reason's representation for Voucher Valuation.
+     * WHEN: Go to settlement page
+     * THEN: no discretionary icon and no hover is displayed
+     */
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page.FT=ON")
+    public void charlie_508_15_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                             DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        String month = "2 ";
+        SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
+        settlementDialog.
+                fillDescription(claimItem.getTextFieldSP()).
+                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
+                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
+                selectValuation(SettlementDialog.Valuation.VOUCHER).
+                selectMonth(month + claimItem.getMonths()).
+                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
+        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason2()), "Discretionary reason for Custom Demand Price " +
+                "is selected not correctly");
+        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "DISCRETIONARY reason field should be disabled for voucher valuation");
+        SettlementPage settlementpage = settlementDialog.ok();
+
+    }
+
     private SettlementDialog createClaimAndPrepareSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
                                                       DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
         return loginAndCreateClaim(user, claim).
