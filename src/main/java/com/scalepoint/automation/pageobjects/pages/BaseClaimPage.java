@@ -32,6 +32,6 @@ public abstract class BaseClaimPage extends Page {
     }
 
     public void toSuppliersPage() {
-        mainMenu.suppliers();
+        mainMenu.toEccAdminPage();
     }
 }
