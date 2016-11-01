@@ -1,6 +1,7 @@
-package com.scalepoint.automation.pageobjects.pages;
+package com.scalepoint.automation.pageobjects.pages.selfservice;
 
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.support.FindBy;
@@ -39,8 +40,9 @@ public class LoginSelfServicePage extends Page {
         return this;
     }
 
-    public void login() {
+    public SelfServicePage login() {
         login.click();
         Wait.waitForLoaded();
+        return at(SelfServicePage.class);
     }
 }

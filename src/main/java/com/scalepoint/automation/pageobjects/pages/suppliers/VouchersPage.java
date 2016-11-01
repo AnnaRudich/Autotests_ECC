@@ -15,7 +15,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.List;
 
 @EccAdminPage
-public class VouchersPage extends Page {
+public class VouchersPage extends BaseEccAdminNavigation {
 
     @FindBy(xpath=".//a[contains(@href, 'logout')]")
     private Link signOutLink;

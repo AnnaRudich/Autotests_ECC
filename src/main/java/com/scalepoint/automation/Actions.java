@@ -131,6 +131,11 @@ public interface Actions {
         clickAndWaitForDisplaying(find(byElement), byWaitForElement);
     }
 
+    default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
+        element.click();
+        Wait.waitForElementEnabling(byEnabledElement);
+    }
+
 
     default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
         element.click();
