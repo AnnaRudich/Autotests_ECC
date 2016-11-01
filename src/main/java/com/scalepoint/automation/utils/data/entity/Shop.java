@@ -13,6 +13,9 @@ public class Shop {
     private String shopName = RandomUtils.randomName("Shop");
     private String shopAddress1 = RandomUtils.randomName("ShopAddr1");
     private String shopAddress2 = RandomUtils.randomName("ShopAddr2");
+
+    @XmlElement
+    private String eVoucherEmail;
     @XmlElement
     private String postalCode;
     @XmlElement
@@ -47,5 +50,9 @@ public class Shop {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String geteVoucherEmail() {
+        return eVoucherEmail;
     }
 }

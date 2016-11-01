@@ -1,7 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.data.entity.Supplier;
@@ -12,8 +13,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.waitForStableElement;
-import static com.scalepoint.automation.utils.Wait.waitForStableElements;
+import static com.scalepoint.automation.utils.Wait.*;
 
 
 /**
@@ -21,7 +21,7 @@ import static com.scalepoint.automation.utils.Wait.waitForStableElements;
  * User: kke
  */
 @EccAdminPage
-public class SuppliersPage extends Page {
+public class SuppliersPage extends BaseEccAdminNavigation {
 
     @FindBy(xpath = "//span[contains(@class,'create-supplier-btn')]")
     private WebElement createSupplierButton;
@@ -32,7 +32,6 @@ public class SuppliersPage extends Page {
     @FindBy(css = "div#suppliersGridId-body table tr:first-of-type td:nth-of-type(2) div")
     private WebElement firstSupplierItem;
 
-    //@FindBy(xpath = "//input[contains(@class,'supplierListSearchField')]")
     @FindBy(xpath = "//input[contains(@name,'searchfield')]")
     private WebElement suppliersSearchField;
 
@@ -49,7 +48,7 @@ public class SuppliersPage extends Page {
 
     @Override
     protected Page ensureWeAreOnPage() {
-        waitForUrl(getRelativeUrl());
+        waitForVisible(createSupplierButton);
         return this;
     }
 
@@ -65,41 +64,16 @@ public class SuppliersPage extends Page {
         createSupplierButton.click();
     }
 
-    /**
-     * This method implemented for technical use - if you don't want to create new supplier to verify shop creation etc.
-     * It waits for General tab element visibility to be confident that supplier form is opened
-     */
-    public void openFirstSupplier() {
-        doubleClick(By.cssSelector("div#suppliersGridId-body table tr:first-of-type td:nth-of-type(2) div"));
-        waitForStableElement(By.xpath("//span[contains(text(),'General')]"));
-    }
 
-
-    public String openRandomSupplier() {
+    public SupplierDialog openFirstSupplier() {
         waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        WebElement supplier = allSuppliersList.get(RandomUtils.randomInt(allSuppliersList.size()));
+        WebElement supplier = allSuppliersList.get(0);
         doubleClick(supplier);
         waitForStableElement(By.xpath("//span[contains(text(),'General')]"));
-        return getInputValue(find(By.xpath("//input[contains(@name,'name')]")));
+        return BaseDialog.at(SupplierDialog.class);
     }
 
-    public void openRandomSupplierNoReturn() {
-        waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        WebElement supplier = allSuppliersList.get(RandomUtils.randomInt(allSuppliersList.size()));
-        doubleClick(supplier);
-        waitForStableElement(By.xpath("//span[contains(text(),'General')]"));
-    }
-
-    public String openRandomSupplierByIC() {
-        waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        WebElement supplier = allSuppliersList.get(RandomUtils.randomInt(allSuppliersList.size()));
-        doubleClick(supplier);
-        waitForStableElement(By.xpath("//span[contains(text(),'General')]"));
-        return getInputValue(find(By.xpath("//label[contains(text(),'Supplier name')]/ancestor::td/following-sibling::td/div")));
-    }
-
-
-    public void openNewSupplierForEditing(Supplier supplier) {
+    public void openEditSupplierDialog(Supplier supplier) {
         find(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplier.getSupplierName());
         WebElement option = find(bySupplierNameXpath, supplier.getSupplierName());
@@ -111,23 +85,6 @@ public class SuppliersPage extends Page {
         }
     }
 
-    public void openSupplierForEditing(String name) {
-        find(By.xpath("//input[contains(@name, 'searchfield')]")).click();
-        makeSupplierSearch(name);
-        waitForStableElements((By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")));
-        WebElement item = find(bySupplierNameXpath, name);
-        if (item.getText().contains(name)) {
-            scrollTo(item);
-            doubleClick(item);
-            waitForStableElement((By.xpath("//span[contains(text(),'General')]")));
-        }
-    }
-
-    /**
-     * This method execute Search via Search field on the top of the page and waits for some results
-     *
-     * @param query Query value
-     */
     public void makeSupplierSearch(String query) {
         suppliersSearchField.clear();
         setValue(suppliersSearchField, query);
@@ -135,10 +92,7 @@ public class SuppliersPage extends Page {
         Wait.waitForAjaxComplete();
     }
 
-    /**
-     * This method checks if suppliers list contains new supplier or not
-     */
-    public boolean isNewSupplierCreated(Supplier supplier) {
+    public boolean isSupplierCreated(Supplier supplier) {
         find(By.xpath("//input[contains(@name,'searchfield')]")).click();
         makeSupplierSearch(supplier.getSupplierName());
         waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
@@ -160,20 +114,5 @@ public class SuppliersPage extends Page {
         return tickedExclOrVouchersField.isDisplayed();
     }
 
-    /**
-     * This method checks if Exclusive or Has vouchers field ticket depending on Supplier's data
-     */
-    public boolean isExclOrVoucherFieldTickedSupList(Supplier supplier) {
-        driver.findElement(By.xpath("//input[contains(@name,'searchfield')]")).click();
-        makeSupplierSearch(supplier.getSupplierName());
-        waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        String xpath = bySupplierNameXpath.replace("$1", supplier.getSupplierName());
-        try {
-            WebElement item = find(By.xpath(xpath));
-            return item.getText().contains(supplier.getSupplierName()) && isExclOrVoucherFieldTicked();
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }
 

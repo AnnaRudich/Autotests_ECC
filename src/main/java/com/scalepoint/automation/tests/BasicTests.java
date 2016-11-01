@@ -187,7 +187,6 @@ public class BasicTests extends BaseTest {
                 cancel();
     }
 
-
     /**
      * GIVEN: SP User, active claim C1
      * WHEN: User completes claim with wizard
