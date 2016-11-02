@@ -25,22 +25,27 @@
             declare @companyId int = 51
             EXEC autotests_create_ic @companyId, 'Future-1'
             EXEC autotests_create_user 'autotest-user-future1', @companyId, @adminUserRights
+            EXEC autotests_create_choice_reasons @companyId
 
             SET @companyId = 52
             EXEC autotests_create_ic @companyId, 'Future-2'
             EXEC autotests_create_user 'autotest-user-future2', @companyId, @adminUserRights
+            EXEC autotests_create_choice_reasons @companyId
 
             SET @companyId = 53
             EXEC autotests_create_ic @companyId, 'Future-3'
             EXEC autotests_create_user 'autotest-user-future3', @companyId, @adminUserRights
+            EXEC autotests_create_choice_reasons @companyId
 
             SET @companyId = 54
             EXEC autotests_create_ic @companyId, 'Future-4'
             EXEC autotests_create_user 'autotest-user-future4', @companyId, @adminUserRights
+            EXEC autotests_create_choice_reasons @companyId
 
             SET @companyId = 55
             EXEC autotests_create_ic @companyId, 'Future-5'
             EXEC autotests_create_user 'autotest-user-future5', @companyId, @adminUserRights
+            EXEC autotests_create_choice_reasons @companyId
 
             declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
             EXEC autotests_create_user 'autotest-user-lb', @lb_id, @chUserRights
