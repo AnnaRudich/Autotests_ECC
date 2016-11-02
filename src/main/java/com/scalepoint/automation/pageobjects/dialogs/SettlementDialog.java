@@ -156,6 +156,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "not-cheapest-reason-combo")
     private ExtComboBox notCheapestReasonCombo;
 
+    @FindBy(id = "not-cheapest-reason-display-inputEl")
+    private TextBlock notCheapestReasonDisplay;
+
     private String enteredDescription;
 
     @Override
@@ -555,6 +558,12 @@ public class SettlementDialog extends BaseDialog {
         Wait.waitForLoaded();
         waitForVisible(brand);
         return brand.getText();
+    }
+
+    public String getNotCheapestChoiceReason() {
+        waitForVisible(notCheapestReasonDisplay);
+
+        return notCheapestReasonDisplay.getText();
     }
 
     public EditVoucherValuationDialog openVoucherValuationCard() {
