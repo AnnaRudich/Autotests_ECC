@@ -40,7 +40,10 @@ public enum FTSetting {
     //FTSetting for Comparison of Depreciation and Discount
     COMPARISON_DEPRECATION_DISCOUNT("input[name=ftDnD2Related][value=1]", CHECKBOX),
     COMBINE_DISCOUNT_DEPRECATION("input[name=ftDnD2Related][value=2]", CHECKBOX),
-    DISABLE_DISCOUNTED_VALUATIONS_FOR_OLD("input[name=ftDnD2Related][value=4]", CHECKBOX);
+    DISABLE_DISCOUNTED_VALUATIONS_FOR_OLD("input[name=ftDnD2Related][value=4]", CHECKBOX),
+
+    REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION("select[name=RequiredValuationId]", SELECT),
+    ENABLE_3RD_VALUATION_FIELD("input[name=ftfunctionflag4][value=4096]", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;

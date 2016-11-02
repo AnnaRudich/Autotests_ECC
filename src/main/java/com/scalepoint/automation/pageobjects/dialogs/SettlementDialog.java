@@ -355,6 +355,12 @@ public class SettlementDialog extends BaseDialog {
        return ok(TextSearchPage.class, addButton);
     }
 
+    public <T extends BaseDialog> T isDialogShownAfterOk(Class <T> dialogClass) {
+        waitForVisible(ok).click();
+
+        return at(dialogClass);
+    }
+
     public <T extends Page> T ok(Class<T> pageClass, Button button) {
         waitForVisible(button);
         if (StringUtils.isBlank(description.getText())) {
