@@ -4,10 +4,12 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.NotCheapestChoiceDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -17,6 +19,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author : igu
  */
+@SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
 public class NotCheapestChoiceTests extends BaseTest {
 
@@ -106,6 +109,37 @@ public class NotCheapestChoiceTests extends BaseTest {
         boolean minimalValuationIsSuggested = "0.50".equals(suggestedAmount);
 
         assertTrue(minimalValuationIsSuggested);
+    }
+
+    /*16*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Item From Catalog")
+    public void charlie530MinimalValuationIsSuggestedInCaseOfItemFromCatalog(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim).
+                toTextSearchPage().
+                chooseCategory(claimItem.getExistingCat3_Telefoni()).
+                sortOrderableFirst().
+                matchFirst().
+                fillNewPrice(1).
+                selectValuation(SettlementDialog.Valuation.MARKET_PRICE).
+                isDialogShownAfterOk(NotCheapestChoiceDialog.class);
+    }
+
+    /*17*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Generic Item")
+    public void charlie530MinimalValuationIsSuggestedInCaseOfGenericItem(User user, Claim claim, GenericItem genericItem) {
+        String companyName = user.getCompanyName();
+
+        loginAndCreateClaim(user, claim).
+                to(GenericItemsAdminPage.class).
+                clickCreateNewItem().
+                addNewGenericItem(genericItem, companyName, true).
+                to(SettlementPage.class).
+                addGenericItemToClaim(genericItem).
+                editClaimLine(genericItem.getName()).
+                fillNewPrice(1).
+                fillCustomerDemand(48).
+                selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
+                isDialogShownAfterOk(NotCheapestChoiceDialog.class);
     }
 
     /*21*/
