@@ -40,6 +40,12 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return reason.getValue();
     }
 
+    public String selectSecondReason() {
+        reason.select(2);
+
+        return reason.getValue();
+    }
+
     public SettlementDialog ok() {
         ok.click();
 
