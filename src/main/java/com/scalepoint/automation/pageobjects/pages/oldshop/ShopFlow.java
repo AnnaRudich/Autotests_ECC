@@ -46,8 +46,7 @@ public abstract class ShopFlow extends Page {
                 toDIBSPage().
                 selectDankortOption().
                 submitCardData(number, month, year, cvc).
-                acceptAndBackToShop().
-                toCustomerDetails();
+                acceptAndBackToEcc();
     }
 
     protected abstract AccountBox getAccountBox();
