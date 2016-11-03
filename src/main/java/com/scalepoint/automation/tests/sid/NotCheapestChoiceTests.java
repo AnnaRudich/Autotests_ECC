@@ -17,11 +17,11 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author : igu
  */
+@RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
 public class NotCheapestChoiceTests extends BaseTest {
 
     /*09*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Not Minimal Valuation Is Selected Then Minimal Valuation Is Suggested")
-    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
     public void charlie530WhenNotMinimalValuationIsSelectedThenMinimalValuationIsSuggested(User user, Claim claim, ClaimItem claimItem) {
         NotCheapestChoiceDialog notCheapestChoiceDialog = loginAndCreateClaim(user, claim).
                 addManually().
@@ -40,10 +40,90 @@ public class NotCheapestChoiceTests extends BaseTest {
 
     /*10*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Selected reason is stored")
-    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
     public void charlie530SelectedReasonIsStored(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
 
+        String selectedReason = selectFirstNotCheapestReason(claimItem, settlementPage);
+
+        SettlementDialog settlementDialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
+
+        assertEquals(selectedReason, settlementDialog.getNotCheapestChoiceReason(), "Reason is not stored");
+    }
+
+    /*11*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
+    public void charlie530WhenMinimalValuationIsSelectedThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim).
+                addManually().
+                fillBaseData(claimItem).
+                fillNewPrice(48).
+                fillCustomerDemand(1).
+                selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
+                ok();
+    }
+
+    /*12*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Discretionary Depreciated Price")
+    @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
+    public void charlie530MinimalValuationIsSuggestedInCaseOfDiscretionaryDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
+        NotCheapestChoiceDialog notCheapestChoiceDialog = loginAndCreateClaim(user, claim).
+                addManually().
+                fillBaseData(claimItem).
+                fillNewPrice(48).
+                fillCustomerDemand(1).
+                fillDepreciation(50).
+                selectDepreciationType(0).
+                selectDepreciationType(1).
+                selectValuation(SettlementDialog.Valuation.NEW_PRICE).
+                isDialogShownAfterOk(NotCheapestChoiceDialog.class);
+
+        String suggestedAmount = notCheapestChoiceDialog.getAmount();
+
+        boolean minimalValuationIsSuggested = "0.50".equals(suggestedAmount);
+
+        assertTrue(minimalValuationIsSuggested);
+    }
+
+    /*13*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Policy Depreciated Price")
+    @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
+    public void charlie530MinimalValuationIsSuggestedInCaseOfPolicyDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
+        NotCheapestChoiceDialog notCheapestChoiceDialog = loginAndCreateClaim(user, claim).
+                addManually().
+                fillBaseData(claimItem).
+                fillNewPrice(48).
+                fillCustomerDemand(1).
+                fillDepreciation(50).
+                selectDepreciationType(1).
+                selectDepreciationType(0).
+                selectValuation(SettlementDialog.Valuation.NEW_PRICE).
+                isDialogShownAfterOk(NotCheapestChoiceDialog.class);
+
+        String suggestedAmount = notCheapestChoiceDialog.getAmount();
+
+        boolean minimalValuationIsSuggested = "0.50".equals(suggestedAmount);
+
+        assertTrue(minimalValuationIsSuggested);
+    }
+
+    /*21*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When reason is set then edit button appears and reason can be changed using popup")
+    public void charlie530WhenReasonIsSetThenEditButtonAppearsAndReasonCanBeChangedUsingPopup(User user, Claim claim, ClaimItem claimItem) {
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        selectFirstNotCheapestReason(claimItem, settlementPage);
+
+        SettlementDialog settlementDialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
+        NotCheapestChoiceDialog notCheapestChoiceDialog = settlementDialog.editNotCheapestReason();
+        String updatedReason = notCheapestChoiceDialog.selectSecondReason();
+        notCheapestChoiceDialog.ok();
+
+        assertEquals(updatedReason, settlementDialog.getNotCheapestChoiceReason(), "Reason is not updated");
+    }
+
+    private String selectFirstNotCheapestReason(ClaimItem claimItem, SettlementPage settlementPage) {
         NotCheapestChoiceDialog notCheapestChoiceDialog = settlementPage.
                 addManually().
                 fillBaseData(claimItem).
@@ -55,22 +135,7 @@ public class NotCheapestChoiceTests extends BaseTest {
         String selectedReason = notCheapestChoiceDialog.selectFirstReason();
         notCheapestChoiceDialog.okGoToSettlementPage();
 
-        SettlementDialog settlementDialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
-
-        assertEquals(selectedReason, settlementDialog.getNotCheapestChoiceReason(), "Reason is not stored");
-    }
-
-    /*11*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
-    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
-    public void charlie530WhenMinimalValuationIsSelectedThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim).
-                addManually().
-                fillBaseData(claimItem).
-                fillNewPrice(48).
-                fillCustomerDemand(1).
-                selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
-                ok();
+        return selectedReason;
     }
 
 }

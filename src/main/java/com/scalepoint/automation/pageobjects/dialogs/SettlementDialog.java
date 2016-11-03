@@ -126,6 +126,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "voucher-valuation-card-valuation-terms")
     private Button voucherTermAndConditions;
 
+    @FindBy(id = "not-cheapest-reason-edit-button")
+    private Button notCheapestReasonEdit;
+
     @FindBy(css = "#rule-suggestion-grid-body table")
     private Table ruleSuggestion;
 
@@ -699,6 +702,13 @@ public class SettlementDialog extends BaseDialog {
         waitForVisible(depreciationType);
         depreciationType.select(visibleText);
         return this;
+    }
+
+    public NotCheapestChoiceDialog editNotCheapestReason() {
+        waitForVisible(notCheapestReasonEdit);
+        notCheapestReasonEdit.click();
+
+        return at(NotCheapestChoiceDialog.class);
     }
 
     public boolean isDiscretionaryReasonSelected(String value){

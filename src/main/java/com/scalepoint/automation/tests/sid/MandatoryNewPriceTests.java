@@ -13,12 +13,12 @@ import org.testng.annotations.Test;
  * @author : igu
  */
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
+@RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
 public class MandatoryNewPriceTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When required valuation is not set then SID closes without popup")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "Select valuation type...")
-    @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
-    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     public void charlie625WhenRequiredValuationIsNotSetThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim).
                 addManually().
@@ -29,8 +29,6 @@ public class MandatoryNewPriceTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And No New Price Entered Then Popup Is Shown")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
-    @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
-    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndNoNewPriceEnteredThenPopupIsShown(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim).
                 addManually().
@@ -44,8 +42,6 @@ public class MandatoryNewPriceTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And Catalog Item Has Market Price SID Closes Without Popup")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
-    @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
-    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndCatalogItemHasMarketPriceSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim).
                 toTextSearchPage().
@@ -58,8 +54,6 @@ public class MandatoryNewPriceTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And New Price Entered Then SID Closes Without Popup")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
-    @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
-    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndNewPriceEnteredThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim).
                 addManually().
