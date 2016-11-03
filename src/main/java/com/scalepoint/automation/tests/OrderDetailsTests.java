@@ -17,6 +17,7 @@ import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class OrderDetailsTests extends BaseTest {
 
     /**
