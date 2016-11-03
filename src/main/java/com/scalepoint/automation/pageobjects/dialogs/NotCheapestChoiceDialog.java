@@ -58,4 +58,12 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
+    public boolean okButtonDoesNotCloseDialog() {
+        ok.click();
+
+        at(NotCheapestChoiceDialog.class);
+
+        return true;
+    }
+
 }

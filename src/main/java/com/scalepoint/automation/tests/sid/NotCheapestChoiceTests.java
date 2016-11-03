@@ -111,6 +111,20 @@ public class NotCheapestChoiceTests extends BaseTest {
         assertTrue(minimalValuationIsSuggested);
     }
 
+    /*14*/
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Not Possible To Not Select The Reason")
+    public void charlie530NotPossibleToNotSelectTheReason(User user, Claim claim, ClaimItem claimItem) {
+        NotCheapestChoiceDialog notCheapestChoiceDialog = loginAndCreateClaim(user, claim).
+                addManually().
+                fillBaseData(claimItem).
+                fillNewPrice(48).
+                fillCustomerDemand(1).
+                selectValuation(SettlementDialog.Valuation.NEW_PRICE).
+                isDialogShownAfterOk(NotCheapestChoiceDialog.class);
+
+        assertTrue(notCheapestChoiceDialog.okButtonDoesNotCloseDialog());
+    }
+
     /*16*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Item From Catalog")
     public void charlie530MinimalValuationIsSuggestedInCaseOfItemFromCatalog(User user, Claim claim, ClaimItem claimItem) {
