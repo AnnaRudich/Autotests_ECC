@@ -1,11 +1,11 @@
 --liquibase formatted sql
 --changeset ipo:1 runOnChange:true endDelimiter:GO
 
-IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_create_agreement]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
-  DROP PROCEDURE [dbo].[autotests_create_agreement]
+IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_create_voucher_agreement]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+  DROP PROCEDURE [dbo].[autotests_create_voucher_agreement]
 GO
 
-CREATE PROCEDURE [dbo].[autotests_create_agreement]
+CREATE PROCEDURE [dbo].[autotests_create_voucher_agreement]
     @VoucherAgreementName NVARCHAR(254),
     @SupplierId INT,
     @CategoriesAsStr VARCHAR(255),
@@ -146,4 +146,4 @@ COMMIT TRANSACTION
 
 SET NOCOUNT OFF
 
---rollback DROP FUNCTION [dbo].[autotests_create_agreement]
+--rollback DROP FUNCTION [dbo].[autotests_create_voucher_agreement]

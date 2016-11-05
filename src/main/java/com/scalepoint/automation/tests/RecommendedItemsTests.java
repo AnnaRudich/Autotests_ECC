@@ -44,18 +44,20 @@ public class RecommendedItemsTests extends BaseTest {
         SettlementDialog sid = findProductAndOpenSid(productWithLtPrices, textSearchPage);
         ProductCashValue productInvoiceLtMarketCash = new ProductCashValue(sid, false);
 
+        String password = "12341234";
         SettlementPage settlementPage = sid.selectValuation(SettlementDialog.Valuation.MARKET_PRICE).ok();
         ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage().
-                completeWithEmailAndLoginToShop("12341234").
+                fillClaimFormWithPassword(claim, password).
+                completeWithEmailAndLoginToShop(password).
                 toProductSearchPage();
 
-        shopProductSearchPage.searchForProduct(productInvoiceGtMarketCash.getName());
+        shopProductSearchPage.searchForProduct(productInvoiceGtMarketCash.name);
         Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue));
 
-        shopProductSearchPage.searchForProduct(productInvoiceEqualMarketCash.getName());
+        shopProductSearchPage.searchForProduct(productInvoiceEqualMarketCash.name);
         Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceEqualMarketCash.cashCompensationFieldValue));
 
-        shopProductSearchPage.searchForProduct(productInvoiceLtMarketCash.getName());
+        shopProductSearchPage.searchForProduct(productInvoiceLtMarketCash.name);
         Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
     }
 
@@ -63,24 +65,16 @@ public class RecommendedItemsTests extends BaseTest {
         return textSearchPage.searchByProductName(productInvoiceGtMarket.getModel()).matchFirst();
     }
 
-    class ProductCashValue {
-        private String cashCompensationFieldValue;
+    private class ProductCashValue {
+        private Double cashCompensationFieldValue;
         private String name;
 
-        public ProductCashValue(SettlementDialog settlementDialog, boolean addToClaim) {
-            cashCompensationFieldValue = RecommendedItemsTests.this.toString(settlementDialog.getCashCompensationValue());
+        ProductCashValue(SettlementDialog settlementDialog, boolean addToClaim) {
+            cashCompensationFieldValue = settlementDialog.getCashCompensationValue();
             name = settlementDialog.getDescriptionText();
             if (addToClaim) {
-                settlementDialog.add();
+                settlementDialog.selectOtherCategoryIfNotChosen().add();
             }
-        }
-
-        public String getCashCompensationFieldValue() {
-            return cashCompensationFieldValue;
-        }
-
-        public String getName() {
-            return name;
         }
     }
 }
