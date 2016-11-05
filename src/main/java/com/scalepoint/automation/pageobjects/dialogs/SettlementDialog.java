@@ -166,7 +166,7 @@ public class SettlementDialog extends BaseDialog {
 
     @Override
     public SettlementDialog ensureWeAreAt() {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         waitForVisible(cancel);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
         return this;
@@ -178,6 +178,13 @@ public class SettlementDialog extends BaseDialog {
                 fillNewPrice(claimItem.getNewPriceSP_2400()).
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
+    }
+
+    public SettlementDialog fillBaseData(String description, String category, String subcategory, int newPrice) {
+        return fillDescription(description).
+                fillNewPrice(newPrice).
+                fillCategory(category).
+                fillSubCategory(subcategory);
     }
 
     public SettlementDialog fillDescription(String descriptionText) {
@@ -377,7 +384,7 @@ public class SettlementDialog extends BaseDialog {
 //        handleNotCheapestDialogIfPresent();
 
         Wait.waitForElementDisappear(button);
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
 
         return Page.at(pageClass);
     }
@@ -709,6 +716,14 @@ public class SettlementDialog extends BaseDialog {
         notCheapestReasonEdit.click();
 
         return at(NotCheapestChoiceDialog.class);
+    }
+
+    public SettlementDialog selectOtherCategoryIfNotChosen() {
+        String value = category.getValue();
+        if (StringUtils.isBlank(value)) {
+            category.select("Øvrige");
+        }
+        return this;
     }
 
     public boolean isDiscretionaryReasonSelected(String value){
