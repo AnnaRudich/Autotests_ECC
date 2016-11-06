@@ -59,7 +59,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
                 scrollTo(item);
                 doubleClick(item);
                 Wait.waitForElementDisplaying(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
-                Wait.waitForAjaxComplete();
+                Wait.waitForAjaxCompleted();
                 break;
             }
         }
@@ -80,7 +80,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
         System.out.println("Search for voucher "+query);
         vouchersSearchField.sendKeys(query);
         vouchersSearchField.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         Wait.waitForStableElements(By.xpath("id('vouchersGridId')"));
     }
 

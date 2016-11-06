@@ -24,7 +24,7 @@ public class Wait {
 
     private static Logger log = LoggerFactory.getLogger(Wait.class);
 
-    public static void waitForAjaxComplete() {
+    public static void waitForAjaxCompleted() {
         new WebDriverWait(Browser.driver(), 30).until((ExpectedCondition<Boolean>) wrapWait ->
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }

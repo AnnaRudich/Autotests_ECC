@@ -96,19 +96,14 @@ public class ShopProductSearchPage extends ShopFlow {
         return OperationalUtils.toNumber(getText(productPrices.get(n)));
     }
 
-    public boolean isRequiredPriceDisplayed(String price) {
+    public boolean isRequiredPriceDisplayed(Double price) {
         try {
-            WebElement option;
-
-            if (System.getProperty("locale").toLowerCase().equals("dk")) {
-                option = find(byProductPricesXpath, price);
-                return option.getText().contains(price);
-            } else {
-                option = find(byProductPricesXpath, price.replaceAll("00", ""));
-                return OperationalUtils.clearString(option.getText()).contains(price);
-            }
-
+            logger.info("Required price is: {}", price);
+            String formattedPrice = OperationalUtils.format(price);
+            find(byProductPricesXpath, formattedPrice);
+            return true;
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             return false;
         }
     }

@@ -38,6 +38,11 @@ public class OperationalUtils {
         return result;
     }
 
+    public static String format(Double value) {
+        Locale locale = new Locale.Builder().setLanguage("da").setRegion("DK").build();
+        return NumberFormat.getNumberInstance(locale).format(value);
+    }
+
     public static String clearString(String s) {
         //return s.replaceAll("[^\\d\\.]*", "");
         return s.replaceAll("[^0-9.,]+", "");
