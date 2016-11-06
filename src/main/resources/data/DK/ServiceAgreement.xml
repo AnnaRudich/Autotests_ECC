@@ -3,8 +3,8 @@
     <!-->Test data <-->
     <testRnVShop>Barbara Maria - Kongevejen 11</testRnVShop>
     <testSePa>Barbara Maria</testSePa>
-    <testAgrName>Test agreement SCALEPOINT</testAgrName>
-    <testAgrNameForRnV>Test agreement for Wizard</testAgrNameForRnV>
+    <testAgrName>AutoTest Agreement</testAgrName>
+    <testAgrNameForRnV>AutoTest Agreement For Wizard</testAgrNameForRnV>
     <templateName>Jacobsen Plus</templateName>
 
     <!-->Service Agreement Details<-->
@@ -38,7 +38,7 @@
 
     <!-->Mails section<-->
     <mailBoxAddress>https://home.scalepoint.com/owa</mailBoxAddress>
-    <newTaskMailSubj>New Repair/Valuation task. Claim#</newTaskMailSubj>
+    <newTaskMailSubj>Ny forsikringsopgave - Kunde:</newTaskMailSubj>
     <cancelledTaskMailSubj>Opgave annulleret</cancelledTaskMailSubj>
     <cancelledMessageText>er annulleret</cancelledMessageText>
     <!-->Claim data<-->

@@ -103,7 +103,7 @@ public class TextSearchPage extends Page {
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
             sortLink.click();
-            Wait.waitForAjaxComplete();
+            Wait.waitForAjaxCompleted();
             Boolean isDisplayed = Wait.For(webDriver -> sortIconToWait.isDisplayed());
             if (isDisplayed) {
                 break;
@@ -152,14 +152,14 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog matchFirst() {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         Wait.waitForElement(By.cssSelector("#productsTable table td"));
         match.click();
         return BaseDialog.at(SettlementDialog.class);
     }
 
     public SettlementDialog match(String productDescription) {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         Wait.waitForElement(By.cssSelector("#productsTable table td"));
         List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//*[text()[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), " +
                 "'" + productDescription + "')]]/../..//button[@class='matchbutton']"));
@@ -194,13 +194,13 @@ public class TextSearchPage extends Page {
             logger.error("The Product name has not been entered!");
         }
         search.click();
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         Wait.waitForStableElement(By.cssSelector("#productsTable table tbody"));
         return this;
     }
 
     public String getFirstProductId() {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         Wait.waitForElement(By.cssSelector("#productsTable table td"));
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
     }

@@ -1,5 +1,6 @@
 package com.scalepoint.automation;
 
+import com.google.common.base.Predicate;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.Window;
@@ -8,8 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public interface Actions {
 
@@ -162,6 +165,35 @@ public interface Actions {
         }
     }
 
+    default boolean isElementPresent(By by) {
+        try {
+            Browser.driver().findElement(by);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    default boolean isDisplayed(By element) {
+        try {
+            return Browser.driver().findElement(element).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    default boolean isDisplayed(WebElement element) {
+        try {
+            new FluentWait<>(element).
+                    withTimeout(5, TimeUnit.SECONDS).
+                    pollingEvery(1000, TimeUnit.MILLISECONDS).
+                    until((Predicate<WebElement>) WebElement::isDisplayed);
+            return element.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     default void doubleClick(WebElement element) {
         org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         action.doubleClick(element);
@@ -191,6 +223,10 @@ public interface Actions {
         JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
         executor.executeScript("arguments[0].value=arguments[1];", element, value);
     }
+
+    default String getAttributeClass(WebElement element){ return element.getAttribute("class");}
+
+    default String getAttributeStyle(WebElement element){return element.getAttribute("style");}
 
 }
 

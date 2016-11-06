@@ -182,7 +182,7 @@ public class SelfServicePage extends Page {
     }
 
     public boolean isSuggestionsContainQuery(String query) {
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
         for (WebElement suggestion : allDescriptionSuggestions) {
             scrollTo(suggestion);
             System.out.println("Query: " + unifyStr(query) + "present in " + unifyStr(suggestion.getText()) + "?");
@@ -291,7 +291,7 @@ public class SelfServicePage extends Page {
 
     public void selectCategory(Integer n) {
         clickAndWaitForStable(allCategories.get(n), By.xpath("(//div[contains(@class, 'categoryColumn')])[3]"));
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         unfocusField();
     }
 
@@ -351,7 +351,7 @@ public class SelfServicePage extends Page {
      * This method adds comment to the claim line
      */
     public void addLineNote(String text) {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         find(By.xpath("//*[contains(@class,'cell-selected')]")).sendKeys(Keys.TAB);
         clickAndWaitForDisplaying(By.xpath("//a[contains(@href, 'showCustomerNoteDialog')]"), By.id("cutomer_note"));
         sendKeys(By.id("cutomer_note"), text);
@@ -364,7 +364,7 @@ public class SelfServicePage extends Page {
     public void addCommonComment(String text) {
         sendKeys(commonCommentsField, text);
         /*commonCommentsField.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxComplete();  */
+        Wait.waitForAjaxCompleted();  */
         commonCommentsField.sendKeys(Keys.TAB);
     }
 
@@ -379,7 +379,7 @@ public class SelfServicePage extends Page {
      * The method selects Close option
      */
     public void selectCloseOption() {
-        //waitForAjaxComplete();
+        //waitForAjaxCompleted();
 //        clickDismissAlertAndWaitForDisplaying(closeButton);
     }
 

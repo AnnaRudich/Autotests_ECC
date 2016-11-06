@@ -39,13 +39,13 @@ public class AddGenericItemDialog extends BaseDialog {
         extCheckboxColumn.enable(itemName);
         ok.click();
 
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         return Page.at(SettlementPage.class);
     }
 
     public AddGenericItemDialog selectCategory(String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         Wait.waitFor(3);
         return this;
     }
@@ -57,7 +57,7 @@ public class AddGenericItemDialog extends BaseDialog {
 
     public void assertGenericItemIsNotPresent(String itemName, String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         try {
             WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '"+itemName+"']"));
             if (element != null && element.isDisplayed()) {

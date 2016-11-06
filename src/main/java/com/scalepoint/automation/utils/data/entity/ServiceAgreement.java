@@ -287,11 +287,11 @@ public class ServiceAgreement {
         return randomTemplateName;
     }
 
-    public String getClaimLineCat() {
+    public String getClaimLineCat_PersonligPleje() {
         return lineCategory;
     }
 
-    public String getClaimLineSubCat() {
+    public String getClaimLineSubCat_Medicin() {
         return lineSubCategory;
     }
 

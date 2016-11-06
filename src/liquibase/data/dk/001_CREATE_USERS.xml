@@ -14,38 +14,45 @@
             declare @chUserRights int = 10 -- claims handler/supply manager
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
 
-            --
             update [User] set UserName = concat(UserName,'-old-',UserID) where Email = 'ecc_auto@scalepoint.com' and UserName like 'autotest-%'
 
-            --
             EXEC autotests_create_user 'autotest-system-scalepoint', @scalepointCompany, @adminUserRights
             EXEC autotests_create_user 'autotest-user-sp',           @scalepointCompany, @adminUserRights
+
+            declare @masterTemplateName varchar(50) = 'mastr'
+            declare @serviceAgreementName varchar(50) = 'AutoTest Agreement'
+            declare @serviceAgreementNameForWizard varchar(50) = 'AutoTest Agreement For Wizard'
 
             -- there are no companies/fts in the range 50-60 across all the countries, so lets grab those ids
             declare @companyId int = 51
             EXEC autotests_create_ic @companyId, 'Future-1'
             EXEC autotests_create_user 'autotest-user-future1', @companyId, @adminUserRights
             EXEC autotests_create_choice_reasons @companyId
+            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
             SET @companyId = 52
             EXEC autotests_create_ic @companyId, 'Future-2'
             EXEC autotests_create_user 'autotest-user-future2', @companyId, @adminUserRights
             EXEC autotests_create_choice_reasons @companyId
+            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
             SET @companyId = 53
             EXEC autotests_create_ic @companyId, 'Future-3'
             EXEC autotests_create_user 'autotest-user-future3', @companyId, @adminUserRights
             EXEC autotests_create_choice_reasons @companyId
+            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
             SET @companyId = 54
             EXEC autotests_create_ic @companyId, 'Future-4'
             EXEC autotests_create_user 'autotest-user-future4', @companyId, @adminUserRights
             EXEC autotests_create_choice_reasons @companyId
+            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
             SET @companyId = 55
             EXEC autotests_create_ic @companyId, 'Future-5'
             EXEC autotests_create_user 'autotest-user-future5', @companyId, @adminUserRights
             EXEC autotests_create_choice_reasons @companyId
+            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
             declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
             EXEC autotests_create_user 'autotest-user-lb', @lb_id, @chUserRights

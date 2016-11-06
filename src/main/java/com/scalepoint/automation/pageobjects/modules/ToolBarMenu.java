@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -50,17 +51,25 @@ public class ToolBarMenu extends Module {
     @FindBy(xpath = "//span[contains(@style, 'claimLineNotesIcon')]/ancestor::a")
     private Button claimLineNote;
 
+    @FindBy(xpath = "//span[contains(@style, 'sendToRepairIcon')]/ancestor::a")
+    private WebElement sendToRnVButton;
+
     public TextSearchPage toProductMatchPage() {
         productMatch.click();
         return at(TextSearchPage.class);
     }
 
-    public ToolBarMenu RemoveSelected() {
+    public ToolBarMenu removeSelected() {
         removeSelected.click();
         return this;
     }
 
-    public ToolBarMenu SelectAll() {
+    public ToolBarMenu sendToRepairAndValuation() {
+        sendToRnVButton.click();
+        return this;
+    }
+
+    public ToolBarMenu selectAll() {
         selectAll.click();
         return this;
     }

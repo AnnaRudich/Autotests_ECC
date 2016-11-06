@@ -14,7 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.waitForAjaxComplete;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @EccPage
 public class UserAddEditPage extends Page {
@@ -205,19 +205,19 @@ public class UserAddEditPage extends Page {
      */
     public void verifyRuleRestrictions(SystemUser user, String login, String password) {
         WebElement option = find(byCompanyXpath, user.getCompany());
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
 
         if (option.getText().equals(user.getCompany())) {
             option.click();
         }
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
         WebElement option1 = find(byDepartmentXpath, user.getDepartment());
         if (option1.getText().equals(user.getDepartment())) {
             option1.click();
         }
         checkPasswordRule(user, password);
         selectSaveOption();
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
     }
 
     /**
@@ -236,7 +236,7 @@ public class UserAddEditPage extends Page {
         saveButton.click();
         String alertTextAndAccept = getAlertTextAndAccept();
         Assert.assertEquals(alertTextAndAccept, message);
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
 
     }
 
@@ -245,7 +245,7 @@ public class UserAddEditPage extends Page {
      */
     public void verifyRuleRestrictionsWithInfo(SystemUser user, String login, String password) {
         WebElement option = find(byCompanyXpath, user.getCompany());
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
         if (option.getText().equals(user.getCompany())) {
             option.click();
         }
@@ -261,7 +261,7 @@ public class UserAddEditPage extends Page {
 
         }
         find(By.xpath("//i[contains(text(),'Your password must follow the rules')]"));
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
 
     }
 
