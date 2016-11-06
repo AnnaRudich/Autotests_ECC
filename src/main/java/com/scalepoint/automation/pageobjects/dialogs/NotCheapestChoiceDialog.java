@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
+
 /**
  * @author : igu
  */
@@ -39,6 +41,12 @@ public class NotCheapestChoiceDialog extends BaseDialog {
 
         return reason.getValue();
     }
+    public NotCheapestChoiceDialog selectReason(String visibleText){
+        waitForVisible(reason);
+        reason.select(visibleText);
+        return this;
+    }
+
 
     public String selectSecondReason() {
         reason.select(2);

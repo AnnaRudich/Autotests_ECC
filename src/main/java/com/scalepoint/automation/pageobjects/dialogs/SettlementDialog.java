@@ -22,6 +22,7 @@ import ru.yandex.qatools.htmlelements.element.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.scalepoint.automation.utils.Wait.For;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementDialog extends BaseDialog {
@@ -534,6 +535,11 @@ public class SettlementDialog extends BaseDialog {
     public AddValuationDialog addValuation() {
         addValuation.click();
         return at(AddValuationDialog.class);
+    }
+
+    public NotCheapestChoiceDialog toNotCheapestDialog(){
+        ok.click();
+        return at(NotCheapestChoiceDialog.class);
     }
 
     public SettlementDialog enterAgeYears(String _ageYears) {

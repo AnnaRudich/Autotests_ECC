@@ -263,6 +263,43 @@ public class SettlementPage extends BaseClaimPage {
                 &&!getAttributeStyle(item).equals(reviewedColor);
     }
 
+    public boolean isVoucherIconPresent(String _claim){
+        List<List<WebElement>> rowsNames = claim.getRows();
+        for (List<WebElement> list : rowsNames) {
+            String claim = list.get(4).getText();
+            if (claim.equals(_claim)) {
+                String voucherIcon = list.get(1).findElement(By.xpath("//td[contains(@class,'voucherImageColumn')]//img")).getAttribute("src");
+                return voucherIcon.contains("voucherIcon.png");
+            }
+        }
+        return false;
+    }
+
+    public boolean isDiscretionaryIconPresent(String _claim){
+        List<List<WebElement>> rowsNames = claim.getRows();
+        for (List<WebElement> list : rowsNames) {
+            String claim = list.get(4).getText();
+            if (claim.equals(_claim)) {
+                String discretionaryIcon = list.get(1).findElement(By.xpath("//td[contains(@class,'voucherImageColumn')]//img")).getAttribute("src");
+                return discretionaryIcon.contains("discretionary_icon.png");
+            }
+        }
+        return false;
+    }
+
+    public boolean isTooltipPresent(String _claim, String expectedText){
+        List<List<WebElement>> rowsNames = claim.getRows();
+        for (List<WebElement> list : rowsNames) {
+            String claim = list.get(4).getText();
+            if (claim.equals(_claim)) {
+                String actualTooltip = list.get(1).getText();
+                return actualTooltip.equals(expectedText);
+            }
+        }
+        return false;
+
+    }
+
     public boolean isClaimLineSendToRepairAndIconDisplays(String ci) {
         return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", ci)));
     }

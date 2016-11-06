@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.pageobjects.dialogs.NotCheapestChoiceDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -362,12 +363,9 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * WHEN:FT is ON
      * AND: Create claimline which is matched with some voucher (combine checkbox is unchecked)
      * AND: Add the discretionary valuation
-     * AND: Add the New price and apply the manual discretionary depreciation.
-     * AND: Add Customer Demand price
-     * AND: Select 0 year, 2 month in calendar
-     * AND: Select the reason 'Max dækning' for the Voucher valuation.
-     * THEN: Verify the reason's representation for Voucher Valuation.
      * WHEN: Go to settlement page
+     * AND: reason 1 is selected
+     * AND: Select Voucher valuation
      * THEN: no discretionary icon and no hover is displayed
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
@@ -378,18 +376,108 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         String month = "2 ";
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
-                fillDescription(claimItem.getTextFieldSP()).
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
                 selectValuation(SettlementDialog.Valuation.VOUCHER).
                 selectMonth(month + claimItem.getMonths()).
-                SelectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2());
-        assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason2()), "Discretionary reason for Custom Demand Price " +
-                "is selected not correctly");
-        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "DISCRETIONARY reason field should be disabled for voucher valuation");
-        SettlementPage settlementpage = settlementDialog.ok();
+                fillDescription(claimItem.getTextFieldSP()).
+                selectDiscretionaryReason(1).
+                toNotCheapestDialog().
+                selectReason(discretionaryReason.getDiscretionaryReason3()).
+                ok();
+        SettlementPage settlementPage = settlementDialog.
+                ok();
+        assertFalse(settlementPage.isVoucherIconPresent(claimItem.getTextFieldSP()),"Discretionary icon should not be displayed");
+    }
 
+    /**
+     * WHEN:FT is ON
+     * AND: Add Customer Demand price
+     * AND: Customer demand price is matched with discretionary rule.
+     * WHEN: Go to settlement page
+     * AND: reason 2 is selected
+     * THEN: discretionary icon and the hover with reason 2 text are displayed.
+     */
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
+            "Customer demand price is matched with discretionary rule.FT=ON")
+    public void charlie_508_16_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                                 DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        String month = "4 ";
+        String age = "1";
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        settlementPage.
+                addManually().
+                fillCategory(claimItem.getExistingCat4()).
+                fillSubCategory(claimItem.getExistingSubCat4()).
+                fillCustomerDemand(claimItem.getUsedPrice()).
+                enableAge().
+                enterAgeYears(age).
+                selectMonth(month + claimItem.getMonths()).
+                selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
+                fillDescription(claimItem.getTextFieldSP()).
+                selectDiscretionaryReason(1).
+                ok();
+        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
+        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason4()),"Discretionary Reason Tooltip should be displayed");
+    }
+
+    /**
+     * WHEN:FT is ON
+     * AND: Create claimline which is matched with some voucher (combine checkbox is unchecked)
+     * AND: Add the discretionary valuation
+     * WHEN: Go to settlement page
+     * AND: reason 3 is selected
+     * THEN:  discretionary icon and the hover with reason 3 text are displayed.
+     */
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
+            "Discretionary valuation is added.FT=ON")
+    public void charlie_508_17_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                                 DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem, depreciationType, discretionaryReason);
+        settlementDialog.
+                fillDescription(claimItem.getTextFieldSP()).
+                selectDiscretionaryReason(2).
+                toNotCheapestDialog().
+                selectReason(discretionaryReason.getDiscretionaryReason5()).
+                ok();
+        SettlementPage settlementPage = settlementDialog
+                .ok();
+        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()), "Discretionary reason icon should be displayed");
+        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(), discretionaryReason.getDiscretionaryReason5()), "Discretionary Reason Tooltip should be displayed");
+    }
+    /**
+     * WHEN:FT is ON
+     * AND: Create claimline which is matched with some voucher and discretionary rule (combine checkbox is checked).
+     * AND: Add the discretionary valuation
+     * AND: Add the New price and apply the manual discretionary depreciation.
+     * AND: Add Customer Demand price
+     * WHEN: Go to settlement page
+     * AND: reason 3 is selected
+     * THEN: discretionary icon and the hover with reason 3 text are displayed.
+     */
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
+            "claimline is matched with some voucher and discretionary rule (combine checkbox is checked)FT=ON")
+    public void charlie_508_18_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                                 DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem, depreciationType, discretionaryReason);
+        settlementDialog.
+                setDiscountAndDepreciation(true).
+                fillDescription(claimItem.getTextFieldSP()).
+                selectDiscretionaryReason(2).
+                toNotCheapestDialog().
+                selectReason(discretionaryReason.getDiscretionaryReason5()).
+                ok();
+        SettlementPage settlementPage = settlementDialog
+                .ok();
+        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()), "Discretionary reason icon should be displayed");
+        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(), discretionaryReason.getDiscretionaryReason5()), "Discretionary Reason Tooltip should be displayed");
     }
 
     private SettlementDialog createClaimAndPrepareSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
@@ -410,4 +498,24 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 fillDepreciation(20).
                 selectDepreciationType(depreciationType.getDiscretionaryType());
     }
+
+    private SettlementDialog createClaimAndFillSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+                                                      DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
+        String month = "4 ";
+        String age = "1";
+        return loginAndCreateClaim(user, claim).
+                addManually().
+                fillCategory(claimItem.getExistingCat4()).
+                fillSubCategory(claimItem.getExistingSubCat4()).
+                addValuation().
+                addValuationPrice(claimItem.getUsedPrice()).
+                addValuationType(claimItem.getValuationType4()).
+                ok().
+                fillNewPrice(claimItem.getUsedPrice()).
+                enableAge().
+                enterAgeYears(age).
+                selectMonth(month + claimItem.getMonths()).
+                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING);
+    }
+
 }
