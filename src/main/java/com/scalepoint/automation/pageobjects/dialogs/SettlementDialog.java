@@ -54,14 +54,14 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "customer-demand-textfield-inputEl")
     private ExtInput customerDemand;
 
-    @FindBy(id = "new-price-textfield")
-    private ExtText newPrice;
+    @FindBy(id = "new-price-textfield-inputEl")
+    private ExtInput newPrice;
 
     @FindBy(id = "depreciation-textfield-inputEl")
-    private TextInput depreciation;
+    private ExtInput depreciation;
 
-    @FindBy(id = "discretionary-replacement-textfield")
-    private ExtText discretionaryDepreciation;
+    @FindBy(id = "discretionary-replacement-textfield-inputEl")
+    private ExtInput discretionaryDepreciation;
 
     @FindBy(id = "reject-checkbox")
     private ExtCheckbox rejected;
@@ -180,34 +180,33 @@ public class SettlementDialog extends BaseDialog {
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
     }
 
-    public SettlementDialog fillDescription(String descriptionText) {
-        this.enteredDescription = descriptionText;
-        description.setValue(descriptionText);
+    private SettlementDialog setExtInputValue(ExtInput input, String value) {
+        waitForVisible(input);
+
+        input.enter(value);
+        input.sendKeys(Keys.TAB);
+
         return this;
+    }
+
+    public SettlementDialog fillDescription(String descriptionText) {
+        return setExtInputValue(description, descriptionText);
     }
 
     public SettlementDialog fillNewPrice(int amount) {
-        newPrice.enter(String.valueOf(amount));
-        return this;
+        return setExtInputValue(newPrice, String.valueOf(amount));
     }
 
     public SettlementDialog fillDepreciationValue(int amount){
-        discretionaryDepreciation.enter(String.valueOf(amount));
-        return this;
+        return setExtInputValue(discretionaryDepreciation, String.valueOf(amount));
     }
 
     public SettlementDialog fillCustomerDemand(int amount) {
-        customerDemand.clear();
-        customerDemand.sendKeys(String.valueOf(amount));
-        newPrice.getWrappedElement().click();
-        return this;
+        return setExtInputValue(customerDemand, String.valueOf(amount));
     }
 
     public SettlementDialog fillDepreciation(int amount) {
-        depreciation.clear();
-        depreciation.sendKeys(String.valueOf(amount));
-        description.getWrappedElement().click();
-        return this;
+        return setExtInputValue(depreciation, String.valueOf(amount));
     }
 
     public SettlementDialog fillCategory(String categoryName) {
@@ -369,9 +368,6 @@ public class SettlementDialog extends BaseDialog {
 
     public <T extends Page> T ok(Class<T> pageClass, Button button) {
         waitForVisible(button);
-        if (StringUtils.isBlank(description.getText())) {
-            description.setValue(enteredDescription);
-        }
         button.click();
 
 //        handleNotCheapestDialogIfPresent();
@@ -530,10 +526,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog enterAgeYears(String _ageYears) {
-        waitForVisible(ageYears);
-        ageYears.enter(_ageYears);
-        ageYears.sendKeys(Keys.TAB);
-        return this;
+        return setExtInputValue(ageYears, _ageYears);
     }
 
     public boolean isAgeYearsIsEnabled() {
