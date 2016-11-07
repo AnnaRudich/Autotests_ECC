@@ -14,7 +14,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         return this;
     }
 
@@ -46,7 +46,6 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public boolean isNewShopExists(Shop shop) {
-            waitForStableElements((By.xpath("id('supplierShopsGridId')//table//tr")));
             try {
                 WebElement item = find(byShopNameXpath, shop.getShopName());
                 scrollTo(item);

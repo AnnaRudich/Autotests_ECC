@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxComplete;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForStableElements;
 
 @EccPage
@@ -54,14 +54,14 @@ public class UsersPage extends Page {
 
     public void refreshUsersList() {
         refreshButton.click();
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
     }
 
     public void makeUserSearchByName(String query) {
         quickSearchField.clear();
         quickSearchField.sendKeys(query);
         quickSearchField.sendKeys(Keys.ENTER);
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
     }
 
     public boolean isUserExists(SystemUser user) {
@@ -81,7 +81,7 @@ public class UsersPage extends Page {
 
     public boolean isDisplayed(SystemUser user) {
         makeUserSearchByName(user.getLogin());
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
         waitForStableElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
         WebElement item = find(byUserLoginXpath, user.getLogin());
         return item.getText().contains(user.getLogin()) &&
@@ -91,7 +91,7 @@ public class UsersPage extends Page {
 
     public UserAddEditPage openUserForEditing(String userName) {
         makeUserSearchByName(userName);
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
         SelenideElement element = $(By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr[1]/td[2]"));
         WebElement item = find(byUserLoginXpath, userName);
         if (item.getText().contains(userName)) {

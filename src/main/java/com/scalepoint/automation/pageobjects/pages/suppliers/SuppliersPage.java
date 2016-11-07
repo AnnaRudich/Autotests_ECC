@@ -89,7 +89,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         suppliersSearchField.clear();
         setValue(suppliersSearchField, query);
         suppliersSearchField.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
     }
 
     public boolean isSupplierCreated(Supplier supplier) {

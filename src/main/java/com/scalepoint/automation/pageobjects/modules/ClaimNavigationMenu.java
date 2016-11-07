@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -39,16 +40,16 @@ public class ClaimNavigationMenu extends Module {
     @FindBy(id = "historyButton")
     private Link history;
 
-    public void ClickSettlement() {
+    public void toSettlementPage() {
         settelment.click();
     }
 
-    public MailsPage clickMails() {
+    public MailsPage toMailsPage() {
         mails.click();
         return at(MailsPage.class);
     }
 
-    public CustomerDetailsPage clickCustomerDetails() {
+    public CustomerDetailsPage toCustomerDetailsPage() {
         details.click();
         return at(CustomerDetailsPage.class);
     }
@@ -57,15 +58,16 @@ public class ClaimNavigationMenu extends Module {
         imports.click();
     }
 
-    public void ClickRepairValuation() {
+    public RnvProjectsPage toRepairValuationProjectsPage() {
         repairValuation.click();
+        return at(RnvProjectsPage.class);
     }
 
     public void ClickSettlementSummary() {
         settlementSummary.click();
     }
 
-    public OrderDetailsPage clickOrder() {
+    public OrderDetailsPage toOrderDetailsPage() {
         order.click();
         return at(OrderDetailsPage.class);
     }
@@ -74,7 +76,7 @@ public class ClaimNavigationMenu extends Module {
         details.click();
     }
 
-    public NotesPage clickOnNotes() {
+    public NotesPage toNotesPage() {
         notes.click();
         return at(NotesPage.class);
     }

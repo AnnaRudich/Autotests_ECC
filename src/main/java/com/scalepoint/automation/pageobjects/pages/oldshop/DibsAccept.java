@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,8 +21,8 @@ public class DibsAccept extends Page {
         return "https://payment.architrade.com/payment/accept.pml";
     }
 
-    public DibsSuccessPage acceptAndBackToShop() {
+    public CustomerDetailsPage acceptAndBackToEcc() {
         continueOption.click();
-        return at(DibsSuccessPage.class);
+        return at(CustomerDetailsPage.class);
     }
 }

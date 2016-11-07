@@ -22,6 +22,7 @@ import ru.yandex.qatools.htmlelements.element.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.scalepoint.automation.utils.Wait.For;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementDialog extends BaseDialog {
@@ -166,7 +167,7 @@ public class SettlementDialog extends BaseDialog {
 
     @Override
     public SettlementDialog ensureWeAreAt() {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         waitForVisible(cancel);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
         return this;
@@ -180,6 +181,16 @@ public class SettlementDialog extends BaseDialog {
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
     }
 
+    public SettlementDialog fillBaseData(String description, String category, String subcategory, int newPrice) {
+        return fillDescription(description).
+                fillNewPrice(newPrice).
+                fillCategory(category).
+                fillSubCategory(subcategory);
+    }
+
+    public SettlementDialog fillDescription(String descriptionText) {
+        this.enteredDescription = descriptionText;
+        description.setValue(descriptionText);
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
 
@@ -373,7 +384,7 @@ public class SettlementDialog extends BaseDialog {
 //        handleNotCheapestDialogIfPresent();
 
         Wait.waitForElementDisappear(button);
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
 
         return Page.at(pageClass);
     }
@@ -523,6 +534,11 @@ public class SettlementDialog extends BaseDialog {
     public AddValuationDialog addValuation() {
         addValuation.click();
         return at(AddValuationDialog.class);
+    }
+
+    public NotCheapestChoiceDialog toNotCheapestDialog(){
+        ok.click();
+        return at(NotCheapestChoiceDialog.class);
     }
 
     public SettlementDialog enterAgeYears(String _ageYears) {
@@ -702,6 +718,14 @@ public class SettlementDialog extends BaseDialog {
         notCheapestReasonEdit.click();
 
         return at(NotCheapestChoiceDialog.class);
+    }
+
+    public SettlementDialog selectOtherCategoryIfNotChosen() {
+        String value = category.getValue();
+        if (StringUtils.isBlank(value)) {
+            category.select("Øvrige");
+        }
+        return this;
     }
 
     public boolean isDiscretionaryReasonSelected(String value){

@@ -3,17 +3,13 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
-import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Radio;
-
-import java.util.List;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -54,7 +50,7 @@ public class ReplacementDialog extends BaseDialog {
 
     @Override
     public ReplacementDialog ensureWeAreAt() {
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
         switchToLast();
         waitForVisible(cancelButton);
         return this;

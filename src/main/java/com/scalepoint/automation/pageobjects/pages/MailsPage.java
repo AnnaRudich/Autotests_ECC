@@ -4,11 +4,12 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
-import static com.scalepoint.automation.utils.Wait.waitForAjaxComplete;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @EccPage
 public class MailsPage extends Page {
@@ -30,7 +31,7 @@ public class MailsPage extends Page {
     @Override
     public MailsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxComplete();
+        waitForAjaxCompleted();
         return this;
     }
 
@@ -39,5 +40,15 @@ public class MailsPage extends Page {
 
         viewLastWelcomeMail.click();
         return BaseDialog.at(MailViewDialog.class);
+    }
+
+    public boolean isRequiredMailSent(String subj) {
+        String mailSubjectXpath = "//div[contains(.,'$1')]".replace("$1", subj);
+        boolean result = isElementPresent(By.xpath(mailSubjectXpath));
+        if(!result){
+            logger.info("Mail with subject {}  was not found", subj.toUpperCase());
+            return false;
+        }
+        return true;
     }
 }

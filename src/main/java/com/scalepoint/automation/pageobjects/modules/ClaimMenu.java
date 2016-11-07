@@ -62,7 +62,7 @@ public class ClaimMenu extends Module {
 
     public void selectTextSearchItem() {
         $(By.xpath("//span[contains(@style, 'findInCatalogIcon')]/ancestor::a")).click();
-        Wait.waitForAjaxComplete();
+        Wait.waitForAjaxCompleted();
     }
 
     /**
