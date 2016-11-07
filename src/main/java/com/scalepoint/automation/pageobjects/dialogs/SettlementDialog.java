@@ -188,9 +188,6 @@ public class SettlementDialog extends BaseDialog {
                 fillSubCategory(subcategory);
     }
 
-    public SettlementDialog fillDescription(String descriptionText) {
-        this.enteredDescription = descriptionText;
-        description.setValue(descriptionText);
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
 
