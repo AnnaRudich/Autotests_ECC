@@ -128,40 +128,33 @@ public class BasicTests extends BaseTest {
     @Bug(bug = "CHARLIE-479")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible add note on Settlement page")
+    @RequiredSetting(type = FTSetting.USE_INTERNAL_NOTES)
+    @RequiredSetting(type = FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON)
+    @RequiredSetting(type = FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)
     public void ecc3256_3050_addInternalAndCustomerNotes(User user, Claim claim) {
-        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-
-        FtOperation[] enableOperations = {
-                enable(FTSetting.USE_INTERNAL_NOTES),
-                enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
-                enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)
-        };
-
-        FtOperation[] disableOperations = {
-                disable(FTSetting.USE_INTERNAL_NOTES),
-                disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
-                disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)
-        };
-
-        loginAndCreateClaim(user, claim);
 
         String customerNote = "Customer note!";
         String internalNote = "Internal note!";
 
-        functionalTemplatesApi.
-                updateTemplate(user.getFtId(), SettlementPage.class, enableOperations).
+        loginAndCreateClaim(user, claim).
                 toNotesPage().
                 addCustomerNote(customerNote).
                 addInternalNote(internalNote).
                 assertCustomerNotePresent(customerNote).
                 assertInternalNotePresent(internalNote);
 
-        functionalTemplatesApi.
-                updateTemplate(user.getFtId(), NotesPage.class, disableOperations).
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
+        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class,
+                disable(FTSetting.USE_INTERNAL_NOTES),
+                disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
+                disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)).
                 assertEditCustomerNoteButtonPresent().
                 assertInternalNoteButtonNotPresent();
 
-        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class, enableOperations).
+        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class,
+                enable(FTSetting.USE_INTERNAL_NOTES),
+                enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
+                enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)).
                 assertEditCustomerNoteButtonPresent().
                 assertInternalNoteFieldsPresent();
     }

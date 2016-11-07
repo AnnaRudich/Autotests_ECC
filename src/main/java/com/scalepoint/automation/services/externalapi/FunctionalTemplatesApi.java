@@ -29,7 +29,7 @@ public class FunctionalTemplatesApi extends EccServerApi {
         super(executor);
     }
 
-    private List<FtOperation> findDifferences(Integer functionalTemplateId, FtOperation... operations) {
+    private FTSettings.ComparingResult findDifferences(Integer functionalTemplateId, FtOperation... operations) {
         try {
             Content content = post(Page.getUrl(EditFunctionTemplatePage.class) + functionalTemplateId, executor).returnContent();
             Document doc = Jsoup.parse(content.asString());
@@ -42,10 +42,12 @@ public class FunctionalTemplatesApi extends EccServerApi {
 
     public <T extends Page> T updateTemplate(Integer functionalTemplateId, Class<T> returnPageClass, FtOperation... operations) {
         String currentUrl = Browser.driver().getCurrentUrl();
-        operationsToRollback = findDifferences(functionalTemplateId, operations);
-        log.info("Requested to update: {} Found diffs: {}", operations.length, operationsToRollback.size());
+        FTSettings.ComparingResult comparingResult = findDifferences(functionalTemplateId, operations);
+        log.info("Requested to update: {} Found diffs: {}", operations.length, comparingResult.getDifferedOperations().size());
 
-        if (operationsToRollback.isEmpty()) {
+        operationsToRollback = comparingResult.getInitialStates();
+
+        if (comparingResult.hasSameStateAsRequested()) {
             return detectPage(currentUrl, returnPageClass);
         }
 
