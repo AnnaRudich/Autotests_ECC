@@ -62,6 +62,7 @@
 
             declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
             EXEC autotests_create_user 'autotest-user-trygfors', @tryg_id, @chUserRights
+            EXEC autotests_create_redrule_tryg
 
             declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'ALKA')
             EXEC autotests_create_user 'autotest-user-alka', @alka_id, @chUserRights
