@@ -378,8 +378,6 @@ public class SettlementDialog extends BaseDialog {
         waitForVisible(button);
         button.click();
 
-//        handleNotCheapestDialogIfPresent();
-
         Wait.waitForElementDisappear(button);
         Wait.waitForAjaxCompleted();
 
@@ -467,19 +465,9 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    /* doesn't work combo selection */
-    private void handleNotCheapestDialogIfPresent() {
-        waitASecond();
-        try {
-            WebElement element = driver.findElement(By.id("not-lowest-reason-dialog"));
-            if (element.isDisplayed()) {
-                notCheapestReasonCombo.select(1);
-                driver.findElement(By.id("not-cheapest-reason-ok-button")).click();
-                waitASecond();
-            }
-        } catch (Exception e) {
-            logger.error("Can't handle not cheapest dialog: "+e.getMessage());
-        }
+    public SettlementDialog selectValuationNotCheapest(Valuation valuation) {
+        selectValuation(valuation);
+        return at(NotCheapestChoiceDialog.class).selectFirstReason().ok();
     }
 
     public Double voucherFaceValueFieldText() {

@@ -180,7 +180,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 isDialogShownAfterOk(NotCheapestChoiceDialog.class);
 
-        String selectedReason = notCheapestChoiceDialog.selectFirstReason();
+        String selectedReason = notCheapestChoiceDialog.selectAndGetFirstReasonValue();
         notCheapestChoiceDialog.okGoToSettlementPage();
 
         return selectedReason;

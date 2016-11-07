@@ -36,11 +36,16 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return amount.getText();
     }
 
-    public String selectFirstReason() {
+    public String selectAndGetFirstReasonValue() {
         reason.select(1);
-
         return reason.getValue();
     }
+
+    public NotCheapestChoiceDialog selectFirstReason() {
+        selectAndGetFirstReasonValue();
+        return this;
+    }
+
     public NotCheapestChoiceDialog selectReason(String visibleText){
         waitForVisible(reason);
         reason.select(visibleText);
