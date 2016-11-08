@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.NotCheapestChoiceDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -180,6 +179,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                      DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
+                fillDescription(claimItem.getTextFieldSP()).
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
                 selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
         assertTrue(settlementDialog.isDiscretionaryReasonSelected(discretionaryReason.getDiscretionaryReason1()), "Discretionary reason for Discretionary Valuation" +
@@ -203,6 +203,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                      DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
+                fillDescription(claimItem.getTextFieldSP()).
                 selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
                 selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
@@ -369,24 +370,20 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page.FT=ON")
-    public void charlie_508_15_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
+    public void charlie_508_15_verifyDiscretionaryReasonIconFTON(User user, Claim claim, ClaimItem claimItem,
                                                              DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
-        String month = "2 ";
         SettlementDialog settlementDialog = createClaimAndPrepareSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
-                selectValuation(SettlementDialog.Valuation.ANDEN_VURDERING).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1()).
-                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                selectValuation(SettlementDialog.Valuation.VOUCHER).
-                selectMonth(month + claimItem.getMonths()).
                 fillDescription(claimItem.getTextFieldSP()).
-                selectDiscretionaryReason(1).
+                disableAge().
+                selectValuation(SettlementDialog.Valuation.VOUCHER).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason3()).
                 toNotCheapestDialog().
                 selectReason(discretionaryReason.getDiscretionaryReason3()).
                 ok();
-        SettlementPage settlementPage = settlementDialog.
+                SettlementPage settlementPage = settlementDialog.
                 ok();
-        assertFalse(settlementPage.isVoucherIconPresent(claimItem.getTextFieldSP()),"Discretionary icon should not be displayed");
+        assertTrue(settlementPage.isVoucherIconPresent(claimItem.getTextFieldSP()),"Discretionary icon should not be displayed");
     }
 
     /**
@@ -416,7 +413,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 selectMonth(month + claimItem.getMonths()).
                 selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND).
                 fillDescription(claimItem.getTextFieldSP()).
-                selectDiscretionaryReason(1).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason4()).
                 ok();
         assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
         assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason4()),"Discretionary Reason Tooltip should be displayed");
@@ -439,7 +436,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem, depreciationType, discretionaryReason);
         settlementDialog.
                 fillDescription(claimItem.getTextFieldSP()).
-                selectDiscretionaryReason(2).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason5()).
                 toNotCheapestDialog().
                 selectReason(discretionaryReason.getDiscretionaryReason5()).
                 ok();
@@ -468,7 +465,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         settlementDialog.
                 setDiscountAndDepreciation(true).
                 fillDescription(claimItem.getTextFieldSP()).
-                selectDiscretionaryReason(2).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason5()).
                 toNotCheapestDialog().
                 selectReason(discretionaryReason.getDiscretionaryReason5()).
                 ok();
@@ -477,6 +474,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()), "Discretionary reason icon should be displayed");
         assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(), discretionaryReason.getDiscretionaryReason5()), "Discretionary Reason Tooltip should be displayed");
     }
+
 
     private SettlementDialog createClaimAndPrepareSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
                                                       DepreciationType depreciationType, DiscretionaryReason discretionaryReason) {
@@ -493,8 +491,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 addValuationType(claimItem.getValuationType1()).
                 addValuationPrice(claimItem.getUsedPrice()).
                 ok().
-                fillDepreciation(20).
-                selectDepreciationType(depreciationType.getDiscretionaryType());
+                fillDepreciation(20);
     }
 
     private SettlementDialog createClaimAndFillSid(@UserCompany(CompanyCode.TRYGFORSIKRING)User user, Claim claim, ClaimItem claimItem,
