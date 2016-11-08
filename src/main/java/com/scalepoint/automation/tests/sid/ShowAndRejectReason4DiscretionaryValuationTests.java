@@ -342,17 +342,15 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             " with policy deducted by the rules")
     public void charlie_508_14_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim,
                                                              ClaimItem claimItem, DepreciationType depreciationType) {
-        String month = "4 ";
-        String age = "1";
+        String age = "3";
         Integer reductionRule = 20;
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog settlementDialog = settlementPage.
                 addManually().
                 fillCategory(claimItem.getTrygCategory1()).
-                fillNewPrice(claimItem.getUsedPrice()).
+                fillNewPrice(10).
                 enableAge().
                 enterAgeYears(age).
-                selectMonth(month + claimItem.getMonths()).
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 applyReductionRuleByValue(reductionRule).
                 selectDepreciationType(depreciationType.getPolicyType()).
