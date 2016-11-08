@@ -180,6 +180,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog fillBaseData(ClaimItem claimItem) {
         return fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getCustomerDemand_500()).
+                fillNewPrice(claimItem.getNewPriceSP_2400()).
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
     }
@@ -206,33 +207,23 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillDescription(String descriptionText) {
-        this.enteredDescription = descriptionText;
-        description.setValue(descriptionText);
-        return this;
+        return setExtInputValue(description, descriptionText);
     }
 
     public SettlementDialog fillNewPrice(int amount) {
-        newPrice.enter(String.valueOf(amount));
-        return this;
+        return setExtInputValue(newPrice, String.valueOf(amount));
     }
 
     public SettlementDialog fillDepreciationValue(int amount){
-        discretionaryDepreciation.enter(String.valueOf(amount));
-        return this;
+        return setExtInputValue(discretionaryDepreciation, String.valueOf(amount));
     }
 
     public SettlementDialog fillCustomerDemand(int amount) {
-        customerDemand.clear();
-        customerDemand.sendKeys(String.valueOf(amount));
-        newPrice.getWrappedElement().click();
-        return this;
+        return setExtInputValue(customerDemand, String.valueOf(amount));
     }
 
     public SettlementDialog fillDepreciation(int amount) {
-        depreciation.clear();
-        depreciation.sendKeys(String.valueOf(amount));
-        description.getWrappedElement().click();
-        return this;
+        return setExtInputValue(depreciation, String.valueOf(amount));
     }
 
     public SettlementDialog fillCategory(String categoryName) {
