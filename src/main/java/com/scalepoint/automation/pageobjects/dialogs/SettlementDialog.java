@@ -1,6 +1,9 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.pageobjects.extjs.*;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -14,15 +17,16 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.*;
+import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.Link;
+import ru.yandex.qatools.htmlelements.element.Table;
+import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.For;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementDialog extends BaseDialog {
@@ -176,7 +180,6 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog fillBaseData(ClaimItem claimItem) {
         return fillDescription(claimItem.getTextFieldSP()).
                 fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
     }
@@ -192,9 +195,14 @@ public class SettlementDialog extends BaseDialog {
         waitForVisible(input);
 
         input.enter(value);
-        input.sendKeys(Keys.TAB);
+        simulateBlurEvent(input);
 
         return this;
+    }
+
+    private void simulateBlurEvent(ExtInput input) {
+        ExtInput inputForClick = input == quantity ? description : quantity;
+        inputForClick.getRootElement().click();
     }
 
     public SettlementDialog fillDescription(String descriptionText) {
