@@ -26,6 +26,7 @@ import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static org.testng.Assert.*;
 
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
+@RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class SettlementDialogSmokeTests extends BaseTest {
 
     /**

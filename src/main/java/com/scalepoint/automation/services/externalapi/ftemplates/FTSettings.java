@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FTSettings {
@@ -31,8 +32,9 @@ public class FTSettings {
         return new FtTextField(ftSetting, value);
     }
 
-    public static List<FtOperation> differences(Document document, List<FtOperation> operations) {
+    public static ComparingResult differences(Document document, List<FtOperation> operations) {
         List<FtOperation> differedOperations = new ArrayList<>();
+        List<FtOperation> initialStates = new ArrayList<>();
 
         for (FtOperation operation : operations) {
             boolean hasSameState = operation.hasSameState(document);
@@ -40,8 +42,31 @@ public class FTSettings {
                 differedOperations.add(operation.getRollbackOperation());
                 logger.info("FTSettings should be updated because of: {}", operation.toString());
             }
+            initialStates.add(operation.getRollbackOperation());
         }
-        return differedOperations;
+        return new ComparingResult(differedOperations, initialStates);
+    }
+
+    public static class ComparingResult {
+        List<FtOperation> differedOperations = Collections.emptyList();
+        List<FtOperation> initialStates = Collections.emptyList();
+
+        ComparingResult(List<FtOperation> differedOperations, List<FtOperation> initialStates) {
+            this.differedOperations = differedOperations;
+            this.initialStates = initialStates;
+        }
+
+        public List<FtOperation> getDifferedOperations() {
+            return differedOperations;
+        }
+
+        public boolean hasSameStateAsRequested() {
+            return differedOperations.isEmpty();
+        }
+
+        public List<FtOperation> getInitialStates() {
+            return initialStates;
+        }
     }
 }
 

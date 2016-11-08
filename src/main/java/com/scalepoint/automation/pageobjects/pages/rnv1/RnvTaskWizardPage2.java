@@ -69,7 +69,6 @@ public class RnvTaskWizardPage2 extends Page {
         String sendText = serviceAgreement.getSentText();
         clickAndWaitForDisplaying(sendBtn, By.xpath("//div[contains(text(), '" + sendText + "')]"));
         driver.findElement(By.cssSelector("a.tasks-statuses-close-button")).click();;
-        waitForAjaxCompleted();
         return at(SettlementPage.class);
     }
 
