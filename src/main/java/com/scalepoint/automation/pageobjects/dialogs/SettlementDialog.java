@@ -59,14 +59,14 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "customer-demand-textfield-inputEl")
     private ExtInput customerDemand;
 
-    @FindBy(id = "new-price-textfield")
-    private ExtText newPrice;
+    @FindBy(id = "new-price-textfield-inputEl")
+    private ExtInput newPrice;
 
     @FindBy(id = "depreciation-textfield-inputEl")
-    private TextInput depreciation;
+    private ExtInput depreciation;
 
-    @FindBy(id = "discretionary-replacement-textfield")
-    private ExtText discretionaryDepreciation;
+    @FindBy(id = "discretionary-replacement-textfield-inputEl")
+    private ExtInput discretionaryDepreciation;
 
     @FindBy(id = "reject-checkbox")
     private ExtCheckbox rejected;
