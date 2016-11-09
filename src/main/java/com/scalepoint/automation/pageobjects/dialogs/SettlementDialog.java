@@ -722,8 +722,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public boolean isDiscretionaryReasonSelected(String value){
-        return discretionaryReason.getValue().equals(value);
+    public String getDiscretionaryReasonText(){
+        return discretionaryReason.getValue();
     }
 }
 
