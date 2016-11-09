@@ -23,7 +23,7 @@ public class MandatoryNewPriceTests extends BaseTest {
         loginAndCreateClaim(user, claim).
                 addManually().
                 fillBaseData(claimItem).
-                fillDepreciationValue(48)
+                fillDiscretionaryPrice(48)
                 .ok();
     }
 
@@ -36,7 +36,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                 fillCustomerDemand(claimItem.getCustomerDemand_500()).
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillDepreciationValue(48).
+                fillDiscretionaryPrice(48).
                 isDialogShownAfterOk(RequiredValuationIsNeededDialog.class);
     }
 
@@ -62,7 +62,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                 fillNewPrice(claimItem.getNewPriceSP_2400()).
                 fillCategory(claimItem.getExistingCat1_Born()).
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillDepreciationValue(48).
+                fillDiscretionaryPrice(48).
                 ok();
     }
 

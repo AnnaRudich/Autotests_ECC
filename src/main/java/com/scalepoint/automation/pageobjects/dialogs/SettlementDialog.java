@@ -1,9 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
+import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -66,7 +63,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtInput depreciation;
 
     @FindBy(id = "discretionary-replacement-textfield-inputEl")
-    private ExtInput discretionaryDepreciation;
+    private ExtInput discretionaryPrice;
 
     @FindBy(id = "reject-checkbox")
     private ExtCheckbox rejected;
@@ -201,7 +198,7 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    private void simulateBlurEvent(ExtInput input) {
+    private void simulateBlurEvent(ExtElement input) {
         ExtInput inputForClick = input == quantity ? description : quantity;
         inputForClick.getRootElement().click();
     }
@@ -214,8 +211,8 @@ public class SettlementDialog extends BaseDialog {
         return setExtInputValue(newPrice, String.valueOf(amount));
     }
 
-    public SettlementDialog fillDepreciationValue(int amount){
-        return setExtInputValue(discretionaryDepreciation, String.valueOf(amount));
+    public SettlementDialog fillDiscretionaryPrice(int amount){
+        return setExtInputValue(discretionaryPrice, String.valueOf(amount));
     }
 
     public SettlementDialog fillCustomerDemand(int amount) {
