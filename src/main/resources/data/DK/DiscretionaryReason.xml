@@ -5,4 +5,7 @@
     <discretionaryReason3>Sagen er generelt veldokumenteret, derfor OK</discretionaryReason3>
     <discretionaryReason4>Sagen er generelt dårligt dokumenteret, derfor lavere skøn</discretionaryReason4>
     <discretionaryReason5>Afviger fra den generelle afskrivning jf. betingelserne (f.eks. FUF)</discretionaryReason5>
+    <discretionaryReason6>Skønnet erstatning grundet manglende dokumentation</discretionaryReason6>
+    <discretionaryReason7>Skønnet erstatning grundet forbrug</discretionaryReason7>
 </discretionaryReason>
+

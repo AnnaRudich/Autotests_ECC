@@ -22,6 +22,10 @@ public class DiscretionaryReason {
     private String discretionaryReason4;
     @XmlElement
     private String discretionaryReason5;
+    @XmlElement
+    private String discretionaryReason6;
+    @XmlElement
+    private String discretionaryReason7;
 
     public String getDiscretionaryReason1(){
         return discretionaryReason1;
@@ -41,6 +45,14 @@ public class DiscretionaryReason {
 
     public String getDiscretionaryReason5(){
         return discretionaryReason5;
+    }
+
+    public String getDiscretionaryReason6() {
+        return discretionaryReason6;
+    }
+
+    public String getDiscretionaryReason7() {
+        return discretionaryReason7;
     }
 
 }
