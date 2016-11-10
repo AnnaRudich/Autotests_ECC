@@ -39,9 +39,9 @@ public class FTSettings {
         for (FtOperation operation : operations) {
             boolean hasSameState = operation.hasSameState(document);
             if (!hasSameState) {
-                differedOperations.add(operation.getRollbackOperation());
                 logger.info("FTSettings should be updated because of: {}", operation.toString());
             }
+            differedOperations.add(operation.getRollbackOperation());
             initialStates.add(operation.getRollbackOperation());
         }
         return new ComparingResult(differedOperations, initialStates);
@@ -69,4 +69,3 @@ public class FTSettings {
         }
     }
 }
-

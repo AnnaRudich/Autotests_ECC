@@ -2,7 +2,9 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -12,6 +14,8 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
+import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -444,6 +448,63 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         SettlementPage settlementPage = settlementDialog.ok();
         assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
         assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(), discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
+    }
+
+    /**
+     * WHEN:FT is ON
+     * AND: Create claimline
+     * AND: Add the discretionary valuation
+     * AND: Add a reason 1
+     * AND: Save the claim
+     * AND: Disable the FT "Show "Valuation reason" block"
+     * AND: Reopen the claim
+     * THEN: Discretionary icon and the hover with reason 1 text are still displayed.
+     * THEN: On the SID no drop-down is shown
+     */
+    @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
+    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
+            "after disabling FT 'Show 'Valuation reason'block' .FT=ON")
+    public void charlie_508_16_verifyDiscretionaryReasonIconFTONandOFF(@UserCompany(CompanyCode.TRYGFORSIKRING)User user,
+                                                                 Claim claim, ClaimItem claimItem,
+                                                                 DiscretionaryReason discretionaryReason) {
+        SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem);
+        settlementDialog.addValuation().
+                addValuationType(claimItem.getValuationType4()).
+                addValuationPrice(1000).
+                ok().
+                fillNewPrice(3000).
+                setDiscountAndDepreciation(false).
+                fillDescription(claimItem.getTextFieldSP()).
+                selectValuation(ANDEN_VURDERING).
+                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6());
+        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason6(), "Incorrect text discretionary reason");
+
+        SettlementPage settlementPage = settlementDialog.ok();
+        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
+        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason6()),"Discretionary Reason Tooltip should be displayed");
+
+        settlementPage.saveClaim().
+                getClaimMenu().
+                logout();
+                login(getSystemUser()).
+                getMainMenu().
+                toAdminPage();
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
+        functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
+                disable(FTSetting.SHOW_DISCREATIONARY_REASON)).
+                getClaimMenu().
+                logout();
+                login(user);
+        SettlementPage line = new MyPage().openRecentClaim().
+                reopenClaim();
+
+        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
+        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason6()),"Discretionary Reason Tooltip should be displayed");
+
+        line.editClaimLine(claimItem.getTextFieldSP());
+        assertFalse(settlementDialog.isDiscretionaryReasonVisible(), "Discretionary Reason should not be shown");
     }
 
 
