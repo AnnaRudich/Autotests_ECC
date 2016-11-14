@@ -5,6 +5,7 @@
     <functionTemplate>Default</functionTemplate>
     <ftIC>LB</ftIC>
     <ftTryg>Tryg</ftTryg>
+    <ftTrygHolding>Tryg Holding</ftTrygHolding>
     <ftAlka>Alka</ftAlka>
     <ftLB>LB</ftLB>
     <icCulture>da-DK</icCulture>

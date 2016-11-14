@@ -43,11 +43,17 @@ public class InsuranceCompany {
     @XmlElement
     private String ftTryg;
     @XmlElement
+    private String ftTrygHolding;
+    @XmlElement
     private String dkCompanyDepartment;
     @XmlElement
     private String ftAlka;
     @XmlElement
     private String ftLB;
+
+    public String getFtTrygHolding(){
+        return ftTrygHolding;
+    }
 
     public String getDkCompanyDepartment() {
         return dkCompanyDepartment;
