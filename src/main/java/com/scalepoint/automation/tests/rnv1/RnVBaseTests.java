@@ -18,8 +18,8 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
 public class RnVBaseTests extends BaseTest {
 
-    @DataProvider(name = "startTaskDataProvider")
-    public static Object[][] provide(Method method) {
+    @DataProvider(name = "RnVBaseTests.startTestDataProvider")
+    public static Object[][] startTestDataProvider(Method method) {
         try {
             ServiceAgreement serviceAgreement = (ServiceAgreement) TestData.Data.getInstance(ServiceAgreement.class);
 
@@ -61,7 +61,7 @@ public class RnVBaseTests extends BaseTest {
         void doAssert(SettlementPage page, String description);
     }
 
-    @Test(dataProvider = "startTaskDataProvider",
+    @Test(dataProvider = "RnVBaseTests.startTestDataProvider",
             description = "verify tasks start")
     public void eccs2961_2816_startTaskTest(User user, Claim claim, ServiceAgreement agreement, String serviceAgreementType, StartTaskAssert taskAssert) {
         String description = agreement.getRandomCLNameForRnV();
@@ -124,6 +124,31 @@ public class RnVBaseTests extends BaseTest {
         Assert.assertTrue(rnvCommunicationPage.isLatestMessageContains(agreement.getCancelledMessageText()), "Sent message contains text: " + agreement.getCancelledMessageText().toUpperCase());
         boolean lineIncludedAndNotReviewed = to(SettlementPage.class).isLineIncludedAndNotReviewed(agreement.getRandomCLNameForRnV());
         Assert.assertTrue(lineIncludedAndNotReviewed, "Line unlocked and included");
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "eccs2605, 2847, 2965 verify no feedback received action and Waiting for Feedback status")
+    public void eccs2605_2847_noFeedbackActionAndWaitingFeedbackStatus(User user, Claim claim, ServiceAgreement agreement) {
+        String description = agreement.getRandomCLNameForRnV();
+
+        RnvProjectsPage rnvProjectsPage = loginAndCreateClaim(user, claim)
+                .addManually()
+                .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .ok()
+                .selectClaimItemByDescription(description)
+                .sendToRnV()
+                .changeTask(description, agreement.getRepairType())
+                .changeAgreement(description, agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement).toRepairValuationProjectsPage();
+
+        Assert.assertEquals(rnvProjectsPage.getTaskStatus(agreement.getTestAgreementForRnV()), agreement.getWaitingStatus());
+        rnvProjectsPage.expandTopTaskDetails();
+        Assert.assertEquals(rnvProjectsPage.getActionByCLName(agreement.getRandomCLNameForRnV()), "NO_FEEDBACK_RECEIVED");
+
+        Assert.assertFalse(rnvProjectsPage.isAcceptBtnDisplays(), "Btn Accept NOT displays");
+        Assert.assertFalse(rnvProjectsPage.isRejectBtnDisplays(), "Btn Reject NOT displays");
+        Assert.assertTrue(rnvProjectsPage.isCancelBtnDisplays(), "Btn Cancel displays");
     }
 
 

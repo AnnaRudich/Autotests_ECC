@@ -154,7 +154,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @DataProvider(name = "testDataProvider")
     public static Object[][] provide(Method method) {
-        return new Object[][]{getTestDataParameters(method).toArray()};
+        Object[][] params = new Object[1][];
+        params[0] = getTestDataParameters(method).toArray();
+        return params;
     }
 
     public static List<Object> getTestDataParameters(Method method) {
