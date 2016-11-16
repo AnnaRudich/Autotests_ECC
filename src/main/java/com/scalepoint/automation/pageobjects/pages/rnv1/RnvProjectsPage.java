@@ -88,15 +88,17 @@ public class RnvProjectsPage extends Page {
         return getText(taskTypeFirstLine);
     }
 
-    public void expandTopTaskDetails() {
+    public RnvProjectsPage expandTopTaskDetails() {
         clickAndWaitForDisplaying(firstTaskExpander, By.cssSelector("div#taskNestedGrid-body"));
+        return this;
     }
 
-    public void cancelTopTask() {
+    public RnvProjectsPage cancelTopTask() {
         cancelTaskBtn.click();
         //clickAndWaitForDisplaying(yesBtnConfirmationDialog, By.id("project_view_id"));
         yesBtnConfirmationDialog.click();
         Wait.waitForAjaxCompleted();
+        return this;
     }
 
     public String getActionByCLName(String cLName) {

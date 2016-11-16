@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
@@ -12,7 +13,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @EccPage
-public class MailsPage extends Page {
+public class MailsPage extends BaseClaimPage {
 
     @FindBy(css = ".x-grid-item tbody")
     private Table sentMails;
@@ -22,6 +23,9 @@ public class MailsPage extends Page {
 
     @FindBy(xpath = "//tr[..//div[text()[contains(.,'Kundemail')]]]//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail']")
     private Button viewLastWelcomeMail;
+
+    @FindBy(xpath = "//table[last()]//td[1]")
+    private WebElement latestMailSubject;
 
     @Override
     protected String getRelativeUrl() {
@@ -50,5 +54,9 @@ public class MailsPage extends Page {
             return false;
         }
         return true;
+    }
+
+    public String getLatestMailSubject() {
+        return getText(latestMailSubject);
     }
 }

@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
+import org.openqa.selenium.By;
 
 public abstract class BaseClaimPage extends Page {
 
@@ -38,5 +39,10 @@ public abstract class BaseClaimPage extends Page {
 
     public void toSuppliersPage() {
         mainMenu.toEccAdminPage();
+    }
+
+    public SettlementPage toSettlementPage() {
+        clickAndWaitForDisplaying(By.xpath("//button[@onclick='backToSettlement()']"), By.id("finishCaseBtn-btnInnerEl"));
+        return at(SettlementPage.class);
     }
 }

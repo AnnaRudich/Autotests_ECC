@@ -2,6 +2,7 @@ package com.scalepoint.automation;
 
 import com.codeborne.selenide.WebDriverRunner;
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.dialogs.EditPolicyDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
@@ -25,6 +26,7 @@ import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -47,6 +49,7 @@ import org.testng.annotations.Listeners;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
@@ -151,22 +154,36 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @DataProvider(name = "testDataProvider")
     public static Object[][] provide(Method method) {
+        return new Object[][]{getTestDataParameters(method).toArray()};
+    }
+
+    public static List<Object> getTestDataParameters(Method method) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        List<Object> instances = new ArrayList<>(parameterTypes.length);
         try {
-            Class<?>[] parameterTypes = method.getParameterTypes();
-            List<Object> instances = new ArrayList<>(parameterTypes.length);
             for (Class<?> parameterType : parameterTypes) {
                 if (parameterType.equals(User.class)) {
                     User user = getRequestedUser(method);
                     instances.add(user);
                 } else {
-                    instances.add(TestData.Data.getInstance(parameterType));
+                    try {
+                        instances.add(TestData.Data.getInstance(parameterType));
+                    } catch (Exception e) {
+                        LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
+                        break;
+                    }
                 }
             }
-            return new Object[][]{instances.toArray()};
         } catch (Exception e) {
-            e.printStackTrace();
-            return new Object[][]{{}};
+            LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
         }
+        return instances;
+    }
+
+    public static Object[] combine(List<Object> testDataParameters, Object... additionalParams) {
+        List<Object> params = Lists.newArrayList(testDataParameters);
+        params.addAll(Arrays.asList(additionalParams));
+        return params.toArray();
     }
 
     private static User getRequestedUser(Method method) {
