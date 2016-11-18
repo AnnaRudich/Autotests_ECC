@@ -146,7 +146,7 @@ public class CompleteClaimPage extends Page {
         return completeWithEmail().
                 openRecentClaim().
                 toMailsPage().
-                openWelcomeCustomerMail().
+                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
                 findLoginToShopLinkAndOpenIt().
                 enterPassword(password).
                 login();

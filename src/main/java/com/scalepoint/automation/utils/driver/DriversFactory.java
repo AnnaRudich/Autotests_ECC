@@ -1,17 +1,22 @@
 package com.scalepoint.automation.utils.driver;
 
+import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
 import com.scalepoint.automation.utils.data.TestData;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
 
 public enum DriversFactory {
 
@@ -23,7 +28,6 @@ public enum DriversFactory {
                 System.setProperty("webdriver.ie.driver", ieDriver.getAbsolutePath());
             }
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
-
             return new InternetExplorerDriver(capabilities);
         }
     },
@@ -75,7 +79,21 @@ public enum DriversFactory {
         capabilities.setCapability("driverAttachTimeout", 60000);
         capabilities.setCapability("unexpectedAlertBehaviour", "accept");
         capabilities.setCapability("ie.ensureCleanSession", true);
+
+//        addLoggingPreferences(capabilities);
         return capabilities;
+    }
+
+    /*doesn't work with IE, but can be used with FF/Chrome*/
+    private static void addLoggingPreferences(DesiredCapabilities capabilities) {
+        LoggingPreferences logs = new LoggingPreferences();
+        logs.enable(LogType.BROWSER, Level.ALL);
+        logs.enable(LogType.CLIENT, Level.ALL);
+        logs.enable(LogType.DRIVER, Level.ALL);
+        logs.enable(LogType.PERFORMANCE, Level.ALL);
+        logs.enable(LogType.PROFILER, Level.ALL);
+        logs.enable(LogType.SERVER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logs);
     }
 
     private DriverType driverType;

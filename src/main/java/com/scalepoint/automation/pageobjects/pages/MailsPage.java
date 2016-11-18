@@ -4,28 +4,52 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.types.SortType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @EccPage
 public class MailsPage extends BaseClaimPage {
 
-    @FindBy(css = ".x-grid-item tbody")
-    private Table sentMails;
+    @FindBy(id = "subject_column")
+    private WebElement subjectColumnHeader;
 
-    @FindBy(xpath = "//table[last()]//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail']")
-    private Button viewLastMail;
+    @FindBy(id = "type_column")
+    private WebElement typeColumnHeader;
 
-    @FindBy(xpath = "//tr[..//div[text()[contains(.,'Kundemail')]]]//span[contains(@class, 'x-btn-inner-grid-cell-small') and text() = 'Vis mail']")
-    private Button viewLastWelcomeMail;
+    @FindBy(id = "date_column")
+    private WebElement dateColumnHeader;
 
-    @FindBy(xpath = "//table[last()]//td[1]")
+    @FindBy(xpath = "//table[1]//td[1]")
     private WebElement latestMailSubject;
+
+    public MailsPage sortByDate(SortType sortType) {
+        dateColumnHeader.click();
+        int totalAttempts = 2;
+        int currentAttempt = 0;
+        while (currentAttempt < totalAttempts) {
+            dateColumnHeader.click();
+            Boolean isDisplayed = Wait.For(webDriver -> sortType.isExtJsValueEqualTo(dateColumnHeader.getAttribute("aria-sort")));
+            if (isDisplayed) {
+                break;
+            }
+            currentAttempt++;
+        }
+        return this;
+    }
 
     @Override
     protected String getRelativeUrl() {
@@ -39,24 +63,134 @@ public class MailsPage extends BaseClaimPage {
         return this;
     }
 
-    public MailViewDialog openWelcomeCustomerMail() {
-        Wait.waitForVisible(viewLastWelcomeMail);
-
-        viewLastWelcomeMail.click();
-        return BaseDialog.at(MailViewDialog.class);
-    }
-
     public boolean isRequiredMailSent(String subj) {
         String mailSubjectXpath = "//div[contains(.,'$1')]".replace("$1", subj);
         boolean result = isElementPresent(By.xpath(mailSubjectXpath));
-        if(!result){
+        if (!result) {
             logger.info("Mail with subject {}  was not found", subj.toUpperCase());
             return false;
         }
         return true;
     }
 
-    public String getLatestMailSubject() {
-        return getText(latestMailSubject);
+    public Mails parseMails() {
+        List<WebElement> elements = driver.findElements(By.cssSelector(".x-grid-item tbody"));
+        List<Mail> mailRows = new ArrayList<>();
+        for (WebElement element : elements) {
+            String text = element.findElement(By.xpath(".//td[contains(@data-columnid,'subject_column')]")).getText();
+            String type = element.findElement(By.xpath(".//td[contains(@data-columnid,'type_column')]")).getText();
+            String dateValue = element.findElement(By.xpath(".//td[contains(@data-columnid,'date_column')]")).getText();
+            LocalDateTime sentDate = LocalDateTime.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            Button viewMailButton = new Button(element.findElement(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]")));
+            mailRows.add(new Mail(text, type, sentDate, viewMailButton));
+        }
+        return new Mails(mailRows);
+    }
+
+    public MailViewDialog viewMail(MailType mailType) {
+        return parseMails().findMailByType(mailType).viewMail();
+    }
+
+    public Mail getLatestMail(MailType mailType) {
+        return parseMails().findMailByType(mailType);
+    }
+
+    public static class Mails {
+        public static final Logger log = LoggerFactory.getLogger(Mails.class);
+
+        private List<Mail> mails = new ArrayList<>();
+
+        public Mails(List<Mail> mails) {
+            this.mails = mails;
+            Collections.sort(mails, (o1, o2) -> o2.getSentDate().compareTo(o1.getSentDate()));
+        }
+
+        public List<Mail> getMails() {
+            return mails;
+        }
+
+        public Mail findMailByType(MailType mailType) {
+            for (Mail mail : mails) {
+                if (mailType.equals(mail.getMailType())) {
+                    return mail;
+                }
+            }
+            log.error("Can't find appropriate MailType");
+            log.error("--------- Existing --------------");
+            for (Mail mail : mails) {
+                log.info(mail.getSubject() + " --> " + mail.getMailType());
+            }
+            log.error("-------------------------------");
+            return null;
+        }
+    }
+
+    public static class Mail {
+        private String subject;
+        private LocalDateTime sentDate;
+        private Button viewMailButton;
+        private MailType mailType;
+
+        public Mail(String subject, String type, LocalDateTime sentDate, Button viewMailButton) {
+            this.subject = subject;
+            this.mailType = MailType.findByText(type);
+            this.sentDate = sentDate;
+            this.viewMailButton = viewMailButton;
+        }
+
+        public String getSubject() {
+            return subject;
+        }
+
+        public LocalDateTime getSentDate() {
+            return sentDate;
+        }
+
+        public MailViewDialog viewMail() {
+            viewMailButton.click();
+            return BaseDialog.at(MailViewDialog.class);
+        }
+
+        public MailType getMailType() {
+            return mailType;
+        }
+    }
+
+    public enum MailType {
+        SETTLEMENT_NOTIFICATION_TO_IC("Opgørelsesnotifikation (skadeafslutning)"),
+        SETTLEMENT_NOTIFICATION_TO_SP("Opgørelsesnotifikation (refusion)"),
+        SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL("Opgørelsesnotifikation (ekstern)"),
+        CUSTOMER_WELCOME("Kundemail (opgørelse)"),
+        ORDER_CONFIRMATION_BY_IC("Genlevering"),
+        ORDER_CONFIRMATION("Ordrebekræftelse"),
+        INVOICE_TO_IC("Ordre bekræftigelse (kopi til forsikringsselskab)"),
+        PAYOUT_NOTIFICATION_TO_IC("Udbetalingsbekræftelse (til selskab)"),
+        PAYOUT_NOTIFICATION_TO_CH("Udbetalingsbekræftelse (til skadebehandler)"),
+        SELFSERVICE_CUSTOMER_WELCOME("Kundemail (adgang til selvbetjening)"),
+        SELFSERVICE_CUSTOMER_NOTIFICATION("Kundemail (selvbetjeningsbekræftelse)"),
+        SELFSERVICE_IC_NOTIFICATION("Selskabsmail (selvbetjeningsbekræftelse)"),
+        PROCURA_APPROVAL_REQUEST("Anmodning om godkendelse af anvisningsret"),
+        PROCURA_DECISION_NOTIFICATION("Afgørelse vedrørende anvisningsret"),
+        REPAIR_AND_VALUATION("Repair And Valuation"),
+        REMINDER_MAIL("Påmindelse vedr. lukning af adgang"),
+        BLOCKED_ACCOUNT("Lukning af adgang"),
+        ITEMIZATION_CUSTOMER_MAIL("Kundemail (fnol)"),
+        ITEMIZATION_CONFIRMATION_MAIL("Selskabsmail (fnol)");
+
+        private String typeText;
+
+        MailType(String typeText) {
+            this.typeText = typeText;
+        }
+
+        public static MailType findByText(String typeText) {
+            for (MailType mailType : MailType.values()) {
+                if (mailType.typeText.equals(typeText)) {
+                    return mailType;
+                }
+            }
+            return null;
+        }
     }
 }
+

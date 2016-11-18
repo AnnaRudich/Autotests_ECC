@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
@@ -84,7 +85,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 completeWithEmail().
                 openRecentClaim().
                 toMailsPage().
-                openWelcomeCustomerMail().
+                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
                 findLoginToShopLinkAndOpenIt().
                 enterPassword(password).
                 login();
@@ -177,7 +178,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 completeWithEmail().
                 openRecentClaim().
                 toMailsPage().
-                openWelcomeCustomerMail().
+                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
                 findLoginToShopLinkAndOpenIt().
                 enterPassword(password).
                 login();

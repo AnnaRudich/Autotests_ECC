@@ -29,6 +29,10 @@ import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +89,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         WebDriverRunner.setWebDriver(driver);
 
         JavascriptHelper.initializeCommonFunctions();
-//        driver.manage().window().maximize();
+        driver.manage().window().maximize();
         logger.info("MainHandle " + Browser.driver().getWindowHandle());
     }
 
@@ -98,6 +102,19 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
         MDC.clear();
+    }
+
+    /*doesn't work with IE, but can be used with FF/Chrome*/
+    private void logJavaScriptErrors() {
+        try {
+            Logs logs = Browser.driver().manage().logs();
+            LogEntries logEntries = logs.get(LogType.BROWSER);
+            for (LogEntry logEntry : logEntries) {
+                logger.error("JSERROR: " + logEntry.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {

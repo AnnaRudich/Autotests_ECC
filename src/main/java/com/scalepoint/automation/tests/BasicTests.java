@@ -95,7 +95,7 @@ public class BasicTests extends BaseTest {
         loginAndCreateClaim(user, claim).
                 requestSelfService(claim, password).
                 toMailsPage().
-                openWelcomeCustomerMail().
+                viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME).
                 findSelfServiceLinkAndOpenIt().
                 enterPassword(password).
                 login();
@@ -114,7 +114,7 @@ public class BasicTests extends BaseTest {
                 openRecentClaim();
         String loginToShopLink = customerDetailsPage.
                 toMailsPage().
-                openWelcomeCustomerMail().
+                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
                 findLoginToShopLink();
 
         customerDetailsPage.toCustomerDetails().cancelClaim();

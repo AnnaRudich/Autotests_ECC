@@ -18,6 +18,13 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
 public class RnVBaseTests extends BaseTest {
 
+    @Test(dataProvider = "testDataProvider")
+    public void test(User user) {
+        MailsPage mailsPage = login(user, SettlementPage.class).toMailsPage();
+        MailsPage.Mails mails = mailsPage.parseMails();
+        System.out.println(mails);
+    }
+
     @DataProvider(name = "RnVBaseTests.startTestDataProvider")
     public static Object[][] startTestDataProvider(Method method) {
         try {
@@ -117,7 +124,7 @@ public class RnVBaseTests extends BaseTest {
         Assert.assertEquals(rnvProjectsPage.getTaskStatus(agreement.getTestAgreementForRnV()), agreement.getCancelledStatus());
 
         MailsPage mailsPage = rnvProjectsPage.navigateToCommunicationTab().toMailsPage();
-        String latestMailSubject = mailsPage.getLatestMailSubject();
+        String latestMailSubject = mailsPage.getLatestMail(MailsPage.MailType.REPAIR_AND_VALUATION).getSubject();
         Assert.assertTrue(latestMailSubject.contains(agreement.getCancelledTaskMailSubj()));
 
         RnvCommunicationPage rnvCommunicationPage = mailsPage.toRepairValuationProjectsPage().navigateToCommunicationTab();
