@@ -5,6 +5,11 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvCommunicationPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
+import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonPresence;
+import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonType;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.ExcelDocUtil;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
@@ -14,8 +19,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
+
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
+@RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider")
@@ -71,7 +78,7 @@ public class RnVBaseTests extends BaseTest {
     @Test(dataProvider = "RnVBaseTests.startTestDataProvider",
             description = "verify tasks start")
     public void eccs2961_2816_startTaskTest(User user, Claim claim, ServiceAgreement agreement, String serviceAgreementType, StartTaskAssert taskAssert) {
-        String description = agreement.getRandomCLNameForRnV();
+        String description = agreement.getClaimLineNameForRnV();
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addManually()
@@ -87,58 +94,178 @@ public class RnVBaseTests extends BaseTest {
         taskAssert.doAssert(settlementPage, description);
 
         //verify task started on RnV overview page
-        RnvProjectsPage rnvProjectsPage = settlementPage.toRepairValuationProjectsPage();
-        Assert.assertTrue(rnvProjectsPage.isTaskDisplayed(agreement.getTestAgreementForRnV()));
-        Assert.assertEquals(rnvProjectsPage.getTaskStatus(agreement.getTestAgreementForRnV()), agreement.getWaitingStatus());
-
-        rnvProjectsPage.expandTopTaskDetails();
-        Assert.assertEquals(rnvProjectsPage.getTaskTypeByCLName(description), serviceAgreementType);
+        RnvProjectsPage rnvPage = settlementPage.toRepairValuationProjectsPage()
+                .getAssertion()
+                .assertTaskDisplayed(agreement)
+                .assertTaskHasWaitingStatus(agreement)
+                .getPage()
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasType(agreement, serviceAgreementType)
+                .getPage();
 
         //verify email sent
-        RnvCommunicationPage rnvCommunicationPage = rnvProjectsPage.navigateToCommunicationTab();
+        RnvCommunicationPage rnvCommunicationPage = rnvPage.navigateToCommunicationTab();
         Assert.assertTrue(rnvCommunicationPage.isMessageSent());
 
         boolean requiredMailSent = rnvCommunicationPage.
                 toMailsPage().
                 isRequiredMailSent(agreement.getNewTaskMailSubject());
+
         Assert.assertTrue(requiredMailSent);
     }
 
-    @Test(dataProvider = "testDataProvider",
-            description = "verify Repair task cancel")
+    @Test(dataProvider = "testDataProvider", description = "verify repair task can be cancelled")
     public void eccs2828_2847_cancelRepairTask(User user, Claim claim, ServiceAgreement agreement) {
-        String description = agreement.getRandomCLNameForRnV();
+        RnvProjectsPage rnvPage = prepareTask(user, claim, agreement)
+                .expandTopTaskDetails()
+                .cancelTopTask()
+                .getAssertion()
+                .assertTaskHasCancelledStatus(agreement)
+                .getPage();
 
-        RnvProjectsPage rnvProjectsPage = loginAndCreateClaim(user, claim)
-                .addManually()
-                .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .ok()
-                .selectClaimItemByDescription(description)
-                .sendToRnV()
-                .changeTask(description, agreement.getRepairType())
-                .changeAgreement(description, agreement.getTestAgreementForRnV())
-                .nextRnVstep()
-                .sendRnV(agreement).toRepairValuationProjectsPage();
+        MailsPage mailsPage = rnvPage
+                .navigateToCommunicationTab()
+                .toMailsPage();
 
-        rnvProjectsPage.expandTopTaskDetails().cancelTopTask();
-        Assert.assertEquals(rnvProjectsPage.getTaskStatus(agreement.getTestAgreementForRnV()), agreement.getCancelledStatus());
-
-        MailsPage mailsPage = rnvProjectsPage.navigateToCommunicationTab().toMailsPage();
         String latestMailSubject = mailsPage.getLatestMail(MailsPage.MailType.REPAIR_AND_VALUATION).getSubject();
         Assert.assertTrue(latestMailSubject.contains(agreement.getCancelledTaskMailSubj()));
 
-        RnvCommunicationPage rnvCommunicationPage = mailsPage.toRepairValuationProjectsPage().navigateToCommunicationTab();
-        Assert.assertTrue(rnvCommunicationPage.isLatestMessageContains(agreement.getCancelledMessageText()), "Sent message contains text: " + agreement.getCancelledMessageText().toUpperCase());
-        boolean lineIncludedAndNotReviewed = to(SettlementPage.class).isLineIncludedAndNotReviewed(agreement.getRandomCLNameForRnV());
+        RnvCommunicationPage communicationPage = mailsPage
+                .toRepairValuationProjectsPage()
+                .navigateToCommunicationTab();
+
+        Assert.assertTrue(communicationPage.isLatestMessageContains(agreement.getCancelledMessageText()), "Sent message contains text: " + agreement.getCancelledMessageText().toUpperCase());
+        boolean lineIncludedAndNotReviewed = to(SettlementPage.class).isLineIncludedAndNotReviewed(agreement.getClaimLineNameForRnV());
         Assert.assertTrue(lineIncludedAndNotReviewed, "Line unlocked and included");
     }
+
 
     @Test(dataProvider = "testDataProvider",
             description = "eccs2605, 2847, 2965 verify no feedback received action and Waiting for Feedback status")
     public void eccs2605_2847_noFeedbackActionAndWaitingFeedbackStatus(User user, Claim claim, ServiceAgreement agreement) {
-        String description = agreement.getRandomCLNameForRnV();
+        prepareTask(user, claim, agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasWaitingStatus(agreement)
+                .assertClaimLineHasFeedback(agreement.getClaimLineNameForRnV())
+                .assertButtonPresence(ButtonType.ACCEPT, ButtonPresence.HIDDEN)
+                .assertButtonPresence(ButtonType.REJECT, ButtonPresence.HIDDEN)
+                .assertButtonPresence(ButtonType.CANCEL, ButtonPresence.SHOWN);
+    }
 
-        RnvProjectsPage rnvProjectsPage = loginAndCreateClaim(user, claim)
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify no changes feedback")
+    public void eccs2605_2847_noChangesFeedbackReceived(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        prepareTask(user, claim, agreement)
+                .navigateToCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertClaimLineHasNoChanges(agreement.getClaimLineNameForRnV())
+                .getPage()
+                .acceptTaskCompletly()
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify Update line feedback")
+    public void eccs2847_updateLineAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        prepareTask(user, claim, agreement)
+                .navigateToCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_INVOICE)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertClaimLineHasUpdates(agreement.getClaimLineNameForRnV())
+                .getPage()
+                .acceptTaskCompletly()
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify new line and exlude action feedback")
+    public void eccs2847_createAndExcludeLineAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        prepareTask(user, claim, agreement)
+                .navigateToCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.DELETE_LINE)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertClaimLineExcluded(agreement.getClaimLineNameForRnV())
+                .assertClaimLineCreated(agreement.getUpdDesc())
+                .getPage().
+                acceptTaskCompletly().
+                getAssertion().
+                assertTaskHasCompletedStatus(agreement);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify feedback received task details")
+    public void eccs2847_2828_feedbackReceivedUI(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        prepareTask(user, claim, agreement)
+                .navigateToCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertButtonPresence(ButtonType.ACCEPT, ButtonPresence.SHOWN)
+                .assertButtonPresence(ButtonType.REJECT, ButtonPresence.SHOWN)
+                .assertButtonPresence(ButtonType.CANCEL, ButtonPresence.HIDDEN)
+                .assertTaskHasCompletedStatus(agreement);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify Completed feedback Accepted action")
+    public void eccs2847_2605_feedbackCompetedAcceptAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        prepareTask(user, claim, agreement)
+                .navigateToCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .getPage()
+                .acceptCL(agreement.getClaimLineNameForRnV())
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement)
+                .assertClaimLineAccepted(agreement.getClaimLineNameForRnV());
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify Completed feedback Reject action")
+    public void eccs2847_2605_feedbackCompetedRejectAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        prepareTask(user, claim, agreement)
+                .navigateToCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .getPage()
+                .rejectCL(agreement.getClaimLineNameForRnV())
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement)
+                .assertClaimLineRejected(agreement.getClaimLineNameForRnV());
+    }
+
+    private RnvProjectsPage prepareTask(User user, Claim claim, ServiceAgreement agreement) {
+        String description = agreement.getClaimLineNameForRnV();
+        return loginAndCreateClaim(user, claim)
                 .addManually()
                 .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .ok()
@@ -147,15 +274,8 @@ public class RnVBaseTests extends BaseTest {
                 .changeTask(description, agreement.getRepairType())
                 .changeAgreement(description, agreement.getTestAgreementForRnV())
                 .nextRnVstep()
-                .sendRnV(agreement).toRepairValuationProjectsPage();
-
-        Assert.assertEquals(rnvProjectsPage.getTaskStatus(agreement.getTestAgreementForRnV()), agreement.getWaitingStatus());
-        rnvProjectsPage.expandTopTaskDetails();
-        Assert.assertEquals(rnvProjectsPage.getActionByCLName(agreement.getRandomCLNameForRnV()), "NO_FEEDBACK_RECEIVED");
-
-        Assert.assertFalse(rnvProjectsPage.isAcceptBtnDisplays(), "Btn Accept NOT displays");
-        Assert.assertFalse(rnvProjectsPage.isRejectBtnDisplays(), "Btn Reject NOT displays");
-        Assert.assertTrue(rnvProjectsPage.isCancelBtnDisplays(), "Btn Cancel displays");
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage();
     }
 
 

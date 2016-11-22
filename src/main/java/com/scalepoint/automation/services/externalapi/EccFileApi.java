@@ -22,14 +22,19 @@ public class EccFileApi extends EccServerApi {
     }
 
     public void downloadFile(String href, String localPath) {
+        InputStream in = null;
+        FileOutputStream fos = null;
         try {
             HttpEntity entity = executor.execute(Request.Get(href)).returnResponse().getEntity();
-            InputStream in = entity.getContent();
-            FileOutputStream fos = new FileOutputStream(new File(localPath));
+            in = entity.getContent();
+            fos = new FileOutputStream(new File(localPath));
             IOUtils.copy(in, fos);
             log.info("File was downloaded to: "+ localPath);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(fos);
         }
     }
 }

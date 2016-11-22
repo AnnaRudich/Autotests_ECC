@@ -81,7 +81,7 @@ public class ServiceAgreement {
     @XmlElement
     private String cancelledMessageText;
     @XmlElement
-    private String randomCLName = RandomUtils.randomName("ForRnV");
+    private String claimLineName = RandomUtils.randomName("ForRnV");
     @XmlElement
     private String testAgrNameForRnV;
     @XmlElement
@@ -311,8 +311,8 @@ public class ServiceAgreement {
         return cancelledMessageText;
     }
 
-    public String getRandomCLNameForRnV() {
-        return randomCLName;
+    public String getClaimLineNameForRnV() {
+        return claimLineName;
     }
 
     public String getWaitingStatus() {
@@ -324,8 +324,7 @@ public class ServiceAgreement {
     }
 
     public String getSaveTemplateTo() {
-        String fullPath = saveTemplateTo + "\\" + randomSavedTemplateName;
-        return fullPath;
+        return saveTemplateTo + "\\" + randomSavedTemplateName;
     }
 
     public String getUpdDesc() {

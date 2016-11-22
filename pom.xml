@@ -50,6 +50,7 @@
                     <threadCount>5</threadCount>
                     <argLine>
                         -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar
+                        -Djava.library.path=${basedir}/src/main/resources/lib
                     </argLine>
                 </configuration>
             </plugin>
@@ -255,6 +256,19 @@
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
             <version>3.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jacob-project</groupId>
+            <artifactId>jacob</artifactId>
+            <version>1.14.3</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jacob-project</groupId>
+            <artifactId>jacob</artifactId>
+            <version>1.14.3</version>
+            <classifier>x64</classifier>
+            <type>dll</type>
         </dependency>
 
 

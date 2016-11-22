@@ -114,6 +114,12 @@ public class SettlementPage extends BaseClaimPage {
         return functionalMenu.addManually();
     }
 
+    public SettlementPage addManually(String description, String category, String subcategory, int newPrice) {
+        return addManually()
+                .fillBaseData(description, category, subcategory, newPrice)
+                .ok();
+    }
+
     public String fetchPriceByPoint(String point) {
         List<List<String>> priceConclusions = settlementConclusion.getClaimsResult().getRowsAsString();
         String line = priceConclusions.stream().filter(points -> point.contains(point)).findFirst().toString();

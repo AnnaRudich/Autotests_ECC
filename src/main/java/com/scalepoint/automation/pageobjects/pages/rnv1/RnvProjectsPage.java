@@ -3,11 +3,11 @@ package com.scalepoint.automation.pageobjects.pages.rnv1;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.annotations.page.RVPage;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 @EccPage
 public class RnvProjectsPage extends Page {
@@ -112,38 +112,29 @@ public class RnvProjectsPage extends Page {
         return getText(By.xpath(taskTypeXpath));
     }
 
-    public Boolean isAcceptBtnDisplays() {
+    public boolean isButtonPresent(ButtonType buttonType) {
         try {
-            acceptTaskBtn.isDisplayed();
+            switch (buttonType) {
+                case ACCEPT:
+                    return acceptTaskBtn.isDisplayed();
+                case REJECT:
+                    return rejectTaskBtn.isDisplayed();
+                case CANCEL:
+                    return cancelTaskBtn.isDisplayed();
+                default:
+                    return false;
+            }
         } catch (Exception e) {
             return false;
         }
-        return true;
     }
 
-    public Boolean isRejectBtnDisplays() {
-        try {
-            rejectTaskBtn.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isCancelBtnDisplays() {
-        try {
-            cancelTaskBtn.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    public void acceptCL(String cLName) {
+    public RnvProjectsPage acceptCL(String cLName) {
         selectCLByName(cLName);
         acceptTaskBtn.click();
         yesBtnConfirmationDialog.click();
         Wait.waitForAjaxCompleted();
+        return this;
     }
 
     private void selectCLByName(String cLName) {
@@ -151,21 +142,147 @@ public class RnvProjectsPage extends Page {
         find(By.xpath(clCheckboxXpath)).click();
     }
 
-    public void rejectCL(String cLName) {
+    public RnvProjectsPage rejectCL(String cLName) {
         selectCLByName(cLName);
         rejectTaskBtn.click();
         yesBtnConfirmationDialog.click();
         Wait.waitForAjaxCompleted();
+        return this;
     }
 
-    public void acceptTaskCompletly() {
+    public RnvProjectsPage acceptTaskCompletly() {
         selectAllLines();
         acceptTaskBtn.click();
         yesBtnConfirmationDialog.click();
         Wait.waitForAjaxCompleted();
+        return this;
     }
 
     private void selectAllLines() {
         selectAllLinesCheckbox.click();
     }
+
+    public RnvProjectsPage waitForFeedbackReceived(ServiceAgreement agreement) {
+        Wait.waitForElementWithPageReload(By.xpath(byTaskStatusAgrXpath.replace("$1", agreement.getFeedbackReceivedStatusName())));
+        return this;
+    }
+
+    public Assertion getAssertion() {
+        return new Assertion();
+    }
+
+    public class Assertion {
+
+        public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement) {
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getCompletedStatusName(), "Task has " + taskStatus + " status. Must be completed");
+            return this;
+        }
+
+        public Assertion assertTaskHasCancelledStatus(ServiceAgreement agreement) {
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getCancelledStatus(), "Task has " + taskStatus + " status. Must be cancelled");
+            return this;
+        }
+
+        public Assertion assertTaskHasWaitingStatus(ServiceAgreement agreement) {
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getWaitingStatus(), "Task has " + taskStatus + " status. Must be waiting");
+            return this;
+        }
+
+        public Assertion assertTaskHasFeedbackReceivedStatus(ServiceAgreement agreement) {
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatusName(), "Task has " + taskStatus + " status. Must be feedback received");
+            return this;
+        }
+
+        public Assertion assertTaskDisplayed(ServiceAgreement agreement) {
+            Assert.assertTrue(isTaskDisplayed(agreement.getTestAgreementForRnV()), "Task is not displayed");
+            return this;
+        }
+
+        public Assertion assertTaskHasType(ServiceAgreement agreement, String type) {
+            String actualType = getTaskTypeByCLName(agreement.getClaimLineNameForRnV());
+            Assert.assertEquals(actualType, type, "Task has type " + actualType + ". Must be: " + type);
+            return this;
+        }
+
+        public Assertion assertClaimLineHasFeedback(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "NO_FEEDBACK_RECEIVED", "Feedback received, but must not be");
+            return this;
+        }
+
+        public Assertion assertClaimLineHasNoChanges(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "NO_CHANGES", "Claim line has changes");
+            return this;
+        }
+
+        public Assertion assertClaimLineHasUpdates(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "UPDATE_LINE", "Claim line has no changes");
+            return this;
+        }
+
+        public Assertion assertClaimLineExcluded(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "EXCLUDE_LINE", "Claim line is not excluded");
+            return this;
+        }
+
+        public Assertion assertClaimLineCreated(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "CREATE_LINE", "Claim line is not created");
+            return this;
+        }
+
+        public Assertion assertClaimLineAccepted(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "ACCEPTED", "Claim line is not created");
+            return this;
+        }
+
+        public Assertion assertClaimLineRejected(String claimLineName) {
+            String action = getActionByCLName(claimLineName);
+            Assert.assertEquals(action, "REJECTED", "Claim line is not rejected");
+            return this;
+        }
+
+        public Assertion assertButtonPresence(ButtonType buttonType, ButtonPresence buttonPresence) {
+            boolean buttonPresent = isButtonPresent(buttonType);
+            if (!buttonPresence.isValidPresence(buttonPresent)) {
+                Assert.fail(buttonType + " must be " + buttonPresence + " but it's not");
+            }
+            return this;
+        }
+
+        public RnvProjectsPage getPage() {
+            return RnvProjectsPage.this;
+        }
+    }
+
+    public static enum ButtonType {
+        ACCEPT,
+        REJECT,
+        CANCEL
+    }
+
+    public static enum ButtonPresence {
+        SHOWN (true),
+        HIDDEN (false);
+
+        boolean presence;
+
+        ButtonPresence(boolean presence) {
+            this.presence = presence;
+        }
+
+        public boolean isValidPresence(boolean actualPresence) {
+            return presence == actualPresence;
+        }
+    }
 }
+
+

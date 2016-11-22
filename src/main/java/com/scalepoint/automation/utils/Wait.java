@@ -31,7 +31,7 @@ public class Wait {
 
     public static void waitFor(int seconds) {
         try {
-            Thread.sleep(seconds*1000);
+            Thread.sleep(seconds * 1000);
         } catch (InterruptedException ignored) {
         }
     }
@@ -248,5 +248,15 @@ public class Wait {
 
     private static <V> V wrapWait(ExpectedCondition<V> expectedCondition) {
         return new WebDriverWait(Browser.driver(), 15, 1000).until(expectedCondition);
+    }
+
+    public static void waitForElementWithPageReload(By locator) {
+        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(1, TimeUnit.MINUTES)
+                .pollingEvery(10, TimeUnit.SECONDS)
+                .ignoring(NoSuchElementException.class);
+        wait.until((WebDriver driver) -> {
+            driver.navigate().refresh();
+            return driver.findElement(locator);
+        });
     }
 }
