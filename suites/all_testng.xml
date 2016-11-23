@@ -2,7 +2,9 @@
 <suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="2">
     <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
-            <package name=".*" />
+            <package name=".*" >
+                <exclude name="com.scalepoint.automation.tests.rnv1"/>
+            </package>
         </packages>
     </test>
 </suite>
