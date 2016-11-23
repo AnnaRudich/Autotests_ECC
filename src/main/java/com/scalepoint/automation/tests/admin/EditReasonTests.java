@@ -53,4 +53,29 @@ public class EditReasonTests extends BaseTest {
         assertTrue(editReasonsPage.isValueReason(expectedValue),"Reason should be trimmed to 70 char and equal to "
                 + expectedValue);
     }
+
+    /**
+     * WHEN: Go to the Edit reasons page from admin.
+     * AND: Select the Tryg Holding
+     * THEN: Edit "Discretionary choice" reasons section is added.
+     * WHEN: Try to input into reason field native letters
+     * AND: Click Save button
+     * THEN: Reason is saved; no error message
+     */
+
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable.")
+    public void charlie508_3_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
+        EditReasonsPage editReasonsPage = login(getSystemUser()).
+                to(EditReasonsPage.class).
+                selectCompany(insuranceCompany.getFtTrygHolding()).
+                selectReasonType("Discretionary choice").
+                refresh();
+        assertTrue(editReasonsPage.isEditReasonsFormVisible(),"Edit Reasons Form should be visible");
+        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
+        editReasonsPage.addReason(newValue);
+        editReasonsPage.save();
+        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
+        assertTrue(editReasonsPage.isValueReason(expectedValue),"Reason should be saved and equal to "
+                + expectedValue);
+    }
 }
