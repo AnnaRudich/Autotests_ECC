@@ -26,6 +26,18 @@ public class DiscretionaryReason {
     private String discretionaryReason6;
     @XmlElement
     private String discretionaryReason7;
+    @XmlElement
+    private String discretionaryReason71;
+    @XmlElement
+    private String discretionaryReason70;
+
+    public String getDiscretionaryReason71(){
+        return discretionaryReason71;
+    }
+
+    public String getDiscretionaryReason70(){
+        return discretionaryReason70;
+    }
 
     public String getDiscretionaryReason1(){
         return discretionaryReason1;

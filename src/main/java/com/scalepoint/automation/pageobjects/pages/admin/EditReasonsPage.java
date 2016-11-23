@@ -17,15 +17,21 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 public class EditReasonsPage extends Page {
     @FindBy(id = "reason_type_dropdown")
     private Select reasonTypes;
-
     @FindBy(id = "company_list_dropdown")
     private Select companies;
-
     @FindBy(xpath = "//button[contains(text(), 'Refresh')]")
     private Button refresh;
-
     @FindBy(id = "editNotLowestChoiceReasonsForm")
     private WebElement editReasonsForm;
+    @FindBy(xpath = "//table[@id='reasons_table']//tbody//td//input")
+    private List<WebElement> reasonsFields;
+    @FindBy(id = "addLine")
+    private Button addReason;
+    @FindBy(xpath = "//input[contains(@id,'reasonNameAdd')]")
+    private ExtInput addReasonField;
+    @FindBy(id = "submitBtn")
+    private Button save;
+
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -39,7 +45,7 @@ public class EditReasonsPage extends Page {
         return "webshop/jsp/Admin/edit_reasons.jsp";
     }
 
-    public EditReasonsPage selectCompany(String insuranceCompany){
+    public EditReasonsPage selectCompany(String insuranceCompany) {
         try {
             companies.selectByVisibleText(insuranceCompany);
         } catch (NoSuchElementException e) {
@@ -48,7 +54,7 @@ public class EditReasonsPage extends Page {
         return this;
     }
 
-    public EditReasonsPage selectReasonType (String visibleText) {
+    public EditReasonsPage selectReasonType(String visibleText) {
         try {
             reasonTypes.selectByVisibleText(visibleText);
         } catch (NoSuchElementException e) {
@@ -56,14 +62,32 @@ public class EditReasonsPage extends Page {
         return this;
     }
 
-    public EditReasonsPage refresh(){
+    public EditReasonsPage refresh() {
         refresh.click();
         return this;
     }
 
-    public boolean isEditReasonsFormVisible(){
+    public boolean isEditReasonsFormVisible() {
         editReasonsForm.isDisplayed();
         return true;
     }
 
+    public EditReasonsPage addReason(String text) {
+        addReasonField.enter(text);
+        return this;
+    }
+
+    public EditReasonsPage save() {
+        save.click();
+        return this;
+    }
+
+    public boolean isValueReason(String expectedValue) {
+        Wait.waitForPageLoaded();
+        WebElement webElement = reasonsFields.get(reasonsFields.size() - 1);
+        String val = webElement.getAttribute("value");
+        return expectedValue.equals(val);
+    }
 }
+
+
