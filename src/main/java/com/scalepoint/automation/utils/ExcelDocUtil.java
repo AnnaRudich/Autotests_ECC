@@ -20,14 +20,14 @@ public class ExcelDocUtil {
     private Dispatch workBooks;
 
     private String clId = "A24";
-    private String description = "D24";
-    private String categoryGroup = "E24";
-    private String subCategory = "F24";
-    private String quantity = "G24";
-    private String ageMonth = "H24";
-    private String ageYears = "I24";
-    private String newPrice = "K24";
-    private String repairPrice = "T24";
+    private String description = "E24";
+    private String categoryGroup = "F24";
+    private String subCategory = "G24";
+    private String quantity = "H24";
+    private String ageMonth = "J24";
+    private String ageYears = "K24";
+    private String newPrice = "M24";
+    private String repairPrice = "U24";
 
     private String mainTemplateSheet = "Template";
     private String invoiceSheet = "Invoice";
@@ -105,8 +105,8 @@ public class ExcelDocUtil {
 
     public void updateFirstCLInExcel(ServiceAgreement serviceAgreement) {
         setCellValue(mainTemplateSheet, description, serviceAgreement.getUpdDesc());
-        setCellValue(mainTemplateSheet, subCategory, serviceAgreement.getUpdSubCategory());
         setCellValue(mainTemplateSheet, categoryGroup, serviceAgreement.getUpdCat());
+        setCellValue(mainTemplateSheet, subCategory, serviceAgreement.getUpdSubCategory());
         setCellValue(mainTemplateSheet, quantity, serviceAgreement.getUpdQuantity());
         setCellValue(mainTemplateSheet, ageMonth, serviceAgreement.getUpdMonth());
         setCellValue(mainTemplateSheet, ageYears, serviceAgreement.getUpdYear());
@@ -206,7 +206,7 @@ public class ExcelDocUtil {
         if (feedbackActionType == NO_CHANGES_KEEP_FILE) {
             closeFile(serviceAgreement.getSaveTemplateTo());
         } else {
-            closeAndDeleteFile(serviceAgreement.getSaveTemplateTo());
+            closeFile(serviceAgreement.getSaveTemplateTo());
         }
     }
 }
