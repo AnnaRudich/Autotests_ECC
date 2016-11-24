@@ -15,9 +15,11 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -25,11 +27,9 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider")
-    public void test(User user) {
-        MailsPage mailsPage = login(user, SettlementPage.class).toMailsPage();
-        MailsPage.Mails mails = mailsPage.parseMails();
-        System.out.println(mails);
+    @BeforeMethod
+    public void initRv() throws IOException {
+        loadJarDll();
     }
 
     @DataProvider(name = "RnVBaseTests.startTestDataProvider")

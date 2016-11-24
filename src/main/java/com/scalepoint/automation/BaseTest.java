@@ -26,7 +26,7 @@ import com.scalepoint.automation.utils.driver.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
@@ -50,6 +50,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -102,6 +106,19 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
         MDC.clear();
+    }
+
+    protected void loadJarDll() throws IOException {
+        String dllName = "jacob-1.14.3-x64.dll";
+        File temp = new File(new File(System.getProperty("java.io.tmpdir")), dllName);
+        if (!temp.exists()) {
+            try (InputStream in = BaseTest.class.getClassLoader().getResourceAsStream("dll/"+dllName);
+                 FileOutputStream fos = new FileOutputStream(temp)) {
+                IOUtils.copy(in, fos);
+            }
+        }
+        logger.info("Jacob dll will be loaded from: "+temp.getAbsolutePath());
+        System.load(temp.getAbsolutePath());
     }
 
     /*doesn't work with IE, but can be used with FF/Chrome*/
