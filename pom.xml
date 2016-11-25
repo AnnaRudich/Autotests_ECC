@@ -50,7 +50,7 @@
                     <threadCount>5</threadCount>
                     <argLine>
                         -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar
-                        -Djava.library.path=${basedir}/src/main/resources/lib
+                        -Djava.library.path=${basedir}/src/main/resources/dll
                     </argLine>
                 </configuration>
             </plugin>
@@ -263,6 +263,7 @@
             <artifactId>jacob</artifactId>
             <version>1.14.3</version>
         </dependency>
+
         <dependency>
             <groupId>net.sf.jacob-project</groupId>
             <artifactId>jacob</artifactId>
