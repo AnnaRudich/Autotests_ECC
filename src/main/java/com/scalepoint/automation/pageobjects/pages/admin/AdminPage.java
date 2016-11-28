@@ -38,6 +38,9 @@ public class AdminPage extends Page {
     @FindBy(xpath = "//a[contains(@href, 'pseudocategory_group')]")
     private Link pseudoCategoryGroup;
 
+    @FindBy(xpath = "//a[contains(@href,'edit_reasons')]")
+    private Link editReasons;
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/Admin";
@@ -82,5 +85,10 @@ public class AdminPage extends Page {
     public PseudoCategoryGroupPage toPseudoCategoryGroupPage() {
         pseudoCategoryGroup.click();
         return at(PseudoCategoryGroupPage.class);
+    }
+
+    public EditReasonsPage toEditReasonsPage(){
+        editReasons.click();
+        return at(EditReasonsPage.class);
     }
 }

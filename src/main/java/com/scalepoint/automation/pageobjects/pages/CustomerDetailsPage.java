@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -75,6 +76,10 @@ public class CustomerDetailsPage extends BaseClaimPage {
         boolean opened = openDialog($(By.id("genoptag")));
         if (opened) {
             closeDialog($(By.id("btn_reopen")));
+        }
+        SelenideElement gemaktive = $(By.id("gemaktive"));
+        if (gemaktive.isDisplayed()) {
+            gemaktive.click();
         }
         return at(SettlementPage.class);
     }
