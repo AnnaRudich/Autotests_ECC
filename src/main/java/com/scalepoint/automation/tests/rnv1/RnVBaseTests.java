@@ -38,7 +38,12 @@ public class RnVBaseTests extends BaseTest {
     @BeforeMethod
     public void createDefaultServiceAgreement() {
         User scalepointUser = UsersManager.takeUser(CompanyCode.SCALEPOINT);
-        databaseApi.createDefaultServiceAgreementIfNotExists(scalepointUser.getCompanyId());
+        try {
+            databaseApi.createDefaultServiceAgreementIfNotExists(scalepointUser.getCompanyId());
+        } finally {
+            UsersManager.returnUser(scalepointUser);
+        }
+
     }
 
 
