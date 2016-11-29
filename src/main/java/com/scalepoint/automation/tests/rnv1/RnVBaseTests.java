@@ -7,13 +7,18 @@ import com.scalepoint.automation.pageobjects.pages.rnv1.RnvCommunicationPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonPresence;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonType;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.ExcelDocUtil;
+import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -27,10 +32,15 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 
+    @Autowired
+    private DatabaseApi databaseApi;
+
     @BeforeMethod
-    public void initRv() throws IOException {
-        loadJarDll();
+    public void createDefaultServiceAgreement() {
+        User scalepointUser = UsersManager.takeUser(CompanyCode.SCALEPOINT);
+        databaseApi.createDefaultServiceAgreementIfNotExists(scalepointUser.getCompanyId());
     }
+
 
     @DataProvider(name = "RnVBaseTests.startTestDataProvider")
     public static Object[][] startTestDataProvider(Method method) {
@@ -223,8 +233,7 @@ public class RnVBaseTests extends BaseTest {
                 .assertTaskHasFeedbackReceivedStatus(agreement)
                 .assertButtonPresence(ButtonType.ACCEPT, ButtonPresence.SHOWN)
                 .assertButtonPresence(ButtonType.REJECT, ButtonPresence.SHOWN)
-                .assertButtonPresence(ButtonType.CANCEL, ButtonPresence.HIDDEN)
-                .assertTaskHasCompletedStatus(agreement);
+                .assertButtonPresence(ButtonType.CANCEL, ButtonPresence.HIDDEN);
     }
 
     @Test(dataProvider = "testDataProvider",

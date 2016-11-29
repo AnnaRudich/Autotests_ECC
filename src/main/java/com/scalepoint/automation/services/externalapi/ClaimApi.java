@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.utils.Http.*;
 
-public class ClaimApi extends EccServerApi {
+public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
     private static String DATE_FORMAT = "yyyy-MM-dd";

@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class EccFileApi extends EccServerApi {
+public class EccFileApi extends AuthenticationApi {
 
     public EccFileApi(User user) {
         super(user);

@@ -14,14 +14,12 @@ public enum DriverType {
         this.profile = profile;
     }
 
-    public static DriverType findByProfile(String[] activeProfiles) {
+    public static DriverType findByProfile(String browserMode) {
         for (DriverType driverType : DriverType.values()) {
-            for (String activeProfile : activeProfiles) {
-                if (driverType.profile.equalsIgnoreCase(activeProfile)) {
-                    return driverType;
-                }
+            if (driverType.profile.equalsIgnoreCase(browserMode)) {
+                return driverType;
             }
         }
-        throw new IllegalArgumentException("Profiles not found in application: "+ Arrays.toString(activeProfiles));
+        throw new IllegalArgumentException("Profiles not found in application: " + browserMode);
     }
 }

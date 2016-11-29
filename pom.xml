@@ -8,6 +8,30 @@
     <artifactId>autotests</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <profiles>
+        <profile>
+            <id>localhost</id>
+            <properties>
+                <activatedProperties>localhost</activatedProperties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>qa01</id>
+            <properties>
+                <activatedProperties>qa01</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>qa09</id>
+            <properties>
+                <activatedProperties>qa09</activatedProperties>
+            </properties>
+        </profile>
+    </profiles>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -18,6 +42,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.4</commons-io.version>
+        <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <fluent-hc.version>4.2.5</fluent-hc.version>
         <guava.version>15.0</guava.version>
         <htmlelements.version>1.17</htmlelements.version>
@@ -32,12 +57,31 @@
         <selenium.ie.driver.version>2.53.1</selenium.ie.driver.version>
         <spring.version>1.3.3.RELEASE</spring.version>
         <testng.version>6.9.12</testng.version>
-
-        <serverUrl>localhost</serverUrl>
     </properties>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources-filtered</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version>
+                <configuration>
+                    <profiles>
+                        <profile>localhost</profile>
+                    </profiles>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -62,6 +106,7 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 
@@ -78,7 +123,7 @@
                     <changeLogFile>${basedir}/src/liquibase/changelog.xml</changeLogFile>
                     <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
                     <url>jdbc:sqlserver://localhost;SelectMethod=cursor;integratedSecurity=true;databaseName=DEV_ECC_DK;</url>
-                    <propertyFile>${basedir}/src/main/resources/props/${serverUrl}.properties</propertyFile>
+                    <propertyFile>${basedir}/src/main/resources/application-${activatedProperties}.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <verbose>true</verbose>
@@ -159,6 +204,18 @@
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp.version}</version>
         </dependency>
 
         <dependency>

@@ -19,15 +19,15 @@ public class ExcelDocUtil {
     private ActiveXComponent activexComponent;
     private Dispatch workBooks;
 
-    private String clId = "A24";
-    private String description = "E24";
-    private String categoryGroup = "F24";
-    private String subCategory = "G24";
-    private String quantity = "H24";
-    private String ageMonth = "J24";
-    private String ageYears = "K24";
-    private String newPrice = "M24";
-    private String repairPrice = "U24";
+    private String clId = "A25";
+    private String description = "E25";
+    private String categoryGroup = "F25";
+    private String subCategory = "G25";
+    private String quantity = "H25";
+    private String ageMonth = "J25";
+    private String ageYears = "K25";
+    private String newPrice = "M25";
+    private String repairPrice = "U25";
 
     private String mainTemplateSheet = "Template";
     private String invoiceSheet = "Invoice";
@@ -76,12 +76,14 @@ public class ExcelDocUtil {
     }
 
     public void executeMacros(String macrosName) {
-        logger.info("Run macro");
-        Dispatch.call(activexComponent, "Run", macrosName);
+            logger.info("Run macro");
+            activexComponent.setProperty("DisplayAlerts", false);
+            Dispatch.call(activexComponent, "Run", macrosName);
     }
 
     public void closeAndDeleteFile(String fileLocation) {
         logger.info("Close file");
+        activexComponent.setProperty("DisplayAlerts", false);
         activexComponent.invoke("Quit", new Variant[]{});
         ComThread.Release();
         deleteFile(fileLocation);
@@ -97,7 +99,7 @@ public class ExcelDocUtil {
         logger.info("File was deleted - " + fileLocation);
     }
 
-    public void closeFile(String fileLocation) {
+    public void closeFile() {
         logger.info("Close file");
         activexComponent.invoke("Quit", new Variant[]{});
         ComThread.Release();
@@ -204,9 +206,9 @@ public class ExcelDocUtil {
         executeMacros(serviceAgreement.getExcelMacroName());
 
         if (feedbackActionType == NO_CHANGES_KEEP_FILE) {
-            closeFile(serviceAgreement.getSaveTemplateTo());
+            closeFile();
         } else {
-            closeFile(serviceAgreement.getSaveTemplateTo());
+            closeAndDeleteFile(serviceAgreement.getSaveTemplateTo());
         }
     }
 }

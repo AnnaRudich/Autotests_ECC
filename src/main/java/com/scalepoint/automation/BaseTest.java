@@ -9,7 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
-import com.scalepoint.automation.services.externalapi.EccServerApi;
+import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -36,6 +36,7 @@ import org.openqa.selenium.logging.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.core.env.Environment;
@@ -73,20 +74,15 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private Environment environment;
+    @Value("${driver.type}")
+    private String browserMode;
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
         MDC.put("sessionid", method.getName());
         logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
-        String[] activeProfiles = environment.getActiveProfiles();
-        if (activeProfiles.length == 0) {
-            throw new IllegalStateException("Profile must be specified");
-        }
-
-        WebDriver driver = DriversFactory.getDriver(DriverType.findByProfile(activeProfiles));
+        WebDriver driver = DriversFactory.getDriver(DriverType.findByProfile(browserMode));
 
         Browser.init(driver);
         Window.init(driver);
@@ -169,12 +165,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected MyPage login(User user) {
         Page.to(LoginPage.class);
-        return EccServerApi.createServerApi().login(user, MyPage.class);
+        return AuthenticationApi.createServerApi().login(user, MyPage.class);
     }
 
     protected <T extends Page> T login(User user, Class<T> returnPageClass) {
         Page.to(LoginPage.class);
-        return EccServerApi.createServerApi().login(user, returnPageClass);
+        return AuthenticationApi.createServerApi().login(user, returnPageClass);
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {

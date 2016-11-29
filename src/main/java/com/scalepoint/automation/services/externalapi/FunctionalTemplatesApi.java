@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static com.scalepoint.automation.utils.Http.post;
 
-public class FunctionalTemplatesApi extends EccServerApi {
+public class FunctionalTemplatesApi extends AuthenticationApi {
 
     private static Lock lock = new ReentrantLock();
 

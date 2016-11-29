@@ -22,28 +22,28 @@ import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.*;
 
-public class EccServerApi {
+public class AuthenticationApi {
 
     protected Logger log = LoggerFactory.getLogger(getClass());
 
-    public EccServerApi(User user) {
+    public AuthenticationApi(User user) {
         login(user, null);
     }
 
-    public EccServerApi(Executor executor) {
+    public AuthenticationApi(Executor executor) {
         this.executor = executor;
     }
 
-    public EccServerApi(User user, Executor executor) {
+    public AuthenticationApi(User user, Executor executor) {
         this.executor = executor;
         login(user, null);
     }
 
-    private EccServerApi() {
+    private AuthenticationApi() {
     }
 
-    public static EccServerApi createServerApi() {
-        return new EccServerApi();
+    public static AuthenticationApi createServerApi() {
+        return new AuthenticationApi();
     }
 
     protected Executor executor;

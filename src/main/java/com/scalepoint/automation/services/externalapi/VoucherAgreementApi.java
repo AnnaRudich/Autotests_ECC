@@ -20,7 +20,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Http.post;
 
 @SuppressWarnings("unchecked")
-public class VoucherAgreementApi extends EccServerApi {
+public class VoucherAgreementApi extends AuthenticationApi {
 
     private static final String URL_ADD_VOUCHER = Configuration.getEccAdminUrl() + "voucher/addVoucher.json?supplierId=";
     private static final String URL_LIST = Configuration.getEccAdminUrl() + "voucher/listAll.json";
