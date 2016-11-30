@@ -4,11 +4,13 @@ import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
+import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
 
@@ -33,8 +35,14 @@ public class EditReasonsPage extends Page {
     private Button addReason;
     @FindBy(xpath = "//input[contains(@id,'reasonNameAdd')]")
     private ExtInput addReasonField;
-    @FindBy(id = "submitBtn")
+    @FindBy(xpath = "//button[contains(text(),'Save')]")
     private Button save;
+    @FindBy(xpath = "//button[contains(text(),'Delete')]")
+    private Button delete;
+    @FindBy(xpath = "//button[contains(@id,'changeStatusBtn')]")
+    private Button changeStatus;
+    @FindBy(id = "reasons_table")
+    private Table reasons;
 
 
     @Override
@@ -88,10 +96,28 @@ public class EditReasonsPage extends Page {
 
     public boolean isValueReason(String expectedValue) {
         Wait.waitForPageLoaded();
-        WebElement webElement = reasonsFields.get(reasonsFields.size() - 1);
+        WebElement webElement = reasonsFields.get(reasonsFields.size() - 2);
         String val = webElement.getAttribute("value");
         return expectedValue.equals(val);
     }
+
+    private int findRowNumber(String _reason) {
+        List<List<WebElement>> rowsNames = reasons.getRows();
+        for (int i = 0; i < rowsNames.size(); i++) {
+            String typeName = rowsNames.get(i).get(1).getText();
+            if (typeName.contains(_reason)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public void deleteReason(String _reason){
+        int numberOfRow = findRowNumber(_reason) + 2;
+        driver.findElement(By.xpath("//tr[" + numberOfRow +  "]//button[contains(text(),'Delete')]")).click();
+    }
+
 }
 
 

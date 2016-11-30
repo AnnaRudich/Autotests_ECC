@@ -17,6 +17,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.returnUser;
@@ -126,7 +127,8 @@ public class EditReasonTests extends BaseTest {
                 + expectedValue);
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
-                enable(FTSetting.SHOW_DISCREATIONARY_REASON)).
+                enable(FTSetting.SHOW_DISCREATIONARY_REASON),
+                disable(FTSetting.SHOW_POLICY_TYPE)).
                 getClaimMenu().
                 logout();
         User trygUser = takeUser(CompanyCode.TRYGFORSIKRING);
