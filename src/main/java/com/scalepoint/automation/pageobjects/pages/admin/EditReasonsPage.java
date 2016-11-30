@@ -101,6 +101,13 @@ public class EditReasonsPage extends Page {
         return expectedValue.equals(val);
     }
 
+    public boolean isReasonEditable(String _reason){
+        Wait.waitForPageLoaded();
+        int numberOfRow = findRowNumber(_reason) + 2;
+        return driver.findElement(By.xpath("//tr[" + numberOfRow + "]//input")).isEnabled();
+
+    }
+
     private int findRowNumber(String _reason) {
         List<List<WebElement>> rowsNames = reasons.getRows();
         for (int i = 0; i < rowsNames.size(); i++) {
@@ -116,6 +123,16 @@ public class EditReasonsPage extends Page {
     public void deleteReason(String _reason){
         int numberOfRow = findRowNumber(_reason) + 2;
         driver.findElement(By.xpath("//tr[" + numberOfRow +  "]//button[contains(text(),'Delete')]")).click();
+    }
+
+    public boolean isDeleteEnable(String _reason){
+        int numberOfRow = findRowNumber(_reason) + 2;
+        return driver.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(text(),'Delete')]")).isEnabled();
+    }
+
+    public boolean isReasonVisible(String _reason){
+        List<WebElement> reasons = reasonsFields;
+        return reasons.stream().anyMatch(reason -> reason.getText().equals(_reason));
     }
 
 }
