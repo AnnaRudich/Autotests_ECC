@@ -152,7 +152,7 @@ public class RnVBaseTests extends BaseTest {
                 .toRepairValuationProjectsPage()
                 .toCommunicationTab();
 
-        Assert.assertTrue(communicationPage.isLatestMessageContains(agreement.getCancelledMessageText()), "Sent message contains text: " + agreement.getCancelledMessageText().toUpperCase());
+        communicationPage.assertLatestMessageContains(agreement.getCancelledMessageText());
         boolean lineIncludedAndNotReviewed = to(SettlementPage.class).findClaimLine(agreement.getClaimLineNameForRnV()).isLineIncludedAndNotReviewed();
         Assert.assertTrue(lineIncludedAndNotReviewed, "Line unlocked and included");
     }
@@ -298,18 +298,20 @@ public class RnVBaseTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "verify new agreement displays in the wizard only when it's assigned to CL category")
     public void eccs2605_feedbackPartiallyCompleted(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        String lineOne = "Line 1";
+        String lineTwo = "Line 2";
         loginAndCreateClaim(user, claim)
                 .addManually()
-                .fillBaseData("Line 1", agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .setReviewed(true)
                 .ok()
                 .addManually()
-                .fillBaseData("Line 2", agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .ok()
                 .selectAllLines()
                 .sendToRnV()
-                .changeAgreement("Line 1", agreement.getTestAgreementForRnV())
-                .changeAgreement("Line 2", agreement.getTestAgreementForRnV())
+                .changeAgreement(lineOne, agreement.getTestAgreementForRnV())
+                .changeAgreement(lineTwo, agreement.getTestAgreementForRnV())
                 .nextRnVstep()
                 .sendRnV(agreement)
                 .toRepairValuationProjectsPage()
@@ -321,12 +323,76 @@ public class RnVBaseTests extends BaseTest {
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement)
                 .getPage()
-                .acceptCL("Line 1")
+                .acceptCL(lineOne)
                 .getAssertion()
                 .assertTaskHasPartlyCompletedStatus(agreement)
-                .assertClaimLineAccepted("Line 1")
-                .assertClaimLineHasNoChanges("Line 2");
+                .assertClaimLineAccepted(lineOne)
+                .assertClaimLineHasNoChanges(lineTwo);
+    }
 
+    @Test(dataProvider = "testDataProvider",
+            description = "verify status Completed wasn't changes after communication between CH and SePa")
+    public void eccs2965_2828_completedNotChangedToWaitingFeedbackStatus(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        String lineOne = "Line 1";
+        loginAndCreateClaim(user, claim)
+                .addManually()
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .setReviewed(true)
+                .ok()
+                .selectAllLines()
+                .sendToRnV()
+                .changeAgreement(lineOne, agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage()
+                .toCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .getPage()
+                .acceptCL(lineOne)
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement)
+                .getPage()
+                .toCommunicationTab()
+                .sendTextMailToSePa("Test text")
+                .assertLatestMessageContains("Test text")
+                .toRepairValuationProjectsPage()
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement);
+    }
 
+    @Test(dataProvider = "testDataProvider",
+            description = "verify status Feedback received wasn't changes after communication between CH and SePa")
+    public void eccs2965_feedbackReceivedNotChangedToWaitingFeedbackStatus(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        String lineOne = "Line 1";
+        loginAndCreateClaim(user, claim)
+                .addManually()
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .setReviewed(true)
+                .ok()
+                .selectAllLines()
+                .sendToRnV()
+                .changeAgreement(lineOne, agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage()
+                .toCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .getPage()
+                .toCommunicationTab()
+                .sendTextMailToSePa("Test text")
+                .assertLatestMessageContains("Test text")
+                .toRepairValuationProjectsPage()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement);
     }
 }

@@ -46,8 +46,11 @@ public class RnvCommunicationPage extends BaseClaimPage {
         return isDisplayed(By.cssSelector("div[class='bubble sent']"));
     }
 
-    public Boolean isLatestMessageContains(String textMessage) {
-        return latestMessageText.getText().contains(textMessage);
+    public RnvCommunicationPage assertLatestMessageContains(String textMessage) {
+        if (!latestMessageText.getText().contains(textMessage)) {
+            throw new AssertionError("Latest message doesn't contain: "+textMessage);
+        }
+        return this;
     }
 
     private void downloadTemplate(User user, String fileLocation) throws Exception {
@@ -66,8 +69,9 @@ public class RnvCommunicationPage extends BaseClaimPage {
     }
 
 
-    public void sendTextMailToSePa(String textMsg) {
+    public RnvCommunicationPage sendTextMailToSePa(String textMsg) {
         sendKeys(mailTextField, textMsg);
         sendBtn.click();
+        return this;
     }
 }
