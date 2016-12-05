@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
+import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
@@ -28,8 +29,6 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 @EccPage
 public class SettlementPage extends BaseClaimPage {
 
-    @FindBy(css = "#settlementGrid-body table")
-    private Table claim;
     @FindBy(css = "#settlementGrid-body table:first-child")
     private Table firstClaim;
     @FindBy(css = ".x-grid-cell-descriptionColumn")
@@ -69,6 +68,12 @@ public class SettlementPage extends BaseClaimPage {
         waitForUrl(getRelativeUrl());
         waitForVisible(ok);
         return this;
+    }
+
+    public ClaimLine findClaimLineByDescription(String description) {
+        Table table = new Table(driver.findElement
+                (By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table")));
+        return new ClaimLine(table);
     }
 
     public SettlementPage requestSelfService(Claim claim, String password) {
@@ -120,12 +125,6 @@ public class SettlementPage extends BaseClaimPage {
                 .ok();
     }
 
-    public String fetchPriceByPoint(String point) {
-        List<List<String>> priceConclusions = settlementConclusion.getClaimsResult().getRowsAsString();
-        String line = priceConclusions.stream().filter(points -> point.contains(point)).findFirst().toString();
-        return line.split(" ")[line.split(" ").length - 1].replaceAll("[\\]]]", "");
-    }
-
     public void cancelClaim() {
         bottomMenu.cancel();
     }
@@ -168,79 +167,10 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
-    public SettlementPage selectClaimItemByDescription(String _item) {
-        List<WebElement> rows = claim.getColumnByIndex(5);
-            rows.stream().filter(claim -> claim.getText().contains(_item)).findFirst().get().click();
-        return this;
-    }
-
     public Double getFaceTooltipValue() {
         String tooltipText = (iconToolTip.getAttribute("title")).split("\\(")[0];
         String value = tooltipText.replaceAll("[^\\.,0123456789]", "");
         return OperationalUtils.getDoubleValue(value);
-    }
-
-    public boolean isDepreciationPercentPresent(String _claim, String _depreciationPercent) {
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(_claim)) {
-                String actualDepreciationPercent = list.get(9).getText();
-                return actualDepreciationPercent.equals(_depreciationPercent);
-            }
-        }
-        return false;
-    }
-
-    public SettlementDialog editClaimLine(String claimDescription) {
-        selectClaimItemByDescription(claimDescription);
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(claimDescription)) {
-                list.get(3).click();
-                driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
-                String js =
-                        "var callback = arguments[arguments.length - 1];" +
-                                "function groupsLoaded() {" +
-                                "var groups = Ext.getCmp('group-combobox');" +
-                                "if (!groups || (groups.getStore().count() <= 0)) {" +
-                                "setTimeout(groupsLoaded, 1000);" +
-                                "} else {" +
-                                "callback();" +
-                                "}" +
-                                "}" +
-                                "groupsLoaded();";
-                ((JavascriptExecutor) driver).executeAsyncScript(js);
-            }
-        }
-        return BaseDialog.at(SettlementDialog.class);
-    }
-
-    public boolean getClaimColorByDescription(String _item, String _color) {
-        selectClaimItemByDescription(_item);
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(_item)) {
-                String actualColor = list.get(4).findElement(By.cssSelector("span")).getAttribute("style");
-                return actualColor.equals(_color);
-            }
-        }
-        return false;
-    }
-
-    public boolean getComputedClaimColorByDescription(String _item, String _color) {
-        selectClaimItemByDescription(_item);
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(_item)) {
-                String color = list.get(4).findElement(By.cssSelector("span")).getCssValue("color");
-                return color.equals(_color);
-            }
-        }
-        return false;
     }
 
     public SettlementPage importExcelFile(String filePath) {
@@ -251,68 +181,6 @@ public class SettlementPage extends BaseClaimPage {
 
     private String reviewedColor = "rgb(30, 144, 255)";
     private String excludedColor = "rgba(221, 170, 170, 1)";
-    public boolean isLineIncludedAndNotReviewed(String clName){
-        WebElement item = find(byDescriptionItemsXpath, clName);
-        return getAttributeClass(item).equals("div")
-                &&!getAttributeStyle(item).equals(reviewedColor);
-    }
-
-    public boolean isLineExcludedAndReviewed(String clName) {
-        WebElement item = find(byDescriptionItemsXpath, clName);
-        return getAttributeClass(item).equals("divNotActive")
-                && item.getCssValue("color").equals(excludedColor);
-    }
-
-    public boolean isLineExcludedAndNotReviewed(String clName){
-        WebElement item = find(byDescriptionItemsXpath, clName);
-        return getAttributeClass(item).equals("divNotActive")
-                &&!getAttributeStyle(item).equals(reviewedColor);
-    }
-
-    public boolean isVoucherIconPresent(String _claim){
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(_claim)) {
-                String voucherIcon = list.get(1).findElement(By.xpath("//td[contains(@class,'voucherImageColumn')]//img")).getAttribute("src");
-                return voucherIcon.contains("voucherIcon.png");
-            }
-        }
-        return false;
-    }
-
-    public boolean isDiscretionaryIconPresent(String _claim){
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(_claim)) {
-                String discretionaryIcon = list.get(1).findElement(By.xpath("//td[contains(@class,'voucherImageColumn')]//img")).getAttribute("src");
-                return discretionaryIcon.contains("discretionary_icon.png");
-            }
-        }
-        return false;
-    }
-
-    public boolean isTooltipPresent(String _claim, String expectedText){
-        List<List<WebElement>> rowsNames = claim.getRows();
-        for (List<WebElement> list : rowsNames) {
-            String claim = list.get(4).getText();
-            if (claim.equals(_claim)) {
-                String actualTooltip = list.get(1).findElement(By.xpath("//td[contains(@class,'voucherImageColumn')]//img")).getAttribute("title");
-                return actualTooltip.equals(expectedText);
-            }
-        }
-        return false;
-
-    }
-
-    public boolean isClaimLineSendToRepairAndIconDisplays(String ci) {
-        return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", ci)));
-    }
-
-    public boolean isClaimLineSendNotToRepairAndIconDisplays(String ci) {
-        return isElementPresent(By.xpath(sendNotToRepairLineIconByDescriptionXpath.replace("$1", ci)));
-    }
 
     public MainMenu getMainMenu() {
         return mainMenu;
@@ -324,5 +192,159 @@ public class SettlementPage extends BaseClaimPage {
         Assert.assertTrue(isItemPresent(claimLineDescription),
                 errorMessage("The claim item [%s] is not found", claimLineDescription));
         return this;
+    }
+
+    public class ClaimLine {
+
+        private boolean voucherPresent;
+        private boolean discretionaryPresent;
+        private String tooltip = "";
+        private String description;
+        private String category;
+        private int quantity;
+        private int age;
+        private double purchasePrice;
+        private int depreciation;
+        private double replacementAmount;
+        private String actualColor;
+        private String computedColor;
+        private boolean lineSentToRepair;
+        private boolean lineSentToValuation;
+
+        private WebElement descriptionElement;
+
+        public ClaimLine(Table claimLine) {
+            this.voucherPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'voucherIcon.png')]")).size() > 0;
+            this.discretionaryPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'discretionary_icon.png')]")).size() > 0;
+            List<WebElement> elements = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[@title]"));
+            if (elements.size() > 0) {
+                this.tooltip = elements.get(0).getAttribute("title");
+            }
+            this.descriptionElement = claimLine.findElement(By.xpath(".//*[@data-columnid='descriptionColumn']//span"));
+            this.description = descriptionElement.getText();
+            this.actualColor = descriptionElement.getAttribute("style");
+            this.computedColor = descriptionElement.getCssValue("color");
+            this.category = claimLine.findElement(By.xpath(".//*[@data-columnid='categoryGroupColumn']")).getText();
+            this.quantity = Integer.valueOf(claimLine.findElement(By.xpath(".//*[@data-columnid='quantityColumn']")).getText());
+
+            String ageValue = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
+            if (NumberUtils.isNumber(ageValue)) {
+                this.age = Integer.valueOf(ageValue);
+            }
+
+            purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
+            String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
+            depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
+            replacementAmount = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
+
+            this.lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
+            this.lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
+        }
+
+        public SettlementPage selectLine() {
+            descriptionElement.click();
+            return SettlementPage.this;
+        }
+
+        public SettlementDialog editLine() {
+            doubleClick(descriptionElement);
+            driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
+            String js =
+                    "var callback = arguments[arguments.length - 1];" +
+                            "function groupsLoaded() {" +
+                            "var groups = Ext.getCmp('group-combobox');" +
+                            "if (!groups || (groups.getStore().count() <= 0)) {" +
+                            "setTimeout(groupsLoaded, 1000);" +
+                            "} else {" +
+                            "callback();" +
+                            "}" +
+                            "}" +
+                            "groupsLoaded();";
+            ((JavascriptExecutor) driver).executeAsyncScript(js);
+            return BaseDialog.at(SettlementDialog.class);
+        }
+
+        public String getTooltip() {
+            return tooltip;
+        }
+
+        public boolean isVoucherPresent() {
+            return voucherPresent;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public double getPurchasePrice() {
+            return purchasePrice;
+        }
+
+        public int getDepreciation() {
+            return depreciation;
+        }
+
+        public double getReplacementAmount() {
+            return replacementAmount;
+        }
+
+        public String getActualColor() {
+            return actualColor;
+        }
+
+        public String getComputedColor() {
+            return computedColor;
+        }
+
+        public boolean isDiscretionaryPresent() {
+            return discretionaryPresent;
+        }
+
+        public boolean hasColor(String color) {
+            return color.equals(getActualColor());
+        }
+
+        public boolean hasComputedColor(String color) {
+            return color.equals(getComputedColor());
+        }
+
+        public boolean isTooltipPresent(String expectedText) {
+            return expectedText.equals(getTooltip());
+        }
+
+        public boolean isClaimLineSentToRepair() {
+            return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", "")));
+        }
+
+        public boolean isClaimLineSendNotToRepairAndIconDisplays() {
+            return isElementPresent(By.xpath(sendNotToRepairLineIconByDescriptionXpath.replace("$1", "")));
+        }
+
+        public boolean isLineExcludedAndReviewed() {
+            return descriptionElement.getAttribute("class").equals("divNotActive")
+                    && descriptionElement.getCssValue("color").equals(excludedColor);
+        }
+
+        public boolean isLineIncludedAndNotReviewed() {
+            return descriptionElement.getAttribute("class").equals("div")
+                    && !descriptionElement.getAttribute("style").equals(reviewedColor);
+        }
+
+        public boolean isLineExcludedAndNotReviewed() {
+            return descriptionElement.getAttribute("class").equals("divNotActive")
+                    && !descriptionElement.getAttribute("style").equals(reviewedColor);
+        }
     }
 }

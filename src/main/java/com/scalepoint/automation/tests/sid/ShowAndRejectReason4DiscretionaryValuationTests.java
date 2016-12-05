@@ -339,9 +339,13 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 selectValuation(ANDEN_VURDERING).
                 selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6());
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason6(), "Incorrect text discretionary reason");
-        settlementDialog.selectValuation(VOUCHER).
-                ok();
-        assertTrue(settlementPage.isVoucherIconPresent(claimItem.getTextFieldSP()),"Voucher icon should be displayed");
+
+        boolean voucherPresent = settlementDialog.selectValuation(VOUCHER)
+                .ok()
+                .findClaimLineByDescription(claimItem.getTextFieldSP())
+                .isVoucherPresent();
+
+        assertTrue(voucherPresent, "Voucher icon should be displayed");
     }
 
     /**
@@ -357,7 +361,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
             "Customer demand price is matched with discretionary rule.FT=ON")
-    public void charlie_508_13_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user,
+    public void charlie_508_13_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim, ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
         String month = "6 ";
@@ -375,9 +379,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 selectValuation(CUSTOMER_DEMAND).
                 selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason1(), "Incorrect text discretionary reason");
-        settlementDialog.ok();
-        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
-        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason1()),"Discretionary Reason Tooltip should be displayed");
+
+        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason1()), "Discretionary Reason Tooltip should be displayed");
     }
 
     /**
@@ -394,7 +399,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
             "Discretionary valuation is added.FT=ON")
-    public void charlie_508_14_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user,
+    public void charlie_508_14_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
@@ -411,11 +416,12 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason7(), "Incorrect text discretionary reason");
 
-        SettlementPage settlementPage = settlementDialog.ok();
-        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
-        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason7()),"Discretionary Reason Tooltip should be displayed");
+        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
 
     }
+
     /**
      * WHEN:FT is ON
      * AND: Create claimline which is matched with some voucher and discretionary rule (combine checkbox is checked).     *
@@ -428,7 +434,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
             "claimline is matched with some voucher and discretionary rule (combine checkbox is checked)FT=ON")
-    public void charlie_508_15_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING)User user,
+    public void charlie_508_15_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
@@ -445,9 +451,9 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason7(), "Incorrect text discretionary reason");
 
-        SettlementPage settlementPage = settlementDialog.ok();
-        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
-        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(), discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
+        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
     }
 
     /**
@@ -466,9 +472,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
             "after disabling FT 'Show 'Valuation reason'block' .FT=ON")
-    public void charlie_508_16_verifyDiscretionaryReasonIconFTONandOFF(@UserCompany(CompanyCode.TRYGFORSIKRING)User user,
-                                                                 Claim claim, ClaimItem claimItem,
-                                                                 DiscretionaryReason discretionaryReason) {
+    public void charlie_508_16_verifyDiscretionaryReasonIconFTONandOFF(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+                                                                       Claim claim,
+                                                                       ClaimItem claimItem,
+                                                                       DiscretionaryReason discretionaryReason) {
         SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem);
         settlementDialog.addValuation().
                 addValuationType(claimItem.getValuationType4()).
@@ -482,13 +489,15 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason6(), "Incorrect text discretionary reason");
 
         SettlementPage settlementPage = settlementDialog.ok();
-        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
-        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason6()),"Discretionary Reason Tooltip should be displayed");
+
+        SettlementPage.ClaimLine claimLine = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason6()), "Discretionary Reason Tooltip should be displayed");
 
         settlementPage.saveClaim().
                 getClaimMenu().
                 logout();
-                login(getSystemUser()).
+        login(getSystemUser()).
                 getMainMenu().
                 toAdminPage();
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
@@ -496,15 +505,14 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 disable(FTSetting.SHOW_DISCREATIONARY_REASON)).
                 getClaimMenu().
                 logout();
-                login(user);
-        SettlementPage line = new MyPage().openRecentClaim().
-                reopenClaim();
+        login(user);
 
-        assertTrue(settlementPage.isDiscretionaryIconPresent(claimItem.getTextFieldSP()),"Discretionary reason icon should be displayed");
-        assertTrue(settlementPage.isTooltipPresent(claimItem.getTextFieldSP(),discretionaryReason.getDiscretionaryReason6()),"Discretionary Reason Tooltip should be displayed");
+        settlementPage = new MyPage().openRecentClaim().reopenClaim();
 
-        line.editClaimLine(claimItem.getTextFieldSP());
-        assertFalse(settlementDialog.isDiscretionaryReasonVisible(), "Discretionary Reason should not be shown");
+        claimLine = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason6()), "Discretionary Reason Tooltip should be displayed");
+        assertFalse(claimLine.editLine().isDiscretionaryReasonVisible(), "Discretionary Reason should not be shown");
     }
 
 

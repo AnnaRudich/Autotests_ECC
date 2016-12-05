@@ -172,7 +172,8 @@ public class BasicTests extends BaseTest {
         loginAndCreateClaim(user, claim).
                 importExcelFile(claimItem.getExcelPath1()).
                 assertItemIsPresent(claimItem.getXlsDescr1()).
-                selectClaimItemByDescription(claimLineDescription).
+                findClaimLineByDescription(claimLineDescription).
+                selectLine().
                 getToolBarMenu().
                 toProductMatchPage().
                 sortOrderableFirst().

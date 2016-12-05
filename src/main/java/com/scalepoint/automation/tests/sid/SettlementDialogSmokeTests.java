@@ -141,7 +141,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog dialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not saved");
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
@@ -162,14 +162,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void     ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
+    public void ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         settlementPage.
                 addManually().
                 fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog dialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not Saved");
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
@@ -179,7 +179,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
 
         dialog.fillBaseData(claimItem).cancel();
 
-        settlementPage.editClaimLine(claimItem.getTextFieldSP());
+        dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP());
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The New Category is Saved");
@@ -223,12 +223,13 @@ public class SettlementDialogSmokeTests extends BaseTest {
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_9_disableIncludeInClaim(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.addManually().
-                fillBaseData(claimItem).
-                setReviewed(true).
-                includeInClaim(false).
-                ok();
-        assertTrue(settlementPage.getClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getBlueColor()), "Claim is not in blue color");
+        SettlementPage.ClaimLine claimLine = settlementPage.addManually()
+                .fillBaseData(claimItem)
+                .setReviewed(true)
+                .includeInClaim(false)
+                .ok()
+                .findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.hasColor(claimItem.getBlueColor()), "Claim is not in blue color");
         assertEquals(toNumber(settlementPage.getBottomMenu().getClaimSumValue()), 0.00, "Claim sum is not assertEqualsDouble zero");
     }
 
@@ -246,12 +247,14 @@ public class SettlementDialogSmokeTests extends BaseTest {
     public void ecc3144_11_enableIncludeInClaimSecondClaim(User user, Claim claim, ClaimItem claimItem) {
         String secondClaimDescription = claimItem.getTextFieldSP().concat("second");
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.addManually().
-                fillBaseData(claimItem).
-                setReviewed(false).
-                includeInClaim(false).
-                ok();
-        assertTrue(settlementPage.getComputedClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getPinkColor()));
+
+        SettlementPage.ClaimLine claimLine = settlementPage.addManually()
+                .fillBaseData(claimItem)
+                .setReviewed(false)
+                .includeInClaim(false)
+                .ok()
+                .findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.hasComputedColor(claimItem.getPinkColor()));
 
         SettlementDialog dialog = settlementPage.addManually().
                 fillBaseData(claimItem).
@@ -278,12 +281,13 @@ public class SettlementDialogSmokeTests extends BaseTest {
             "and 'Reviewed' disabled")
     public void ecc3144_10_disableIncludeInClaimAndReviewed(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        settlementPage.addManually().
-                fillBaseData(claimItem).
-                setReviewed(false).
-                includeInClaim(false).
-                ok();
-        assertTrue(settlementPage.getComputedClaimColorByDescription(claimItem.getTextFieldSP(), claimItem.getPinkColor()), "Claim is not in pink color");
+        SettlementPage.ClaimLine claimLine = settlementPage.addManually()
+                .fillBaseData(claimItem)
+                .setReviewed(false)
+                .includeInClaim(false)
+                .ok()
+                .findClaimLineByDescription(claimItem.getTextFieldSP());
+        assertTrue(claimLine.hasComputedColor(claimItem.getPinkColor()), "Claim is not in pink color");
     }
 
     /**
@@ -491,7 +495,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 ok();
 
-        SettlementDialog dialog = settlementPage.editClaimLine(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
         assertEquals(dialog.getAgeYears(), "10", "The age year is not saved");
         assertEquals(dialog.getMonthValue().trim(), "6 " + claimItem.getMonths(), "The month is not saved");
     }
@@ -514,7 +518,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
         assertTrue(dialog.isMonthMenuIsEnabled(), "Month DropDown is disabled");
 
         dialog.disableAge().ok();
-        settlementPage.editClaimLine(claimItem.getTextFieldSP());
+        settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
 
         assertFalse(dialog.isAgeYearsIsEnabled(), "Age Years field is enabled");
         assertFalse(dialog.isMonthMenuIsEnabled(), "Month DropDown is enabled");

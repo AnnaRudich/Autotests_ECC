@@ -223,10 +223,5 @@ public interface Actions {
         JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
         executor.executeScript("arguments[0].value=arguments[1];", element, value);
     }
-
-    default String getAttributeClass(WebElement element){ return element.getAttribute("class");}
-
-    default String getAttributeStyle(WebElement element){return element.getAttribute("style");}
-
 }
 

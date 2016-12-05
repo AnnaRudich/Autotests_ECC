@@ -75,7 +75,7 @@ public class RnvProjectsPage extends Page {
         return isElementPresent(By.xpath(byAgrXpath.replace("$1", agrName)));
     }
 
-    public RnvCommunicationPage navigateToCommunicationTab() {
+    public RnvCommunicationPage toCommunicationTab() {
         clickAndWaitForDisplaying(comunicationTab, By.cssSelector("td#combo-communication-task-inputCell"));
         return at(RnvCommunicationPage.class);
     }
@@ -95,7 +95,6 @@ public class RnvProjectsPage extends Page {
 
     public RnvProjectsPage cancelTopTask() {
         cancelTaskBtn.click();
-        //clickAndWaitForDisplaying(yesBtnConfirmationDialog, By.id("project_view_id"));
         yesBtnConfirmationDialog.click();
         Wait.waitForAjaxCompleted();
         return this;
@@ -194,6 +193,12 @@ public class RnvProjectsPage extends Page {
         public Assertion assertTaskHasFeedbackReceivedStatus(ServiceAgreement agreement) {
             String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
             Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatusName(), "Task has " + taskStatus + " status. Must be feedback received");
+            return this;
+        }
+
+        public Assertion assertTaskHasPartlyCompletedStatus(ServiceAgreement agreement) {
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getPartlyCompletedStatusName(), "Task has " + taskStatus + " status. Must be partly received");
             return this;
         }
 
