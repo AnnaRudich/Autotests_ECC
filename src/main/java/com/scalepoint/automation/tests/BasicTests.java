@@ -4,7 +4,6 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -172,7 +171,7 @@ public class BasicTests extends BaseTest {
         loginAndCreateClaim(user, claim).
                 importExcelFile(claimItem.getExcelPath1()).
                 assertItemIsPresent(claimItem.getXlsDescr1()).
-                findClaimLineByDescription(claimLineDescription).
+                findClaimLine(claimLineDescription).
                 selectLine().
                 getToolBarMenu().
                 toProductMatchPage().

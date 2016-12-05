@@ -141,7 +141,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        SettlementDialog dialog = settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not saved");
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
@@ -169,7 +169,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 fillBaseData(claimItem).
                 ok();
 
-        SettlementDialog dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        SettlementDialog dialog = settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP(), "The Description is not Saved");
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The Category is not Saved");
@@ -179,7 +179,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
 
         dialog.fillBaseData(claimItem).cancel();
 
-        dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        dialog = settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(dialog.getDescriptionText(), claimItem.getTextFieldSP());
         assertEquals(dialog.getCategoryText(), claimItem.getExistingCat1_Born(), "The New Category is Saved");
@@ -228,7 +228,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 .setReviewed(true)
                 .includeInClaim(false)
                 .ok()
-                .findClaimLineByDescription(claimItem.getTextFieldSP());
+                .findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.hasColor(claimItem.getBlueColor()), "Claim is not in blue color");
         assertEquals(toNumber(settlementPage.getBottomMenu().getClaimSumValue()), 0.00, "Claim sum is not assertEqualsDouble zero");
     }
@@ -253,7 +253,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 .setReviewed(false)
                 .includeInClaim(false)
                 .ok()
-                .findClaimLineByDescription(claimItem.getTextFieldSP());
+                .findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.hasComputedColor(claimItem.getPinkColor()));
 
         SettlementDialog dialog = settlementPage.addManually().
@@ -286,7 +286,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 .setReviewed(false)
                 .includeInClaim(false)
                 .ok()
-                .findClaimLineByDescription(claimItem.getTextFieldSP());
+                .findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.hasComputedColor(claimItem.getPinkColor()), "Claim is not in pink color");
     }
 
@@ -495,7 +495,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
                 selectValuation(SettlementDialog.Valuation.NEW_PRICE).
                 ok();
 
-        SettlementDialog dialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        SettlementDialog dialog = settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
         assertEquals(dialog.getAgeYears(), "10", "The age year is not saved");
         assertEquals(dialog.getMonthValue().trim(), "6 " + claimItem.getMonths(), "The month is not saved");
     }
@@ -518,7 +518,7 @@ public class SettlementDialogSmokeTests extends BaseTest {
         assertTrue(dialog.isMonthMenuIsEnabled(), "Month DropDown is disabled");
 
         dialog.disableAge().ok();
-        settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
 
         assertFalse(dialog.isAgeYearsIsEnabled(), "Age Years field is enabled");
         assertFalse(dialog.isMonthMenuIsEnabled(), "Month DropDown is enabled");

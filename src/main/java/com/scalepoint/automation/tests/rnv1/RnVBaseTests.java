@@ -52,14 +52,14 @@ public class RnVBaseTests extends BaseTest {
             Object[][] params = new Object[4][];
             //verify Repair task start
             params[0] = combine(getTestDataParameters(method), serviceAgreement.getRepairType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLineByDescription(description);
+                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
                 Assert.assertTrue(claimLine.isLineExcludedAndReviewed());
                 Assert.assertTrue(claimLine.isClaimLineSentToRepair());
             });
 
             //verify Valuation task start
             params[1] = combine(getTestDataParameters(method), serviceAgreement.getValuaitonType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLineByDescription(description);
+                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
                 Assert.assertTrue(claimLine.isLineExcludedAndReviewed());
                 Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
             });
@@ -67,14 +67,14 @@ public class RnVBaseTests extends BaseTest {
 
             //verify Match task start
             params[2] = combine(getTestDataParameters(method), serviceAgreement.getMatchServiceType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLineByDescription(description);
+                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
                 Assert.assertTrue(claimLine.isLineExcludedAndNotReviewed());
                 Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
             });
 
             //verify Repair estimate task start
             params[3] = combine(getTestDataParameters(method), serviceAgreement.getRepairEstimateType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLineByDescription(description);
+                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
                 Assert.assertTrue(claimLine.isLineExcludedAndNotReviewed());
                 Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
 
@@ -100,7 +100,7 @@ public class RnVBaseTests extends BaseTest {
                 .addManually()
                 .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .ok()
-                .findClaimLineByDescription(description)
+                .findClaimLine(description)
                 .selectLine()
                 .sendToRnV()
                 .changeTask(description, serviceAgreementType)
@@ -153,7 +153,7 @@ public class RnVBaseTests extends BaseTest {
                 .toCommunicationTab();
 
         Assert.assertTrue(communicationPage.isLatestMessageContains(agreement.getCancelledMessageText()), "Sent message contains text: " + agreement.getCancelledMessageText().toUpperCase());
-        boolean lineIncludedAndNotReviewed = to(SettlementPage.class).findClaimLineByDescription(agreement.getClaimLineNameForRnV()).isLineIncludedAndNotReviewed();
+        boolean lineIncludedAndNotReviewed = to(SettlementPage.class).findClaimLine(agreement.getClaimLineNameForRnV()).isLineIncludedAndNotReviewed();
         Assert.assertTrue(lineIncludedAndNotReviewed, "Line unlocked and included");
     }
 
@@ -285,7 +285,7 @@ public class RnVBaseTests extends BaseTest {
                 .addManually()
                 .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .ok()
-                .findClaimLineByDescription(description)
+                .findClaimLine(description)
                 .selectLine()
                 .sendToRnV()
                 .changeTask(description, agreement.getRepairType())
@@ -306,8 +306,7 @@ public class RnVBaseTests extends BaseTest {
                 .addManually()
                 .fillBaseData("Line 2", agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .ok()
-                .findClaimLineByDescription("Line 1").selectLine()
-                .findClaimLineByDescription("Line 2").selectLine()
+                .selectAllLines()
                 .sendToRnV()
                 .changeAgreement("Line 1", agreement.getTestAgreementForRnV())
                 .changeAgreement("Line 2", agreement.getTestAgreementForRnV())

@@ -342,7 +342,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         boolean voucherPresent = settlementDialog.selectValuation(VOUCHER)
                 .ok()
-                .findClaimLineByDescription(claimItem.getTextFieldSP())
+                .findClaimLine(claimItem.getTextFieldSP())
                 .isVoucherPresent();
 
         assertTrue(voucherPresent, "Voucher icon should be displayed");
@@ -380,7 +380,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason1(), "Incorrect text discretionary reason");
 
-        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLineByDescription(claimItem.getTextFieldSP());
+        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
         assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason1()), "Discretionary Reason Tooltip should be displayed");
     }
@@ -416,7 +416,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason7(), "Incorrect text discretionary reason");
 
-        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLineByDescription(claimItem.getTextFieldSP());
+        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
         assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
 
@@ -451,7 +451,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason7(), "Incorrect text discretionary reason");
 
-        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLineByDescription(claimItem.getTextFieldSP());
+        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
         assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
     }
@@ -490,7 +490,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         SettlementPage settlementPage = settlementDialog.ok();
 
-        SettlementPage.ClaimLine claimLine = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP());
+        SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
         assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason6()), "Discretionary Reason Tooltip should be displayed");
 
@@ -509,7 +509,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         settlementPage = new MyPage().openRecentClaim().reopenClaim();
 
-        claimLine = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP());
+        claimLine = settlementPage.findClaimLine(claimItem.getTextFieldSP());
         assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
         assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason6()), "Discretionary Reason Tooltip should be displayed");
         assertFalse(claimLine.editLine().isDiscretionaryReasonVisible(), "Discretionary Reason should not be shown");

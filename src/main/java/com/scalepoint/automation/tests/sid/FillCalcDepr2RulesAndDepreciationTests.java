@@ -87,7 +87,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
         assertEquals(depreciation, newExpectedDepreciation, "The depreciation is not updated");
 
         String newlyFetchedDepreciation = settlementDialog.ok()
-                .findClaimLineByDescription(claimItem.getTextFieldSP())
+                .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
                 .getDepreciation();
         assertEquals(newlyFetchedDepreciation, newExpectedDepreciation, "Depreciation incorrect");

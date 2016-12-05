@@ -10,10 +10,8 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -44,6 +42,9 @@ public class SettlementPage extends BaseClaimPage {
     @FindBy(id = "_OK_button")
     private Button _import;
 
+    @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
+    private WebElement selectAllClaims;
+
     private String sendNotToRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
     private String lockForRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'wrench.png')]";
     private String byDescriptionItemsXpath = "//td[contains(@class,'descriptionColumn')][contains(.,'$1')]//span";
@@ -70,10 +71,15 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
-    public ClaimLine findClaimLineByDescription(String description) {
+    public ClaimLine findClaimLine(String description) {
         Table table = new Table(driver.findElement
                 (By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table")));
         return new ClaimLine(table);
+    }
+
+    public SettlementPage selectAllLines() {
+        selectAllClaims.click();
+        return this;
     }
 
     public SettlementPage requestSelfService(Claim claim, String password) {

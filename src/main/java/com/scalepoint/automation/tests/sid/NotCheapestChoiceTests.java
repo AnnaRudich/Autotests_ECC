@@ -48,7 +48,7 @@ public class NotCheapestChoiceTests extends BaseTest {
 
         String selectedReason = selectFirstNotCheapestReason(claimItem, settlementPage);
 
-        SettlementDialog settlementDialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        SettlementDialog settlementDialog = settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
 
         assertEquals(selectedReason, settlementDialog.getNotCheapestChoiceReason(), "Reason is not stored");
     }
@@ -149,7 +149,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 addNewGenericItem(genericItem, companyName, true).
                 to(SettlementPage.class).
                 addGenericItemToClaim(genericItem).
-                findClaimLineByDescription(genericItem.getName()).
+                findClaimLine(genericItem.getName()).
                 editLine().
                 fillNewPrice(1).
                 fillCustomerDemand(48).
@@ -164,7 +164,7 @@ public class NotCheapestChoiceTests extends BaseTest {
 
         selectFirstNotCheapestReason(claimItem, settlementPage);
 
-        SettlementDialog settlementDialog = settlementPage.findClaimLineByDescription(claimItem.getTextFieldSP()).editLine();
+        SettlementDialog settlementDialog = settlementPage.findClaimLine(claimItem.getTextFieldSP()).editLine();
         NotCheapestChoiceDialog notCheapestChoiceDialog = settlementDialog.editNotCheapestReason();
         String updatedReason = notCheapestChoiceDialog.selectSecondReason();
         notCheapestChoiceDialog.ok();
