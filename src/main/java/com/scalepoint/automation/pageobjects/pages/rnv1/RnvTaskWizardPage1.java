@@ -290,12 +290,13 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
 
-    public void updateTaskTypeAndAgrForAllLines(String type, String agreementName) {
+    public RnvTaskWizardPage1 updateTaskTypeAndAgrForAllLines(String type, String agreementName) {
         selectAllCLines();
         clickActions();
         selectBulkReassignOption();
         selectTaskForBulkUpdate(type);
         selectAgrForBulkUpdate(agreementName);
         selectUpdate();
+        return this;
     }
 }

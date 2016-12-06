@@ -395,4 +395,95 @@ public class RnVBaseTests extends BaseTest {
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify status Cancelled wasn't changes after communication between CH and SePa")
+    public void eccs2965_2828_cancelledNotChangedToWaitingFeedbackStatus(User user, Claim claim, ServiceAgreement agreement) {
+        String lineOne = "Line 1";
+        loginAndCreateClaim(user, claim)
+                .addManually()
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .setReviewed(true)
+                .ok()
+                .selectAllLines()
+                .sendToRnV()
+                .changeAgreement(lineOne, agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .cancelTopTask()
+                .getAssertion()
+                .assertTaskHasCancelledStatus(agreement)
+                .getPage()
+                .toCommunicationTab()
+                .sendTextMailToSePa("Test text")
+                .assertLatestMessageContains("Test text")
+                .toRepairValuationProjectsPage()
+                .getAssertion()
+                .assertTaskHasCancelledStatus(agreement);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify status Competed changed to Feedback received after next feedback")
+    public void eccs2965_completedChangedToFeedbackReceived(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        String lineOne = "Line 1";
+        loginAndCreateClaim(user, claim)
+                .addManually()
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .setReviewed(true)
+                .ok()
+                .selectAllLines()
+                .sendToRnV()
+                .changeTask(lineOne, agreement.getRepairType())
+                .changeAgreement(lineOne, agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage()
+                .toCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES_KEEP_FILE)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .acceptCL(lineOne)
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement)
+                .getPage()
+                .toCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify task is Repair for new line if all other lines sent to Repair")
+    public void eccs3305_repairTaskForNewLine(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        String lineOne = "Line 1";
+        String lineTwo = "Line 2";
+        String lineThree = "Line 3";
+        loginAndCreateClaim(user, claim)
+                .addManually()
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .ok()
+                .addManually()
+                .fillBaseData(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .ok()
+                .addManually()
+                .fillBaseData(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .ok()
+                .selectAllLines()
+                .sendToRnV()
+                .updateTaskTypeAndAgrForAllLines(agreement.getRepairType(), agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage()
+                .toCommunicationTab()
+                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.DELETE_CLAIM_LINE_ID)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .getAssertion()
+                .assertTaskHasType(agreement, agreement.getRepairType());
+    }
 }
