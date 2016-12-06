@@ -75,7 +75,8 @@ public class EditReasonTests extends BaseTest {
     public void charlie508_3_EditReasonPageFromAdmin(User user,InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
         EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
+        long timestamp = new Date().getTime();
+        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet() + timestamp;
         boolean valueReasonPresent = editReasonsPage.addReason(newValue)
                 .save()
                 .isValueReason(newValue);
