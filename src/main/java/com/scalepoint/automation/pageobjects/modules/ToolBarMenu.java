@@ -61,6 +61,9 @@ public class ToolBarMenu extends Module {
 
     public ToolBarMenu removeSelected() {
         removeSelected.click();
+        if(isAlertPresent()) {
+            acceptAlert();
+        }
         return this;
     }
 

@@ -14,6 +14,8 @@ import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import java.util.Date;
+
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.*;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.*;
@@ -33,12 +35,8 @@ public class EditReasonTests extends BaseTest {
      */
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that Edit reasons page is visible from admin")
-    public void charlie508_1_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany) {
-        EditReasonsPage editReasonsPage = login(getSystemUser()).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+    public void charlie508_1_EditReasonPageFromAdmin(User user,InsuranceCompany insuranceCompany) {
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
     }
 
@@ -51,19 +49,17 @@ public class EditReasonTests extends BaseTest {
      */
     @Bug(bug = "CHARLIE-1378")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Reason text length is restricted to 70 characters")
-    public void charlie508_2_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
-        EditReasonsPage editReasonsPage = login(getSystemUser()).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+    public void charlie508_2_EditReasonPageFromAdmin(User user,InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
+        String expectedReasonValue = discretionaryReason.getDiscretionaryReason70();
         String newValue = discretionaryReason.getDiscretionaryReason71();
-        editReasonsPage.addReason(newValue);
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReason70();
-        assertTrue(editReasonsPage.isValueReason(expectedValue), "Reason should be trimmed to 70 char and equal to "
-                + expectedValue);
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(expectedReasonValue);
+        assertTrue(valueReasonPresent, "Reason should be trimmed to 70 char and equal to " + expectedReasonValue);
+        editReasonsPage.deleteReason(newValue);
+        assertFalse(editReasonsPage.isReasonVisible(newValue),"Reason should be deleted!");
     }
 
     /**
@@ -74,22 +70,16 @@ public class EditReasonTests extends BaseTest {
      * AND: Click Save button
      * THEN: Reason is saved; no error message
      */
-    @Bug(bug = "CHARLIE-1378")
+    @Bug(bug = "CHARLIE-1379 - fixed")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable.")
-    public void charlie508_3_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
-        EditReasonsPage editReasonsPage = login(getSystemUser()).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+    public void charlie508_3_EditReasonPageFromAdmin(User user,InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
         String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        editReasonsPage.addReason(newValue);
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        assertTrue(editReasonsPage.isValueReason(expectedValue), "Reason should be saved and equal to "
-                + expectedValue);
-//        clean up
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(newValue);
+        assertTrue(valueReasonPresent, "Reason should be " + newValue);
         editReasonsPage.deleteReason(newValue);
         assertFalse(editReasonsPage.isReasonVisible(newValue),"Reason should be deleted!");
     }
@@ -108,21 +98,16 @@ public class EditReasonTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
     public void charlie508_4_EditReasonPageFromAdmin(User user,
                                                      InsuranceCompany insuranceCompany,
-                                                     DiscretionaryReason discretionaryReason,
                                                      ClaimItem claimItem) {
-        String month = "6 ";
-        EditReasonsPage editReasonsPage = login(user, AdminPage.class).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        editReasonsPage.addReason(newValue).save();
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        assertTrue(editReasonsPage.isValueReason(expectedValue), "Reason should be saved and equal to "
-                + expectedValue);
+        String claimLine = claimItem.getTextFieldSP();
+        long timestamp = new Date().getTime();
+        String newValue = "New reason " + timestamp;
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(newValue);
+        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
                 enable(FTSetting.SHOW_DISCREATIONARY_REASON),
@@ -135,25 +120,20 @@ public class EditReasonTests extends BaseTest {
             SettlementPage line = new MyPage().
                     openRecentClaim().
                     reopenClaim();
-            SettlementDialog settlementDialog = line.
-                    addManually().
-                    fillCategory(claimItem.getExistingCat4()).
-                    fillSubCategory(claimItem.getExistingSubCat4()).
-                    fillCustomerDemand(1000).
-                    enableAge().
-                    selectMonth(month + claimItem.getMonths()).
-                    selectDepreciationType(1).
-                    fillDepreciation(5).
-                    fillDiscretionaryPrice(400).
-                    fillNewPrice(3000).
-                    setDiscountAndDepreciation(false).
-                    fillDescription(claimItem.getTextFieldSP()).
-                    selectValuation(ANDEN_VURDERING).
-                    selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonNativeLet());
-            assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReasonNativeLet(), "Incorrect text discretionary reason");
+        SettlementDialog settlementDialog = createClaimLine(line, claimItem, claimLine, newValue);
+        assertEquals(settlementDialog.getDiscretionaryReasonText(), newValue, "Incorrect text discretionary reason");
         } finally {
             returnUser(trygUser);
         }
+        functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
+        functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
+                enable(FTSetting.SHOW_DISCREATIONARY_REASON),
+                disable(FTSetting.SHOW_POLICY_TYPE)).
+                getClaimMenu().
+                logout();
+                goToEditReasonPage(user,insuranceCompany);
+        editReasonsPage.deleteReason(newValue);
+        assertFalse(editReasonsPage.isReasonVisible(newValue),"Reason should be deleted!");
     }
 
     /**
@@ -173,21 +153,16 @@ public class EditReasonTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
     public void charlie508_5_DeleteReasonInUse(User user, InsuranceCompany insuranceCompany,
-                                               DiscretionaryReason discretionaryReason,
                                                ClaimItem claimItem) {
-        String month = "6 ";
-        EditReasonsPage editReasonsPage = login(user, AdminPage.class).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        editReasonsPage.addReason(newValue);
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        assertTrue(editReasonsPage.isValueReason(expectedValue), "Reason should be saved and equal to "
-                + expectedValue);
+        String claimLine = claimItem.getTextFieldSP();
+        long timestamp = new Date().getTime();
+        String newValue = "New reason " + timestamp;
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(newValue);
+        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
                 enable(FTSetting.SHOW_DISCREATIONARY_REASON),
@@ -201,37 +176,18 @@ public class EditReasonTests extends BaseTest {
             line = new MyPage().
                     openRecentClaim().
                     reopenClaim();
-            SettlementDialog settlementDialog = line.
-                    addManually().
-                    fillCategory(claimItem.getExistingCat4()).
-                    fillSubCategory(claimItem.getExistingSubCat4()).
-                    fillCustomerDemand(1000).
-                    enableAge().
-                    selectMonth(month + claimItem.getMonths()).
-                    selectDepreciationType(1).
-                    fillDepreciation(5).
-                    fillDiscretionaryPrice(400).
-                    fillNewPrice(3000).
-                    setDiscountAndDepreciation(false).
-                    fillDescription(claimItem.getTextFieldSP()).
-                    selectValuation(ANDEN_VURDERING).
-                    selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonNativeLet());
-            assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReasonNativeLet(), "Incorrect text discretionary reason");
-            settlementDialog.ok();
+        SettlementDialog settlementDialog = createClaimLine(line, claimItem, claimLine, newValue);
+        assertEquals(settlementDialog.getDiscretionaryReasonText(), newValue, "Incorrect text discretionary reason");
+        settlementDialog.ok();
         } finally {
             returnUser(trygUser);
         }
         line.saveClaim().
                 getClaimMenu().
                 logout();
-        login(getSystemUser()).
-                getMainMenu().
-                toAdminPage().
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+        goToEditReasonPage(user,insuranceCompany);
         assertFalse(editReasonsPage.isDeleteEnable(newValue), "Delete button should be disabled!");
+        cleanUpClaimLineAndReason(editReasonsPage,user,insuranceCompany,newValue);
     }
 
     /**
@@ -244,26 +200,19 @@ public class EditReasonTests extends BaseTest {
      * WHEN: try to delete a reason
      * THEN: reason is deleted
      */
-    @Bug(bug = "CHARLIE-1378")
+    @Bug(bug = "CHARLIE-1379 - fixed")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
-    public void charlie508_6_DeleteReasonNotInUse(User user, InsuranceCompany insuranceCompany,
-                                               DiscretionaryReason discretionaryReason) {
-
-        EditReasonsPage editReasonsPage = login(user,AdminPage.class).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+    public void charlie508_6_DeleteReasonNotInUse(User user, InsuranceCompany insuranceCompany) {
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(),"Edit Reasons Form should be visible");
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        editReasonsPage.addReason(newValue);
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        assertTrue(editReasonsPage.isValueReason(expectedValue),"Reason should be saved and equal to "
-                + expectedValue);
+        long timestamp = new Date().getTime();
+        String newValue = "New reason " + timestamp;
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(newValue);
+        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
         editReasonsPage.deleteReason(newValue);
         assertFalse(editReasonsPage.isReasonVisible(newValue),"Reason should be deleted!");
-
     }
 
     /**
@@ -283,21 +232,16 @@ public class EditReasonTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
     public void charlie508_7_EditReasonInUse(User user, InsuranceCompany insuranceCompany,
-                                               DiscretionaryReason discretionaryReason,
-                                               ClaimItem claimItem) {
-        String month = "6 ";
-        EditReasonsPage editReasonsPage = login(user, AdminPage.class).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+                                                        ClaimItem claimItem) {
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        editReasonsPage.addReason(newValue);
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        assertTrue(editReasonsPage.isValueReason(expectedValue), "Reason should be saved and equal to "
-                + expectedValue);
+        String claimLine = claimItem.getTextFieldSP();
+        long timestamp = new Date().getTime();
+        String newValue = "New reason " + timestamp;
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(newValue);
+        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
                 enable(FTSetting.SHOW_DISCREATIONARY_REASON),
@@ -311,37 +255,19 @@ public class EditReasonTests extends BaseTest {
             line = new MyPage().
                     openRecentClaim().
                     reopenClaim();
-            SettlementDialog settlementDialog = line.
-                    addManually().
-                    fillCategory(claimItem.getExistingCat4()).
-                    fillSubCategory(claimItem.getExistingSubCat4()).
-                    fillCustomerDemand(1000).
-                    enableAge().
-                    selectMonth(month + claimItem.getMonths()).
-                    selectDepreciationType(1).
-                    fillDepreciation(5).
-                    fillDiscretionaryPrice(400).
-                    fillNewPrice(3000).
-                    setDiscountAndDepreciation(false).
-                    fillDescription(claimItem.getTextFieldSP()).
-                    selectValuation(ANDEN_VURDERING).
-                    selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonNativeLet());
-            assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReasonNativeLet(), "Incorrect text discretionary reason");
-            settlementDialog.ok();
+        SettlementDialog settlementDialog = createClaimLine(line,claimItem,claimLine,newValue);
+        assertEquals(settlementDialog.getDiscretionaryReasonText(), newValue, "Incorrect text discretionary reason");
+        settlementDialog.ok();
         } finally {
             returnUser(trygUser);
         }
         line.saveClaim().
                 getClaimMenu().
                 logout();
-        login(getSystemUser()).
-                getMainMenu().
-                toAdminPage().
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+        goToEditReasonPage(user,insuranceCompany);
         assertFalse(editReasonsPage.isReasonEditable(newValue), "The reason field should be disabled!");
+        cleanUpClaimLineAndReason(editReasonsPage,user,insuranceCompany,newValue);
+        assertFalse(editReasonsPage.isReasonVisible(newValue),"Reason should be deleted!");
     }
 
 
@@ -355,26 +281,72 @@ public class EditReasonTests extends BaseTest {
      * WHEN: try to edit a reason
      * THEN: the field is enabled and user can edit the reason
      */
-    @Bug(bug = "CHARLIE-1378")
+    @Bug(bug = "CHARLIE-1379 - fixed")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
-    public void charlie508_8_EditReasonNotInUse(User user, InsuranceCompany insuranceCompany,
-                                               DiscretionaryReason discretionaryReason) {
-        EditReasonsPage editReasonsPage = login(user, AdminPage.class).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+    public void charlie508_8_EditReasonNotInUse(User user, InsuranceCompany insuranceCompany) {
+        EditReasonsPage editReasonsPage = goToEditReasonPage(user,insuranceCompany);
         assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        editReasonsPage.addReason(newValue);
-        editReasonsPage.save();
-        String expectedValue = discretionaryReason.getDiscretionaryReasonNativeLet();
-        assertTrue(editReasonsPage.isValueReason(expectedValue), "Reason should be saved and equal to "
-                + expectedValue);
-        assertTrue(editReasonsPage.isReasonEditable(newValue),"The reason field should be disabled!");
-//        clean up
+        long timestamp = new Date().getTime();
+        String newValue = "New reason " + timestamp;
+        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
+                .save()
+                .isValueReason(newValue);
+        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
+        assertTrue(editReasonsPage.isReasonEditable(newValue),"The reason field should be enabled!");
         editReasonsPage.deleteReason(newValue);
         assertFalse(editReasonsPage.isReasonVisible(newValue),"Reason should be deleted!");
     }
 
+
+    private SettlementDialog createClaimLine(SettlementPage settlementPage, ClaimItem claimItem, String claimLine, String reason) {
+        String month = "6 ";
+        return settlementPage.
+                addManually().
+                fillCategory(claimItem.getExistingCat4()).
+                fillSubCategory(claimItem.getExistingSubCat4()).
+                fillCustomerDemand(1000).
+                enableAge().
+                selectMonth(month + claimItem.getMonths()).
+                selectDepreciationType(1).
+                fillDepreciation(5).
+                fillDiscretionaryPrice(400).
+                fillNewPrice(3000).
+                fillDescription(claimLine).
+                selectValuation(ANDEN_VURDERING).
+                selectDiscretionaryReason(reason);
+    }
+
+
+    private EditReasonsPage goToEditReasonPage(User user, InsuranceCompany insuranceCompany){
+         return login(user, AdminPage.class).
+                to(EditReasonsPage.class).
+                selectCompany(insuranceCompany.getFtTrygHolding()).
+                selectReasonType("Discretionary choice").
+                refresh();
+    }
+
+    private void cleanUpClaimLineAndReason(EditReasonsPage editReasonPage, User user,InsuranceCompany insuranceCompany,String reason) {
+        User trygUser = takeUser(CompanyCode.TRYGFORSIKRING);
+        SettlementPage line = new SettlementPage();
+        try {
+            login(trygUser);
+            line = new MyPage().
+                    openRecentClaim().
+                    reopenClaim();
+            line.getToolBarMenu().
+                    selectAll().
+                    removeSelected();
+        } finally {
+            returnUser(trygUser);
+        }
+        line.saveClaim().
+                getClaimMenu().
+                logout();
+            goToEditReasonPage(user,insuranceCompany);
+            editReasonPage.deleteReason(reason);
+    }
 }
+
+
+
+
