@@ -15,7 +15,6 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 /**
@@ -39,8 +38,6 @@ public class EditReasonsPage extends Page {
     private ExtInput addReasonField;
     @FindBy(xpath = "//button[contains(text(),'Save')]")
     private Button save;
-    @FindBy(xpath = "//button[contains(text(),'Delete')]")
-    private Button delete;
     @FindBy(xpath = "//button[contains(@id,'changeStatusBtn')]")
     private Button changeStatus;
     @FindBy(id = "reasons_table")
@@ -119,13 +116,11 @@ public class EditReasonsPage extends Page {
     }
 
     public boolean isReasonDisabled(String visibleValue){
-        Wait.waitForPageLoaded();
         int numberOfRow = findRowNumber(visibleValue) + 1;
         return driver.findElement(By.xpath("//tr[" + numberOfRow + "]//input")).getAttribute("disabled").contains("disabled");
     }
 
     private int findRowNumber(String visibleValue) {
-        waitForPageLoaded();
         List<List<WebElement>> rowsNames = reasons.getRows();
         for (int i = 0; i < rowsNames.size(); i++) {
             WebElement input = rowsNames.get(i).get(0).findElement(By.tagName("input"));
@@ -137,7 +132,6 @@ public class EditReasonsPage extends Page {
     }
 
     public EditReasonsPage deleteReason(String visibleValue){
-        waitForPageLoaded();
         int numberOfRow = findRowNumber(visibleValue) + 1;
         driver.findElement(By.xpath("//tr[" + numberOfRow +  "]//button[contains(@id,'deleteBtn')]")).click();
         if(isAlertPresent()) {
@@ -152,7 +146,6 @@ public class EditReasonsPage extends Page {
     }
 
     public boolean isReasonVisible(String visibleValue){
-        waitForPageLoaded();
         List<WebElement> reasons = reasonsFields;
         return reasons.stream().anyMatch(reason -> reason.getText().equals(visibleValue));
     }

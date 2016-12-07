@@ -27,22 +27,10 @@ public class DiscretionaryReason {
     @XmlElement
     private String discretionaryReason7;
     @XmlElement
-    private String discretionaryReason71;
-    @XmlElement
-    private String discretionaryReason70;
-    @XmlElement
     private String discretionaryReasonNativeLet;
 
     public String getDiscretionaryReasonNativeLet(){
         return discretionaryReasonNativeLet;
-    }
-
-    public String getDiscretionaryReason71(){
-        return discretionaryReason71;
-    }
-
-    public String getDiscretionaryReason70(){
-        return discretionaryReason70;
     }
 
     public String getDiscretionaryReason1(){
