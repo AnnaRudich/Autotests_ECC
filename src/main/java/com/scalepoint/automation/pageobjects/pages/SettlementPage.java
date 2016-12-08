@@ -5,13 +5,11 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -20,8 +18,6 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.scalepoint.automation.utils.Wait.waitForElementDisplaying;
-import static com.scalepoint.automation.utils.Wait.waitForStableElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage

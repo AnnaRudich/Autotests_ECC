@@ -94,7 +94,7 @@ public class RnVBaseTests extends BaseTest {
     @Test(dataProvider = "RnVBaseTests.startTestDataProvider",
             description = "verify tasks start")
     public void eccs2961_2816_startTaskTest(User user, Claim claim, ServiceAgreement agreement, String serviceAgreementType, StartTaskAssert taskAssert) {
-        String description = agreement.getClaimLineNameForRnV();
+        String description = "Line 1";;
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addManually()
@@ -118,7 +118,7 @@ public class RnVBaseTests extends BaseTest {
                 .getPage()
                 .expandTopTaskDetails()
                 .getAssertion()
-                .assertTaskHasType(agreement, serviceAgreementType)
+                .assertTaskHasType(description, serviceAgreementType)
                 .getPage();
 
         //verify email sent
@@ -221,10 +221,10 @@ public class RnVBaseTests extends BaseTest {
                 .assertTaskHasFeedbackReceivedStatus(agreement)
                 .assertClaimLineExcluded(agreement.getClaimLineNameForRnV())
                 .assertClaimLineCreated(agreement.getUpdDesc())
-                .getPage().
-                acceptTaskCompletly().
-                getAssertion().
-                assertTaskHasCompletedStatus(agreement);
+                .getPage()
+                .acceptTaskCompletly()
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement);
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -464,15 +464,9 @@ public class RnVBaseTests extends BaseTest {
         String lineTwo = "Line 2";
         String lineThree = "Line 3";
         loginAndCreateClaim(user, claim)
-                .addManually()
-                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .ok()
-                .addManually()
-                .fillBaseData(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .ok()
-                .addManually()
-                .fillBaseData(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .ok()
+                .addManually(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .addManually(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .addManually(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .selectAllLines()
                 .sendToRnV()
                 .updateTaskTypeAndAgrForAllLines(agreement.getRepairType(), agreement.getTestAgreementForRnV())
@@ -483,7 +477,8 @@ public class RnVBaseTests extends BaseTest {
                 .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.DELETE_CLAIM_LINE_ID)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
                 .getAssertion()
-                .assertTaskHasType(agreement, agreement.getRepairType());
+                .assertTaskHasType(lineOne, agreement.getRepairType());
     }
 }

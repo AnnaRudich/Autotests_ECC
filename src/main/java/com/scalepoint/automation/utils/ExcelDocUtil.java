@@ -167,6 +167,7 @@ public class ExcelDocUtil {
         WITH_INVOICE,
         WITH_INVOICE_AND_FIK,
         DELETE_CLAIM_LINE_ID,
+        DELETE_CLAIM_LINE_ID_ADD_REPAIR_PRICE,
         WITH_CREDIT_NOTE,
     }
 
@@ -192,10 +193,11 @@ public class ExcelDocUtil {
                 updateInvoice(serviceAgreement);
                 addFikInfo(serviceAgreement);
                 break;
+            case DELETE_CLAIM_LINE_ID_ADD_REPAIR_PRICE:
+                addRepairPriceForFirstLine("100");
             case DELETE_CLAIM_LINE_ID:
                 deleteCLIdForFirstLine();
                 updateDescriptionForFirstLine(serviceAgreement);
-                addRepairPriceForFirstLine("100");
                 break;
             case WITH_CREDIT_NOTE:
                 updateFirstCLInExcel(serviceAgreement);

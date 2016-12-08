@@ -207,8 +207,8 @@ public class RnvProjectsPage extends Page {
             return this;
         }
 
-        public Assertion assertTaskHasType(ServiceAgreement agreement, String type) {
-            String actualType = getTaskTypeByCLName(agreement.getClaimLineNameForRnV());
+        public Assertion assertTaskHasType(String lineDescription, String type) {
+            String actualType = getTaskTypeByCLName(lineDescription);
             Assert.assertEquals(actualType, type, "Task has type " + actualType + ". Must be: " + type);
             return this;
         }

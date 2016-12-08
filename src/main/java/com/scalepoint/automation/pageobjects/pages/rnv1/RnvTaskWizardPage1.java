@@ -224,10 +224,8 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
     public void selectAgrForBulkUpdate(String agreementName) {
-        clickAndWaitForStable(agrForBulkUpdateField, By.cssSelector("ul li"));
-        WebElement item = find(By.xpath(("//ul/li[contains(.,'$1')]").replace("$1", agreementName)));
-        scrollTo(item);
-        item.click();
+        find(By.id("agreementsCombo-inputEl")).click();
+        find(By.xpath(("//ul/li[contains(text(),'$1')]").replace("$1", agreementName))).click();
     }
 
     public void selectAllCLines() {
@@ -236,7 +234,7 @@ public class RnvTaskWizardPage1 extends Page {
 
     public void selectTaskForBulkUpdate(String taskType) {
         clickAndWaitForStable(taskForBulkUpdateField, By.xpath("//ul/li"));
-        find(By.xpath(("//ul/li[contains(.,'$1')]").replace("$1", taskType))).click();
+        find(By.xpath(("//ul/li[contains(text(),'$1')]").replace("$1", taskType))).click();
     }
 
 

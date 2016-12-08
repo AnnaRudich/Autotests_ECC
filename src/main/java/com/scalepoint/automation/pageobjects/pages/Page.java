@@ -47,7 +47,7 @@ public abstract class Page implements Actions {
             return;
         }
 
-        int totalTimeoutInSeconds = 10;
+        int totalTimeoutInSeconds = 20;
         int pollingMs = 1000;
 
         logger.info(" Expected: {}", expectedUrl);
