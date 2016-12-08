@@ -1,15 +1,14 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
 import ru.yandex.qatools.htmlelements.element.Table;
 
@@ -43,7 +42,7 @@ public class EditReasonsPage extends Page {
     @FindBy(id = "reasons_table")
     private Table reasons;
     @FindBy(id = "showDisabled")
-    private ExtCheckbox showDisabled;
+    private CheckBox showDisabled;
 
 
     @Override
@@ -95,30 +94,31 @@ public class EditReasonsPage extends Page {
         return this;
     }
 
-    public EditReasonsPage showDisabled(boolean state){
+    public EditReasonsPage showDisabled(boolean state) {
         showDisabled.set(state);
         return this;
     }
 
     public boolean isValueReason(String expectedValue) {
-        Wait.waitForPageLoaded();
         WebElement webElement = reasonsFields.get(reasonsFields.size() - 2);
         String val = webElement.getAttribute("value");
         return expectedValue.equals(val);
     }
 
-    public boolean isReasonEditable(String visibleValue){
-        Wait.waitForPageLoaded();
-        int numberOfRow = findRowNumber(visibleValue)+ 1;
+    public boolean isReasonEditable(String visibleValue) {
+        int numberOfRow = findRowNumber(visibleValue) + 1;
         WebElement element = driver.findElement(By.xpath("//tr[" + numberOfRow + "]/td/div/input"));
         String readonly = element.getAttribute("readonly");
         return readonly == null;
     }
 
-    public boolean isReasonDisabled(String visibleValue){
+    public boolean isReasonEnabled(String visibleValue) {
         int numberOfRow = findRowNumber(visibleValue) + 1;
-        return driver.findElement(By.xpath("//tr[" + numberOfRow + "]//input")).getAttribute("disabled").contains("disabled");
+        WebElement element = driver.findElement(By.xpath("//tr[" + numberOfRow + "]/td/div/input"));
+        String disabled = element.getAttribute("disabled");
+        return disabled == null;
     }
+
 
     private int findRowNumber(String visibleValue) {
         List<List<WebElement>> rowsNames = reasons.getRows();
@@ -131,28 +131,31 @@ public class EditReasonsPage extends Page {
         return -1;
     }
 
-    public EditReasonsPage deleteReason(String visibleValue){
+    public EditReasonsPage deleteReason(String visibleValue) {
         int numberOfRow = findRowNumber(visibleValue) + 1;
-        driver.findElement(By.xpath("//tr[" + numberOfRow +  "]//button[contains(@id,'deleteBtn')]")).click();
-        if(isAlertPresent()) {
+        driver.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(@id,'deleteBtn')]")).click();
+        if (isAlertPresent()) {
             acceptAlert();
         }
         return this;
     }
 
-    public boolean isDeleteEnable(String visibleValue){
+    public boolean isDeleteEnable(String visibleValue) {
         int numberOfRow = findRowNumber(visibleValue) + 1;
         return driver.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(@id,'deleteBtn')]")).isEnabled();
     }
 
-    public boolean isReasonVisible(String visibleValue){
+    public boolean isReasonVisible(String visibleValue) {
         List<WebElement> reasons = reasonsFields;
-        return reasons.stream().anyMatch(reason -> reason.getText().equals(visibleValue));
+        return reasons.stream().anyMatch(reason -> reason.getAttribute("value").equals(visibleValue));
     }
 
-    public EditReasonsPage disableReason(String visibleValue){
+    public EditReasonsPage disableEnableReason(String visibleValue) {
         int numberOfRow = findRowNumber(visibleValue) + 1;
-        driver.findElement(By.xpath("//tr[" + numberOfRow +  "]//button[contains(@value,'Disable')]")).click();
+        driver.findElement(By.xpath("//tr[" + numberOfRow + "]//button[contains(@onclick,'disableEnableReason')]")).click();
+        if (isAlertPresent()) {
+            acceptAlert();
+        }
         return this;
     }
 

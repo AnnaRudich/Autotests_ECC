@@ -211,7 +211,7 @@ public class SettlementDialog extends BaseDialog {
         return setExtInputValue(newPrice, String.valueOf(amount));
     }
 
-    public SettlementDialog fillDiscretionaryPrice(int amount){
+    public SettlementDialog fillDiscretionaryPrice(int amount) {
         return setExtInputValue(discretionaryPrice, String.valueOf(amount));
     }
 
@@ -363,18 +363,18 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementPage ok() {
-       return ok(SettlementPage.class, ok);
+        return ok(SettlementPage.class, ok);
     }
 
     public <T extends Page> T ok(Class<T> pageClass) {
-       return ok(pageClass, ok);
+        return ok(pageClass, ok);
     }
 
     public TextSearchPage add() {
-       return ok(TextSearchPage.class, addButton);
+        return ok(TextSearchPage.class, addButton);
     }
 
-    public <T extends BaseDialog> T isDialogShownAfterOk(Class <T> dialogClass) {
+    public <T extends BaseDialog> T isDialogShownAfterOk(Class<T> dialogClass) {
         waitForVisible(ok).click();
 
         return at(dialogClass);
@@ -399,8 +399,16 @@ public class SettlementDialog extends BaseDialog {
         return options.stream().anyMatch(i -> i.contains(_voucher.getVoucherNameSP()));
     }
 
-    public void cancel() {
-        cancel.click();
+    public SettlementPage cancel() {
+        return cancel(SettlementPage.class, cancel);
+    }
+
+    public <T extends Page> T cancel(Class<T> pageClass, Button button) {
+        waitForVisible(button);
+        button.click();
+        Wait.waitForElementDisappear(button);
+        Wait.waitForAjaxCompleted();
+        return Page.at(pageClass);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
@@ -442,7 +450,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private String getValuationColumnValue(Valuation valuation, int column) {
-            return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column + "]")).getText();
+        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column + "]")).getText();
     }
 
     public boolean isIncludeInClaimSet() {
@@ -527,7 +535,7 @@ public class SettlementDialog extends BaseDialog {
         return at(AddValuationDialog.class);
     }
 
-    public NotCheapestChoiceDialog toNotCheapestDialog(){
+    public NotCheapestChoiceDialog toNotCheapestDialog() {
         ok.click();
         return at(NotCheapestChoiceDialog.class);
     }
@@ -619,7 +627,7 @@ public class SettlementDialog extends BaseDialog {
         return Double.valueOf(depreciation.getText());
     }
 
-    public String getDepreciation(){
+    public String getDepreciation() {
         return depreciation.getText();
     }
 
@@ -654,51 +662,51 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-    public boolean isScalepointSupplierNotVisible(){
+    public boolean isScalepointSupplierNotVisible() {
         return (!statusSupplier.exists());
     }
 
-    public boolean isScalepointSupplierVisible(String supplier){
+    public boolean isScalepointSupplierVisible(String supplier) {
         return statusSupplier.getText().contains(supplier);
     }
 
-    public boolean isRejectReasonVisible(){
+    public boolean isRejectReasonVisible() {
         return rejectReason.exists();
     }
 
-    public boolean isRejectReasonEnabled(){
+    public boolean isRejectReasonEnabled() {
         waitForVisible(rejectReason);
         return rejectReason.isEnabled();
     }
 
-    public boolean isDiscretionaryReasonVisible(){
+    public boolean isDiscretionaryReasonVisible() {
         return (discretionaryReason.exists());
     }
 
-    public boolean isDiscretionaryReasonEnabled(){
+    public boolean isDiscretionaryReasonEnabled() {
         waitForVisible(discretionaryReason);
         return discretionaryReason.isEnabled();
     }
 
-    public SettlementDialog selectDiscretionaryReason(int index){
+    public SettlementDialog selectDiscretionaryReason(int index) {
         waitForVisible(discretionaryReason);
         discretionaryReason.select(index);
         return this;
     }
 
-    public SettlementDialog selectDiscretionaryReason(String visibleText){
+    public SettlementDialog selectDiscretionaryReason(String visibleText) {
         waitForVisible(discretionaryReason);
         discretionaryReason.select(visibleText);
         return this;
     }
 
-    public SettlementDialog selectDepreciationType(int index){
+    public SettlementDialog selectDepreciationType(int index) {
         waitForVisible(depreciationType);
         depreciationType.select(index);
         return this;
     }
 
-    public SettlementDialog selectDepreciationType(String visibleText){
+    public SettlementDialog selectDepreciationType(String visibleText) {
         waitForVisible(depreciationType);
         depreciationType.select(visibleText);
         return this;
@@ -719,8 +727,13 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public String getDiscretionaryReasonText(){
+    public String getDiscretionaryReasonText() {
         return discretionaryReason.getValue();
+    }
+
+    public boolean isDiscretionaryReasonValuePresent(String expectedValue) {
+        List<String> options = discretionaryReason.getComboBoxOptions();
+        return options.stream().anyMatch(i -> i.contains(expectedValue));
     }
 }
 

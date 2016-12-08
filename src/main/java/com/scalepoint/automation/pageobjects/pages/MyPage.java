@@ -54,8 +54,9 @@ public class MyPage extends Page {
         return this;
     }
 
-    public void selectActiveClient() {
+    public SettlementPage selectActiveClient() {
         activeCustomerLink.click();
+        return at(SettlementPage.class);
     }
 
     public CustomerDetailsPage openRecentClaim() {
