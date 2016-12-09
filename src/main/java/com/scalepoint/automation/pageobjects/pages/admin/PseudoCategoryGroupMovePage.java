@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 @EccPage
-public class PseudoCategoryGroupMovePage extends Page {
+public class PseudoCategoryGroupMovePage extends AdminBasePage {
 
     @FindBy(id = "btnOk")
     private WebElement okButton;

@@ -14,7 +14,7 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
-public class GenericItemsAdminPage extends Page {
+public class GenericItemsAdminPage extends AdminBasePage {
 
     @FindBy(id = "btnNew")
     private WebElement newButton;

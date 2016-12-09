@@ -12,7 +12,7 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class InsCompaniesPage extends Page {
+public class InsCompaniesPage extends AdminBasePage {
 
     @FindBy(id = "btnAdd")
     private WebElement addButton;

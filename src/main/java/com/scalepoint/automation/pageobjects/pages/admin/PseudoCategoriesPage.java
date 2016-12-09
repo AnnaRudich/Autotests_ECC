@@ -11,7 +11,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 @EccPage
-public class PseudoCategoriesPage extends Page {
+public class PseudoCategoriesPage extends AdminBasePage {
 
     @FindBy(name = "searchField")
     private WebElement quickSearchField;

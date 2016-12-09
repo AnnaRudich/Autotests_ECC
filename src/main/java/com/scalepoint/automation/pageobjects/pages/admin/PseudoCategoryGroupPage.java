@@ -10,7 +10,7 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class PseudoCategoryGroupPage extends Page {
+public class PseudoCategoryGroupPage extends AdminBasePage {
 
     @FindBy(name = "pseudoCategoryGroupList")
     private Select pseudoCategoryGroupList;

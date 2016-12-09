@@ -2,26 +2,23 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
-import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.annotations.Bug;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
 
-import java.util.Date;
-
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
-import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.*;
-import static com.scalepoint.automation.services.usersmanagement.UsersManager.*;
-
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
+import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
+import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static org.testng.Assert.*;
 
 /**
@@ -30,17 +27,7 @@ import static org.testng.Assert.*;
 @SuppressWarnings("AccessStaticViaInstance")
 public class EditReasonTests extends BaseTest {
 
-    /**
-     * WHEN: Go to the Edit reasons page from admin.
-     * AND: Select the Tryg Holding
-     * THEN: Edit "Discretionary choice" reasons section is added.
-     */
-
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that Edit reasons page is visible from admin")
-    public void charlie508_1_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-    }
+    private static final String TEST_REASON_LINE = "Test reason line";
 
     /**
      * WHEN: Go to the Edit reasons page from admin.
@@ -52,39 +39,13 @@ public class EditReasonTests extends BaseTest {
     @Bug(bug = "CHARLIE-1378 - not a bug")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Reason text length is restricted to 500 characters")
     public void charlie508_2_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String newValue = RandomStringUtils.randomAlphabetic(501);
-        String expectedReasonValue = newValue.substring(0, 500);
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(expectedReasonValue);
-        assertTrue(valueReasonPresent, "Reason should be trimmed to 500 char and equal to " + expectedReasonValue);
-        editReasonsPage.deleteReason(expectedReasonValue);
-        assertFalse(editReasonsPage.isReasonVisible(expectedReasonValue), "Reason should be deleted!");
-    }
+        String reasonWithExceededLength = RandomStringUtils.randomAlphabetic(501);
+        String reasonWithAllowedLength = reasonWithExceededLength.substring(0, 500);
 
-    /**
-     * WHEN: Go to the Edit reasons page from admin.
-     * AND: Select the Tryg Holding
-     * THEN: Edit "Discretionary choice" reasons section is added.
-     * WHEN: Try to input into reason field native letters
-     * AND: Click Save button
-     * THEN: Reason is saved; no error message
-     */
-    @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable.")
-    public void charlie508_3_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany, DiscretionaryReason discretionaryReason) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        long timestamp = new Date().getTime();
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet() + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be " + newValue);
-        editReasonsPage.deleteReason(newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+        openEditReasonPage(insuranceCompany)
+                .addReason(reasonWithExceededLength)
+                .findReason(reasonWithAllowedLength)
+                .delete();
     }
 
     /**
@@ -98,27 +59,28 @@ public class EditReasonTests extends BaseTest {
      * AND: Go to Sid
      * THEN: Saved discretionary reason is visible in drop-down
      */
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
-    public void charlie508_4_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany,
-                                                     ClaimItem claimItem, DiscretionaryReason discretionaryReason) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String claimLine = claimItem.getTextFieldSP();
-        long timestamp = new Date().getTime();
-        String newValue = discretionaryReason.getDiscretionaryReasonNativeLet() + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
-        logoutSystemUserLoginAsTryg();
-        SettlementPage line = new MyPage().
-                openRecentClaim().
-                reopenClaim();
-        SettlementDialog settlementDialog = createClaimLine(line, claimItem, claimLine, newValue);
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), newValue, "Incorrect text discretionary reason");
-        logoutTrygUserLoginAsSystemUser(insuranceCompany);
-        editReasonsPage.deleteReason(newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+    public void charlie508_3_EditReasonPageFromAdmin(@UserCompany(TRYGFORSIKRING) User trygUser,
+                                                     Claim claim,
+                                                     InsuranceCompany insuranceCompany,
+                                                     ClaimItem claimItem) {
+
+        String reason = "Sample reason åæéø " + System.currentTimeMillis();
+
+        openEditReasonPage(insuranceCompany)
+                .addReason(reason)
+                .findReason(reason)
+                .getPage()
+                .logout();
+
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+
+        openEditReasonPage(insuranceCompany)
+                .findReason(reason)
+                .disable()
+                .assertReasonDisabled(reason);
     }
 
     /**
@@ -135,23 +97,24 @@ public class EditReasonTests extends BaseTest {
      * AND: try to delete a reason
      * THEN: delete button is disabled
      */
-
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
-    public void charlie508_5_DeleteReasonInUse(InsuranceCompany insuranceCompany,
+    public void charlie508_5_DeleteReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
+                                               Claim claim,
+                                               InsuranceCompany insuranceCompany,
                                                ClaimItem claimItem) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String claimLine = claimItem.getTextFieldSP();
-        long timestamp = new Date().getTime();
-        String newValue = "New reason " + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
-        logoutLogin(claimItem, claimLine, newValue, insuranceCompany);
-        assertFalse(editReasonsPage.isDeleteEnable(newValue), "Delete button should be disabled!");
-        cleanUpClaimLineAndReason(editReasonsPage, insuranceCompany, newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+        String reason = "New reason " + System.currentTimeMillis();
+        openEditReasonPage(insuranceCompany)
+                .addReason(reason)
+                .logout();
+
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+
+        openEditReasonPage(insuranceCompany)
+                .findReason(reason)
+                .assertDeleteIsDisabled()
+                .disable();
     }
 
     /**
@@ -167,16 +130,12 @@ public class EditReasonTests extends BaseTest {
     @Bug(bug = "CHARLIE-1379 - fixed")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
     public void charlie508_6_DeleteReasonNotInUse(InsuranceCompany insuranceCompany) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        long timestamp = new Date().getTime();
-        String newValue = "New reason " + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
-        editReasonsPage.deleteReason(newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+        String reason = "New reason " + System.currentTimeMillis();
+        openEditReasonPage(insuranceCompany)
+                .addReason(reason)
+                .findReason(reason)
+                .delete()
+                .assertReasonNotFound(reason);
     }
 
     /**
@@ -193,23 +152,24 @@ public class EditReasonTests extends BaseTest {
      * AND: verify if the reason input field enabled
      * THEN: reason input field is disabled
      */
-
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
-    public void charlie508_7_EditReasonInUse(InsuranceCompany insuranceCompany,
+    public void charlie508_7_EditReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
+                                             Claim claim,
+                                             InsuranceCompany insuranceCompany,
                                              ClaimItem claimItem) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String claimLine = claimItem.getTextFieldSP();
-        long timestamp = new Date().getTime();
-        String newValue = "New reason " + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
-        logoutLogin(claimItem, claimLine, newValue, insuranceCompany);
-        assertFalse(editReasonsPage.isReasonEditable(newValue), "The reason field should be disabled!");
-        cleanUpClaimLineAndReason(editReasonsPage, insuranceCompany, newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+        String reason = "New reason " + System.currentTimeMillis();
+        openEditReasonPage(insuranceCompany)
+                .addReason(reason)
+                .findReason(reason)
+                .getPage()
+                .logout();
+
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+
+        openEditReasonPage(insuranceCompany)
+                .findReason(reason)
+                .assertReasonIsNotEditable()
+                .disable();
     }
 
 
@@ -226,19 +186,14 @@ public class EditReasonTests extends BaseTest {
     @Bug(bug = "CHARLIE-1379 - fixed")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
     public void charlie508_8_EditReasonNotInUse(InsuranceCompany insuranceCompany) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        long timestamp = new Date().getTime();
-        String newValue = "New reason " + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
-        assertTrue(editReasonsPage.isReasonEditable(newValue), "The reason field should be enabled!");
-        editReasonsPage.deleteReason(newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+        String reason = "New reason " + System.currentTimeMillis();
+        openEditReasonPage(insuranceCompany)
+                .addReason(reason)
+                .findReason(reason)
+                .assertReasonIsEditable()
+                .delete()
+                .assertReasonNotFound(reason);
     }
-
 
     /**
      * WHEN: Go to the Edit reasons page from admin.
@@ -257,121 +212,59 @@ public class EditReasonTests extends BaseTest {
      */
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
-    public void charlie508_9_DisableReasonInUse(InsuranceCompany insuranceCompany,
+    public void charlie508_9_DisableReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
+                                                Claim claim,
+                                                InsuranceCompany insuranceCompany,
                                                 ClaimItem claimItem) {
-        EditReasonsPage editReasonsPage = goToEditReasonPage(insuranceCompany);
-        assertTrue(editReasonsPage.isEditReasonsFormVisible(), "Edit Reasons Form should be visible");
-        String claimLine = claimItem.getTextFieldSP();
-        long timestamp = new Date().getTime();
-        String newValue = "New reason " + timestamp;
-        boolean valueReasonPresent = editReasonsPage.addReason(newValue)
-                .save()
-                .isValueReason(newValue);
-        assertTrue(valueReasonPresent, "Reason should be equal to " + newValue);
-        logoutLogin(claimItem, claimLine, newValue, insuranceCompany);
-        editReasonsPage.showDisabled(true).
-                refresh().
-                disableEnableReason(newValue);
-        assertFalse(editReasonsPage.isReasonEnabled(newValue), "Reason " + newValue + " should be disabled");
-        logoutSystemUserLoginAsTryg();
-        SettlementPage.ClaimLine line = new MyPage().
-                openRecentClaim().
-                reopenClaim().
-                findClaimLine(claimLine);
-        assertTrue(line.isTooltipPresent(newValue), "Tooltip is not equal to " + newValue);
-        SettlementDialog settlementDialog = line.editLine();
-        assertTrue(settlementDialog.isDiscretionaryReasonValuePresent(newValue), "Incorrect text discretionary reason");
-        settlementDialog.
-                cancel().
-                getToolBarMenu().
-                selectAll().
-                removeSelected();
-        logoutTrygUserLoginAsSystemUser(insuranceCompany);
-        editReasonsPage.showDisabled(true).
-                refresh().
-                disableEnableReason(newValue).
-                deleteReason(newValue);
-        assertFalse(editReasonsPage.isReasonVisible(newValue), "Reason should be deleted!");
+        String reason = "New reason " + System.currentTimeMillis();
+
+        openEditReasonPage(insuranceCompany).addReason(reason);
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+
+        openEditReasonPage(insuranceCompany, true)
+                .findReason(reason)
+                .disable()
+                .assertReasonDisabled(reason)
+                .logout();
+
+        SettlementPage.ClaimLine claimLine = login(trygUser, SettlementPage.class).findClaimLine(TEST_REASON_LINE);
+        assertTrue(claimLine.isTooltipPresent(reason), "Tooltip is not equal to " + reason);
+
+        SettlementDialog settlementDialog = claimLine.editLine();
+        assertTrue(settlementDialog.isDiscretionaryReasonValuePresent(reason), "Incorrect text discretionary reason");
     }
 
-    private SettlementDialog createClaimLine(SettlementPage settlementPage, ClaimItem claimItem, String claimLine, String reason) {
-        String month = "6 ";
-        return settlementPage.
-                addManually().
-                fillCategory(claimItem.getExistingCat4()).
-                fillSubCategory(claimItem.getExistingSubCat4()).
-                fillCustomerDemand(1000).
-                enableAge().
-                selectMonth(month + claimItem.getMonths()).
-                selectDepreciationType(1).
-                fillDepreciation(5).
-                fillDiscretionaryPrice(400).
-                fillNewPrice(3000).
-                fillDescription(claimLine).
-                selectValuation(ANDEN_VURDERING).
-                selectDiscretionaryReason(reason);
+
+    private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
+        SettlementPage settlementPage = loginAndCreateClaim(trygUser, claim);
+        SettlementDialog dialog = settlementPage
+                .addManually()
+                .fillDescription(TEST_REASON_LINE)
+                .fillCategory(claimItem.getExistingCat4())
+                .fillSubCategory(claimItem.getExistingSubCat4())
+                .fillCustomerDemand(1000)
+                .enableAge()
+                .selectMonth("6 " + claimItem.getMonths())
+                .selectDepreciationType(1)
+                .fillDepreciation(5)
+                .fillDiscretionaryPrice(400)
+                .fillNewPrice(3000)
+                .selectValuation(ANDEN_VURDERING)
+                .selectDiscretionaryReason(reason);
+        assertEquals(dialog.getDiscretionaryReasonText(), reason, "Incorrect text discretionary reason");
+        dialog.ok().getMainMenu().logOut();
     }
 
-    private EditReasonsPage goToEditReasonPage(InsuranceCompany insuranceCompany) {
-        return login(getSystemUser(), AdminPage.class).
-                to(EditReasonsPage.class).
-                selectCompany(insuranceCompany.getFtTrygHolding()).
-                selectReasonType("Discretionary choice").
-                refresh();
+    private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany) {
+        return openEditReasonPage(insuranceCompany, false);
     }
 
-    private void cleanUpClaimLineAndReason(EditReasonsPage editReasonPage, InsuranceCompany insuranceCompany, String reason) {
-        User trygUser = takeUser(CompanyCode.TRYGFORSIKRING);
-        try {
-            login(trygUser);
-        } finally {
-            returnUser(trygUser);
-        }
-        SettlementPage line;
-        line = new MyPage().openRecentClaim().
-                reopenClaim();
-        line.getToolBarMenu().
-                selectAll().
-                removeSelected();
-        line.saveClaim().
-                getClaimMenu().
-                logout();
-        goToEditReasonPage(insuranceCompany);
-        editReasonPage.deleteReason(reason);
+    private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisable) {
+        return login(getSystemUser(), AdminPage.class)
+                .to(EditReasonsPage.class)
+                .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, showDisable)
+                .assertEditReasonsFormVisible();
     }
-
-    private void logoutLogin(ClaimItem claimItem, String claimLine, String newValue, InsuranceCompany insuranceCompany) {
-        logoutSystemUserLoginAsTryg();
-        SettlementPage line = new MyPage().
-                openRecentClaim().
-                reopenClaim();
-        SettlementDialog settlementDialog = createClaimLine(line, claimItem, claimLine, newValue);
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), newValue, "Incorrect text discretionary reason");
-        settlementDialog.ok();
-        logoutTrygUserLoginAsSystemUser(insuranceCompany);
-    }
-
-    private void logoutSystemUserLoginAsTryg() {
-        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
-        User trygUser = takeUser(CompanyCode.TRYGFORSIKRING);
-        functionalTemplatesApi.updateTemplate(trygUser.getFtId(), MyPage.class,
-                enable(FTSetting.SHOW_DISCREATIONARY_REASON),
-                disable(FTSetting.SHOW_POLICY_TYPE)).
-                getClaimMenu().
-                logout();
-        try {
-            login(trygUser);
-        } finally {
-            returnUser(trygUser);
-        }
-    }
-
-    private void logoutTrygUserLoginAsSystemUser(InsuranceCompany insuranceCompany) {
-        LoginPage line = new MyPage().getClaimMenu().logout();
-        line.ensureWeAreOnPage();
-        goToEditReasonPage(insuranceCompany);
-    }
-
 }
 
 

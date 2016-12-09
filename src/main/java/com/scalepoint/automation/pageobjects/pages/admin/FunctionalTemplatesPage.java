@@ -10,7 +10,7 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class FunctionalTemplatesPage extends Page {
+public class FunctionalTemplatesPage extends AdminBasePage {
 
     @FindBy(name = "ftList")
     private Select templates;

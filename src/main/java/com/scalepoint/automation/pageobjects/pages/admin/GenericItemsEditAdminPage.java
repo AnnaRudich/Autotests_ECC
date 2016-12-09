@@ -14,7 +14,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class GenericItemsEditAdminPage extends Page {
+public class GenericItemsEditAdminPage extends AdminBasePage {
 
     @FindBy(xpath = ".//*[contains(@id,'itemdescription_')]")
     private TextInput descriptionField;

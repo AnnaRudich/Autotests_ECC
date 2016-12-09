@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @EccPage
-public class RoleAddEditPage extends Page {
+public class RoleAddEditPage extends AdminBasePage {
 
     @FindBy(name = "roleName")
     private WebElement nameField;

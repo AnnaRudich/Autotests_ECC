@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 @EccPage
-public class ReductionRulesPage extends Page {
+public class ReductionRulesPage extends AdminBasePage {
 
     @FindBy(id = "btnNew")
     private WebElement newButton;

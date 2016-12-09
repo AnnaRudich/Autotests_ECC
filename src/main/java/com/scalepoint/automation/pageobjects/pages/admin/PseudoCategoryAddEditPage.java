@@ -11,7 +11,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 @EccPage
-public class PseudoCategoryAddEditPage extends Page {
+public class PseudoCategoryAddEditPage extends AdminBasePage {
 
     @FindBy(xpath = "//input[contains(@id, 'pcname')]")
     private WebElement descriptionField;

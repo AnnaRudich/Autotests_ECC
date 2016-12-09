@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class AddEditReductionRulePage extends Page {
+public class AddEditReductionRulePage extends AdminBasePage {
 
     @FindBy(name = "name")
     private WebElement nameField;

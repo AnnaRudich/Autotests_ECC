@@ -12,7 +12,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class AdminPage extends Page {
+public class AdminPage extends AdminBasePage {
 
     @FindBy(xpath = "//a[contains(@href, 'matching_engine/start.jsp')]")
     private Link matchingEngine;

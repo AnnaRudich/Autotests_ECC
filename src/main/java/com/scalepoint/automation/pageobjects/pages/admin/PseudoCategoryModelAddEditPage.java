@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @EccPage
-public class PseudoCategoryModelAddEditPage extends Page {
+public class PseudoCategoryModelAddEditPage extends AdminBasePage {
 
     @FindBy(xpath = "//input[contains(@id, 'modelname')]")
     private WebElement modelNameField;

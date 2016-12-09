@@ -19,7 +19,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class EditFunctionTemplatePage extends Page {
+public class EditFunctionTemplatePage extends AdminBasePage {
 
     @FindBy(xpath = "//input[@value='Save values']")
     private Button saveValues;

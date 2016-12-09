@@ -16,7 +16,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForStableElements;
 
 @EccPage
-public class UsersPage extends Page {
+public class UsersPage extends AdminBasePage {
 
     @FindBy(xpath = "//button[contains(@class,'icon-create')]")
     private WebElement createUserButton;

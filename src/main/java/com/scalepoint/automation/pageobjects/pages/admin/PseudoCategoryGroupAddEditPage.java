@@ -14,7 +14,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class PseudoCategoryGroupAddEditPage extends Page {
+public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
 
     @FindBy(xpath = "//input[contains(@id, 'pcgroupname')]")
     private WebElement groupNameField;

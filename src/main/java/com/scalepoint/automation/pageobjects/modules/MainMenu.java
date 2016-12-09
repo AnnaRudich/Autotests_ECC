@@ -45,7 +45,7 @@ public class MainMenu extends Module {
         return at(AdminPage.class);
     }
 
-    public void signOut() {
+    public void logOut() {
         signOut.click();
     }
 

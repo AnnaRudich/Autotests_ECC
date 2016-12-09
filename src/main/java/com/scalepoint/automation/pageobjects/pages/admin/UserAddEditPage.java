@@ -17,7 +17,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @EccPage
-public class UserAddEditPage extends Page {
+public class UserAddEditPage extends AdminBasePage {
 
     @FindBy(name = "userCompanyId")
     private WebElement companySelect;

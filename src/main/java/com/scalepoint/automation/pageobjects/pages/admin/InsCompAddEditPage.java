@@ -13,7 +13,7 @@ import static com.scalepoint.automation.utils.Wait.waitForStableElement;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class InsCompAddEditPage extends Page {
+public class InsCompAddEditPage extends AdminBasePage {
 
     @FindBy(name = "id")
     private WebElement companyIDField;

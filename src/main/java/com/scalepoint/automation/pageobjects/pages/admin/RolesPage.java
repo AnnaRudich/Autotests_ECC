@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 @EccPage
-public class RolesPage extends Page {
+public class RolesPage extends AdminBasePage {
 
     @FindBy(id = "btnAdd")
     private WebElement addButton;
