@@ -65,10 +65,14 @@ public class RnvCommunicationPage extends BaseClaimPage {
         find(By.cssSelector("span#button-close-chat-attachment-btnInnerEl")).click();
     }
 
-    public RnvCommunicationPage doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType) throws Exception {
-        downloadTemplate(user, serviceAgreement.getSaveTemplateTo());
-        ExcelDocUtil doc = new ExcelDocUtil();
-        doc.doFeedback(actionType, serviceAgreement);
+    public RnvCommunicationPage doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType)  {
+        try {
+            downloadTemplate(user, serviceAgreement.getSaveTemplateTo());
+            ExcelDocUtil doc = new ExcelDocUtil();
+            doc.doFeedback(actionType, serviceAgreement);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
         return this;
     }
 

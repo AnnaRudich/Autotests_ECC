@@ -12,6 +12,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.ExcelDocUtil;
+import com.scalepoint.automation.utils.ExcelDocUtil.FeedbackActionType;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -177,7 +178,7 @@ public class RnVBaseTests extends BaseTest {
     public void eccs2605_2847_noChangesFeedbackReceived(User user, Claim claim, ServiceAgreement agreement) throws Exception {
         prepareTask(user, claim, agreement)
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -195,7 +196,7 @@ public class RnVBaseTests extends BaseTest {
     public void eccs2847_updateLineAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
         prepareTask(user, claim, agreement)
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_INVOICE)
+                .doFeedback(user, agreement, FeedbackActionType.NO_INVOICE)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -213,7 +214,7 @@ public class RnVBaseTests extends BaseTest {
     public void eccs2847_createAndExcludeLineAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
         prepareTask(user, claim, agreement)
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.DELETE_LINE)
+                .doFeedback(user, agreement, FeedbackActionType.DELETE_LINE)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -232,7 +233,7 @@ public class RnVBaseTests extends BaseTest {
     public void eccs2847_2828_feedbackReceivedUI(User user, Claim claim, ServiceAgreement agreement) throws Exception {
         prepareTask(user, claim, agreement)
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -248,7 +249,7 @@ public class RnVBaseTests extends BaseTest {
     public void eccs2847_2605_feedbackCompetedAcceptAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
         prepareTask(user, claim, agreement)
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -266,7 +267,7 @@ public class RnVBaseTests extends BaseTest {
     public void eccs2847_2605_feedbackCompetedRejectAction(User user, Claim claim, ServiceAgreement agreement) throws Exception {
         prepareTask(user, claim, agreement)
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -316,7 +317,7 @@ public class RnVBaseTests extends BaseTest {
                 .sendRnV(agreement)
                 .toRepairValuationProjectsPage()
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -346,7 +347,7 @@ public class RnVBaseTests extends BaseTest {
                 .sendRnV(agreement)
                 .toRepairValuationProjectsPage()
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -381,7 +382,7 @@ public class RnVBaseTests extends BaseTest {
                 .sendRnV(agreement)
                 .toRepairValuationProjectsPage()
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -441,7 +442,7 @@ public class RnVBaseTests extends BaseTest {
                 .sendRnV(agreement)
                 .toRepairValuationProjectsPage()
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES_KEEP_FILE)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES_KEEP_FILE)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
@@ -450,16 +451,58 @@ public class RnVBaseTests extends BaseTest {
                 .assertTaskHasCompletedStatus(agreement)
                 .getPage()
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.NO_CHANGES)
+                .doFeedback(user, agreement, FeedbackActionType.NO_CHANGES)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @DataProvider(name = "RnVBaseTests.changeTaskTypeProvider")
+    public static Object[][] changeTaskTypeProvider(Method method) {
+        try {
+            ServiceAgreement serviceAgreement = (ServiceAgreement) TestData.Data.getInstance(ServiceAgreement.class);
+
+            Object[][] params = new Object[4][];
+            //verify task is Repair for new line if all other lines sent to Repair
+            params[0] = combine(getTestDataParameters(method),
+                    serviceAgreement.getRepairType(),
+                    FeedbackActionType.DELETE_CLAIM_LINE_ID,
+                    serviceAgreement.getRepairType()
+            );
+
+            //verify task is Repair for new line if Repair price was added
+            params[1] = combine(getTestDataParameters(method),
+                    serviceAgreement.getValuaitonType(),
+                    FeedbackActionType.DELETE_CLAIM_LINE_ID_ADD_REPAIR_PRICE,
+                    serviceAgreement.getRepairType()
+            );
+
+            //verify task is Valuation for new line if all other lines sent to Valuation
+            params[2] = combine(getTestDataParameters(method),
+                    serviceAgreement.getValuaitonType(),
+                    FeedbackActionType.DELETE_CLAIM_LINE_ID,
+                    serviceAgreement.getValuaitonType()
+            );
+
+            //verify task is match Service for new line if all other lines sent to match service
+            params[3] = combine(getTestDataParameters(method),
+                    serviceAgreement.getMatchServiceType(),
+                    FeedbackActionType.DELETE_CLAIM_LINE_ID,
+                    serviceAgreement.getMatchServiceType()
+            );
+
+            return params;
+        } catch (Exception e) {
+            LoggerFactory.getLogger(RnVBaseTests.class).error(e.getMessage(), e);
+            return new Object[][]{{}};
+        }
+    }
+
+    @Test(dataProvider = "RnVBaseTests.changeTaskTypeProvider",
             description = "verify task is Repair for new line if all other lines sent to Repair")
-    public void eccs3305_repairTaskForNewLine(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+    public void eccs3305_taskTypesForNewLine(User user, Claim claim, ServiceAgreement agreement,
+                                              String taskTypeForAllLines, FeedbackActionType feedbackActionType, String taskTypeForFirstLine) {
         String lineOne = "Line 1";
         String lineTwo = "Line 2";
         String lineThree = "Line 3";
@@ -469,16 +512,46 @@ public class RnVBaseTests extends BaseTest {
                 .addManually(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
                 .selectAllLines()
                 .sendToRnV()
-                .updateTaskTypeAndAgrForAllLines(agreement.getRepairType(), agreement.getTestAgreementForRnV())
+                .updateTaskTypeAndAgrForAllLines(taskTypeForAllLines, agreement.getTestAgreementForRnV())
                 .nextRnVstep()
                 .sendRnV(agreement)
                 .toRepairValuationProjectsPage()
                 .toCommunicationTab()
-                .doFeedback(user, agreement, ExcelDocUtil.FeedbackActionType.DELETE_CLAIM_LINE_ID)
+                .doFeedback(user, agreement, feedbackActionType)
                 .toRepairValuationProjectsPage()
                 .waitForFeedbackReceived(agreement)
                 .expandTopTaskDetails()
                 .getAssertion()
-                .assertTaskHasType(lineOne, agreement.getRepairType());
+                .assertTaskHasType(agreement.getUpdDesc(), taskTypeForFirstLine);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "verify task is Valuation for new line if all other lines sent to different tasks")
+    public void eccs3305_valuationTaskForNewLine2(User user, Claim claim, ServiceAgreement agreement) throws Exception {
+        String lineOne = "Line 1";
+        String lineTwo = "Line 2";
+        String lineThree = "Line 3";
+        loginAndCreateClaim(user, claim)
+                .addManually(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .addManually(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .addManually(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .selectAllLines()
+                .sendToRnV()
+                .changeTask(lineOne, agreement.getRepairType())
+                .changeTask(lineTwo, agreement.getRepairEstimateType())
+                .changeTask(lineThree, agreement.getMatchServiceType())
+                .changeAgreement(lineOne, agreement.getTestAgreementForRnV())
+                .changeAgreement(lineTwo, agreement.getTestAgreementForRnV())
+                .changeAgreement(lineThree, agreement.getTestAgreementForRnV())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .toRepairValuationProjectsPage()
+                .toCommunicationTab()
+                .doFeedback(user, agreement, FeedbackActionType.DELETE_CLAIM_LINE_ID)
+                .toRepairValuationProjectsPage()
+                .waitForFeedbackReceived(agreement)
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasType(agreement.getUpdDesc(), agreement.getValuaitonType());
     }
 }
