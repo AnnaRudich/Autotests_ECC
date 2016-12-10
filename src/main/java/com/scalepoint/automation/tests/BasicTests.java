@@ -177,7 +177,7 @@ public class BasicTests extends BaseTest {
                 toProductMatchPage().
                 sortOrderableFirst().
                 match(claimLineDescription).
-                cancel();
+                cancel(TextSearchPage.class);
     }
 
     /**

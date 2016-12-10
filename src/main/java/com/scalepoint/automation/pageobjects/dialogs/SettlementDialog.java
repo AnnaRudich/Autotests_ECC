@@ -381,6 +381,18 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public <T extends Page> T ok(Class<T> pageClass, Button button) {
+        return closeDialog(pageClass, button);
+    }
+
+    public SettlementPage cancel() {
+        return cancel(SettlementPage.class);
+    }
+
+    public <T extends Page> T cancel(Class<T> pageClass) {
+        return closeDialog(pageClass, cancel);
+    }
+
+    private <T extends Page> T closeDialog(Class<T> pageClass, Button button) {
         waitForVisible(button);
         button.click();
 
@@ -397,18 +409,6 @@ public class SettlementDialog extends BaseDialog {
         else
             options = avoucher.getComboBoxOptions();
         return options.stream().anyMatch(i -> i.contains(_voucher.getVoucherNameSP()));
-    }
-
-    public SettlementPage cancel() {
-        return cancel(SettlementPage.class, cancel);
-    }
-
-    public <T extends Page> T cancel(Class<T> pageClass, Button button) {
-        waitForVisible(button);
-        button.click();
-        Wait.waitForElementDisappear(button);
-        Wait.waitForAjaxCompleted();
-        return Page.at(pageClass);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
