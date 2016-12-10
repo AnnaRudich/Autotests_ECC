@@ -124,12 +124,11 @@ public class EditReasonsPage extends AdminBasePage {
         public ReasonRow(String reasonName) {
             WebElement reasonInput = driver.findElement(By.xpath("//input[contains(@value, '" + reasonName + "')]"));
             String prefix = "reasonNameEdit_";
-            String name = reasonInput.getAttribute("name");
             String id = reasonInput.getAttribute("id");
-
             this.rowNumber = Integer.valueOf(id.substring(id.indexOf(prefix) + prefix.length()));
             this.readonly = reasonInput.getAttribute("readOnly") != null;
-            this.disabled = reasonInput.getAttribute("disabled") != null;
+            WebElement reasonRow = driver.findElement(By.id(rowNumber + "_rowNumber"));
+            this.disabled = !reasonRow.isDisplayed();
 
             this.disableButton = driver.findElement(By.id(rowNumber + "_changeStatusBtn"));
             this.deleteButton = driver.findElement(By.id(rowNumber + "_deleteBtn"));
