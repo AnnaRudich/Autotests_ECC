@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.utils.OperationalUtils;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -68,8 +69,9 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public ClaimLine findClaimLine(String description) {
-        Table table = new Table(driver.findElement
-                (By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table")));
+        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
+        Wait.waitForElement(claimLineXpath);
+        Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
     }
 
@@ -79,16 +81,14 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementPage requestSelfService(Claim claim, String password) {
-        claimOperationsMenu.requestSelfService().
+        return claimOperationsMenu.requestSelfService().
                 fill(claim, password).
                 send();
-        return this;
     }
 
     public SettlementPage addGenericItemToClaim(GenericItem genericItem) {
-        claimOperationsMenu.addGenericItem().
+        return claimOperationsMenu.addGenericItem().
                 chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
-        return this;
     }
 
     public ClaimOperationsMenu getClaimOperationsMenu() {
