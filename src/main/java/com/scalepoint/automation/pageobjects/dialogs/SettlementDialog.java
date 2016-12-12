@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -141,7 +142,7 @@ public class SettlementDialog extends BaseDialog {
     private TextBlock marketPrice;
 
     @FindBy(id = "marketprice-card-supplier-inputEl")
-    private TextBlock marketPriceSupplier;
+    private WebElement marketPriceSupplier;
 
     @FindBy(id = "productmatch-card-supplier")
     private TextBlock statusSupplier;
@@ -472,10 +473,13 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog selectValuation(Valuation valuation) {
-        for (int i = 0; i < 5; i++) {
-            driver.findElement(By.cssSelector("tr." + valuation.className + " .x-form-radio-default")).click();
-            waitASecond();
+        By valuationCheckbox = By.cssSelector("tr." + valuation.className + " .x-form-radio-default");
+        Wait.waitForStableElement(valuationCheckbox);
+        for (int i = 0; i < 3; i++) {
+            System.out.println(i);
+            driver.findElement(valuationCheckbox).click();
         }
+        waitASecond();
         return this;
     }
 
@@ -641,8 +645,8 @@ public class SettlementDialog extends BaseDialog {
 
     public boolean isMarketPriceSupplierVisible() {
         try {
-            return marketPriceSupplier.exists();
-        } catch (Exception e) {
+            return marketPriceSupplier.isDisplayed();
+        } catch (NoSuchElementException e) {
             return false;
         }
     }

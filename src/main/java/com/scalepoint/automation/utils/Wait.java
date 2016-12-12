@@ -169,11 +169,11 @@ public class Wait {
     }
 
     private static <T> T wrap(Function<WebDriver, T> condition) {
-        offImplicit();
+//        offImplicit();
         try {
             return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).until(condition);
         } finally {
-            onImplicit();
+//            onImplicit();
         }
     }
 

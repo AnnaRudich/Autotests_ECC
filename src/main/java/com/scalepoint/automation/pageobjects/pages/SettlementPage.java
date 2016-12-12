@@ -250,7 +250,6 @@ public class SettlementPage extends BaseClaimPage {
 
         public SettlementDialog editLine() {
             doubleClick(descriptionElement);
-            driver.manage().timeouts().setScriptTimeout(150, TimeUnit.SECONDS);
             String js =
                     "var callback = arguments[arguments.length - 1];" +
                             "function groupsLoaded() {" +

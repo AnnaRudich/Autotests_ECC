@@ -153,7 +153,7 @@ public class TextSearchPage extends Page {
 
     public SettlementDialog matchFirst() {
         Wait.waitForAjaxCompleted();
-        Wait.waitForElement(By.cssSelector("#productsTable table td"));
+        Wait.waitForVisible(match);
         match.click();
         return BaseDialog.at(SettlementDialog.class);
     }

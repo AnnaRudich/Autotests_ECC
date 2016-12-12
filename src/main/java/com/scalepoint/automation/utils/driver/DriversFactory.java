@@ -16,6 +16,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public enum DriversFactory {
@@ -28,7 +29,11 @@ public enum DriversFactory {
                 System.setProperty("webdriver.ie.driver", ieDriver.getAbsolutePath());
             }
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
-            return new InternetExplorerDriver(capabilities);
+            InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+            System.setProperty("webdriver.timeouts.implicitlywait", "10");
+            return driver;
         }
     },
 
@@ -38,6 +43,8 @@ public enum DriversFactory {
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
             WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
             driver = new Augmenter().augment(driver);
+            driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
             return driver;
         }
 
