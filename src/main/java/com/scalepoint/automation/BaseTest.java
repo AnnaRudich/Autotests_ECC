@@ -97,7 +97,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     public void cleanup(Method method, ITestResult iTestResult) {
         logger.info("Clean up after: {}", method.toString());
         Browser.quit();
-        WebDriverRunner.closeWebDriver();
         Window.cleanUp();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
