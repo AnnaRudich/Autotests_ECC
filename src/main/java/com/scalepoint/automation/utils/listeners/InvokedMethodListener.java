@@ -60,22 +60,27 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @Override
     public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
         if (iInvokedMethod.isTestMethod()) {
-            takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
+            try {
+                takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
 
-            logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
-            printErrorStackTraceIfAny(iTestResult);
+                logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
+                printErrorStackTraceIfAny(iTestResult);
 
-            RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
-            if (rollbackContext == null || rollbackContext.operations.isEmpty()) {
-                logger.info("No ft settings found to rollback");
-                return;
+                RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
+                if (rollbackContext == null || rollbackContext.operations.isEmpty()) {
+                    logger.info("No ft settings found to rollback");
+                    return;
+                }
+
+                Page.to(LoginPage.class);
+
+                FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
+                List<FtOperation> operations = rollbackContext.operations;
+                functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
+            } catch (Exception e) {
+                /* if not caught it breaks the call of AfterMethod*/
+                logger.error(e.getMessage(), e);
             }
-
-            Page.to(LoginPage.class);
-
-            FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-            List<FtOperation> operations = rollbackContext.operations;
-            functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
         }
     }
 
