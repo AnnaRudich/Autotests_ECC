@@ -156,6 +156,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "discretionary-reason-combobox")
     private ExtComboBox discretionaryReason;
 
+    @FindBy(id = "discretionary-reason-combobox-inputEl")
+    private ExtInput discretionaryReasonField;
+
     @FindBy(id = "depreciation-type-combobox")
     private ExtComboBox depreciationType;
 
@@ -365,6 +368,11 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementPage ok() {
         return ok(SettlementPage.class, ok);
+    }
+
+    public SettlementDialog clickOK() {
+        ok.click();
+        return this;
     }
 
     public <T extends Page> T ok(Class<T> pageClass) {
@@ -738,6 +746,14 @@ public class SettlementDialog extends BaseDialog {
     public boolean isDiscretionaryReasonValuePresent(String expectedValue) {
         List<String> options = discretionaryReason.getComboBoxOptions();
         return options.stream().anyMatch(i -> i.contains(expectedValue));
+    }
+
+    public boolean isDiscretionaryReasonFieldInvalid() {
+        return discretionaryReasonField.getAttribute("aria-invalid").equals("true");
+    }
+
+    public boolean isSIDVisible() {
+        return cancel.exists();
     }
 }
 
