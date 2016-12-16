@@ -2,8 +2,6 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -37,12 +35,10 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                                                                    Claim claim) {
         String claimLineDescription = "test1";
 
-        SettlementPage settlementPage = loginAndCreateClaim(trygUser, claim);
-        settlementPage.importExcelFile(excelImportPath);
-
-        SettlementDialog claimLine = settlementPage.findClaimLine(claimLineDescription).editLine();
-        assertTrue(claimLine.isDiscretionaryReasonEnabled());
-        claimLine.cancel();
+        SettlementDialog settlementDialog = loginAndCreateClaim(trygUser, claim).
+        importExcelFile(excelImportPath).
+        findClaimLine(claimLineDescription).editLine();
+        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason field should be enabled");
     }
 
 
@@ -61,11 +57,9 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                                                                   Claim claim, DiscretionaryReason discretionaryReason) {
         String claimLineDescription = "APPLE iphone 1";
 
-        SettlementPage settlementPage = loginAndCreateClaim(trygUser, claim);
-        settlementPage.importExcelFile(excelImportPath);
-
-        SettlementDialog claimLine = settlementPage.findClaimLine(claimLineDescription).editLine();
-        claimLine.
+        SettlementDialog settlementDialog = loginAndCreateClaim(trygUser, claim).
+                importExcelFile(excelImportPath).
+                findClaimLine(claimLineDescription).editLine().
                 fillDiscretionaryPrice(400).
                 selectValuation(ANDEN_VURDERING).
                 selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2()).
@@ -76,8 +70,8 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 toProductMatchPage().
                 matchFirst().
                 selectValuation(ANDEN_VURDERING);
-        assertEquals(claimLine.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason2());
-        claimLine.cancel(TextSearchPage.class);
+        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason2(), "Selected reason should be visible in match dialog");
+
     }
 
     /* WHEN:Import excel file and add the manual discretionary depreciation.
@@ -95,11 +89,9 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                                                                      Claim claim, DiscretionaryReason discretionaryReason) {
         String claimLineDescription = "APPLE iphone 2";
 
-        SettlementPage settlementPage = loginAndCreateClaim(trygUser, claim);
-        settlementPage.importExcelFile(excelImportPath);
-
-        SettlementDialog claimLine = settlementPage.findClaimLine(claimLineDescription).editLine();
-        claimLine.
+        SettlementDialog settlementDialog = loginAndCreateClaim(trygUser, claim).
+                importExcelFile(excelImportPath).
+                findClaimLine(claimLineDescription).editLine().
                 fillDepreciation(10).
                 selectDepreciationType(1).
                 selectValuation(NEW_PRICE).
@@ -111,8 +103,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 toProductMatchPage().
                 matchFirst().
                 selectValuation(NEW_PRICE);
-        assertEquals(claimLine.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason2());
-        claimLine.cancel(TextSearchPage.class);
+        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason2(),"Selected reason should be visible in match dialog");
     }
 
 }

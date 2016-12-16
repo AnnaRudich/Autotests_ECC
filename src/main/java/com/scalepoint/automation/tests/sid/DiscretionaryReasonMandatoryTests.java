@@ -45,9 +45,8 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 selectValuation(NEW_PRICE).
                 clickOK();
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason field should be enabled");
-        assertTrue(settlementDialog.isDiscretionaryReasonFieldInvalid(), "Discretionary Reason field should be invalid");
-        assertTrue(settlementDialog.isSIDVisible(), "SID should be open");
-        settlementDialog.cancel();
+        assertTrue(settlementDialog.isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have red border");
+
     }
 
     /*
@@ -69,9 +68,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 selectValuation(ANDEN_VURDERING).
                 clickOK();
         assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason field should be enabled");
-        assertTrue(settlementDialog.isDiscretionaryReasonFieldInvalid(), "Discretionary Reason field should be invalid");
-        assertTrue(settlementDialog.isSIDVisible(), "SID should be open");
-        settlementDialog.cancel();
+        assertTrue(settlementDialog.isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have red border");
     }
 
     /*
@@ -79,7 +76,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with discretionary depreciation
      * AND: Select non-depreciable valuation
      * AND: click OK button
-     * THEN: the field has no red frame; the dialog is closed
+     * THEN: the field is disabled; the dialog is closed
      */
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
@@ -90,9 +87,10 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
         settlementDialog.
                 fillDepreciation(10).
                 selectDepreciationType(1).
-                fillDescription(claimItem.getTextFieldSP()).
-                ok();
-        assertFalse(settlementDialog.isSIDVisible(), "SID should be closed");
+                fillDescription(claimItem.getTextFieldSP());
+        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason field should be disabled");
+        assertFalse(settlementDialog.isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have no red border");
+        settlementDialog.ok();
         removeLine(claimItem.getTextFieldSP());
     }
 
@@ -102,7 +100,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with policy depreciation
      * AND: Select depreciable valuation
      * AND: click OK button
-     * THEN: the field has no red frame; the dialog is closed
+     * THEN: the field is disabled; the dialog is closed
      */
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding policy depreciation")
@@ -114,9 +112,10 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 fillDepreciation(10).
                 selectDepreciationType(0).
                 fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(NEW_PRICE).
-                ok();
-        assertFalse(settlementDialog.isSIDVisible(), "SID should be closed");
+                selectValuation(NEW_PRICE);
+        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason field should be disabled");
+        assertFalse(settlementDialog.isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have no red border");
+        settlementDialog.ok();
         removeLine(claimItem.getTextFieldSP());
     }
 
@@ -125,7 +124,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with discretionary depreciation = 0%
      * AND: Select depreciable valuation
      * AND: click OK button
-     * THEN: the field has red frame; the dialog is not closed
+     * THEN: the field is disabled; the dialog is closed
      */
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation=0%")
@@ -137,9 +136,10 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 fillDepreciation(0).
                 selectDepreciationType(1).
                 fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(NEW_PRICE).
-                ok();
-        assertFalse(settlementDialog.isSIDVisible(), "SID should be closed");
+                selectValuation(NEW_PRICE);
+        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason field should be disabled");
+        assertFalse(settlementDialog.isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have no red border");
+        settlementDialog.ok();
         removeLine(claimItem.getTextFieldSP());
     }
 

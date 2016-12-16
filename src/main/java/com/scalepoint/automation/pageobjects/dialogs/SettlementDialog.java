@@ -156,9 +156,6 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "discretionary-reason-combobox")
     private ExtComboBox discretionaryReason;
 
-    @FindBy(id = "discretionary-reason-combobox-inputEl")
-    private ExtInput discretionaryReasonField;
-
     @FindBy(id = "depreciation-type-combobox")
     private ExtComboBox depreciationType;
 
@@ -748,12 +745,12 @@ public class SettlementDialog extends BaseDialog {
         return options.stream().anyMatch(i -> i.contains(expectedValue));
     }
 
-    public boolean isDiscretionaryReasonFieldInvalid() {
-        return discretionaryReasonField.getAttribute("aria-invalid").equals("true");
+    private String redBorder = "#c30";
+
+    public boolean isDiscretionaryReasonHasRedBorder() {
+        return driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
+                && driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
     }
 
-    public boolean isSIDVisible() {
-        return cancel.exists();
-    }
 }
 
