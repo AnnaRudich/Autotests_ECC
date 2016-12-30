@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.EditCustomerNoteDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -11,7 +13,7 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 @EccPage
-public class NotesPage extends BaseClaimPage {
+public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelpers {
 
     @FindBy(id = "btnEditCustomerNote")
     private Button editCustomerNote;
@@ -41,15 +43,14 @@ public class NotesPage extends BaseClaimPage {
 
     public EditCustomerNoteDialog editCustomerNote() {
         Wait.waitForVisible(editCustomerNote);
-        openDialogWithJavascriptHelper(editCustomerNote);
-        return at(EditCustomerNoteDialog.class);
+        editCustomerNote.click();
+        return BaseDialog.at(EditCustomerNoteDialog.class);
     }
 
     public NotesPage addInternalNote(String note) {
         Wait.waitForVisible(addInternalNote);
-        openDialog(addInternalNote);
-        at(AddInternalNoteDialog.class).addInternalNote(note);
-        return this;
+        addInternalNote.click();
+        return BaseDialog.at(AddInternalNoteDialog.class).addInternalNote(note, NotesPage.class);
     }
 
     public NotesPage addCustomerNote(String customerNote) {

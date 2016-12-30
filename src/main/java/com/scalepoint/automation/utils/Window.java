@@ -87,7 +87,7 @@ public class Window implements Actions {
             for (String winHandle : windowHandles) {
                 driver.switchTo().window(winHandle);
             }
-            logger.info("url after switch: " + driver.getCurrentUrl());
+            logger.info("url after switchToLast: " + driver.getCurrentUrl());
         }
 
     }

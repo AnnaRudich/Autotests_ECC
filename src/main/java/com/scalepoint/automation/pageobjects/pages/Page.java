@@ -1,7 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.Actions;
+import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -9,6 +11,7 @@ import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
@@ -108,8 +111,18 @@ public abstract class Page implements Actions {
 
     public static <T extends Page> T at(Class<T> pageClass) {
         T page = PagesCache.get(pageClass);
+        loadJavascriptHelpersIfNeeds(page);
         page.ensureWeAreOnPage();
         return page;
+    }
+
+    private static <T extends Page> void loadJavascriptHelpersIfNeeds(T page) {
+        if (page instanceof RequiresJavascriptHelpers) {
+            Object o = ((JavascriptExecutor) Browser.driver()).executeScript("try { return isUtilsInitialized(); } catch (e) { return false;}");
+            if (!(o instanceof Boolean && Boolean.valueOf(o.toString()))) {
+                JavascriptHelper.initializeCommonFunctions();
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

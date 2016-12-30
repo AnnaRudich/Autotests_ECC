@@ -18,6 +18,9 @@ window.getElementsByClassName = function (className) {// Get a list of all eleme
     return foundElements;
 };
 
+window.isUtilsInitialized = function() {
+    return true;
+};
 
 /*refedined function to open ShopViewImportViewDialog as modal window*/
 
@@ -87,8 +90,9 @@ onready(function(){
         }
     };
 
-    window.populateRichTextEditorWithText = function (iframeId, text) {
-        document.getElementById(iframeId).contentWindow.document.getElementsByTagName('body')[0].innerHTML = text;
+    window.populateRichTextEditorWithText = function (parentElementId, text) {
+        var iframe = document.getElementById(parentElementId).getElementsByTagName("iframe")[0];
+        iframe.contentWindow.document.getElementsByTagName('body')[0].innerHTML = text;
     };
 });
 

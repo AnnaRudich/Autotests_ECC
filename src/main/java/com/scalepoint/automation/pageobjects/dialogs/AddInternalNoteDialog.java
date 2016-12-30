@@ -1,38 +1,31 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class AddInternalNoteDialog extends Page {
+public class AddInternalNoteDialog extends BaseDialog {
 
-    @FindBy(name = "internal_note")
-    private ExtInput internalNote;
+    @FindBy(name = "addNoteTextArea-inputEl")
+    private WebElement internalNote;
 
-    @FindBy(id = "_OK_button")
-    private Button ok;
-
-    @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/matching_engine/dialog/add_note_dialog.jsp";
-    }
+    @FindBy(id = "addCustomerNoteOkButton")
+    private WebElement ok;
 
     @Override
-    public AddInternalNoteDialog ensureWeAreOnPage() {
-        switchToLast();
-        waitForUrl(getRelativeUrl());
+    public BaseDialog ensureWeAreAt() {
         waitForVisible(internalNote);
         return this;
     }
 
-    public void addInternalNote(String note) {
-        waitForVisible(internalNote);
+    public <T extends Page> T addInternalNote(String note, Class<T> pageClass) {
         internalNote.sendKeys(note);
-        closeDialog(ok);
+        ok.click();
+        return Page.at(pageClass);
     }
 }

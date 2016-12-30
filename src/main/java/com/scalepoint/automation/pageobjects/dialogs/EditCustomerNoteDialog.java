@@ -12,32 +12,24 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class EditCustomerNoteDialog extends Page {
+public class EditCustomerNoteDialog extends BaseDialog {
 
-    @FindBy(id = "_OK_button")
-    private Button ok;
+    @FindBy(id = "editCustomerNoteOkButton")
+    private WebElement ok;
 
-    @FindBy(tagName = "body")
-    private WebElement note;
-
-    @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/matching_engine/dialog/edit_note_dialog.jsp";
-    }
+    @FindBy(id = "editCustomerNoteCancelButton")
+    private WebElement cancel;
 
     @Override
-    public EditCustomerNoteDialog ensureWeAreOnPage() {
-        switchToLast();
-        waitForUrl(getRelativeUrl());
-        waitForVisible(note);
+    protected BaseDialog ensureWeAreAt() {
+        waitForVisible(ok);
         return this;
     }
 
     public NotesPage addCustomerNote(String note) {
-        Wait.waitForLoaded();
-        ((JavascriptExecutor) driver).executeScript("populateRichTextEditorWithText('noteHtmlEditorId-inputCmp-iframeEl', '" + note + "');");
+        ((JavascriptExecutor) driver).executeScript("populateRichTextEditorWithText('noteContainer', '" + note + "');");
         driver.switchTo().defaultContent();
-        closeDialog(ok);
-        return at(NotesPage.class);
+        ok.click();
+        return Page.at(NotesPage.class);
     }
 }
