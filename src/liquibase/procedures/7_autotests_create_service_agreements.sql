@@ -51,7 +51,7 @@ AS
 		[insuranceCompanyId],[SUORNOT],	[SUSUPDELIV],	[SUSUPPICKUP],	[SULOGO],[SUVCPICT],[suDeliveryTime],[suHandlesWeee],[suCulture],[SUFREIGHTPRICE],[SUORDERRETURNADDRESS],[SUOPENINGHOURS],[SUVOUCHERSONLY],[LogoFileId],[BannerFileId],[SUVENDORACCTNO],[PushOrderDocument],[rvIntegrationType])
 		SELECT
 			@SupplierName,@Email,@SupplierCVR,@Phone,@Address1,@Address2,@PostalCode,@City,@SupplierURL,
-			@insCompanyId, 'M','1','0','\jessops_logo.gif','\jessops_logo.gif','7',NULL,'2057','1','','','0','14','13',NULL,'0', 'XL'
+			@insCompanyId, 'M','1','0','\jessops_logo.gif','\jessops_logo.gif','7',NULL,'2057','1','','','0','14','13',NULL,'0', 1
 	declare @SupplierID int = @@IDENTITY
 	declare @AgreementTags varchar(100) = ''
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive

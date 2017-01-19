@@ -11,14 +11,36 @@ AS
 
 SET NOCOUNT ON
 
-INSERT INTO ChoiceReason VALUES
-            ('Sagen er generelt veldokumenteret, derfor OK', 1, @InsCompanyId, 1, NULL),
-            ('Sagen er generelt dårligt dokumenteret, derfor lavere skøn', 1, @InsCompanyId, 1, NULL),
-            ('Afviger fra den generelle afskrivning jf. betingelserne (f.eks. FUF)', 1, @InsCompanyId, 1, NULL),
-            ('Vurderes til bedste løsning, tæt på bedste valg', 1, @InsCompanyId, 1, NULL),
-            ('Andet (begrundelse skrives i Rumba)', 1, @InsCompanyId, 1, NULL);
+BEGIN TRANSACTION
 
-PRINT 'Choice reasons created for company with id = ' + CAST(@InsCompanyId AS VARCHAR(32))
+CREATE TABLE #tmp
+(
+  id INT IDENTITY(1, 1) primary key,
+  reasonName NVARCHAR(500)
+);
+
+insert into #tmp (reasonName) values
+('Sagen er generelt veldokumenteret, derfor OK'),
+('Sagen er generelt dårligt dokumenteret, derfor lavere skøn'),
+('Afviger fra den generelle afskrivning jf. betingelserne (f.eks. FUF)'),
+('Vurderes til bedste løsning, tæt på bedste valg'),
+('Andet (begrundelse skrives i Rumba)')
+
+declare @id int
+declare @reason nvarchar(500)
+
+WHILE EXISTS (SELECT * FROM #tmp)
+BEGIN
+  SELECT TOP 1 @id = id, @reason = reasonName FROM #tmp ORDER BY id ASC
+  IF NOT EXISTS (SELECT * FROM ChoiceReason WHERE ReasonName = @reason AND ReasonType = 1 AND InsuranceCompanyId = @InsCompanyId)
+  BEGIN
+    INSERT INTO ChoiceReason VALUES (@reason, 1, @InsCompanyId, 1, NULL)
+  END
+
+  DELETE #tmp WHERE id = @id
+END
+
+DROP TABLE #tmp
 
 COMMIT TRANSACTION
 
