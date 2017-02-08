@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog.ShopType.RETAIL;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -20,17 +21,9 @@ public class ShopTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3036 It's possible to create new shop for existing supplier")
     public void ecc3036_createNewShop(Shop shop) {
-        SupplierDialog.ShopsTab shopsTab = login(getSystemUser())
-                .getMainMenu()
-                .toEccAdminPage()
-                .toSuppliersPage()
-                .openFirstSupplier()
-                .selectShopsTab()
-                .openAddShopDialog()
-                .createShop(shop, AddShopDialog.ShopType.RETAIL);
-
-        assertTrue(shopsTab.isNewShopExists(shop));
-        shopsTab.deleteShop(shop);
+        createRetailShop(shop)
+                .assertNewShopExists(shop)
+                .deleteShop(shop);
     }
 
     /**
@@ -40,24 +33,14 @@ public class ShopTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3036 It's possible to update all new shop data for existing supplier")
-    public void ecc3036_updateNewShop(Shop shop, Shop updatedWithNewData){
-        SupplierDialog.ShopsTab shopsTab = login(getSystemUser())
-                .getMainMenu()
-                .toEccAdminPage()
-                .toSuppliersPage()
-                .openFirstSupplier()
-                .selectShopsTab()
-                .openAddShopDialog()
-                .createShop(shop, AddShopDialog.ShopType.RETAIL)
+    public void ecc3036_updateNewShop(Shop shop, Shop updatedWithNewData) {
+        createRetailShop(shop)
                 .openEditShopDialog(shop.getShopName())
-                .updateShop(updatedWithNewData);
-
-        AddShopDialog addShopDialog = shopsTab.openEditShopDialog(updatedWithNewData.getShopName());
-        boolean dataEquals = addShopDialog.isShopDataEqualsWith(updatedWithNewData);
-        assertTrue(dataEquals);
-
-        addShopDialog.cancel();
-        shopsTab.deleteShop(updatedWithNewData);
+                .updateShop(updatedWithNewData)
+                .openEditShopDialog(updatedWithNewData.getShopName())
+                .assertShopDataIsEqualTo(updatedWithNewData)
+                .cancel()
+                .deleteShop(updatedWithNewData);
     }
 
     /**
@@ -69,16 +52,19 @@ public class ShopTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3036 It's possible to delete new shop for existing supplier")
     public void ecc3036_deleteNewShop(Shop shop) {
-        SupplierDialog.ShopsTab shopsTab = login(getSystemUser())
+        createRetailShop(shop)
+                .deleteShop(shop)
+                .assertNewShopNotExists(shop);
+    }
+
+    private SupplierDialog.ShopsTab createRetailShop(Shop shop) {
+        return login(getSystemUser())
                 .getMainMenu()
                 .toEccAdminPage()
                 .toSuppliersPage()
                 .openFirstSupplier()
                 .selectShopsTab()
                 .openAddShopDialog()
-                .createShop(shop, AddShopDialog.ShopType.RETAIL)
-                .deleteShop(shop);
-
-        assertFalse(shopsTab.isNewShopExists(shop));
+                .createShop(shop, RETAIL);
     }
 }

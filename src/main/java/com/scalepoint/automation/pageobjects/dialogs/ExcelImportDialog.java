@@ -5,32 +5,26 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 @EccPage
-public class ExcelImportDialog extends Page {
+public class ExcelImportDialog extends BaseDialog {
+
+    private static final String CLOSE_IMPORT = "import-summary-close-button";
+
+    @FindBy(id = CLOSE_IMPORT)
+    private WebElement closeButton;
 
     @Override
-    protected String getRelativeUrl() {
-        return "ImportLossLines";
-    }
-
-    @Override
-    public ExcelImportDialog ensureWeAreOnPage() {
-        waitForUrl(getRelativeUrl());
-        return this;
+    protected BaseDialog ensureWeAreAt() {
+        Wait.waitForDisplayed(By.id(CLOSE_IMPORT));
+        return null;
     }
 
     public SettlementPage cancel() {
-        switchToLast();
-        String buttonId = driver.getCurrentUrl().contains("ExcelImport") ? "Cancel_button" : "_Cancel_button";
-        cancelDialogWindow(buttonId);
-        return at(SettlementPage.class);
-    }
-
-    private void cancelDialogWindow(String buttonId) {
-        By cancelButton = By.id(buttonId);
-        Wait.waitForElement(cancelButton);
-        closeDialog(driver.findElement(cancelButton));
-        Wait.waitForLoaded();
+        closeButton.click();
+        Wait.waitForAjaxCompleted();
+        return Page.at(SettlementPage.class);
     }
 }

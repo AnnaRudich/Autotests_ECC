@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static org.testng.Assert.assertTrue;
+
 public class AddShopDialog extends BaseDialog {
 
     public enum ShopType {
@@ -63,6 +65,11 @@ public class AddShopDialog extends BaseDialog {
                 getInputValue(phoneField).contains(shop.getPhone()));
     }
 
+
+    public AddShopDialog assertShopDataIsEqualTo(Shop expectedData) {
+        assertTrue(isShopDataEqualsWith(expectedData));
+        return this;
+    }
 
     public SupplierDialog.ShopsTab updateShop(Shop shop) {
         clearShopForm();

@@ -3,7 +3,6 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -23,8 +22,8 @@ import static org.testng.Assert.assertTrue;
 /**
  * Created by asa on 10/17/2016.
  */
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
+@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
@@ -39,11 +38,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
     public void charlie_508_1_verifyDiscretionaryAndRejectReasonFTOFF(User user, Claim claim) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually();
-        assertFalse(settlementDialog.isRejectReasonEnabled(), "Rejection Reason dropdown should be disabled");
-        assertFalse(settlementDialog.isDiscretionaryReasonVisible(), "Discretionary Reason dropdown should NOT be visible");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .assertRejectReasonDisabled()
+                .assertDiscretionaryReasonInvisible();
     }
 
     /**
@@ -56,11 +54,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
     public void charlie_508_2_verifyDiscretionaryAndRejectReasonFTOFF(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually();
-        assertFalse(settlementDialog.isRejectReasonEnabled(), "Rejection Reason should be disabled");
-        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason should be disabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .assertRejectReasonDisabled()
+                .assertDiscretionaryReasonDisabled();
     }
 
     /**
@@ -71,11 +68,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is ON")
     public void charlie_508_3_verifyDiscretionaryAndRejectReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually();
-        assertTrue(settlementDialog.isRejectReasonVisible(), "Rejection Reason dropdown should be visible");
-        assertTrue(settlementDialog.isDiscretionaryReasonVisible(), "Discretionary Reason should be visible");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .assertRejectReasonVisible()
+                .assertDiscretionaryReasonVisible();
     }
 
     /**
@@ -89,15 +85,14 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled after adding discretionary valuation.FT=ON")
     public void charlie_508_4_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                addValuation().
-                addValuationPrice(claimItem.getTrygNewPrice()).
-                addValuationType(claimItem.getValuationType4()).
-                ok().
-                selectValuation(ANDEN_VURDERING);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Reason for discretionary valuation should be enabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .addValuation()
+                .addValuationPrice(claimItem.getTrygNewPrice())
+                .addValuationType(claimItem.getValuationType4())
+                .closeValuationDialogWithOk()
+                .selectValuation(ANDEN_VURDERING)
+                .assertDiscretionaryReasonEnabled();
     }
 
     /**
@@ -113,16 +108,15 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
             " after adding Input manually discretionary depreciation.FT=ON")
     public void charlie_508_5_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                addValuation().
-                addValuationPrice(claimItem.getTrygNewPrice()).
-                addValuationType(claimItem.getValuationType1()).
-                ok().
-                fillDiscretionaryPrice(claimItem.getUsedPrice()).
-                selectValuation(ANDEN_VURDERING);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary reason drop down should be enabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .addValuation()
+                .addValuationPrice(claimItem.getTrygNewPrice())
+                .addValuationType(claimItem.getValuationType1())
+                .closeValuationDialogWithOk()
+                .fillDiscretionaryPrice(claimItem.getUsedPrice())
+                .selectValuation(ANDEN_VURDERING)
+                .assertDiscretionaryReasonEnabled();
     }
 
     /**
@@ -136,16 +130,15 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is greyed out" +
             " when the voucher is selected and adding the manual discretionary depreciation (combine checkbox is unchecked).FT=ON")
     public void charlie_508_6_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getTrygCategory()).
-                fillSubCategory(claimItem.getTrygSubCategory()).
-                fillDiscretionaryPrice(claimItem.getUsedPrice()).
-                setDiscountAndDepreciation(false).
-                selectValuation(NOT_SELECTED).
-                fillVoucher(voucher.getTrygVoucher());
-        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary reason drop down should be disabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getTrygCategory())
+                .fillSubCategory(claimItem.getTrygSubCategory())
+                .fillDiscretionaryPrice(claimItem.getUsedPrice())
+                .setDiscountAndDepreciation(false)
+                .selectValuation(NOT_SELECTED)
+                .fillVoucher(voucher.getTrygVoucher())
+                .assertDiscretionaryReasonDisabled();
     }
 
     /**
@@ -160,14 +153,13 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
             " adding the manual discretionary depreciation (combine checkbox is checked).FT=ON")
     public void charlie_508_7_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getTrygCategory()).
-                fillSubCategory(claimItem.getTrygSubCategory()).
-                fillDiscretionaryPrice(claimItem.getUsedPrice()).
-                setDiscountAndDepreciation(true);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary reason drop down should be enabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getTrygCategory())
+                .fillSubCategory(claimItem.getTrygSubCategory())
+                .fillDiscretionaryPrice(claimItem.getUsedPrice())
+                .setDiscountAndDepreciation(true)
+                .assertDiscretionaryReasonEnabled();
     }
 
     /**
@@ -184,36 +176,31 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")
     public void charlie_508_8_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem,
                                                             DiscretionaryReason discretionaryReason) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCategory(claimItem.getAlkaCategory()).
-                fillSubCategory(claimItem.getExistingSubCat2()).
-                setDiscountAndDepreciation(false).
-                fillDiscretionaryPrice(1000).
-                fillNewPrice(3000).
-                fillCustomerDemand(3000).
-                selectDepreciationType(1).
-                fillDepreciation(19).
-                selectValuation(NEW_PRICE);
-
         String reasonText = discretionaryReason.getDiscretionaryReason2();
 
-        settlementDialog.selectDiscretionaryReason(reasonText);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Reason must be enabled for New Price");
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), reasonText, "Wrong reason selected for New Price");
-
-        settlementDialog.selectValuation(ANDEN_VURDERING);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Reason must be enabled for Discretionary Price");
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), reasonText, "Wrong reason selected for Discretionary Price");
-
-        settlementDialog.selectValuation(CUSTOMER_DEMAND);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Reason field must be enabled for Customer Demand");
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), reasonText, "Wrong reason selected for Customer Demand");
-
-        settlementDialog.selectValuation(VOUCHER);
-        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary reason must be disabled for Voucher");
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillDescription(claimItem.getTextFieldSP())
+                .fillCategory(claimItem.getAlkaCategory())
+                .fillSubCategory(claimItem.getExistingSubCat2())
+                .setDiscountAndDepreciation(false)
+                .fillDiscretionaryPrice(1000)
+                .fillNewPrice(3000)
+                .fillCustomerDemand(3000)
+                .selectDepreciationType(1)
+                .fillDepreciation(19)
+                .selectValuation(NEW_PRICE)
+                .selectDiscretionaryReason(reasonText)
+                .assertDiscretionaryReasonEnabled()
+                .assertDiscretionaryReasonEqualTo(reasonText)
+                .selectValuation(ANDEN_VURDERING)
+                .assertDiscretionaryReasonEnabled()
+                .assertDiscretionaryReasonEqualTo(reasonText)
+                .selectValuation(CUSTOMER_DEMAND)
+                .assertDiscretionaryReasonEnabled()
+                .assertDiscretionaryReasonEqualTo(reasonText)
+                .selectValuation(VOUCHER)
+                .assertDiscretionaryReasonDisabled();
     }
 
     /**
@@ -230,20 +217,17 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                             Claim claim,
                                                             ClaimItem claimItem,
                                                             DepreciationType depreciationType) {
-        String month = "4 ";
-        String age = "1";
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getTrygCategory1()).
-                fillNewPrice(claimItem.getUsedPrice()).
-                enableAge().
-                enterAgeYears(age).
-                selectMonth(month + claimItem.getMonths()).
-                selectDepreciationType(depreciationType.getDiscretionaryType()).
-                fillDepreciation(20).
-                selectValuation(NEW_PRICE);
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason should be enabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getTrygCategory1())
+                .fillNewPrice(claimItem.getUsedPrice())
+                .enableAge()
+                .enterAgeYears("1")
+                .selectMonth("4")
+                .selectDepreciationType(depreciationType.getDiscretionaryType())
+                .fillDepreciation(20)
+                .selectValuation(NEW_PRICE)
+                .assertDiscretionaryReasonEnabled();
     }
 
     /**
@@ -260,20 +244,17 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem,
                                                              DepreciationType depreciationType) {
-        String month = "4 ";
-        String age = "1";
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getTrygCategory1()).
-                fillNewPrice(claimItem.getUsedPrice()).
-                enableAge().
-                enterAgeYears(age).
-                selectMonth(month + claimItem.getMonths()).
-                selectDepreciationType(depreciationType.getDiscretionaryType()).
-                selectValuation(NEW_PRICE).
-                selectDepreciationType(depreciationType.getPolicyType());
-        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason should be disabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getTrygCategory1())
+                .fillNewPrice(claimItem.getUsedPrice())
+                .enableAge()
+                .enterAgeYears("1")
+                .selectMonth("4")
+                .selectDepreciationType(depreciationType.getDiscretionaryType())
+                .selectValuation(NEW_PRICE)
+                .selectDepreciationType(depreciationType.getPolicyType())
+                .assertDiscretionaryReasonDisabled();
     }
 
     /**
@@ -290,20 +271,17 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem,
                                                              DepreciationType depreciationType) {
-        String age = "3";
-        Integer reductionRule = 20;
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getTrygCategory1()).
-                fillNewPrice(10).
-                enableAge().
-                enterAgeYears(age).
-                selectValuation(NEW_PRICE).
-                applyReductionRuleByValue(reductionRule).
-                selectDepreciationType(depreciationType.getPolicyType()).
-                selectValuation(NEW_PRICE);
-        assertFalse(settlementDialog.isDiscretionaryReasonEnabled(), "Discretionary Reason should be disabled");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getTrygCategory1())
+                .fillNewPrice(10)
+                .enableAge()
+                .enterAgeYears("3")
+                .selectValuation(NEW_PRICE)
+                .applyReductionRuleByValue(20)
+                .selectDepreciationType(depreciationType.getPolicyType())
+                .selectValuation(NEW_PRICE)
+                .assertDiscretionaryReasonDisabled();
     }
 
     /**
@@ -323,29 +301,26 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillCategory(claimItem.getExistingCat4()).
-                fillSubCategory(claimItem.getExistingSubCat4()).
-                fillCustomerDemand(claimItem.getUsedPrice()).
-                disableAge().
-                setDiscountAndDepreciation(false).
-                fillDiscretionaryPrice(1000).
-                fillNewPrice(3000).
-                selectDepreciationType(1).
-                fillDepreciation(5).
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(3000).
-                selectValuation(ANDEN_VURDERING).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6());
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason6(), "Incorrect text discretionary reason");
-
-        boolean voucherPresent = settlementDialog.selectValuation(VOUCHER)
-                .ok()
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getExistingCat4())
+                .fillSubCategory(claimItem.getExistingSubCat4())
+                .fillCustomerDemand(claimItem.getUsedPrice())
+                .disableAge()
+                .setDiscountAndDepreciation(false)
+                .fillDiscretionaryPrice(1000)
+                .fillNewPrice(3000)
+                .selectDepreciationType(1)
+                .fillDepreciation(5)
+                .fillDescription(claimItem.getTextFieldSP())
+                .fillCustomerDemand(3000)
+                .selectValuation(ANDEN_VURDERING)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6())
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason6())
+                .selectValuation(VOUCHER)
+                .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
-                .isVoucherPresent();
-
-        assertTrue(voucherPresent, "Voucher icon should be displayed");
+                .assertVoucherPresent();
     }
 
     /**
@@ -364,25 +339,24 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_13_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim, ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
-        String month = "6 ";
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.addManually().
-                fillCategory(claimItem.getExistingCat4()).
-                fillSubCategory(claimItem.getExistingSubCat4()).
-                fillCustomerDemand(1000).
-                enableAge().
-                selectMonth(month + claimItem.getMonths()).
-                setDiscountAndDepreciation(false).
-                selectDepreciationType(1).
-                fillDepreciation(5).
-                fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(CUSTOMER_DEMAND).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason1(), "Incorrect text discretionary reason");
-
-        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLine(claimItem.getTextFieldSP());
-        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
-        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason1()), "Discretionary Reason Tooltip should be displayed");
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getExistingCat4())
+                .fillSubCategory(claimItem.getExistingSubCat4())
+                .fillCustomerDemand(1000)
+                .enableAge()
+                .selectMonth("6")
+                .setDiscountAndDepreciation(false)
+                .selectDepreciationType(1)
+                .fillDepreciation(5)
+                .fillDescription(claimItem.getTextFieldSP())
+                .selectValuation(CUSTOMER_DEMAND)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason1())
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason1())
+                .closeSidWithOk()
+                .findClaimLine(claimItem.getTextFieldSP())
+                .assertDiscretionaryPresent()
+                .assertTooltipPresent(discretionaryReason.getDiscretionaryReason1());
     }
 
     /**
@@ -393,7 +367,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * AND: Go to settlement page
      * THEN:  discretionary icon and the hover with reason 3 text are displayed.
      */
-
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
@@ -403,23 +376,21 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
-        SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem);
-        settlementDialog.addValuation().
-                addValuationType(claimItem.getValuationType4()).
-                addValuationPrice(1000).
-                ok().
-                fillNewPrice(3000).
-                setDiscountAndDepreciation(false).
-                fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(ANDEN_VURDERING).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason7());
-
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason7(), "Incorrect text discretionary reason");
-
-        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLine(claimItem.getTextFieldSP());
-        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
-        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
-
+        createClaimAndFillSid(user, claim, claimItem)
+                .addValuation()
+                .addValuationType(claimItem.getValuationType4())
+                .addValuationPrice(1000)
+                .closeValuationDialogWithOk()
+                .fillNewPrice(3000)
+                .setDiscountAndDepreciation(false)
+                .fillDescription(claimItem.getTextFieldSP())
+                .selectValuation(ANDEN_VURDERING)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason7())
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason7())
+                .closeSidWithOk()
+                .findClaimLine(claimItem.getTextFieldSP())
+                .assertDiscretionaryPresent()
+                .assertTooltipPresent(discretionaryReason.getDiscretionaryReason7());
     }
 
     /**
@@ -438,22 +409,21 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
                                                                  DiscretionaryReason discretionaryReason) {
-        SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem);
-        settlementDialog.addValuation().
-                addValuationType(claimItem.getValuationType4()).
-                addValuationPrice(1000).
-                ok().
-                fillNewPrice(3000).
-                setDiscountAndDepreciation(true).
-                fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(ANDEN_VURDERING).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason7());
-
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason7(), "Incorrect text discretionary reason");
-
-        SettlementPage.ClaimLine claimLine = settlementDialog.ok().findClaimLine(claimItem.getTextFieldSP());
-        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
-        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason7()), "Discretionary Reason Tooltip should be displayed");
+        createClaimAndFillSid(user, claim, claimItem)
+                .addValuation()
+                .addValuationType(claimItem.getValuationType4())
+                .addValuationPrice(1000)
+                .closeValuationDialogWithOk()
+                .fillNewPrice(3000)
+                .setDiscountAndDepreciation(true)
+                .fillDescription(claimItem.getTextFieldSP())
+                .selectValuation(ANDEN_VURDERING)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason7())
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason7())
+                .closeSidWithOk()
+                .findClaimLine(claimItem.getTextFieldSP())
+                .assertDiscretionaryPresent()
+                .assertTooltipPresent(discretionaryReason.getDiscretionaryReason7());
     }
 
     /**
@@ -476,57 +446,55 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                        Claim claim,
                                                                        ClaimItem claimItem,
                                                                        DiscretionaryReason discretionaryReason) {
-        SettlementDialog settlementDialog = createClaimAndFillSid(user, claim, claimItem);
-        settlementDialog.addValuation().
-                addValuationType(claimItem.getValuationType4()).
-                addValuationPrice(1000).
-                ok().
-                fillNewPrice(3000).
-                setDiscountAndDepreciation(false).
-                fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(ANDEN_VURDERING).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6());
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason6(), "Incorrect text discretionary reason");
+        createClaimAndFillSid(user, claim, claimItem)
+                .addValuation()
+                .addValuationType(claimItem.getValuationType4())
+                .addValuationPrice(1000)
+                .closeValuationDialogWithOk()
+                .fillNewPrice(3000)
+                .setDiscountAndDepreciation(false)
+                .fillDescription(claimItem.getTextFieldSP())
+                .selectValuation(ANDEN_VURDERING)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6())
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason6())
+                .closeSidWithOk()
+                .findClaimLine(claimItem.getTextFieldSP())
+                .assertDiscretionaryPresent()
+                .assertTooltipPresent(discretionaryReason.getDiscretionaryReason6())
+                .selectLine()
+                .saveClaim()
+                .getClaimMenu()
+                .logout();
 
-        SettlementPage settlementPage = settlementDialog.ok();
-
-        SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(claimItem.getTextFieldSP());
-        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
-        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason6()), "Discretionary Reason Tooltip should be displayed");
-
-        settlementPage.saveClaim().
-                getClaimMenu().
-                logout();
-        login(getSystemUser()).
-                getMainMenu().
-                toAdminPage();
+        login(getSystemUser())
+                .getMainMenu()
+                .toAdminPage();
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
-        functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class,
-                disable(FTSetting.SHOW_DISCREATIONARY_REASON)).
-                getClaimMenu().
-                logout();
-        login(user);
+        functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class, disable(FTSetting.SHOW_DISCREATIONARY_REASON))
+                .getClaimMenu()
+                .logout();
 
-        settlementPage = new MyPage().openRecentClaim().reopenClaim();
-
-        claimLine = settlementPage.findClaimLine(claimItem.getTextFieldSP());
-        assertTrue(claimLine.isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
-        assertTrue(claimLine.isTooltipPresent(discretionaryReason.getDiscretionaryReason6()), "Discretionary Reason Tooltip should be displayed");
-        assertFalse(claimLine.editLine().isDiscretionaryReasonVisible(), "Discretionary Reason should not be shown");
+        login(user, MyPage.class)
+                .openRecentClaim()
+                .reopenClaim()
+                .findClaimLine(claimItem.getTextFieldSP())
+                .assertDiscretionaryPresent()
+                .assertTooltipPresent(discretionaryReason.getDiscretionaryReason6())
+                .editLine()
+                .assertDiscretionaryReasonInvisible();
     }
 
 
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
-        String month = "6 ";
-        return loginAndCreateClaim(user, claim).
-                addManually().
-                fillCategory(claimItem.getExistingCat4()).
-                fillSubCategory(claimItem.getExistingSubCat4()).
-                fillCustomerDemand(1000).
-                enableAge().
-                selectMonth(month + claimItem.getMonths()).
-                selectDepreciationType(1).
-                fillDepreciation(5);
+        return loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getExistingCat4())
+                .fillSubCategory(claimItem.getExistingSubCat4())
+                .fillCustomerDemand(1000)
+                .enableAge()
+                .selectMonth("6")
+                .selectDepreciationType(1)
+                .fillDepreciation(5);
     }
 
 }

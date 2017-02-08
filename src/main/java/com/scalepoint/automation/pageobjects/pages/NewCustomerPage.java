@@ -58,7 +58,6 @@ public class NewCustomerPage extends Page {
     }
 
     public NewCustomerPage enterTitle(String titleName) {
-        Wait.waitForPageLoaded();
         title.enter(titleName);
         return this;
     }

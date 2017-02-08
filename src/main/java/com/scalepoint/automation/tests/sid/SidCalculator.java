@@ -2,13 +2,13 @@ package com.scalepoint.automation.tests.sid;
 
 class SidCalculator {
 
-    public static PriceValuation calculatePriceValuation(int price, int depreciationPercentage) {
+    static PriceValuation calculatePriceValuation(int price, int depreciationPercentage) {
         double depreciation = price * ((double)depreciationPercentage) / 100;
         double cashCompensation = price - depreciation;
         return new PriceValuation(cashCompensation, depreciation);
     }
 
-    public static VoucherValuation calculateVoucherValuation(double price, int voucherDiscount, int depreciationPercentage) {
+    static VoucherValuation calculateVoucherValuation(double price, int voucherDiscount, int depreciationPercentage) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashCompensationOfVoucher = price - discountedAmountByVoucher;
         double depreciatedAmount = (cashCompensationOfVoucher*depreciationPercentage)/100;
@@ -17,7 +17,7 @@ class SidCalculator {
         return new VoucherValuation(cashCompensationOfVoucher, discountedAmountByVoucher, cashCompensationWithDepreciation, depreciatedAmount);
     }
 
-    public static ValuationWithReduction calculatePriceValuationWithReduction(double price, double depreciationPercentage, int reductionPercentage) {
+    static ValuationWithReduction calculatePriceValuationWithReduction(double price, double depreciationPercentage, int reductionPercentage) {
         double depreciation = price * depreciationPercentage / 100;
         double cashCompensation = price - depreciation;
         double reduction = price * reductionPercentage/100;
@@ -80,7 +80,7 @@ class SidCalculator {
         private double cashCompensationWithDepreciation;
         private double depreciatedAmount;
 
-        public VoucherValuation(double cashCompensationOfVoucher, double discountedAmountByVoucher, double cashCompensationWithDepreciation, double depreciatedAmount) {
+        VoucherValuation(double cashCompensationOfVoucher, double discountedAmountByVoucher, double cashCompensationWithDepreciation, double depreciatedAmount) {
             this.cashCompensationOfVoucher = cashCompensationOfVoucher;
             this.discountedAmountByVoucher = discountedAmountByVoucher;
             this.cashCompensationWithDepreciation = cashCompensationWithDepreciation;

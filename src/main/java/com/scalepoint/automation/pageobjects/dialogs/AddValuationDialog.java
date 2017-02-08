@@ -36,7 +36,7 @@ public class AddValuationDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementDialog ok() {
+    public SettlementDialog closeValuationDialogWithOk() {
         ok.click();
         return at(SettlementDialog.class);
 

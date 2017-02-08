@@ -4,8 +4,10 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.exception.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.CurrentUser;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -13,6 +15,7 @@ import org.apache.http.client.fluent.Executor;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Driver;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.utils.Http.*;
 
+@SuppressWarnings("ConstantConditions")
 public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
@@ -37,14 +41,19 @@ public class ClaimApi extends AuthenticationApi {
         super(executor);
     }
 
-    public void createClaim(Claim claim) {
-        createClaim(claim, 0);
+    public void createClaim(Claim claim, String policyType) {
+        createClaim(claim, 0, policyType);
     }
-    private void createClaim(Claim claim, int attempt) {
+
+    public void createClaim(Claim claim) {
+        createClaim(claim, 0, null);
+    }
+
+    private void createClaim(Claim claim, int attempt, String policyType) {
         log.info("Create client: " + claim.getClaimNumber());
 
         List<NameValuePair> clientParams = ParamsBuilder.create().
-                add("policytype", claim.getPolicyTypeFF()).
+                add("policytype", policyType).
                 add("damageDate", new SimpleDateFormat(DATE_FORMAT).format(new Date())).
                 add("last_name", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
@@ -63,25 +72,14 @@ public class ClaimApi extends AuthenticationApi {
             log.info("CreateUser redirected to: " + location);
             log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
-            if (location != null && !location.getValue().endsWith("/")) {
-                String leaveCaseRedirectUrl = location.getValue() + Page.getUrl(SettlementPage.class);
-                log.info("Leaving the case: " + leaveCaseRedirectUrl);
-                String query = new URL(leaveCaseRedirectUrl).getQuery();
-                log.info("Extracted query: " + query);
-                String saveCustomerJsp = URL_SAVE_CUSTOMER_PAGE + query+"&policytype="+claim.getPolicyType();
-                log.info("To saveCustomer.jsp: " + saveCustomerJsp);
+            String claimId = location.getValue().replaceAll("[^\\d]+", "");
+            CurrentUser.setClaimId(claimId);
 
-                String content = get(saveCustomerJsp, executor).returnContent().asString();
-                String saveCustomerUrl = Configuration.getEccUrl() + extractUrl(content);
-                log.info("To SaveCustomer: " + saveCustomerUrl);
-
-                HttpResponse saveCustomerResponse = get(saveCustomerUrl, executor).returnResponse();
-                ensure200Code(saveCustomerResponse.getStatusLine().getStatusCode());
-            }
+            Browser.driver().get(location.getValue() + "settlement.jsp");
         } catch (IOException e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {
-                createClaim(claim, ++attempt);
+                createClaim(claim, ++attempt, policyType);
             } else {
                 throw new ServerApiException(e);
             }
@@ -102,4 +100,6 @@ public class ClaimApi extends AuthenticationApi {
         }
         return url;
     }
+
+
 }

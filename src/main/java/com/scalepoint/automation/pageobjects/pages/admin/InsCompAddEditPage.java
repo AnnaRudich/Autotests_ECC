@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.waitForStableElement;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
@@ -73,7 +73,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     }
 
     public void selectSaveOption() {
-        waitForStableElement(By.id("btnOk"));
+        waitForStaleElement(By.id("btnOk"));
         clickAndWaitForDisplaying(saveButton, By.id("btnAdd"));
     }
 

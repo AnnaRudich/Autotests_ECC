@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -57,5 +58,10 @@ public class InsCompaniesPage extends AdminBasePage {
         companies.selectByVisibleText(icName);
         selectEditOption();
         return at(InsCompAddEditPage.class);
+    }
+
+    public InsCompaniesPage assertCompanyDisplayed(InsuranceCompany insuranceCompany) {
+        Assert.assertTrue(isCompanyDisplayed(insuranceCompany));
+        return this;
     }
 }

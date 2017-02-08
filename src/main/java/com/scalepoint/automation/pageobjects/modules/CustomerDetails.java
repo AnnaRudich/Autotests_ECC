@@ -13,7 +13,7 @@ public class CustomerDetails extends Module {
     private WebElement depreciation;
 
     @FindBy(xpath = "//td[4][contains(@class,'rejected-text')]")
-    private WebElement faceValue;
+    private WebElement voucherValue;
 
     @FindBy(xpath = "//td[contains(@class,'rejected-text')]//img")
     private WebElement iconToolTip;
@@ -23,8 +23,8 @@ public class CustomerDetails extends Module {
         return OperationalUtils.getDoubleValue(value);
     }
 
-    public Double getFaceValue() {
-        String value = faceValue.getText().replaceAll("[^0-9.,]+", "");
+    public Double getVoucherValue() {
+        String value = voucherValue.getText().replaceAll("[^0-9.,]+", "");
         return OperationalUtils.getDoubleValue(value);
     }
 

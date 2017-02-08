@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.EditCustomerNoteDialog;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,7 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 @EccPage
+@ClaimSpecificPage
 public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelpers {
 
     @FindBy(id = "btnEditCustomerNote")

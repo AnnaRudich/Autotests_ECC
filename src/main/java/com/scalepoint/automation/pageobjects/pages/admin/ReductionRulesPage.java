@@ -11,6 +11,9 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 @EccPage
 public class ReductionRulesPage extends AdminBasePage {
 
@@ -103,5 +106,15 @@ public class ReductionRulesPage extends AdminBasePage {
                 break;
             }
         }
+    }
+
+    public ReductionRulesPage assertRuleDisplayed(ReductionRule rule) {
+        assertTrue(isRuleDisplayed(rule));
+        return this;
+    }
+
+    public ReductionRulesPage assertRuleNotDisplayed(ReductionRule rule) {
+        assertFalse(isRuleDisplayed(rule));
+        return this;
     }
 }

@@ -80,7 +80,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
     public RnvCommunicationPage sendTextMailToSePa(String textMsg) {
         sendKeys(mailTextField, textMsg);
         sendBtn.click();
-        Wait.For(new Function<WebDriver, Object>() {
+        Wait.forCondition(new Function<WebDriver, Object>() {
             @Nullable
             @Override
             public Object apply(@Nullable WebDriver webDriver) {

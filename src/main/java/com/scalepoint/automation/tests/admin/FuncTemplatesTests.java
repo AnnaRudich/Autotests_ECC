@@ -13,10 +13,7 @@ public class FuncTemplatesTests extends BaseTest {
     @Test(description = "CHARLIE-555 It's possible to create new ME_FT. New ME_FT is displayed in ME_FT list")
     public void charlie555_createNewFt() {
         String ftName = "CHARLIE-555-" + System.currentTimeMillis();
-        boolean containsTemplate = createNewTemplate(ftName).
-                containsTemplate(ftName);
-
-        Assert.assertTrue(containsTemplate, "Template is not found");
+        createNewTemplate(ftName).assertTemplateExists(ftName);
     }
 
     @Test(description = "CHARLIE-555 It's possible to delete new ME_FT. New ME_FT is not displayed in ME_FT list")
@@ -30,12 +27,10 @@ public class FuncTemplatesTests extends BaseTest {
     public void charlie555_editFt() {
         String ftName = "CHARLIE-555-" + System.currentTimeMillis();
         String ftNameUpdated = "CHARLIE-555-U-" + System.currentTimeMillis();
-        boolean containsTemplate = createNewTemplate(ftName).
-                editTemplate(ftName).
-                setName(ftNameUpdated).
-                saveTemplate().
-                containsTemplate(ftNameUpdated);
-        Assert.assertTrue(containsTemplate, "Template is not found");
+        createNewTemplate(ftName).editTemplate(ftName)
+                .setName(ftNameUpdated)
+                .saveTemplate()
+                .assertTemplateExists(ftNameUpdated);
     }
 
     private FunctionalTemplatesPage createNewTemplate(String ftName) {

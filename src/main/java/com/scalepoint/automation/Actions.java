@@ -14,10 +14,12 @@ import org.openqa.selenium.support.ui.FluentWait;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public interface Actions {
 
     default boolean openDialog(WebElement openButton) {
-        return Window.get().openDialog(openButton);
+        return Window.get().openDialog($(openButton));
     }
 
     default void openDialogWithJavascriptHelper(WebElement openButton) {
@@ -127,7 +129,7 @@ public interface Actions {
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
         element.click();
-        Wait.waitForElementDisplaying(byWaitForElement);
+        Wait.waitForDisplayed(byWaitForElement);
     }
 
     default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
@@ -136,13 +138,13 @@ public interface Actions {
 
     default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
         element.click();
-        Wait.waitForElementEnabling(byEnabledElement);
+        Wait.waitForEnabled(byEnabledElement);
     }
 
 
     default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
         element.click();
-        Wait.waitForStableElement(byWaitForElement);
+        Wait.waitForStaleElement(byWaitForElement);
     }
 
     default void clickAndWaitForStable(By element, By byWaitForElement) {
@@ -216,7 +218,7 @@ public interface Actions {
         for (int i = 1; i <= params.length; i++) {
             xpath = xpath.replace("$" + i, params[i - 1]);
         }
-        return Wait.waitForElementDisplaying(By.xpath(xpath)); //find(By.xpath(xpath));
+        return Wait.waitForDisplayed(By.xpath(xpath)); //find(By.xpath(xpath));
     }
 
     default void setValue(WebElement element, String value) {

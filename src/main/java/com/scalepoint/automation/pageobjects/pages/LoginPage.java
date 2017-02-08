@@ -55,7 +55,7 @@ public class LoginPage extends Page {
     }
 
     public <T extends Page> T login(String userLogin, String userPassword, Class<T> pageClass) {
-        Wait.waitForElement(By.id("j_username"));
+        Wait.waitForDisplayed(By.id("j_username"));
         username.sendKeys(userLogin);
         password.sendKeys(userPassword);
         loginButton.click();
@@ -69,7 +69,7 @@ public class LoginPage extends Page {
 
     private boolean isLoginErrorPresent() {
         try {
-            Wait.For((Function<WebDriver, Object>) webDriver -> {
+            Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
                 try {
                     driver.findElement(By.id("loginError"));
                     return true;

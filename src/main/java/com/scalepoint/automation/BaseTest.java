@@ -1,8 +1,8 @@
 package com.scalepoint.automation;
 
 import com.codeborne.selenide.WebDriverRunner;
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.EditPolicyDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
@@ -15,8 +15,8 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.spring.Application;
+import com.scalepoint.automation.utils.CurrentUser;
 import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.Window;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
@@ -35,11 +35,9 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.env.Environment;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -61,7 +59,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static org.testng.Assert.assertEquals;
 
 @SpringApplicationConfiguration(classes = Application.class)
@@ -107,12 +104,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         String dllName = "jacob-1.14.3-x64.dll";
         File temp = new File(new File(System.getProperty("java.io.tmpdir")), dllName);
         if (!temp.exists()) {
-            try (InputStream in = BaseTest.class.getClassLoader().getResourceAsStream("dll/"+dllName);
+            try (InputStream in = BaseTest.class.getClassLoader().getResourceAsStream("dll/" + dllName);
                  FileOutputStream fos = new FileOutputStream(temp)) {
                 IOUtils.copy(in, fos);
             }
         }
-        logger.info("Jacob dll will be loaded from: "+temp.getAbsolutePath());
+        logger.info("Jacob dll will be loaded from: " + temp.getAbsolutePath());
         System.load(temp.getAbsolutePath());
     }
 
@@ -133,18 +130,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Page.to(LoginPage.class);
 
         ClaimApi claimApi = new ClaimApi(user);
-        claimApi.createClaim(claim);
-
-        Page.toWithNoAt(SettlementPage.class);
-
-        try {
-            Wait.For((Function<WebDriver, Object>) webDriver -> {
-                assert webDriver != null;
-                return webDriver.getWindowHandles().size() > 1;
-            }, 5, 1000);
-            processPolicyType(policyType);
-        } catch (Exception ignored) {
-        }
+        claimApi.createClaim(claim, policyType);
 
         return Page.at(SettlementPage.class);
     }
@@ -154,7 +140,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     private void processPolicyType(String policyType) {
-        EditPolicyDialog editPolicyDialog = at(EditPolicyDialog.class);
+        EditPolicyDialog editPolicyDialog = BaseDialog.at(EditPolicyDialog.class);
         if (policyType == null) {
             editPolicyDialog.chooseAny();
         } else {
@@ -170,6 +156,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected <T extends Page> T login(User user, Class<T> returnPageClass) {
         Page.to(LoginPage.class);
         return AuthenticationApi.createServerApi().login(user, returnPageClass);
+    }
+
+    protected <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
+        Page.to(LoginPage.class);
+        return AuthenticationApi.createServerApi().login(user, returnPageClass, parameters);
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
@@ -227,36 +218,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             }
         }
         User user = UsersManager.takeUser(companyCode);
-        CurrentUser.set(user);
+        CurrentUser.setUser(user);
         return user;
     }
-
-    private static class CurrentUser {
-        private static ThreadLocal<User> holder = new ThreadLocal<>();
-
-        public static void set(User user) {
-            holder.set(user);
-        }
-
-        public static User get() {
-            return holder.get();
-        }
-
-        static void cleanUp() {
-            if (get() != null) {
-                UsersManager.returnUser(get());
-            }
-            holder.remove();
-        }
-    }
-
-    protected void assertEqualsDouble(Double actualAmount, Double expectedAmount, String message) {
-        String actual = toString(actualAmount);
-        String expected = toString(expectedAmount);
-        assertEquals(actual, expected, String.format(message, actualAmount, expectedAmount));
-    }
-
-    protected String toString(Double actualAmount) {
-        return String.format("%.2f", actualAmount);
-    }
 }
+
+

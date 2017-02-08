@@ -114,8 +114,12 @@ public class ShopProductSearchPage extends ShopFlow {
 
     public ShopProductSearchPage addProductToCart(Integer n) {
         addToCartButton.get(n).click();
-        Wait.waitForElementDisplaying(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
+        Wait.waitForDisplayed(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
         return this;
+    }
+
+    public ShopShoppingCartPage toShoppingCart() {
+        return getAccountBox().toShoppingCart();
     }
 
     public void viewProductDetails(Integer n) {

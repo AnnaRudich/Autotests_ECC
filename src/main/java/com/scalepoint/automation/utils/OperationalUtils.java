@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+import static org.testng.Assert.assertEquals;
+
 public class OperationalUtils {
 
     public static Double toNumber(String s) {
@@ -55,6 +57,16 @@ public class OperationalUtils {
 
     public static String unifyStr(String string) {
         return string.trim().toLowerCase().replaceAll("[-\\s+/,]", "");
+    }
+
+    public static void assertEqualsDouble(Double actualAmount, Double expectedAmount, String message) {
+        String actual = toString(actualAmount);
+        String expected = toString(expectedAmount);
+        assertEquals(actual, expected, String.format(message, actualAmount, expectedAmount));
+    }
+
+    public static String toString(Double actualAmount) {
+        return String.format("%.2f", actualAmount);
     }
 }
 

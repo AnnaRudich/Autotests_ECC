@@ -10,7 +10,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.Browser;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -25,11 +24,11 @@ public class BasicTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void charlie544_reopenSavedClaim(User user, Claim claim) {
-        loginAndCreateClaim(user, claim).
-                saveClaim().
-                openRecentClaim().
-                reopenClaim().
-                assertSettlementPagePresent("Settlement page is not loaded");
+        loginAndCreateClaim(user, claim)
+                .saveClaim()
+                .openRecentClaim()
+                .reopenClaim()
+                .assertSettlementPagePresent("Settlement page is not loaded");
     }
 
     /**
@@ -40,47 +39,45 @@ public class BasicTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
-        boolean recentClaimCancelled = loginAndCreateClaim(user, claim).
-                saveClaim().
-                openRecentClaim().
-                cancelClaim().
-                to(MyPage.class).
-                isRecentClaimCancelled();
-        Assert.assertTrue(recentClaimCancelled);
+        loginAndCreateClaim(user, claim)
+                .saveClaim()
+                .openRecentClaim()
+                .cancelClaim()
+                .to(MyPage.class)
+                .assertRecentClaimCancelled();
     }
 
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void charlie544_2629_completeClaimWithMail(User user, Claim claim) {
-        loginAndCreateClaim(user, claim).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                completeWithEmail().
-                assertClaimHasStatus(claim.getStatusCompleted());
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail()
+                .assertClaimHasStatus(claim.getStatusCompleted());
     }
 
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
-        loginAndCreateClaim(user, claim).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                completeWithoutEmail().
-                assertClaimHasStatus(claim.getStatusClosedEx());
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithoutEmail()
+                .assertClaimHasStatus(claim.getStatusClosedEx());
     }
 
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to save claim without completing from Enter base info page. " +
                     "Saved claim is added to the latest claims list with Saved status")
     public void charlie544_saveClaimFromBaseInfo(User user, Claim claim) {
-
-        loginAndCreateClaim(user, claim).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                saveClaim().
-                assertClaimHasStatus(claim.getStatusSaved());
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .saveClaim()
+                .assertClaimHasStatus(claim.getStatusSaved());
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -90,14 +87,13 @@ public class BasicTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
         String password = "12341234";
-
-        loginAndCreateClaim(user, claim).
-                requestSelfService(claim, password).
-                toMailsPage().
-                viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME).
-                findSelfServiceLinkAndOpenIt().
-                enterPassword(password).
-                login();
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, password)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceLinkAndOpenIt()
+                .enterPassword(password)
+                .login();
     }
 
 
@@ -105,23 +101,24 @@ public class BasicTests extends BaseTest {
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_not_possible_login_to_cancelled_claim(User user, Claim claim) {
         String password = "12341234";
+        CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail()
+                .openRecentClaim();
 
-        CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                completeWithEmail().
-                openRecentClaim();
-        String loginToShopLink = customerDetailsPage.
-                toMailsPage().
-                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
-                findLoginToShopLink();
+        String loginToShopLink = customerDetailsPage
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
+                .findLoginToShopLink();
 
         customerDetailsPage.toCustomerDetails().cancelClaim();
 
         Browser.driver().get(loginToShopLink);
-        Page.at(LoginShopPage.class).
-                enterPassword(password).
-                loginWithFail();
+
+        Page.at(LoginShopPage.class)
+                .enterPassword(password)
+                .loginWithFail();
     }
 
     @Bug(bug = "CHARLIE-479")
@@ -135,49 +132,50 @@ public class BasicTests extends BaseTest {
         String customerNote = "Customer note!";
         String internalNote = "Internal note!";
 
-        loginAndCreateClaim(user, claim).
-                toNotesPage().
-                addCustomerNote(customerNote).
-                addInternalNote(internalNote).
-                assertCustomerNotePresent(customerNote).
-                assertInternalNotePresent(internalNote);
+
+
+        loginAndCreateClaim(user, claim)
+                .toNotesPage()
+                .addCustomerNote(customerNote)
+                .addInternalNote(internalNote)
+                .assertCustomerNotePresent(customerNote)
+                .assertInternalNotePresent(internalNote);
 
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
         functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class,
                 disable(FTSetting.USE_INTERNAL_NOTES),
                 disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
-                disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)).
-                assertEditCustomerNoteButtonPresent().
-                assertInternalNoteButtonNotPresent();
+                disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
+                .assertEditCustomerNoteButtonPresent()
+                .assertInternalNoteButtonNotPresent();
 
         functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class,
                 enable(FTSetting.USE_INTERNAL_NOTES),
                 enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
-                enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)).
-                assertEditCustomerNoteButtonPresent().
-                assertInternalNoteFieldsPresent();
+                enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
+                .assertEditCustomerNoteButtonPresent()
+                .assertInternalNoteFieldsPresent();
     }
 
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-2631 It's possible to matchFirst product via Quick matchFirst icon for Excel imported claim lines")
+            description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
     @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
     @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
-
         String claimLineDescription = claimItem.getSetDialogTextMatch();
 
-        loginAndCreateClaim(user, claim).
-                importExcelFile(claimItem.getExcelPath1()).
-                assertItemIsPresent(claimItem.getXlsDescr1()).
-                findClaimLine(claimLineDescription).
-                selectLine().
-                getToolBarMenu().
-                toProductMatchPage().
-                sortOrderableFirst().
-                match(claimLineDescription).
-                cancel(TextSearchPage.class);
+        loginAndCreateClaim(user, claim)
+                .importExcelFile(claimItem.getExcelPath1())
+                .assertItemIsPresent(claimItem.getXlsDescr1())
+                .findClaimLine(claimLineDescription)
+                .selectLine()
+                .getToolBarMenu()
+                .toProductMatchPage()
+                .sortOrderableFirst()
+                .match(claimLineDescription)
+                .cancel(TextSearchPage.class);
     }
 
     /**
@@ -189,18 +187,16 @@ public class BasicTests extends BaseTest {
             description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_2632_completeSPSimpleClaimWizard(User user, Claim claim, ClaimItem claimItem) {
-        boolean recentClaimCompleted = loginAndCreateClaim(user, claim).
-                addManually().
-                fillBaseData(claimItem).
-                ok().
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard().
-                completeClaimUsingCompPayment().
-                to(MyPage.class).
-                isRecentClaimCompleted();
-
-        Assert.assertTrue(recentClaimCompleted);
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .completeClaimUsingCompPayment()
+                .to(MyPage.class)
+                .assertClaimCompleted();
     }
 
     /**
@@ -211,25 +207,23 @@ public class BasicTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")
-    public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) throws Exception {
-        boolean recentClaimCompleted = loginAndCreateClaim(user, claim).
-                addManually().
-                fillBaseData(claimItem).
-                ok().
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard().
-                goToShop().
-                toProductSearchPage().
-                addProductToCart(1).
-                getAccountBox().
-                toShoppingCart().
-                toCashPayoutPage().
-                keepMoneyOnAccountAndProceed().
-                selectAgreeOption().
-                selectPlaceMyOrderOption().
-                to(MyPage.class).
-                isRecentClaimCompleted();
-        Assert.assertTrue(recentClaimCompleted);
+    public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .toProductSearchPage()
+                .addProductToCart(1)
+                .toShoppingCart()
+                .toCashPayoutPage()
+                .keepMoneyOnAccountAndProceed()
+                .selectAgreeOption()
+                .selectPlaceMyOrderOption()
+                .to(MyPage.class)
+                .assertClaimCompleted();
     }
 }

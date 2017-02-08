@@ -2,7 +2,6 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
-import com.scalepoint.automation.pageobjects.pages.admin.ReductionRulesPage;
 import com.scalepoint.automation.utils.data.entity.RRLinesFields;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import org.testng.Assert;
@@ -52,14 +51,13 @@ public class ReductionRulesTest extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationNoOverlapping(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("0", "1000", "1100", "3000").
-                save();
-
-        assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "1100", "3000")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
 
@@ -71,14 +69,13 @@ public class ReductionRulesTest extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationSamePriceRange(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("0", "1000", "0", "1000").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "0", "1000")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -89,13 +86,13 @@ public class ReductionRulesTest extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629, 635 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationSameAgeRange(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "1", "2").
-                fillPriceRangeForTwoLines("0", "1000", "1001", "3000").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "1", "2")
+                .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -106,13 +103,13 @@ public class ReductionRulesTest extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationAgeRangeOverlap(ReductionRule rule) throws Exception {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "3", "2", "4").
-                fillPriceRangeForTwoLines("0", "1000", "1001", "3000").
-                saveAndExpectSuccess();
-
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "3", "2", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
+                .saveAndExpectSuccess()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -123,13 +120,13 @@ public class ReductionRulesTest extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationPriceRangeOverlap(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("0", "1000", "500", "2000").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "500", "2000")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -139,12 +136,13 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationForMinToMaxPriceRange(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("0", " ", "0", " ").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("0", " ", "0", " ")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -154,13 +152,13 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationForMinToMaxPriceRangeOverlap(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("0", "1000", "0", " ").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "0", " ")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -170,17 +168,15 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyFailRRValidationForIncorrectAgeRange(ReductionRule rule) {
-        AddEditReductionRulePage editReductionRulePage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("2", "1", "3", "4").
-                fillPriceRangeForTwoLines("0", " ", "0", " ").
-                saveAndExpectWarning();
-        Assert.assertNotNull(editReductionRulePage.getDescriptionColumnHeader());
-        boolean newRRDisplayed = editReductionRulePage.
-                cancel().
-                searchRule(rule).
-                isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("2", "1", "3", "4")
+                .fillPriceRangeForTwoLines("0", " ", "0", " ")
+                .saveAndExpectWarning()
+                .assertDescriptionColumnHeaderPresent()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     /**
@@ -190,18 +186,15 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyFailRRValidationForIncorrectPriceRange(ReductionRule rule) {
-        AddEditReductionRulePage editReductionRulePage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("2000", "1000", "1001", "2000").
-                saveAndExpectWarning();
-        Assert.assertNotNull(editReductionRulePage.getDescriptionColumnHeader());
-
-        boolean newRRDisplayed = editReductionRulePage.
-                cancel().
-                searchRule(rule).
-                isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("2000", "1000", "1001", "2000")
+                .saveAndExpectWarning()
+                .assertDescriptionColumnHeaderPresent()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     /**
@@ -211,17 +204,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationDocumentationDiffersSameAge(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "1", "2").
-                fillPriceRangeForTwoLines("0", "1000", "500", "3000").
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                save();
-
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "1", "2")
+                .fillPriceRangeForTwoLines("0", "1000", "500", "3000")
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -231,14 +223,14 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationDocumentationDiffersSamePrice(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "3", "4").
-                fillPriceRangeForTwoLines("0", "1000", "0", "1000").
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "3", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "0", "1000")
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -248,17 +240,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationRatingDiffersSameAge(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "2", "1", "2").
-                fillPriceRangeForTwoLines("0", "1000", "0", " ").
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                save();
-
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "2", "1", "2")
+                .fillPriceRangeForTwoLines("0", "1000", "0", " ")
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -268,17 +259,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationRatingDiffersOverlapPriceAge(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("1", "3", "2", "4").
-                fillPriceRangeForTwoLines("0", "1000", "0", " ").
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                saveAndExpectSuccess();
-
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("1", "3", "2", "4")
+                .fillPriceRangeForTwoLines("0", "1000", "0", " ")
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .saveAndExpectSuccess()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -288,27 +278,26 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyFailRRValidationThreeLinesOverlap(ReductionRule rule) {
-        boolean newRRDisplayed = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillDescriptionForLine(2, description).
-                fillClaimReductionForLine(2, "32").
-                fillAgeRangeForLine(0, "1", "2").
-                fillAgeRangeForLine(1, "1", "2").
-                fillAgeRangeForLine(2, "1", "2").
-                fillPriceRangeForLine(0, "0", "1000").
-                fillPriceRangeForLine(1, "0", "1000").
-                fillPriceRangeForLine(2, "1000", "2000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectDocumentationDropValue(2, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, red).
-                selectRatingDropValue(2, green).
-                saveAndExpectWarning().
-                cancel().
-                searchRule(rule).isRuleDisplayed(rule);
-
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillDescriptionForLine(2, description)
+                .fillClaimReductionForLine(2, "32")
+                .fillAgeRangeForLine(0, "1", "2")
+                .fillAgeRangeForLine(1, "1", "2")
+                .fillAgeRangeForLine(2, "1", "2")
+                .fillPriceRangeForLine(0, "0", "1000")
+                .fillPriceRangeForLine(1, "0", "1000")
+                .fillPriceRangeForLine(2, "1000", "2000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectDocumentationDropValue(2, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, red)
+                .selectRatingDropValue(2, green)
+                .saveAndExpectWarning()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
 
@@ -319,9 +308,9 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRDocumentationComboboxValues() {
-        String[] expectedDocumentationCombobox = {undefined, sufficientDocumentation, insufficient};
-        String[] comboboxValues = toNewReductionRulePage().readDocumentationComboboxValues();
-        assertEquals(comboboxValues, expectedDocumentationCombobox);
+        String[] expectedDocumentationComboboxValues = {undefined, sufficientDocumentation, insufficient};
+        toNewReductionRulePage()
+                .assertDocumentationComboboxValuesAre(expectedDocumentationComboboxValues);
     }
 
     /**
@@ -331,9 +320,9 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRRatingComboboxValues() {
-        String[] expectedRatingCombobox = {undefined, green, yellow, red};
-        String[] actualRatingCombobox = toNewReductionRulePage().readRatingComboboxValues();
-        assertEquals(expectedRatingCombobox, actualRatingCombobox);
+        String[] expectedRatingComboboxValues = {undefined, green, yellow, red};
+        toNewReductionRulePage()
+                .assertRatingComboboxValuesAre(expectedRatingComboboxValues);
     }
 
     /**
@@ -343,15 +332,14 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyFailRRValidationDuplicatedLines(ReductionRule rule) {
-        boolean newRRDisplayed = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "200", "100", "200").
-                saveAndExpectWarning().
-                cancel().
-                searchRule(rule).
-                isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "200", "100", "200")
+                .saveAndExpectWarning()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     /**
@@ -361,17 +349,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyFailRRValidationDocumentationAndRatingOverlap(ReductionRule rule) {
-        boolean newRRDisplayed = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "200", "100", "200").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectRatingDropValue(1, green).
-                saveAndExpectWarning().
-                cancel().
-                searchRule(rule).
-                isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "200", "100", "200")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectRatingDropValue(1, green)
+                .saveAndExpectWarning()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     /**
@@ -381,18 +368,17 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyFailRRValidationSameRatingDocumentationOverlap(ReductionRule rule) {
-        boolean newRRDisplayed = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, green).
-                saveAndExpectWarning().
-                cancel().
-                searchRule(rule).
-                isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, green)
+                .saveAndExpectWarning()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     /**
@@ -402,15 +388,15 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyFailRRValidationSameDocumentationRatingOverlap(ReductionRule rule) {
-        boolean newRRDisplayed = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectRatingDropValue(1, green).
-                saveAndExpectWarning().
-                cancel().
-                searchRule(rule).isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectRatingDropValue(1, green)
+                .saveAndExpectWarning()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     /**
@@ -420,16 +406,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationRatingDiffersDocumentationOverlap(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -439,16 +425,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationDocumentationDiffersRatingOverlap(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, insufficient).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, insufficient)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -458,17 +444,17 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationRatingAndDocumentationDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, insufficient).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, insufficient)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -478,17 +464,17 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSameRatingAndDocumentationDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, insufficient).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, insufficient)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -498,16 +484,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSameRatingAndAgeDocumentationOverlapPriceRangeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "1001", "2000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "1001", "2000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -517,13 +503,13 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSameRatingAndAgeAndDocumentationButPriceRangeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("0", "1000", "1001", "3000").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -533,15 +519,15 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSameAgeOverlapDocumentationAndRatingButPriceRangeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("0", "1000", "1001", "3000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("0", "1000", "1001", "3000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -551,16 +537,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSameRatingAndPriceRangeAndDocumentationOverlapButAgeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "13", "24").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "13", "24")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -570,17 +556,17 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSamePriceAndDocumentationAndRatingButAgeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "13", "24").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "13", "24")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -590,16 +576,16 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSamePriceAndDocumentationOverlapButRatingAndAgeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "13", "24").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(1, sufficientDocumentation).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "13", "24")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(1, sufficientDocumentation)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -609,16 +595,17 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSamePriceButDocumentationAndRatingAndAgeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "13", "24").
-                fillPriceRangeForTwoLines("100", "1000", "100", "1000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, insufficient).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, yellow).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "13", "24")
+                .fillPriceRangeForTwoLines("100", "1000", "100", "1000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, insufficient)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, yellow)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -628,19 +615,19 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationThreeLinesSamePriceAndDocumentationAndRatingButAgeDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillDescriptionForLine(2, description).
-                fillClaimReductionForLine(2, "32").
-                fillAgeRangeForLine(0, "1", "12").
-                fillAgeRangeForLine(1, "13", "24").
-                fillAgeRangeForLine(2, "25", "32").
-                fillPriceRangeForLine(0, "0", "1000").
-                fillPriceRangeForLine(1, "0", "1000").
-                fillPriceRangeForLine(2, "0", "1000").
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillDescriptionForLine(2, description)
+                .fillClaimReductionForLine(2, "32")
+                .fillAgeRangeForLine(0, "1", "12")
+                .fillAgeRangeForLine(1, "13", "24")
+                .fillAgeRangeForLine(2, "25", "32")
+                .fillPriceRangeForLine(0, "0", "1000")
+                .fillPriceRangeForLine(1, "0", "1000")
+                .fillPriceRangeForLine(2, "0", "1000")
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -650,17 +637,17 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyAddRRValidationSameAgeAndRatingPriceRangeOverlapButDocumentationDiffers(ReductionRule rule) {
-        ReductionRulesPage rulesPage = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillAgeRangeForTwoLines("0", "12", "0", "12").
-                fillPriceRangeForTwoLines("100", "1000", "500", "4000").
-                selectDocumentationDropValue(0, sufficientDocumentation).
-                selectDocumentationDropValue(1, insufficient).
-                selectRatingDropValue(0, green).
-                selectRatingDropValue(1, green).
-                save();
-        Assert.assertTrue(rulesPage.isRuleDisplayed(rule));
-        rulesPage.deleteRule(rule);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillAgeRangeForTwoLines("0", "12", "0", "12")
+                .fillPriceRangeForTwoLines("100", "1000", "500", "4000")
+                .selectDocumentationDropValue(0, sufficientDocumentation)
+                .selectDocumentationDropValue(1, insufficient)
+                .selectRatingDropValue(0, green)
+                .selectRatingDropValue(1, green)
+                .save()
+                .assertRuleDisplayed(rule)
+                .deleteRule(rule);
     }
 
     /**
@@ -670,21 +657,20 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECCD-635 Extend reduction rule line with Documentation and Claimant rating fields")
     public void ecc3951_verifyFailRRValidationThreeLinesSameAgeAndRatingAndDocumentationButPriceRangeOverlap(ReductionRule rule) {
-        boolean newRRDisplayed = toNewReductionRulePage().
-                fillGeneralForTwoLines(rule).
-                fillDescriptionForLine(2, description).
-                fillClaimReductionForLine(2, "32").
-                fillAgeRangeForLine(0, "0", "12").
-                fillAgeRangeForLine(1, "0", "12").
-                fillAgeRangeForLine(2, "0", "12").
-                fillPriceRangeForLine(0, "100", "1000").
-                fillPriceRangeForLine(1, "500", "4000").
-                fillPriceRangeForLine(2, "4100", "6000").
-                saveAndExpectWarning().
-                cancel().
-                searchRule(rule).
-                isRuleDisplayed(rule);
-        assertFalse(newRRDisplayed);
+        toNewReductionRulePage()
+                .fillGeneralForTwoLines(rule)
+                .fillDescriptionForLine(2, description)
+                .fillClaimReductionForLine(2, "32")
+                .fillAgeRangeForLine(0, "0", "12")
+                .fillAgeRangeForLine(1, "0", "12")
+                .fillAgeRangeForLine(2, "0", "12")
+                .fillPriceRangeForLine(0, "100", "1000")
+                .fillPriceRangeForLine(1, "500", "4000")
+                .fillPriceRangeForLine(2, "4100", "6000")
+                .saveAndExpectWarning()
+                .cancel()
+                .searchRule(rule)
+                .assertRuleNotDisplayed(rule);
     }
 
     private AddEditReductionRulePage toNewReductionRulePage() {

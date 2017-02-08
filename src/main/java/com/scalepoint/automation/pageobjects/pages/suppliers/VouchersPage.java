@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
@@ -53,12 +54,12 @@ public class VouchersPage extends BaseEccAdminNavigation {
     public void openNewVoucherForEditing(Voucher voucher) {
         find(By.xpath("//input[contains(@class,'voucherListSearchField')]")).click();
         makeVouchersSearch(voucher.getVoucherNameSP());
-        List<WebElement> elements = Wait.waitForStableElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
+        List<WebElement> elements = Wait.waitForStaleElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
         for (WebElement item : elements) {
             if (item.getText().contains(voucher.getVoucherNameSP())) {
                 scrollTo(item);
                 doubleClick(item);
-                Wait.waitForElementDisplaying(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
+                Wait.waitForDisplayed(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
                 Wait.waitForAjaxCompleted();
                 break;
             }
@@ -81,7 +82,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
         vouchersSearchField.sendKeys(query);
         vouchersSearchField.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
-        Wait.waitForStableElements(By.xpath("id('vouchersGridId')"));
+        Wait.waitForStaleElements(By.xpath("id('vouchersGridId')"));
     }
 
     public boolean isVouchersListContainsNewVoucher(String voucherName) {
@@ -96,24 +97,24 @@ public class VouchersPage extends BaseEccAdminNavigation {
      * It waits for Categories tab element visibility to be confident that voucher is opened
      */
     public void openFirstVoucher() {
-        Wait.waitForStableElement(By.xpath("//div[1]/table/tbody/tr/td[2]/div"));
+        Wait.waitForStaleElement(By.xpath("//div[1]/table/tbody/tr/td[2]/div"));
         doubleClick(firstVoucherItem);
-        Wait.waitForStableElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
+        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
     }
 
     public String openRandomVoucher() {
-        Wait.waitForStableElements(By.xpath("id('vouchersGridId-body')//tr"));
+        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//tr"));
         WebElement voucher = allVouchersList.get(RandomUtils.randomInt(allVouchersList.size()));
         doubleClick(voucher);
-        Wait.waitForStableElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
+        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
         return getInputValue(find(By.xpath("//input[@name='voucherName']")));
     }
 
     public String openVoucherByCount(int count) {
-        Wait.waitForStableElements(By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr"));
+        Wait.waitForStaleElements(By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr"));
         WebElement voucher = allVouchersList.get(count);
         doubleClick(voucher);
-        Wait.waitForStableElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
+        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
         return getInputValue(find(By.name("voucherName")));
     }
 
@@ -135,7 +136,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
     public boolean isActiveOrExclFieldTickedVouchersList(Voucher voucher) {
         find(By.xpath("//input[contains(@id,'searchfield')]")).click();
         makeVouchersSearch(voucher.getVoucherNameSP());
-        Wait.waitForStableElements((By.xpath("id('vouchersGridId')")));
+        Wait.waitForStaleElements((By.xpath("id('vouchersGridId')")));
         String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherNameSP());
         try {
             WebElement item = find(By.xpath(xpath));
@@ -155,12 +156,19 @@ public class VouchersPage extends BaseEccAdminNavigation {
         return at(LoginPage.class);
     }
 
-    public boolean isToMeLinkDisplayed(){
+    private boolean isToMeLinkDisplayed(){
         try {
             return toMeLink.isDisplayed();
         } catch (Exception e) {
             return false;
         }
     }
+
+    public VouchersPage assertLinkToECCIsNotShown() {
+        Assert.assertFalse(isToMeLinkDisplayed());
+        return this;
+    }
+
+
 }
 

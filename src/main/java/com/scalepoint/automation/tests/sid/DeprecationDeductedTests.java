@@ -19,6 +19,8 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -49,76 +51,43 @@ public class DeprecationDeductedTests extends BaseTest {
     public void ecc3288_1_displayVoucherValueWithDeprecationDeductedOFF(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
 
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
-
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillDepreciation(claimItem.getDepAmount1_10()).
-                fillCategory(categoryInfo).
-                fillVoucher(voucher.getVoucherNameSP());
-
-        VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(claimItem.getNewPriceSP_2400(),
+        VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(
+                claimItem.getNewPriceSP_2400(),
                 voucher.getDiscount(),
                 claimItem.getDepAmount1_10());
-
         Double expectedCashValue = expectedCalculation.getCashCompensationOfVoucher();
-        Double expectedNewPrice = Double.valueOf(claimItem.getNewPriceSP_2400());
-
-        Double actualFaceValue = settlementDialog.voucherFaceValueFieldText();
-        Double actualCashValue = settlementDialog.voucherCashValueFieldText();
-
-        assertEqualsDouble(actualFaceValue, expectedNewPrice, "Face value should be equals to new price");
-        assertEqualsDouble(actualCashValue, expectedCashValue, "Voucher cash value should be equals to expectedCashValue");
-        settlementDialog.ok();
-
-        Double fetchedFaceTooltipValue = settlementPage.getFaceTooltipValue();
-        assertEqualsDouble(fetchedFaceTooltipValue, expectedNewPrice, "Face tooltip should be equals new Price");
-
+        Double expectedFaceValue = Double.valueOf(claimItem.getNewPriceSP_2400());
+        Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
         String password = "12341234";
 
-        ShopWelcomePage shopWelcomePage = settlementPage.
-                toCompleteClaimPage().
-                fillClaimFormWithPassword(claim, password).
-                completeWithEmail().
-                openRecentClaim().
-                toMailsPage().
-                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
-                findLoginToShopLinkAndOpenIt().
-                enterPassword(password).
-                login();
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillDescription(claimItem.getTextFieldSP())
+                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
+                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillDepreciation(claimItem.getDepAmount1_10())
+                .fillCategory(categoryInfo)
+                .fillVoucher(voucher.getVoucherNameSP())
+                .waitASecond()
+                .assertVoucherCashValueIs(expectedCashValue)
+                .assertVoucherFaceValueIs(expectedFaceValue)
+                .closeSidWithOk()
+                .assertFaceValueTooltipIs(expectedFaceValue)
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim, password)
+                .completeWithEmail()
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
+                .findLoginToShopLinkAndOpenIt()
+                .enterPassword(password)
+                .login()
+                .assertProductCashValueIs(expectedCashValue)
+                .assertProductFaceValueIs(expectedFaceValue)
+                .logout();
 
-        Double fetchedProductCashValue = shopWelcomePage.getProductCashValue();
-        Double fetchedProductFaceValue = shopWelcomePage.getProductFaceValue();
 
-        assertEqualsDouble(fetchedProductCashValue, expectedCashValue, "Voucher cash value should be equals to calculated expectedCashValue");
-        assertEqualsDouble(fetchedProductFaceValue, expectedNewPrice, "Voucher face value should be equals to entered new Price ");
-        shopWelcomePage.logout();
-
-        CustomerDetailsPage customerDetailsPage = login(user).openRecentClaim();
-        CustomerDetails customerDetails = customerDetailsPage.getCustomerDetails();
-        Double fetchedCustomerCashValue = customerDetails.getCashValue();
-        Double fetchedCustomerFaceTooltipValue = customerDetails.getFaceTooltipValue();
-
-        Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
-        assertEqualsDouble(fetchedCustomerCashValue, voucherValue, "Voucher cash value should be equals to expectedCashValue");
-        assertEqualsDouble(fetchedCustomerFaceTooltipValue, expectedNewPrice, "Voucher face value should be equals to new Price");
-
-        ReplacementDialog replacementDialog = customerDetailsPage.
-                reopenClaim().
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard();
-
-        Double fetchedReplacementDialogVoucherFaceValue = replacementDialog.getVoucherFaceValue();
-        Double fetchedReplacementDialogItemPriceValue = replacementDialog.getItemPriceValue();
-
-        assertEqualsDouble(fetchedReplacementDialogVoucherFaceValue, expectedNewPrice, "Voucher face value %s should be equals to new Price %s");
-
-        assertEqualsDouble(fetchedReplacementDialogItemPriceValue, expectedCashValue, "Voucher cash value %s should be equals to calculated %s");
-        replacementDialog.closeReplacementDialog();
+        checkReplacementWizard(user, claim, expectedCashValue, expectedFaceValue, voucherValue);
     }
 
     /**
@@ -143,76 +112,53 @@ public class DeprecationDeductedTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (on)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     public void ecc3288_2_displayVoucherValueWithDeprecationDeductedON(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog settlementDialog = settlementPage.
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getBigCustomDemandPrice()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillDepreciation(claimItem.getDepAmount1_10()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillVoucher(claimItem.getExistingVoucher1()).
-                waitASecond();
-
         VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(claimItem.getNewPriceSP_2400(), voucher.getDiscount(), claimItem.getDepAmount1_10());
 
-        Double calculatedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
-        Double calculatedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
-
-        Double faceValue = settlementDialog.voucherFaceValueFieldText();
-        Double cashValue = settlementDialog.voucherCashValueFieldText();
-
-        assertEqualsDouble(faceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new Price %s");
-        assertEqualsDouble(cashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
-
-        settlementDialog.ok();
-
-        Double fetchedFaceTooltipValue = settlementPage.getFaceTooltipValue();
-
-        assertEqualsDouble(fetchedFaceTooltipValue, calculatedFaceValue, "Tooltip face value %s should be equals to depreciated new price %s");
-
+        Double expectedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
+        Double expectedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
         String password = "12341234";
-        ShopWelcomePage shopWelcomePage = settlementPage.toCompleteClaimPage().
-                fillClaimFormWithPassword(claim, password).
-                completeWithEmail().
-                openRecentClaim().
-                toMailsPage().
-                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
-                findLoginToShopLinkAndOpenIt().
-                enterPassword(password).
-                login();
 
-        Double fetchedProductCashValue = shopWelcomePage.getProductCashValue();
-        Double fetchedProductFaceValue = shopWelcomePage.getProductFaceValue();
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillDescription(claimItem.getTextFieldSP())
+                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
+                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillDepreciation(claimItem.getDepAmount1_10())
+                .fillCategory(claimItem.getExistingCat1_Born())
+                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillVoucher(claimItem.getExistingVoucher1())
+                .waitASecond()
+                .assertVoucherCashValueIs(expectedCashValue)
+                .assertVoucherFaceValueIs(expectedFaceValue)
+                .closeSidWithOk()
+                .assertFaceValueTooltipIs(expectedFaceValue)
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim, password)
+                .completeWithEmail()
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
+                .findLoginToShopLinkAndOpenIt()
+                .enterPassword(password)
+                .login()
+                .assertProductCashValueIs(expectedCashValue)
+                .assertProductFaceValueIs(expectedFaceValue)
+                .logout();
 
-        assertEqualsDouble(fetchedProductCashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
-        assertEqualsDouble(fetchedProductFaceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new price %s");
+        checkReplacementWizard(user, claim, expectedCashValue, expectedFaceValue, expectedCashValue);
+    }
 
-        shopWelcomePage.logout();
-
-        CustomerDetailsPage customerDetailsPage = login(user).openRecentClaim().toCustomerDetails();
-        CustomerDetails customerDetails = customerDetailsPage.getCustomerDetails();
-
-        Double fetchedCustomerCashValue = customerDetails.getCashValue();
-        Double fetchedCustomerFaceTooltipValue = customerDetails.getFaceTooltipValue();
-
-        assertEqualsDouble(fetchedCustomerCashValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
-        assertEqualsDouble(fetchedCustomerFaceTooltipValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new price %s");
-
-        ReplacementDialog replacementDialog = customerDetailsPage.
-                reopenClaim().
-                toCompleteClaimPage().
-                fillClaimFormWithPassword(claim, password).
-                openReplacementWizard();
-
-        Double fetchedReplacementDialogVoucherFaceValue = replacementDialog.getVoucherFaceValue();
-        Double fetchedReplacementDialogItemPriceValue = replacementDialog.getItemPriceValue();
-
-        assertEqualsDouble(fetchedReplacementDialogVoucherFaceValue, calculatedFaceValue, "Voucher face value %s should be equals to depreciated new price %s");
-        assertEqualsDouble(fetchedReplacementDialogItemPriceValue, calculatedCashValue, "Voucher cash value %s should be equals to depreciated voucher cash value %s");
-
-        replacementDialog.closeReplacementDialog();
+    private void checkReplacementWizard(User user, Claim claim, Double expectedCashValue, Double expectedFaceValue, Double voucherValue) {
+        login(user).openRecentClaim()
+                .assertCustomerCashValueIs(voucherValue)
+                .assertCustomerFaceValueTooltipIs(expectedFaceValue)
+                .reopenClaim()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .assertVoucherFaceValueIs(expectedFaceValue)
+                .assertItemPriceValueIs(expectedCashValue)
+                .closeReplacementDialog();
     }
 
 }

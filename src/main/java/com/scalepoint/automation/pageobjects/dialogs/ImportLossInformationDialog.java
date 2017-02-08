@@ -12,36 +12,28 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
-public class ImportLossInformationDialog extends Page {
+public class ImportLossInformationDialog extends BaseDialog {
 
-    @FindBy(id = "upfile")
+    @FindBy(name = "upfile")
     private TextInput browseControl;
 
-    @FindBy(id = "_OK_button")
+    @FindBy(id = "excel-import-button")
     private Button importButton;
 
     @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/matching_engine/dialog/upload_excel_import.jsp";
-    }
-
-    @Override
-    public ImportLossInformationDialog ensureWeAreOnPage() {
-        switchToLast();
-        waitForUrl(getRelativeUrl());
-        waitForVisible(importButton);
+    protected BaseDialog ensureWeAreAt() {
+        Wait.waitForVisible(importButton);
         return this;
     }
 
     public SettlementPage uploadExcel(String path) {
-        Wait.waitForElement(By.id("upfile"));
-        browseControl.clear();
+        Wait.waitForInvisible(browseControl);
         browseControl.sendKeys(path);
-        Wait.waitForElement(By.id("_OK_button"));
+        Wait.waitForDisplayed(By.id("excel-import-button"));
         importButton.click();
         ExcelImportDialog excelImportDialog = at(ExcelImportDialog.class);
         excelImportDialog.cancel();
-        return at(SettlementPage.class);
+        return Page.at(SettlementPage.class);
     }
 
 }

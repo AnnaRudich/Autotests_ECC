@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -17,10 +18,13 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
+@ClaimSpecificPage
 @EccPage
 public class SettlementPage extends BaseClaimPage {
 
@@ -70,7 +74,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public ClaimLine findClaimLine(String description) {
         By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
-        Wait.waitForElement(claimLineXpath);
+        Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
     }
@@ -117,14 +121,14 @@ public class SettlementPage extends BaseClaimPage {
         return toTextSearchPage().searchByProductName(text);
     }
 
-    public SettlementDialog addManually() {
+    public SettlementDialog openAddManuallyDialog() {
         return functionalMenu.addManually();
     }
 
-    public SettlementPage addManually(String description, String category, String subcategory, int newPrice) {
-        return addManually()
+    public SettlementPage openAddManuallyDialog(String description, String category, String subcategory, int newPrice) {
+        return openAddManuallyDialog()
                 .fillBaseData(description, category, subcategory, newPrice)
-                .ok();
+                .closeSidWithOk();
     }
 
     public void cancelClaim() {
@@ -169,6 +173,11 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
+    public SettlementPage assertFaceValueTooltipIs(Double expectedPrice) {
+        assertEqualsDouble(getFaceTooltipValue(), expectedPrice, "Tooltip face value %s should be assertEqualsDouble to not  depreciated new price %s");
+        return this;
+    }
+
     public Double getFaceTooltipValue() {
         String tooltipText = (iconToolTip.getAttribute("title")).split("\\(")[0];
         String value = tooltipText.replaceAll("[^\\.,0123456789]", "");
@@ -193,6 +202,12 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage assertItemIsPresent(String claimLineDescription) {
         Assert.assertTrue(isItemPresent(claimLineDescription),
                 errorMessage("The claim item [%s] is not found", claimLineDescription));
+        return this;
+    }
+
+    public SettlementPage assertItemNotPresent(String claimLineDescription) {
+        Assert.assertFalse(isItemPresent(claimLineDescription),
+                errorMessage("The claim item [%s] must be absent: ", claimLineDescription));
         return this;
     }
 
@@ -269,8 +284,9 @@ public class SettlementPage extends BaseClaimPage {
             return tooltip;
         }
 
-        public boolean isVoucherPresent() {
-            return voucherPresent;
+        public ClaimLine assertVoucherPresent() {
+            assertTrue(voucherPresent, "Voucher icon should be displayed");
+            return this;
         }
 
         public String getDescription() {
@@ -309,16 +325,32 @@ public class SettlementPage extends BaseClaimPage {
             return computedColor;
         }
 
+        public ClaimLine assertDiscretionaryPresent() {
+            assertTrue(isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+            return this;
+        }
+
+        public ClaimLine assertTooltipPresent(String tooltip) {
+            assertTrue(isTooltipPresent(tooltip), "Discretionary Reason Tooltip should be displayed");
+            return this;
+        }
+
         public boolean isDiscretionaryPresent() {
             return discretionaryPresent;
         }
 
-        public boolean hasColor(String color) {
-            return color.equals(getActualColor());
+        public ClaimLine assertLineHasColor(String color) {
+            assertEquals(getActualColor(), color, "Claim line must have color: " + color);
+            return this;
         }
 
         public boolean hasComputedColor(String color) {
             return color.equals(getComputedColor());
+        }
+
+        public ClaimLine assertLineHasComputedColor(String color) {
+            assertEquals(getComputedColor(), color, "Claim line must have color: " + color);
+            return this;
         }
 
         public boolean isTooltipPresent(String expectedText) {

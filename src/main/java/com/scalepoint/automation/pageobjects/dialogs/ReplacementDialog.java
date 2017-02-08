@@ -11,6 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
+import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class ReplacementDialog extends BaseDialog {
@@ -93,4 +94,13 @@ public class ReplacementDialog extends BaseDialog {
         return Page.at(CustomerDetailsPage.class);
     }
 
+    public ReplacementDialog assertItemPriceValueIs(Double expectedPrice) {
+        assertEqualsDouble(getItemPriceValue(), expectedPrice, "Voucher cash value %s should be equal to not depreciated new price %s");
+        return this;
+    }
+
+    public ReplacementDialog assertVoucherFaceValueIs(Double expectedPrice) {
+        assertEqualsDouble(getVoucherFaceValue(), expectedPrice, "Voucher face value %s should be equal to not depreciated new price %s");
+        return this;
+    }
 }

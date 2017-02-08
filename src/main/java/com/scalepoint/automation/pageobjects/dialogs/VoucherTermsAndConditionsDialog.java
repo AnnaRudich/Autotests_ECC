@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 public class VoucherTermsAndConditionsDialog extends BaseDialog {
@@ -21,6 +22,11 @@ public class VoucherTermsAndConditionsDialog extends BaseDialog {
 
     public String getTermsAndConditions(){
         return termsAndConditions.getText();
+    }
+
+    public VoucherTermsAndConditionsDialog assertTermsAndConditionsTextIs(String expectedText) {
+        Assert.assertEquals(getTermsAndConditions(), expectedText, "The Terms And Conditions are different");
+        return this;
     }
 
     public void close(){

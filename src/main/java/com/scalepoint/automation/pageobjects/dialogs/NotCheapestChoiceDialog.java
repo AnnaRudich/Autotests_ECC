@@ -4,11 +4,14 @@ import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
+import org.junit.Assert;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author : igu
@@ -52,6 +55,11 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return this;
     }
 
+    public NotCheapestChoiceDialog assertMinimalValuationIsSuggested(String amount) {
+        assertEquals(getAmount(), amount, "Must be suggested amount: "+amount);
+        return this;
+    }
+
 
     public String selectSecondReason() {
         reason.select(2);
@@ -71,12 +79,13 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
-    public boolean okButtonDoesNotCloseDialog() {
+    public void assertNotPossibleToCloseDialog() {
         ok.click();
-
-        at(NotCheapestChoiceDialog.class);
-
-        return true;
+        try {
+            at(NotCheapestChoiceDialog.class);
+        } catch (Exception e) {
+            Assert.fail("We were able to close NotCheapestChoiceDialog");
+        }
     }
 
 }

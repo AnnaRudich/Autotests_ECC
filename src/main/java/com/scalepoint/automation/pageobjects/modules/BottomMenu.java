@@ -4,8 +4,11 @@ import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
+
+import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 
 public class BottomMenu extends Module {
 
@@ -30,11 +33,6 @@ public class BottomMenu extends Module {
     @FindBy(id = "subtotal_cash_payout-inputEl")
     private WebElement subtotalValue;
 
-
-    public Table getClaimsResult() {
-        return claimsResult;
-    }
-
     public void cancel() {
         cancel.click();
     }
@@ -55,17 +53,27 @@ public class BottomMenu extends Module {
 
     private void expand() {
         expand.click();
-        Wait.waitForElementDisplaying(By.id("finishCaseBtn"));
+        Wait.waitForDisplayed(By.id("finishCaseBtn"));
     }
 
-    public String getClaimSumValue() {
+    private String getClaimSumValue() {
         if (!claimSumValue.isDisplayed()) {
             expand();
         }
         return claimSumValue.getText();
     }
 
-    public String getSubtotalSumValue() {
+    public BottomMenu assertClaimSumValueIs(double value) {
+        Assert.assertEquals(toNumber(getClaimSumValue()), value, "Claim sum must be: "+value);
+        return this;
+    }
+
+    public BottomMenu assertSubtotalSumValueIs(double value) {
+        Assert.assertEquals(toNumber(getSubtotalSumValue()), value, "Subtotal sum must be: "+value);
+        return this;
+    }
+
+    private String getSubtotalSumValue() {
         if (!subtotalValue.isDisplayed()) {
             expand();
         }
@@ -77,6 +85,11 @@ public class BottomMenu extends Module {
             expand();
         }
         return completeClaim.isEnabled();
+    }
+
+    public BottomMenu assertCompleteClaimEnabled() {
+        Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
+        return this;
     }
 
 }

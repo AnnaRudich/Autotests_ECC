@@ -1,13 +1,18 @@
 package com.scalepoint.automation.utils;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
+import static org.openqa.selenium.support.ui.WebDriverWait.DEFAULT_SLEEP_TIMEOUT;
+
+@SuppressWarnings("ConstantConditions")
 public class Window implements Actions {
 
     private static ThreadLocal<WindowManager> holder = new ThreadLocal<>();
@@ -46,7 +51,7 @@ public class Window implements Actions {
                 logger.info("Text of alert: " + alertText);
                 return false;
             } else {
-                Wait.waitForNewModalWindow(windowHandlesBefore);
+                waitForNewModalWindow(windowHandlesBefore);
                 switchToLast();
             }
             return true;
@@ -60,7 +65,7 @@ public class Window implements Actions {
         public void acceptAlert() {
             try {
                 driver.switchTo().alert().accept();
-                Wait.waitForModalWindowDisappear();
+                waitForModalWindowDisappear();
             } catch (Exception ignored) {
             }
         }
@@ -68,14 +73,14 @@ public class Window implements Actions {
         public void closeDialog() {
             Set<String> windowHandles = driver.getWindowHandles();
             driver.close();
-            Wait.waitForCloseModalWindow(windowHandles);
+            waitForCloseModalWindow(windowHandles);
             switchToLast();
         }
 
         public void closeDialog(WebElement closeButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
             closeButton.click();
-            Wait.waitForCloseModalWindow(windowHandlesBefore);
+            waitForCloseModalWindow(windowHandlesBefore);
             switchToLast();
         }
 
@@ -89,6 +94,33 @@ public class Window implements Actions {
             }
             logger.info("url after switchToLast: " + driver.getCurrentUrl());
         }
+    }
 
+
+    private static void waitForModalWindowDisappear() {
+        wrap((WebDriver driver) -> {
+            Set<String> allWindows = driver.getWindowHandles();
+            return allWindows.size() == 1;
+        });
+        Browser.driver().switchTo().window(Browser.getMainWindowHandle());
+    }
+
+    private static String waitForNewModalWindow(final Set<String> oldWindows) {
+        return wrap((WebDriver driver) -> {
+            Set<String> allWindows = driver.getWindowHandles();
+            allWindows.removeAll(oldWindows);
+            return allWindows.size() > 0 ? allWindows.iterator().next() : null;
+        });
+    }
+
+    private static void waitForCloseModalWindow(final Set<String> oldWindows) {
+        wrap((WebDriver driver) -> {
+            Set<String> allWindows = driver.getWindowHandles();
+            return oldWindows.size() > allWindows.size();
+        });
+    }
+
+    private static <T> T wrap(Function<WebDriver, T> condition) {
+        return new WebDriverWait(Browser.driver(), DEFAULT_SLEEP_TIMEOUT).until(condition);
     }
 }

@@ -20,12 +20,11 @@ public class InsCompanyTest extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-509 It's possible to create new simple parent IC. IC is displayed in IC list")
     public void charlie509_createNewSimpleParentIC(InsuranceCompany insuranceCompany) {
-        boolean icDisplayed = login(getSystemUser()).
-                to(InsCompaniesPage.class).
-                toAddNewCompanyPage().
-                createCompany(insuranceCompany).
-                isCompanyDisplayed(insuranceCompany);
-        Assert.assertTrue(icDisplayed);
+        login(getSystemUser())
+                .to(InsCompaniesPage.class)
+                .toAddNewCompanyPage()
+                .createCompany(insuranceCompany)
+                .assertCompanyDisplayed(insuranceCompany);
     }
 
     /**
@@ -37,16 +36,12 @@ public class InsCompanyTest extends BaseTest {
             description = "CHARLIE-509 It's possible to update new simple parent IC. IC is displayed in IC list")
     public void charlie509_updateNewSimpleParentIC(InsuranceCompany insuranceCompany) {
         InsuranceCompany anotherCompany = TestData.getInsuranceCompany();
-
-        boolean icDisplayed = login(getSystemUser()).
-                to(InsCompaniesPage.class).
-                toAddNewCompanyPage().
-                createCompany(insuranceCompany).
-                editCompany(insuranceCompany.getIcName()).
-                updateNameAndSave(anotherCompany).
-                isCompanyDisplayed(anotherCompany);
-
-        Assert.assertTrue(icDisplayed);
+        login(getSystemUser())
+                .to(InsCompaniesPage.class)
+                .toAddNewCompanyPage()
+                .createCompany(insuranceCompany)
+                .editCompany(insuranceCompany.getIcName())
+                .updateNameAndSave(anotherCompany).assertCompanyDisplayed(anotherCompany);
     }
 
 }

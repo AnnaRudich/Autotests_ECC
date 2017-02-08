@@ -45,7 +45,7 @@ public class ExistingUsers {
      * This is why there is not a <CODE>set</CODE> method for the users property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * forCondition example, to add a new item, do as follows:
      * <pre>
      *    getUsers().add(newItem);
      * </pre>

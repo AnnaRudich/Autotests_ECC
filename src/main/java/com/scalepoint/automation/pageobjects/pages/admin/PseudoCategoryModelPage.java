@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 @EccPage
@@ -36,7 +37,7 @@ public class PseudoCategoryModelPage extends AdminBasePage {
         return "webshop/jsp/Admin/pseudocategory_model.jsp";
     }
 
-    public PseudoCategoryModelAddEditPage toAddPage() {
+    public PseudoCategoryModelAddEditPage toAddModelPage() {
         clickAndWaitForDisplaying(addButton, By.xpath("//input[contains(@id, 'modelname')]"));
         return at(PseudoCategoryModelAddEditPage.class);
     }
@@ -60,6 +61,16 @@ public class PseudoCategoryModelPage extends AdminBasePage {
         modelsList.selectByVisibleText(model);
         removeButton.click();
         return at(PseudoCategoryModelPage.class);
+    }
+
+    public PseudoCategoryModelPage assertModelDisplayed(String modelName) {
+        Assert.assertTrue(isModelDisplayed(modelName));
+        return this;
+    }
+
+    public PseudoCategoryModelPage assertModelNotDisplayed(String modelName) {
+        Assert.assertFalse(isModelDisplayed(modelName));
+        return this;
     }
 }
 

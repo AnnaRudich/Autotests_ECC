@@ -52,6 +52,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
                     log.info("Lock acquired for FT update");
 
                     String currentUrl = Browser.driver().getCurrentUrl();
+
                     FTSettings.ComparingResult comparingResult = findDifferences(functionalTemplateId, operations);
                     log.info("Requested to update: {} Found diffs: {}", operations.length, comparingResult.getDifferedOperations().size());
 

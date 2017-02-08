@@ -51,7 +51,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
         WebElement option = find(byCategoryNameXpath, catName);
         scrollTo(option);
         By xpath = By.xpath(byCategoryNameXpath.replace("$1", catName));
-        Wait.waitForStableElement(xpath);
+        Wait.waitForStaleElement(xpath);
         if (!option.isSelected()) {
             option.click();
         }

@@ -14,6 +14,8 @@ import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
 
+import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+
 @EccPage
 public class ShopWelcomePage extends ShopFlow {
 
@@ -63,14 +65,14 @@ public class ShopWelcomePage extends ShopFlow {
     }
 
     public ShopProductSearchPage toProductSearchPage() {
-        Wait.waitForStableElement(By.xpath("//a[@id='menu_id_2']"));
+        Wait.waitForStaleElement(By.xpath("//a[@id='menu_id_2']"));
         clickAndWaitForStable(By.xpath("//a[@id='menu_id_2']"), By.xpath("//input[@id='TextSearch_text']"));
         return at(ShopProductSearchPage.class);
     }
 
     public ShopWelcomePage addFirstRecommendedItemToCart() {
         firstRecommendedItem.click();
-        Wait.waitForElementDisplaying(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
+        Wait.waitForDisplayed(By.xpath("//*[@id='AccountInfoBox_shopping_cart']//td[@class='description']"));
         return this;
     }
 
@@ -80,6 +82,16 @@ public class ShopWelcomePage extends ShopFlow {
 
     public AccountBox getAccountBox() {
         return accountBox;
+    }
+
+    public ShopWelcomePage assertProductCashValueIs(Double expectedPrice) {
+        assertEqualsDouble(getProductCashValue(), expectedPrice, "Voucher cash value %s should be assertEqualsDouble to not depreciated voucher cash value %s");
+        return this;
+    }
+
+    public ShopWelcomePage assertProductFaceValueIs(Double expectedPrice) {
+        assertEqualsDouble(getProductFaceValue(), expectedPrice, "Voucher face value %s should be assertEqualsDouble to not depreciated new price %s");
+        return this;
     }
 }
 

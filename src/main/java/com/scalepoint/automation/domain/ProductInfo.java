@@ -87,4 +87,17 @@ public class ProductInfo {
     public boolean isVoucherOnlyInShop() {
         return voucherOnlyInShop;
     }
+
+    @Override
+    public String toString() {
+        return "ProductInfo{" +
+                "id=" + id +
+                ", model='" + model + '\'' +
+                ", orderable=" + orderable +
+                ", sku='" + sku + '\'' +
+                ", lowest=" + lowest +
+                ", invoice=" + invoice +
+                ", supplierName='" + supplierName + '\'' +
+                '}';
+    }
 }

@@ -7,8 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static com.scalepoint.automation.utils.Wait.waitForElementEnabling;
-import static com.scalepoint.automation.utils.Wait.waitForStableElements;
+import static com.scalepoint.automation.utils.Wait.waitForEnabled;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
@@ -66,7 +67,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             WebElement item = find(byShopNameXpath, shopName);
             scrollTo(item);
             doubleClick(item);
-            waitForElementEnabling(By.name("shopName"));
+            waitForEnabled(By.name("shopName"));
             return at(AddShopDialog.class);
         }
 
@@ -74,6 +75,16 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             selectShop(shop);
             deleteShopButton.click();
             deleteShopYesButton.click();
+            return this;
+        }
+
+        public ShopsTab assertNewShopExists(Shop shop) {
+            assertTrue(isNewShopExists(shop));
+            return this;
+        }
+
+        public ShopsTab assertNewShopNotExists(Shop shop) {
+            assertFalse(isNewShopExists(shop));
             return this;
         }
     }

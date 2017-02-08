@@ -43,7 +43,7 @@ public class UsersManager {
         }
     }
 
-    public static void returnUser(User user) {
+    public static void releaseUser(User user) {
         logger.info("Returned: {}", user.getLogin());
         if (user.isBasic()) {
             basicUsersQueue.add(user);

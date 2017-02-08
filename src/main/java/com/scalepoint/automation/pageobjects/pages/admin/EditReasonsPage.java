@@ -128,7 +128,7 @@ public class EditReasonsPage extends AdminBasePage {
             this.rowNumber = Integer.valueOf(id.substring(id.indexOf(prefix) + prefix.length()));
             this.readonly = reasonInput.getAttribute("readOnly") != null;
             WebElement reasonRow = driver.findElement(By.id(rowNumber + "_reasonRow"));
-            this.disabled = !reasonRow.isDisplayed();
+            this.disabled = !reasonRow.findElement(By.tagName("input")).isEnabled();
 
             this.disableButton = driver.findElement(By.id(rowNumber + "_changeStatusBtn"));
             this.deleteButton = driver.findElement(By.id(rowNumber + "_deleteBtn"));

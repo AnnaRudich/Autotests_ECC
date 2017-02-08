@@ -33,12 +33,11 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
             " drop-down for choosing reason is enabled")
     public void charlie508_1_ImportEcxelWithDiscretionaryValuation(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                                    Claim claim) {
-        String claimLineDescription = "test1";
-
-        SettlementDialog settlementDialog = loginAndCreateClaim(trygUser, claim).
-        importExcelFile(excelImportPath).
-        findClaimLine(claimLineDescription).editLine();
-        assertTrue(settlementDialog.isDiscretionaryReasonEnabled(),"Discretionary reason field should be enabled");
+        loginAndCreateClaim(trygUser, claim)
+                .importExcelFile(excelImportPath)
+                .findClaimLine("test1")
+                .editLine()
+                .assertDiscretionaryReasonEnabled();
     }
 
 
@@ -56,21 +55,21 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     public void charlie508_2_ImportEcxelAddManuallyDiscrValuation(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                                   Claim claim, DiscretionaryReason discretionaryReason) {
         String claimLineDescription = "APPLE iphone 1";
-
-        SettlementDialog settlementDialog = loginAndCreateClaim(trygUser, claim).
-                importExcelFile(excelImportPath).
-                findClaimLine(claimLineDescription).editLine().
-                fillDiscretionaryPrice(400).
-                selectValuation(ANDEN_VURDERING).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2()).
-                ok().
-                findClaimLine(claimLineDescription).
-                selectLine().
-                getToolBarMenu().
-                toProductMatchPage().
-                matchFirst().
-                selectValuation(ANDEN_VURDERING);
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason2(), "Selected reason should be visible in match dialog");
+        loginAndCreateClaim(trygUser, claim)
+                .importExcelFile(excelImportPath)
+                .findClaimLine(claimLineDescription)
+                .editLine()
+                .fillDiscretionaryPrice(400)
+                .selectValuation(ANDEN_VURDERING)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
+                .closeSidWithOk()
+                .findClaimLine(claimLineDescription)
+                .selectLine()
+                .getToolBarMenu()
+                .toProductMatchPage()
+                .openSidForFirstProduct().
+                selectValuation(ANDEN_VURDERING)
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2());
 
     }
 
@@ -89,21 +88,22 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                                                                      Claim claim, DiscretionaryReason discretionaryReason) {
         String claimLineDescription = "APPLE iphone 2";
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(trygUser, claim).
-                importExcelFile(excelImportPath).
-                findClaimLine(claimLineDescription).editLine().
-                fillDepreciation(10).
-                selectDepreciationType(1).
-                selectValuation(NEW_PRICE).
-                selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2()).
-                ok().
-                findClaimLine(claimLineDescription).
-                selectLine().
-                getToolBarMenu().
-                toProductMatchPage().
-                matchFirst().
-                selectValuation(NEW_PRICE);
-        assertEquals(settlementDialog.getDiscretionaryReasonText(), discretionaryReason.getDiscretionaryReason2(),"Selected reason should be visible in match dialog");
+        loginAndCreateClaim(trygUser, claim)
+                .importExcelFile(excelImportPath)
+                .findClaimLine(claimLineDescription)
+                .editLine()
+                .fillDepreciation(10)
+                .selectDepreciationType(1)
+                .selectValuation(NEW_PRICE)
+                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
+                .closeSidWithOk()
+                .findClaimLine(claimLineDescription)
+                .selectLine()
+                .getToolBarMenu()
+                .toProductMatchPage()
+                .openSidForFirstProduct()
+                .selectValuation(NEW_PRICE)
+                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2());
     }
 
 }

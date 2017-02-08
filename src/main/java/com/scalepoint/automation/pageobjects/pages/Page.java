@@ -3,8 +3,10 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.CurrentUser;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
@@ -20,10 +22,10 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public abstract class Page implements Actions {
 
     private static Map<Class, String> pageAnnotationToBaseUrl = new HashMap<>();
-
     static {
         pageAnnotationToBaseUrl.put(EccPage.class, Configuration.getEccUrl());
         pageAnnotationToBaseUrl.put(EccAdminPage.class, Configuration.getEccAdminUrl());
@@ -54,7 +56,7 @@ public abstract class Page implements Actions {
         int pollingMs = 1000;
 
         logger.info(" Expected: {}", expectedUrl);
-        Wait.For(webDriver -> {
+        Wait.forCondition(webDriver -> {
             try {
                 String currentUrl = driver.getCurrentUrl();
                 logger.info("Current url: {}", currentUrl);
@@ -90,23 +92,24 @@ public abstract class Page implements Actions {
         if (baseUrl == null) {
             throw new IllegalArgumentException("No page type annotation found for " + pageClass);
         }
-        return baseUrl + relativeUrl;
+
+        boolean claimIdPresent = StringUtils.isNotBlank(CurrentUser.getClaimId());
+        boolean pageIsClaimSpecific = pageClass.isAnnotationPresent(ClaimSpecificPage.class);
+
+        String claimId = claimIdPresent && pageIsClaimSpecific ? CurrentUser.getClaimId() + "/" : "";
+        return baseUrl + claimId + relativeUrl;
     }
 
     public static <T extends Page> T to(Class<T> pageClass, String parameters) {
-        String urlValue = getUrl(pageClass) + parameters;
-        Browser.open(urlValue);
-        return at(pageClass);
-    }
-
-    public static <T extends Page> T toWithNoAt(Class<T> pageClass) {
-        String urlValue = getUrl(pageClass);
-        Browser.open(urlValue);
-        try {
-            return pageClass.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        String initialUrl = getUrl(pageClass);
+        if (StringUtils.isNotBlank(parameters)) {
+            initialUrl = initialUrl + (initialUrl.contains("?") ? "&" : "?") + parameters;
         }
+        LogManager.getLogger(Page.class).info("Open page: " + initialUrl);
+        Browser.open(initialUrl);
+        Wait.waitForPageLoaded();
+
+        return at(pageClass);
     }
 
     public static <T extends Page> T at(Class<T> pageClass) {
@@ -129,6 +132,7 @@ public abstract class Page implements Actions {
     public static class PagesCache {
 
         private static ThreadLocal<Map<Class<? extends Page>, Page>> holder = new ThreadLocal<>();
+        private static ThreadLocal<String> savePointPageUrl = new ThreadLocal<>();
 
         public static <T extends Page> T get(Class<T> pageClass) {
             Map<Class<? extends Page>, Page> classPageMap = holder.get();
@@ -148,9 +152,29 @@ public abstract class Page implements Actions {
         public static void cleanUp() {
             holder.remove();
         }
+
+        public static void setSavePointUrl(String url) {
+            savePointPageUrl.set(url);
+        }
+
+        public static String getSavePointUrl() {
+            String url = savePointPageUrl.get();
+            savePointPageUrl.remove();
+            return url;
+        }
     }
 
     protected String errorMessage(String text, Object... params) {
         return String.format(text, params);
+    }
+
+    public <T extends Page> T savePoint(Class<T> currentPageClass) {
+        PagesCache.setSavePointUrl(Browser.driver().getCurrentUrl());
+        return at(currentPageClass);
+    }
+
+    public <T extends Page> T backToSavePoint(Class<T> pointPageClass) {
+        Browser.driver().get(PagesCache.getSavePointUrl());
+        return at(pointPageClass);
     }
 }

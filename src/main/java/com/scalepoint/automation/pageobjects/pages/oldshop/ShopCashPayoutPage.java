@@ -60,7 +60,7 @@ public class ShopCashPayoutPage extends Page {
     }
 
     public ShopOrderVerificationPage withdrawMoney() {
-        Wait.waitForElementDisplaying(By.xpath("//input[@id='withdrawal_option_partial_withdrawal']"));
+        Wait.waitForDisplayed(By.xpath("//input[@id='withdrawal_option_partial_withdrawal']"));
         withdrawRadioButton.click();
         selectBankTransferAndAddBankInfo();
         checkoutWithdrawButton.click();

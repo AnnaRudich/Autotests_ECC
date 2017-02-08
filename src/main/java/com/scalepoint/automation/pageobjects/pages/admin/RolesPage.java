@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 @EccPage
@@ -58,5 +59,10 @@ public class RolesPage extends AdminBasePage {
         roles.selectByVisibleText(roleName);
         selectEditOption();
         return at(RoleAddEditPage.class);
+    }
+
+    public RolesPage assertRoleDisplayed(String roleName) {
+        Assert.assertTrue(isRoleDisplayed(roleName));
+        return this;
     }
 }

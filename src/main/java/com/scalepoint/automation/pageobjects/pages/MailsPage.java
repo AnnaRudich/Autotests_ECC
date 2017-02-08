@@ -11,7 +11,6 @@ import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +41,7 @@ public class MailsPage extends BaseClaimPage {
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
             dateColumnHeader.click();
-            Boolean isDisplayed = Wait.For(webDriver -> sortType.isExtJsValueEqualTo(dateColumnHeader.getAttribute("aria-sort")));
+            Boolean isDisplayed = Wait.forCondition(webDriver -> sortType.isExtJsValueEqualTo(dateColumnHeader.getAttribute("aria-sort")));
             if (isDisplayed) {
                 break;
             }

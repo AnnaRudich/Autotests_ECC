@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
@@ -57,4 +58,8 @@ public class PseudoCategoriesPage extends AdminBasePage {
         return at(PseudoCategoryAddEditPage.class);
     }
 
+    public PseudoCategoriesPage assertCategoryDisplayed(String categoryName) {
+        Assert.assertTrue(isCategoryDisplayed(categoryName));
+        return this;
+    }
 }

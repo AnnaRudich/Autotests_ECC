@@ -45,12 +45,9 @@ public class MyPage extends Page {
 
     @Override
     public MyPage ensureWeAreOnPage() {
-        long start = System.currentTimeMillis();
         waitForUrl(getRelativeUrl());
         waitForVisible(editPreferences);
         waitForVisible(lastClaims);
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
         return this;
     }
 
@@ -64,16 +61,14 @@ public class MyPage extends Page {
         return at(CustomerDetailsPage.class);
     }
 
-    public boolean isRecentClaimCompleted() {
-        return latestCustomerStatus.getText().contains(ClaimStatus.completed());
+    public MyPage assertClaimCompleted() {
+        Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.completed()), "Claim must be completed");
+        return this;
     }
 
-    public boolean isRecentClaimSaved() {
-        return latestCustomerStatus.getText().contains(ClaimStatus.saved());
-    }
-
-    public boolean isRecentClaimCancelled() {
-        return latestCustomerStatus.getText().contains(ClaimStatus.cancelled());
+    public MyPage assertRecentClaimCancelled() {
+        Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.cancelled()), "Claim must be cancelled");
+        return this;
     }
 
     public NewCustomerPage clickCreateNewCase() {
@@ -93,6 +88,11 @@ public class MyPage extends Page {
     /*------------------------------ ------- ---------------------------------------*/
     public MyPage assertClaimHasStatus(String status) {
         Assert.assertTrue(latestCustomerStatus.getText().contains(status), errorMessage("Claim should have [%s] status", status));
+        return this;
+    }
+
+    public MyPage assertAdminLinkDisplayed() {
+        Assert.assertTrue(getClaimMenu().isAdminLinkDisplayed());
         return this;
     }
 }

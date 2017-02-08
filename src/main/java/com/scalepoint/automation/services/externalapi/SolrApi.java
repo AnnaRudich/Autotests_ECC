@@ -27,30 +27,32 @@ public class SolrApi {
         }
     }
 
-    public static ProductInfo findProductInvoiceBiggerMarket() {
+    public static ProductInfo findProductInvoiceHigherMarket() {
         String filterQuery = "{!frange l=0 incl=false}sub(price_invoice_1,market_price)";
-        return findOrderableQueryWithFilterQuery(filterQuery);
+        return findOrderableProduct(filterQuery, "ProductInvoiceHigherMarket");
     }
 
     public static ProductInfo findProductInvoiceLowerMarket() {
         String filterQuery = "{!frange l=0 incl=false}sub(market_price, price_invoice_1)";
-        return findOrderableQueryWithFilterQuery(filterQuery);
+        return findOrderableProduct(filterQuery, "ProductInvoiceLowerMarket");
     }
 
     public static ProductInfo findProductInvoiceEqualMarket() {
         String filterQuery = "{!frange =0 incl=false}sub(price_invoice_1,market_price)";
-        return findOrderableQueryWithFilterQuery(filterQuery);
+        return findOrderableProduct(filterQuery, "ProductInvoiceEqualMarket");
     }
 
-    private static ProductInfo findOrderableQueryWithFilterQuery(String filterQuery) {
+    private static ProductInfo findOrderableProduct(String filterQuery, String message) {
         try {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
-            query.setQuery("orderable:true");
+            query.setQuery("orderable:true AND -product_as_voucher_agreement_id_1:[* TO *]");
             query.setFilterQueries(filterQuery);
             query.setRows(1);
             QueryResponse response = solr.query(query);
-            return response.getBeans(ProductInfo.class).get(0);
+            ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
+            logger.info(message + ": {}", productInfo);
+            return productInfo;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new IllegalStateException("no products found", e);

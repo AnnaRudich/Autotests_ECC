@@ -2,10 +2,13 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.CurrentUser;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -21,9 +24,6 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRY
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static org.testng.Assert.*;
 
-/**
- * Created by asa on 11/14/2016.
- */
 @SuppressWarnings("AccessStaticViaInstance")
 public class EditReasonTests extends BaseTest {
 
@@ -227,42 +227,44 @@ public class EditReasonTests extends BaseTest {
                 .assertReasonDisabled(reason)
                 .logout();
 
-        SettlementPage.ClaimLine claimLine = login(trygUser, SettlementPage.class).findClaimLine(TEST_REASON_LINE);
-        assertTrue(claimLine.isTooltipPresent(reason), "Tooltip is not equal to " + reason);
-
-        SettlementDialog settlementDialog = claimLine.editLine();
-        assertTrue(settlementDialog.isDiscretionaryReasonValuePresent(reason), "Incorrect text discretionary reason");
+        login(trygUser, CustomerDetailsPage.class, "shnbr="+ CurrentUser.getClaimId())
+                .reopenClaim()
+                .findClaimLine(TEST_REASON_LINE)
+                .assertTooltipPresent(reason)
+                .editLine()
+                .assertDiscretionaryReasonValuePresent(reason);
     }
 
 
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
-        SettlementPage settlementPage = loginAndCreateClaim(trygUser, claim);
-        SettlementDialog dialog = settlementPage
-                .addManually()
+        loginAndCreateClaim(trygUser, claim)
+                .openAddManuallyDialog()
                 .fillDescription(TEST_REASON_LINE)
                 .fillCategory(claimItem.getExistingCat4())
                 .fillSubCategory(claimItem.getExistingSubCat4())
                 .fillCustomerDemand(1000)
                 .enableAge()
-                .selectMonth("6 " + claimItem.getMonths())
+                .selectMonth("6")
                 .selectDepreciationType(1)
                 .fillDepreciation(5)
                 .fillDiscretionaryPrice(400)
                 .fillNewPrice(3000)
                 .selectValuation(ANDEN_VURDERING)
-                .selectDiscretionaryReason(reason);
-        assertEquals(dialog.getDiscretionaryReasonText(), reason, "Incorrect text discretionary reason");
-        dialog.ok().getMainMenu().logOut();
+                .selectDiscretionaryReason(reason)
+                .assertDiscretionaryReasonEqualTo(reason)
+                .closeSidWithOk()
+                .getMainMenu()
+                .logOut();
     }
 
     private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany) {
         return openEditReasonPage(insuranceCompany, false);
     }
 
-    private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisable) {
+    private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
         return login(getSystemUser(), AdminPage.class)
                 .to(EditReasonsPage.class)
-                .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, showDisable)
+                .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, showDisabled)
                 .assertEditReasonsFormVisible();
     }
 }

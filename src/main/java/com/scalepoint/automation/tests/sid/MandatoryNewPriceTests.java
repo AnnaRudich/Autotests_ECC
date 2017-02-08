@@ -20,50 +20,50 @@ public class MandatoryNewPriceTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When required valuation is not set then SID closes without popup")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "Select valuation type...")
     public void charlie625WhenRequiredValuationIsNotSetThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim).
-                addManually().
-                fillBaseData(claimItem).
-                fillDiscretionaryPrice(48)
-                .ok();
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillBaseData(claimItem)
+                .fillDiscretionaryPrice(48)
+                .closeSidWithOk();
     }
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And No New Price Entered Then Popup Is Shown")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndNoNewPriceEnteredThenPopupIsShown(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim).
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillDiscretionaryPrice(48).
-                isDialogShownAfterOk(RequiredValuationIsNeededDialog.class);
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillDescription(claimItem.getTextFieldSP())
+                .fillCustomerDemand(claimItem.getCustomerDemand_500())
+                .fillCategory(claimItem.getExistingCat1_Born())
+                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillDiscretionaryPrice(48)
+                .assertAfterOkWeGet(RequiredValuationIsNeededDialog.class);
     }
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And Catalog Item Has Market Price SID Closes Without Popup")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndCatalogItemHasMarketPriceSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim).
-                toTextSearchPage().
-                chooseCategory(claimItem.getExistingCat3_Telefoni()).
-                sortOrderableFirst().
-                matchFirst().
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                ok();
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .sortOrderableFirst()
+                .openSidForFirstProduct()
+                .fillCustomerDemand(claimItem.getCustomerDemand_500())
+                .closeSidWithOk();
     }
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And New Price Entered Then SID Closes Without Popup")
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndNewPriceEnteredThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim).
-                addManually().
-                fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillDiscretionaryPrice(48).
-                ok();
+        loginAndCreateClaim(user, claim)
+                .openAddManuallyDialog()
+                .fillDescription(claimItem.getTextFieldSP())
+                .fillCustomerDemand(claimItem.getCustomerDemand_500())
+                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCategory(claimItem.getExistingCat1_Born())
+                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillDiscretionaryPrice(48)
+                .closeSidWithOk();
     }
 
 }

@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
@@ -36,7 +37,7 @@ public class PseudoCategoryGroupPage extends AdminBasePage {
         return this;
     }
 
-    public boolean isGroupDisplayed(String groupName) {
+    private boolean isGroupDisplayed(String groupName) {
         try {
             groups.selectByVisibleText(groupName);
         } catch (NoSuchElementException e) {
@@ -57,4 +58,8 @@ public class PseudoCategoryGroupPage extends AdminBasePage {
     }
 
 
+    public PseudoCategoryGroupPage assertGroupDisplayed(String groupName) {
+        Assert.assertTrue(isGroupDisplayed(groupName));
+        return this;
+    }
 }

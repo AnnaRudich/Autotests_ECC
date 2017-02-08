@@ -6,8 +6,10 @@ import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.testng.Assert.assertEquals;
 
 @EccPage
 public class AddEditReductionRulePage extends AdminBasePage {
@@ -371,7 +373,18 @@ public class AddEditReductionRulePage extends AdminBasePage {
         return ratingComboboxValues;
     }
 
-    static class TwoLines {
+    public AddEditReductionRulePage assertDescriptionColumnHeaderPresent() {
+        Assert.assertNotNull(getDescriptionColumnHeader());
+        return this;
+    }
 
+    public AddEditReductionRulePage assertDocumentationComboboxValuesAre(String[] expectedDocumentationComboboxValues) {
+        assertEquals(readDocumentationComboboxValues(), expectedDocumentationComboboxValues);
+        return this;
+    }
+
+    public AddEditReductionRulePage assertRatingComboboxValuesAre(String[] expectedRatingComboboxValues) {
+        assertEquals(readRatingComboboxValues(), expectedRatingComboboxValues);
+        return this;
     }
 }

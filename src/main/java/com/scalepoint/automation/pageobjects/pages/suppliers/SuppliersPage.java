@@ -66,10 +66,10 @@ public class SuppliersPage extends BaseEccAdminNavigation {
 
 
     public SupplierDialog openFirstSupplier() {
-        waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
+        waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         WebElement supplier = allSuppliersList.get(0);
         doubleClick(supplier);
-        waitForStableElement(By.xpath("//span[contains(text(),'General')]"));
+        waitForStaleElement(By.xpath("//span[contains(text(),'General')]"));
         return BaseDialog.at(SupplierDialog.class);
     }
 
@@ -77,11 +77,11 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         find(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplier.getSupplierName());
         WebElement option = find(bySupplierNameXpath, supplier.getSupplierName());
-        waitForStableElements((By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")));
+        waitForStaleElements((By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")));
         if (option.getText().contains(supplier.getSupplierName()) && option.getText().contains(supplier.getSupplierCVR())) {
             scrollTo(option);
             doubleClick(option);
-            waitForStableElement((By.xpath("//span[contains(text(),'General')]")));
+            waitForStaleElement((By.xpath("//span[contains(text(),'General')]")));
         }
     }
 
@@ -95,7 +95,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     public boolean isSupplierCreated(Supplier supplier) {
         find(By.xpath("//input[contains(@name,'searchfield')]")).click();
         makeSupplierSearch(supplier.getSupplierName());
-        waitForStableElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
+        waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         String xpath = bySupplierNameXpath.replace("$1", supplier.getSupplierName());
         try {
             WebElement option = find(By.xpath(xpath));

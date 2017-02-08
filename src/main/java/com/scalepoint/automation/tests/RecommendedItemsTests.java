@@ -34,8 +34,10 @@ public class RecommendedItemsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-587 Only product prices are displayed in Product catalog in Shop")
     public void charlie587_productPricesInShopCatalog(User user, Claim claim) {
-        ProductInfo productInvoiceGtMarket = SolrApi.findProductInvoiceBiggerMarket();
+
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
+
+        ProductInfo productInvoiceGtMarket = SolrApi.findProductInvoiceHigherMarket();
         ProductCashValue productInvoiceGtMarketCash = new ProductCashValue(findProductAndOpenSid(productInvoiceGtMarket, textSearchPage), true);
 
         ProductInfo productWithEqualPrices = SolrApi.findProductInvoiceEqualMarket();
@@ -46,11 +48,11 @@ public class RecommendedItemsTests extends BaseTest {
         ProductCashValue productInvoiceLtMarketCash = new ProductCashValue(sid, false);
 
         String password = "12341234";
-        SettlementPage settlementPage = sid.selectValuation(SettlementDialog.Valuation.MARKET_PRICE).ok();
-        ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage().
-                fillClaimFormWithPassword(claim, password).
-                completeWithEmailAndLoginToShop(password).
-                toProductSearchPage();
+        SettlementPage settlementPage = sid.selectValuation(SettlementDialog.Valuation.MARKET_PRICE).closeSidWithOk();
+        ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim, password)
+                .completeWithEmailAndLoginToShop(password)
+                .toProductSearchPage();
 
         shopProductSearchPage.searchForProduct(productInvoiceGtMarketCash.name);
         Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue));
@@ -62,8 +64,8 @@ public class RecommendedItemsTests extends BaseTest {
         Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
     }
 
-    private SettlementDialog findProductAndOpenSid(ProductInfo productInvoiceGtMarket, TextSearchPage textSearchPage) {
-        return textSearchPage.searchByProductName(productInvoiceGtMarket.getModel()).matchFirst();
+    private SettlementDialog findProductAndOpenSid(ProductInfo productInfo, TextSearchPage textSearchPage) {
+        return textSearchPage.searchByProductName(productInfo.getModel()).matchStrict(productInfo.getModel());
     }
 
     private class ProductCashValue {

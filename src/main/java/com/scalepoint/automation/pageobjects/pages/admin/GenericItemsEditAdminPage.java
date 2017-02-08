@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -60,7 +59,7 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
 
     public GenericItemsEditAdminPage selectCategory(String categoryName) {
         category.selectByVisibleText(categoryName);
-        Wait.waitFor(5);
+        Wait.wait(5);
         return this;
     }
 

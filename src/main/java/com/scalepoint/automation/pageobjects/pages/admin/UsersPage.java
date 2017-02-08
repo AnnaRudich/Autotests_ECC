@@ -10,10 +10,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForStableElements;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 
 @EccPage
 public class UsersPage extends AdminBasePage {
@@ -74,7 +75,7 @@ public class UsersPage extends AdminBasePage {
     public boolean isUserDisplayed(SystemUser user) {
         filterByIC(user.getCompany());
         makeUserSearchByName(user.getLogin());
-        waitForStableElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
+        waitForStaleElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
         WebElement item = find(byUserLoginXpath, user.getLogin());
         return item.getText().contains(user.getLogin());
     }
@@ -82,7 +83,7 @@ public class UsersPage extends AdminBasePage {
     public boolean isDisplayed(SystemUser user) {
         makeUserSearchByName(user.getLogin());
         waitForAjaxCompleted();
-        waitForStableElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
+        waitForStaleElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
         WebElement item = find(byUserLoginXpath, user.getLogin());
         return item.getText().contains(user.getLogin()) &&
                 item.getText().contains((user.getFirstName())) &&
@@ -110,5 +111,10 @@ public class UsersPage extends AdminBasePage {
 
     public MyPage toMatchingEngine() {
         return to(AdminPage.class).toMatchingEngine();
+    }
+
+    public UsersPage assertUserExists(SystemUser newUser) {
+        Assert.assertTrue(isDisplayed(newUser), "User is not found");
+        return this;
     }
 }

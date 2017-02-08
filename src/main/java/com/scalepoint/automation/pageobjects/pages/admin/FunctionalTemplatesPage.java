@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
@@ -75,6 +76,11 @@ public class FunctionalTemplatesPage extends AdminBasePage {
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    public FunctionalTemplatesPage assertTemplateExists(String ftName) {
+        Assert.assertTrue(containsTemplate(ftName), "Template is not found");
+        return this;
     }
 }
 

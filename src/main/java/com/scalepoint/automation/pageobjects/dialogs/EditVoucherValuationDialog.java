@@ -4,13 +4,13 @@ import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
-public class EditVoucherValuationDialog extends BaseDialog {
+import static org.testng.Assert.assertEquals;
 
-    @FindBy(id = "edit-voucher-brands-text")
-    private ExtInput brands;
+public class EditVoucherValuationDialog extends BaseDialog {
 
     @FindBy(name = "edit-voucher-brands-text-inputEl")
     private TextInput brandsText;
@@ -20,9 +20,6 @@ public class EditVoucherValuationDialog extends BaseDialog {
 
     @FindBy(id = "edit-voucher-ok-button")
     private Button ok;
-
-    @FindBy(id = "edit-voucher-cancel-button")
-    private Button cancel;
 
     @FindBy(id = "edit-voucher-terms-button")
     private Button termsAndConditions;
@@ -51,17 +48,14 @@ public class EditVoucherValuationDialog extends BaseDialog {
         return tags.getWrappedElement().getAttribute("textContent");
     }
 
-    public void ok() {
+    public SettlementDialog closeDialogWithOk() {
         ok.click();
+        return at(SettlementDialog.class);
     }
 
-    public void Cancel() {
-        cancel.click();
-    }
-
-    public EditVoucherValuationDialog openTermsAndConditions() {
+    public VoucherTermsAndConditionsDialog openTermsAndConditions() {
         termsAndConditions.click();
-        return this;
+        return at(VoucherTermsAndConditionsDialog.class);
     }
 
     public EditVoucherValuationDialog discountDistribution(String _discountDistribution) {
@@ -75,6 +69,16 @@ public class EditVoucherValuationDialog extends BaseDialog {
 
     public String getVoucherCashValue() {
         return voucherCashValue.getText();
+    }
+
+    public EditVoucherValuationDialog assertBrandsTextIs(String expectedBrandsText) {
+        assertEquals(getBrands(), expectedBrandsText, "Wrong Brand is displayed.");
+        return this;
+    }
+
+    public EditVoucherValuationDialog assertTagsTextIs(String expectedTagsText) {
+        assertEquals(getTags(), expectedTagsText, "Wrong Tags are displayed");
+        return this;
     }
 
 }

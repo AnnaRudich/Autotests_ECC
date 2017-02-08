@@ -4,8 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.driver.Browser;
-import org.openqa.selenium.Alert;
+import com.scalepoint.automation.utils.Window;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -30,9 +29,7 @@ public class ClaimMenu extends Module {
     public LoginPage logout() {
         $(By.id("signOutButton")).click();
         try {
-            Alert alert = Browser.driver().switchTo().alert();
-            alert.accept();
-            Wait.waitForModalWindowDisappear();
+            Window.get().acceptAlert();
         } catch (Exception e) {
             SelenideElement gemaktive = $(By.id("gemaktive"));
             if (gemaktive.isDisplayed()) {
@@ -57,7 +54,7 @@ public class ClaimMenu extends Module {
     public void selectMyPageItem() {
         if ($(By.xpath("//button[@onclick='onEditPreferencesClick()']")).isDisplayed()) return;
         $(By.xpath("//a[@id='myPageButton']")).click();
-        Wait.waitForStableElement(By.xpath("//button[@onclick='onEditPreferencesClick()']"));
+        Wait.waitForStaleElement(By.xpath("//button[@onclick='onEditPreferencesClick()']"));
     }
 
     public void selectTextSearchItem() {

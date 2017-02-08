@@ -329,6 +329,11 @@
             <type>dll</type>
         </dependency>
 
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.6</version>
+        </dependency>
 
     </dependencies>
 

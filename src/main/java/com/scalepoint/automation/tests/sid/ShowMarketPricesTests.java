@@ -1,11 +1,7 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
-import com.scalepoint.automation.pageobjects.pages.BestFitPage;
-import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -31,23 +27,18 @@ public class ShowMarketPricesTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
-
-        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                toTextSearchPage().
-                chooseCategory(claimItem.getExistingCat1_Born());
-        assertFalse(textSearchPage.isMarketPriceVisible(), "Market Price is Visible");
-
-        ProductDetailsPage productDetailsPage = textSearchPage.
-                sortOrderableFirst().
-                productDetails();
-            assertFalse(productDetailsPage.isMarketPriceVisible(), "Market price is visible");
-            assertFalse(productDetailsPage.isMarketPriceSupplierVisible(), "Supplier is visible");
-
-        BestFitPage bestFitPage = productDetailsPage.
-                closeWindow().
-                sortOrderableLast().
-                toBestFitPage();
-        assertFalse(bestFitPage.isMarketPriceVisible(), "Market Price is visible");
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(claimItem.getExistingCat1_Born())
+                .assertMarketPriceInvisible()
+                .sortOrderableFirst()
+                .openProductDetailsOfFirstProduct()
+                .assetMarketPriceSupplierInvisible()
+                .assertMarketPriceInvisible()
+                .closeProductDetails()
+                .sortNonOrderableFirst()
+                .toBestFitPage()
+                .assertMarketPriceInvisible();
     }
 
     /**
@@ -61,15 +52,14 @@ public class ShowMarketPricesTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
-                toTextSearchPage().
-                chooseCategory(claimItem.getExistingCat3_Telefoni()).
-                sortOrderableFirst().
-                matchFirst().
-                selectValuation(Valuation.MARKET_PRICE);
-
-        assertTrue(settlementDialog.isMarketPriceVisible(), "Market price is not visible");
-        assertFalse(settlementDialog.isMarketPriceSupplierVisible(), "Supplier is visible");
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .sortOrderableFirst()
+                .openSidForFirstProduct()
+                .selectValuation(Valuation.MARKET_PRICE)
+                .assertMarketPriceVisible()
+                .assertMarketPriceSupplierInvisible();
     }
 
     /**
@@ -84,20 +74,20 @@ public class ShowMarketPricesTests extends BaseTest {
      */
     @Bug(bug = "CHARLIE-1033")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
+    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
-        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                toTextSearchPage().
-                chooseCategory(claimItem.getExistingCat3_Telefoni()).
-                sortMarketPricesAscending();
-        assertTrue(textSearchPage.isSortingMarketPriceAscendant(), "Ascendant sorting of Market Price does not work");
-
-        textSearchPage.sortMarketPricesDescending();
-        assertTrue(textSearchPage.isSortingMarketPriceDescendant(), "Descendant sorting of Market Price does not work");
-
-        ProductDetailsPage productDetailsPage = textSearchPage.sortOrderableFirst().productDetails();
-        assertTrue(productDetailsPage.isMarketPriceVisible(), "Market price is not visible");
-        assertTrue(productDetailsPage.isMarketPriceSupplierVisible(), "Market price is not visible");
-        productDetailsPage.closeWindow();
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .sortMarketPricesAscending()
+                .assertSortingMarketPriceAscendant()
+                .sortMarketPricesDescending()
+                .assertSortingMarketPriceDescendant()
+                .sortOrderableFirst()
+                .openProductDetailsOfFirstProduct()
+                .assertMarketPriceVisible()
+                .assertMarketPriceSupplierVisible()
+                .closeProductDetails();
     }
 
     /**
@@ -113,19 +103,16 @@ public class ShowMarketPricesTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
     public void charlie_588_5_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
-        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).
-                toTextSearchPage().
-                chooseCategory(claimItem.getExistingCat3_Telefoni()).
-                sortOrderableFirst();
-
-        ProductDetailsPage productDetailsPage = textSearchPage.productDetails();
-        assertTrue(productDetailsPage.isMarketPriceVisible(), "Market price is not visible");
-        assertTrue(productDetailsPage.isMarketPriceSupplierVisible(), "Supplier is not visible");
-
-        SettlementDialog settlementDialog = productDetailsPage.
-                closeWindow().
-                matchFirst().
-                selectValuation(Valuation.MARKET_PRICE);
-        assertTrue(settlementDialog.isMarketPriceVisible(), "Market price is not visible");
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .sortOrderableFirst()
+                .openProductDetailsOfFirstProduct()
+                .assertMarketPriceVisible()
+                .assertMarketPriceSupplierVisible()
+                .closeProductDetails()
+                .openSidForFirstProduct()
+                .selectValuation(Valuation.MARKET_PRICE)
+                .assertMarketPriceVisible();
     }
 }

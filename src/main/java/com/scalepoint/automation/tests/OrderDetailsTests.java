@@ -71,23 +71,23 @@ public class OrderDetailsTests extends BaseTest {
             description = "CHARLIE-540 ME: Order page; Make product order")
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog dialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillNewPrice(900).
-                fillDescription(claimItem.getTextFieldSP());
+        SettlementDialog dialog = settlementPage
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getExistingCat1_Born())
+                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillNewPrice(900)
+                .fillDescription(claimItem.getTextFieldSP());
 
         Double activeValuation = dialog.getCashCompensationValue();
-        OrderDetailsPage ordersPage = dialog.ok(SettlementPage.class).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard().
-                goToShop().
-                addFirstRecommendedItemToCart().
-                checkoutProduct().
-                openRecentClaim().
-                toOrdersDetailsPage();
+        OrderDetailsPage ordersPage = dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .addFirstRecommendedItemToCart()
+                .checkoutProduct()
+                .openRecentClaim()
+                .toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
@@ -124,28 +124,28 @@ public class OrderDetailsTests extends BaseTest {
             description = "CHARLIE-540 ME: Order page; Make voucher order")
     public void charlie540_ordersPageWhenWeWithdrawMoney(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog dialog = settlementPage.
-                addManually().
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr()).
-                fillNewPrice(5000).
-                fillDescription(claimItem.getTextFieldSP()).
-                selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+        SettlementDialog dialog = settlementPage
+                .openAddManuallyDialog()
+                .fillCategory(claimItem.getExistingCat1_Born())
+                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillNewPrice(5000)
+                .fillDescription(claimItem.getTextFieldSP())
+                .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
         Double activeValuation = dialog.getCashCompensationValue();
-        ShopProductSearchPage searchPage = dialog.ok(SettlementPage.class).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard().
-                goToShop().
-                toProductSearchPage();
+        ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .toProductSearchPage();
 
         double productPrice = searchPage.getProductPrice(1);
-        OrderDetailsPage ordersPage = searchPage.
-                addProductToCart(1).
-                checkoutProductWithdrawal().
-                openRecentClaim().
-                toOrdersDetailsPage();
+        OrderDetailsPage ordersPage = searchPage
+                .addProductToCart(1)
+                .checkoutProductWithdrawal()
+                .openRecentClaim()
+                .toOrdersDetailsPage();
 
         double withdrawValue = activeValuation - productPrice;
 
@@ -183,19 +183,19 @@ public class OrderDetailsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount")
     public void charlie540_ordersPageWhenWeUseBankAccount(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
-        ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard().
-                goToShop().
-                toProductSearchPage();
+        ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .toProductSearchPage();
 
         Double productPrice = shopProductSearchPage.getProductPrice(0);
         Dankort dankort = payments.getDankort();
-        OrderDetailsPage ordersPage = shopProductSearchPage.
-                addProductToCart(0).
-                checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc()).
-                toOrdersDetailsPage();
+        OrderDetailsPage ordersPage = shopProductSearchPage
+                .addProductToCart(0)
+                .checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc())
+                .toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
@@ -231,23 +231,23 @@ public class OrderDetailsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Complete claim (2)")
     public void charlie540_ordersPageWhenWeRecompleteAfterCreditCardPayment(User user, Claim claim, OrderDetails orderDetails, Payments payments) {
-        ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim).
-                toCompleteClaimPage().
-                fillClaimForm(claim).
-                openReplacementWizard().
-                goToShop().
-                toProductSearchPage();
+        ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .toProductSearchPage();
 
         Double productPrice = shopProductSearchPage.getProductPrice(0);
         Dankort dankort = payments.getDankort();
-        OrderDetailsPage ordersPage = shopProductSearchPage.
-                addProductToCart(0).
-                checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc()).
-                reopenClaim().
-                toCompleteClaimPage().
-                completeWithEmail().
-                openRecentClaim().
-                toOrdersDetailsPage();
+        OrderDetailsPage ordersPage = shopProductSearchPage
+                .addProductToCart(0)
+                .checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc())
+                .reopenClaim()
+                .toCompleteClaimPage()
+                .completeWithEmail()
+                .openRecentClaim()
+                .toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
@@ -283,12 +283,12 @@ public class OrderDetailsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
-                toTextSearchPage(textSearch.getCatProduct1()).
-                matchFirst();
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+                .toTextSearchPage(textSearch.getCatProduct1())
+                .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
 
-        OrderDetailsPage ordersPage = settlementDialog.ok()
+        OrderDetailsPage ordersPage = settlementDialog.closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard()
@@ -326,12 +326,12 @@ public class OrderDetailsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Complete claim (1)")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).
-                toTextSearchPage(textSearch.getCatProduct1()).
-                matchFirst();
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+                .toTextSearchPage(textSearch.getCatProduct1())
+                .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
 
-        OrderDetailsPage ordersPage = settlementDialog.ok()
+        OrderDetailsPage ordersPage = settlementDialog.closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard()

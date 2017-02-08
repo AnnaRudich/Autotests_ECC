@@ -47,6 +47,7 @@ public class MainMenu extends Module {
 
     public void logOut() {
         signOut.click();
+        acceptAlert();
     }
 
     public void myPage() {

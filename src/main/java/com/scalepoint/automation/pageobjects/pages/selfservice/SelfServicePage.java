@@ -169,16 +169,16 @@ public class SelfServicePage extends Page {
 
     public SelfServicePage addDescription(String text) {
         sendKeys(descriptionFirstField, text);
-        waitForStableElement(By.xpath("(//div[contains(@class, 'categoryColumn')])[3]/div"));
+        waitForStaleElement(By.xpath("(//div[contains(@class, 'categoryColumn')])[3]/div"));
         find(By.xpath("//input[contains(@class, 'focus')]")).sendKeys(Keys.TAB);
-        //Wait.waitForStableElement(By.xpath("//div[contains(text(),'[Choose category]')]"));
-        waitForStableElement(By.cssSelector("div#cell1_2"));
+        //Wait.waitForStaleElement(By.xpath("//div[contains(text(),'[Choose category]')]"));
+        waitForStaleElement(By.cssSelector("div#cell1_2"));
         return this;
     }
 
     public void justAddDescription(String text) {
         sendKeys(descriptionFirstField, text);
-        waitForStableElements(By.xpath("//*[contains(@class, 'x-combo-list-item')]"));
+        waitForStaleElements(By.xpath("//*[contains(@class, 'x-combo-list-item')]"));
     }
 
     public boolean isSuggestionsContainQuery(String query) {
@@ -196,7 +196,7 @@ public class SelfServicePage extends Page {
 
     public boolean isFirst10SuggestionContainQuery(String query) {
         String [] queryList = query.split(" ");
-        waitForStableElement(By.xpath(descSuggestionsXpath));
+        waitForStaleElement(By.xpath(descSuggestionsXpath));
         List<WebElement> suggestionItem = driver.findElements(By.xpath(descSuggestionsXpath));
         for(int i=0; i<10; i++){
             System.out.println("Query: " + unifyStr(query).toUpperCase() + " present in " + unifyStr(suggestionItem.get(i).getText()) + "?");
@@ -213,7 +213,7 @@ public class SelfServicePage extends Page {
      * The method waits for file upload is completed
      */
     public void waitForUploadCompleted() {
-        waitForElementDisplaying(By.xpath("//div[contains(text(),'100 %')]"));
+        waitForDisplayed(By.xpath("//div[contains(text(),'100 %')]"));
     }
 
     /**
@@ -229,12 +229,12 @@ public class SelfServicePage extends Page {
      * to use previous Years page
      */
     public SelfServicePage addPurchaseDate() {
-        Wait.waitForElementDisplaying(By.xpath("//div[@id='cell1_4']"));
+        Wait.waitForDisplayed(By.xpath("//div[@id='cell1_4']"));
         purDateFirstField.click();
         if (!System.getProperty("locale").equals("DK")) {
             clickAndWaitForStable(By.xpath("//div[contains(@class,'x-grid3-scroller')]/div/div[2]//td[contains(@class,'x-grid3-td-purchaseDate')]/div/div"), By.xpath("//*[contains(@class, 'date-trigger')]"));
         }
-        waitForElementDisplaying(By.xpath("//img[contains(@class, 'x-form-date-trigger')]"));
+        waitForDisplayed(By.xpath("//img[contains(@class, 'x-form-date-trigger')]"));
         calendarImage.click();
         previousYearButton.click();
         WebElement year = allVisibleYears.get(RandomUtils.randomInt(allVisibleYears.size()));
@@ -274,7 +274,7 @@ public class SelfServicePage extends Page {
 
     public void selectGroupInput() {
         groupInputField.sendKeys(Keys.DOWN);
-        waitForStableElements(By.xpath("//div[contains(@id,'cg_item')]"));
+        waitForStaleElements(By.xpath("//div[contains(@id,'cg_item')]"));
     }
 
     public void selectGroup(Integer n) {
@@ -284,9 +284,9 @@ public class SelfServicePage extends Page {
 
     public void selectCategoryInput() {
         groupInputField.sendKeys(Keys.TAB);
-        waitForStableElement(By.xpath("//input[@id='cs_pseudo_category']"));
+        waitForStaleElement(By.xpath("//input[@id='cs_pseudo_category']"));
         categoriesInputField.sendKeys(Keys.DOWN);
-        waitForStableElements(By.xpath("//div[contains(@id,'cs_cat_item')]"));
+        waitForStaleElements(By.xpath("//div[contains(@id,'cs_cat_item')]"));
     }
 
     public void selectCategory(Integer n) {
@@ -306,7 +306,7 @@ public class SelfServicePage extends Page {
 
     public void addRandomCategory() {
         doubleClick(chooseCategoryField);
-        waitForStableElements(By.xpath("//*[contains(@id,'cg_item')]"));
+        waitForStaleElements(By.xpath("//*[contains(@id,'cg_item')]"));
         WebElement category = allCategoriesList.get(RandomUtils.randomInt(allCategoriesList.size()));
         scrollTo(category);
         category.click();
@@ -314,7 +314,7 @@ public class SelfServicePage extends Page {
 
     public SelfServicePage addPurchasePrice(String text) {
         purPriceFirstField.click();
-        Wait.waitForElementDisplaying(By.xpath("//input[contains(@class, 'x-form-num-field')]"));
+        Wait.waitForDisplayed(By.xpath("//input[contains(@class, 'x-form-num-field')]"));
         setValue(priceInputs.get(0), text);
         return this;
     }
@@ -339,7 +339,7 @@ public class SelfServicePage extends Page {
 
         }
         if (hasDocumentation) {
-            waitForElementDisplaying(By.name("isInternal"));
+            waitForDisplayed(By.name("isInternal"));
             file.sendKeys(claimItem.getFileLoc());
             waitForUploadCompleted();
             uploadOKButton.click();

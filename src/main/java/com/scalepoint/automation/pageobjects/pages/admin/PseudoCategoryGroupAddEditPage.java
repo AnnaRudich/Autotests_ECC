@@ -5,6 +5,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
@@ -79,5 +80,10 @@ public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
             return false;
         }
         return true;
+    }
+
+    public PseudoCategoryGroupAddEditPage assertGroupDisplayed(String categoryName) {
+        Assert.assertTrue(isCategoryDisplayed(categoryName));
+        return this;
     }
 }

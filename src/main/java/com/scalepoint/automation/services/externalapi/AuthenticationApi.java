@@ -49,6 +49,10 @@ public class AuthenticationApi {
     protected Executor executor;
 
     public <T extends Page> T login(User user, Class<T> returnPageClass) {
+        return login(user, returnPageClass, null);
+    }
+
+    public <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
         String loginUrl = Configuration.getEccAdminUrl();
 
         List<NameValuePair> params = ParamsBuilder.create().
@@ -89,7 +93,7 @@ public class AuthenticationApi {
         log.info("Fast login was performed as " + user.getLogin());
 
         if (returnPageClass != null) {
-            return Page.to(returnPageClass);
+            return Page.to(returnPageClass, parameters);
         }
 
         return null;

@@ -46,7 +46,7 @@ public class AddGenericItemDialog extends BaseDialog {
     public AddGenericItemDialog selectCategory(String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxCompleted();
-        Wait.waitFor(3);
+        Wait.wait(3);
         return this;
     }
 

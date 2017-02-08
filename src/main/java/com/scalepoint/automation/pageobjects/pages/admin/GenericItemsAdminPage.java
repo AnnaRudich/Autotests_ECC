@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -93,7 +92,7 @@ public class GenericItemsAdminPage extends AdminBasePage {
     private GenericItemsAdminPage selectDeleteOptionAndAccept() {
         deleteButton.click();
         acceptAlert();
-        Wait.waitForElementDisplaying(By.id("btnEdit"));
+        Wait.waitForDisplayed(By.id("btnEdit"));
         return this;
     }
 
