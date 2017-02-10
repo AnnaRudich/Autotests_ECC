@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,6 +16,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
+@RequiredParameters("pseudocatgroupid=%s")
 public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
 
     @FindBy(xpath = "//input[contains(@id, 'pcgroupname')]")
@@ -41,7 +43,7 @@ public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
 
     @Override
     protected String getRelativeUrl() {
-        return "webshop/jsp/Admin/pseudocategory_group_edit.jsp?pseudocatgroupid=";
+        return "webshop/jsp/Admin/pseudocategory_group_edit.jsp";
     }
 
     public List<String> getAllPseudoCategories() {

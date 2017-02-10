@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -19,6 +20,7 @@ import java.util.List;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
+@RequiredParameters("ftrfnbr=%s&showHidden=true")
 public class EditFunctionTemplatePage extends AdminBasePage {
 
     @FindBy(xpath = "//input[@value='Save values']")
@@ -32,7 +34,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
 
     @Override
     protected String getRelativeUrl() {
-        return "webshop/jsp/Admin/func_template_edit.jsp?ftrfnbr=";
+        return "webshop/jsp/Admin/func_template_edit.jsp";
     }
 
     @Override

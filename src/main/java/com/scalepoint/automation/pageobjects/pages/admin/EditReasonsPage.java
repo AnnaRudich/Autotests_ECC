@@ -106,7 +106,7 @@ public class EditReasonsPage extends AdminBasePage {
     }
 
     public EditReasonsPage assertReasonDisabled(String reason) {
-        Assert.assertTrue(new ReasonRow(reason).isReasonDisabled(), "Reason is active: " + reason);
+        Assert.assertTrue(new ReasonRow(reason).isReasonDisabled(), "Reason must be disabled");
         return this;
     }
 
@@ -127,8 +127,7 @@ public class EditReasonsPage extends AdminBasePage {
             String id = reasonInput.getAttribute("id");
             this.rowNumber = Integer.valueOf(id.substring(id.indexOf(prefix) + prefix.length()));
             this.readonly = reasonInput.getAttribute("readOnly") != null;
-            WebElement reasonRow = driver.findElement(By.id(rowNumber + "_reasonRow"));
-            this.disabled = !reasonRow.findElement(By.tagName("input")).isEnabled();
+            this.disabled = driver.findElement(By.xpath("//input[@id='"+rowNumber+"_isActive']")).getAttribute("value").equals("0");
 
             this.disableButton = driver.findElement(By.id(rowNumber + "_changeStatusBtn"));
             this.deleteButton = driver.findElement(By.id(rowNumber + "_deleteBtn"));

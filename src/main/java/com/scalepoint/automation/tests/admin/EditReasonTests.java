@@ -224,6 +224,7 @@ public class EditReasonTests extends BaseTest {
         openEditReasonPage(insuranceCompany, true)
                 .findReason(reason)
                 .disable()
+                .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .assertReasonDisabled(reason)
                 .logout();
 

@@ -36,7 +36,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
 
     private FTSettings.ComparingResult findDifferences(Integer functionalTemplateId, FtOperation... operations) {
         try {
-            Content content = post(Page.getUrl(EditFunctionTemplatePage.class) + functionalTemplateId, executor).returnContent();
+            Content content = post(Page.getUrl(EditFunctionTemplatePage.class, functionalTemplateId), executor).returnContent();
             Document doc = Jsoup.parse(content.asString());
             return FTSettings.differences(doc, Arrays.asList(operations));
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
                         return detectPage(currentUrl, returnPageClass);
                     }
 
-                    EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId.toString() + "&showHidden=true");
+                    EditFunctionTemplatePage templatePage = Page.to(EditFunctionTemplatePage.class, functionalTemplateId);
                     Arrays.stream(operations).
                             sorted((o1, o2) -> o2.getSetting().hasDependency().compareTo(o1.getSetting().hasDependency())).
                             forEach(ftOperation -> ftOperation.updateSetting(templatePage));

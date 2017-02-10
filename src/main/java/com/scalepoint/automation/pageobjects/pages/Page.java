@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -77,7 +78,7 @@ public abstract class Page implements Actions {
         return to(pageClass, "");
     }
 
-    public static <T extends Page> String getUrl(Class<T> pageClass) {
+    public static <T extends Page> String getUrl(Class<T> pageClass, Object... params) {
         String relativeUrl = PagesCache.get(pageClass).getRelativeUrl();
         String baseUrl = null;
         if (relativeUrl != null) {
@@ -97,19 +98,32 @@ public abstract class Page implements Actions {
         boolean pageIsClaimSpecific = pageClass.isAnnotationPresent(ClaimSpecificPage.class);
 
         String claimId = claimIdPresent && pageIsClaimSpecific ? CurrentUser.getClaimId() + "/" : "";
-        return baseUrl + claimId + relativeUrl;
+        String fullBasePath = baseUrl + claimId + relativeUrl;
+
+        return buildFullUrl(pageClass, fullBasePath, params);
     }
 
-    public static <T extends Page> T to(Class<T> pageClass, String parameters) {
-        String initialUrl = getUrl(pageClass);
-        if (StringUtils.isNotBlank(parameters)) {
-            initialUrl = initialUrl + (initialUrl.contains("?") ? "&" : "?") + parameters;
-        }
+    public static <T extends Page> T to(Class<T> pageClass, Object... parameters) {
+        String initialUrl = buildFullUrl(pageClass, getUrl(pageClass), parameters);
+
         LogManager.getLogger(Page.class).info("Open page: " + initialUrl);
         Browser.open(initialUrl);
         Wait.waitForPageLoaded();
 
         return at(pageClass);
+    }
+
+    private static <T extends Page> String buildFullUrl(Class<T> pageClass, String initialUrl, Object[] parameters) {
+        String queryString = "";
+        RequiredParameters requiredParametersAnnotation = pageClass.getAnnotation(RequiredParameters.class);
+        if (requiredParametersAnnotation != null && parameters.length > 0) {
+            queryString = String.format(requiredParametersAnnotation.value(), parameters);
+        }
+
+        if (StringUtils.isNotBlank(queryString)) {
+            initialUrl = initialUrl + (initialUrl.contains("?") ? "&" : "?") + queryString;
+        }
+        return initialUrl;
     }
 
     public static <T extends Page> T at(Class<T> pageClass) {

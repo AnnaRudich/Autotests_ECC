@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
@@ -13,6 +14,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
+@RequiredParameters("shrfnbr=%s")
 public class GenericItemsEditAdminPage extends AdminBasePage {
 
     @FindBy(xpath = ".//*[contains(@id,'itemdescription_')]")
@@ -38,7 +40,7 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
 
     @Override
     protected String getRelativeUrl() {
-        return "webshop/jsp/Admin/generic_items_edit.jsp?shrfnbr=";
+        return "webshop/jsp/Admin/generic_items_edit.jsp";
     }
 
     @Override
