@@ -26,19 +26,6 @@ public class UserRolesTest extends BaseTest {
     /**
      * GIVEN: SP user U1 with Admin permissions
      * WHEN: U1 creates user U2 with Admin permissions
-     * THEN: U2 is displayed in Users list
-     */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to create SP admin user. Created user is displayed in Users list")
-    public void charlie537_createSPAdminUser(SystemUser user) {
-        login(getSystemUser(), UsersPage.class)
-                .toUserCreatePage()
-                .createUser(user, ALL_ROLES)
-                .assertUserExists(user);
-    }
-
-    /**
-     * GIVEN: SP user U1 with Admin permissions
-     * WHEN: U1 creates user U2 with Admin permissions
      * THEN: U2 can sign in to the application
      * THEN: Admin link is available for U2
      */
@@ -71,6 +58,19 @@ public class UserRolesTest extends BaseTest {
                 .clearFields()
                 .update(newUser)
                 .assertUserExists(newUser);
+    }
+
+    /**
+     * GIVEN: SP user U1 with Admin permissions
+     * WHEN: U1 creates user U2 with Admin permissions
+     * THEN: U2 is displayed in Users list
+     */
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to create SP admin user. Created user is displayed in Users list")
+    public void charlie537_createSPAdminUser(SystemUser user) {
+        login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUser(user, ALL_ROLES)
+                .assertUserExists(user);
     }
 
     /**

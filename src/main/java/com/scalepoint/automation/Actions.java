@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.LogManager;
 
 import static com.codeborne.selenide.Selenide.$;
 

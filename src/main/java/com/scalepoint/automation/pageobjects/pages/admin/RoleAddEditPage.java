@@ -36,9 +36,6 @@ public class RoleAddEditPage extends AdminBasePage {
     @FindBy(name = "TESTMOBILE_PAGE_ACCESS_ID_7")
     private WebElement testMobilePageButton;
 
-    @FindBy(name = "NEWS_PAGE_ACCESS_ID_8")
-    private WebElement newsPageButton;
-
     @FindBy(name = "SALES_TAXES_PAGE_ACCESS_ID_9")
     private WebElement salesTaxesPageButton;
 
@@ -135,9 +132,6 @@ public class RoleAddEditPage extends AdminBasePage {
     @FindBy(name = "PSEUDOCATEGORIES_PAGE_ACCESS_ID_41")
     private WebElement pseudoCatPageButton;
 
-    @FindBy(name = "ROOMS_PAGE_ACCESS_ID_42")
-    private WebElement roomsPageButton;
-
     @FindBy(name = "EDIT_CUSTOMER_ORDERS_ACCESS_ID_43")
     private WebElement editCastOrderPageButton;
 
@@ -184,7 +178,7 @@ public class RoleAddEditPage extends AdminBasePage {
 
     public void enableAllRoles() {
         List<WebElement> elements = Arrays.asList(adminRoleButton, accessoryPageButton,
-                usersPageButton, icPageButton, ftPageButton, testMailPageButton, testMobilePageButton, newsPageButton,
+                usersPageButton, icPageButton, ftPageButton, testMailPageButton, testMobilePageButton,
                 salesTaxesPageButton, flushAllPageButton, flushTextCashPageButton, importTasksPageButton, dbVersionPageButton,
                 dbInfoPageButton, applicationInfoPageButton, versionInfoPageButton, serPartnerPageButton, bbbInitOrdersPageButton,
                 bbbSentOrdersPageButton,
@@ -209,7 +203,6 @@ public class RoleAddEditPage extends AdminBasePage {
                 pseudoCatModelPageButton,
                 pseudoCatGroupPageButton,
                 pseudoCatPageButton,
-                roomsPageButton,
                 editCastOrderPageButton,
                 canCompleteClaimButton,
                 appStatusPageButton);

@@ -72,7 +72,7 @@ public class ClaimApi extends AuthenticationApi {
             log.info("CreateUser redirected to: " + location);
             log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
-            String claimId = location.getValue().replaceAll("[^\\d]+", "");
+            String claimId = location.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
             CurrentUser.setClaimId(claimId);
 
             Browser.driver().get(location.getValue() + "settlement.jsp");

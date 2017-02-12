@@ -67,8 +67,11 @@ public class SettlementPage extends BaseClaimPage {
 
     @Override
     public SettlementPage ensureWeAreOnPage() {
+        long start = System.currentTimeMillis();
+
         waitForUrl(getRelativeUrl());
         waitForVisible(ok);
+        System.out.println("SPAGE: "+(System.currentTimeMillis() - start));
         return this;
     }
 

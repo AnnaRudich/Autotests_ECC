@@ -90,14 +90,13 @@ public class Wait {
         FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS).
                 pollingEvery(1, TimeUnit.SECONDS).
                 ignoring(StaleElementReferenceException.class);
-        wait.until(new Function<WebDriver, Boolean>() {
-            @Override
-            public Boolean apply(WebDriver webDriver) {
-                try {
-                    return !element.isDisplayed();
-                } catch (Exception e) {
-                    return true;
-                }
+        wait.until((Function<WebDriver, Boolean>) webDriver -> {
+            try {
+                boolean displayed = element.isDisplayed();
+                System.out.println("Dsiplayed: "+displayed);
+                return !displayed;
+            } catch (Exception e) {
+                return true;
             }
         });
     }

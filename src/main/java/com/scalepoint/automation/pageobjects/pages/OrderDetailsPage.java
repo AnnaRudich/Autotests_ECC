@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
-import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialogOld;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Window;
@@ -120,7 +119,7 @@ public class OrderDetailsPage extends Page {
         cancelButton.click();
         getAlertTextAndAccept();
         Window.get().switchToLast();
-        return Page.at(AddInternalNoteDialogOld.class)
+        return BaseDialog.at(AddInternalNoteDialog.class)
                 .addInternalNote("Autotests", OrderDetailsPage.class);
     }
 }

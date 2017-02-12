@@ -311,7 +311,11 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public TextSearchPage add() {
-        return closeSidWithOk(TextSearchPage.class, addButton);
+        TextSearchPage textSearchPage = closeSidWithOk(TextSearchPage.class, addButton);
+        if(isAlertPresent()) {
+            acceptAlert();
+        }
+        return textSearchPage;
     }
 
     public <T extends BaseDialog> T assertAfterOkWeGet(Class<T> dialogClass) {
@@ -342,7 +346,6 @@ public class SettlementDialog extends BaseDialog {
 
         Wait.waitElementDisappeared(button);
         Wait.waitForAjaxCompleted();
-
         return Page.at(pageClass);
     }
 
@@ -518,17 +521,17 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog assertMonthMenuDisabled() {
-        assertFalse($(month).isEnabled(), "Month DropDown must be disabled");
+        assertFalse(month.isEnabled(), "Month DropDown must be disabled");
         return this;
     }
 
     public SettlementDialog assertMonthValueIs(String expectedMonthValue) {
-        assertEquals($(month).getValue().trim(), expectedMonthValue, "The month is not saved");
+        assertEquals(month.getValue().trim(), expectedMonthValue, "The month is not saved");
         return this;
     }
 
     public SettlementDialog assertYearsValueIs(String expectedValue) {
-        assertEquals($(ageYears).getText(), expectedValue, "The age year is not saved");
+        assertEquals(ageYears.getText(), expectedValue, "The age year is not saved");
         return this;
     }
 

@@ -132,8 +132,6 @@ public class BasicTests extends BaseTest {
         String customerNote = "Customer note!";
         String internalNote = "Internal note!";
 
-
-
         loginAndCreateClaim(user, claim)
                 .toNotesPage()
                 .addCustomerNote(customerNote)

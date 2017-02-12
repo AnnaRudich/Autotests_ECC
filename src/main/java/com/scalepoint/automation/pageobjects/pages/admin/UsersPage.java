@@ -81,9 +81,9 @@ public class UsersPage extends AdminBasePage {
     }
 
     public boolean isDisplayed(SystemUser user) {
-        makeUserSearchByName(user.getLogin());
+        refreshUsersList();
         waitForAjaxCompleted();
-        waitForStaleElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
+        makeUserSearchByName(user.getLogin());
         WebElement item = find(byUserLoginXpath, user.getLogin());
         return item.getText().contains(user.getLogin()) &&
                 item.getText().contains((user.getFirstName())) &&
