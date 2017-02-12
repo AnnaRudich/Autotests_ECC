@@ -19,7 +19,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @SuppressWarnings("AccessStaticViaInstance")
 public class GenericItemsTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item", retryAnalyzer = Retrier.class)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 
@@ -93,8 +93,8 @@ public class GenericItemsTests extends BaseTest {
                 .deleteItem(genericItem, companyName)
                 .assertGenericItemInList(genericItem.getName())
                 .clickCreateNewItem()
-                .addNewGenericItem(genericItemToDelete, companyName, true).
-                deleteItem(genericItemToDelete, companyName).
-                assertGenericItemNotInList(genericItemToDelete.getName());
+                .addNewGenericItem(genericItemToDelete, companyName, true)
+                .deleteItem(genericItemToDelete, companyName)
+                .assertGenericItemNotInList(genericItemToDelete.getName());
     }
 }
