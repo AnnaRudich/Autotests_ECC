@@ -59,7 +59,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
                 .editLine()
-                .fillDiscretionaryPrice(400)
+                .fillDiscretionaryPrice(400.00)
                 .selectValuation(ANDEN_VURDERING)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
                 .closeSidWithOk()

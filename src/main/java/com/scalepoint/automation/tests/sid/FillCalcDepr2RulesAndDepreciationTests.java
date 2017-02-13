@@ -30,7 +30,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify automatic overwrite of the depreciation field")
     public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
-                .assertDepreciationPercentageEqualTo("41", NEW_PRICE);
+                .assertDepreciationPercentageEqualTo(41, NEW_PRICE);
     }
 
     /**
@@ -50,15 +50,15 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Update automatic overwrite of the depreciation field")
     public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
-                .assertDepreciationPercentageEqualTo("41", NEW_PRICE)
+                .assertDepreciationPercentageEqualTo(41, NEW_PRICE)
                 .enterAgeYears("6")
                 .automaticDepreciation(true)
                 .selectValuation(NEW_PRICE)
-                .assertDepreciationPercentageEqualTo("47", NEW_PRICE)
+                .assertDepreciationPercentageEqualTo(47, NEW_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
-                .assertDepreciationPercentageEqualTo("47", NEW_PRICE);
+                .assertDepreciationPercentageEqualTo(47, NEW_PRICE);
     }
 
     /**
@@ -75,12 +75,12 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that changing category automatically reset of the depreciation field to 0")
     public void charlie_505_4_changeCategoryResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
-                .assertDepreciationPercentageEqualTo("41", NEW_PRICE)
+                .assertDepreciationPercentageEqualTo(41, NEW_PRICE)
                 .fillCategory(claimItem.getTrygCat1())
                 .fillSubCategory(claimItem.getTrygSubCat1())
                 .automaticDepreciation(true)
                 .selectValuation(NEW_PRICE)
-                .assertDepreciationPercentageEqualTo("0", NEW_PRICE);
+                .assertDepreciationPercentageEqualTo(0, NEW_PRICE);
     }
 
     /**
@@ -98,11 +98,11 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that select other age than specified in the rules automatically reset of the depreciation field to 0")
     public void charlie_505_5_changeAgeResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
-                .assertDepreciationPercentageEqualTo("41", NEW_PRICE)
+                .assertDepreciationPercentageEqualTo(41, NEW_PRICE)
                 .enterAgeYears("0")
                 .automaticDepreciation(true)
                 .selectValuation(NEW_PRICE)
-                .assertDepreciationPercentageEqualTo("0", NEW_PRICE);
+                .assertDepreciationPercentageEqualTo(0, NEW_PRICE);
     }
 
     private SettlementDialog createClaimAndPrepareSid(User user, Claim claim, ClaimItem claimItem) {

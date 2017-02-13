@@ -84,7 +84,7 @@ public class SidSmokeTests extends BaseTest {
     public void ecc3144_1_setIncludeInClaimCheckbox(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillNewPrice(claimItem.getDepAmount1_10())
+                .fillNewPrice(claimItem.getNewPriceSP_2400())
                 .includeInClaim(true)
                 .assertIncludeInClaimSelected()
                 .includeInClaim(false)
@@ -119,11 +119,11 @@ public class SidSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to input Customer demand")
     public void ecc3144_3_inputCustomDemand(User user, Claim claim, ClaimItem claimItem) {
-        Integer customerDemand = claimItem.getCustomerDemand_500();
+        Double customerDemand = claimItem.getCustomerDemand_500();
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillCustomerDemand(customerDemand)
-                .assertAmountOfValuationEqualTo(customerDemand.toString(), CUSTOMER_DEMAND);
+                .assertAmountOfValuationEqualTo(customerDemand, CUSTOMER_DEMAND);
     }
 
 
@@ -133,11 +133,11 @@ public class SidSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to input New price")
     public void ecc3144_4_inputNewPrice(User user, Claim claim, ClaimItem claimItem) {
-        Integer newPrice = claimItem.getNewPriceSP_2400();
+        Double newPrice = claimItem.getNewPriceSP_2400();
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillNewPrice(newPrice)
-                .assertAmountOfValuationEqualTo(newPrice.toString(), SettlementDialog.Valuation.NEW_PRICE);
+                .assertAmountOfValuationEqualTo(newPrice, SettlementDialog.Valuation.NEW_PRICE);
     }
 
     /**
@@ -166,8 +166,8 @@ public class SidSmokeTests extends BaseTest {
 
         dialog.assertCashValueIs(expectedCalculations.getCashValue())
                 .assertDepreciationAmountIs(expectedCalculations.getDepreciation())
-                .assertTotalAmountOfValuationIs(OperationalUtils.toString(expectedCalculations.getCashValue()), CUSTOMER_DEMAND)
-                .assertDepreciationPercentageEqualTo("10", CUSTOMER_DEMAND);
+                .assertTotalAmountOfValuationIs(expectedCalculations.getCashValue(), CUSTOMER_DEMAND)
+                .assertDepreciationPercentageEqualTo(10, CUSTOMER_DEMAND);
     }
 
     /**
@@ -187,8 +187,8 @@ public class SidSmokeTests extends BaseTest {
                 .assertDescriptionIs(claimItem.getTextFieldSP())
                 .assertCategoryTextIs(claimItem.getExistingCat1_Born())
                 .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .assertAmountOfValuationEqualTo(claimItem.getCustomerDemand_500().toString(), CUSTOMER_DEMAND)
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400().toString(), NEW_PRICE);
+                .assertAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND)
+                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), NEW_PRICE);
     }
 
     /**
@@ -213,8 +213,8 @@ public class SidSmokeTests extends BaseTest {
                 .assertDescriptionIs(claimItem.getTextFieldSP())
                 .assertCategoryTextIs(claimItem.getExistingCat1_Born())
                 .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .assertAmountOfValuationEqualTo(claimItem.getCustomerDemand_500().toString(), CUSTOMER_DEMAND)
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400().toString(), SettlementDialog.Valuation.NEW_PRICE)
+                .assertAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND)
+                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE)
                 .fillBaseData(claimItem)
                 .cancel()
                 .findClaimLine(claimItem.getTextFieldSP())
@@ -222,8 +222,8 @@ public class SidSmokeTests extends BaseTest {
                 .assertDescriptionIs(claimItem.getTextFieldSP())
                 .assertCategoryTextIs(claimItem.getExistingCat1_Born())
                 .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .assertTotalAmountOfValuationIs(claimItem.getCustomerDemand_500().toString(), CUSTOMER_DEMAND)
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400().toString(), SettlementDialog.Valuation.NEW_PRICE);
+                .assertTotalAmountOfValuationIs(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND)
+                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE);
     }
 
     /**
@@ -244,7 +244,7 @@ public class SidSmokeTests extends BaseTest {
                 .includeInClaim(false)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .waitASecond()
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400().toString(), NEW_PRICE);
+                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), NEW_PRICE);
     }
 
     /**
@@ -405,7 +405,7 @@ public class SidSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(Double.valueOf(claimItem.getCustomerDemand_500()));
+                .assertCashValueIs(claimItem.getCustomerDemand_500());
     }
 
     /**
@@ -440,12 +440,12 @@ public class SidSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(Double.valueOf(claimItem.getCustomerDemand_500()))
+                .assertCashValueIs(claimItem.getCustomerDemand_500())
                 .addValuation()
                 .addValuationType(claimItem.getValuationType3())
                 .addValuationPrice(claimItem.getLowerPrice())
                 .closeValuationDialogWithOk()
-                .assertCashValueIs(Double.valueOf(claimItem.getLowerPrice()));
+                .assertCashValueIs(claimItem.getLowerPrice());
     }
 
     /**
@@ -464,12 +464,12 @@ public class SidSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(Double.valueOf(claimItem.getCustomerDemand_500()))
+                .assertCashValueIs(claimItem.getCustomerDemand_500())
                 .addValuation()
                 .addValuationType(claimItem.getValuationType4())
                 .addValuationPrice(claimItem.getLowerPrice())
                 .closeValuationDialogWithOk()
-                .assertCashValueIs(Double.valueOf(claimItem.getLowerPrice()));
+                .assertCashValueIs(claimItem.getLowerPrice());
     }
 
 
@@ -490,12 +490,12 @@ public class SidSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(Double.valueOf(claimItem.getCustomerDemand_500()))
+                .assertCashValueIs(claimItem.getCustomerDemand_500())
                 .addValuation()
                 .addValuationType(claimItem.getValuationType5())
                 .addValuationPrice(claimItem.getLowerPrice())
                 .closeValuationDialogWithOk()
-                .assertCashValueIs(Double.valueOf(claimItem.getLowerPrice()));
+                .assertCashValueIs(claimItem.getLowerPrice());
     }
 
 

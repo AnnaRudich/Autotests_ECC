@@ -12,6 +12,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.zookeeper.Op;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -166,7 +167,7 @@ public class SettlementDialog extends BaseDialog {
                 fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
     }
 
-    public SettlementDialog fillBaseData(String description, String category, String subcategory, int newPrice) {
+    public SettlementDialog fillBaseData(String description, String category, String subcategory, Double newPrice) {
         return fillDescription(description).
                 fillNewPrice(newPrice).
                 fillCategory(category).
@@ -191,20 +192,20 @@ public class SettlementDialog extends BaseDialog {
         return setExtInputValue(description, descriptionText);
     }
 
-    public SettlementDialog fillNewPrice(int amount) {
-        return setExtInputValue(newPrice, String.valueOf(amount));
+    public SettlementDialog fillNewPrice(Double amount) {
+        return setExtInputValue(newPrice, OperationalUtils.format(amount));
     }
 
-    public SettlementDialog fillDiscretionaryPrice(int amount) {
-        return setExtInputValue(discretionaryPrice, String.valueOf(amount));
+    public SettlementDialog fillDiscretionaryPrice(Double amount) {
+        return setExtInputValue(discretionaryPrice, OperationalUtils.format(amount));
     }
 
-    public SettlementDialog fillCustomerDemand(int amount) {
-        return setExtInputValue(customerDemand, String.valueOf(amount));
+    public SettlementDialog fillCustomerDemand(Double amount) {
+        return setExtInputValue(customerDemand, OperationalUtils.format(amount));
     }
 
-    public SettlementDialog fillDepreciation(int amount) {
-        return setExtInputValue(depreciationPercentage, String.valueOf(amount));
+    public SettlementDialog fillDepreciation(Integer amount) {
+        return setExtInputValue(depreciationPercentage, amount.toString());
     }
 
     public SettlementDialog fillCategory(String categoryName) {
@@ -455,8 +456,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public Double getDepreciationValue() {
-        return Double.valueOf(depreciationPercentage.getText());
+    public Integer getDepreciationPercentage() {
+        return Integer.valueOf(depreciationPercentage.getText());
     }
 
     private boolean isMarketPriceSupplierDisplayed() {
@@ -613,26 +614,26 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementDialog assertAmountOfValuationEqualTo(String amount, Valuation valuation) {
+    public SettlementDialog assertAmountOfValuationEqualTo(Double amount, Valuation valuation) {
         Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
         return this;
     }
 
-    public SettlementDialog assertTotalAmountOfValuationIs(String amount, Valuation valuation) {
+    public SettlementDialog assertTotalAmountOfValuationIs(Double amount, Valuation valuation) {
         Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, TOTAL_AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
         return this;
     }
 
-    public SettlementDialog assertDepreciationPercentageEqualTo(String amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, DEPRECIATION_COLUMN), valuation.name() + " has not been added");
+    public SettlementDialog assertDepreciationPercentageEqualTo(Integer amount, Valuation valuation) {
+        Assert.assertTrue(anyMatchFromValuationsTable(amount.doubleValue(), valuation, DEPRECIATION_COLUMN), valuation.name() + " has not been added");
         return this;
     }
 
-    private boolean anyMatchFromValuationsTable(String value, Valuation valuation, int column) {
+    private boolean anyMatchFromValuationsTable(Double value, Valuation valuation, int column) {
         Wait.waitForLoaded();
         waitForVisible(firstValuation);
         String foundText = getValuationColumnValue(valuation, column);
-        boolean equals = OperationalUtils.toNumber(foundText).equals(Double.parseDouble(value));
+        boolean equals = OperationalUtils.toNumber(foundText).equals(value);
         logger.info("Valuation requested: {} found: {} matched: {}", value, foundText, equals);
         return equals;
     }

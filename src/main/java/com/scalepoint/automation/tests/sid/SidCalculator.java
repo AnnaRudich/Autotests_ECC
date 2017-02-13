@@ -2,13 +2,13 @@ package com.scalepoint.automation.tests.sid;
 
 class SidCalculator {
 
-    static PriceValuation calculatePriceValuation(int price, int depreciationPercentage) {
-        double depreciation = price * ((double)depreciationPercentage) / 100;
+    static PriceValuation calculatePriceValuation(Double price, Integer depreciationPercentage) {
+        double depreciation = price * (double)depreciationPercentage / 100;
         double cashCompensation = price - depreciation;
         return new PriceValuation(cashCompensation, depreciation);
     }
 
-    static VoucherValuation calculateVoucherValuation(double price, int voucherDiscount, int depreciationPercentage) {
+    static VoucherValuation calculateVoucherValuation(Double price, Double voucherDiscount, Integer depreciationPercentage) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashCompensationOfVoucher = price - discountedAmountByVoucher;
         double depreciatedAmount = (cashCompensationOfVoucher*depreciationPercentage)/100;
@@ -17,7 +17,7 @@ class SidCalculator {
         return new VoucherValuation(cashCompensationOfVoucher, discountedAmountByVoucher, cashCompensationWithDepreciation, depreciatedAmount);
     }
 
-    static ValuationWithReduction calculatePriceValuationWithReduction(double price, double depreciationPercentage, int reductionPercentage) {
+    static ValuationWithReduction calculatePriceValuationWithReduction(double price, Integer depreciationPercentage, Integer reductionPercentage) {
         double depreciation = price * depreciationPercentage / 100;
         double cashCompensation = price - depreciation;
         double reduction = price * reductionPercentage/100;

@@ -56,7 +56,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 voucher.getDiscount(),
                 claimItem.getDepAmount1_10());
         Double expectedCashValue = expectedCalculation.getCashCompensationOfVoucher();
-        Double expectedFaceValue = Double.valueOf(claimItem.getNewPriceSP_2400());
+        Double expectedFaceValue = claimItem.getNewPriceSP_2400();
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
         String password = "12341234";
 

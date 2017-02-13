@@ -84,9 +84,9 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .enableAge(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        Double depreciationValue = settlementDialog.getDepreciationValue();
+        Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationValue, claimItem.getAlkaUserReductionRule_25());
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationPercentage, claimItem.getAlkaUserReductionRule_25());
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
@@ -130,9 +130,9 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .enableAge(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        double depreciation = settlementDialog.getDepreciationValue();
+        Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, claimItem.getAlkaUserReductionRule_25());
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationPercentage, claimItem.getAlkaUserReductionRule_25());
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
@@ -176,9 +176,9 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .enableAge(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        double depreciation = settlementDialog.getDepreciationValue();
+        Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciation, 0);
+                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationPercentage, 0);
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
 
@@ -219,10 +219,10 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .enableAge(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        double depreciation = settlementDialog.getDepreciationValue();
+        Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
                 SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
-                        depreciation, claimItem.getAlkaUserReductionRule40());
+                        depreciationPercentage, claimItem.getAlkaUserReductionRule40());
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
@@ -266,10 +266,10 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .enableAge(reductionRule.getAgeFrom2())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 
-        double depreciation = settlementDialog.getDepreciationValue();
+        Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
 
         ValuationWithReduction calculation = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
-                depreciation,
+                depreciationPercentage,
                 claimItem.getAlkaUserReductionRule40());
         Double calculatedCashValue = calculation.getCashCompensation();
 

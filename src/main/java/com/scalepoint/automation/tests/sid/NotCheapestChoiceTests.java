@@ -29,8 +29,8 @@ public class NotCheapestChoiceTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .fillNewPrice(48)
-                .fillCustomerDemand(1)
+                .fillNewPrice(48.00)
+                .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .assertAfterOkWeGet(NotCheapestChoiceDialog.class)
                 .assertMinimalValuationIsSuggested("1.00");
@@ -53,8 +53,8 @@ public class NotCheapestChoiceTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .fillNewPrice(48)
-                .fillCustomerDemand(1)
+                .fillNewPrice(48.00)
+                .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND)
                 .closeSidWithOk();
     }
@@ -67,8 +67,8 @@ public class NotCheapestChoiceTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .fillNewPrice(48)
-                .fillCustomerDemand(1)
+                .fillNewPrice(48.00)
+                .fillCustomerDemand(1.00)
                 .fillDepreciation(50)
                 .selectDepreciationType(0)
                 .selectDepreciationType(1)
@@ -85,8 +85,8 @@ public class NotCheapestChoiceTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .fillNewPrice(48)
-                .fillCustomerDemand(1)
+                .fillNewPrice(48.00)
+                .fillCustomerDemand(1.00)
                 .fillDepreciation(50)
                 .selectDepreciationType(1)
                 .selectDepreciationType(0)
@@ -101,8 +101,8 @@ public class NotCheapestChoiceTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .fillNewPrice(48)
-                .fillCustomerDemand(1)
+                .fillNewPrice(48.00)
+                .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .assertAfterOkWeGet(NotCheapestChoiceDialog.class)
                 .assertNotPossibleToCloseDialog();
@@ -116,7 +116,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .fillNewPrice(1)
+                .fillNewPrice(1.00)
                 .selectValuation(SettlementDialog.Valuation.MARKET_PRICE)
                 .assertAfterOkWeGet(NotCheapestChoiceDialog.class);
     }
@@ -133,8 +133,8 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .findClaimLine(genericItem.getName())
                 .editLine()
-                .fillNewPrice(1)
-                .fillCustomerDemand(48)
+                .fillNewPrice(1.00)
+                .fillCustomerDemand(48.00)
                 .selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND)
                 .assertAfterOkWeGet(NotCheapestChoiceDialog.class);
     }
@@ -160,8 +160,8 @@ public class NotCheapestChoiceTests extends BaseTest {
         NotCheapestChoiceDialog notCheapestChoiceDialog = settlementPage
                 .openAddManuallyDialog()
                 .fillBaseData(claimItem)
-                .fillNewPrice(48)
-                .fillCustomerDemand(1)
+                .fillNewPrice(48.00)
+                .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .assertAfterOkWeGet(NotCheapestChoiceDialog.class);
 

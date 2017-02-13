@@ -75,7 +75,7 @@ public class OrderDetailsTests extends BaseTest {
                 .openAddManuallyDialog()
                 .fillCategory(claimItem.getExistingCat1_Born())
                 .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
-                .fillNewPrice(900)
+                .fillNewPrice(900.00)
                 .fillDescription(claimItem.getTextFieldSP());
 
         Double activeValuation = dialog.getCashCompensationValue();
@@ -128,7 +128,7 @@ public class OrderDetailsTests extends BaseTest {
                 .openAddManuallyDialog()
                 .fillCategory(claimItem.getExistingCat1_Born())
                 .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
-                .fillNewPrice(5000)
+                .fillNewPrice(5000.00)
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
 

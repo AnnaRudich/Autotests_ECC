@@ -54,7 +54,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDiscretionaryPrice(300)
+                .fillDiscretionaryPrice(300.00)
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(ANDEN_VURDERING)
                 .clickOK()
@@ -127,8 +127,8 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .openAddManuallyDialog()
                 .fillCategory(claimItem.getExistingCat4())
                 .fillSubCategory(claimItem.getExistingSubCat4())
-                .fillCustomerDemand(1000)
-                .fillNewPrice(100)
+                .fillCustomerDemand(1000.00)
+                .fillNewPrice(100.00)
                 .enableAge()
                 .selectMonth("6");
     }

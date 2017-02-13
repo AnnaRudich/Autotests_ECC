@@ -89,7 +89,7 @@ public class RnVBaseTests extends BaseTest {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .closeSidWithOk()
                 .findClaimLine(description)
                 .selectLine()
@@ -274,7 +274,7 @@ public class RnVBaseTests extends BaseTest {
         String description = agreement.getClaimLineNameForRnV();
         return loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(description, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .closeSidWithOk()
                 .findClaimLine(description)
                 .selectLine()
@@ -293,11 +293,11 @@ public class RnVBaseTests extends BaseTest {
         String lineTwo = "Line 2";
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .setReviewed(true)
                 .closeSidWithOk()
                 .openAddManuallyDialog()
-                .fillBaseData(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .closeSidWithOk()
                 .selectAllLines()
                 .sendToRnV()
@@ -327,7 +327,7 @@ public class RnVBaseTests extends BaseTest {
         String lineOne = "Line 1";
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .setReviewed(true)
                 .closeSidWithOk()
                 .selectAllLines()
@@ -362,7 +362,7 @@ public class RnVBaseTests extends BaseTest {
         String lineOne = "Line 1";
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .setReviewed(true)
                 .closeSidWithOk()
                 .selectAllLines()
@@ -393,7 +393,7 @@ public class RnVBaseTests extends BaseTest {
         String lineOne = "Line 1";
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .setReviewed(true)
                 .closeSidWithOk()
                 .selectAllLines()
@@ -421,7 +421,7 @@ public class RnVBaseTests extends BaseTest {
         String lineOne = "Line 1";
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
-                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .fillBaseData(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .setReviewed(true)
                 .closeSidWithOk()
                 .selectAllLines()
@@ -478,9 +478,9 @@ public class RnVBaseTests extends BaseTest {
         String lineTwo = "Line 2";
         String lineThree = "Line 3";
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .openAddManuallyDialog(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .openAddManuallyDialog(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .openAddManuallyDialog(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .openAddManuallyDialog(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .openAddManuallyDialog(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .selectAllLines()
                 .sendToRnV()
                 .updateTaskTypeAndAgrForAllLines(taskTypeForAllLines, agreement.getTestAgreementForRnV())
@@ -503,9 +503,9 @@ public class RnVBaseTests extends BaseTest {
         String lineTwo = "Line 2";
         String lineThree = "Line 3";
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .openAddManuallyDialog(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
-                .openAddManuallyDialog(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100)
+                .openAddManuallyDialog(lineOne, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .openAddManuallyDialog(lineTwo, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .openAddManuallyDialog(lineThree, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .selectAllLines()
                 .sendToRnV()
                 .changeTask(lineOne, agreement.getRepairType())

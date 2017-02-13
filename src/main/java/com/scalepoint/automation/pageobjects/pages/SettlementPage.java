@@ -128,7 +128,7 @@ public class SettlementPage extends BaseClaimPage {
         return functionalMenu.addManually();
     }
 
-    public SettlementPage openAddManuallyDialog(String description, String category, String subcategory, int newPrice) {
+    public SettlementPage openAddManuallyDialog(String description, String category, String subcategory, Double newPrice) {
         return openAddManuallyDialog()
                 .fillBaseData(description, category, subcategory, newPrice)
                 .closeSidWithOk();
@@ -216,8 +216,8 @@ public class SettlementPage extends BaseClaimPage {
 
     public class ClaimLine {
 
-        private boolean voucherPresent;
-        private boolean discretionaryPresent;
+        private Table claimLine;
+
         private String tooltip = "";
         private String description;
         private String category;
@@ -225,17 +225,12 @@ public class SettlementPage extends BaseClaimPage {
         private int age;
         private double purchasePrice;
         private int depreciation;
-        private double replacementAmount;
+        private double replacementPrice;
         private String actualColor;
         private String computedColor;
-        private boolean lineSentToRepair;
-        private boolean lineSentToValuation;
-
         private WebElement descriptionElement;
 
         public ClaimLine(Table claimLine) {
-            this.voucherPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'voucherIcon.png')]")).size() > 0;
-            this.discretionaryPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'discretionary_icon.png')]")).size() > 0;
             List<WebElement> elements = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[@title]"));
             if (elements.size() > 0) {
                 this.tooltip = elements.get(0).getAttribute("title");
@@ -255,10 +250,8 @@ public class SettlementPage extends BaseClaimPage {
             purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
             String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
-            replacementAmount = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
+            replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
 
-            this.lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
-            this.lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
         }
 
         public SettlementPage selectLine() {
@@ -288,6 +281,7 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public ClaimLine assertVoucherPresent() {
+            boolean voucherPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'voucherIcon.png')]")).size() > 0;
             assertTrue(voucherPresent, "Voucher icon should be displayed");
             return this;
         }
@@ -300,36 +294,17 @@ public class SettlementPage extends BaseClaimPage {
             return category;
         }
 
-        public int getQuantity() {
-            return quantity;
-        }
-
         public int getAge() {
             return age;
-        }
-
-        public double getPurchasePrice() {
-            return purchasePrice;
         }
 
         public int getDepreciation() {
             return depreciation;
         }
 
-        public double getReplacementAmount() {
-            return replacementAmount;
-        }
-
-        public String getActualColor() {
-            return actualColor;
-        }
-
-        public String getComputedColor() {
-            return computedColor;
-        }
-
         public ClaimLine assertDiscretionaryPresent() {
-            assertTrue(isDiscretionaryPresent(), "Discretionary reason icon should be displayed");
+            boolean discretionaryPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'discretionary_icon.png')]")).size() > 0;
+            assertTrue(discretionaryPresent, "Discretionary reason icon should be displayed");
             return this;
         }
 
@@ -338,25 +313,17 @@ public class SettlementPage extends BaseClaimPage {
             return this;
         }
 
-        public boolean isDiscretionaryPresent() {
-            return discretionaryPresent;
-        }
-
         public ClaimLine assertLineHasColor(String color) {
-            assertEquals(getActualColor(), color, "Claim line must have color: " + color);
+            assertEquals(actualColor, color, "Claim line must have color: " + color);
             return this;
-        }
-
-        public boolean hasComputedColor(String color) {
-            return color.equals(getComputedColor());
         }
 
         public ClaimLine assertLineHasComputedColor(String color) {
-            assertEquals(getComputedColor(), color, "Claim line must have color: " + color);
+            assertEquals(computedColor, color, "Claim line must have color: " + color);
             return this;
         }
 
-        public boolean isTooltipPresent(String expectedText) {
+        boolean isTooltipPresent(String expectedText) {
             return expectedText.equals(getTooltip());
         }
 
@@ -381,6 +348,28 @@ public class SettlementPage extends BaseClaimPage {
         public boolean isLineExcludedAndNotReviewed() {
             return descriptionElement.getAttribute("class").equals("divNotActive")
                     && !descriptionElement.getAttribute("style").equals(reviewedColor);
+        }
+
+        public ClaimLine assertLineIsSentToRepair() {
+            boolean lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
+            Assert.assertTrue(lineSentToRepair);
+            return this;
+        }
+
+        public ClaimLine assertLineSentToValuation() {
+            boolean lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
+            Assert.assertTrue(lineSentToValuation);
+            return this;
+        }
+
+        public ClaimLine assertPurchasePriceIs(double expectedPrice) {
+            OperationalUtils.assertEqualsDouble(purchasePrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+            return this;
+        }
+
+        public ClaimLine assertReplacementPriceIs(double expectedPrice) {
+            OperationalUtils.assertEqualsDouble(replacementPrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+            return this;
         }
     }
 }

@@ -13,7 +13,7 @@ public class ClaimItem {
 
     private String textFieldSP = RandomUtils.randomName("ClaimItem");
     @XmlElement
-    private Integer newPriceSP;
+    private Double newPriceSP;
     @XmlElement
     private Integer purchasePriceSP;
     @XmlElement
@@ -55,9 +55,9 @@ public class ClaimItem {
     @XmlElement
     private String procuraLimitPrice;
     @XmlElement
-    private Integer customerDemand;
+    private Double customerDemand;
     @XmlElement
-    private Integer usedPrice;
+    private Double usedPrice;
     @XmlElement
     private String depAmount2;
     @XmlElement
@@ -75,7 +75,7 @@ public class ClaimItem {
     @XmlElement
     private String pinkColor;
     @XmlElement
-    private Integer lowerPrice;
+    private Double lowerPrice;
     @XmlElement
     private String valuationType1;
     @XmlElement
@@ -89,7 +89,7 @@ public class ClaimItem {
     @XmlElement
     private String ageStatus;
     @XmlElement
-    private Integer bigCustomDemandPrice;
+    private Double bigCustomDemandPrice;
     @XmlElement
     private String existingCat3;
     @XmlElement
@@ -119,7 +119,7 @@ public class ClaimItem {
     @XmlElement
     private String trygSubCategory;
     @XmlElement
-    private Integer trygNewPrice;
+    private Double trygNewPrice;
     @XmlElement
     private String trygCat1;
     @XmlElement
@@ -160,7 +160,7 @@ public class ClaimItem {
         return trygSubCategory;
     }
 
-    public Integer getTrygNewPrice(){
+    public Double getTrygNewPrice(){
         return trygNewPrice;
     }
 
@@ -168,7 +168,7 @@ public class ClaimItem {
         return textFieldSP;
     }
 
-    public Integer getNewPriceSP_2400() {
+    public Double getNewPriceSP_2400() {
         return newPriceSP;
     }
 
@@ -270,11 +270,11 @@ public class ClaimItem {
 
     }
 
-    public Integer getCustomerDemand_500() {
+    public Double getCustomerDemand_500() {
         return customerDemand;
     }
 
-    public Integer getUsedPrice() {
+    public Double getUsedPrice() {
         return usedPrice;
     }
 
@@ -302,7 +302,7 @@ public class ClaimItem {
         return pinkColor;
     }
 
-    public Integer getLowerPrice() {
+    public Double getLowerPrice() {
         return lowerPrice;
     }
 
@@ -330,7 +330,7 @@ public class ClaimItem {
         return ageStatus;
     }
 
-    public Integer getBigCustomDemandPrice() {
+    public Double getBigCustomDemandPrice() {
         return bigCustomDemandPrice;
     }
 

@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -30,8 +31,8 @@ public class AddValuationDialog extends BaseDialog {
         return this;
     }
 
-    public AddValuationDialog addValuationPrice(int valuationPrice) {
-        addValuationPrice.enter(String.valueOf(valuationPrice));
+    public AddValuationDialog addValuationPrice(Double valuationPrice) {
+        addValuationPrice.enter(OperationalUtils.format(valuationPrice));
         return this;
     }
 
