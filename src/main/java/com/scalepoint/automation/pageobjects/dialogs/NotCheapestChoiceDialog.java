@@ -11,7 +11,6 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 /**
  * @author : igu
@@ -44,41 +43,27 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return reason.getValue();
     }
 
-    public NotCheapestChoiceDialog selectFirstReason() {
-        selectAndGetFirstReasonValue();
-        return this;
-    }
-
-    public NotCheapestChoiceDialog selectReason(String visibleText){
-        waitForVisible(reason);
-        reason.select(visibleText);
-        return this;
-    }
-
     public NotCheapestChoiceDialog assertMinimalValuationIsSuggested(String amount) {
         assertEquals(getAmount(), amount, "Must be suggested amount: "+amount);
         return this;
     }
 
-
     public String selectSecondReason() {
         reason.select(2);
-
         return reason.getValue();
     }
 
     public SettlementDialog ok() {
         ok.click();
-
         return at(SettlementDialog.class);
     }
 
     public SettlementPage okGoToSettlementPage() {
         ok.click();
-
         return Page.at(SettlementPage.class);
     }
 
+    //ASSERTS
     public void assertNotPossibleToCloseDialog() {
         ok.click();
         try {

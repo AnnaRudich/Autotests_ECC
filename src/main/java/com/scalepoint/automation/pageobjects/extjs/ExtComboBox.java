@@ -46,6 +46,7 @@ public class ExtComboBox extends ExtElement {
         ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }
 
+    @SuppressWarnings("unchecked")
     public List<String> getComboBoxOptions() {
         Object[] args = {getRootElement()};
         String js =
@@ -55,7 +56,7 @@ public class ExtComboBox extends ExtElement {
                         "options = [];" +
                         "store.each(function(rec){ options.push(rec.get(cmp.displayField)) });" +
                         "return options;";
-        return (List) ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
+        return (List<String>) ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
     }
 
     private WebElement getInput() {

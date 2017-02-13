@@ -56,7 +56,7 @@ public class AddShopDialog extends BaseDialog {
         return at(SupplierDialog.ShopsTab.class);
     }
 
-    public boolean isShopDataEqualsWith(Shop shop) {
+    private boolean isShopDataEqualsWith(Shop shop) {
         return (getInputValue(nameField).contains(shop.getShopName()) &&
                 getInputValue(address1Field).contains(shop.getShopAddress1()) &&
                 getInputValue(address2Field).contains(shop.getShopAddress2()) &&

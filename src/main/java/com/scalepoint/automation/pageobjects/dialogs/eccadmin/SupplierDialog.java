@@ -46,7 +46,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             return BaseDialog.at(AddShopDialog.class);
         }
 
-        public boolean isNewShopExists(Shop shop) {
+        boolean isNewShopExists(Shop shop) {
             try {
                 WebElement item = find(byShopNameXpath, shop.getShopName());
                 scrollTo(item);
@@ -56,7 +56,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
         }
 
-        public ShopsTab selectShop(Shop shop) {
+        ShopsTab selectShop(Shop shop) {
             WebElement item = find(byShopNameXpath, shop.getShopName());
             scrollTo(item);
             clickAndWaitForEnabling(item, By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]"));

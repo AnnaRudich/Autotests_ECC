@@ -228,7 +228,7 @@ public class EditReasonTests extends BaseTest {
                 .assertReasonDisabled(reason)
                 .logout();
 
-        login(trygUser, CustomerDetailsPage.class, "shnbr="+ CurrentUser.getClaimId())
+        login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
                 .reopenClaim()
                 .findClaimLine(TEST_REASON_LINE)
                 .assertTooltipPresent(reason)

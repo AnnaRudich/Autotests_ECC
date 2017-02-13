@@ -61,11 +61,11 @@ public class ReplacementDialog extends BaseDialog {
         closeDialog(cancelButton);
     }
 
-    public Double getVoucherFaceValue() {
+    private Double getVoucherFaceValue() {
         return OperationalUtils.toNumber(voucherFaceValue.getText().split("rdi")[1].replaceAll("[^\\.,0123456789]", ""));
     }
 
-    public Double getItemPriceValue() {
+    private Double getItemPriceValue() {
         return OperationalUtils.toNumber(itemPrice.getText().replaceAll("[^\\.,0123456789]", ""));
     }
 
@@ -94,6 +94,7 @@ public class ReplacementDialog extends BaseDialog {
         return Page.at(CustomerDetailsPage.class);
     }
 
+    //ASSERTS
     public ReplacementDialog assertItemPriceValueIs(Double expectedPrice) {
         assertEqualsDouble(getItemPriceValue(), expectedPrice, "Voucher cash value %s should be equal to not depreciated new price %s");
         return this;

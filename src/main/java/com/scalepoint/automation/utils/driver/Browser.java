@@ -30,6 +30,7 @@ public class Browser {
             logger.info("Data found {}", data);
             data.getDriver().quit();
             holder.remove();
+            logger.info("Completed browser quit!");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

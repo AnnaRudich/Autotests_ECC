@@ -24,12 +24,12 @@ public class VoucherTermsAndConditionsDialog extends BaseDialog {
         return termsAndConditions.getText();
     }
 
+    public void close(){
+        close.click();
+    }
+
     public VoucherTermsAndConditionsDialog assertTermsAndConditionsTextIs(String expectedText) {
         Assert.assertEquals(getTermsAndConditions(), expectedText, "The Terms And Conditions are different");
         return this;
-    }
-
-    public void close(){
-        close.click();
     }
 }

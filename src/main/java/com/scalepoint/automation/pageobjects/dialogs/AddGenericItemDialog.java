@@ -43,7 +43,7 @@ public class AddGenericItemDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
-    public AddGenericItemDialog selectCategory(String categoryGroup, String category) {
+    private AddGenericItemDialog selectCategory(String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxCompleted();
         Wait.wait(3);
@@ -55,6 +55,7 @@ public class AddGenericItemDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
+    //ASSERTS
     public void assertGenericItemIsNotPresent(String itemName, String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxCompleted();
@@ -63,7 +64,7 @@ public class AddGenericItemDialog extends BaseDialog {
             if (element != null && element.isDisplayed()) {
                 throw new AssertionError("Item is present but shouldn't be: "+itemName);
             }
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException ignored) {
         }
     }
 }

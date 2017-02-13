@@ -13,9 +13,6 @@ public class OpenSettlementOptionDialog extends Page {
     @FindBy(id = "btn_reopen")
     private Button reopen;
 
-    @FindBy(id = "btn_view")
-    private Button view;
-
     @FindBy(id = "btn_cancel")
     private Button cancel;
 
@@ -30,9 +27,5 @@ public class OpenSettlementOptionDialog extends Page {
         waitForVisible(reopen);
         waitForVisible(cancel);
         return null;
-    }
-
-    public void reopen() {
-        reopen.click();
     }
 }

@@ -9,8 +9,6 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
-
 @EccPage
 public class ImportLossInformationDialog extends BaseDialog {
 
@@ -29,8 +27,10 @@ public class ImportLossInformationDialog extends BaseDialog {
     public SettlementPage uploadExcel(String path) {
         Wait.waitForInvisible(browseControl);
         browseControl.sendKeys(path);
+
         Wait.waitForDisplayed(By.id("excel-import-button"));
         importButton.click();
+
         ExcelImportDialog excelImportDialog = at(ExcelImportDialog.class);
         excelImportDialog.cancel();
         return Page.at(SettlementPage.class);

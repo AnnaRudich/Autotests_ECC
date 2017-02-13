@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="1" author="ipo" runOnChange="true">
+    <changeSet id="1" author="ipo" runOnChange="true" failOnError="true" >
 
         <comment>Create ICs/Users</comment>
 
@@ -16,56 +16,34 @@
 
             update [User] set UserName = concat(UserName,'-old-',UserID) where Email = 'ecc_auto@scalepoint.com' and UserName like 'autotest-%'
 
-            EXEC autotests_create_user 'autotest-system-scalepoint', @scalepointCompany, @adminUserRights
-            EXEC autotests_create_user 'autotest-user-sp',           @scalepointCompany, @adminUserRights
-
-            declare @masterTemplateName varchar(50) = 'mastr'
-            declare @serviceAgreementName varchar(50) = 'AutoTest Agreement'
-            declare @serviceAgreementNameForWizard varchar(50) = 'AutoTest Agreement For Wizard'
+            EXEC autotests_create_user @scalepointCompany, 'autotest-system', @adminUserRights
+            EXEC autotests_create_user @scalepointCompany, 'autotest-sp', @adminUserRights
 
             -- there are no companies/fts in the range 50-60 across all the countries, so lets grab those ids
-            declare @companyId int = 51
-            EXEC autotests_create_ic @companyId, 'Future-1'
-            EXEC autotests_create_user 'autotest-user-future1', @companyId, @adminUserRights
-            EXEC autotests_create_choice_reasons @companyId
-            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
-
-            SET @companyId = 52
-            EXEC autotests_create_ic @companyId, 'Future-2'
-            EXEC autotests_create_user 'autotest-user-future2', @companyId, @adminUserRights
-            EXEC autotests_create_choice_reasons @companyId
-            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
-
-            SET @companyId = 53
-            EXEC autotests_create_ic @companyId, 'Future-3'
-            EXEC autotests_create_user 'autotest-user-future3', @companyId, @adminUserRights
-            EXEC autotests_create_choice_reasons @companyId
-            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
-
-            SET @companyId = 54
-            EXEC autotests_create_ic @companyId, 'Future-4'
-            EXEC autotests_create_user 'autotest-user-future4', @companyId, @adminUserRights
-            EXEC autotests_create_choice_reasons @companyId
-            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
-
-            SET @companyId = 55
-            EXEC autotests_create_ic @companyId, 'Future-5'
-            EXEC autotests_create_user 'autotest-user-future5', @companyId, @adminUserRights
-            EXEC autotests_create_choice_reasons @companyId
-            EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
+            exec autotests_prepare_future_company 50, @adminUserRights
+            exec autotests_prepare_future_company 51, @adminUserRights
+            exec autotests_prepare_future_company 52, @adminUserRights
+            exec autotests_prepare_future_company 53, @adminUserRights
+            exec autotests_prepare_future_company 54, @adminUserRights
+            exec autotests_prepare_future_company 55, @adminUserRights
+            exec autotests_prepare_future_company 56, @adminUserRights
+            exec autotests_prepare_future_company 57, @adminUserRights
+            exec autotests_prepare_future_company 58, @adminUserRights
+            exec autotests_prepare_future_company 59, @adminUserRights
+            exec autotests_prepare_future_company 60, @adminUserRights
 
             declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
-            EXEC autotests_create_user 'autotest-user-lb', @lb_id, @chUserRights
+            EXEC autotests_create_user @lb_id, 'autotest-lb', @chUserRights
 
             declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'BAUTA')
-            EXEC autotests_create_user 'autotest-user-bauta', @bauta_id, @chUserRights
+            EXEC autotests_create_user @bauta_id, 'autotest-bauta', @chUserRights
 
             declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
-            EXEC autotests_create_user 'autotest-user-trygfors', @tryg_id, @chUserRights
+            EXEC autotests_create_user @tryg_id, 'autotest-trygfors', @chUserRights
             EXEC autotests_create_redrule_tryg
 
             declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'ALKA')
-            EXEC autotests_create_user 'autotest-user-alka', @alka_id, @chUserRights
+            EXEC autotests_create_user @alka_id, 'autotest-alka', @chUserRights
         </sql>
 
         <sql>

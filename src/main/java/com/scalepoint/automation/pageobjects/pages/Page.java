@@ -56,14 +56,12 @@ public abstract class Page implements Actions {
         int totalTimeoutInSeconds = 20;
         int pollingMs = 1000;
 
-        logger.info(" Expected: {}", expectedUrl);
         Wait.forCondition(webDriver -> {
             try {
                 String currentUrl = driver.getCurrentUrl();
-                logger.info("Current url: {}", currentUrl);
+                logger.info("Expected: {} Current url: {}", expectedUrl, currentUrl);
 
                 assert webDriver != null;
-                logger.info("Windows count: {}", webDriver.getWindowHandles().size());
                 switchToLast();
 
                 return currentUrl.contains(expectedUrl) || (alternativeUrl != null && currentUrl.contains(alternativeUrl));

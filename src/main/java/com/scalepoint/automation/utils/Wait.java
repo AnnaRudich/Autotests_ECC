@@ -92,9 +92,7 @@ public class Wait {
                 ignoring(StaleElementReferenceException.class);
         wait.until((Function<WebDriver, Boolean>) webDriver -> {
             try {
-                boolean displayed = element.isDisplayed();
-                System.out.println("Dsiplayed: "+displayed);
-                return !displayed;
+                return !element.isDisplayed();
             } catch (Exception e) {
                 return true;
             }

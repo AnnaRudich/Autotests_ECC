@@ -1,16 +1,22 @@
 <?xml version="1.0"?>
 <existingUsers>
-    <user login="autotest-system-scalepoint" password="12341234" company="SCALEPOINT" companyId="7" ftId="1" system="true"/>
+    <user login="autotest-system" password="12341234" company="SCALEPOINT" companyId="7" ftId="1" system="true"/>
 
-    <user login="autotest-user-future1" password="12341234" companyCode="FUTURE-1" companyName="Future-1" companyId="51" ftId="51" basic="true"/>
-    <user login="autotest-user-future2" password="12341234" companyCode="FUTURE-2" companyName="Future-2" companyId="52" ftId="52" basic="true"/>
-    <user login="autotest-user-future3" password="12341234" companyCode="FUTURE-3" companyName="Future-3" companyId="53" ftId="53" basic="true"/>
-    <user login="autotest-user-future4" password="12341234" companyCode="FUTURE-4" companyName="Future-4" companyId="54" ftId="54" basic="true"/>
-    <user login="autotest-user-future5" password="12341234" companyCode="FUTURE-5" companyName="Future-5" companyId="55" ftId="55" basic="true"/>
+    <user login="autotest-future50" password="12341234" companyCode="FUTURE-50" companyName="Future-50" companyId="50" ftId="50" basic="true"/>
+    <user login="autotest-future51" password="12341234" companyCode="FUTURE-51" companyName="Future-51" companyId="51" ftId="51" basic="true"/>
+    <user login="autotest-future52" password="12341234" companyCode="FUTURE-52" companyName="Future-52" companyId="52" ftId="52" basic="true"/>
+    <user login="autotest-future53" password="12341234" companyCode="FUTURE-53" companyName="Future-53" companyId="53" ftId="53" basic="true"/>
+    <user login="autotest-future54" password="12341234" companyCode="FUTURE-54" companyName="Future-54" companyId="54" ftId="54" basic="true"/>
+    <user login="autotest-future55" password="12341234" companyCode="FUTURE-55" companyName="Future-55" companyId="55" ftId="55" basic="true"/>
+    <user login="autotest-future56" password="12341234" companyCode="FUTURE-56" companyName="Future-56" companyId="56" ftId="56" basic="true"/>
+    <user login="autotest-future57" password="12341234" companyCode="FUTURE-57" companyName="Future-57" companyId="57" ftId="57" basic="true"/>
+    <user login="autotest-future58" password="12341234" companyCode="FUTURE-58" companyName="Future-58" companyId="58" ftId="58" basic="true"/>
+    <user login="autotest-future59" password="12341234" companyCode="FUTURE-59" companyName="Future-59" companyId="59" ftId="59" basic="true"/>
+    <user login="autotest-future60" password="12341234" companyCode="FUTURE-60" companyName="Future-60" companyId="60" ftId="60" basic="true"/>
 
-    <user login="autotest-user-sp"       password="12341234" companyCode="SCALEPOINT" companyName="Scalepoint" companyId="7"     ftId="1"/>
-    <user login="autotest-user-lb"       password="12341234" companyCode="LB"         companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052"/>
-    <user login="autotest-user-bauta"    password="12341234" companyCode="BAUTA"      companyName="Bauta Forsikring" companyId="14"    ftId="140052"/>
-    <user login="autotest-user-trygfors" password="12341234" companyCode="TRYGFORSIKRING" companyId="17" companyName="Tryg" ftId="140053"/>
-    <user login="autotest-user-alka"     password="12341234" companyCode="ALKA"       companyId="6" companyName="ALKA"     ftId="5"/>
+    <user login="autotest-sp"       password="12341234" companyCode="SCALEPOINT"     companyName="Scalepoint" companyId="7"     ftId="1"/>
+    <user login="autotest-lb"       password="12341234" companyCode="LB"             companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052"/>
+    <user login="autotest-bauta"    password="12341234" companyCode="BAUTA"          companyName="Bauta Forsikring" companyId="14"    ftId="140052"/>
+    <user login="autotest-trygfors" password="12341234" companyCode="TRYGFORSIKRING" companyId="17" companyName="Tryg" ftId="140053"/>
+    <user login="autotest-alka"     password="12341234" companyCode="ALKA"           companyId="6" companyName="ALKA"     ftId="5"/>
 </existingUsers>

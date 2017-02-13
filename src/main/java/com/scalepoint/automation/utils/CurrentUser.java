@@ -2,8 +2,12 @@ package com.scalepoint.automation.utils;
 
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CurrentUser {
+
+    private static Logger logger = LoggerFactory.getLogger(CurrentUser.class);
 
     private static ThreadLocal<User> userHolder = new ThreadLocal<>();
     private static ThreadLocal<String> claimIdHolder = new ThreadLocal<>();
@@ -25,9 +29,11 @@ public class CurrentUser {
     }
 
     public static void cleanUp() {
+        logger.info("Clean up CurrentUser");
         if (getUser() != null) {
             UsersManager.releaseUser(getUser());
         }
+
         userHolder.remove();
 
         if (claimIdHolder.get() != null) {

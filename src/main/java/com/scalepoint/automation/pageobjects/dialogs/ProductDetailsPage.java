@@ -2,13 +2,11 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
-import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import static org.testng.Assert.assertTrue;
 
@@ -41,6 +39,8 @@ public class ProductDetailsPage extends Page {
         return at(TextSearchPage.class);
     }
 
+
+    //ASSERTS
     public ProductDetailsPage assertMarketPriceSupplierVisible(){
         assertTrue(Wait.visible(marketPriceSupplier), "Market price supplier must be shown");
         return this;

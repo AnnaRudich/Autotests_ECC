@@ -1,14 +1,10 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
 
 @EccPage
 public class ShopDepositPage extends Page {

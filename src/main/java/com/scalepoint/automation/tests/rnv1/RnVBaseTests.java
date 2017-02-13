@@ -44,57 +44,48 @@ public class RnVBaseTests extends BaseTest {
         }
     }
 
-    @DataProvider(name = "RnVBaseTests.startTestDataProvider")
-    public static Object[][] startTestDataProvider(Method method) {
-        try {
-            ServiceAgreement serviceAgreement = (ServiceAgreement) TestData.Data.getInstance(ServiceAgreement.class);
-
-            Object[][] params = new Object[4][];
-            //verify Repair task start
-            params[0] = combine(getTestDataParameters(method), serviceAgreement.getRepairType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
-                Assert.assertTrue(claimLine.isLineExcludedAndReviewed());
-                Assert.assertTrue(claimLine.isClaimLineSentToRepair());
-            });
-
-            //verify Valuation task start
-            params[1] = combine(getTestDataParameters(method), serviceAgreement.getValuaitonType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
-                Assert.assertTrue(claimLine.isLineExcludedAndReviewed());
-                Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
-            });
-
-
-            //verify Match task start
-            params[2] = combine(getTestDataParameters(method), serviceAgreement.getMatchServiceType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
-                Assert.assertTrue(claimLine.isLineExcludedAndNotReviewed());
-                Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
-            });
-
-            //verify Repair estimate task start
-            params[3] = combine(getTestDataParameters(method), serviceAgreement.getRepairEstimateType(), (StartTaskAssert) (settlementPage, description) -> {
-                SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
-                Assert.assertTrue(claimLine.isLineExcludedAndNotReviewed());
-                Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
-
-            });
-
-            return params;
-        } catch (Exception e) {
-            LoggerFactory.getLogger(RnVBaseTests.class).error(e.getMessage(), e);
-            return new Object[][]{{}};
-        }
-    }
-
     interface StartTaskAssert {
         void doAssert(SettlementPage page, String description);
     }
 
-    @Test(dataProvider = "RnVBaseTests.startTestDataProvider",
-            description = "verify tasks start")
-    public void eccs2961_2816_startTaskTest(User user, Claim claim, ServiceAgreement agreement, String serviceAgreementType, StartTaskAssert taskAssert) {
-        String description = "Line 1";;
+    @Test(dataProvider = "testDataProvider", description = "verify repair tasks start")
+    public void eccs2961_2816_verifyRepairTaskStart(User user, Claim claim, ServiceAgreement agreement) {
+        startTaskTest(user, claim, agreement, agreement.getRepairType(), (settlementPage, description) -> {
+            SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
+            Assert.assertTrue(claimLine.isLineExcludedAndReviewed());
+            Assert.assertTrue(claimLine.isClaimLineSentToRepair());
+        });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "verify valuation tasks start")
+    public void eccs2961_2816_verifyValuationTaskStart(User user, Claim claim, ServiceAgreement agreement) {
+        startTaskTest(user, claim, agreement, agreement.getValuaitonType(), (settlementPage, description) -> {
+            SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
+            Assert.assertTrue(claimLine.isLineExcludedAndReviewed());
+            Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
+        });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "verify match tasks start")
+    public void eccs2961_2816_verifyMatchTaskStart(User user, Claim claim, ServiceAgreement agreement) {
+        startTaskTest(user, claim, agreement, agreement.getMatchServiceType(), (settlementPage, description) -> {
+            SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
+            Assert.assertTrue(claimLine.isLineExcludedAndNotReviewed());
+            Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
+        });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "verify repair estimate tasks start")
+    public void eccs2961_2816_verifyRepairEstimateTaskStart(User user, Claim claim, ServiceAgreement agreement) {
+        startTaskTest(user, claim, agreement, agreement.getRepairEstimateType(), (settlementPage, description) -> {
+            SettlementPage.ClaimLine claimLine = settlementPage.findClaimLine(description);
+            Assert.assertTrue(claimLine.isLineExcludedAndNotReviewed());
+            Assert.assertTrue(claimLine.isClaimLineSendNotToRepairAndIconDisplays());
+        });
+    }
+
+    private void startTaskTest(User user, Claim claim, ServiceAgreement agreement, String serviceAgreementType, StartTaskAssert taskAssert) {
+        String description = "Line 1";
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
@@ -457,50 +448,31 @@ public class RnVBaseTests extends BaseTest {
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
 
-    @DataProvider(name = "RnVBaseTests.changeTaskTypeProvider")
-    public static Object[][] changeTaskTypeProvider(Method method) {
-        try {
-            ServiceAgreement serviceAgreement = (ServiceAgreement) TestData.Data.getInstance(ServiceAgreement.class);
-
-            Object[][] params = new Object[4][];
-            //verify task is Repair for new line if all other lines sent to Repair
-            params[0] = combine(getTestDataParameters(method),
-                    serviceAgreement.getRepairType(),
-                    FeedbackActionType.DELETE_CLAIM_LINE_ID,
-                    serviceAgreement.getRepairType()
-            );
-
-            //verify task is Repair for new line if Repair price was added
-            params[1] = combine(getTestDataParameters(method),
-                    serviceAgreement.getValuaitonType(),
-                    FeedbackActionType.DELETE_CLAIM_LINE_ID_ADD_REPAIR_PRICE,
-                    serviceAgreement.getRepairType()
-            );
-
-            //verify task is Valuation for new line if all other lines sent to Valuation
-            params[2] = combine(getTestDataParameters(method),
-                    serviceAgreement.getValuaitonType(),
-                    FeedbackActionType.DELETE_CLAIM_LINE_ID,
-                    serviceAgreement.getValuaitonType()
-            );
-
-            //verify task is match Service for new line if all other lines sent to match service
-            params[3] = combine(getTestDataParameters(method),
-                    serviceAgreement.getMatchServiceType(),
-                    FeedbackActionType.DELETE_CLAIM_LINE_ID,
-                    serviceAgreement.getMatchServiceType()
-            );
-
-            return params;
-        } catch (Exception e) {
-            LoggerFactory.getLogger(RnVBaseTests.class).error(e.getMessage(), e);
-            return new Object[][]{{}};
-        }
+    //verify task is Repair for new line if all other lines sent to Repair
+    @Test(dataProvider = "testDataProvider")
+    public void eccs3305_testTaskIsRepairForNewLineIfAllRepair(User user, Claim claim, ServiceAgreement agreement) {
+        testTaskTypesForNewLine(user, claim, agreement,  agreement.getRepairType(), FeedbackActionType.DELETE_CLAIM_LINE_ID, agreement.getRepairType());
     }
 
-    @Test(dataProvider = "RnVBaseTests.changeTaskTypeProvider",
-            description = "verify task is Repair for new line if all other lines sent to Repair")
-    public void eccs3305_taskTypesForNewLine(User user, Claim claim, ServiceAgreement agreement,
+    //verify task is Repair for new line if Repair price was added
+    @Test(dataProvider = "testDataProvider")
+    public void eccs3305_testTaskIsRepairForNewLineIfRepairPriceAdded(User user, Claim claim, ServiceAgreement agreement) {
+        testTaskTypesForNewLine(user, claim, agreement,  agreement.getValuaitonType(), FeedbackActionType.DELETE_CLAIM_LINE_ID_ADD_REPAIR_PRICE, agreement.getRepairType());
+    }
+
+    //verify task is Valuation for new line if all other lines sent to Valuation
+    @Test(dataProvider = "testDataProvider")
+    public void eccs3305_testTaskIsValuationForNewLineIfAllValuation(User user, Claim claim, ServiceAgreement agreement) {
+        testTaskTypesForNewLine(user, claim, agreement,  agreement.getValuaitonType(), FeedbackActionType.DELETE_CLAIM_LINE_ID, agreement.getValuaitonType());
+    }
+
+    //verify task is match Service for new line if all other lines sent to match service
+    @Test(dataProvider = "testDataProvider")
+    public void eccs3305_testTaskIsServiceForNewLineIfAllService(User user, Claim claim, ServiceAgreement agreement) {
+        testTaskTypesForNewLine(user, claim, agreement,  agreement.getMatchServiceType(), FeedbackActionType.DELETE_CLAIM_LINE_ID, agreement.getMatchServiceType());
+    }
+
+    private void testTaskTypesForNewLine(User user, Claim claim, ServiceAgreement agreement,
                                               String taskTypeForAllLines, FeedbackActionType feedbackActionType, String taskTypeForFirstLine) {
         String lineOne = "Line 1";
         String lineTwo = "Line 2";

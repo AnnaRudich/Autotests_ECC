@@ -6,8 +6,8 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_
 GO
 
 CREATE PROCEDURE [dbo].[autotests_create_user]
-  @username NVARCHAR(256),
 	@insCompanyId BIGINT,
+  @username NVARCHAR(256),
 	@userrole INT = 10,
 	@email NVARCHAR(256) = 'ecc_auto@scalepoint.com',
 	@password VARCHAR(256) = '12341234'
@@ -30,14 +30,15 @@ DECLARE @shopperAddressId INT = (SELECT max(ShopperAddressId) + 1 FROM [ShopperA
 DECLARE @hashedPassword NVARCHAR(256) = 'wSmzJK7mYrBOzPaLq7qFhRNG3/k='
 DECLARE @hashType VARCHAR(10) = 'SHA1'
 
-IF @userId IS NOT NULL
-BEGIN
-	IF NOT EXISTS(SELECT 1 FROM [UserRoleMapping] WHERE UserId = @userId)
-		INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USERROLE_ITMANAGER)
-  RETURN
-END
-
 BEGIN TRANSACTION
+
+  IF @userId IS NOT NULL
+  BEGIN
+    IF NOT EXISTS(SELECT 1 FROM [UserRoleMapping] WHERE UserId = @userId)
+      INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USERROLE_ITMANAGER)
+    RETURN
+  END
+
 	SET @userId = (SELECT max(UserId) + 1 FROM [User])
 
   SET IDENTITY_INSERT [User] ON

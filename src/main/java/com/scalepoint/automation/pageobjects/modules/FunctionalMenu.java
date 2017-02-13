@@ -8,8 +8,6 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
-import static com.scalepoint.automation.pageobjects.pages.Page.at;
-
 public class FunctionalMenu extends Module {
 
     @FindBy(xpath = "//span[contains(@style,'findInCatalogIcon.png')]/ancestor::a")

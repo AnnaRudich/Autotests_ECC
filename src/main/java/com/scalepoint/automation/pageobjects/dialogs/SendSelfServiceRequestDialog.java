@@ -27,9 +27,6 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
     private Button ok;
 
-    @FindBy(xpath = "//span[contains(@class,'x-btn-inner-center')][contains(text(),'Annuller')]")
-    private Button cancel;
-
     @Override
     public SendSelfServiceRequestDialog ensureWeAreAt() {
         waitForVisible(email);

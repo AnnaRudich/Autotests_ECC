@@ -4,7 +4,6 @@ import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
@@ -58,18 +57,17 @@ public class EditVoucherValuationDialog extends BaseDialog {
         return at(VoucherTermsAndConditionsDialog.class);
     }
 
-    public EditVoucherValuationDialog discountDistribution(String _discountDistribution) {
-        discountDistribution.enter(_discountDistribution);
+    public EditVoucherValuationDialog discountDistribution(String discountDistributionValue) {
+        discountDistribution.enter(discountDistributionValue);
         return this;
-    }
-
-    public String getVoucherFaceValue() {
-        return voucherFaceValue.getText();
     }
 
     public String getVoucherCashValue() {
         return voucherCashValue.getText();
     }
+
+
+    //ASSERTS
 
     public EditVoucherValuationDialog assertBrandsTextIs(String expectedBrandsText) {
         assertEquals(getBrands(), expectedBrandsText, "Wrong Brand is displayed.");

@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -39,7 +38,5 @@ public class AddValuationDialog extends BaseDialog {
     public SettlementDialog closeValuationDialogWithOk() {
         ok.click();
         return at(SettlementDialog.class);
-
     }
-
 }

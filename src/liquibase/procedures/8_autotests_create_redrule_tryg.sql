@@ -9,7 +9,6 @@ CREATE PROCEDURE [dbo].[autotests_create_redrule_tryg]
 AS
 
 	SET NOCOUNT ON
-	BEGIN TRANSACTION
 
   DECLARE @RuleName varchar(20) = 'Autotest-MusikRule'
   IF EXISTS (SELECT * FROM [dbo].[ReductionRule] WHERE [Description] = @RuleName)
@@ -30,8 +29,6 @@ AS
   INSERT INTO [dbo].[ReductionRuleLine]
          ([Description], [Sequence], [ClaimReduction], [CashReduction], [NewItemCode], [ReductionRule], [AgeFrom], [AgeTo], [priceRangeFrom], [priceRangeTo], [claimantRating])
   VALUES ('36-37', 1, 0.2, 0, 'O', @ReductionRuleId, 36, 37, 10, 20, 0)
-
-	COMMIT TRANSACTION
 
 	SET NOCOUNT OFF
 

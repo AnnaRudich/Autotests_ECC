@@ -11,7 +11,10 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -67,11 +70,8 @@ public class SettlementPage extends BaseClaimPage {
 
     @Override
     public SettlementPage ensureWeAreOnPage() {
-        long start = System.currentTimeMillis();
-
         waitForUrl(getRelativeUrl());
         waitForVisible(ok);
-        System.out.println("SPAGE: "+(System.currentTimeMillis() - start));
         return this;
     }
 

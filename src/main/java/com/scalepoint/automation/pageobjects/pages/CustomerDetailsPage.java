@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,6 +13,7 @@ import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubl
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
+@RequiredParameters("shnbr=%s")
 public class CustomerDetailsPage extends BaseClaimPage {
 
     @FindBy(id = "genoptag")

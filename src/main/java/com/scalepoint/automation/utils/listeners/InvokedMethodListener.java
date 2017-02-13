@@ -40,6 +40,9 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     logger.error(e.getMessage(), e);
                     logger.error("Next attempt");
                     attempt++;
+                    if (attempt > 1) {
+                        throw e;
+                    }
                 }
             }
         }

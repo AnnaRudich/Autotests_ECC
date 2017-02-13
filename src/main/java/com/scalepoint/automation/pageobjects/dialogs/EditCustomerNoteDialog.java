@@ -2,12 +2,10 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -16,9 +14,6 @@ public class EditCustomerNoteDialog extends BaseDialog {
 
     @FindBy(id = "editCustomerNoteOkButton")
     private WebElement ok;
-
-    @FindBy(id = "editCustomerNoteCancelButton")
-    private WebElement cancel;
 
     @Override
     protected BaseDialog ensureWeAreAt() {

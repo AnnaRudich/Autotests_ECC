@@ -80,7 +80,7 @@ public class BottomMenu extends Module {
         return subtotalValue.getText();
     }
 
-    public boolean isCompleteClaimEnabled() {
+    private boolean isCompleteClaimEnabled() {
         if (!completeClaim.isDisplayed()) {
             expand();
         }
