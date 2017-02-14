@@ -1,9 +1,11 @@
 package com.scalepoint.automation.utils;
 
+import com.codeborne.selenide.*;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.driver.DriversFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -86,17 +88,17 @@ public class Wait {
         });
     }
 
-    public static void waitElementDisappeared(WebElement element) {
-        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS).
-                pollingEvery(1, TimeUnit.SECONDS).
-                ignoring(StaleElementReferenceException.class);
-        wait.until((Function<WebDriver, Boolean>) webDriver -> {
+    public static void waitElementDisappeared(By element) {
+        Browser.driver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT).until((Function<WebDriver, Boolean>) webDriver -> {
             try {
-                return !element.isDisplayed();
+                Browser.driver().findElement(element);
+                return false;
             } catch (Exception e) {
                 return true;
             }
         });
+        Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.defaultImplicitWait, TimeUnit.SECONDS);
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {

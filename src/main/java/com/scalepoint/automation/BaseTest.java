@@ -139,15 +139,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return loginAndCreateClaim(user, claim, null);
     }
 
-    private void processPolicyType(String policyType) {
-        EditPolicyDialog editPolicyDialog = BaseDialog.at(EditPolicyDialog.class);
-        if (policyType == null) {
-            editPolicyDialog.chooseAny();
-        } else {
-            editPolicyDialog.choose(policyType);
-        }
-    }
-
     protected MyPage login(User user) {
         Page.to(LoginPage.class);
         return AuthenticationApi.createServerApi().login(user, MyPage.class);

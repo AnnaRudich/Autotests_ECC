@@ -139,15 +139,15 @@ public class BasicTests extends BaseTest {
                 .assertCustomerNotePresent(customerNote)
                 .assertInternalNotePresent(internalNote);
 
-        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class,
+        updateFT(user, NotesPage.class,
                 disable(FTSetting.USE_INTERNAL_NOTES),
                 disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
                 .assertEditCustomerNoteButtonPresent()
                 .assertInternalNoteButtonNotPresent();
 
-        functionalTemplatesApi.updateTemplate(user.getFtId(), NotesPage.class,
+
+        updateFT(user, NotesPage.class,
                 enable(FTSetting.USE_INTERNAL_NOTES),
                 enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))

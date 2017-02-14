@@ -10,6 +10,7 @@ import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
+import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -22,6 +23,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
@@ -77,6 +79,13 @@ public class SettlementPage extends BaseClaimPage {
 
     public ClaimLine findClaimLine(String description) {
         By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
+        Wait.waitForDisplayed(claimLineXpath);
+        Table table = new Table(driver.findElement(claimLineXpath));
+        return new ClaimLine(table);
+    }
+
+    public ClaimLine findFirstClaimLine() {
+        By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1]");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);

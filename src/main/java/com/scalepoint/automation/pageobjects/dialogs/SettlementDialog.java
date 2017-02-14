@@ -12,8 +12,8 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.zookeeper.Op;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,6 +25,8 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
@@ -36,6 +38,10 @@ public class SettlementDialog extends BaseDialog {
     private static final int DEPRECIATION_COLUMN = 4;
     private static final int TOTAL_AMOUNT_OF_VALUATION = 5;
     private static final int AMOUNT_OF_VALUATION = 3;
+
+    public static final By OK_BUTTON = By.id("ok-button");
+    public static final By ADD_BUTTON = By.id("add-button");
+    public static final By CANCEL_BUTTON = By.id("cancel-button");
 
     @FindBy(id = "description-textfield-inputEl")
     private ExtInput description;
@@ -107,7 +113,7 @@ public class SettlementDialog extends BaseDialog {
     private Table firstValuation;
 
     @FindBy(id = "cancel-button")//
-    private Button cancel;
+    private WebElement cancelButton;
 
     @FindBy(id = "add-valuation-button")
     private Link addValuation;
@@ -154,7 +160,7 @@ public class SettlementDialog extends BaseDialog {
     @Override
     public SettlementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
-        waitForVisible(cancel);
+        waitForVisible(cancelButton);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
         return this;
     }
@@ -277,7 +283,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementPage closeSidWithOk() {
-        return closeSidWithOk(SettlementPage.class, ok);
+        return closeSidWithOk(SettlementPage.class, OK_BUTTON);
     }
 
     public SettlementDialog clickOK() {
@@ -286,18 +292,18 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public <T extends Page> T closeSidWithOk(Class<T> pageClass) {
-        return closeSidWithOk(pageClass, ok);
+        return closeSidWithOk(pageClass, OK_BUTTON);
     }
 
     public TextSearchPage add() {
-        TextSearchPage textSearchPage = closeSidWithOk(TextSearchPage.class, addButton);
+        TextSearchPage textSearchPage = closeSidWithOk(TextSearchPage.class, ADD_BUTTON);
         if (isAlertPresent()) {
             acceptAlert();
         }
         return textSearchPage;
     }
 
-    public <T extends Page> T closeSidWithOk(Class<T> pageClass, Button button) {
+    public <T extends Page> T closeSidWithOk(Class<T> pageClass, By button) {
         return closeDialog(pageClass, button);
     }
 
@@ -306,14 +312,15 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public <T extends Page> T cancel(Class<T> pageClass) {
-        return closeDialog(pageClass, cancel);
+        return closeDialog(pageClass, CANCEL_BUTTON);
     }
 
-    private <T extends Page> T closeDialog(Class<T> pageClass, Button button) {
+    private <T extends Page> T closeDialog(Class<T> pageClass, By buttonBy) {
+        WebElement button = driver.findElement(buttonBy);
         waitForVisible(button);
         button.click();
 
-        Wait.waitElementDisappeared(button);
+        Wait.waitElementDisappeared(buttonBy);
         Wait.waitForAjaxCompleted();
         return Page.at(pageClass);
     }
@@ -391,6 +398,11 @@ public class SettlementDialog extends BaseDialog {
         Wait.waitForLoaded();
         waitForVisible(subCategory);
         return subCategory.getValue();
+    }
+
+    public Integer getVoucherPercentage() {
+        String text = Browser.driver().findElement(By.id("voucher-supplier-link-inputEl")).getText();
+        return Integer.valueOf(text.replaceAll(".*\\(([0-9]*)%\\)", "$1"));
     }
 
     public String getDescriptionText() {
@@ -541,6 +553,11 @@ public class SettlementDialog extends BaseDialog {
         String redBorder = "#c30";
         return driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
                 && driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
+    }
+
+    public EditDiscountDistributionDialog openEditDiscountDistributionForVoucher() {
+        IntStream.range(0, 2).forEach(i -> doubleClick(By.xpath(".//*[contains(@class, '" + Valuation.VOUCHER.className + "')]")));
+        return at(EditDiscountDistributionDialog.class);
     }
 
 
@@ -782,5 +799,24 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    /**
+     * @param rowInTable
+     * @param columnInTable
+     * @return value of needed row and column (because xpath is difficult to find needed value and valuation position depends from scenario)
+     */
+    public SettlementDialog assertGridValueIs(int rowInTable, int columnInTable, Double expectedAmount) {
+        Double cellValue = null;
+        if (rowInTable == 0 & columnInTable == 0) {
+            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()]/td[last()]"))));
+        } else if (rowInTable == 0) {
+            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()]/td[last()-" + columnInTable + "]"))));
+        } else if (columnInTable == 0) {
+            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()-" + rowInTable + "]/td[last()]"))));
+        } else {
+            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()-" + rowInTable + "]/td[last()-" + columnInTable + "]"))));
+        }
+        OperationalUtils.assertEqualsDouble(cellValue, expectedAmount, "Values must be the same");
+        return this;
+    }
 }
 

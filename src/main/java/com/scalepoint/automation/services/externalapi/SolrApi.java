@@ -58,4 +58,20 @@ public class SolrApi {
             throw new IllegalStateException("no products found", e);
         }
     }
+
+    public static ProductInfo findBaOProduct() {
+        try {
+            SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
+            SolrQuery query = new SolrQuery();
+            query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true");
+            query.setRows(1);
+            QueryResponse response = solr.query(query);
+            ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
+            logger.info("FindBaOProduct: {}", productInfo);
+            return productInfo;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new IllegalStateException("no products found", e);
+        }
+    }
 }

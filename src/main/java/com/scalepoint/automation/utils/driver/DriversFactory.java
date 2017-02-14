@@ -1,6 +1,5 @@
 package com.scalepoint.automation.utils.driver;
 
-import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
 import com.scalepoint.automation.utils.data.TestData;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,20 +18,26 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultImplicitWait;
+import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultScriptTimeout;
+
 public enum DriversFactory {
 
     IE(DriverType.IE) {
         @Override
         protected WebDriver getDriverInstance() {
+
+            defaultImplicitWait = 10;
+            defaultScriptTimeout = 30;
+
             if (System.getProperty("webdriver.ie.driver") == null) {
                 File ieDriver = new File("src/main/resources/drivers/IEDriverServer.exe");
                 System.setProperty("webdriver.ie.driver", ieDriver.getAbsolutePath());
             }
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
             InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
-            System.setProperty("webdriver.timeouts.implicitlywait", "10");
+            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;
         }
     },
@@ -40,11 +45,14 @@ public enum DriversFactory {
     IE_REMOTE(DriverType.IE_REMOTE) {
         @Override
         protected WebDriver getDriverInstance() throws MalformedURLException {
+            defaultImplicitWait = 15;
+            defaultScriptTimeout = 60;
+
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
             WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
             driver = new Augmenter().augment(driver);
-            driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(60, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;
         }
 
@@ -120,4 +128,10 @@ public enum DriversFactory {
     }
 
     protected abstract WebDriver getDriverInstance() throws MalformedURLException;
+
+    public static class Timeout {
+
+        public static int defaultImplicitWait;
+        public static int defaultScriptTimeout;
+    }
 }
