@@ -231,6 +231,7 @@ public class SettlementPage extends BaseClaimPage {
         private WebElement descriptionElement;
 
         public ClaimLine(Table claimLine) {
+            this.claimLine = claimLine;
             List<WebElement> elements = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[@title]"));
             if (elements.size() > 0) {
                 this.tooltip = elements.get(0).getAttribute("title");
