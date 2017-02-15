@@ -621,7 +621,7 @@ public class SettlementDialog extends BaseDialog {
 
         public static ValuationGridColumn getColumn(String dataColumnId) {
             for (ValuationGridColumn valuationGridColumn : ValuationGridColumn.values()) {
-                if (valuationGridColumn.dataColumnId.equals(dataColumnId)) {
+                if (dataColumnId.equals(valuationGridColumn.dataColumnId)) {
                     return valuationGridColumn;
                 }
             }

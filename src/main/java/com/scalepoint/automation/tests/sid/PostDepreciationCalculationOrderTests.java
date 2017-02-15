@@ -118,7 +118,6 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         EditDiscountDistributionDialog editDiscountDistributionDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(product.getModel())
-                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .openEditDiscountDistributionForVoucher();
 
@@ -130,7 +129,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         int depreciationPercentage = 13;
         double depreciationAmount = product.getInvoicePrice() * (double)depreciationPercentage/100;
         double replacementPrice = voucherCashValue - depreciationAmount;
-        double voucherFaceValue = (voucherCashValue*100)/(100-voucherPercentage);
+        double voucherFaceValue = (replacementPrice*100)/(100-voucherPercentage);
 
         settlementDialog.closeSidWithOk()
                 .findFirstClaimLine()

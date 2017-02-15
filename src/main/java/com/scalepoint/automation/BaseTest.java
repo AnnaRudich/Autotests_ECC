@@ -1,5 +1,6 @@
 package com.scalepoint.automation;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
@@ -87,6 +88,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         JavascriptHelper.initializeCommonFunctions();
         driver.manage().window().maximize();
+
+        Configuration.savePageSource = false;
         logger.info("MainHandle " + Browser.driver().getWindowHandle());
     }
 
