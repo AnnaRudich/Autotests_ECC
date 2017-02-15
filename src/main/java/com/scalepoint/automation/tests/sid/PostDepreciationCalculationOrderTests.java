@@ -26,11 +26,12 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         double purchasePrice = 1000.00;
         double replacementPrice = 870.00;
         double depreciationAmount = 130.00;
+        int depreciationPercentage = 13;
 
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillBaseData(lineDescription, claimItem.getExistingCat1_Born(), claimItem.getExistingSubCat1_Babyudstyr(), purchasePrice)
-                .fillDepreciation(13)
+                .fillDepreciation(depreciationPercentage)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .assertAmountOfValuationEqualTo(purchasePrice, SettlementDialog.Valuation.NEW_PRICE)
                 .assertCashValueIs(replacementPrice)
@@ -136,25 +137,5 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .findFirstClaimLine()
                 .assertPurchasePriceIs(voucherCashValue)
                 .assertReplacementPriceIs(replacementPrice);
-
-        //SID:
-        /*Double voucherValuation_2ndColumn = settlementDialog.getValuationGreedSecondColumnValue(settlementDialog.getSelectedValuation());
-        Assert.assertTrue((Math.abs(voucherValuation_2ndColumn - 282.0)) < 0.001,
-                "Selected valuation " + voucherValuation_2ndColumn + " should be  depreciated product Price = " + 282.0);
-        Double faceValue = settlementDialog.getVoucherFaceValueFieldText();
-        Double cashValue = settlementDialog.getVoucherCashValueFieldText();
-        Assert.assertTrue((Math.abs(faceValue-300.0))<0.001, "Face value "+faceValue+" should be  = "+300.0);
-        Assert.assertTrue((Math.abs(cashValue - 282.0)) < 0.001, "Cash value " + cashValue + " should be  = " + 282.0);
-
-        Assert.assertTrue((Math.abs(settlementDialog.getDepreciationBelowCashFieldValue() - 36.66)) < 0.001,
-                "Depreciation value " + settlementDialog.getDepreciationBelowCashFieldValue() + " should be  = " + 36.66);
-        settlementDialog.saveAndCloseAddEditSetDialog();
-        //SETTLEMENT page
-        Assert.assertTrue(Math.abs(pages.ME_SETTLEMENT.getClTotalNewPrice(textSearch.getProductWithOnlyVoucherHandling()) - 282.0) < 0.001,
-                "Get line Total new Price  " + pages.ME_SETTLEMENT.getClTotalNewPrice(textSearch.getProductWithOnlyVoucherHandling()) + " is equal to product Price "+282.0);
-        Assert.assertTrue((Math.abs(pages.ME_SETTLEMENT.getClValue(textSearch.getProductWithOnlyVoucherHandling()) - 245.34))< 0.001,
-                "Get line Value  " + pages.ME_SETTLEMENT.getClValue(textSearch.getProductWithOnlyVoucherHandling()) + " is equal to depreciated product Price " + 245.34);
-        pages.ME_SETTLEMENT.removeLine(textSearch.getProductWithOnlyVoucherHandling());
-        flows.CLAIM.logout();*/
     }
 }
