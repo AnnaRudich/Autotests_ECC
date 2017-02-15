@@ -45,6 +45,7 @@ public enum DriversFactory {
     IE_REMOTE(DriverType.IE_REMOTE) {
         @Override
         protected WebDriver getDriverInstance() throws MalformedURLException {
+
             defaultImplicitWait = 15;
             defaultScriptTimeout = 60;
 

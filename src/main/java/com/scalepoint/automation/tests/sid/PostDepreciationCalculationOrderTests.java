@@ -2,9 +2,11 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.domain.ProductInfo;
+import com.scalepoint.automation.pageobjects.dialogs.EditDiscountDistributionDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -110,18 +112,23 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         ProductInfo product = SolrApi.findBaOProduct();
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        EditDiscountDistributionDialog editDiscountDistributionDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(product.getModel())
                 .sortOrderableFirst()
-                .openSidForFirstProduct();
+                .openSidForFirstProduct()
+                .openEditDiscountDistributionForVoucher();
 
-        int voucherPercentage = settlementDialog.getVoucherPercentage();
+        int voucherPercentage = editDiscountDistributionDialog.getVoucherPercentage();
+
+        SettlementDialog settlementDialog = editDiscountDistributionDialog.save();
+        String valuationColumnValue = settlementDialog.getValuationColumnValue(SettlementDialog.Valuation.VOUCHER, SettlementDialog.ValuationGridColumn.AMOUNT_OF_VALUATION);
+        logger.info("Voucher valuation: {}", valuationColumnValue);
+
         int depreciationPercentage = 13;
-        double voucherCashValue = product.getInvoice();
+        double voucherCashValue = OperationalUtils.toNumber(valuationColumnValue);
         double depreciationAmount = product.getInvoice() * (double)depreciationPercentage/100;
         double replacementPrice = voucherCashValue - depreciationAmount;
         double voucherFaceValue = (replacementPrice*100)/(100-voucherPercentage);
-
 
         settlementDialog.closeSidWithOk()
                 .findFirstClaimLine()

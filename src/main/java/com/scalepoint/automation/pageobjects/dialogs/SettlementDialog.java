@@ -13,7 +13,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,7 +24,6 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -35,13 +33,9 @@ import static org.testng.Assert.*;
 
 public class SettlementDialog extends BaseDialog {
 
-    private static final int DEPRECIATION_COLUMN = 4;
-    private static final int TOTAL_AMOUNT_OF_VALUATION = 5;
-    private static final int AMOUNT_OF_VALUATION = 3;
-
-    public static final By OK_BUTTON = By.id("ok-button");
-    public static final By ADD_BUTTON = By.id("add-button");
-    public static final By CANCEL_BUTTON = By.id("cancel-button");
+    private static final By OK_BUTTON = By.id("ok-button");
+    private static final By ADD_BUTTON = By.id("add-button");
+    private static final By CANCEL_BUTTON = By.id("cancel-button");
 
     @FindBy(id = "description-textfield-inputEl")
     private ExtInput description;
@@ -338,8 +332,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    private String getValuationColumnValue(Valuation valuation, int column) {
-        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column + "]")).getText();
+    public String getValuationColumnValue(Valuation valuation, ValuationGridColumn column) {
+        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column.getColumnIndex() + "]")).getText();
     }
 
     public SettlementDialog selectValuation(Valuation valuation) {
@@ -631,23 +625,39 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    public enum ValuationGridColumn {
+        TYPE(2),
+        AMOUNT_OF_VALUATION(3),
+        DEPRECIATION_COLUMN(4),
+        TOTAL_AMOUNT_OF_VALUATION(5);
+
+        private int columnIndex;
+
+        ValuationGridColumn(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        public int getColumnIndex() {
+            return columnIndex;
+        }
+    }
+
     public SettlementDialog assertAmountOfValuationEqualTo(Double amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
+        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, ValuationGridColumn.AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
         return this;
     }
 
     public SettlementDialog assertTotalAmountOfValuationIs(Double amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, TOTAL_AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
+        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, ValuationGridColumn.TOTAL_AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
         return this;
     }
 
     public SettlementDialog assertDepreciationPercentageEqualTo(Integer amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount.doubleValue(), valuation, DEPRECIATION_COLUMN), valuation.name() + " has not been added");
+        Assert.assertTrue(anyMatchFromValuationsTable(amount.doubleValue(), valuation, ValuationGridColumn.DEPRECIATION_COLUMN), valuation.name() + " has not been added");
         return this;
     }
 
-    private boolean anyMatchFromValuationsTable(Double value, Valuation valuation, int column) {
-        Wait.waitForLoaded();
+    private boolean anyMatchFromValuationsTable(Double value, Valuation valuation, ValuationGridColumn column) {
         waitForVisible(firstValuation);
         String foundText = getValuationColumnValue(valuation, column);
         boolean equals = OperationalUtils.toNumber(foundText).equals(value);
@@ -725,7 +735,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog assertMarketPriceVisible() {
         String failMessage = "Market price must be visible";
         try {
-            if (getValuationColumnValue(Valuation.MARKET_PRICE, 1) == null) {
+            if (getValuationColumnValue(Valuation.MARKET_PRICE, ValuationGridColumn.TYPE) == null) {
                 Assert.fail(failMessage);
             }
         } catch (Exception e) {

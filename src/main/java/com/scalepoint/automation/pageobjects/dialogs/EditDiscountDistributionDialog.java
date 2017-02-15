@@ -22,8 +22,11 @@ public class EditDiscountDistributionDialog extends BaseDialog {
     @FindBy(id = "edit-voucher-face-value-input-inputEl")
     private WebElement faceValueInput;
 
-    @FindBy(id = " edit-voucher-cash-value-input-inputEl")
+    @FindBy(id = "edit-voucher-cash-value-input-inputEl")
     private WebElement cashValueInput;
+
+    @FindBy(id = "edit-voucher-rebate-display-inputEl")
+    private WebElement voucherRebate;
 
     @Override
     protected BaseDialog ensureWeAreAt() {
@@ -44,6 +47,11 @@ public class EditDiscountDistributionDialog extends BaseDialog {
     public SettlementDialog save() {
         okButton.click();
         return at(SettlementDialog.class);
+    }
+
+    public Integer getVoucherPercentage() {
+        String text = voucherRebate.getText();
+        return Integer.valueOf(text.replaceAll("([0-9]+),.*", "$1"));
     }
 }
 
