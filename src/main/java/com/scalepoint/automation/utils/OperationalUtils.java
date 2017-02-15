@@ -59,6 +59,12 @@ public class OperationalUtils {
         return string.trim().toLowerCase().replaceAll("[-\\s+/,]", "");
     }
 
+    public static void assertEqualsDouble(Double actualAmount, Double expectedAmount) {
+        String actual = toString(actualAmount);
+        String expected = toString(expectedAmount);
+        assertEquals(actual, expected, String.format("Actual: %s Expected: %s", actualAmount, expectedAmount));
+    }
+
     public static void assertEqualsDouble(Double actualAmount, Double expectedAmount, String message) {
         String actual = toString(actualAmount);
         String expected = toString(expectedAmount);

@@ -6,15 +6,13 @@ import com.scalepoint.automation.pageobjects.dialogs.EditDiscountDistributionDia
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-@RequiredSetting(type = FTSetting.COMPARISON_DEPRECATION_DISCOUNT, enabled = false)
+@RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
 @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED, enabled = false)
@@ -34,8 +32,10 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .openAddManuallyDialog()
                 .fillBaseData(lineDescription, claimItem.getExistingCat1_Born(), claimItem.getExistingSubCat1_Babyudstyr(), purchasePrice)
                 .fillDepreciation(depreciationPercentage)
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertAmountOfValuationEqualTo(purchasePrice, SettlementDialog.Valuation.NEW_PRICE)
+                .parseValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .makeActive()
+                .assertTotalAmountIs(purchasePrice)
+                .toSettlementDialog()
                 .assertCashValueIs(replacementPrice)
                 .assertDepreciationAmountIs(depreciationAmount)
                 .closeSidWithOk()
@@ -61,8 +61,11 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .fillBaseData(lineDescription, claimItem.getExistingCat1_Born(), claimItem.getExistingSubCat1_Babyudstyr(), purchasePrice)
                 .fillVoucher(claimItem.getExistingVoucher1())
                 .fillDepreciation(depreciationPercentage)
-                .assertAmountOfValuationEqualTo(discountedVoucherAmount, SettlementDialog.Valuation.VOUCHER)
-                .assertAmountOfValuationEqualTo(purchasePrice, SettlementDialog.Valuation.NEW_PRICE)
+                .parseValuation(SettlementDialog.Valuation.VOUCHER)
+                .assertTotalAmountIs(discountedVoucherAmount)
+                .parseValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .assertTotalAmountIs(purchasePrice)
+                .toSettlementDialog()
                 .assertCashValueIs(replacementPrice)
                 .assertDepreciationAmountIs(depreciationAmount)
                 .assertVoucherFaceValueIs(voucherFaceValue)
@@ -94,8 +97,9 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .openEditDiscountDistributionForVoucher()
                 .updateCustomerPercentage(6)
                 .save()
-                .assertAmountOfValuationEqualTo(discountedVoucherAmount, SettlementDialog.Valuation.VOUCHER)
-                .assertAmountOfValuationEqualTo(purchasePrice, SettlementDialog.Valuation.NEW_PRICE)
+                .parseValuation(SettlementDialog.Valuation.VOUCHER)
+                .assertTotalAmountIs(discountedVoucherAmount)
+                .toSettlementDialog()
                 .assertCashValueIs(replacementPrice)
                 .assertDepreciationAmountIs(depreciationAmount)
                 .assertVoucherFaceValueIs(voucherFaceValue)
@@ -108,7 +112,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
-    public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
+    public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
 
         ProductInfo product = SolrApi.findBaOProduct();
 
@@ -119,23 +123,23 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .openEditDiscountDistributionForVoucher();
 
         int voucherPercentage = editDiscountDistributionDialog.getVoucherPercentage();
-
         SettlementDialog settlementDialog = editDiscountDistributionDialog.save();
-        String valuationColumnValue = settlementDialog.getValuationColumnValue(SettlementDialog.Valuation.VOUCHER, SettlementDialog.ValuationGridColumn.AMOUNT_OF_VALUATION);
-        logger.info("Voucher valuation: {}", valuationColumnValue);
+        double voucherCashValue = settlementDialog.parseValuation(SettlementDialog.Valuation.VOUCHER).getTotalPrice();
+        logger.info("Voucher cash value: {}", voucherCashValue);
 
         int depreciationPercentage = 13;
-        double voucherCashValue = OperationalUtils.toNumber(valuationColumnValue);
-        double depreciationAmount = product.getInvoice() * (double)depreciationPercentage/100;
+        double depreciationAmount = product.getInvoicePrice() * (double)depreciationPercentage/100;
         double replacementPrice = voucherCashValue - depreciationAmount;
-        double voucherFaceValue = (replacementPrice*100)/(100-voucherPercentage);
+        double voucherFaceValue = (voucherCashValue*100)/(100-voucherPercentage);
 
         settlementDialog.closeSidWithOk()
                 .findFirstClaimLine()
                 .editLine()
-                .selectValuation(SettlementDialog.Valuation.VOUCHER)
+                .parseValuation(SettlementDialog.Valuation.VOUCHER)
+                .makeActive()
+                .assertTotalAmountIs(voucherCashValue)
+                .toSettlementDialog()
                 .fillDepreciation(depreciationPercentage)
-                .assertAmountOfValuationEqualTo(voucherCashValue, SettlementDialog.Valuation.VOUCHER)
                 .assertCashValueIs(replacementPrice)
                 .assertDepreciationAmountIs(depreciationAmount)
                 .assertVoucherFaceValueIs(voucherFaceValue)

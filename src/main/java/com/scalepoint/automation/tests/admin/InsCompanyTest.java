@@ -41,7 +41,8 @@ public class InsCompanyTest extends BaseTest {
                 .toAddNewCompanyPage()
                 .createCompany(insuranceCompany)
                 .editCompany(insuranceCompany.getIcName())
-                .updateNameAndSave(anotherCompany).assertCompanyDisplayed(anotherCompany);
+                .updateNameAndSave(anotherCompany)
+                .assertCompanyDisplayed(anotherCompany);
     }
 
 }

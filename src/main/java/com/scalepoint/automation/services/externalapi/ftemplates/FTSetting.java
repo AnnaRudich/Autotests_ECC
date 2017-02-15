@@ -6,7 +6,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.operatio
 
 public enum FTSetting {
     //Various function around the system
-    COMPARISON_OF_DISCOUNT_DEPRECATION("input[name=ftDnD2Related][value=1]", CHECKBOX),
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value=1]", CHECKBOX),
     USE_SELF_SERVICE2("input[name=ftSelfServiceFlag][value=65536]", CHECKBOX),
     ENABLE_REGISTRATION_LINE_SELF_SERVICE("input[name=ftSelfServiceFlag][value=2048]", CHECKBOX),
@@ -38,7 +37,7 @@ public enum FTSetting {
     USE_BRAND_LOYALTY_BY_DEFAULT("input[name=ftfunctionflag3][value=2048]", CHECKBOX),
 
     //FTSetting for Comparison of Depreciation and Discount
-    COMPARISON_DEPRECATION_DISCOUNT("input[name=ftDnD2Related][value=1]", CHECKBOX),
+    COMPARISON_OF_DISCOUNT_DEPRECATION("input[name=ftDnD2Related][value=1]", CHECKBOX),
     COMBINE_DISCOUNT_DEPRECATION("input[name=ftDnD2Related][value=2]", CHECKBOX),
     DISABLE_DISCOUNTED_VALUATIONS_FOR_OLD("input[name=ftDnD2Related][value=4]", CHECKBOX),
 

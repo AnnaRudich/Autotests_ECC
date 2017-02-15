@@ -123,7 +123,8 @@ public class SidSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillCustomerDemand(customerDemand)
-                .assertAmountOfValuationEqualTo(customerDemand, CUSTOMER_DEMAND);
+                .parseValuation(CUSTOMER_DEMAND)
+                .assertCashCompensationIs(customerDemand);
     }
 
 
@@ -137,7 +138,8 @@ public class SidSmokeTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openAddManuallyDialog()
                 .fillNewPrice(newPrice)
-                .assertAmountOfValuationEqualTo(newPrice, SettlementDialog.Valuation.NEW_PRICE);
+                .parseValuation(NEW_PRICE)
+                .assertCashCompensationIs(newPrice);
     }
 
     /**
@@ -166,8 +168,9 @@ public class SidSmokeTests extends BaseTest {
 
         dialog.assertCashValueIs(expectedCalculations.getCashValue())
                 .assertDepreciationAmountIs(expectedCalculations.getDepreciation())
-                .assertTotalAmountOfValuationIs(expectedCalculations.getCashValue(), CUSTOMER_DEMAND)
-                .assertDepreciationPercentageEqualTo(10, CUSTOMER_DEMAND);
+                .parseValuation(CUSTOMER_DEMAND)
+                .assertCashCompensationIs(expectedCalculations.getCashValue())
+                .assertDepreciationPercentageIs(10);
     }
 
     /**
@@ -187,8 +190,10 @@ public class SidSmokeTests extends BaseTest {
                 .assertDescriptionIs(claimItem.getTextFieldSP())
                 .assertCategoryTextIs(claimItem.getExistingCat1_Born())
                 .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .assertAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND)
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), NEW_PRICE);
+                .parseValuation(CUSTOMER_DEMAND)
+                .assertCashCompensationIs(claimItem.getCustomerDemand_500())
+                .parseValuation(NEW_PRICE)
+                .assertTotalAmountIs(claimItem.getNewPriceSP_2400());
     }
 
     /**
@@ -213,8 +218,11 @@ public class SidSmokeTests extends BaseTest {
                 .assertDescriptionIs(claimItem.getTextFieldSP())
                 .assertCategoryTextIs(claimItem.getExistingCat1_Born())
                 .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .assertAmountOfValuationEqualTo(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND)
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE)
+                .parseValuation(CUSTOMER_DEMAND)
+                .assertCashCompensationIs(claimItem.getCustomerDemand_500())
+                .parseValuation(NEW_PRICE)
+                .assertTotalAmountIs(claimItem.getNewPriceSP_2400())
+                .toSettlementDialog()
                 .fillBaseData(claimItem)
                 .cancel()
                 .findClaimLine(claimItem.getTextFieldSP())
@@ -222,8 +230,10 @@ public class SidSmokeTests extends BaseTest {
                 .assertDescriptionIs(claimItem.getTextFieldSP())
                 .assertCategoryTextIs(claimItem.getExistingCat1_Born())
                 .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .assertTotalAmountOfValuationIs(claimItem.getCustomerDemand_500(), CUSTOMER_DEMAND)
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), SettlementDialog.Valuation.NEW_PRICE);
+                .parseValuation(CUSTOMER_DEMAND)
+                .assertTotalAmountIs(claimItem.getCustomerDemand_500())
+                .parseValuation(NEW_PRICE)
+                .assertTotalAmountIs(claimItem.getNewPriceSP_2400());
     }
 
     /**
@@ -244,7 +254,8 @@ public class SidSmokeTests extends BaseTest {
                 .includeInClaim(false)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .waitASecond()
-                .assertTotalAmountOfValuationIs(claimItem.getNewPriceSP_2400(), NEW_PRICE);
+                .parseValuation(NEW_PRICE)
+                .assertTotalAmountIs(claimItem.getNewPriceSP_2400());
     }
 
     /**

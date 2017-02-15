@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -177,6 +178,7 @@ public class SettlementDialog extends BaseDialog {
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
 
+        input.clear();
         input.enter(value);
         simulateBlurEvent(input);
 
@@ -329,29 +331,6 @@ public class SettlementDialog extends BaseDialog {
         Wait.waitForLoaded();
         Wait.waitForEnabled(includeInClaim);
         includeInClaim.set(state);
-        return this;
-    }
-
-    public String getValuationColumnValue(Valuation valuation, ValuationGridColumn column) {
-        return driver.findElement(By.xpath(".//*[contains(@class, '" + valuation.className + "')]//td[" + column.getColumnIndex() + "]")).getText();
-    }
-
-    public SettlementDialog selectValuation(Valuation valuation) {
-        By xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
-        Wait.waitForStaleElement(xpath);
-
-        WebElement webElement = Browser.driver().findElement(xpath);
-        boolean checked = webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
-        if (!checked) {
-            //one click doesn't work, each click renew dom so we should wait for stale element each time
-            for (int i = 0; i < 3; i++) {
-                Wait.waitForStaleElement(xpath);
-                webElement = Browser.driver().findElement(xpath);
-                webElement.click();
-            }
-
-        }
-        waitASecond();
         return this;
     }
 
@@ -626,43 +605,123 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public enum ValuationGridColumn {
-        TYPE(2),
-        AMOUNT_OF_VALUATION(3),
-        DEPRECIATION_COLUMN(4),
-        TOTAL_AMOUNT_OF_VALUATION(5);
+        CHECK_COLUMN("active-valuation-checkcolumn"),
+        TYPE("description"),
+        CASH_COMPENSATION("cashCompensation"),
+        DEPRECIATION_COLUMN("depreciation"),
+        TOTAL_AMOUNT_OF_VALUATION("totalPrice"),
+        EDIT_VALUATION("editValuation"),
+        NULL(null);
 
-        private int columnIndex;
+        private String dataColumnId;
 
-        ValuationGridColumn(int columnIndex) {
-            this.columnIndex = columnIndex;
+        ValuationGridColumn(String dataColumnId) {
+            this.dataColumnId = dataColumnId;
         }
 
-        public int getColumnIndex() {
-            return columnIndex;
+        public static ValuationGridColumn getColumn(String dataColumnId) {
+            for (ValuationGridColumn valuationGridColumn : ValuationGridColumn.values()) {
+                if (valuationGridColumn.dataColumnId.equals(dataColumnId)) {
+                    return valuationGridColumn;
+                }
+            }
+            return NULL;
         }
     }
 
-    public SettlementDialog assertAmountOfValuationEqualTo(Double amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, ValuationGridColumn.AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
-        return this;
+    public ValuationRow parseValuation(Valuation valuation) {
+        ValuationRow valuationRow = new ValuationRow(valuation);
+
+        List<WebElement> elements = Browser.driver().findElements(By.xpath(".//tr[contains(@class, '" +valuation.className + "')]//td"));
+        for (WebElement td : elements) {
+            String attribute = td.getAttribute("data-columnid");
+            switch (ValuationGridColumn.getColumn(attribute)) {
+                case CASH_COMPENSATION:
+                    valuationRow.cashCompensation = OperationalUtils.toNumber(td.getText());
+                    break;
+                case DEPRECIATION_COLUMN:
+                    valuationRow.depreciationPercentage = Integer.valueOf(td.getText());
+                    break;
+                case TOTAL_AMOUNT_OF_VALUATION:
+                    valuationRow.totalPrice = OperationalUtils.toNumber(td.getText());
+                    break;
+                case TYPE:
+                    valuationRow.description = td.getText();
+                    break;
+            }
+        }
+        return valuationRow;
+
     }
 
-    public SettlementDialog assertTotalAmountOfValuationIs(Double amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount, valuation, ValuationGridColumn.TOTAL_AMOUNT_OF_VALUATION), valuation.name() + " has not been added");
-        return this;
+    public class ValuationRow {
+
+        private Valuation valuation;
+        private Double cashCompensation;
+        private Integer depreciationPercentage;
+        private Double totalPrice;
+        private String description;
+
+        public ValuationRow makeActive() {
+            WebDriver driver = Browser.driver();
+            By xpath = By.xpath("//tr[contains(@class, '" + valuation.className+ "')]//div[@role='button']");
+            Wait.waitForStaleElement(xpath);
+            WebElement webElement = driver.findElement(xpath);
+            boolean checked = webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
+            if (!checked) {
+                //one click doesn't work, each click renew dom so we should wait for stale element each time
+                for (int i = 0; i < 3; i++) {
+                    Wait.waitForStaleElement(xpath);
+                    webElement = driver.findElement(xpath);
+                    webElement.click();
+                }
+            }
+            waitASecond();
+            return this;
+        }
+
+        public ValuationRow parseValuation(Valuation valuation) {
+            return SettlementDialog.this.parseValuation(valuation);
+        }
+
+        public SettlementDialog toSettlementDialog() {
+            return SettlementDialog.this;
+        }
+
+        private ValuationRow(Valuation valuation) {
+            this.valuation = valuation;
+        }
+
+        public ValuationRow assertCashCompensationIs(Double amount) {
+            OperationalUtils.assertEqualsDouble(cashCompensation, amount);
+            return this;
+        }
+
+        public ValuationRow assertTotalAmountIs(Double amount) {
+            OperationalUtils.assertEqualsDouble(totalPrice, amount);
+            return this;
+        }
+
+        public ValuationRow assertDepreciationPercentageIs(Integer expectedDepreciationPercentage) {
+            assertEquals(depreciationPercentage, expectedDepreciationPercentage);
+            return this;
+        }
+
+        public String getDescription() {
+            return this.description;
+        }
+
+        public Double getCashCompensation() {
+            return cashCompensation;
+        }
+
+        public Double getTotalPrice() {
+            return totalPrice;
+        }
     }
 
-    public SettlementDialog assertDepreciationPercentageEqualTo(Integer amount, Valuation valuation) {
-        Assert.assertTrue(anyMatchFromValuationsTable(amount.doubleValue(), valuation, ValuationGridColumn.DEPRECIATION_COLUMN), valuation.name() + " has not been added");
-        return this;
-    }
-
-    private boolean anyMatchFromValuationsTable(Double value, Valuation valuation, ValuationGridColumn column) {
-        waitForVisible(firstValuation);
-        String foundText = getValuationColumnValue(valuation, column);
-        boolean equals = OperationalUtils.toNumber(foundText).equals(value);
-        logger.info("Valuation requested: {} found: {} matched: {}", value, foundText, equals);
-        return equals;
+    public SettlementDialog selectValuation(Valuation valuation) {
+        return parseValuation(valuation).makeActive().toSettlementDialog();
     }
 
     public SettlementDialog assertIncludeInClaimSelected() {
@@ -735,7 +794,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog assertMarketPriceVisible() {
         String failMessage = "Market price must be visible";
         try {
-            if (getValuationColumnValue(Valuation.MARKET_PRICE, ValuationGridColumn.TYPE) == null) {
+            if (parseValuation(Valuation.MARKET_PRICE).getDescription() == null) {
                 Assert.fail(failMessage);
             }
         } catch (Exception e) {
@@ -806,26 +865,6 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog assertScalepointSupplierVisible(String supplier) {
         assertTrue(statusSupplier.getText().contains(supplier), "Scalepoint supplier must be visible");
-        return this;
-    }
-
-    /**
-     * @param rowInTable
-     * @param columnInTable
-     * @return value of needed row and column (because xpath is difficult to find needed value and valuation position depends from scenario)
-     */
-    public SettlementDialog assertGridValueIs(int rowInTable, int columnInTable, Double expectedAmount) {
-        Double cellValue = null;
-        if (rowInTable == 0 & columnInTable == 0) {
-            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()]/td[last()]"))));
-        } else if (rowInTable == 0) {
-            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()]/td[last()-" + columnInTable + "]"))));
-        } else if (columnInTable == 0) {
-            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()-" + rowInTable + "]/td[last()]"))));
-        } else {
-            cellValue = OperationalUtils.toNumber(getText(find(By.xpath("//*[@id='valuation_div']/table/tbody/tr[last()-" + rowInTable + "]/td[last()-" + columnInTable + "]"))));
-        }
-        OperationalUtils.assertEqualsDouble(cellValue, expectedAmount, "Values must be the same");
         return this;
     }
 }

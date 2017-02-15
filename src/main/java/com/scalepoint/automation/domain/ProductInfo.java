@@ -26,10 +26,10 @@ public class ProductInfo {
     private String sku;
 
     @Field("price_lowest_1")
-    private double lowest;
+    private double lowestPrice;
 
     @Field("price_invoice_1")
-    private double invoice;
+    private double invoicePrice;
 
     @Field("price_supplier_shop_1")
     private Double supplierShopPrice;
@@ -68,12 +68,12 @@ public class ProductInfo {
         return sku;
     }
 
-    public double getLowest() {
-        return lowest;
+    public double getLowestPrice() {
+        return lowestPrice;
     }
 
-    public double getInvoice() {
-        return invoice;
+    public double getInvoicePrice() {
+        return invoicePrice;
     }
 
     public Double getSupplierShopPrice() {
@@ -95,8 +95,8 @@ public class ProductInfo {
                 ", model='" + model + '\'' +
                 ", orderable=" + orderable +
                 ", sku='" + sku + '\'' +
-                ", lowest=" + lowest +
-                ", invoice=" + invoice +
+                ", lowestPrice=" + lowestPrice +
+                ", invoicePrice=" + invoicePrice +
                 ", supplierName='" + supplierName + '\'' +
                 '}';
     }
