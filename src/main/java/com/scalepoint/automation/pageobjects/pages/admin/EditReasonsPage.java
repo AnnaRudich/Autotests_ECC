@@ -13,14 +13,12 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
-/**
- * Created by asa on 11/14/2016.
- */
 @EccPage
 public class EditReasonsPage extends AdminBasePage {
 
@@ -30,7 +28,6 @@ public class EditReasonsPage extends AdminBasePage {
         REJECT("Reject choice");
 
         private String text;
-
         ReasonType(String text) {
             this.text = text;
         }
@@ -174,19 +171,27 @@ public class EditReasonsPage extends AdminBasePage {
             return EditReasonsPage.this;
         }
 
-        public ReasonRow assertDeleteIsDisabled() {
-            Assert.assertFalse(deleteButton.isEnabled(), "Delete button must be disabled!");
-            return this;
+        public ReasonRow doAssert(Consumer<Asserts> assertFunc) {
+            assertFunc.accept(new Asserts());
+            return ReasonRow.this;
         }
 
-        public ReasonRow assertReasonIsEditable() {
-            Assert.assertFalse(readonly, "The reason field should be enabled!");
-            return this;
-        }
+        public class Asserts {
+            public Asserts assertDeleteIsDisabled() {
+                Assert.assertFalse(deleteButton.isEnabled(), "Delete button must be disabled!");
+                return this;
+            }
 
-        public ReasonRow assertReasonIsNotEditable() {
-            Assert.assertTrue(readonly, "The reason field should be disabled!");
-            return this;
+            public Asserts assertReasonIsEditable() {
+                Assert.assertFalse(readonly, "The reason field should be enabled!");
+                return this;
+            }
+
+            public Asserts assertReasonIsNotEditable() {
+                Assert.assertTrue(readonly, "The reason field should be disabled!");
+                return this;
+            }
+
         }
     }
 

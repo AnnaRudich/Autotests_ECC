@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
+import java.util.function.Consumer;
+
 import static org.testng.Assert.assertEquals;
 
 public class EditVoucherValuationDialog extends BaseDialog {
@@ -67,16 +69,21 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
 
-    //ASSERTS
-
-    public EditVoucherValuationDialog assertBrandsTextIs(String expectedBrandsText) {
-        assertEquals(getBrands(), expectedBrandsText, "Wrong Brand is displayed.");
-        return this;
+    public EditVoucherValuationDialog doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return EditVoucherValuationDialog.this;
     }
 
-    public EditVoucherValuationDialog assertTagsTextIs(String expectedTagsText) {
-        assertEquals(getTags(), expectedTagsText, "Wrong Tags are displayed");
-        return this;
+    public class Asserts {
+        public Asserts assertBrandsTextIs(String expectedBrandsText) {
+            assertEquals(getBrands(), expectedBrandsText, "Wrong Brand is displayed.");
+            return this;
+        }
+
+        public Asserts assertTagsTextIs(String expectedTagsText) {
+            assertEquals(getTags(), expectedTagsText, "Wrong Tags are displayed");
+            return this;
+        }
     }
 
 }

@@ -16,6 +16,7 @@ import ru.yandex.qatools.htmlelements.element.Image;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
@@ -102,16 +103,6 @@ public class TextSearchPage extends Page {
         return sort(sortByMarketPrice, descendantMarketPrice);
     }
 
-    public TextSearchPage assertSortingMarketPriceAscendant() {
-        Assert.assertTrue(isSortingMarketPriceAscendant(), "Ascendant sorting of Market Price does not work");
-        return this;
-    }
-
-    public TextSearchPage assertSortingMarketPriceDescendant() {
-        Assert.assertTrue(isSortingMarketPriceDescendant(), "Descendant sorting of Market Price does not work");
-        return this;
-    }
-
     public boolean isSortingMarketPriceAscendant() {
         return ascendantMarketPrice.isDisplayed();
     }
@@ -168,11 +159,6 @@ public class TextSearchPage extends Page {
         return this;
     }
 
-    public TextSearchPage assertMarketPriceInvisible() {
-        Assert.assertTrue(Wait.invisible(sortByMarketPrice), "Market price still visible");
-        return this;
-    }
-
     public TextSearchPage searchByProductName(String productName) {
         try {
             int attempt = 0;
@@ -194,6 +180,28 @@ public class TextSearchPage extends Page {
         Wait.waitForAjaxCompleted();
         Wait.waitForDisplayed(By.xpath("(.//*[@id='productsTable']/table//td[@productId])[1]"));
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
+    }
+
+    public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return TextSearchPage.this;
+    }
+
+    public class Asserts {
+        public Asserts assertSortingMarketPriceAscendant() {
+            Assert.assertTrue(isSortingMarketPriceAscendant(), "Ascendant sorting of Market Price does not work");
+            return this;
+        }
+
+        public Asserts assertSortingMarketPriceDescendant() {
+            Assert.assertTrue(isSortingMarketPriceDescendant(), "Descendant sorting of Market Price does not work");
+            return this;
+        }
+
+        public Asserts assertMarketPriceInvisible() {
+            Assert.assertTrue(Wait.invisible(sortByMarketPrice), "Market price still visible");
+            return this;
+        }
     }
 }
 

@@ -168,10 +168,6 @@ public class ClaimItem {
         return textFieldSP;
     }
 
-    public Double getNewPriceSP_2400() {
-        return newPriceSP;
-    }
-
     public Integer getPurchasePriceSP() {
         return purchasePriceSP;
     }
@@ -184,7 +180,7 @@ public class ClaimItem {
         return ssDescriptionSP;
     }
 
-    public String getExistingCat1_Born() {
+    public String getCategoryBorn() {
         return existingCat1;
     }
 
@@ -192,7 +188,7 @@ public class ClaimItem {
         return existingCat2;
     }
 
-    public String getExistingSubCat1_Babyudstyr() {
+    public String getSubcategoryBornBabyudstyr() {
         return existingSubCat1;
     }
 
@@ -200,7 +196,7 @@ public class ClaimItem {
         return existingSubCat2;
     }
 
-    public String getExistingVoucher1() {
+    public String getExistingVoucher_10() {
         return existingVoucher1;
     }
 
@@ -218,10 +214,6 @@ public class ClaimItem {
 
     public String getDepTypeDisc() {
         return depTypeDisc;
-    }
-
-    public Integer getDepAmount1_10() {
-        return depAmount1;
     }
 
     public String getDepAmount2() {
@@ -268,10 +260,6 @@ public class ClaimItem {
     public String getProcuraLimitPrice() {
         return procuraLimitPrice;
 
-    }
-
-    public Double getCustomerDemand_500() {
-        return customerDemand;
     }
 
     public Double getUsedPrice() {
@@ -328,10 +316,6 @@ public class ClaimItem {
 
     public String getAgeStatus() {
         return ageStatus;
-    }
-
-    public Double getBigCustomDemandPrice() {
-        return bigCustomDemandPrice;
     }
 
     public String getExistingCat3_Telefoni() {

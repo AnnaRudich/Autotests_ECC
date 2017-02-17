@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
+import java.util.function.Consumer;
+
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -26,8 +28,15 @@ public class BestFitPage extends Page {
         return "BestFit2";
     }
 
-    public BestFitPage assertMarketPriceInvisible() {
-        assertTrue(Wait.invisible(marketPrice), "Market Price must be hidden");
-        return this;
+    public BestFitPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return BestFitPage.this;
+    }
+
+    public class Asserts {
+        public Asserts assertMarketPriceInvisible() {
+            assertTrue(Wait.invisible(marketPrice), "Market Price must be hidden");
+            return this;
+        }
     }
 }

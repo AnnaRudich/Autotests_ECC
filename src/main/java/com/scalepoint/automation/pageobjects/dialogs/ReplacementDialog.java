@@ -11,6 +11,8 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -94,14 +96,24 @@ public class ReplacementDialog extends BaseDialog {
         return Page.at(CustomerDetailsPage.class);
     }
 
-    //ASSERTS
-    public ReplacementDialog assertItemPriceValueIs(Double expectedPrice) {
-        assertEqualsDouble(getItemPriceValue(), expectedPrice, "Voucher cash value %s should be equal to not depreciated new price %s");
-        return this;
+    public ReplacementDialog doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return ReplacementDialog.this;
     }
 
-    public ReplacementDialog assertVoucherFaceValueIs(Double expectedPrice) {
-        assertEqualsDouble(getVoucherFaceValue(), expectedPrice, "Voucher face value %s should be equal to not depreciated new price %s");
-        return this;
+    public class Asserts {
+        public Asserts assertItemPriceValueIs(Double expectedPrice) {
+            assertEqualsDouble(getItemPriceValue(), expectedPrice, "Voucher cash value %s should be equal to not depreciated new price %s");
+            return this;
+        }
+
+        public Asserts assertVoucherFaceValueIs(Double expectedPrice) {
+            assertEqualsDouble(getVoucherFaceValue(), expectedPrice, "Voucher face value %s should be equal to not depreciated new price %s");
+            return this;
+        }
+
+        public ReplacementDialog back() {
+            return ReplacementDialog.this;
+        }
     }
 }

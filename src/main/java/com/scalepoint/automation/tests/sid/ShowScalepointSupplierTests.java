@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.domain.ProductInfo;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -11,11 +12,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
-
-/**
- * Created by asa on 10/10/2016.
- */
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
 public class ShowScalepointSupplierTests extends BaseTest {
@@ -35,7 +31,7 @@ public class ShowScalepointSupplierTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .assertScalepointSupplierNotVisible();
+                .doAssert(SettlementDialog.Asserts::assertScalepointSupplierNotVisible);
     }
 
     /**
@@ -55,6 +51,6 @@ public class ShowScalepointSupplierTests extends BaseTest {
         ProductInfo product = SolrApi.findProduct(textSearchPage.getFirstProductId());
 
         textSearchPage.openSidForFirstProduct()
-                .assertScalepointSupplierVisible(product.getSupplierName());
+                .doAssert(sid -> sid.assertScalepointSupplierVisible(product.getSupplierName()));
     }
 }

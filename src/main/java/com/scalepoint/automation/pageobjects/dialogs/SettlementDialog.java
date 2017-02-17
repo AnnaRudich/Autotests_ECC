@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -25,6 +26,8 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -147,10 +150,110 @@ public class SettlementDialog extends BaseDialog {
     private ExtComboBox discretionaryReason;
 
     @FindBy(id = "depreciation-type-combobox")
-    private ExtComboBox depreciationType;
+    private ExtComboBox depreciationTypeComboBox;
 
     @FindBy(id = "not-cheapest-reason-display-inputEl")
     private TextBlock notCheapestReasonDisplay;
+
+    public enum ValuationGridColumn {
+        CHECK_COLUMN("active-valuation-checkcolumn"),
+        TYPE("description"),
+        CASH_COMPENSATION("cashCompensation"),
+        DEPRECIATION_COLUMN("depreciation"),
+        TOTAL_AMOUNT_OF_VALUATION("totalPrice"),
+        EDIT_VALUATION("editValuation"),
+        NULL(null);
+
+        private String dataColumnId;
+
+        ValuationGridColumn(String dataColumnId) {
+            this.dataColumnId = dataColumnId;
+        }
+
+        public static ValuationGridColumn getColumn(String dataColumnId) {
+            for (ValuationGridColumn valuationGridColumn : ValuationGridColumn.values()) {
+                if (dataColumnId.equals(valuationGridColumn.dataColumnId)) {
+                    return valuationGridColumn;
+                }
+            }
+            return NULL;
+        }
+    }
+
+    public enum Valuation {
+        NOT_SELECTED("valuation-type-NOT_SELECTED"),
+        CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
+        VOUCHER("valuation-type-VOUCHER"),
+        NEW_PRICE("valuation-type-NEW_PRICE"),
+        MARKET_PRICE("valuation-type-MARKET_PRICE"),
+        ANDEN_VURDERING("valuation-type-DISCRETIONARY_VALUATION");
+
+        private String className;
+
+        Valuation(String className) {
+            this.className = className;
+        }
+    }
+
+    public enum DepreciationType {
+        POLICY(0),
+        DISCRETIONARY(1);
+
+        int index;
+
+        DepreciationType(int i) {
+            index = i;
+        }
+    }
+
+    public static class FormFiller {
+
+        private SettlementDialog sid;
+
+        public FormFiller(SettlementDialog settlementDialog) {
+            this.sid = settlementDialog;
+        }
+
+        public FormFiller withText(String text) {
+            sid.fillDescription(text);
+            return this;
+        }
+
+        public FormFiller withCategory(String category) {
+            sid.fillCategory(category);
+            return this;
+        }
+
+        public FormFiller withCategory(VoucherAgreementApi.AssignedCategory category) {
+            sid.fillCategory(category);
+            return this;
+        }
+
+        public FormFiller withSubCategory(String subcategory) {
+            sid.fillSubCategory(subcategory);
+            return this;
+        }
+
+        public FormFiller withNewPrice(Double newPrice) {
+            sid.fillNewPrice(newPrice);
+            return this;
+        }
+
+        public FormFiller withCustomerDemandPrice(Double customerDemandPrice) {
+            sid.fillCustomerDemand(customerDemandPrice);
+            return this;
+        }
+
+        public FormFiller withVoucher(String voucher) {
+            sid.fillVoucher(voucher);
+            return this;
+        }
+
+        public FormFiller withDepreciation(int depreciation) {
+            sid.fillDepreciation(depreciation);
+            return this;
+        }
+    }
 
     @Override
     public SettlementDialog ensureWeAreAt() {
@@ -160,15 +263,19 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementDialog fillBaseData(ClaimItem claimItem) {
-        return fillDescription(claimItem.getTextFieldSP()).
-                fillCustomerDemand(claimItem.getCustomerDemand_500()).
-                fillNewPrice(claimItem.getNewPriceSP_2400()).
-                fillCategory(claimItem.getExistingCat1_Born()).
-                fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr());
+    public SettlementDialog fill(Function<SettlementDialog, SettlementDialog> fillFunc) {
+        return fillFunc.apply(this);
     }
 
-    public SettlementDialog fillBaseData(String description, String category, String subcategory, Double newPrice) {
+    public SettlementDialog fillBaseData(ClaimItem claimItem) {
+        return fillDescription(claimItem.getTextFieldSP()).
+                fillCustomerDemand(Constants.PRICE_500).
+                fillNewPrice(Constants.PRICE_2400).
+                fillCategory(claimItem.getCategoryBorn()).
+                fillSubCategory(claimItem.getSubcategoryBornBabyudstyr());
+    }
+
+    public SettlementDialog fill(String description, String category, String subcategory, Double newPrice) {
         return fillDescription(description).
                 fillNewPrice(newPrice).
                 fillCategory(category).
@@ -177,11 +284,9 @@ public class SettlementDialog extends BaseDialog {
 
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
-
         input.clear();
         input.enter(value);
         simulateBlurEvent(input);
-
         return this;
     }
 
@@ -291,16 +396,16 @@ public class SettlementDialog extends BaseDialog {
         return closeSidWithOk(pageClass, OK_BUTTON);
     }
 
+    public <T extends BaseDialog> T closeSidWithOkAndExpectDialog(Class<T> dialogClass) {
+        return closeDialogAndExpectDialog(dialogClass, OK_BUTTON, false);
+    }
+
     public TextSearchPage add() {
-        TextSearchPage textSearchPage = closeSidWithOk(TextSearchPage.class, ADD_BUTTON);
-        if (isAlertPresent()) {
-            acceptAlert();
-        }
-        return textSearchPage;
+        return closeDialog(TextSearchPage.class, ADD_BUTTON, true);
     }
 
     public <T extends Page> T closeSidWithOk(Class<T> pageClass, By button) {
-        return closeDialog(pageClass, button);
+        return closeDialog(pageClass, button, false);
     }
 
     public SettlementPage cancel() {
@@ -308,17 +413,30 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public <T extends Page> T cancel(Class<T> pageClass) {
-        return closeDialog(pageClass, CANCEL_BUTTON);
+        return closeDialog(pageClass, CANCEL_BUTTON, false);
     }
 
-    private <T extends Page> T closeDialog(Class<T> pageClass, By buttonBy) {
+    private <T extends Page> T closeDialog(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
+        closeSid(buttonBy, acceptAlert);
+        return Page.at(pageClass);
+    }
+
+    private <T extends BaseDialog> T closeDialogAndExpectDialog(Class<T> dialogClass, By buttonBy, boolean acceptAlert) {
+        closeSid(buttonBy, acceptAlert);
+        return BaseDialog.at(dialogClass);
+    }
+
+    private void closeSid(By buttonBy, boolean acceptAlert) {
         WebElement button = driver.findElement(buttonBy);
         waitForVisible(button);
         button.click();
 
+        if (acceptAlert) {
+            acceptAlert();
+        }
+
         Wait.waitElementDisappeared(buttonBy);
         Wait.waitForAjaxCompleted();
-        return Page.at(pageClass);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
@@ -371,11 +489,6 @@ public class SettlementDialog extends BaseDialog {
         Wait.waitForLoaded();
         waitForVisible(subCategory);
         return subCategory.getValue();
-    }
-
-    public Integer getVoucherPercentage() {
-        String text = Browser.driver().findElement(By.id("voucher-supplier-link-inputEl")).getText();
-        return Integer.valueOf(text.replaceAll(".*\\(([0-9]*)%\\)", "$1"));
     }
 
     public String getDescriptionText() {
@@ -453,21 +566,6 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-    public enum Valuation {
-        NOT_SELECTED("valuation-type-NOT_SELECTED"),
-        CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
-        VOUCHER("valuation-type-VOUCHER"),
-        NEW_PRICE("valuation-type-NEW_PRICE"),
-        MARKET_PRICE("valuation-type-MARKET_PRICE"),
-        ANDEN_VURDERING("valuation-type-DISCRETIONARY_VALUATION");
-
-        private String className;
-
-        Valuation(String className) {
-            this.className = className;
-        }
-    }
-
     private boolean isRejectReasonVisible() {
         return rejectReason.exists();
     }
@@ -491,15 +589,15 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementDialog selectDepreciationType(int index) {
-        waitForVisible(depreciationType);
-        depreciationType.select(index);
+    public SettlementDialog selectDepreciationType(DepreciationType depreciation) {
+        waitForVisible(depreciationTypeComboBox);
+        depreciationTypeComboBox.select(depreciation.index);
         return this;
     }
 
     public SettlementDialog selectDepreciationType(String visibleText) {
-        waitForVisible(depreciationType);
-        depreciationType.select(visibleText);
+        waitForVisible(depreciationTypeComboBox);
+        depreciationTypeComboBox.select(visibleText);
         return this;
     }
 
@@ -529,121 +627,36 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public EditDiscountDistributionDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 2).forEach(i -> doubleClick(By.xpath(".//*[contains(@class, '" + Valuation.VOUCHER.className + "')]")));
+        IntStream.range(0, 3).forEach(i -> Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.VOUCHER.className + "')]//img")).click());
         return at(EditDiscountDistributionDialog.class);
     }
 
-
-    //ASSERTS
-    public SettlementDialog assertDiscretionaryReasonValuePresent(String expectedValue) {
-        List<String> options = discretionaryReason.getComboBoxOptions();
-        Assert.assertTrue(options.stream().anyMatch(i -> i.contains(expectedValue)));
-        return this;
+    public SettlementDialog distributeDiscountForVoucherValuation(EditDiscountDistributionDialog.DistributeTo distributeTo, Integer percentage) {
+        return openEditDiscountDistributionForVoucher().updatePercentage(distributeTo, percentage).save();
     }
 
-    public SettlementDialog assertCashValueIs(Double expectedCashValue) {
-        assertEqualsDouble(getCashCompensationValue(), expectedCashValue, "Cash compensation is incorrect");
-        return this;
+    public Integer getVoucherPercentage() {
+        EditDiscountDistributionDialog editDiscountDistributionDialog = openEditDiscountDistributionForVoucher();
+        Integer voucherPercentage = editDiscountDistributionDialog.getVoucherPercentage();
+        editDiscountDistributionDialog.save();
+        return voucherPercentage;
     }
 
-    public SettlementDialog assertVoucherCashValueIs(Double expectedVoucherCashValue) {
-        assertEqualsDouble(voucherCashValueFieldText(), expectedVoucherCashValue, "Voucher cash value is incorrect");
-        return this;
-    }
-
-    public SettlementDialog assertVoucherFaceValueIs(Double expectedVoucherCashValue) {
-        assertEqualsDouble(voucherFaceValueFieldText(), expectedVoucherCashValue, "Voucher face value is incorrect");
-        return this;
-    }
-
-    public SettlementDialog assertDepreciationAmountIs(Double expectedDepreciation) {
-        assertEqualsDouble(fetchDepreciationAmount(), expectedDepreciation, "Depreciation is incorrect");
-        return this;
-    }
-
-    public SettlementDialog assertDescriptionIs(String expectedDescription) {
-        assertEquals(getDescriptionText(), expectedDescription, "The Description is not saved");
-        return this;
-    }
-
-    public SettlementDialog assertCategoryTextIs(String expectedCategory) {
-        assertEquals(getCategoryText(), expectedCategory, "The Category is not Saved");
-        return this;
-    }
-
-    public SettlementDialog assertSubCategoryTextIs(String expectedSubCategory) {
-        assertEquals(getSubCategoryText(), expectedSubCategory, "The Subcategory is not Saved");
-        return this;
-    }
-
-    public SettlementDialog assertReviewedNotPresent() {
-        try {
-            assertFalse(reviewed.isEnabled(), "Reviewed checkbox msu be disabled");
-        } catch (Exception ignored) {
-        }
-        return this;
-    }
-
-    public <T extends BaseDialog> T assertAfterOkWeGet(Class<T> dialogClass) {
-        waitForVisible(ok).click();
-        try {
-            return at(dialogClass);
-        } catch (Exception e) {
-            Assert.fail("We must get after ok: " + dialogClass);
-            throw e;
-        }
-    }
-
-    public SettlementDialog assertVoucherListed(String voucherTitle) {
-        List<String> options;
-        if (voucher.isDisplayed())
-            options = voucher.getComboBoxOptions();
-        else
-            options = availableVoucher.getComboBoxOptions();
-        Assert.assertTrue(options.stream().anyMatch(i -> i.contains(voucherTitle)), "Voucher " + voucherTitle + " must be present");
-        return this;
-    }
-
-    public enum ValuationGridColumn {
-        CHECK_COLUMN("active-valuation-checkcolumn"),
-        TYPE("description"),
-        CASH_COMPENSATION("cashCompensation"),
-        DEPRECIATION_COLUMN("depreciation"),
-        TOTAL_AMOUNT_OF_VALUATION("totalPrice"),
-        EDIT_VALUATION("editValuation"),
-        NULL(null);
-
-        private String dataColumnId;
-
-        ValuationGridColumn(String dataColumnId) {
-            this.dataColumnId = dataColumnId;
-        }
-
-        public static ValuationGridColumn getColumn(String dataColumnId) {
-            for (ValuationGridColumn valuationGridColumn : ValuationGridColumn.values()) {
-                if (dataColumnId.equals(valuationGridColumn.dataColumnId)) {
-                    return valuationGridColumn;
-                }
-            }
-            return NULL;
-        }
-    }
-
-    public ValuationRow parseValuation(Valuation valuation) {
+    public ValuationRow parseValuationRow(Valuation valuation) {
         ValuationRow valuationRow = new ValuationRow(valuation);
 
-        List<WebElement> elements = Browser.driver().findElements(By.xpath(".//tr[contains(@class, '" +valuation.className + "')]//td"));
+        List<WebElement> elements = Browser.driver().findElements(By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td"));
         for (WebElement td : elements) {
             String attribute = td.getAttribute("data-columnid");
             switch (ValuationGridColumn.getColumn(attribute)) {
                 case CASH_COMPENSATION:
-                    valuationRow.cashCompensation = OperationalUtils.toNumber(td.getText());
+                    valuationRow.cashCompensation = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
                     break;
                 case DEPRECIATION_COLUMN:
-                    valuationRow.depreciationPercentage = Integer.valueOf(td.getText());
+                    valuationRow.depreciationPercentage = StringUtils.isBlank(td.getText()) ? null : Integer.valueOf(td.getText());
                     break;
                 case TOTAL_AMOUNT_OF_VALUATION:
-                    valuationRow.totalPrice = OperationalUtils.toNumber(td.getText());
+                    valuationRow.totalPrice = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
                     break;
                 case TYPE:
                     valuationRow.description = td.getText();
@@ -664,7 +677,7 @@ public class SettlementDialog extends BaseDialog {
 
         public ValuationRow makeActive() {
             WebDriver driver = Browser.driver();
-            By xpath = By.xpath("//tr[contains(@class, '" + valuation.className+ "')]//div[@role='button']");
+            By xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
             Wait.waitForStaleElement(xpath);
             WebElement webElement = driver.findElement(xpath);
             boolean checked = webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
@@ -680,31 +693,35 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public ValuationRow parseValuation(Valuation valuation) {
-            return SettlementDialog.this.parseValuation(valuation);
+        public SettlementDialog doAssert(Consumer<Asserts> func) {
+            func.accept(new Asserts());
+            return SettlementDialog.this;
+
         }
 
-        public SettlementDialog toSettlementDialog() {
-            return SettlementDialog.this;
+        public class Asserts {
+            public Asserts assertCashCompensationIs(Double amount) {
+                OperationalUtils.assertEqualsDouble(cashCompensation, amount);
+                return this;
+            }
+
+            public Asserts assertTotalAmountIs(Double amount) {
+                OperationalUtils.assertEqualsDouble(totalPrice, amount);
+                return this;
+            }
+
+            public Asserts assertDepreciationPercentageIs(Integer expectedDepreciationPercentage) {
+                assertEquals(depreciationPercentage, expectedDepreciationPercentage);
+                return this;
+            }
+        }
+
+        public ValuationRow parseValuation(Valuation valuation) {
+            return SettlementDialog.this.parseValuationRow(valuation);
         }
 
         private ValuationRow(Valuation valuation) {
             this.valuation = valuation;
-        }
-
-        public ValuationRow assertCashCompensationIs(Double amount) {
-            OperationalUtils.assertEqualsDouble(cashCompensation, amount);
-            return this;
-        }
-
-        public ValuationRow assertTotalAmountIs(Double amount) {
-            OperationalUtils.assertEqualsDouble(totalPrice, amount);
-            return this;
-        }
-
-        public ValuationRow assertDepreciationPercentageIs(Integer expectedDepreciationPercentage) {
-            assertEquals(depreciationPercentage, expectedDepreciationPercentage);
-            return this;
         }
 
         public String getDescription() {
@@ -718,154 +735,227 @@ public class SettlementDialog extends BaseDialog {
         public Double getTotalPrice() {
             return totalPrice;
         }
+
+        public SettlementDialog back() {
+            return SettlementDialog.this;
+        }
     }
 
     public SettlementDialog selectValuation(Valuation valuation) {
-        return parseValuation(valuation).makeActive().toSettlementDialog();
+        return parseValuationRow(valuation).makeActive().back();
     }
 
-    public SettlementDialog assertIncludeInClaimSelected() {
-        Assert.assertTrue(includeInClaim.isSelected(), "The 'Include in Claim' must be selected'");
-        return this;
+    public SettlementDialog doAssert(Consumer<Asserts> func) {
+        func.accept(new Asserts());
+        return SettlementDialog.this;
     }
 
-    public SettlementDialog assertIncludeInClaimNotSelected() {
-        Assert.assertFalse(includeInClaim.isSelected(), "The 'Include in Claim' must be unselected'");
-        return this;
-    }
+    public class Asserts {
 
-    public SettlementDialog assertNotCheapestReasonIs(String reason) {
-        assertEquals(getNotCheapestChoiceReason(), reason, "Reason must be: " + reason);
-        return this;
-    }
-
-    public SettlementDialog assertSubCategoriesListEqualTo(List<String> expectedSubCategoriesList) {
-        waitForVisible(subCategory);
-        List<String> stringList = new ArrayList<>();
-        List<String> allCategories = subCategory.getComboBoxOptions();
-        for (String allCategory : allCategories) {
-            String normalizedString = allCategory.replaceAll("[\\s\\.:,%]", "").replaceAll("(\\[)?(.+?)(\\])?", "$2");
-            stringList.add(normalizedString);
+        public Asserts assertDiscretionaryReasonValuePresent(String expectedValue) {
+            List<String> options = discretionaryReason.getComboBoxOptions();
+            Assert.assertTrue(options.stream().anyMatch(i -> i.contains(expectedValue)));
+            return this;
         }
-        assertEqualsNoOrder(stringList.toArray(), expectedSubCategoriesList.toArray(), "Category is not selected");
-        return this;
-    }
 
-    public SettlementDialog assertVoucherCashValueIs(String expectedValue) {
-        assertEquals(voucherCashValueFieldText(), OperationalUtils.getDoubleValue(expectedValue));
-        return this;
-    }
+        public Asserts assertCashValueIs(Double expectedCashValue) {
+            assertEqualsDouble(getCashCompensationValue(), expectedCashValue, "Cash compensation is incorrect");
+            return this;
+        }
 
-    public SettlementDialog assertAgeYearsEnabled() {
-        assertTrue($(ageYears).isEnabled(), "Age Years field must be enabled");
-        return this;
-    }
+        public Asserts assertVoucherCashValueIs(Double expectedVoucherCashValue) {
+            assertEqualsDouble(voucherCashValueFieldText(), expectedVoucherCashValue, "Voucher cash value is incorrect");
+            return this;
+        }
 
-    public SettlementDialog assertMonthMenuEnabled() {
-        assertTrue($(month).isEnabled(), "Month DropDown must be enabled");
-        return this;
-    }
+        public Asserts assertVoucherFaceValueIs(Double expectedVoucherCashValue) {
+            assertEqualsDouble(voucherFaceValueFieldText(), expectedVoucherCashValue, "Voucher face value is incorrect");
+            return this;
+        }
 
-    public SettlementDialog assertAgeYearsDisabled() {
-        assertFalse($(ageYears).isEnabled(), "Age Years field must be disabled");
-        return this;
-    }
+        public Asserts assertDepreciationAmountIs(Double expectedDepreciation) {
+            assertEqualsDouble(fetchDepreciationAmount(), expectedDepreciation, "Depreciation is incorrect");
+            return this;
+        }
 
-    public SettlementDialog assertMonthMenuDisabled() {
-        assertFalse(month.isEnabled(), "Month DropDown must be disabled");
-        return this;
-    }
+        public Asserts assertDescriptionIs(String expectedDescription) {
+            assertEquals(getDescriptionText(), expectedDescription, "The Description is not saved");
+            return this;
+        }
 
-    public SettlementDialog assertMonthValueIs(String expectedMonthValue) {
-        assertEquals(month.getValue().trim(), expectedMonthValue, "The month is not saved");
-        return this;
-    }
+        public Asserts assertCategoryTextIs(String expectedCategory) {
+            assertEquals(getCategoryText(), expectedCategory, "The Category is not Saved");
+            return this;
+        }
 
-    public SettlementDialog assertYearsValueIs(String expectedValue) {
-        assertEquals(ageYears.getText(), expectedValue, "The age year is not saved");
-        return this;
-    }
+        public Asserts assertSubCategoryTextIs(String expectedSubCategory) {
+            assertEquals(getSubCategoryText(), expectedSubCategory, "The Subcategory is not Saved");
+            return this;
+        }
 
-    public SettlementDialog assertDepreciationValueIs(Double expectedDepreciationValue) {
-        assertEqualsDouble(Double.valueOf(depreciationPercentage.getText()), expectedDepreciationValue, "Depreciation percentage incorrect");
-        return this;
-    }
+        public Asserts assertReviewedNotPresent() {
+            try {
+                assertFalse(reviewed.isEnabled(), "Reviewed checkbox msu be disabled");
+            } catch (Exception ignored) {
+            }
+            return this;
+        }
 
-    public SettlementDialog assertMarketPriceVisible() {
-        String failMessage = "Market price must be visible";
-        try {
-            if (parseValuation(Valuation.MARKET_PRICE).getDescription() == null) {
+        public Asserts assertVoucherListed(String voucherTitle) {
+            List<String> options;
+            if (voucher.isDisplayed())
+                options = voucher.getComboBoxOptions();
+            else
+                options = availableVoucher.getComboBoxOptions();
+            Assert.assertTrue(options.stream().anyMatch(i -> i.contains(voucherTitle)), "Voucher " + voucherTitle + " must be present");
+            return this;
+        }
+
+        public Asserts assertIncludeInClaimSelected() {
+            Assert.assertTrue(includeInClaim.isSelected(), "The 'Include in Claim' must be selected'");
+            return this;
+        }
+
+        public Asserts assertIncludeInClaimNotSelected() {
+            Assert.assertFalse(includeInClaim.isSelected(), "The 'Include in Claim' must be unselected'");
+            return this;
+        }
+
+        public Asserts assertNotCheapestReasonIs(String reason) {
+            assertEquals(getNotCheapestChoiceReason(), reason, "Reason must be: " + reason);
+            return this;
+        }
+
+        public Asserts assertSubCategoriesListEqualTo(List<String> expectedSubCategoriesList) {
+            waitForVisible(subCategory);
+            List<String> stringList = new ArrayList<>();
+            List<String> allCategories = subCategory.getComboBoxOptions();
+            for (String allCategory : allCategories) {
+                String normalizedString = allCategory.replaceAll("[\\s\\.:,%]", "").replaceAll("(\\[)?(.+?)(\\])?", "$2");
+                stringList.add(normalizedString);
+            }
+            assertEqualsNoOrder(stringList.toArray(), expectedSubCategoriesList.toArray(), "Category is not selected");
+            return this;
+        }
+
+        public Asserts assertVoucherCashValueIs(String expectedValue) {
+            assertEquals(voucherCashValueFieldText(), OperationalUtils.getDoubleValue(expectedValue));
+            return this;
+        }
+
+        public Asserts assertAgeYearsEnabled() {
+            assertTrue($(ageYears).isEnabled(), "Age Years field must be enabled");
+            return this;
+        }
+
+        public Asserts assertMonthMenuEnabled() {
+            assertTrue($(month).isEnabled(), "Month DropDown must be enabled");
+            return this;
+        }
+
+        public Asserts assertAgeYearsDisabled() {
+            assertFalse($(ageYears).isEnabled(), "Age Years field must be disabled");
+            return this;
+        }
+
+        public Asserts assertMonthMenuDisabled() {
+            assertFalse(month.isEnabled(), "Month DropDown must be disabled");
+            return this;
+        }
+
+        public Asserts assertMonthValueIs(String expectedMonthValue) {
+            assertEquals(month.getValue().trim(), expectedMonthValue, "The month is not saved");
+            return this;
+        }
+
+        public Asserts assertYearsValueIs(String expectedValue) {
+            assertEquals(ageYears.getText(), expectedValue, "The age year is not saved");
+            return this;
+        }
+
+        public Asserts assertDepreciationValueIs(Double expectedDepreciationValue) {
+            assertEqualsDouble(Double.valueOf(depreciationPercentage.getText()), expectedDepreciationValue, "Depreciation percentage incorrect");
+            return this;
+        }
+
+        public Asserts assertMarketPriceVisible() {
+            String failMessage = "Market price must be visible";
+            try {
+                if (parseValuationRow(Valuation.MARKET_PRICE).getDescription() == null) {
+                    Assert.fail(failMessage);
+                }
+            } catch (Exception e) {
                 Assert.fail(failMessage);
             }
-        } catch (Exception e) {
-            Assert.fail(failMessage);
+            return this;
         }
-        return this;
+
+        public Asserts assertMarketPriceSupplierInvisible() {
+            assertFalse(isMarketPriceSupplierDisplayed(), "Market price must be not visible");
+            return this;
+        }
+
+        public Asserts assertRejectReasonDisabled() {
+            assertFalse(isRejectReasonEnabled(), "Reject Reason must be disabled");
+            return this;
+        }
+
+        public Asserts assertRejectReasonVisible() {
+            assertTrue(isRejectReasonVisible(), "Reject Reason must be visible");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonInvisible() {
+            assertFalse(isDiscretionaryReasonVisible(), "Discretionary Reason must be invisible");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonVisible() {
+            assertTrue(isDiscretionaryReasonVisible(), "Discretionary Reason must be visible");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonDisabled() {
+            assertFalse(isDiscretionaryReasonEnabled(), "Discretionary Reason must be disabled");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonEnabled() {
+            assertTrue(isDiscretionaryReasonEnabled(), "Discretionary Reason must be enabled");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonHasRedBorder() {
+            Assert.assertTrue(isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have red border");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonHasNormalBorder() {
+            Assert.assertFalse(isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have normal border");
+            return this;
+        }
+
+        public Asserts assertDiscretionaryReasonEqualTo(String reason) {
+            assertEquals(getDiscretionaryReasonText(), reason, "Wrong reason selected for New Price");
+            return this;
+        }
+
+        public Asserts assertBrandTextIs(String brandLink) {
+            assertEquals($(brand).getText(), brandLink, "Wrong Brand is Displayed");
+            return this;
+        }
+
+        public Asserts assertScalepointSupplierNotVisible() {
+            assertFalse(statusSupplier.exists(), "Scalepoint supplier must not be visible");
+            return this;
+        }
+
+        public Asserts assertScalepointSupplierVisible(String supplier) {
+            assertTrue(statusSupplier.getText().contains(supplier), "Scalepoint supplier must be visible");
+            return this;
+        }
     }
 
-    public SettlementDialog assertMarketPriceSupplierInvisible() {
-        assertFalse(isMarketPriceSupplierDisplayed(), "Market price must be not visible");
-        return this;
-    }
 
-    public SettlementDialog assertRejectReasonDisabled() {
-        assertFalse(isRejectReasonEnabled(), "Reject Reason must be disabled");
-        return this;
-    }
-
-    public SettlementDialog assertRejectReasonVisible() {
-        assertTrue(isRejectReasonVisible(), "Reject Reason must be visible");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonInvisible() {
-        assertFalse(isDiscretionaryReasonVisible(), "Discretionary Reason must be invisible");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonVisible() {
-        assertTrue(isDiscretionaryReasonVisible(), "Discretionary Reason must be visible");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonDisabled() {
-        assertFalse(isDiscretionaryReasonEnabled(), "Discretionary Reason must be disabled");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonEnabled() {
-        assertTrue(isDiscretionaryReasonEnabled(), "Discretionary Reason must be enabled");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonHasRedBorder() {
-        Assert.assertTrue(isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have red border");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonHasNormalBorder() {
-        Assert.assertFalse(isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have normal border");
-        return this;
-    }
-
-    public SettlementDialog assertDiscretionaryReasonEqualTo(String reason) {
-        assertEquals(getDiscretionaryReasonText(), reason, "Wrong reason selected for New Price");
-        return this;
-    }
-
-    public SettlementDialog assertBrandTextIs(String brandLink) {
-        assertEquals($(brand).getText(), brandLink, "Wrong Brand is Displayed");
-        return this;
-    }
-
-    public SettlementDialog assertScalepointSupplierNotVisible() {
-        assertFalse(statusSupplier.exists(), "Scalepoint supplier must not be visible");
-        return this;
-    }
-
-    public SettlementDialog assertScalepointSupplierVisible(String supplier) {
-        assertTrue(statusSupplier.getText().contains(supplier), "Scalepoint supplier must be visible");
-        return this;
-    }
 }
 

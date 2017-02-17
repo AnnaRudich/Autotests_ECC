@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.support.FindBy;
@@ -85,8 +86,8 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
-    public CompleteClaimPage fillClaimFormWithPassword(Claim claim, String password) {
-        return fillClaimForm(claim).enterPassword(password);
+    public CompleteClaimPage fillClaimFormWithPassword(Claim claim) {
+        return fillClaimForm(claim).enterPassword(Constants.PASSWORD);
     }
 
     public CompleteClaimPage enterPhone(String phone) {
@@ -142,13 +143,13 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public ShopWelcomePage completeWithEmailAndLoginToShop(String password) {
+    public ShopWelcomePage completeWithEmailAndLoginToShop() {
         return completeWithEmail().
                 openRecentClaim().
                 toMailsPage().
                 viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
                 findLoginToShopLinkAndOpenIt().
-                enterPassword(password).
+                enterPassword(Constants.PASSWORD).
                 login();
     }
 

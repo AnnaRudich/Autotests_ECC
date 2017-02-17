@@ -170,7 +170,7 @@ public class Claim {
         return statusCancelled;
     }
 
-    public String getStatusClosedEx() {
+    public String getStatusClosedExternally() {
         return statusClosedEx;
     }
 

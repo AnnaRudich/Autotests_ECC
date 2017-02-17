@@ -4,11 +4,10 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
 import com.scalepoint.automation.utils.data.entity.RRLinesFields;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public class ReductionRulesTest extends BaseTest {

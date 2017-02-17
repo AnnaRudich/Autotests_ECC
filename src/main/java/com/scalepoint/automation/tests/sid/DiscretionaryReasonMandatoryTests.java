@@ -2,18 +2,19 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
-
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
@@ -33,13 +34,15 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(10)
-                .selectDepreciationType(1)
+                .fillDepreciation(Constants.DEPRECIATION_10)
+                .selectDepreciationType(DepreciationType.DISCRETIONARY)
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(NEW_PRICE)
                 .clickOK()
-                .assertDiscretionaryReasonEnabled()
-                .assertDiscretionaryReasonHasRedBorder();
+                .doAssert(sid->{
+                    sid.assertDiscretionaryReasonEnabled();
+                    sid.assertDiscretionaryReasonHasRedBorder();
+                });
     }
 
     /*
@@ -58,8 +61,10 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(ANDEN_VURDERING)
                 .clickOK()
-                .assertDiscretionaryReasonEnabled()
-                .assertDiscretionaryReasonHasRedBorder();
+                .doAssert(sid->{
+                    sid.assertDiscretionaryReasonEnabled();
+                    sid.assertDiscretionaryReasonHasRedBorder();
+                });
     }
 
     /*
@@ -74,11 +79,13 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(10)
-                .selectDepreciationType(1)
+                .fillDepreciation(Constants.DEPRECIATION_10)
+                .selectDepreciationType(DepreciationType.DISCRETIONARY)
                 .fillDescription(claimItem.getTextFieldSP())
-                .assertDiscretionaryReasonDisabled()
-                .assertDiscretionaryReasonHasNormalBorder();
+                .doAssert(sid->{
+                    sid.assertDiscretionaryReasonDisabled();
+                    sid.assertDiscretionaryReasonHasNormalBorder();
+                });
     }
 
 
@@ -94,12 +101,14 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(10)
-                .selectDepreciationType(0)
+                .fillDepreciation(Constants.DEPRECIATION_10)
+                .selectDepreciationType(DepreciationType.POLICY)
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(NEW_PRICE)
-                .assertDiscretionaryReasonDisabled()
-                .assertDiscretionaryReasonHasNormalBorder();
+                .doAssert(sid->{
+                    sid.assertDiscretionaryReasonDisabled();
+                    sid.assertDiscretionaryReasonHasNormalBorder();
+                });
     }
 
      /*
@@ -115,16 +124,18 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
                 .fillDepreciation(0)
-                .selectDepreciationType(1)
+                .selectDepreciationType(DepreciationType.DISCRETIONARY)
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(NEW_PRICE)
-                .assertDiscretionaryReasonDisabled()
-                .assertDiscretionaryReasonHasNormalBorder();
+                .doAssert(sid->{
+                    sid.assertDiscretionaryReasonDisabled();
+                    sid.assertDiscretionaryReasonHasNormalBorder();
+                });
     }
 
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
         return loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillCategory(claimItem.getExistingCat4())
                 .fillSubCategory(claimItem.getExistingSubCat4())
                 .fillCustomerDemand(1000.00)

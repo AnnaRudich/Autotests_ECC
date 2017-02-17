@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.LogManager;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -41,7 +40,9 @@ public interface Actions {
     }
 
     default void acceptAlert() {
-        Window.get().acceptAlert();
+        if (isAlertPresent()) {
+            Window.get().acceptAlert();
+        }
     }
 
     default boolean isAlertPresent() {
@@ -204,6 +205,7 @@ public interface Actions {
     }
 
     default void doubleClick(By by) {
+        Wait.waitForStaleElement(by);
         doubleClick(Browser.driver().findElement(by));
     }
 

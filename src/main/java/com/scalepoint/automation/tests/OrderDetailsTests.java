@@ -72,9 +72,9 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
-                .openAddManuallyDialog()
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .openSid()
+                .fillCategory(claimItem.getCategoryBorn())
+                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillNewPrice(900.00)
                 .fillDescription(claimItem.getTextFieldSP());
 
@@ -125,9 +125,9 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageWhenWeWithdrawMoney(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
-                .openAddManuallyDialog()
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .openSid()
+                .fillCategory(claimItem.getCategoryBorn())
+                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillNewPrice(5000.00)
                 .fillDescription(claimItem.getTextFieldSP())
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE);

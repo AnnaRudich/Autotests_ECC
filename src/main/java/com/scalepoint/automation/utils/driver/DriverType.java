@@ -1,7 +1,5 @@
 package com.scalepoint.automation.utils.driver;
 
-import java.util.Arrays;
-
 public enum DriverType {
     IE("ie.local"),
     IE_REMOTE("ie.remote"),

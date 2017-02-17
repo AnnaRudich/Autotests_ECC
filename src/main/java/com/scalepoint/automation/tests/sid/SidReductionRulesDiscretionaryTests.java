@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -74,11 +75,11 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                ClaimItem claimItem,
                                                                ReductionRule reductionRule) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
-                .openAddManuallyDialog()
+                .openSid()
                 .automaticDepreciation(false)
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
                 .fillCategory(claimItem.getAlkaCategory())
                 .fillSubCategory(claimItem.getAlkaSubCategory())
                 .enableAge(reductionRule.getAgeFrom2())
@@ -86,20 +87,25 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationPercentage, claimItem.getAlkaUserReductionRule_25());
+                SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, depreciationPercentage, claimItem.getAlkaUserReductionRule_25());
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
         Double calculatedCashWithReduction = valuationWithReduction.getCashCompensationWithReduction();
         Double calculatedReduction = valuationWithReduction.getReduction();
 
-        settlementDialog.assertCashValueIs(calculatedCashValue)
-                .assertDepreciationAmountIs(calculatedDepreciation)
-                .assertDepreciationValueIs(0d)
+        settlementDialog
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashValue);
+                    sid.assertDepreciationAmountIs(calculatedDepreciation);
+                    sid.assertDepreciationValueIs(0d);
+                })
                 .applyReductionRuleByValue(claimItem.getAlkaUserReductionRule_25())
-                .assertCashValueIs(calculatedCashWithReduction)
-                .assertDepreciationAmountIs(calculatedReduction)
-                .assertDepreciationValueIs(claimItem.getAlkaUserReductionRule_25().doubleValue())
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashWithReduction);
+                    sid.assertDepreciationAmountIs(calculatedReduction);
+                    sid.assertDepreciationValueIs(claimItem.getAlkaUserReductionRule_25().doubleValue());
+                })
                 .cancel();
     }
 
@@ -120,11 +126,11 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                         ClaimItem claimItem,
                                                                         ReductionRule reductionRule) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
-                .openAddManuallyDialog()
+                .openSid()
                 .automaticDepreciation(false)
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
                 .fillCategory(claimItem.getAlkaCategory())
                 .fillSubCategory(claimItem.getAlkaSubCategory())
                 .enableAge(reductionRule.getAgeFrom2())
@@ -132,7 +138,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationPercentage, claimItem.getAlkaUserReductionRule_25());
+                SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, depreciationPercentage, claimItem.getAlkaUserReductionRule_25());
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
@@ -140,14 +146,18 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
         Double calculatedReduction = valuationWithReduction.getReduction();
 
         settlementDialog
-                .assertCashValueIs(calculatedCashValue)
-                .assertDepreciationAmountIs(calculatedDepreciation)
-                .assertDepreciationValueIs(0d)
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashValue);
+                    sid.assertDepreciationAmountIs(calculatedDepreciation);
+                    sid.assertDepreciationValueIs(0d);
+                })
                 .automaticDepreciation(true)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertCashValueIs(calculatedCashWithReduction)
-                .assertDepreciationAmountIs(calculatedReduction)
-                .assertDepreciationValueIs(claimItem.getAlkaUserReductionRule_25().doubleValue())
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashWithReduction);
+                    sid.assertDepreciationAmountIs(calculatedReduction);
+                    sid.assertDepreciationValueIs(claimItem.getAlkaUserReductionRule_25().doubleValue());
+                })
                 .cancel();
     }
 
@@ -166,11 +176,11 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                          ClaimItem claimItem,
                                                          ReductionRule reductionRule) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
-                .openAddManuallyDialog()
+                .openSid()
                 .automaticDepreciation(false)
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
                 .fillCategory(claimItem.getAlkaCategoryUnpublishedPolicy())
                 .fillSubCategory(claimItem.getAlkaSubCategoryUnpublishedPolicy())
                 .enableAge(reductionRule.getAgeFrom2())
@@ -178,14 +188,16 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(), depreciationPercentage, 0);
+                SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, depreciationPercentage, 0);
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
 
         settlementDialog
-                .assertCashValueIs(calculatedCashValue)
-                .assertDepreciationAmountIs(calculatedDepreciation)
-                .assertDepreciationValueIs(0d)
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashValue);
+                    sid.assertDepreciationAmountIs(calculatedDepreciation);
+                    sid.assertDepreciationValueIs(0d);
+                })
                 .cancel();
     }
 
@@ -209,11 +221,11 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                            ClaimItem claimItem,
                                                            ReductionRule reductionRule) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF())
-                .openAddManuallyDialog()
+                .openSid()
                 .automaticDepreciation(false)
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
                 .fillCategory(claimItem.getExistingCat3_Telefoni())
                 .fillSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .enableAge(reductionRule.getAgeFrom2())
@@ -221,20 +233,24 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
-                SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
+                SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400,
                         depreciationPercentage, claimItem.getAlkaUserReductionRule40());
 
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
 
         settlementDialog
-                .assertCashValueIs(calculatedCashValue)
-                .assertDepreciationAmountIs(calculatedDepreciation)
-                .assertDepreciationValueIs(0d)
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashValue);
+                    sid.assertDepreciationAmountIs(calculatedDepreciation);
+                    sid.assertDepreciationValueIs(0d);
+                })
                 .applyReductionRuleByValue(claimItem.getAlkaUserReductionRule40())
-                .assertCashValueIs(valuationWithReduction.getCashCompensationWithReduction())
-                .assertDepreciationAmountIs(valuationWithReduction.getReduction())
-                .assertDepreciationValueIs(claimItem.getAlkaUserReductionRule40().doubleValue())
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(valuationWithReduction.getCashCompensationWithReduction());
+                    sid.assertDepreciationAmountIs(valuationWithReduction.getReduction());
+                    sid.assertDepreciationValueIs(claimItem.getAlkaUserReductionRule40().doubleValue());
+                })
                 .cancel();
     }
 
@@ -256,11 +272,11 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                                                                     Claim claim,
                                                                     ClaimItem claimItem,
                                                                     ReductionRule reductionRule) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF()).openAddManuallyDialog()
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeAF()).openSid()
                 .automaticDepreciation(false)
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
                 .fillCategory(claimItem.getExistingCat3_Telefoni())
                 .fillSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .enableAge(reductionRule.getAgeFrom2())
@@ -268,20 +284,24 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
 
-        ValuationWithReduction calculation = SidCalculator.calculatePriceValuationWithReduction(claimItem.getNewPriceSP_2400(),
+        ValuationWithReduction calculation = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400,
                 depreciationPercentage,
                 claimItem.getAlkaUserReductionRule40());
         Double calculatedCashValue = calculation.getCashCompensation();
 
         settlementDialog
-                .assertCashValueIs(calculatedCashValue)
-                .assertDepreciationAmountIs(calculation.getDepreciation())
-                .assertDepreciationValueIs(0d)
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashValue);
+                    sid.assertDepreciationAmountIs(calculation.getDepreciation());
+                    sid.assertDepreciationValueIs(0d);
+                })
                 .automaticDepreciation(true)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertCashValueIs(calculation.getCashCompensationWithReduction())
-                .assertDepreciationAmountIs(calculation.getReduction())
-                .assertDepreciationValueIs(claimItem.getAlkaUserReductionRule40().doubleValue())
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculation.getCashCompensationWithReduction());
+                    sid.assertDepreciationAmountIs(calculation.getReduction());
+                    sid.assertDepreciationValueIs(claimItem.getAlkaUserReductionRule40().doubleValue());
+                })
                 .cancel();
     }
 }

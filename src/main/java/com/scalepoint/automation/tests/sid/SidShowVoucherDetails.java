@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.dialogs.VoucherTermsAndConditionsDi
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -14,8 +15,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
 
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class SidShowVoucherDetails extends BaseTest {
@@ -101,16 +100,18 @@ public class SidShowVoucherDetails extends BaseTest {
     private void checkBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         VoucherAgreementApi.AssignedCategory assignedCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
-        EditVoucherValuationDialog editVoucherValuationDialog = loginAndCreateClaim(user, claim).openAddManuallyDialog()
+        loginAndCreateClaim(user, claim).openSid()
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
                 .fillCategory(assignedCategory)
-                .fillDepreciation(claimItem.getDepAmount1_10())
+                .fillDepreciation(Constants.DEPRECIATION_10)
                 .fillVoucher(voucher.getVoucherNameSP())
                 .openVoucherValuationCard()
-                .assertBrandsTextIs(voucher.getBrandsText())
-                .assertTagsTextIs(voucher.getTagsText());
+                .doAssert(editVoucherValuation -> {
+                    editVoucherValuation.assertBrandsTextIs(voucher.getBrandsText());
+                    editVoucherValuation.assertTagsTextIs(voucher.getTagsText());
+                });
     }
 
     /**
@@ -126,12 +127,12 @@ public class SidShowVoucherDetails extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify 'Trade and conditions' buttons and window")
     public void ecc5519_2_voucherTradeTermsAndConditions(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
-                .fillDepreciation(claimItem.getDepAmount1_10())
-                .fillCategory(claimItem.getExistingCat1_Born()).fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
+                .fillDepreciation(Constants.DEPRECIATION_10)
+                .fillCategory(claimItem.getCategoryBorn()).fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillVoucher(claimItem.getExistingVoucher2());
 
         VoucherTermsAndConditionsDialog voucherTermsAndConditionsDialog = settlementDialog.openVoucherTermAndConditions();
@@ -139,8 +140,8 @@ public class SidShowVoucherDetails extends BaseTest {
         voucherTermsAndConditionsDialog.close();
 
         settlementDialog.openVoucherValuationCard()
-                .openTermsAndConditions().
-                assertTermsAndConditionsTextIs(termsAndConditions);
+                .openTermsAndConditions()
+                .doAssert(termsPage -> termsPage.assertTermsAndConditionsTextIs(termsAndConditions));
     }
 
     /**
@@ -165,15 +166,15 @@ public class SidShowVoucherDetails extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
     public void ecc5519_3_voucherBrandTagInSIDCompactMode(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
-                .fillDepreciation(claimItem.getDepAmount1_10())
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
+                .fillDepreciation(Constants.DEPRECIATION_10)
+                .fillCategory(claimItem.getCategoryBorn())
+                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillVoucher(claimItem.getExistingVoucher2())
-                .assertBrandTextIs(voucher.getBrandLink())
+                .doAssert(sid -> sid.assertBrandTextIs(voucher.getBrandLink()))
                 .cancel();
     }
 
@@ -194,12 +195,12 @@ public class SidShowVoucherDetails extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify that discount distribution can be changed")
     public void ecc5519_4_discountDistributionIsChanged(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
+                .fillCategory(claimItem.getCategoryBorn())
+                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillVoucher(claimItem.getExistingVoucher2());
 
         EditVoucherValuationDialog editVoucherValuationDialog = settlementDialog
@@ -208,7 +209,7 @@ public class SidShowVoucherDetails extends BaseTest {
         String voucherCashValue = editVoucherValuationDialog.getVoucherCashValue();
         editVoucherValuationDialog
                 .closeDialogWithOk()
-                .assertVoucherCashValueIs(voucherCashValue);
+                .doAssert(sid -> sid.assertVoucherCashValueIs(voucherCashValue));
     }
 
 
@@ -222,17 +223,17 @@ public class SidShowVoucherDetails extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify that user can re-select voucher")
     public void ecc5519_5_reselectVoucherInSID(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getBigCustomDemandPrice())
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
-                .fillDepreciation(claimItem.getDepAmount1_10())
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .fillSubCategory(claimItem.getExistingSubCat1_Babyudstyr())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
+                .fillDepreciation(Constants.DEPRECIATION_10)
+                .fillCategory(claimItem.getCategoryBorn())
+                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillVoucher(claimItem.getExistingVoucher2())
-                .assertBrandTextIs(claimItem.getExistingVoucher2())
+                .doAssert(sid -> sid.assertBrandTextIs(claimItem.getExistingVoucher2()))
                 .fillVoucher(claimItem.getExistingVoucher4())
-                .assertBrandTextIs(claimItem.getBrandLinkVoucher4());
+                .doAssert(sid -> sid.assertBrandTextIs(claimItem.getBrandLinkVoucher4()));
     }
 
 }

@@ -1,7 +1,10 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
+import com.scalepoint.automation.pageobjects.pages.BestFitPage;
+import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -9,9 +12,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
@@ -29,16 +29,18 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat1_Born())
-                .assertMarketPriceInvisible()
+                .chooseCategory(claimItem.getCategoryBorn())
+                .doAssert(TextSearchPage.Asserts::assertMarketPriceInvisible)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
-                .assetMarketPriceSupplierInvisible()
-                .assertMarketPriceInvisible()
+                .doAssert(productDetails -> {
+                    productDetails.assetMarketPriceSupplierInvisible();
+                    productDetails.assertMarketPriceInvisible();
+                })
                 .closeProductDetails()
                 .sortNonOrderableFirst()
                 .toBestFitPage()
-                .assertMarketPriceInvisible();
+                .doAssert(BestFitPage.Asserts::assertMarketPriceInvisible);
     }
 
     /**
@@ -58,8 +60,10 @@ public class ShowMarketPricesTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .selectValuation(Valuation.MARKET_PRICE)
-                .assertMarketPriceVisible()
-                .assertMarketPriceSupplierInvisible();
+                .doAssert(sid->{
+                    sid.assertMarketPriceVisible();
+                    sid.assertMarketPriceSupplierInvisible();
+                });
     }
 
     /**
@@ -80,13 +84,15 @@ public class ShowMarketPricesTests extends BaseTest {
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortMarketPricesAscending()
-                .assertSortingMarketPriceAscendant()
+                .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceAscendant)
                 .sortMarketPricesDescending()
-                .assertSortingMarketPriceDescendant()
+                .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceDescendant)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
-                .assertMarketPriceVisible()
-                .assertMarketPriceSupplierVisible()
+                .doAssert(productDetails->{
+                    productDetails.assertMarketPriceVisible();
+                    productDetails.assertMarketPriceSupplierVisible();
+                })
                 .closeProductDetails();
     }
 
@@ -108,11 +114,13 @@ public class ShowMarketPricesTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
-                .assertMarketPriceVisible()
-                .assertMarketPriceSupplierVisible()
+                .doAssert(productDetails->{
+                    productDetails.assertMarketPriceVisible();
+                    productDetails.assertMarketPriceSupplierVisible();
+                })
                 .closeProductDetails()
                 .openSidForFirstProduct()
                 .selectValuation(Valuation.MARKET_PRICE)
-                .assertMarketPriceVisible();
+                .doAssert(SettlementDialog.Asserts::assertMarketPriceVisible);
     }
 }

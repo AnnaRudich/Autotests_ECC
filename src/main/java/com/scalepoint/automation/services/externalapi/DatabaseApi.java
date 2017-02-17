@@ -7,7 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 

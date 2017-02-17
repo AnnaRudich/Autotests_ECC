@@ -34,13 +34,12 @@ public class EditDiscountDistributionDialog extends BaseDialog {
         return this;
     }
 
-    public EditDiscountDistributionDialog updateCompanyPercentage(Integer percentage) {
-        companyPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
-        return this;
-    }
-
-    public EditDiscountDistributionDialog updateCustomerPercentage(Integer percentage) {
-        customerPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+    public EditDiscountDistributionDialog updatePercentage(DistributeTo distributeTo, Integer percentage) {
+        if (DistributeTo.COMPANY.equals(distributeTo)) {
+            companyPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+        } else {
+            customerPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+        }
         return this;
     }
 
@@ -53,6 +52,12 @@ public class EditDiscountDistributionDialog extends BaseDialog {
         String text = voucherRebate.getText();
         return Integer.valueOf(text.replaceAll("([0-9]+),.*", "$1"));
     }
+
+    public enum DistributeTo {
+        CUSTOMER,
+        COMPANY
+    }
+
 }
 
 

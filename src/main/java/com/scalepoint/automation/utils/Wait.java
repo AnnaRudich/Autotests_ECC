@@ -1,6 +1,5 @@
 package com.scalepoint.automation.utils;
 
-import com.codeborne.selenide.*;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;

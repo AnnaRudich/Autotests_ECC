@@ -4,13 +4,13 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
-import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -22,8 +22,9 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
@@ -84,11 +85,15 @@ public class SettlementPage extends BaseClaimPage {
         return new ClaimLine(table);
     }
 
-    public ClaimLine findFirstClaimLine() {
+    public ClaimLine parseFirstClaimLine() {
         By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1]");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
+    }
+
+    public SettlementDialog editFirstClaimLine() {
+        return parseFirstClaimLine().editLine();
     }
 
     public SettlementPage selectAllLines() {
@@ -111,11 +116,6 @@ public class SettlementPage extends BaseClaimPage {
         return claimOperationsMenu;
     }
 
-    public SettlementPage assertGenericItemIsNotPresent(GenericItem genericItem) {
-        claimOperationsMenu.addGenericItem().assertGenericItemIsNotPresent(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
-        return this;
-    }
-
     public ToolBarMenu getToolBarMenu() {
         return toolBarMenu;
     }
@@ -133,14 +133,18 @@ public class SettlementPage extends BaseClaimPage {
         return toTextSearchPage().searchByProductName(text);
     }
 
-    public SettlementDialog openAddManuallyDialog() {
+    public SettlementDialog openSid() {
         return functionalMenu.addManually();
     }
 
-    public SettlementPage openAddManuallyDialog(String description, String category, String subcategory, Double newPrice) {
-        return openAddManuallyDialog()
-                .fillBaseData(description, category, subcategory, newPrice)
+    public SettlementPage openSid(String description, String category, String subcategory, Double newPrice) {
+        return openSid()
+                .fill(description, category, subcategory, newPrice)
                 .closeSidWithOk();
+    }
+
+    public SettlementDialog openSidAndFill(Function<SettlementDialog, SettlementDialog> fillfunc) {
+        return openSid().fillDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
 
     public void cancelClaim() {
@@ -180,15 +184,6 @@ public class SettlementPage extends BaseClaimPage {
         return at(RnvTaskWizardPage1.class);
     }
 
-    public SettlementPage assertSettlementPagePresent(String message) {
-        Assert.assertTrue(isSettlementPagePresent(), message);
-        return this;
-    }
-
-    public SettlementPage assertFaceValueTooltipIs(Double expectedPrice) {
-        assertEqualsDouble(getFaceTooltipValue(), expectedPrice, "Tooltip face value %s should be assertEqualsDouble to not  depreciated new price %s");
-        return this;
-    }
 
     public Double getFaceTooltipValue() {
         String tooltipText = (iconToolTip.getAttribute("title")).split("\\(")[0];
@@ -209,19 +204,42 @@ public class SettlementPage extends BaseClaimPage {
         return mainMenu;
     }
 
-    /*------------------------------ ASSERTS ---------------------------------------*/
-    /*------------------------------ ------- ---------------------------------------*/
-    public SettlementPage assertItemIsPresent(String claimLineDescription) {
-        Assert.assertTrue(isItemPresent(claimLineDescription),
-                errorMessage("The claim item [%s] is not found", claimLineDescription));
-        return this;
+    public SettlementPage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return SettlementPage.this;
     }
 
-    public SettlementPage assertItemNotPresent(String claimLineDescription) {
-        Assert.assertFalse(isItemPresent(claimLineDescription),
-                errorMessage("The claim item [%s] must be absent: ", claimLineDescription));
-        return this;
+    public class Asserts {
+        public Asserts assertFaceValueTooltipIs(Double expectedPrice) {
+            assertEqualsDouble(getFaceTooltipValue(), expectedPrice, "Tooltip face value %s should be assertEqualsDouble to not  depreciated new price %s");
+            return this;
+        }
+
+        public Asserts assertSettlementPagePresent(String message) {
+            Assert.assertTrue(isSettlementPagePresent(), message);
+            return this;
+        }
+
+        public Asserts assertItemIsPresent(String claimLineDescription) {
+            Assert.assertTrue(isItemPresent(claimLineDescription),
+                    errorMessage("The claim item [%s] is not found", claimLineDescription));
+            return this;
+        }
+
+        public Asserts assertItemNotPresent(String claimLineDescription) {
+            Assert.assertFalse(isItemPresent(claimLineDescription),
+                    errorMessage("The claim item [%s] must be absent: ", claimLineDescription));
+            return this;
+        }
+
+
+        public Asserts assertGenericItemIsNotPresent(GenericItem genericItem) {
+            boolean genericItemIsPresent = claimOperationsMenu.addGenericItem().isGenericItemPresent(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
+            Assert.assertFalse(genericItemIsPresent);
+            return this;
+        }
     }
+
 
     public class ClaimLine {
 
@@ -269,6 +287,10 @@ public class SettlementPage extends BaseClaimPage {
             return SettlementPage.this;
         }
 
+        public SettlementPage toSettlementPage() {
+            return SettlementPage.this;
+        }
+
         public SettlementDialog editLine() {
             doubleClick(descriptionElement);
             String js =
@@ -290,12 +312,6 @@ public class SettlementPage extends BaseClaimPage {
             return tooltip;
         }
 
-        public ClaimLine assertVoucherPresent() {
-            boolean voucherPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'voucherIcon.png')]")).size() > 0;
-            assertTrue(voucherPresent, "Voucher icon should be displayed");
-            return this;
-        }
-
         public String getDescription() {
             return description;
         }
@@ -310,27 +326,6 @@ public class SettlementPage extends BaseClaimPage {
 
         public int getDepreciation() {
             return depreciation;
-        }
-
-        public ClaimLine assertDiscretionaryPresent() {
-            boolean discretionaryPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'discretionary_icon.png')]")).size() > 0;
-            assertTrue(discretionaryPresent, "Discretionary reason icon should be displayed");
-            return this;
-        }
-
-        public ClaimLine assertTooltipPresent(String tooltip) {
-            assertTrue(isTooltipPresent(tooltip), "Discretionary Reason Tooltip should be displayed");
-            return this;
-        }
-
-        public ClaimLine assertLineHasColor(String color) {
-            assertEquals(actualColor, color, "Claim line must have color: " + color);
-            return this;
-        }
-
-        public ClaimLine assertLineHasComputedColor(String color) {
-            assertEquals(computedColor, color, "Claim line must have color: " + color);
-            return this;
         }
 
         boolean isTooltipPresent(String expectedText) {
@@ -360,26 +355,60 @@ public class SettlementPage extends BaseClaimPage {
                     && !descriptionElement.getAttribute("style").equals(reviewedColor);
         }
 
-        public ClaimLine assertLineIsSentToRepair() {
-            boolean lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
-            Assert.assertTrue(lineSentToRepair);
+        public ClaimLine doAssert(Consumer<Asserts> assertFunc) {
+            assertFunc.accept(new Asserts());
             return this;
         }
 
-        public ClaimLine assertLineSentToValuation() {
-            boolean lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
-            Assert.assertTrue(lineSentToValuation);
-            return this;
-        }
+        public class Asserts {
+            public Asserts assertDiscretionaryPresent() {
+                boolean discretionaryPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'discretionary_icon.png')]")).size() > 0;
+                assertTrue(discretionaryPresent, "Discretionary reason icon should be displayed");
+                return this;
+            }
 
-        public ClaimLine assertPurchasePriceIs(double expectedPrice) {
-            OperationalUtils.assertEqualsDouble(purchasePrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
-            return this;
-        }
+            public Asserts assertTooltipPresent(String tooltip) {
+                assertTrue(isTooltipPresent(tooltip), "Discretionary Reason Tooltip should be displayed");
+                return this;
+            }
 
-        public ClaimLine assertReplacementPriceIs(double expectedPrice) {
-            OperationalUtils.assertEqualsDouble(replacementPrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
-            return this;
+            public Asserts assertLineHasColor(String color) {
+                assertEquals(actualColor, color, "Claim line must have color: " + color);
+                return this;
+            }
+
+            public Asserts assertLineHasComputedColor(String color) {
+                assertEquals(computedColor, color, "Claim line must have color: " + color);
+                return this;
+            }
+
+            public Asserts assertLineIsSentToRepair() {
+                boolean lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
+                Assert.assertTrue(lineSentToRepair);
+                return this;
+            }
+
+            public Asserts assertLineSentToValuation() {
+                boolean lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
+                Assert.assertTrue(lineSentToValuation);
+                return this;
+            }
+
+            public Asserts assertPurchasePriceIs(double expectedPrice) {
+                OperationalUtils.assertEqualsDouble(purchasePrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+                return this;
+            }
+
+            public Asserts assertReplacementPriceIs(double expectedPrice) {
+                OperationalUtils.assertEqualsDouble(replacementPrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+                return this;
+            }
+
+            public Asserts assertVoucherPresent() {
+                boolean voucherPresent = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[contains(@src, 'voucherIcon.png')]")).size() > 0;
+                assertTrue(voucherPresent, "Voucher icon should be displayed");
+                return this;
+            }
         }
     }
 }

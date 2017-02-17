@@ -8,6 +8,8 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 
 public class BottomMenu extends Module {
@@ -63,16 +65,6 @@ public class BottomMenu extends Module {
         return claimSumValue.getText();
     }
 
-    public BottomMenu assertClaimSumValueIs(double value) {
-        Assert.assertEquals(toNumber(getClaimSumValue()), value, "Claim sum must be: "+value);
-        return this;
-    }
-
-    public BottomMenu assertSubtotalSumValueIs(double value) {
-        Assert.assertEquals(toNumber(getSubtotalSumValue()), value, "Subtotal sum must be: "+value);
-        return this;
-    }
-
     private String getSubtotalSumValue() {
         if (!subtotalValue.isDisplayed()) {
             expand();
@@ -87,9 +79,26 @@ public class BottomMenu extends Module {
         return completeClaim.isEnabled();
     }
 
-    public BottomMenu assertCompleteClaimEnabled() {
-        Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
-        return this;
+    public BottomMenu doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return BottomMenu.this;
     }
 
+    public class Asserts {
+        public Asserts assertClaimSumValueIs(double value) {
+            Assert.assertEquals(toNumber(getClaimSumValue()), value, "Claim sum must be: " + value);
+            return this;
+        }
+
+        public Asserts assertSubtotalSumValueIs(double value) {
+            Assert.assertEquals(toNumber(getSubtotalSumValue()), value, "Subtotal sum must be: " + value);
+            return this;
+        }
+
+        public Asserts assertCompleteClaimEnabled() {
+            Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
+            return this;
+        }
+
+    }
 }

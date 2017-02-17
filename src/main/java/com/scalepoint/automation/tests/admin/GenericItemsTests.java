@@ -26,7 +26,7 @@ public class GenericItemsTests extends BaseTest {
         GenericItemsAdminPage genericItemsAdminPage = loginAndCreateClaim(user, claim)
                 .to(GenericItemsAdminPage.class)
                 .refreshList()
-                .assertItemsListIsNotEmpty();
+                .doAssert(GenericItemsAdminPage.Asserts::assertItemsListIsNotEmpty);
 
         //Create new item and check we are able to add it to settlement
         SettlementPage settlementPage = genericItemsAdminPage
@@ -34,7 +34,7 @@ public class GenericItemsTests extends BaseTest {
                 .addNewGenericItem(genericItem, companyName, true)
                 .to(SettlementPage.class)
                 .addGenericItemToClaim(genericItem)
-                .assertItemIsPresent(genericItem.getName());
+                .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
 
         //Update generic item name and make sure the update is visible in settlement
         String newDescription = genericItem.getName() + "-UPDATED";
@@ -49,8 +49,7 @@ public class GenericItemsTests extends BaseTest {
 
         to(SettlementPage.class)
                 .addGenericItemToClaim(genericItem)
-                .assertItemIsPresent(genericItem.getName());
-
+                .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Publish/Unpublish generic item")
@@ -65,7 +64,7 @@ public class GenericItemsTests extends BaseTest {
                 .clickCreateNewItem()
                 .addNewGenericItem(genericItem, companyName, false)
                 .to(SettlementPage.class)
-                .assertGenericItemIsNotPresent(genericItem)
+                .doAssert(spage->spage.assertGenericItemIsNotPresent(genericItem))
                 .to(GenericItemsAdminPage.class)
                 .editItem(genericItem, companyName)
                 .publish(true)
@@ -74,7 +73,7 @@ public class GenericItemsTests extends BaseTest {
         Browser.driver().get(currentUrl);
         Page.at(SettlementPage.class)
                 .addGenericItemToClaim(genericItem)
-                .assertItemIsPresent(genericItem.getName());
+                .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Delete generic item")
@@ -91,10 +90,10 @@ public class GenericItemsTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .to(GenericItemsAdminPage.class)
                 .deleteItem(genericItem, companyName)
-                .assertGenericItemInList(genericItem.getName())
+                .doAssert(genericItemPage -> genericItemPage.assertGenericItemInList(genericItem.getName()))
                 .clickCreateNewItem()
                 .addNewGenericItem(genericItemToDelete, companyName, true)
                 .deleteItem(genericItemToDelete, companyName)
-                .assertGenericItemNotInList(genericItemToDelete.getName());
+                .doAssert(genericItemPage -> genericItemPage.assertGenericItemNotInList(genericItemToDelete.getName()));
     }
 }

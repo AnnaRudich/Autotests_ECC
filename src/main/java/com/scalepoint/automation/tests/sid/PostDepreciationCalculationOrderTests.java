@@ -2,8 +2,9 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.domain.ProductInfo;
-import com.scalepoint.automation.pageobjects.dialogs.EditDiscountDistributionDialog;
+import com.scalepoint.automation.pageobjects.dialogs.EditDiscountDistributionDialog.DistributeTo;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -21,34 +22,43 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
-    public void ecc3636_manualItem(User user, Claim claim, ClaimItem claimItem)  {
-        String lineDescription = "test";
+    public void ecc3636_manualItem(User user, Claim claim, ClaimItem claimItem) {
+        String description = "test";
         double purchasePrice = 1000.00;
         double replacementPrice = 870.00;
         double depreciationAmount = 130.00;
         int depreciationPercentage = 13;
 
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
-                .fillBaseData(lineDescription, claimItem.getExistingCat1_Born(), claimItem.getExistingSubCat1_Babyudstyr(), purchasePrice)
-                .fillDepreciation(depreciationPercentage)
-                .parseValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .openSidAndFill(sid -> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withText(description)
+                            .withCategory(claimItem.getCategoryBorn())
+                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withNewPrice(purchasePrice)
+                            .withDepreciation(depreciationPercentage);
+                    return sid;
+                })
+                .parseValuationRow(Valuation.NEW_PRICE)
                 .makeActive()
-                .assertTotalAmountIs(purchasePrice)
-                .toSettlementDialog()
-                .assertCashValueIs(replacementPrice)
-                .assertDepreciationAmountIs(depreciationAmount)
+                .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(replacementPrice);
+                    sid.assertDepreciationAmountIs(depreciationAmount);
+                })
                 .closeSidWithOk()
-                .findClaimLine(lineDescription)
-                .assertPurchasePriceIs(purchasePrice)
-                .assertReplacementPriceIs(replacementPrice);
+                .findClaimLine(description)
+                .doAssert(claimLine -> {
+                    claimLine.assertPurchasePriceIs(purchasePrice);
+                    claimLine.assertReplacementPriceIs(replacementPrice);
+                });
     }
 
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherDefaultDD(User user, Claim claim, ClaimItem claimItem) {
 
-        String lineDescription = "test";
+        String description = "test";
         double purchasePrice = 1000.00;
         double discountedVoucherAmount = 900.00;
         double voucherFaceValue = 870.00;
@@ -57,23 +67,34 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         int depreciationPercentage = 13;
 
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
-                .fillBaseData(lineDescription, claimItem.getExistingCat1_Born(), claimItem.getExistingSubCat1_Babyudstyr(), purchasePrice)
-                .fillVoucher(claimItem.getExistingVoucher1())
-                .fillDepreciation(depreciationPercentage)
-                .parseValuation(SettlementDialog.Valuation.VOUCHER)
-                .assertTotalAmountIs(discountedVoucherAmount)
-                .parseValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertTotalAmountIs(purchasePrice)
-                .toSettlementDialog()
-                .assertCashValueIs(replacementPrice)
-                .assertDepreciationAmountIs(depreciationAmount)
-                .assertVoucherFaceValueIs(voucherFaceValue)
-                .assertVoucherCashValueIs(replacementPrice)
+                .openSidAndFill(sid -> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withText(description)
+                            .withCategory(claimItem.getCategoryBorn())
+                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withNewPrice(purchasePrice)
+                            .withVoucher(claimItem.getExistingVoucher_10())
+                            .withDepreciation(depreciationPercentage);
+                    return sid;
+                })
+                .parseValuationRow(Valuation.VOUCHER)
+                .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
+                .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
-                .findClaimLine(lineDescription)
-                .assertPurchasePriceIs(discountedVoucherAmount)
-                .assertReplacementPriceIs(replacementPrice);
+                .findClaimLine(description)
+                .doAssert(claimLine -> {
+                    claimLine.assertPurchasePriceIs(discountedVoucherAmount);
+                    claimLine.assertReplacementPriceIs(replacementPrice);
+
+                });
+
+    }
+
+    private void doGeneralAssert(double voucherFaceValue, double replacementPrice, double depreciationAmount, SettlementDialog.Asserts sid) {
+        sid.assertCashValueIs(replacementPrice);
+        sid.assertDepreciationAmountIs(depreciationAmount);
+        sid.assertVoucherFaceValueIs(voucherFaceValue);
+        sid.assertVoucherCashValueIs(replacementPrice);
     }
 
 
@@ -81,7 +102,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherCustomDD(User user, Claim claim, ClaimItem claimItem) {
 
-        String lineDescription = "test";
+        String description = "test";
         double purchasePrice = 1000.00;
         double discountedVoucherAmount = 960;
         double voucherFaceValue = 928.00;
@@ -90,62 +111,59 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         int depreciationPercentage = 13;
 
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
-                .fillBaseData(lineDescription, claimItem.getExistingCat1_Born(), claimItem.getExistingSubCat1_Babyudstyr(), purchasePrice)
-                .fillVoucher(claimItem.getExistingVoucher1())
-                .fillDepreciation(depreciationPercentage)
-                .openEditDiscountDistributionForVoucher()
-                .updateCustomerPercentage(6)
-                .save()
-                .parseValuation(SettlementDialog.Valuation.VOUCHER)
-                .assertTotalAmountIs(discountedVoucherAmount)
-                .toSettlementDialog()
-                .assertCashValueIs(replacementPrice)
-                .assertDepreciationAmountIs(depreciationAmount)
-                .assertVoucherFaceValueIs(voucherFaceValue)
-                .assertVoucherCashValueIs(replacementPrice)
+                .openSidAndFill(sid -> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withText(description)
+                            .withCategory(claimItem.getCategoryBorn())
+                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withNewPrice(purchasePrice)
+                            .withVoucher(claimItem.getExistingVoucher_10())
+                            .withDepreciation(depreciationPercentage);
+                    return sid;
+                })
+                .distributeDiscountForVoucherValuation(DistributeTo.CUSTOMER, 6)
+                .parseValuationRow(Valuation.VOUCHER)
+                .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
+                .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
-                .findClaimLine(lineDescription)
-                .assertPurchasePriceIs(discountedVoucherAmount)
-                .assertReplacementPriceIs(replacementPrice);
+                .findClaimLine(description)
+                .doAssert(line -> {
+                    line.assertPurchasePriceIs(discountedVoucherAmount);
+                    line.assertReplacementPriceIs(replacementPrice);
+                });
     }
 
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
     public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
 
-        ProductInfo product = SolrApi.findBaOProduct();
+        ProductInfo product = SolrApi.findProductAsVoucher();
 
-        EditDiscountDistributionDialog editDiscountDistributionDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(product.getModel())
-                .openSidForFirstProduct()
-                .openEditDiscountDistributionForVoucher();
+                .openSidForFirstProduct();
 
-        int voucherPercentage = editDiscountDistributionDialog.getVoucherPercentage();
-        SettlementDialog settlementDialog = editDiscountDistributionDialog.save();
-        double voucherCashValue = settlementDialog.parseValuation(SettlementDialog.Valuation.VOUCHER).getTotalPrice();
-        logger.info("Voucher cash value: {}", voucherCashValue);
+        int voucherPercentage = settlementDialog.getVoucherPercentage();
+        double voucherCashValue = settlementDialog.parseValuationRow(Valuation.VOUCHER).getTotalPrice();
 
         int depreciationPercentage = 13;
-        double depreciationAmount = product.getInvoicePrice() * (double)depreciationPercentage/100;
+        double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
         double replacementPrice = voucherCashValue - depreciationAmount;
-        double voucherFaceValue = (replacementPrice*100)/(100-voucherPercentage);
+        double voucherFaceValue = (replacementPrice * 100) / (100 - voucherPercentage);
 
         settlementDialog.closeSidWithOk()
-                .findFirstClaimLine()
-                .editLine()
-                .parseValuation(SettlementDialog.Valuation.VOUCHER)
+                .editFirstClaimLine()
+                .parseValuationRow(Valuation.VOUCHER)
                 .makeActive()
-                .assertTotalAmountIs(voucherCashValue)
-                .toSettlementDialog()
+                .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
                 .fillDepreciation(depreciationPercentage)
-                .assertCashValueIs(replacementPrice)
-                .assertDepreciationAmountIs(depreciationAmount)
-                .assertVoucherFaceValueIs(voucherFaceValue)
-                .assertVoucherCashValueIs(replacementPrice)
+                .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
-                .findFirstClaimLine()
-                .assertPurchasePriceIs(voucherCashValue)
-                .assertReplacementPriceIs(replacementPrice);
+                .parseFirstClaimLine()
+                .doAssert(claimLine -> {
+                    claimLine.assertPurchasePriceIs(voucherCashValue);
+                    claimLine.assertReplacementPriceIs(replacementPrice);
+                });
+
     }
 }

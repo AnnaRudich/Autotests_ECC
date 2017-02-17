@@ -1,7 +1,5 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.exception.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.CurrentUser;
@@ -14,8 +12,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Executor;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Driver;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

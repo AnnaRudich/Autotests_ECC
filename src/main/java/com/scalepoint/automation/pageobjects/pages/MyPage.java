@@ -11,6 +11,8 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
@@ -51,24 +53,9 @@ public class MyPage extends Page {
         return this;
     }
 
-    public SettlementPage selectActiveClient() {
-        activeCustomerLink.click();
-        return at(SettlementPage.class);
-    }
-
     public CustomerDetailsPage openRecentClaim() {
         recentCustomer.click();
         return at(CustomerDetailsPage.class);
-    }
-
-    public MyPage assertClaimCompleted() {
-        Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.completed()), "Claim must be completed");
-        return this;
-    }
-
-    public MyPage assertRecentClaimCancelled() {
-        Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.cancelled()), "Claim must be cancelled");
-        return this;
     }
 
     public NewCustomerPage clickCreateNewCase() {
@@ -84,15 +71,30 @@ public class MyPage extends Page {
         return claimMenu;
     }
 
-    /*------------------------------ ASSERTS ---------------------------------------*/
-    /*------------------------------ ------- ---------------------------------------*/
-    public MyPage assertClaimHasStatus(String status) {
-        Assert.assertTrue(latestCustomerStatus.getText().contains(status), errorMessage("Claim should have [%s] status", status));
-        return this;
+    public MyPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return MyPage.this;
     }
 
-    public MyPage assertAdminLinkDisplayed() {
-        Assert.assertTrue(getClaimMenu().isAdminLinkDisplayed());
-        return this;
+    public class Asserts {
+        public Asserts assertClaimCompleted() {
+            Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.completed()), "Claim must be completed");
+            return this;
+        }
+
+        public Asserts assertRecentClaimCancelled() {
+            Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.cancelled()), "Claim must be cancelled");
+            return this;
+        }
+
+        public Asserts assertClaimHasStatus(String status) {
+            Assert.assertTrue(latestCustomerStatus.getText().contains(status), errorMessage("Claim should have [%s] status", status));
+            return this;
+        }
+
+        public Asserts assertAdminLinkDisplayed() {
+            Assert.assertTrue(getClaimMenu().isAdminLinkDisplayed());
+            return this;
+        }
     }
 }

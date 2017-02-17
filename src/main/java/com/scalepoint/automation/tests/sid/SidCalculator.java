@@ -8,7 +8,7 @@ class SidCalculator {
         return new PriceValuation(cashCompensation, depreciation);
     }
 
-    static VoucherValuation calculateVoucherValuation(Double price, Double voucherDiscount, Integer depreciationPercentage) {
+    static VoucherValuation calculateVoucherValuation(Double price, Integer voucherDiscount, Integer depreciationPercentage) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashCompensationOfVoucher = price - discountedAmountByVoucher;
         double depreciatedAmount = (cashCompensationOfVoucher*depreciationPercentage)/100;

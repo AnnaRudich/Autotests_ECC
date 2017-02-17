@@ -2,9 +2,7 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -20,9 +18,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
+import static com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage.ReasonRow.*;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static org.testng.Assert.*;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public class EditReasonTests extends BaseTest {
@@ -113,7 +111,7 @@ public class EditReasonTests extends BaseTest {
 
         openEditReasonPage(insuranceCompany)
                 .findReason(reason)
-                .assertDeleteIsDisabled()
+                .doAssert(EditReasonsPage.ReasonRow.Asserts::assertDeleteIsDisabled)
                 .disable();
     }
 
@@ -168,7 +166,7 @@ public class EditReasonTests extends BaseTest {
 
         openEditReasonPage(insuranceCompany)
                 .findReason(reason)
-                .assertReasonIsNotEditable()
+                .doAssert(EditReasonsPage.ReasonRow.Asserts::assertReasonIsNotEditable)
                 .disable();
     }
 
@@ -190,7 +188,7 @@ public class EditReasonTests extends BaseTest {
         openEditReasonPage(insuranceCompany)
                 .addReason(reason)
                 .findReason(reason)
-                .assertReasonIsEditable()
+                .doAssert(EditReasonsPage.ReasonRow.Asserts::assertReasonIsEditable)
                 .delete()
                 .assertReasonNotFound(reason);
     }
@@ -232,28 +230,28 @@ public class EditReasonTests extends BaseTest {
         login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
                 .reopenClaim()
                 .findClaimLine(TEST_REASON_LINE)
-                .assertTooltipPresent(reason)
+                .doAssert(claimLine -> claimLine.assertTooltipPresent(reason))
                 .editLine()
-                .assertDiscretionaryReasonValuePresent(reason);
+                .doAssert(sid -> sid.assertDiscretionaryReasonValuePresent(reason));
     }
 
 
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
         loginAndCreateClaim(trygUser, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(TEST_REASON_LINE)
                 .fillCategory(claimItem.getExistingCat4())
                 .fillSubCategory(claimItem.getExistingSubCat4())
                 .fillCustomerDemand(1000.00)
                 .enableAge()
                 .selectMonth("6")
-                .selectDepreciationType(1)
+                .selectDepreciationType(SettlementDialog.DepreciationType.DISCRETIONARY)
                 .fillDepreciation(5)
                 .fillDiscretionaryPrice(400.00)
                 .fillNewPrice(3000.00)
                 .selectValuation(ANDEN_VURDERING)
                 .selectDiscretionaryReason(reason)
-                .assertDiscretionaryReasonEqualTo(reason)
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reason))
                 .closeSidWithOk()
                 .getMainMenu()
                 .logOut();

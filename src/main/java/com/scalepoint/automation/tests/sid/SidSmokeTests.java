@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.modules.BottomMenu;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
@@ -9,7 +10,7 @@ import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi.AssignedCategory;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
-import com.scalepoint.automation.utils.OperationalUtils;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -35,9 +36,9 @@ public class SidSmokeTests extends BaseTest {
     public void ecc3025_selectVoucherExistingCatAddDialog(User user, Claim claim, Voucher voucher) {
         AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillCategory(categoryInfo)
-                .assertVoucherListed(voucher.getVoucherNameSP());
+                .doAssert(sid -> sid.assertVoucherListed(voucher.getVoucherNameSP()));
     }
 
     /**
@@ -56,16 +57,16 @@ public class SidSmokeTests extends BaseTest {
         AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(item.getTextFieldSP())
-                .fillCustomerDemand(item.getBigCustomDemandPrice())
-                .fillNewPrice(item.getNewPriceSP_2400())
-                .fillDepreciation(item.getDepAmount1_10())
+                .fillCustomerDemand(Constants.PRICE_100_000)
+                .fillNewPrice(Constants.PRICE_2400)
+                .fillDepreciation(Constants.DEPRECIATION_10)
                 .fillCategory(categoryInfo)
                 .fillVoucher(voucher.getVoucherNameSP());
 
         SidCalculator.VoucherValuation expectedCalculations =
-                SidCalculator.calculateVoucherValuation(item.getNewPriceSP_2400(), voucher.getDiscount(), item.getDepAmount1_10());
+                SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
 
         Double fetchedCashValue = settlementDialog.getCashCompensationValue();
         Double calculatedCashValue = expectedCalculations.getCashCompensationWithDepreciation();
@@ -83,12 +84,12 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Include in claim option is ON")
     public void ecc3144_1_setIncludeInClaimCheckbox(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
-                .fillNewPrice(claimItem.getNewPriceSP_2400())
+                .openSid()
+                .fillNewPrice(Constants.PRICE_2400)
                 .includeInClaim(true)
-                .assertIncludeInClaimSelected()
+                .doAssert(SettlementDialog.Asserts::assertIncludeInClaimSelected)
                 .includeInClaim(false)
-                .assertIncludeInClaimNotSelected();
+                .doAssert(SettlementDialog.Asserts::assertIncludeInClaimNotSelected);
     }
 
     /**
@@ -102,15 +103,15 @@ public class SidSmokeTests extends BaseTest {
         String currentUrl = Browser.driver().getCurrentUrl();
 
         List<String> allSubCategories = Page.to(PseudoCategoryGroupPage.class)
-                .editGroup(claimItem.getExistingCat1_Born())
+                .editGroup(claimItem.getCategoryBorn())
                 .getAllPseudoCategories();
 
         Browser.driver().get(currentUrl);
 
         Page.at(SettlementPage.class)
-                .openAddManuallyDialog()
-                .fillCategory(claimItem.getExistingCat1_Born())
-                .assertSubCategoriesListEqualTo(allSubCategories);
+                .openSid()
+                .fillCategory(claimItem.getCategoryBorn())
+                .doAssert(sid -> sid.assertSubCategoriesListEqualTo(allSubCategories));
     }
 
     /**
@@ -119,12 +120,12 @@ public class SidSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to input Customer demand")
     public void ecc3144_3_inputCustomDemand(User user, Claim claim, ClaimItem claimItem) {
-        Double customerDemand = claimItem.getCustomerDemand_500();
+        Double customerDemand = Constants.PRICE_500;
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillCustomerDemand(customerDemand)
-                .parseValuation(CUSTOMER_DEMAND)
-                .assertCashCompensationIs(customerDemand);
+                .parseValuationRow(CUSTOMER_DEMAND)
+                .doAssert(valuation -> valuation.assertCashCompensationIs(customerDemand));
     }
 
 
@@ -134,12 +135,12 @@ public class SidSmokeTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to input New price")
     public void ecc3144_4_inputNewPrice(User user, Claim claim, ClaimItem claimItem) {
-        Double newPrice = claimItem.getNewPriceSP_2400();
+        Double newPrice = Constants.PRICE_2400;
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillNewPrice(newPrice)
-                .parseValuation(NEW_PRICE)
-                .assertCashCompensationIs(newPrice);
+                .parseValuationRow(NEW_PRICE)
+                .doAssert(valuation -> valuation.assertCashCompensationIs(newPrice));
     }
 
     /**
@@ -156,21 +157,26 @@ public class SidSmokeTests extends BaseTest {
         AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
 
         SettlementDialog dialog = loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(claimItem.getCustomerDemand_500())
+                .fillCustomerDemand(Constants.PRICE_500)
                 .fillCategory(categoryInfo)
                 .fillVoucher(voucher.getVoucherNameSP())
-                .fillDepreciation(claimItem.getDepAmount1_10())
+                .fillDepreciation(Constants.DEPRECIATION_10)
                 .selectValuation(CUSTOMER_DEMAND);
 
-        PriceValuation expectedCalculations = SidCalculator.calculatePriceValuation(claimItem.getCustomerDemand_500(), claimItem.getDepAmount1_10());
+        PriceValuation expectedCalculations = SidCalculator.calculatePriceValuation(Constants.PRICE_500, Constants.DEPRECIATION_10);
 
-        dialog.assertCashValueIs(expectedCalculations.getCashValue())
-                .assertDepreciationAmountIs(expectedCalculations.getDepreciation())
-                .parseValuation(CUSTOMER_DEMAND)
-                .assertCashCompensationIs(expectedCalculations.getCashValue())
-                .assertDepreciationPercentageIs(10);
+        dialog
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(expectedCalculations.getCashValue());
+                    sid.assertDepreciationAmountIs(expectedCalculations.getDepreciation());
+                }).parseValuationRow(CUSTOMER_DEMAND)
+                .doAssert(valuationRow -> {
+                    valuationRow.assertCashCompensationIs(expectedCalculations.getCashValue());
+                    valuationRow.assertDepreciationPercentageIs(10);
+                });
+
     }
 
     /**
@@ -183,17 +189,19 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_6_SaveAllEnteredResults(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP()).editLine()
-                .assertDescriptionIs(claimItem.getTextFieldSP())
-                .assertCategoryTextIs(claimItem.getExistingCat1_Born())
-                .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .parseValuation(CUSTOMER_DEMAND)
-                .assertCashCompensationIs(claimItem.getCustomerDemand_500())
-                .parseValuation(NEW_PRICE)
-                .assertTotalAmountIs(claimItem.getNewPriceSP_2400());
+                .doAssert(claimLine -> {
+                    claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
+                    claimLine.assertCategoryTextIs(claimItem.getCategoryBorn());
+                    claimLine.assertSubCategoryTextIs(claimItem.getSubcategoryBornBabyudstyr());
+                })
+                .parseValuationRow(CUSTOMER_DEMAND)
+                .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(Constants.PRICE_500))
+                .parseValuationRow(NEW_PRICE)
+                .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
     /**
@@ -210,30 +218,33 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
-                .assertDescriptionIs(claimItem.getTextFieldSP())
-                .assertCategoryTextIs(claimItem.getExistingCat1_Born())
-                .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .parseValuation(CUSTOMER_DEMAND)
-                .assertCashCompensationIs(claimItem.getCustomerDemand_500())
-                .parseValuation(NEW_PRICE)
-                .assertTotalAmountIs(claimItem.getNewPriceSP_2400())
-                .toSettlementDialog()
+                .doAssert(claimLine -> {
+                    claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
+                    claimLine.assertCategoryTextIs(claimItem.getCategoryBorn());
+                    claimLine.assertSubCategoryTextIs(claimItem.getSubcategoryBornBabyudstyr());
+                })
+                .parseValuationRow(CUSTOMER_DEMAND)
+                .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(Constants.PRICE_500))
+                .parseValuationRow(NEW_PRICE)
+                .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400))
                 .fillBaseData(claimItem)
                 .cancel()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
-                .assertDescriptionIs(claimItem.getTextFieldSP())
-                .assertCategoryTextIs(claimItem.getExistingCat1_Born())
-                .assertSubCategoryTextIs(claimItem.getExistingSubCat1_Babyudstyr())
-                .parseValuation(CUSTOMER_DEMAND)
-                .assertTotalAmountIs(claimItem.getCustomerDemand_500())
-                .parseValuation(NEW_PRICE)
-                .assertTotalAmountIs(claimItem.getNewPriceSP_2400());
+                .doAssert(claimLine -> {
+                    claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
+                    claimLine.assertCategoryTextIs(claimItem.getCategoryBorn());
+                    claimLine.assertSubCategoryTextIs(claimItem.getSubcategoryBornBabyudstyr());
+                })
+                .parseValuationRow(CUSTOMER_DEMAND)
+                .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_500))
+                .parseValuationRow(NEW_PRICE)
+                .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
     /**
@@ -248,14 +259,14 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_8_addNewValuation(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .setReviewed(true)
                 .includeInClaim(false)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .waitASecond()
-                .parseValuation(NEW_PRICE)
-                .assertTotalAmountIs(claimItem.getNewPriceSP_2400());
+                .parseValuationRow(NEW_PRICE)
+                .doAssert(valuation -> valuation.assertTotalAmountIs(Constants.PRICE_2400));
     }
 
     /**
@@ -271,16 +282,16 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_9_disableIncludeInClaim(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .setReviewed(true)
                 .includeInClaim(false)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
-                .assertLineHasColor(claimItem.getBlueColor())
+                .doAssert(claimLine -> claimLine.assertLineHasColor(claimItem.getBlueColor()))
                 .selectLine()
                 .getBottomMenu()
-                .assertClaimSumValueIs(0.00);
+                .doAssert(menu -> menu.assertClaimSumValueIs(0.00));
     }
 
     /**
@@ -298,15 +309,15 @@ public class SidSmokeTests extends BaseTest {
         String secondClaimDescription = claimItem.getTextFieldSP().concat("second");
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog dialog = settlementPage.openAddManuallyDialog()
+        SettlementDialog dialog = settlementPage.openSid()
                 .fillBaseData(claimItem)
                 .setReviewed(false)
                 .includeInClaim(false)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
-                .assertLineHasComputedColor(claimItem.getPinkColor())
+                .doAssert(claimLine -> claimLine.assertLineHasComputedColor(claimItem.getPinkColor()))
                 .selectLine()
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillDescription(secondClaimDescription)
                 .setReviewed(true)
@@ -315,8 +326,10 @@ public class SidSmokeTests extends BaseTest {
         Double claimValue = dialog.customerDemandValue();
         dialog.closeSidWithOk()
                 .getBottomMenu()
-                .assertClaimSumValueIs(claimValue)
-                .assertSubtotalSumValueIs(claimValue);
+                .doAssert(menu -> {
+                    menu.assertClaimSumValueIs(claimValue);
+                    menu.assertSubtotalSumValueIs(claimValue);
+                });
     }
 
     /**
@@ -330,13 +343,13 @@ public class SidSmokeTests extends BaseTest {
             "and 'Reviewed' disabled")
     public void ecc3144_10_disableIncludeInClaimAndReviewed(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .setReviewed(false)
                 .includeInClaim(false)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
-                .assertLineHasComputedColor(claimItem.getPinkColor());
+                .doAssert(claimLine -> claimLine.assertLineHasComputedColor(claimItem.getPinkColor()));
     }
 
     /**
@@ -349,12 +362,12 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     public void ecc3144_12_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .setReviewed(false)
                 .closeSidWithOk()
                 .getBottomMenu()
-                .assertCompleteClaimEnabled();
+                .doAssert(BottomMenu.Asserts::assertCompleteClaimEnabled);
     }
 
     /**
@@ -368,8 +381,8 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED, enabled = false)
     public void ecc3144_14_ReviewedBoxNotDisplayed(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
-                .assertReviewedNotPresent();
+                .openSid()
+                .doAssert(SettlementDialog.Asserts::assertReviewedNotPresent);
     }
 
     /**
@@ -383,12 +396,12 @@ public class SidSmokeTests extends BaseTest {
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM)
     public void ecc3144_13_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .setReviewed(false)
                 .closeSidWithOk()
                 .getBottomMenu()
-                .assertCompleteClaimEnabled();
+                .doAssert(BottomMenu.Asserts::assertCompleteClaimEnabled);
     }
 
     /**
@@ -399,10 +412,10 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify cancelled claim line is not added to the claim")
     public void ecc3144_15_cancelledClaimNotAdded(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .cancel()
-                .assertItemNotPresent(claimItem.getTextFieldSP());
+                .doAssert(settlementPage -> settlementPage.assertItemNotPresent(claimItem.getTextFieldSP()));
     }
 
 
@@ -414,9 +427,9 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify Cash compensation CC is equal to V1")
     public void ecc3144_16_cashCompensationEqualV1(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(claimItem.getCustomerDemand_500());
+                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500));
     }
 
     /**
@@ -429,7 +442,7 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to open Add Valuation dialog in SID")
     public void ecc3144_17_openAddValuationDialogInSID(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .addValuation();
     }
@@ -449,14 +462,14 @@ public class SidSmokeTests extends BaseTest {
             "valuation dialog (user selects 3d type)")
     public void ecc3144_18_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(claimItem.getCustomerDemand_500())
+                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500))
                 .addValuation()
                 .addValuationType(claimItem.getValuationType3())
                 .addValuationPrice(claimItem.getLowerPrice())
                 .closeValuationDialogWithOk()
-                .assertCashValueIs(claimItem.getLowerPrice());
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
     }
 
     /**
@@ -473,14 +486,14 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialog (user selects 4th type)")
     public void ecc3144_19_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(claimItem.getCustomerDemand_500())
+                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500))
                 .addValuation()
                 .addValuationType(claimItem.getValuationType4())
                 .addValuationPrice(claimItem.getLowerPrice())
                 .closeValuationDialogWithOk()
-                .assertCashValueIs(claimItem.getLowerPrice());
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
     }
 
 
@@ -499,14 +512,14 @@ public class SidSmokeTests extends BaseTest {
             "add valuation dialog (user selects 5th type)")
     public void ecc3144_20_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
-                .assertCashValueIs(claimItem.getCustomerDemand_500())
+                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500))
                 .addValuation()
                 .addValuationType(claimItem.getValuationType5())
                 .addValuationPrice(claimItem.getLowerPrice())
                 .closeValuationDialogWithOk()
-                .assertCashValueIs(claimItem.getLowerPrice());
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
     }
 
 
@@ -519,11 +532,14 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to enable age option")
     public void ecc3144_22_enableAgeOption(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .enableAge()
-                .assertAgeYearsEnabled()
-                .assertMonthMenuEnabled();
+                .doAssert(sid -> {
+                    sid.assertAgeYearsEnabled();
+                    sid.assertMonthMenuEnabled();
+                });
+
     }
 
     /**
@@ -540,7 +556,7 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add years & month and save set")
     public void ecc3144_23_addYearsAndMonthAndSave(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .enableAge("10")
                 .selectMonth("6")
@@ -548,8 +564,10 @@ public class SidSmokeTests extends BaseTest {
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
-                .assertYearsValueIs("10")
-                .assertMonthValueIs("6");
+                .doAssert(sid -> {
+                    sid.assertYearsValueIs("10");
+                    sid.assertMonthValueIs("6");
+                });
     }
 
 
@@ -562,17 +580,21 @@ public class SidSmokeTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to disable age checkbox")
     public void ecc3144_24_disableAgeAndSave(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .enableAge()
-                .assertAgeYearsEnabled()
-                .assertMonthMenuEnabled()
+                .doAssert(sid -> {
+                    sid.assertAgeYearsEnabled();
+                    sid.assertMonthMenuEnabled();
+                })
                 .disableAge()
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
-                .assertAgeYearsDisabled()
-                .assertMonthMenuDisabled();
+                .doAssert(sid -> {
+                    sid.assertAgeYearsDisabled();
+                    sid.assertMonthMenuDisabled();
+                });
     }
 
 }

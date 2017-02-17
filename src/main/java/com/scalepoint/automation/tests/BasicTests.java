@@ -2,8 +2,8 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.*;
-import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -12,7 +12,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 
@@ -28,7 +27,7 @@ public class BasicTests extends BaseTest {
                 .saveClaim()
                 .openRecentClaim()
                 .reopenClaim()
-                .assertSettlementPagePresent("Settlement page is not loaded");
+                .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
 
     /**
@@ -44,7 +43,7 @@ public class BasicTests extends BaseTest {
                 .openRecentClaim()
                 .cancelClaim()
                 .to(MyPage.class)
-                .assertRecentClaimCancelled();
+                .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -55,7 +54,7 @@ public class BasicTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail()
-                .assertClaimHasStatus(claim.getStatusCompleted());
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -66,7 +65,7 @@ public class BasicTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithoutEmail()
-                .assertClaimHasStatus(claim.getStatusClosedEx());
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusClosedExternally()));
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -77,7 +76,7 @@ public class BasicTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .saveClaim()
-                .assertClaimHasStatus(claim.getStatusSaved());
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -86,13 +85,12 @@ public class BasicTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
-        String password = "12341234";
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, password)
+                .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(password)
+                .enterPassword(Constants.PASSWORD)
                 .login();
     }
 
@@ -100,7 +98,7 @@ public class BasicTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_not_possible_login_to_cancelled_claim(User user, Claim claim) {
-        String password = "12341234";
+
         CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -117,7 +115,7 @@ public class BasicTests extends BaseTest {
         Browser.driver().get(loginToShopLink);
 
         Page.at(LoginShopPage.class)
-                .enterPassword(password)
+                .enterPassword(Constants.PASSWORD)
                 .loginWithFail();
     }
 
@@ -136,23 +134,29 @@ public class BasicTests extends BaseTest {
                 .toNotesPage()
                 .addCustomerNote(customerNote)
                 .addInternalNote(internalNote)
-                .assertCustomerNotePresent(customerNote)
-                .assertInternalNotePresent(internalNote);
+                .doAssert(notesPage -> {
+                    notesPage.assertCustomerNotePresent(customerNote);
+                    notesPage.assertInternalNotePresent(internalNote);
+                });
+
 
         updateFT(user, NotesPage.class,
                 disable(FTSetting.USE_INTERNAL_NOTES),
                 disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
-                .assertEditCustomerNoteButtonPresent()
-                .assertInternalNoteButtonNotPresent();
-
+                .doAssert(notesPage -> {
+                    notesPage.assertEditCustomerNoteButtonPresent();
+                    notesPage.assertInternalNoteButtonNotPresent();
+                });
 
         updateFT(user, NotesPage.class,
                 enable(FTSetting.USE_INTERNAL_NOTES),
                 enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
-                .assertEditCustomerNoteButtonPresent()
-                .assertInternalNoteFieldsPresent();
+                .doAssert(notesPage -> {
+                    notesPage.assertEditCustomerNoteButtonPresent();
+                    notesPage.assertInternalNoteFieldsPresent();
+                });
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -166,7 +170,7 @@ public class BasicTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPath1())
-                .assertItemIsPresent(claimItem.getXlsDescr1())
+                .doAssert(sid -> sid.assertItemIsPresent(claimItem.getXlsDescr1()))
                 .findClaimLine(claimLineDescription)
                 .selectLine()
                 .getToolBarMenu()
@@ -186,7 +190,7 @@ public class BasicTests extends BaseTest {
                     "Claim status is Completed in the claims list")
     public void charlie544_2632_completeSPSimpleClaimWizard(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .closeSidWithOk()
                 .toCompleteClaimPage()
@@ -194,7 +198,7 @@ public class BasicTests extends BaseTest {
                 .openReplacementWizard()
                 .completeClaimUsingCompPayment()
                 .to(MyPage.class)
-                .assertClaimCompleted();
+                .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
 
     /**
@@ -207,7 +211,7 @@ public class BasicTests extends BaseTest {
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .closeSidWithOk()
                 .toCompleteClaimPage()
@@ -222,6 +226,6 @@ public class BasicTests extends BaseTest {
                 .selectAgreeOption()
                 .selectPlaceMyOrderOption()
                 .to(MyPage.class)
-                .assertClaimCompleted();
+                .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
 }

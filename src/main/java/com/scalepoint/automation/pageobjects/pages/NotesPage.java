@@ -13,6 +13,8 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import java.util.function.Consumer;
+
 @EccPage
 @ClaimSpecificPage
 public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelpers {
@@ -91,31 +93,36 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
         return addInternalNote.isDisplayed();
     }
 
-    /*------------------------------ ASSERTS ---------------------------------------*/
-    /*------------------------------ ------- ---------------------------------------*/
-    public NotesPage assertCustomerNotePresent(String customerNote) {
-        Assert.assertTrue(isCustomerNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
-        return this;
+    public NotesPage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return NotesPage.this;
     }
 
-    public NotesPage assertInternalNotePresent(String internalNote) {
-        Assert.assertTrue(isInternalNotesPresent(internalNote), errorMessage("Internal Note has not been added"));
-        return this;
-    }
+    public class Asserts {
+        public Asserts assertCustomerNotePresent(String customerNote) {
+            Assert.assertTrue(isCustomerNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
+            return this;
+        }
 
-    public NotesPage assertEditCustomerNoteButtonPresent() {
-        Assert.assertTrue(isEditCustomerNoteButtonPresent(), errorMessage("Edit Customer Note button is not visible"));
-        return this;
-    }
+        public Asserts assertInternalNotePresent(String internalNote) {
+            Assert.assertTrue(isInternalNotesPresent(internalNote), errorMessage("Internal Note has not been added"));
+            return this;
+        }
 
-    public NotesPage assertInternalNoteButtonNotPresent() {
-        Assert.assertFalse(isAddInternalNoteButtonPresent(), errorMessage("Add Internal Note button is visible"));
-        return this;
-    }
+        public Asserts assertEditCustomerNoteButtonPresent() {
+            Assert.assertTrue(isEditCustomerNoteButtonPresent(), errorMessage("Edit Customer Note button is not visible"));
+            return this;
+        }
 
-    public NotesPage assertInternalNoteFieldsPresent() {
-        Assert.assertTrue(isInternalNotePresent(), errorMessage("Internal Note field is not visible"));
-        Assert.assertTrue(isAddInternalNoteButtonDisplayed(), errorMessage("Add Internal Note button is not visible"));
-        return this;
+        public Asserts assertInternalNoteButtonNotPresent() {
+            Assert.assertFalse(isAddInternalNoteButtonPresent(), errorMessage("Add Internal Note button is visible"));
+            return this;
+        }
+
+        public Asserts assertInternalNoteFieldsPresent() {
+            Assert.assertTrue(isInternalNotePresent(), errorMessage("Internal Note field is not visible"));
+            Assert.assertTrue(isAddInternalNoteButtonDisplayed(), errorMessage("Add Internal Note button is not visible"));
+            return this;
+        }
     }
 }

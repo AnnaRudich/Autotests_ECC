@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import java.util.function.Consumer;
+
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -39,25 +41,30 @@ public class ProductDetailsPage extends Page {
         return at(TextSearchPage.class);
     }
 
-
-    //ASSERTS
-    public ProductDetailsPage assertMarketPriceSupplierVisible(){
-        assertTrue(Wait.visible(marketPriceSupplier), "Market price supplier must be shown");
-        return this;
+    public ProductDetailsPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return ProductDetailsPage.this;
     }
 
-    public ProductDetailsPage assetMarketPriceSupplierInvisible(){
-        assertTrue(Wait.invisible(marketPriceSupplier), "Market price supplier must be hidden");
-        return this;
-    }
+    public class Asserts {
+        public Asserts assertMarketPriceSupplierVisible(){
+            assertTrue(Wait.visible(marketPriceSupplier), "Market price supplier must be shown");
+            return this;
+        }
 
-    public ProductDetailsPage assertMarketPriceVisible(){
-        assertTrue(Wait.visible(marketPriceValue), "Market price must be shown");
-        return this;
-    }
+        public Asserts assetMarketPriceSupplierInvisible(){
+            assertTrue(Wait.invisible(marketPriceSupplier), "Market price supplier must be hidden");
+            return this;
+        }
 
-    public ProductDetailsPage assertMarketPriceInvisible(){
-        assertTrue(Wait.invisible(marketPriceValue), "Market price must be hidden");
-        return this;
+        public Asserts assertMarketPriceVisible(){
+            assertTrue(Wait.visible(marketPriceValue), "Market price must be shown");
+            return this;
+        }
+
+        public Asserts assertMarketPriceInvisible(){
+            assertTrue(Wait.invisible(marketPriceValue), "Market price must be hidden");
+            return this;
+        }
     }
 }

@@ -55,16 +55,16 @@ public class AddGenericItemDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
-    //ASSERTS
-    public void assertGenericItemIsNotPresent(String itemName, String categoryGroup, String category) {
+    public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxCompleted();
         try {
             WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '"+itemName+"']"));
             if (element != null && element.isDisplayed()) {
-                throw new AssertionError("Item is present but shouldn't be: "+itemName);
+                return true;
             }
         } catch (NoSuchElementException ignored) {
         }
+        return false;
     }
 }

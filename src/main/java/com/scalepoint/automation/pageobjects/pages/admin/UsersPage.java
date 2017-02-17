@@ -12,6 +12,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.function.Consumer;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
@@ -53,12 +55,12 @@ public class UsersPage extends AdminBasePage {
         return at(UserAddEditPage.class);
     }
 
-    public void refreshUsersList() {
+    private void refreshUsersList() {
         refreshButton.click();
         waitForAjaxCompleted();
     }
 
-    public void makeUserSearchByName(String query) {
+    private void makeUserSearchByName(String query) {
         quickSearchField.clear();
         quickSearchField.sendKeys(query);
         quickSearchField.sendKeys(Keys.ENTER);
@@ -113,8 +115,15 @@ public class UsersPage extends AdminBasePage {
         return to(AdminPage.class).toMatchingEngine();
     }
 
-    public UsersPage assertUserExists(SystemUser newUser) {
-        Assert.assertTrue(isDisplayed(newUser), "User is not found");
-        return this;
+    public UsersPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return UsersPage.this;
+    }
+
+    public class Asserts {
+        public Asserts assertUserExists(SystemUser newUser) {
+            Assert.assertTrue(isDisplayed(newUser), "User is not found");
+            return this;
+        }
     }
 }

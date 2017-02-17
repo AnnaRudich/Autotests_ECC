@@ -15,7 +15,6 @@ public class RequiredValuationIsNeededDialog extends BaseDialog {
     @Override
     protected BaseDialog ensureWeAreAt() {
         Wait.waitForVisible(dialog);
-
         return this;
     }
 

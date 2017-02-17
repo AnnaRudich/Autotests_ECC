@@ -9,8 +9,10 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -155,4 +157,20 @@ public class ShopProductSearchPage extends ShopFlow {
     public AccountBox getAccountBox() {
         return accountBox;
     }
+
+
+    public ShopProductSearchPage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return ShopProductSearchPage.this;
+    }
+
+    public class Asserts {
+
+        public Asserts assertRequiredPriceIsDisplayed(Double requiredPrice) {
+            Assert.assertTrue(isRequiredPriceDisplayed(requiredPrice));
+            return this;
+        }
+
+    }
+
 }

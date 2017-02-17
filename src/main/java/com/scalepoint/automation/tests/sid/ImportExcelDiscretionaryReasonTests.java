@@ -1,23 +1,20 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
-import static org.testng.Assert.*;
 
 
-/**
- * Created by asa on 12/12/2016.
- */
 public class ImportExcelDiscretionaryReasonTests extends BaseTest {
 
     private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
@@ -37,7 +34,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .importExcelFile(excelImportPath)
                 .findClaimLine("test1")
                 .editLine()
-                .assertDiscretionaryReasonEnabled();
+                .doAssert(sid -> sid.assertDiscretionaryReasonEnabled());
     }
 
 
@@ -67,9 +64,9 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .selectLine()
                 .getToolBarMenu()
                 .toProductMatchPage()
-                .openSidForFirstProduct().
-                selectValuation(ANDEN_VURDERING)
-                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2());
+                .openSidForFirstProduct()
+                .selectValuation(ANDEN_VURDERING)
+                .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
 
     }
 
@@ -93,7 +90,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .findClaimLine(claimLineDescription)
                 .editLine()
                 .fillDepreciation(10)
-                .selectDepreciationType(1)
+                .selectDepreciationType(DepreciationType.DISCRETIONARY)
                 .selectValuation(NEW_PRICE)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
                 .closeSidWithOk()
@@ -103,7 +100,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .toProductMatchPage()
                 .openSidForFirstProduct()
                 .selectValuation(NEW_PRICE)
-                .assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2());
+                .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
     }
 
 }

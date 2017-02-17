@@ -11,7 +11,6 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -37,8 +36,7 @@ public class RecommendedItemsTests extends BaseTest {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductInfo productInvoiceGtMarket = SolrApi.findProductInvoiceHigherMarket();
-        ProductCashValue productInvoiceGtMarketCash = new ProductCashValue(findProductAndOpenSid(productInvoiceGtMarket, textSearchPage), true);
+        ProductCashValue productInvoiceGtMarketCash = new ProductCashValue(findProductAndOpenSid(SolrApi.findProductInvoiceHigherMarket(), textSearchPage), true);
 
         ProductInfo productWithEqualPrices = SolrApi.findProductInvoiceEqualMarket();
         ProductCashValue productInvoiceEqualMarketCash = new ProductCashValue(findProductAndOpenSid(productWithEqualPrices, textSearchPage), true);
@@ -47,21 +45,19 @@ public class RecommendedItemsTests extends BaseTest {
         SettlementDialog sid = findProductAndOpenSid(productWithLtPrices, textSearchPage);
         ProductCashValue productInvoiceLtMarketCash = new ProductCashValue(sid, false);
 
-        String password = "12341234";
         SettlementPage settlementPage = sid.selectValuation(SettlementDialog.Valuation.MARKET_PRICE).closeSidWithOk();
         ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage()
-                .fillClaimFormWithPassword(claim, password)
-                .completeWithEmailAndLoginToShop(password)
+                .fillClaimFormWithPassword(claim)
+                .completeWithEmailAndLoginToShop()
                 .toProductSearchPage();
 
-        shopProductSearchPage.searchForProduct(productInvoiceGtMarketCash.name);
-        Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue));
-
-        shopProductSearchPage.searchForProduct(productInvoiceEqualMarketCash.name);
-        Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceEqualMarketCash.cashCompensationFieldValue));
-
-        shopProductSearchPage.searchForProduct(productInvoiceLtMarketCash.name);
-        Assert.assertTrue(shopProductSearchPage.isRequiredPriceDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
+        shopProductSearchPage
+                .searchForProduct(productInvoiceGtMarketCash.name)
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue))
+                .searchForProduct(productInvoiceEqualMarketCash.name)
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceEqualMarketCash.cashCompensationFieldValue))
+                .searchForProduct(productInvoiceLtMarketCash.name)
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
     }
 
     private SettlementDialog findProductAndOpenSid(ProductInfo productInfo, TextSearchPage textSearchPage) {

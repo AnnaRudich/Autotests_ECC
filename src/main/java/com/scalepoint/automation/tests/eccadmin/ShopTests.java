@@ -1,15 +1,12 @@
 package com.scalepoint.automation.tests.eccadmin;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog.ShopType.RETAIL;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 public class ShopTests extends BaseTest {
 
@@ -22,7 +19,7 @@ public class ShopTests extends BaseTest {
             description = "ECC-3036 It's possible to create new shop for existing supplier")
     public void ecc3036_createNewShop(Shop shop) {
         createRetailShop(shop)
-                .assertNewShopExists(shop)
+                .doAssert(shopTab -> shopTab.assertNewShopExists(shop))
                 .deleteShop(shop);
     }
 
@@ -54,7 +51,7 @@ public class ShopTests extends BaseTest {
     public void ecc3036_deleteNewShop(Shop shop) {
         createRetailShop(shop)
                 .deleteShop(shop)
-                .assertNewShopNotExists(shop);
+                .doAssert(shopTab -> shopTab.assertNewShopNotExists(shop));
     }
 
     private SupplierDialog.ShopsTab createRetailShop(Shop shop) {

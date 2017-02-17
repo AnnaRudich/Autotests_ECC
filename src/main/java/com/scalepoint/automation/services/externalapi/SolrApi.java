@@ -59,7 +59,7 @@ public class SolrApi {
         }
     }
 
-    public static ProductInfo findBaOProduct() {
+    public static ProductInfo findProductAsVoucher() {
         try {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();

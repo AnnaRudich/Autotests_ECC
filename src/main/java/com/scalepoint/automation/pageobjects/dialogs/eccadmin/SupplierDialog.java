@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.Wait.waitForEnabled;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -78,14 +80,21 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             return this;
         }
 
-        public ShopsTab assertNewShopExists(Shop shop) {
-            assertTrue(isNewShopExists(shop));
-            return this;
+        public ShopsTab doAssert(Consumer<Asserts> assertFunc) {
+            assertFunc.accept(new Asserts());
+            return ShopsTab.this;
         }
 
-        public ShopsTab assertNewShopNotExists(Shop shop) {
-            assertFalse(isNewShopExists(shop));
-            return this;
+        public class Asserts {
+            public Asserts assertNewShopExists(Shop shop) {
+                assertTrue(isNewShopExists(shop));
+                return this;
+            }
+
+            public Asserts assertNewShopNotExists(Shop shop) {
+                assertFalse(isNewShopExists(shop));
+                return this;
+            }
         }
     }
 }

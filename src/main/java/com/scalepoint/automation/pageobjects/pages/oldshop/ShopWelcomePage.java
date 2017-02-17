@@ -13,6 +13,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 
@@ -39,7 +40,6 @@ public class ShopWelcomePage extends ShopFlow {
 
     private AccountBox accountBox = new AccountBox();
 
-
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
@@ -52,7 +52,7 @@ public class ShopWelcomePage extends ShopFlow {
         return "webshop/jsp/shop/welcome.jsp";
     }
 
-    public Double getProductFaceValue() {
+    private Double getProductFaceValue() {
         if (Configuration.isDK()) {
             return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[2]);
         } else {
@@ -60,7 +60,7 @@ public class ShopWelcomePage extends ShopFlow {
         }
     }
 
-    public Double getProductCashValue() {
+    private Double getProductCashValue() {
         return OperationalUtils.getDoubleValue(productCashValue.getText().replaceAll("kr.", "").trim());
     }
 
@@ -84,14 +84,21 @@ public class ShopWelcomePage extends ShopFlow {
         return accountBox;
     }
 
-    public ShopWelcomePage assertProductCashValueIs(Double expectedPrice) {
-        assertEqualsDouble(getProductCashValue(), expectedPrice, "Voucher cash value %s should be assertEqualsDouble to not depreciated voucher cash value %s");
-        return this;
+    public ShopWelcomePage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return ShopWelcomePage.this;
     }
 
-    public ShopWelcomePage assertProductFaceValueIs(Double expectedPrice) {
-        assertEqualsDouble(getProductFaceValue(), expectedPrice, "Voucher face value %s should be assertEqualsDouble to not depreciated new price %s");
-        return this;
+    public class Asserts {
+        public Asserts assertProductCashValueIs(Double expectedPrice) {
+            assertEqualsDouble(getProductCashValue(), expectedPrice, "Voucher cash value %s should be assertEqualsDouble to not depreciated voucher cash value %s");
+            return this;
+        }
+
+        public Asserts assertProductFaceValueIs(Double expectedPrice) {
+            assertEqualsDouble(getProductFaceValue(), expectedPrice, "Voucher face value %s should be assertEqualsDouble to not depreciated new price %s");
+            return this;
+        }
     }
 }
 

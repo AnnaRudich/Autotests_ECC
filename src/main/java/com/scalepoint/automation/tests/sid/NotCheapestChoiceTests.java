@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.NotCheapestChoiceDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -14,7 +15,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 /**
  * @author : igu
@@ -27,13 +27,13 @@ public class NotCheapestChoiceTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Not Minimal Valuation Is Selected Then Minimal Valuation Is Suggested")
     public void charlie530WhenNotMinimalValuationIsSelectedThenMinimalValuationIsSuggested(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class)
-                .assertMinimalValuationIsSuggested("1.00");
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(1.00));
     }
 
     /*10*/
@@ -44,14 +44,14 @@ public class NotCheapestChoiceTests extends BaseTest {
         settlementPage
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
-                .assertNotCheapestReasonIs(selectedReason);
+                .doAssert(sid -> sid.assertNotCheapestReasonIs(selectedReason));
     }
 
     /*11*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
     public void charlie530WhenMinimalValuationIsSelectedThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
@@ -65,16 +65,15 @@ public class NotCheapestChoiceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     public void charlie530MinimalValuationIsSuggestedInCaseOfDiscretionaryDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .fillDepreciation(50)
-                .selectDepreciationType(0)
-                .selectDepreciationType(1)
+                .selectDepreciationType(DepreciationType.DISCRETIONARY)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class)
-                .assertMinimalValuationIsSuggested("0.50");
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(0.50));
     }
 
     /*13*/
@@ -83,29 +82,28 @@ public class NotCheapestChoiceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     public void charlie530MinimalValuationIsSuggestedInCaseOfPolicyDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .fillDepreciation(50)
-                .selectDepreciationType(1)
-                .selectDepreciationType(0)
+                .selectDepreciationType(DepreciationType.POLICY)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class)
-                .assertMinimalValuationIsSuggested("0.50");
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(0.50));
     }
 
     /*14*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Not Possible To Not Select The Reason")
     public void charlie530NotPossibleToNotSelectTheReason(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class)
-                .assertNotPossibleToCloseDialog();
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .doAssert(NotCheapestChoiceDialog.Asserts::assertNotPossibleToCloseDialog);
     }
 
     /*16*/
@@ -118,7 +116,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .openSidForFirstProduct()
                 .fillNewPrice(1.00)
                 .selectValuation(SettlementDialog.Valuation.MARKET_PRICE)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class);
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class);
     }
 
     /*17*/
@@ -136,7 +134,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillNewPrice(1.00)
                 .fillCustomerDemand(48.00)
                 .selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class);
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class);
     }
 
     /*21*/
@@ -158,12 +156,12 @@ public class NotCheapestChoiceTests extends BaseTest {
 
     private String selectFirstNotCheapestReason(ClaimItem claimItem, SettlementPage settlementPage) {
         NotCheapestChoiceDialog notCheapestChoiceDialog = settlementPage
-                .openAddManuallyDialog()
+                .openSid()
                 .fillBaseData(claimItem)
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .assertAfterOkWeGet(NotCheapestChoiceDialog.class);
+                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class);
 
         String selectedReason = notCheapestChoiceDialog.selectAndGetFirstReasonValue();
         notCheapestChoiceDialog.okGoToSettlementPage();

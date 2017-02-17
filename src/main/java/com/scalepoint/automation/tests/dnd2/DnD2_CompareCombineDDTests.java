@@ -2,14 +2,11 @@ package com.scalepoint.automation.tests.dnd2;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.domain.ProductInfo;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -193,7 +190,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         pages.LOGIN.loginToME(credentials.getMyAdmin10Login(), credentials.getMyAdmin10Pass());
         flows.CLAIM.createClient(client);
         pages.ME_SETTLEMENT.openAddEditDialog();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         pages.ME_SET_DIALOG.addValuation("CUSTOMER_DEMAND", claimItem.getCustomerDemand());
         pages.ME_SET_DIALOG.addValuation("USED_PRICE", claimItem.getUsedPrice());
@@ -325,7 +322,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         meAdminMenu.selectMELink();
         flows.CLAIM.createClient(client);
         pages.ME_SETTLEMENT.openAddEditDialog();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         Double newPrice = OperationalUtils.toNumber(claimItem.getNewPriceSP());
         Double discount = OperationalUtils.toNumber(voucher.getDiscount());
@@ -346,7 +343,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         Client client1 = DataProvider.getClient();
         flows.CLAIM.createClient(client1);
         pages.ME_SETTLEMENT.openAddEditDialog();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         cashCompensation = newPrice - OperationalUtils.getValueByPercent(newPrice, discount);
         Assert.assertTrue(pages.ME_SET_DIALOG.getSelectedValuation().contains("Gavekort baseret på Nypris"));
@@ -377,7 +374,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         Double newPrice = OperationalUtils.toNumber(claimItem.getNewPriceSP());
         Double depAmount = OperationalUtils.toNumber(claimItem.getDepAmount2());
         Double depreciation = OperationalUtils.getValueByPercent(newPrice, depAmount);
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         Assert.assertTrue(pages.ME_SET_DIALOG.isVoucherRepButtonSelected(), "Voucher valuation is NOT selected because discounted value is NOT lower that depreciated");
         Assert.assertTrue((Math.abs(pages.ME_SET_DIALOG.getDepreciationBelowCashFieldValue()-0.0))<0.0001,
@@ -417,7 +414,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         meAdminMenu.selectMELink();
         flows.CLAIM.createClient(client);
         pages.ME_SETTLEMENT.openAddEditDialog();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         Double discount = OperationalUtils.doubleString(voucher.getDiscount());
         Double newPrice = OperationalUtils.doubleString(claimItem.getNewPriceSP());
@@ -482,7 +479,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         meAdminMenu.selectMELink();
         flows.CLAIM.createClient(client);
         pages.ME_SETTLEMENT.openAddEditDialog();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
 
         Double discount = OperationalUtils.doubleString(voucher.getDiscount());
@@ -553,7 +550,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         flows.CLAIM.createClient(client);
         pages.ME_SETTLEMENT.openAddEditDialog();
         pages.ME_SET_DIALOG.disablecombineDD();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         Double discount = OperationalUtils.doubleString(voucher.getDiscount());
         Double newPrice = OperationalUtils.doubleString(claimItem.getNewPriceSP());
@@ -621,7 +618,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         flows.CLAIM.createClient(client);
         pages.ME_SETTLEMENT.openAddEditDialog();
         pages.ME_SET_DIALOG.enablecombineDD();
-        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher1());
+        pages.ME_SET_DIALOG.fillCategoriesVoucherPrice(claimItem.getTextFieldSP(), claimItem.getExistingCat1(), claimItem.getExistingSubCat1(), claimItem.getNewPriceSP(), claimItem.getExistingVoucher_10());
         pages.ME_SET_DIALOG.setDepreciationAmount(claimItem.getDepAmount1());
         Double discount = OperationalUtils.doubleString(voucher.getDiscount());
         Double newPrice = OperationalUtils.doubleString(claimItem.getNewPriceSP());

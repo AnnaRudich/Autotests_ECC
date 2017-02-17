@@ -1,18 +1,15 @@
 package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
-import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
@@ -38,7 +35,7 @@ public class UserRolesTest extends BaseTest {
                 .getClaimMenu()
                 .logout()
                 .login(user.getLogin(), user.getPassword(), MyPage.class)
-                .assertAdminLinkDisplayed();
+                .doAssert(MyPage.Asserts::assertAdminLinkDisplayed);
     }
 
     /**
@@ -57,7 +54,7 @@ public class UserRolesTest extends BaseTest {
                 .openUserForEditing(user.getLogin())
                 .clearFields()
                 .update(newUser)
-                .assertUserExists(newUser);
+                .doAssert(usersPage->usersPage.assertUserExists(newUser));
     }
 
     /**
@@ -70,7 +67,7 @@ public class UserRolesTest extends BaseTest {
         login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, ALL_ROLES)
-                .assertUserExists(user);
+                .doAssert(usersPage->usersPage.assertUserExists(user));
     }
 
     /**
@@ -85,7 +82,7 @@ public class UserRolesTest extends BaseTest {
                 .toUserCreatePage()
                 .createUser(user, CLAIMSHANDLER, SUPPLYMANAGER)
                 .filterByIC(user.getCompany())
-                .assertUserExists(user);
+                .doAssert(usersPage->usersPage.assertUserExists(user));
     }
 
     /**
@@ -171,6 +168,6 @@ public class UserRolesTest extends BaseTest {
                 .toUsersPage()
                 .toUserCreatePage()
                 .createNewSPAdminNewRole(user, role)
-                .assertUserExists(user);
+                .doAssert(usersPage->usersPage.assertUserExists(user));
     }
 }

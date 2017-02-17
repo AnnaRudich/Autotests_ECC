@@ -9,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Select;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertTrue;
 
@@ -113,30 +115,34 @@ public class GenericItemsAdminPage extends AdminBasePage {
         return genericItemsList.getOptions().size();
     }
 
-    /*------------------------------ ASSERTS ---------------------------------------*/
-    /*------------------------------ ------- ---------------------------------------*/
-    public GenericItemsAdminPage assertItemsListIsNotEmpty() {
-        assertTrue(genericItemsListSize() > 0, "List of generic items is empty");
-        return this;
+    public GenericItemsAdminPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return GenericItemsAdminPage.this;
     }
 
-    public GenericItemsAdminPage assertGenericItemInList(String genericItem) {
-        try {
-            genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
-        } catch (Exception e) {
-            throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
+    public class Asserts {
+        public Asserts assertItemsListIsNotEmpty() {
+            assertTrue(genericItemsListSize() > 0, "List of generic items is empty");
+            return this;
         }
-        return this;
-    }
 
-    public GenericItemsAdminPage assertGenericItemNotInList(String genericItem) {
-        try {
-            genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
-            throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
+        public Asserts assertGenericItemInList(String genericItem) {
+            try {
+                genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
+            } catch (Exception e) {
+                throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
+            }
+            return this;
         }
-        return this;
+
+        public Asserts assertGenericItemNotInList(String genericItem) {
+            try {
+                genericItemsList.findElement(By.xpath("//option[contains(text(), '" + genericItem + "')]"));
+                throw new AssertionError(errorMessage("Item %[s] is not present in list", genericItem));
+            } catch (NoSuchElementException ignored) {
+            }
+            return this;
+        }
     }
 
 }
