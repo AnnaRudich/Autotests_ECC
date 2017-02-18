@@ -20,6 +20,7 @@ import java.util.logging.Level;
 
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultImplicitWait;
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultScriptTimeout;
+import static org.openqa.selenium.ie.InternetExplorerDriver.*;
 
 public enum DriversFactory {
 
@@ -87,14 +88,14 @@ public enum DriversFactory {
 
     private static DesiredCapabilities getDesiredCapabilitiesForIE() {
         DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-        capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-        capabilities.setCapability("ignoreZoomSetting", true);
-        capabilities.setJavascriptEnabled(true);
-        capabilities.setCapability("nativeEvents", false);
-        capabilities.setCapability("requireWindowFocus", true);
+        capabilities.setCapability(INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+        capabilities.setCapability(IGNORE_ZOOM_SETTING, true);
+        capabilities.setCapability(NATIVE_EVENTS, false);
+        capabilities.setCapability(REQUIRE_WINDOW_FOCUS, true);
+        capabilities.setCapability(UNEXPECTED_ALERT_BEHAVIOR, "accept");
+        capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
         capabilities.setCapability("driverAttachTimeout", 60000);
-        capabilities.setCapability("unexpectedAlertBehaviour", "accept");
-        capabilities.setCapability("ie.ensureCleanSession", true);
+        capabilities.setJavascriptEnabled(true);
 
 //        addLoggingPreferences(capabilities);
         return capabilities;

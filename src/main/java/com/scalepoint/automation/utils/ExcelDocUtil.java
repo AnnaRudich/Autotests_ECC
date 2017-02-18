@@ -173,7 +173,7 @@ public class ExcelDocUtil {
         WITH_CREDIT_NOTE,
     }
 
-    public void doFeedback(FeedbackActionType feedbackActionType, ServiceAgreement serviceAgreement) throws Exception {
+    public void doFeedback(FeedbackActionType feedbackActionType, ServiceAgreement serviceAgreement) {
         openFile(serviceAgreement.getSaveTemplateTo());
         switch (feedbackActionType) {
             case NO_CHANGES:

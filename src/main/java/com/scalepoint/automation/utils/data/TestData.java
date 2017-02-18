@@ -182,7 +182,7 @@ public class TestData {
         return (PasswordsVerification) getData(Data.PASSWORDVERIFICATION);
     }
 
-    public static enum Data {
+    public enum Data {
         SUPPLIER("Supplier.xml", Supplier.class),
         LINKS("Links.xml", Links.class),
         SHOP("Shop.xml", Shop.class),

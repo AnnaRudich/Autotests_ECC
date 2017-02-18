@@ -32,7 +32,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(1.00));
     }
 
@@ -72,7 +72,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillDepreciation(50)
                 .selectDepreciationType(DepreciationType.DISCRETIONARY)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(0.50));
     }
 
@@ -89,7 +89,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillDepreciation(50)
                 .selectDepreciationType(DepreciationType.POLICY)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(0.50));
     }
 
@@ -102,7 +102,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class)
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(NotCheapestChoiceDialog.Asserts::assertNotPossibleToCloseDialog);
     }
 
@@ -116,7 +116,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .openSidForFirstProduct()
                 .fillNewPrice(1.00)
                 .selectValuation(SettlementDialog.Valuation.MARKET_PRICE)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class);
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 
     /*17*/
@@ -134,7 +134,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillNewPrice(1.00)
                 .fillCustomerDemand(48.00)
                 .selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class);
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 
     /*21*/
@@ -161,7 +161,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .fillNewPrice(48.00)
                 .fillCustomerDemand(1.00)
                 .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .closeSidWithOkAndExpectDialog(NotCheapestChoiceDialog.class);
+                .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
 
         String selectedReason = notCheapestChoiceDialog.selectAndGetFirstReasonValue();
         notCheapestChoiceDialog.okGoToSettlementPage();

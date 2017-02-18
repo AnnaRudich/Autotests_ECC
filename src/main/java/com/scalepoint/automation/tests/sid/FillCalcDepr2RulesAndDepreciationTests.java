@@ -57,7 +57,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .automaticDepreciation(true)
                 .parseValuationRow(NEW_PRICE)
                 .makeActive()
-                .doAssert(row -> row.assertDepreciationPercentageIs(41))
+                .doAssert(row -> row.assertDepreciationPercentageIs(47))
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()

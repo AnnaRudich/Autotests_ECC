@@ -10,5 +10,5 @@ public enum CompanyCode {
     LB,
     BAUTA,
     TRYGFORSIKRING,
-    ALKA;
+    ALKA
 }

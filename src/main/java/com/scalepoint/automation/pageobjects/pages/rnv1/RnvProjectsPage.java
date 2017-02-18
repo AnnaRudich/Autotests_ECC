@@ -268,13 +268,13 @@ public class RnvProjectsPage extends Page {
         }
     }
 
-    public static enum ButtonType {
+    public enum ButtonType {
         ACCEPT,
         REJECT,
         CANCEL
     }
 
-    public static enum ButtonPresence {
+    public enum ButtonPresence {
         SHOWN (true),
         HIDDEN (false);
 

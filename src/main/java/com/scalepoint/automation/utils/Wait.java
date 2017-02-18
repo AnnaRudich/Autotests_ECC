@@ -169,8 +169,8 @@ public class Wait {
         wrap(d -> {
             try {
                 assert d != null;
-                return !d.findElements(By.xpath("//div[@class='x-mask-msg-text' and text()='Loading...']")).stream()
-                        .anyMatch(WebElement::isDisplayed);
+                return d.findElements(By.xpath("//div[@class='x-mask-msg-text' and text()='Loading...']")).stream()
+                        .noneMatch(WebElement::isDisplayed);
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 return true;
             }

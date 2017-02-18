@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -34,7 +35,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .importExcelFile(excelImportPath)
                 .findClaimLine("test1")
                 .editLine()
-                .doAssert(sid -> sid.assertDiscretionaryReasonEnabled());
+                .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonEnabled);
     }
 
 

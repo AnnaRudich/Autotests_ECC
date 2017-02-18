@@ -420,8 +420,7 @@ public class ServiceAgreement {
     }
 
     public String getExcelMacroName() {
-        String fullMacroName = randomSavedTemplateName + macroName;
-        return fullMacroName;
+        return randomSavedTemplateName + macroName;
     }
 
     public String getFeedbackReceivedStatusName() {

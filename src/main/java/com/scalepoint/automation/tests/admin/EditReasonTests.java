@@ -18,7 +18,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
-import static com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage.ReasonRow.*;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 

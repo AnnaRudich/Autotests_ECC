@@ -85,7 +85,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
             settlementDialog.setDiscountAndDepreciation(true);
         }
 
-        settlementDialog.setDiscountAndDepreciation(setDiscountAndDepreciation)
+        settlementDialog
                 .doAssert(sid -> {
                     sid.assertVoucherCashValueIs(expectedCashValue);
                     sid.assertVoucherFaceValueIs(expectedNewPrice);

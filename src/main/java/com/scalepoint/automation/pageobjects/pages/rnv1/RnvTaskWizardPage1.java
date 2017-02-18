@@ -109,16 +109,14 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
     public boolean isCustomerInfoCorrect(Claim client) {
-        if (getInputValue(nameField).contains(client.getFullName()) &&
+        return getInputValue(nameField).contains(client.getFullName()) &&
                 getInputValue(phoneField).contains(client.getPhoneNumber()) &&
                 getInputValue(mobilePhoneField).contains(client.getCellNumber()) &&
                 getInputValue(emailField).contains(client.getEmail()) &&
                 getInputValue(address1Field).contains(client.getAddress()) &&
                 getInputValue(address2Field).contains(client.getAddress2()) &&
                 getInputValue(postalCodeField).contains(client.getZipCode()) &&
-                getInputValue(cityField).contains(client.getCity()))
-            return true;
-        return false;
+                getInputValue(cityField).contains(client.getCity());
     }
 
     public void closeRnV() {

@@ -15,7 +15,6 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
@@ -101,7 +100,7 @@ public class MailsPage extends BaseClaimPage {
 
         public Mails(List<Mail> mails) {
             this.mails = mails;
-            Collections.sort(mails, (o1, o2) -> o2.getSentDate().compareTo(o1.getSentDate()));
+            mails.sort((o1, o2) -> o2.getSentDate().compareTo(o1.getSentDate()));
         }
 
         public List<Mail> getMails() {

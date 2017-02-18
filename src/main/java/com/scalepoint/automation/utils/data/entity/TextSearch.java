@@ -163,14 +163,12 @@ public class TextSearch {
     }
 
     public String[] getDYMQueries() {
-        String[] dYMQueriesList = queriesWithMistake.split(",");
-        return dYMQueriesList;
+        return queriesWithMistake.split(",");
     }
 
     public String[] getFixedDYMQueries() {
         fixedQueries = fixedQueries.toLowerCase();
-        String[] didYouMeanFixedQueriesList = fixedQueries.split(",");
-        return didYouMeanFixedQueriesList;
+        return fixedQueries.split(",");
     }
 
     public String getFixedQueries() {
@@ -178,18 +176,15 @@ public class TextSearch {
     }
 
     public String[] getSynonymList() {
-        String[] synonymsQueries = synonyms.split(",");
-        return synonymsQueries;
+        return synonyms.split(",");
     }
 
     public String[] getDYMQueriesWithOriginalLetters() {
-        String[] dYMQueriesWithOriginalLettersList = queryWithOriginalLetters.split(",");
-        return dYMQueriesWithOriginalLettersList;
+        return queryWithOriginalLetters.split(",");
     }
 
     public String[] getFixedDYMQueriesWithOriginalLetters() {
-        String[] fixedDYMQueriesWithOriginalLettersList = fixedQueryWithOriginalLetters.split(",");
-        return fixedDYMQueriesWithOriginalLettersList;
+        return fixedQueryWithOriginalLetters.split(",");
     }
 
     public String getManualProductQuery() {

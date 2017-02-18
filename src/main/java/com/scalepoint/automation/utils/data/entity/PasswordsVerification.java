@@ -5,10 +5,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by sro on 10/11/13.
- */
-
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PasswordsVerification {

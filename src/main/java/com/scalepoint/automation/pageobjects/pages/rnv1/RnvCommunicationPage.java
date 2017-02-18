@@ -57,7 +57,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
         return this;
     }
 
-    private void downloadTemplate(User user, String fileLocation) throws Exception {
+    private void downloadTemplate(User user, String fileLocation) {
         firstAttachIcon.click();
         String href = find(By.cssSelector("div[id*='attachmentsDownloadList'] a")).getAttribute("href");
         EccFileApi eccFileApi = new EccFileApi(user);

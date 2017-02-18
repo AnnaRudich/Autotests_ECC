@@ -8,9 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-/**
- * Created by jts on 4/7/2015.
- */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AttachmentFiles {
@@ -47,8 +44,7 @@ public class AttachmentFiles {
     public String randomSavedAttachmentName = RandomUtils.randomName("downloadedAttachment");
 
     public String getRandomSavedAttachmentName(String originalFileName) {
-        String randomName = RandomUtils.randomInt(999999) + originalFileName;
-        return randomName;
+        return RandomUtils.randomInt(999999) + originalFileName;
     }
 
     public String getJpgFileLoc() {
@@ -118,18 +114,15 @@ public class AttachmentFiles {
 
     public String getFileName(String fileLocation) {
         String[] splitedString = fileLocation.split("\\\\");
-        String fileName = splitedString[splitedString.length - 1];
-        return fileName;
+        return splitedString[splitedString.length - 1];
     }
 
     public String getSaveRnVFileTo() {
-        String fullPath = downloadRnVFilesFolder + "\\" + randomSavedTemplateName;
-        return fullPath;
+        return downloadRnVFilesFolder + "\\" + randomSavedTemplateName;
     }
 
     public String getSaveAttachmentFileTo(String fileName) {
-        String fullPath = downloadAttachmentsFolder + "\\" + getRandomSavedAttachmentName(fileName);
-        return fullPath;
+        return downloadAttachmentsFolder + "\\" + getRandomSavedAttachmentName(fileName);
     }
 
     public String getBigFileLoc() {

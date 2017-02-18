@@ -39,7 +39,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                 .fillCategory(claimItem.getCategoryBorn())
                 .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                 .fillDiscretionaryPrice(48.00)
-                .closeSidWithOkAndExpectDialog(RequiredValuationIsNeededDialog.class);
+                .tryToCloseSidWithOkButExpectDialog(RequiredValuationIsNeededDialog.class);
     }
 
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-625 When Required Valuation Is Set To New Price And Catalog Item Has Market Price SID Closes Without Popup")

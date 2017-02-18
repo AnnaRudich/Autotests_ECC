@@ -14,6 +14,6 @@ public @interface Bug {
      */
     String value() default "";
 
-    public boolean alwaysRun() default false;
-    public boolean enabled() default false;
+    boolean alwaysRun() default false;
+    boolean enabled() default false;
 }

@@ -13,10 +13,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -396,16 +393,19 @@ public class SettlementDialog extends BaseDialog {
         return closeSidWithOk(pageClass, OK_BUTTON);
     }
 
-    public <T extends BaseDialog> T closeSidWithOkAndExpectDialog(Class<T> dialogClass) {
-        return closeDialogAndExpectDialog(dialogClass, OK_BUTTON, false);
+    public <T extends BaseDialog> T tryToCloseSidWithOkButExpectDialog(Class<T> dialogClass) {
+        WebElement button = driver.findElement(OK_BUTTON);
+        waitForVisible(button);
+        button.click();
+        return BaseDialog.at(dialogClass);
     }
 
-    public TextSearchPage add() {
-        return closeDialog(TextSearchPage.class, ADD_BUTTON, true);
+    public TextSearchPage closeSidWithAdd() {
+        return closeSid(TextSearchPage.class, ADD_BUTTON, true);
     }
 
     public <T extends Page> T closeSidWithOk(Class<T> pageClass, By button) {
-        return closeDialog(pageClass, button, false);
+        return closeSid(pageClass, button, false);
     }
 
     public SettlementPage cancel() {
@@ -413,30 +413,27 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public <T extends Page> T cancel(Class<T> pageClass) {
-        return closeDialog(pageClass, CANCEL_BUTTON, false);
+        return closeSid(pageClass, CANCEL_BUTTON, false);
     }
 
-    private <T extends Page> T closeDialog(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
+    private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
         closeSid(buttonBy, acceptAlert);
         return Page.at(pageClass);
     }
 
-    private <T extends BaseDialog> T closeDialogAndExpectDialog(Class<T> dialogClass, By buttonBy, boolean acceptAlert) {
-        closeSid(buttonBy, acceptAlert);
-        return BaseDialog.at(dialogClass);
-    }
-
     private void closeSid(By buttonBy, boolean acceptAlert) {
-        WebElement button = driver.findElement(buttonBy);
-        waitForVisible(button);
-        button.click();
+        try {
+            WebElement button = driver.findElement(buttonBy);
+            waitForVisible(button);
+            button.click();
 
+            Wait.waitElementDisappeared(buttonBy);
+            Wait.waitForAjaxCompleted();
+        } catch (UnhandledAlertException ignored) {
+        }
         if (acceptAlert) {
             acceptAlert();
         }
-
-        Wait.waitElementDisappeared(buttonBy);
-        Wait.waitForAjaxCompleted();
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {

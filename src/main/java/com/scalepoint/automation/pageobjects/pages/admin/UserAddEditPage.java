@@ -257,8 +257,7 @@ public class UserAddEditPage extends AdminBasePage {
         saveButton.click();
         try {
             getAlertTextAndAccept();
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
         find(By.xpath("//i[contains(text(),'Your password must follow the rules')]"));
         waitForAjaxCompleted();
@@ -312,7 +311,7 @@ public class UserAddEditPage extends AdminBasePage {
         return at(UsersPage.class);
     }
 
-    public static enum UserType {
+    public enum UserType {
         ADMIN,
         CLAIMSHANDLER,
         SUPPLYMANAGER

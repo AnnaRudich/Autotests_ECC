@@ -26,8 +26,12 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 
+    private final DatabaseApi databaseApi;
+
     @Autowired
-    private DatabaseApi databaseApi;
+    public RnVBaseTests(DatabaseApi databaseApi) {
+        this.databaseApi = databaseApi;
+    }
 
     @BeforeMethod
     public void createDefaultServiceAgreement() {

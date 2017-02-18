@@ -9,7 +9,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.io.IOException;
 import java.util.List;
 
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
@@ -187,7 +186,7 @@ public class SelfServicePage extends Page {
             scrollTo(suggestion);
             System.out.println("Query: " + unifyStr(query) + "present in " + unifyStr(suggestion.getText()) + "?");
             if (!unifyStr(suggestion.getText()).contains(unifyStr(query))) {
-                System.out.println(suggestion.getText().toUpperCase()+ "- doesn't contain "+ unifyStr(query).toUpperCase());
+                System.out.println(suggestion.getText().toUpperCase() + "- doesn't contain " + unifyStr(query).toUpperCase());
                 return false;
             }
         }
@@ -195,10 +194,10 @@ public class SelfServicePage extends Page {
     }
 
     public boolean isFirst10SuggestionContainQuery(String query) {
-        String [] queryList = query.split(" ");
+        String[] queryList = query.split(" ");
         waitForStaleElement(By.xpath(descSuggestionsXpath));
         List<WebElement> suggestionItem = driver.findElements(By.xpath(descSuggestionsXpath));
-        for(int i=0; i<10; i++){
+        for (int i = 0; i < 10; i++) {
             System.out.println("Query: " + unifyStr(query).toUpperCase() + " present in " + unifyStr(suggestionItem.get(i).getText()) + "?");
             for (String aQueryList : queryList) {
                 if (!unifyStr(suggestionItem.get(i).getText()).contains(unifyStr(aQueryList))) {
@@ -257,7 +256,7 @@ public class SelfServicePage extends Page {
         }
         clickAndWaitForStable(calendarImage, By.xpath("//*[contains(@class,'date-mp-ok')]"));
         find("//td[@class='x-date-mp-month']/a[@month='$1']", Integer.toString(month)).click();
-        find("//td[@class='x-date-mp-year']/a[contains(text(), '$1')]",year).click();
+        find("//td[@class='x-date-mp-year']/a[contains(text(), '$1')]", year).click();
         clickAndWaitForStable(calendarOKOption, By.xpath("//*[contains(@class,'cell-selected')]"));
         unfocusField();
     }
@@ -325,7 +324,7 @@ public class SelfServicePage extends Page {
         return this;
     }
 
-    public SelfServicePage uploadDocument(boolean hasDocumentation, ClaimItem claimItem) throws IOException {
+    public SelfServicePage uploadDocument(boolean hasDocumentation, ClaimItem claimItem) {
         documentationFirstField.click();
         documentInput.click();
         String yes = claimItem.getYesOption();
@@ -374,15 +373,6 @@ public class SelfServicePage extends Page {
     public void selectSubmitOption() {
         clickAndWaitForDisplaying(submitButton, By.id("menu_id_1"));
     }
-
-    /**
-     * The method selects Close option
-     */
-    public void selectCloseOption() {
-        //waitForAjaxCompleted();
-//        clickDismissAlertAndWaitForDisplaying(closeButton);
-    }
-
 
     /**
      * The method return description text
@@ -455,11 +445,7 @@ public class SelfServicePage extends Page {
         addPurchaseDate();
         addPurchasePrice("10000");
         addNewPrice("20000");
-        try {
-            uploadDocument(false, claimItem);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        uploadDocument(false, claimItem);
     }
 
     public String getPageText() {

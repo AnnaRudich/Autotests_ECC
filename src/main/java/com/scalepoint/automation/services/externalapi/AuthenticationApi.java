@@ -66,7 +66,7 @@ public class AuthenticationApi {
             CookieStore cookieStore = new BasicCookieStore();
 
             HttpClient httpClient = HttpClientBuilder.create().
-                    setSslcontext(sslContext).
+                    setSSLContext(sslContext).
                     setRedirectStrategy(new DefaultRedirectStrategy()).
                     setDefaultCookieStore(cookieStore).
                     build();

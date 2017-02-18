@@ -72,7 +72,7 @@ public class RecommendedItemsTests extends BaseTest {
             cashCompensationFieldValue = settlementDialog.getCashCompensationValue();
             name = settlementDialog.getDescriptionText();
             if (addToClaim) {
-                settlementDialog.selectOtherCategoryIfNotChosen().add();
+                settlementDialog.selectOtherCategoryIfNotChosen().closeSidWithAdd();
             }
         }
     }

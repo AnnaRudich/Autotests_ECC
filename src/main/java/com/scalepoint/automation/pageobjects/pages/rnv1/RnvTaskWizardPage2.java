@@ -68,7 +68,7 @@ public class RnvTaskWizardPage2 extends Page {
     public SettlementPage sendRnV(ServiceAgreement serviceAgreement) {
         String sendText = serviceAgreement.getSentText();
         clickAndWaitForDisplaying(sendBtn, By.xpath("//div[contains(text(), '" + sendText + "')]"));
-        driver.findElement(By.cssSelector("a.tasks-statuses-close-button")).click();;
+        driver.findElement(By.cssSelector("a.tasks-statuses-close-button")).click();
         return at(SettlementPage.class);
     }
 
