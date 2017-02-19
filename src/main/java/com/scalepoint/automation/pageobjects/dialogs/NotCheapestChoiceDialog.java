@@ -33,8 +33,9 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         return this;
     }
 
-    public String getAmount() {
-        return amount.getText();
+    //TODO the price is not i18n, 1.00 instead pf 1,00
+    public Double getAmount() {
+        return Double.valueOf(amount.getText());
     }
 
     public String selectAndGetFirstReasonValue() {
@@ -64,7 +65,7 @@ public class NotCheapestChoiceDialog extends BaseDialog {
 
     public class Asserts {
         public Asserts assertMinimalValuationIsSuggested(Double expectedAmount) {
-            OperationalUtils.assertEqualsDouble(OperationalUtils.getDoubleValue(getAmount()), expectedAmount, "Must be suggested expectedAmount: "+expectedAmount);
+            OperationalUtils.assertEqualsDouble(getAmount(), expectedAmount, "Must be suggested expectedAmount: "+expectedAmount);
             return this;
         }
 

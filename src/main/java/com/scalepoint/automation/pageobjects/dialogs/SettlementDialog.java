@@ -15,6 +15,7 @@ import com.scalepoint.automation.utils.driver.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -23,6 +24,7 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -417,11 +419,6 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
-        closeSid(buttonBy, acceptAlert);
-        return Page.at(pageClass);
-    }
-
-    private void closeSid(By buttonBy, boolean acceptAlert) {
         try {
             WebElement button = driver.findElement(buttonBy);
             waitForVisible(button);
@@ -434,6 +431,17 @@ public class SettlementDialog extends BaseDialog {
         if (acceptAlert) {
             acceptAlert();
         }
+
+        try {
+            Wait.forCondition((WebDriver driver) -> {
+                WebElement element = driver.findElement(By.xpath("//button[@onclick='spsubmit()']"));
+                element.click();
+                acceptAlert();
+                return element;
+            });
+        } catch (Exception ignored) {
+        }
+        return Page.at(pageClass);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
