@@ -20,9 +20,9 @@
     <existingSubCat2>Smykker</existingSubCat2>
     <existingSubCat3>Mobiltelefoner</existingSubCat3>
     <existingSubCat4>Sko</existingSubCat4>
-    <existingVoucher1>SPVoucher24463</existingVoucher1>
+    <existingVoucher1>Autotest-SpVoucher</existingVoucher1>
     <existingVoucher2>BabySam A/S</existingVoucher2>
-    <existingVoucher3>SPVoucher24463</existingVoucher3>
+    <existingVoucher3>Autotest-SpVoucher</existingVoucher3>
     <existingVoucher4>Dreams for kids</existingVoucher4>
     <brandLinkVoucher4>Dreams for kids</brandLinkVoucher4>
     <excelPath1>C:\ExcelImport\ClaimSheetDK2003.xls</excelPath1>
@@ -44,11 +44,11 @@
     <lowerPrice>300</lowerPrice>
     <trygNewPrice>200</trygNewPrice>
     <bigCustomDemandPrice>100000</bigCustomDemandPrice>
-    <valuationType1>Nypris</valuationType1>
-    <valuationType2>Kundens krav</valuationType2>
-    <valuationType3>Brugtpris</valuationType3>
-    <valuationType4>Anden vurdering</valuationType4>
-    <valuationType5>Reparationsestimat</valuationType5>
+    <valuationTypeNewPrice>Nypris</valuationTypeNewPrice>
+    <valuationTypeCustomerDemand>Kundens krav</valuationTypeCustomerDemand>
+    <valuationTypeUsedPrice>Brugtpris</valuationTypeUsedPrice>
+    <valuationTypeDiscretionary>Anden vurdering</valuationTypeDiscretionary>
+    <valuationTypeRepair>Reparationsestimat</valuationTypeRepair>
     <ageStatus>Ikke defineret</ageStatus>
     <month>måneder</month>
     <integrationCategory>A758E0B9-66E5-4229-A5BB-1D86FA1B2AC8</integrationCategory>

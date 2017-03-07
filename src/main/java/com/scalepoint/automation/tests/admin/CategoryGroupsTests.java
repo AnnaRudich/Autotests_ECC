@@ -4,11 +4,13 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-545")
 public class CategoryGroupsTests extends BaseTest {
     /**
      * GIVEN: SP user U1 with Admin permissions

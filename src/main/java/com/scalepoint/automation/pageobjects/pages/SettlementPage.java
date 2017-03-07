@@ -23,7 +23,6 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -41,7 +40,7 @@ public class SettlementPage extends BaseClaimPage {
     @FindBy(css = ".x-grid-cell-claimLineIDColumn")
     private List<WebElement> claimLineID;
     @FindBy(id = "settlementSummaryTotalsPanel-body")
-    private BottomMenu settlementConclusion;
+    private SettlementSummary settlementConclusion;
     @FindBy(xpath = "//td[contains(@class,'voucherImageColumn')]//img")
     private WebElement iconToolTip;
     @FindBy(xpath = "//a[contains(@id, 'button-')][1]")
@@ -56,7 +55,7 @@ public class SettlementPage extends BaseClaimPage {
     private String lockForRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'wrench.png')]";
     private String byDescriptionItemsXpath = "//td[contains(@class,'descriptionColumn')][contains(.,'$1')]//span";
 
-    private BottomMenu bottomMenu = new BottomMenu();
+    private SettlementSummary settlementSummary = new SettlementSummary();
 
     private FunctionalMenu functionalMenu = new FunctionalMenu();
 
@@ -120,8 +119,8 @@ public class SettlementPage extends BaseClaimPage {
         return toolBarMenu;
     }
 
-    public BottomMenu getBottomMenu() {
-        return bottomMenu;
+    public SettlementSummary getSettlementSummary() {
+        return settlementSummary;
     }
 
     public TextSearchPage toTextSearchPage() {
@@ -143,21 +142,21 @@ public class SettlementPage extends BaseClaimPage {
                 .closeSidWithOk();
     }
 
-    public SettlementDialog openSidAndFill(Function<SettlementDialog, SettlementDialog> fillfunc) {
-        return openSid().fillDescription(Constants.TEXT_LINE).fill(fillfunc);
+    public SettlementDialog openSidAndFill(Consumer<SettlementDialog> fillfunc) {
+        return openSid().setDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
 
     public void cancelClaim() {
-        bottomMenu.cancel();
+        settlementSummary.cancel();
     }
 
     public MyPage saveClaim() {
-        bottomMenu.saveClaim();
+        settlementSummary.saveClaim();
         return at(MyPage.class);
     }
 
     public CompleteClaimPage toCompleteClaimPage() {
-        bottomMenu.completeClaim();
+        settlementSummary.completeClaim();
         try {
             driver.switchTo().alert().accept();
         } catch (NoAlertPresentException ignored) {

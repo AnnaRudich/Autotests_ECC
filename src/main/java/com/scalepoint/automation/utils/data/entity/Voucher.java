@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Voucher {
 
-    private String voucherNameSP = RandomUtils.randomName("SPVoucher");
+    private String voucherNameSP = RandomUtils.randomName("Autotest-SpVoucher");
     @XmlElement
     private Double discount;
     @XmlElement
@@ -327,7 +327,7 @@ public class Voucher {
         return brandLink;
     }
 
-    public String getExistingVoucher() {
+    public String getExistingVoucher_10() {
         return existingVoucher;
     }
 

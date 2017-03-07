@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Depreciati
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -13,9 +14,10 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
@@ -34,10 +36,9 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(Constants.DEPRECIATION_10)
-                .selectDepreciationType(DepreciationType.DISCRETIONARY)
-                .fillDescription(claimItem.getTextFieldSP())
-                .selectValuation(NEW_PRICE)
+                .setDepreciation(Constants.DEPRECIATION_10)
+                .setDepreciationType(DepreciationType.DISCRETIONARY)
+                .setValuation(NEW_PRICE)
                 .clickOK()
                 .doAssert(sid->{
                     sid.assertDiscretionaryReasonEnabled();
@@ -57,9 +58,8 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDiscretionaryPrice(300.00)
-                .fillDescription(claimItem.getTextFieldSP())
-                .selectValuation(ANDEN_VURDERING)
+                .setDiscretionaryPrice(300.00)
+                .setValuation(DISCRETIONARY)
                 .clickOK()
                 .doAssert(sid->{
                     sid.assertDiscretionaryReasonEnabled();
@@ -79,9 +79,8 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(Constants.DEPRECIATION_10)
-                .selectDepreciationType(DepreciationType.DISCRETIONARY)
-                .fillDescription(claimItem.getTextFieldSP())
+                .setDepreciation(Constants.DEPRECIATION_10)
+                .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .doAssert(sid->{
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
@@ -101,10 +100,9 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(Constants.DEPRECIATION_10)
-                .selectDepreciationType(DepreciationType.POLICY)
-                .fillDescription(claimItem.getTextFieldSP())
-                .selectValuation(NEW_PRICE)
+                .setDepreciation(Constants.DEPRECIATION_10)
+                .setDepreciationType(DepreciationType.POLICY)
+                .setValuation(NEW_PRICE)
                 .doAssert(sid->{
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
@@ -123,10 +121,9 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
-                .fillDepreciation(0)
-                .selectDepreciationType(DepreciationType.DISCRETIONARY)
-                .fillDescription(claimItem.getTextFieldSP())
-                .selectValuation(NEW_PRICE)
+                .setDepreciation(0)
+                .setDepreciationType(DepreciationType.DISCRETIONARY)
+                .setValuation(NEW_PRICE)
                 .doAssert(sid->{
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
@@ -135,12 +132,13 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
 
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
         return loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillCategory(claimItem.getExistingCat4())
-                .fillSubCategory(claimItem.getExistingSubCat4())
-                .fillCustomerDemand(1000.00)
-                .fillNewPrice(100.00)
-                .enableAge()
-                .selectMonth("6");
+                .openSidAndFill(sid -> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withCategory(claimItem.getExistingCat4())
+                            .withSubCategory(claimItem.getExistingSubCat4())
+                            .withCustomerDemandPrice(1000.00)
+                            .withNewPrice(100.00)
+                            .withAge(0, 6);
+                });
     }
 }

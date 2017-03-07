@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
@@ -60,8 +61,9 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     /**
      * This method selects Create supplier option
      */
-    public void selectCreateSupplier() {
+    public CreateSupplierDialog selectCreateSupplier() {
         createSupplierButton.click();
+        return BaseDialog.at(CreateSupplierDialog.class);
     }
 
 

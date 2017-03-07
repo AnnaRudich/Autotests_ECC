@@ -2,8 +2,10 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.RequiredValuationIsNeededDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -13,6 +15,7 @@ import org.testng.annotations.Test;
 /**
  * @author : igu
  */
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-625")
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
@@ -23,9 +26,15 @@ public class MandatoryNewPriceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "Select valuation type...")
     public void charlie625WhenRequiredValuationIsNotSetThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillDiscretionaryPrice(48.00)
+                .openSidAndFill(sid-> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withCustomerDemandPrice(Constants.PRICE_100_000)
+                            .withNewPrice(Constants.PRICE_2400)
+                            .withDepreciation(Constants.DEPRECIATION_10)
+                            .withCategory(claimItem.getCategoryBorn())
+                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withDiscretionaryPrice(48.00);
+                })
                 .closeSidWithOk();
     }
 
@@ -33,12 +42,13 @@ public class MandatoryNewPriceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndNoNewPriceEnteredThenPopupIsShown(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(Constants.PRICE_500)
-                .fillCategory(claimItem.getCategoryBorn())
-                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                .fillDiscretionaryPrice(48.00)
+                .openSidAndFill(sid-> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withCustomerDemandPrice(Constants.PRICE_500)
+                            .withCategory(claimItem.getCategoryBorn())
+                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withDiscretionaryPrice(48.00);
+                })
                 .tryToCloseSidWithOkButExpectDialog(RequiredValuationIsNeededDialog.class);
     }
 
@@ -50,7 +60,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .fillCustomerDemand(Constants.PRICE_500)
+                .setCustomerDemand(Constants.PRICE_500)
                 .closeSidWithOk();
     }
 
@@ -58,13 +68,14 @@ public class MandatoryNewPriceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndNewPriceEnteredThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillDescription(claimItem.getTextFieldSP())
-                .fillCustomerDemand(Constants.PRICE_500)
-                .fillNewPrice(Constants.PRICE_2400)
-                .fillCategory(claimItem.getCategoryBorn())
-                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                .fillDiscretionaryPrice(48.00)
+                .openSidAndFill(sid-> {
+                    new SettlementDialog.FormFiller(sid)
+                            .withCustomerDemandPrice(Constants.PRICE_500)
+                            .withNewPrice(Constants.PRICE_2400)
+                            .withCategory(claimItem.getCategoryBorn())
+                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withDiscretionaryPrice(48.00);
+                })
                 .closeSidWithOk();
     }
 

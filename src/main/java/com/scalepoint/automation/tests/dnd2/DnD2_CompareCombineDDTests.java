@@ -1,9 +1,10 @@
 package com.scalepoint.automation.tests.dnd2;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.domain.ProductInfo;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -13,6 +14,7 @@ import org.testng.annotations.Test;
  * The class represents smoke tests set for D&D2 functionality
  * run only on DK
  */
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-586")
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)

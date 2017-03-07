@@ -2,12 +2,14 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.FunctionalTemplatesPage;
+import com.scalepoint.automation.utils.annotations.Jira;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
 @SuppressWarnings("AccessStaticViaInstance")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-555")
 public class FuncTemplatesTests extends BaseTest {
 
     @Test(description = "CHARLIE-555 It's possible to create new ME_FT. New ME_FT is displayed in ME_FT list")

@@ -1,18 +1,20 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.domain.ProductInfo;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-587")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
@@ -45,7 +47,7 @@ public class RecommendedItemsTests extends BaseTest {
         SettlementDialog sid = findProductAndOpenSid(productWithLtPrices, textSearchPage);
         ProductCashValue productInvoiceLtMarketCash = new ProductCashValue(sid, false);
 
-        SettlementPage settlementPage = sid.selectValuation(SettlementDialog.Valuation.MARKET_PRICE).closeSidWithOk();
+        SettlementPage settlementPage = sid.setValuation(SettlementDialog.Valuation.MARKET_PRICE).closeSidWithOk();
         ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
                 .completeWithEmailAndLoginToShop()

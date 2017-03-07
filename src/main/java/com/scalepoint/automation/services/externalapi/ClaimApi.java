@@ -26,8 +26,7 @@ public class ClaimApi extends AuthenticationApi {
     private static final int ATTEMPTS_LIMIT = 1;
     private static String DATE_FORMAT = "yyyy-MM-dd";
 
-    public static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
-    public static final String URL_SAVE_CUSTOMER_PAGE = Configuration.getEccUrl() + "webshop/jsp/matching_engine/save_customer.jsp?";
+    private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
 
     public ClaimApi(User user) {
         super(user);

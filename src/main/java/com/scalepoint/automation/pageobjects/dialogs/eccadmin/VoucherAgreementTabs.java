@@ -1,31 +1,43 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.pageobjects.dialogs.BaseDialog.at;
 
-interface SupplierTabs {
+interface VoucherAgreementTabs {
 
-    default SupplierDialog.ShopsTab selectShopsTab() {
-        return selectTab(SupplierDialog.ShopsTab.class, "Shops");
+    default VoucherAgreementDialog.LegalTab selectLegalTab() {
+        return selectTab(VoucherAgreementDialog.LegalTab.class, "Legal");
     }
 
-    default SupplierDialog.AgreementsTab selectAgreementsTab() {
-        return selectTab(SupplierDialog.AgreementsTab.class, "Agreements");
+    default VoucherAgreementDialog.CoverageTab selectCoverageTab() {
+        return selectTab(VoucherAgreementDialog.CoverageTab.class, "Coverage");
     }
 
-    default <T extends BaseDialog & SupplierTabs> T selectTab(Class<T> tabClass, String tabName) {
-        $(By.xpath("//div[contains(@class,'SupplierWindow')]//span[contains(text(),'"+tabName+"')]")).click();
-        return BaseDialog.at(tabClass);
+    default VoucherAgreementDialog.InfoTab selectInfoTab() {
+        return selectTab(VoucherAgreementDialog.InfoTab.class, "Info");
     }
 
-    default SuppliersPage saveSupplier() {
-        $(By.className("edit-supplier-save-btn")).click();
-        return Page.at(SuppliersPage.class);
+    default VoucherAgreementDialog.GeneralTab selectGeneralTab() {
+        return selectTab(VoucherAgreementDialog.GeneralTab.class, "General");
     }
+
+    default VoucherAgreementDialog.CategoriesTab selectCategoriesTab() {
+        return selectTab(VoucherAgreementDialog.CategoriesTab.class, "Categories");
+    }
+
+    default <T extends BaseDialog & VoucherAgreementTabs> T selectTab(Class<T> tabClass, String tabName) {
+        $(By.xpath("//div[contains(@class,'editSupplierVoucherWindow')]//span[contains(text(),'"+tabName+"')]")).click();
+        return at(tabClass);
+    }
+
+    default SupplierDialog.AgreementsTab saveVoucherAgreement() {
+        $(By.className("supplier-save-voucher-btn")).click();
+        return at(SupplierDialog.AgreementsTab.class);
+    }
+
 
     /*public void selectOrdersTab() {
         switchToTab(SupplierDialog.Tab.ORDERS);

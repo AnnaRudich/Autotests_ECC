@@ -2,12 +2,14 @@ package com.scalepoint.automation.tests.eccadmin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog.ShopType.RETAIL;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-507")
 public class ShopTests extends BaseTest {
 
     /**

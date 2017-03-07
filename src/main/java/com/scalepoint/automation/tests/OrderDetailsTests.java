@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -17,6 +18,7 @@ import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class OrderDetailsTests extends BaseTest {
 
@@ -73,10 +75,10 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .fillCategory(claimItem.getCategoryBorn())
-                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                .fillNewPrice(900.00)
-                .fillDescription(claimItem.getTextFieldSP());
+                .setCategory(claimItem.getCategoryBorn())
+                .setSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                .setNewPrice(900.00)
+                .setDescription(claimItem.getTextFieldSP());
 
         Double activeValuation = dialog.getCashCompensationValue();
         OrderDetailsPage ordersPage = dialog.closeSidWithOk(SettlementPage.class)
@@ -126,11 +128,11 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .fillCategory(claimItem.getCategoryBorn())
-                .fillSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                .fillNewPrice(5000.00)
-                .fillDescription(claimItem.getTextFieldSP())
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE);
+                .setCategory(claimItem.getCategoryBorn())
+                .setSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                .setNewPrice(5000.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
         Double activeValuation = dialog.getCashCompensationValue();
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)

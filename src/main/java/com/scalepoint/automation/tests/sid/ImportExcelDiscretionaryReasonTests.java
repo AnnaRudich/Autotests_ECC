@@ -4,6 +4,7 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -11,11 +12,11 @@ import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 
-
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 public class ImportExcelDiscretionaryReasonTests extends BaseTest {
 
     private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
@@ -57,8 +58,8 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
                 .editLine()
-                .fillDiscretionaryPrice(400.00)
-                .selectValuation(ANDEN_VURDERING)
+                .setDiscretionaryPrice(400.00)
+                .setValuation(DISCRETIONARY)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
                 .closeSidWithOk()
                 .findClaimLine(claimLineDescription)
@@ -66,7 +67,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .getToolBarMenu()
                 .toProductMatchPage()
                 .openSidForFirstProduct()
-                .selectValuation(ANDEN_VURDERING)
+                .setValuation(DISCRETIONARY)
                 .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
 
     }
@@ -85,14 +86,13 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     public void charlie508_3_ImportEcxelAddManuallyDiscrDepreciation(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                                      Claim claim, DiscretionaryReason discretionaryReason) {
         String claimLineDescription = "APPLE iphone 2";
-
         loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
                 .editLine()
-                .fillDepreciation(10)
-                .selectDepreciationType(DepreciationType.DISCRETIONARY)
-                .selectValuation(NEW_PRICE)
+                .setDepreciation(10)
+                .setDepreciationType(DepreciationType.DISCRETIONARY)
+                .setValuation(NEW_PRICE)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
                 .closeSidWithOk()
                 .findClaimLine(claimLineDescription)
@@ -100,7 +100,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .getToolBarMenu()
                 .toProductMatchPage()
                 .openSidForFirstProduct()
-                .selectValuation(NEW_PRICE)
+                .setValuation(NEW_PRICE)
                 .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
     }
 

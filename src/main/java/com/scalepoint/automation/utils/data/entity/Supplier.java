@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Supplier {
 
     private String supplierID = Integer.toString(RandomUtils.randomInt());
-    private String supplierName = RandomUtils.randomName("Kira");
+    private String supplierName = RandomUtils.randomName("AutotestSupplier-");
     private String supplierCVR = Integer.toString(RandomUtils.randomInt() + 10000000);
     private String address1 = RandomUtils.randomName("addr1");
     private String address2 = RandomUtils.randomName("addr2");

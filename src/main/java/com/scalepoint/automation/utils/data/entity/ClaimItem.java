@@ -77,15 +77,15 @@ public class ClaimItem {
     @XmlElement
     private Double lowerPrice;
     @XmlElement
-    private String valuationType1;
+    private String valuationTypeNewPrice;
     @XmlElement
-    private String valuationType2;
+    private String valuationTypeCustomerDemand;
     @XmlElement
-    private String valuationType3;
+    private String valuationTypeUsedPrice;
     @XmlElement
-    private String valuationType4;
+    private String valuationTypeDiscretionary;
     @XmlElement
-    private String valuationType5;
+    private String valuationTypeRepair;
     @XmlElement
     private String ageStatus;
     @XmlElement
@@ -294,24 +294,24 @@ public class ClaimItem {
         return lowerPrice;
     }
 
-    public String getValuationType1() {
-        return valuationType1;
+    public String getValuationTypeNewPrice() {
+        return valuationTypeNewPrice;
     }
 
-    public String getValuationType2() {
-        return valuationType2;
+    public String getValuationTypeCustomerDemand() {
+        return valuationTypeCustomerDemand;
     }
 
-    public String getValuationType3() {
-        return valuationType3;
+    public String getValuationTypeUsedPrice() {
+        return valuationTypeUsedPrice;
     }
 
-    public String getValuationType4() {
-        return valuationType4;
+    public String getValuationTypeDiscretionary() {
+        return valuationTypeDiscretionary;
     }
 
-    public String getValuationType5() {
-        return valuationType5;
+    public String getValuationTypeRepair() {
+        return valuationTypeRepair;
     }
 
     public String getAgeStatus() {

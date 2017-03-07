@@ -7,12 +7,14 @@ import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.annotations.Bug;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-588")
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ShowMarketPricesTests extends BaseTest {
@@ -59,7 +61,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .selectValuation(Valuation.MARKET_PRICE)
+                .setValuation(Valuation.MARKET_PRICE)
                 .doAssert(sid->{
                     sid.assertMarketPriceVisible();
                     sid.assertMarketPriceSupplierInvisible();
@@ -120,7 +122,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 })
                 .closeProductDetails()
                 .openSidForFirstProduct()
-                .selectValuation(Valuation.MARKET_PRICE)
+                .setValuation(Valuation.MARKET_PRICE)
                 .doAssert(SettlementDialog.Asserts::assertMarketPriceVisible);
     }
 }

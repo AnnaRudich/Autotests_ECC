@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.RRLinesFields;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import org.testng.annotations.Test;
@@ -10,6 +11,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 import static org.testng.Assert.assertEquals;
 
 @SuppressWarnings("AccessStaticViaInstance")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-546")
 public class ReductionRulesTest extends BaseTest {
 
     private static String sufficientDocumentation = "Sufficient documentation";

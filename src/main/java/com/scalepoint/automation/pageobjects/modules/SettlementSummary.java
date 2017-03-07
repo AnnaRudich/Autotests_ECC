@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 
-public class BottomMenu extends Module {
+public class SettlementSummary extends Module {
 
     @FindBy(xpath = "//div[@id='settlementSummaryTotalTable-targetEl']//table")
     private Table claimsResult;
@@ -79,9 +79,9 @@ public class BottomMenu extends Module {
         return completeClaim.isEnabled();
     }
 
-    public BottomMenu doAssert(Consumer<Asserts> assertFunc) {
+    public SettlementSummary doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
-        return BottomMenu.this;
+        return SettlementSummary.this;
     }
 
     public class Asserts {

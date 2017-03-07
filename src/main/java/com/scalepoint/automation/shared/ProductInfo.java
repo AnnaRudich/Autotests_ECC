@@ -1,4 +1,4 @@
-package com.scalepoint.automation.domain;
+package com.scalepoint.automation.shared;
 
 import org.apache.solr.client.solrj.beans.Field;
 

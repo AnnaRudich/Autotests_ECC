@@ -10,7 +10,6 @@
         <comment>Create Vouchers</comment>
 
         <sql>
-
             /*
             ---Category:---
             22 - Babyudstyr
@@ -18,13 +17,16 @@
             */
 
             /* 10socks.com.com supplier */
-            EXEC autotests_create_voucher_agreement 'SPVoucher24463', '17', '22', '10', '7'
+            EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher', 17, '22', 10, 7
+
             /* ComputerCity */
-            EXEC autotests_create_voucher_agreement 'DNDVoucher1', '1663', '22', '10', '7'
+            EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher1', 1663, '22', 10, 7
+
             /* Cool Shop */
-            EXEC autotests_create_voucher_agreement 'DNDVoucher2', '3921', '200018', '10', '7'
+            EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher2', 3921, '200018', 10, 7
+
             /* Webhallen */
-            EXEC autotests_create_voucher_agreement 'Voucher handling products', '24398', '200018', '6', '7'
+            EXEC autotests_create_voucher_agreement 'Autotest-BO', 24398, '200018', 6, 7
         </sql>
         <rollback/>
     </changeSet>

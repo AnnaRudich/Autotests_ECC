@@ -12,6 +12,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.ExcelDocUtil.FeedbackActionType;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
@@ -23,6 +24,11 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-563")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-566")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-579")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-560")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-569")
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 

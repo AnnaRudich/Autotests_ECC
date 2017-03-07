@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -20,6 +21,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class BasicTests extends BaseTest {
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void charlie544_reopenSavedClaim(User user, Claim claim) {
@@ -35,6 +37,7 @@ public class BasicTests extends BaseTest {
      * WHEN: User cancels C1
      * THEN: "Cancelled" is the status of C1
      */
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
@@ -46,6 +49,7 @@ public class BasicTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
@@ -57,6 +61,7 @@ public class BasicTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
@@ -68,6 +73,7 @@ public class BasicTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusClosedExternally()));
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to save claim without completing from Enter base info page. " +
                     "Saved claim is added to the latest claims list with Saved status")
@@ -79,6 +85,7 @@ public class BasicTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
@@ -95,6 +102,7 @@ public class BasicTests extends BaseTest {
     }
 
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_not_possible_login_to_cancelled_claim(User user, Claim claim) {
@@ -119,6 +127,7 @@ public class BasicTests extends BaseTest {
                 .loginWithFail();
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
     @Bug(bug = "CHARLIE-479")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible add note on Settlement page")
@@ -159,6 +168,7 @@ public class BasicTests extends BaseTest {
                 });
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
@@ -185,13 +195,14 @@ public class BasicTests extends BaseTest {
      * WHEN: User completes claim with wizard
      * THEN: C1 status is "Completed"
      */
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_2632_completeSPSimpleClaimWizard(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
-                .fillBaseData(claimItem)
+                .setBaseData(claimItem)
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -212,7 +223,7 @@ public class BasicTests extends BaseTest {
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
-                .fillBaseData(claimItem)
+                .setBaseData(claimItem)
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)

@@ -1,4 +1,4 @@
-package com.scalepoint.automation.domain;
+package com.scalepoint.automation.shared;
 
 import com.scalepoint.automation.utils.Configuration;
 

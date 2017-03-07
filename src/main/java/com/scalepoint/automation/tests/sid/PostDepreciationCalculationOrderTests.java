@@ -1,18 +1,21 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.domain.ProductInfo;
-import com.scalepoint.automation.pageobjects.dialogs.EditDiscountDistributionDialog.DistributeTo;
+import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-539")
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
@@ -23,22 +26,13 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualItem(User user, Claim claim, ClaimItem claimItem) {
-        String description = "test";
         double purchasePrice = 1000.00;
         double replacementPrice = 870.00;
         double depreciationAmount = 130.00;
         int depreciationPercentage = 13;
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withText(description)
-                            .withCategory(claimItem.getCategoryBorn())
-                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                            .withNewPrice(purchasePrice)
-                            .withDepreciation(depreciationPercentage);
-                    return sid;
-                })
+                .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
                 .parseValuationRow(Valuation.NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
@@ -47,7 +41,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                     sid.assertDepreciationAmountIs(depreciationAmount);
                 })
                 .closeSidWithOk()
-                .findClaimLine(description)
+                .findClaimLine(Constants.TEXT_LINE)
                 .doAssert(claimLine -> {
                     claimLine.assertPurchasePriceIs(purchasePrice);
                     claimLine.assertReplacementPriceIs(replacementPrice);
@@ -58,7 +52,6 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherDefaultDD(User user, Claim claim, ClaimItem claimItem) {
 
-        String description = "test";
         double purchasePrice = 1000.00;
         double discountedVoucherAmount = 900.00;
         double voucherFaceValue = 870.00;
@@ -68,20 +61,15 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withText(description)
-                            .withCategory(claimItem.getCategoryBorn())
-                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                            .withNewPrice(purchasePrice)
+                    prepareBaseFiller(claimItem, purchasePrice, sid)
                             .withVoucher(claimItem.getExistingVoucher_10())
                             .withDepreciation(depreciationPercentage);
-                    return sid;
                 })
                 .parseValuationRow(Valuation.VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
-                .findClaimLine(description)
+                .findClaimLine(Constants.TEXT_LINE)
                 .doAssert(claimLine -> {
                     claimLine.assertPurchasePriceIs(discountedVoucherAmount);
                     claimLine.assertReplacementPriceIs(replacementPrice);
@@ -102,7 +90,6 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherCustomDD(User user, Claim claim, ClaimItem claimItem) {
 
-        String description = "test";
         double purchasePrice = 1000.00;
         double discountedVoucherAmount = 960;
         double voucherFaceValue = 928.00;
@@ -112,21 +99,16 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withText(description)
-                            .withCategory(claimItem.getCategoryBorn())
-                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
-                            .withNewPrice(purchasePrice)
+                    prepareBaseFiller(claimItem, purchasePrice, sid)
                             .withVoucher(claimItem.getExistingVoucher_10())
                             .withDepreciation(depreciationPercentage);
-                    return sid;
                 })
-                .distributeDiscountForVoucherValuation(DistributeTo.CUSTOMER, 6)
+                .distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo.CUSTOMER, 6)
                 .parseValuationRow(Valuation.VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
-                .findClaimLine(description)
+                .findClaimLine(Constants.TEXT_LINE)
                 .doAssert(line -> {
                     line.assertPurchasePriceIs(discountedVoucherAmount);
                     line.assertReplacementPriceIs(replacementPrice);
@@ -156,7 +138,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .parseValuationRow(Valuation.VOUCHER)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
-                .fillDepreciation(depreciationPercentage)
+                .setDepreciation(depreciationPercentage)
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
                 .parseFirstClaimLine()
@@ -165,5 +147,12 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                     claimLine.assertReplacementPriceIs(replacementPrice);
                 });
 
+    }
+
+    private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, double purchasePrice, SettlementDialog sid) {
+        return new SettlementDialog.FormFiller(sid)
+                .withCategory(claimItem.getCategoryBorn())
+                .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                .withNewPrice(purchasePrice);
     }
 }

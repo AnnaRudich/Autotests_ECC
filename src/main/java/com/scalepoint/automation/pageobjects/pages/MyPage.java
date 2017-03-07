@@ -1,8 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.scalepoint.automation.domain.ClaimStatus;
 import com.scalepoint.automation.pageobjects.modules.ClaimMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
+import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Depreciati
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -14,11 +15,13 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
 import static org.testng.Assert.assertEquals;
 
 /**
  * @author : igu
  */
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-530")
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP)
 public class NotCheapestChoiceTests extends BaseTest {
@@ -27,11 +30,7 @@ public class NotCheapestChoiceTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Not Minimal Valuation Is Selected Then Minimal Valuation Is Suggested")
     public void charlie530WhenNotMinimalValuationIsSelectedThenMinimalValuationIsSuggested(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillNewPrice(48.00)
-                .fillCustomerDemand(1.00)
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(NEW_PRICE))
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(1.00));
     }
@@ -51,11 +50,7 @@ public class NotCheapestChoiceTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
     public void charlie530WhenMinimalValuationIsSelectedThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillNewPrice(48.00)
-                .fillCustomerDemand(1.00)
-                .selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND)
+                .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(CUSTOMER_DEMAND))
                 .closeSidWithOk();
     }
 
@@ -65,13 +60,11 @@ public class NotCheapestChoiceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     public void charlie530MinimalValuationIsSuggestedInCaseOfDiscretionaryDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillNewPrice(48.00)
-                .fillCustomerDemand(1.00)
-                .fillDepreciation(50)
-                .selectDepreciationType(DepreciationType.DISCRETIONARY)
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .openSidAndFill(sid -> {
+                    prepareBaseFiller(claimItem, sid)
+                            .withDepreciation(50, DepreciationType.DISCRETIONARY)
+                            .withValuation(NEW_PRICE);
+                })
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(0.50));
     }
@@ -82,13 +75,11 @@ public class NotCheapestChoiceTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     public void charlie530MinimalValuationIsSuggestedInCaseOfPolicyDepreciatedPrice(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillNewPrice(48.00)
-                .fillCustomerDemand(1.00)
-                .fillDepreciation(50)
-                .selectDepreciationType(DepreciationType.POLICY)
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .openSidAndFill(sid -> {
+                    prepareBaseFiller(claimItem, sid)
+                            .withDepreciation(50, DepreciationType.POLICY)
+                            .withValuation(NEW_PRICE);
+                })
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(0.50));
     }
@@ -97,11 +88,10 @@ public class NotCheapestChoiceTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Not Possible To Not Select The Reason")
     public void charlie530NotPossibleToNotSelectTheReason(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillNewPrice(48.00)
-                .fillCustomerDemand(1.00)
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .openSidAndFill(sid -> {
+                    prepareBaseFiller(claimItem, sid)
+                            .withValuation(NEW_PRICE);
+                })
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(NotCheapestChoiceDialog.Asserts::assertNotPossibleToCloseDialog);
     }
@@ -114,8 +104,8 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .fillNewPrice(1.00)
-                .selectValuation(SettlementDialog.Valuation.MARKET_PRICE)
+                .setNewPrice(1.00)
+                .setValuation(MARKET_PRICE)
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 
@@ -131,9 +121,9 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .findClaimLine(genericItem.getName())
                 .editLine()
-                .fillNewPrice(1.00)
-                .fillCustomerDemand(48.00)
-                .selectValuation(SettlementDialog.Valuation.CUSTOMER_DEMAND)
+                .setNewPrice(1.00)
+                .setCustomerDemand(48.00)
+                .setValuation(CUSTOMER_DEMAND)
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 
@@ -156,17 +146,21 @@ public class NotCheapestChoiceTests extends BaseTest {
 
     private String selectFirstNotCheapestReason(ClaimItem claimItem, SettlementPage settlementPage) {
         NotCheapestChoiceDialog notCheapestChoiceDialog = settlementPage
-                .openSid()
-                .fillBaseData(claimItem)
-                .fillNewPrice(48.00)
-                .fillCustomerDemand(1.00)
-                .selectValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(NEW_PRICE))
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
 
         String selectedReason = notCheapestChoiceDialog.selectAndGetFirstReasonValue();
         notCheapestChoiceDialog.okGoToSettlementPage();
 
         return selectedReason;
+    }
+
+    private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, SettlementDialog sid) {
+        return new SettlementDialog.FormFiller(sid)
+                .withCustomerDemandPrice(1.00)
+                .withNewPrice(48.00)
+                .withCategory(claimItem.getCategoryBorn())
+                .withSubCategory(claimItem.getSubcategoryBornBabyudstyr());
     }
 
 }

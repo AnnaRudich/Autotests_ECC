@@ -1,62 +1,75 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.function.Consumer;
+
 public class EditDiscountDistributionDialog extends BaseDialog {
 
-    @FindBy(id = "edit-voucher-ok-button")
-    private WebElement okButton;
-
-    @FindBy(id = "edit-voucher-cancel-button")
-    private WebElement cancelButton;
-
-    @FindBy(id = "edit-voucher-to-company-input-inputEl")
+    @FindBy(xpath = "//input[@data-componentid='distribution-voucher-to-company-input']")
     private WebElement companyPercentageInput;
 
-    @FindBy(id = "edit-voucher-to-customer-input-inputEl")
+    @FindBy(xpath = "//input[@data-componentid='distribution-voucher-to-customer-input']")
     private WebElement customerPercentageInput;
 
-    @FindBy(id = "edit-voucher-face-value-input-inputEl")
-    private WebElement faceValueInput;
+    @FindBy(id = "distribution-voucher-face-value-display")
+    private WebElement faceValueText;
 
-    @FindBy(id = "edit-voucher-cash-value-input-inputEl")
-    private WebElement cashValueInput;
+    @FindBy(id = "distribution-voucher-cash-value-display")
+    private WebElement cashValueText;
 
-    @FindBy(id = "edit-voucher-rebate-display-inputEl")
-    private WebElement voucherRebate;
+    @FindBy(id = "distribution-voucher-ok-button")
+    private WebElement saveButton;
+
+    @FindBy(id = "distribution-voucher-cancel-button")
+    private WebElement cancelButton;
+
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(okButton);
+        Wait.waitForVisible(saveButton);
         return this;
     }
 
-    public EditDiscountDistributionDialog updatePercentage(DistributeTo distributeTo, Integer percentage) {
-        if (DistributeTo.COMPANY.equals(distributeTo)) {
+    public EditDiscountDistributionDialog updatePercentage(EditVoucherValuationDialog.DistributeTo distributeTo, Integer percentage) {
+        if (EditVoucherValuationDialog.DistributeTo.COMPANY.equals(distributeTo)) {
             companyPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+            companyPercentageInput.sendKeys(Keys.TAB);
         } else {
             customerPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+            companyPercentageInput.sendKeys(Keys.TAB);
         }
         return this;
     }
 
-    public SettlementDialog save() {
-        okButton.click();
-        return at(SettlementDialog.class);
+    public EditVoucherValuationDialog saveDiscountDistribution() {
+        saveButton.click();
+        return BaseDialog.at(EditVoucherValuationDialog.class);
     }
 
-    public Integer getVoucherPercentage() {
-        String text = voucherRebate.getText();
-        return Integer.valueOf(text.replaceAll("([0-9]+),.*", "$1"));
+    public EditDiscountDistributionDialog doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return EditDiscountDistributionDialog.this;
     }
 
-    public enum DistributeTo {
-        CUSTOMER,
-        COMPANY
+    public class Asserts {
+        public Asserts assertFaceValueIs(Double expectedFaceValue) {
+            Double currentValue = OperationalUtils.toNumber(faceValueText.getText());
+            OperationalUtils.assertEqualsDouble(currentValue, expectedFaceValue);
+            return this;
+        }
+
+        public Asserts assertCashValueIs(Double expectedCashValue) {
+            Double currentValue = OperationalUtils.toNumber(cashValueText.getText());
+            OperationalUtils.assertEqualsDouble(currentValue, expectedCashValue);
+            return this;
+        }
     }
+
 
 }
 

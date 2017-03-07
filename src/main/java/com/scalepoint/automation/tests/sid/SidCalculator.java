@@ -1,5 +1,7 @@
 package com.scalepoint.automation.tests.sid;
 
+import java.math.BigDecimal;
+
 class SidCalculator {
 
     static PriceValuation calculatePriceValuation(Double price, Integer depreciationPercentage) {
@@ -8,13 +10,20 @@ class SidCalculator {
         return new PriceValuation(cashCompensation, depreciation);
     }
 
-    static VoucherValuation calculateVoucherValuation(Double price, Integer voucherDiscount, Integer depreciationPercentage) {
+    static VoucherValuationWithDepreciation calculateVoucherValuation(Double price, Integer voucherDiscount, Integer depreciationPercentage) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashCompensationOfVoucher = price - discountedAmountByVoucher;
         double depreciatedAmount = (cashCompensationOfVoucher*depreciationPercentage)/100;
         double cashCompensationWithDepreciation = cashCompensationOfVoucher - (cashCompensationOfVoucher*depreciationPercentage)/100;
 
-        return new VoucherValuation(cashCompensationOfVoucher, discountedAmountByVoucher, cashCompensationWithDepreciation, depreciatedAmount);
+        return new VoucherValuationWithDepreciation(cashCompensationOfVoucher, discountedAmountByVoucher, cashCompensationWithDepreciation, depreciatedAmount);
+    }
+
+    static VoucherValuation calculateVoucherValuationWithDiscountDistribution(Double price, Integer voucherDiscount, Integer companyDiscount) {
+        double discountedAmountByVoucher = price * voucherDiscount / 100;
+        double cashValue = price - (discountedAmountByVoucher * companyDiscount/voucherDiscount);
+        double faceValue = new BigDecimal(cashValue/((100.0-voucherDiscount)/100.0)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return new VoucherValuation(cashValue, faceValue);
     }
 
     static ValuationWithReduction calculatePriceValuationWithReduction(double price, Integer depreciationPercentage, Integer reductionPercentage) {
@@ -74,13 +83,13 @@ class SidCalculator {
         }
     }
 
-    static class VoucherValuation {
+    static class VoucherValuationWithDepreciation {
         private double cashCompensationOfVoucher;
         private double discountedAmountByVoucher;
         private double cashCompensationWithDepreciation;
         private double depreciatedAmount;
 
-        VoucherValuation(double cashCompensationOfVoucher, double discountedAmountByVoucher, double cashCompensationWithDepreciation, double depreciatedAmount) {
+        VoucherValuationWithDepreciation(double cashCompensationOfVoucher, double discountedAmountByVoucher, double cashCompensationWithDepreciation, double depreciatedAmount) {
             this.cashCompensationOfVoucher = cashCompensationOfVoucher;
             this.discountedAmountByVoucher = discountedAmountByVoucher;
             this.cashCompensationWithDepreciation = cashCompensationWithDepreciation;
@@ -101,6 +110,24 @@ class SidCalculator {
 
         double getDepreciatedAmount() {
             return depreciatedAmount;
+        }
+    }
+
+    static class VoucherValuation {
+        private double cashValue;
+        private double faceValue;
+
+        public VoucherValuation(double cashValue, double faceValue) {
+            this.cashValue = cashValue;
+            this.faceValue = faceValue;
+        }
+
+        public double getCashValue() {
+            return cashValue;
+        }
+
+        public double getFaceValue() {
+            return faceValue;
         }
     }
 }

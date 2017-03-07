@@ -142,6 +142,16 @@ BEGIN TRANSACTION
 
 	PRINT 'Voucher Agreement was successfully created with id = ' + CAST(@VoucherAgreementId AS VARCHAR(32))
 
+	declare @ShopName varchar(32) = CONCAT('Test shop ', @VoucherAgreementName)
+	declare @IsRetailShop bit = 1
+	declare @IsRepairValuationLocation bit = 0
+	declare @PostalCode varchar(100) = '5000'
+
+	/*SUPPLIER SHOP #1 - R&V LOCATION #1*/
+	declare @PickupId int
+	exec autotests_create_shop @ShopName, @SupplierID, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, @PickupId OUTPUT
+
+
 COMMIT TRANSACTION
 
 SET NOCOUNT OFF

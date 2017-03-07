@@ -108,7 +108,7 @@ public class AuthenticationApi {
                 Browser.driver().manage().addCookie(new org.openqa.selenium.Cookie(
                         cookie.getName(),
                         cookie.getValue(),
-                        //ie will not set cookies if domain name is incorrect (localhost, nb-ian)
+                        //ie will not set cookies if shared name is incorrect (localhost, nb-ian)
                         cookie.getDomain().contains(".") ? cookie.getDomain() : null,
                         cookie.getPath(),
                         cookie.getExpiryDate()

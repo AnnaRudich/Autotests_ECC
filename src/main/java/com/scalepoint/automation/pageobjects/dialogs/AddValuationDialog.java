@@ -26,6 +26,12 @@ public class AddValuationDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog addValuation(String valuationName, Double priceAmount) {
+        return addValuationType(valuationName)
+                .addValuationPrice(priceAmount)
+                .closeValuationDialogWithOk();
+    }
+
     public AddValuationDialog addValuationType(String valuationType) {
         addValuationType.select(valuationType);
         return this;

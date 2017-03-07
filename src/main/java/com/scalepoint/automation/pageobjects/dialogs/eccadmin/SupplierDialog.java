@@ -21,6 +21,35 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         return this;
     }
 
+    public static class GeneralTab extends BaseDialog implements SupplierTabs {
+
+        @FindBy(name = "website")
+        private WebElement website;
+
+        @Override
+        protected BaseDialog ensureWeAreAt() {
+            Wait.waitForVisible(website);
+            return this;
+        }
+    }
+
+    public static class AgreementsTab extends BaseDialog implements SupplierTabs {
+
+        @FindBy(className = "supplier-new-voucher-agreement-btn")
+        private WebElement createNewVoucherAgreementBtn;
+
+        @Override
+        protected BaseDialog ensureWeAreAt() {
+            Wait.waitForVisible(createNewVoucherAgreementBtn);
+            return this;
+        }
+
+        public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
+            createNewVoucherAgreementBtn.click();
+            return at(CreateVoucherAgreementDialog.class);
+        }
+    }
+
     public static class ShopsTab extends BaseDialog implements SupplierTabs {
 
         @FindBy(xpath = "//a[contains(@class,'supplier-add-shop-btn')]")

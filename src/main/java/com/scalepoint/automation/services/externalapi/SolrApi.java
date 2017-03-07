@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.domain.ProductInfo;
+import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Configuration;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;

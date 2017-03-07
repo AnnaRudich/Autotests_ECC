@@ -4,9 +4,10 @@ import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuation;
+import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -34,7 +35,7 @@ import org.testng.annotations.Test;
  * WHEN: CH review completed claim details
  * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
  */
-
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
 @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
@@ -42,7 +43,7 @@ import org.testng.annotations.Test;
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class DepreciationDeductedCombinedTests extends BaseTest {
 
-    private static final VoucherValuation voucherValuation = SidCalculator.calculateVoucherValuation(
+    private static final VoucherValuationWithDepreciation VOUCHER_VALUATION_WITH_DEPRECIATION = SidCalculator.calculateVoucherValuation(
             Constants.PRICE_2400,
             Constants.VOUCHER_DISCOUNT_10,
             Constants.DEPRECIATION_10
@@ -52,7 +53,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3288_1_verifyDndD2AndFTRelationCombineDnDOFF(User user, Claim claim, ClaimItem claimItem) {
-        Double expectedCashValue = voucherValuation.getCashCompensationOfVoucher();
+        Double expectedCashValue = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationOfVoucher();
         Double expectedNewPrice = Constants.PRICE_2400;
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, false);
     }
@@ -62,8 +63,8 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON(User user, Claim claim, ClaimItem claimItem) {
-        Double expectedNewPrice = voucherValuation.getCashCompensationOfVoucher();
-        Double expectedCashValue = voucherValuation.getCashCompensationWithDepreciation();
+        Double expectedNewPrice = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationOfVoucher();
+        Double expectedCashValue = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationWithDepreciation();
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, true);
     }
 
@@ -78,7 +79,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                             .withCategory(claimItem.getCategoryBorn())
                             .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
                             .withVoucher(claimItem.getExistingVoucher_10());
-                    return sid;
                 });
 
         if (setDiscountAndDepreciation) {

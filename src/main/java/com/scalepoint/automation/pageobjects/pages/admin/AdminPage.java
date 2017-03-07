@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.data.entity.Category;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -89,5 +90,20 @@ public class AdminPage extends AdminBasePage {
     public EditReasonsPage toEditReasonsPage(){
         editReasons.click();
         return at(EditReasonsPage.class);
+    }
+
+    @SuppressWarnings("AccessStaticViaInstance")
+    public AdminPage createPsModelWithCategoryAndEnable(Category category, String pseudoCategoryModel) {
+        return toPseudoCategoryGroupPage()
+                .toAddGroupPage()
+                .addGroup(category.getGroupName())
+                .to(PseudoCategoriesPage.class)
+                .toAddCategoryPage()
+                .addCategory(category)
+                .to(PseudoCategoryModelPage.class)
+                .toEditPage(pseudoCategoryModel)
+                .selectCategory(category.getGroupName())
+                .save()
+                .to(AdminPage.class);
     }
 }

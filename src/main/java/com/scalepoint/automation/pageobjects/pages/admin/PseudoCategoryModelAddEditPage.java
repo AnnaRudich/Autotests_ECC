@@ -35,11 +35,10 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
         return save();
     }
 
-    private PseudoCategoryModelPage save() {
+    public PseudoCategoryModelPage save() {
         saveOption.click();
         return at(PseudoCategoryModelPage.class);
     }
-
 
     public PseudoCategoryModelPage updateNewModelNameAndSave(String model) {
         modelNameField.clear();
@@ -47,7 +46,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
         return save();
     }
 
-    public void selectCategory(String catName) throws InterruptedException {
+    public PseudoCategoryModelAddEditPage selectCategory(String catName) {
         WebElement option = find(byCategoryNameXpath, catName);
         scrollTo(option);
         By xpath = By.xpath(byCategoryNameXpath.replace("$1", catName));
@@ -55,6 +54,6 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
         if (!option.isSelected()) {
             option.click();
         }
-        Thread.sleep(2000);
+        return this;
     }
 }

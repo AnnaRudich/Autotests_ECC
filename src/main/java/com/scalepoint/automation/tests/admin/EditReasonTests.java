@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.CurrentUser;
 import com.scalepoint.automation.utils.annotations.Bug;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -17,11 +18,12 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.ANDEN_VURDERING;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
 @SuppressWarnings("AccessStaticViaInstance")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 public class EditReasonTests extends BaseTest {
 
     private static final String TEST_REASON_LINE = "Test reason line";
@@ -238,17 +240,17 @@ public class EditReasonTests extends BaseTest {
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
         loginAndCreateClaim(trygUser, claim)
                 .openSid()
-                .fillDescription(TEST_REASON_LINE)
-                .fillCategory(claimItem.getExistingCat4())
-                .fillSubCategory(claimItem.getExistingSubCat4())
-                .fillCustomerDemand(1000.00)
+                .setDescription(TEST_REASON_LINE)
+                .setCategory(claimItem.getExistingCat4())
+                .setSubCategory(claimItem.getExistingSubCat4())
+                .setCustomerDemand(1000.00)
                 .enableAge()
                 .selectMonth("6")
-                .selectDepreciationType(SettlementDialog.DepreciationType.DISCRETIONARY)
-                .fillDepreciation(5)
-                .fillDiscretionaryPrice(400.00)
-                .fillNewPrice(3000.00)
-                .selectValuation(ANDEN_VURDERING)
+                .setDepreciationType(SettlementDialog.DepreciationType.DISCRETIONARY)
+                .setDepreciation(5)
+                .setDiscretionaryPrice(400.00)
+                .setNewPrice(3000.00)
+                .setValuation(DISCRETIONARY)
                 .selectDiscretionaryReason(reason)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reason))
                 .closeSidWithOk()

@@ -1,6 +1,6 @@
 package com.scalepoint.automation.utils;
 
-import com.scalepoint.automation.domain.Locale;
+import com.scalepoint.automation.shared.Locale;
 import org.springframework.util.Assert;
 
 public class Configuration {

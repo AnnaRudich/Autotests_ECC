@@ -68,6 +68,7 @@ public enum DriversFactory {
             return driver;
         }
     },
+
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance() {
             if (System.getProperty("webdriver.chrome.driver") == null) {

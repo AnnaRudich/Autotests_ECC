@@ -165,11 +165,11 @@ public abstract class Page implements Actions {
             holder.remove();
         }
 
-        public static void setSavePointUrl(String url) {
+        static void setSavePointUrl(String url) {
             savePointPageUrl.set(url);
         }
 
-        public static String getSavePointUrl() {
+        static String getSavePointUrl() {
             String url = savePointPageUrl.get();
             savePointPageUrl.remove();
             return url;

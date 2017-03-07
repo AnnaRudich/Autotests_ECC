@@ -9,35 +9,22 @@ import static org.testng.Assert.assertEquals;
 public class OperationalUtils {
 
     public static Double toNumber(String s) {
-        Double result;
-        String locale = Configuration.getLocale().getValue();
-        if (locale.equalsIgnoreCase("nl")
-                || locale.equalsIgnoreCase("es")) {
-            s = clearString(s);
-            try {
-                NumberFormat formatter = NumberFormat.getInstance(Locale.GERMAN);
-                result = formatter.parse(s).doubleValue();
-            } catch (ParseException e) {
-                result = -1d;
-            }
-        } else if (locale.equalsIgnoreCase("gb")
-                || locale.equalsIgnoreCase("ch")) {
-            s = clearString(s);
-            try {
-                NumberFormat formatter = NumberFormat.getInstance(Locale.ENGLISH);
-                result = formatter.parse(s).doubleValue();
-            } catch (ParseException e) {
-                result = -1d;
-            }
-        } else {
-            try {
-                NumberFormat formatter = NumberFormat.getInstance(Locale.GERMAN);
-                return formatter.parse(s).doubleValue();
-            } catch (ParseException e) {
-                return -1d;
-            }
+        String currentLocale = Configuration.getLocale().getValue();
+        String value = clearString(s);
+        Locale locale = Locale.GERMAN;
+
+        switch (currentLocale) {
+            case "gb":
+            case "ch":
+                locale = Locale.ENGLISH;
         }
-        return result;
+
+        NumberFormat formatter = NumberFormat.getInstance(locale);
+        try {
+            return formatter.parse(value).doubleValue();
+        } catch (ParseException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
     }
 
     public static String format(Double value) {

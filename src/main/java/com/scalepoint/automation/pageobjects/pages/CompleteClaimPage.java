@@ -108,6 +108,11 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
+    public CompleteClaimPage enterZipCode(String zip) {
+        zipcodeField.setValue(zip);
+        return this;
+    }
+
     public CompleteClaimPage enterEmail(String email) {
         emailField.setValue(email);
         return this;

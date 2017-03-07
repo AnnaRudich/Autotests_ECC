@@ -3,6 +3,8 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.Wait;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
@@ -34,11 +36,37 @@ public class EditVoucherValuationDialog extends BaseDialog {
     @FindBy(id = "edit-voucher-cash-value-input-inputEl")
     private ExtText voucherCashValue;
 
+    @FindBy(id = "edit-voucher-to-company-input-inputEl")
+    private WebElement companyPercentageInput;
+
+    @FindBy(id = "edit-voucher-to-customer-input-inputEl")
+    private WebElement customerPercentageInput;
+
+    @FindBy(id = "edit-voucher-rebate-display-inputEl")
+    private WebElement voucherRebate;
+
+    @FindBy(id = "edit-voucher-distribution-button")
+    private WebElement editDistributionButton;
+
     @Override
     protected BaseDialog ensureWeAreAt() {
         Wait.waitForVisible(ok);
         Wait.waitForVisible(voucherFaceValue);
         return null;
+    }
+
+    public EditVoucherValuationDialog updatePercentage(DistributeTo distributeTo, Integer percentage) {
+        if (DistributeTo.COMPANY.equals(distributeTo)) {
+            companyPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+        } else {
+            customerPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+        }
+        return this;
+    }
+
+    public EditDiscountDistributionDialog updatePercentageFromDialog(DistributeTo distributeTo, Integer percentage) {
+        editDistributionButton.click();
+        return BaseDialog.at(EditDiscountDistributionDialog.class).updatePercentage(distributeTo, percentage);
     }
 
     public String getBrands() {
@@ -64,10 +92,25 @@ public class EditVoucherValuationDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog saveVoucherValuation() {
+        ok.click();
+        return at(SettlementDialog.class);
+    }
+
     public String getVoucherCashValue() {
         return voucherCashValue.getText();
     }
 
+
+    public Integer getVoucherPercentage() {
+        String text = voucherRebate.getText();
+        return Integer.valueOf(text.replaceAll("([0-9]+),.*", "$1"));
+    }
+
+    public enum DistributeTo {
+        CUSTOMER,
+        COMPANY
+    }
 
     public EditVoucherValuationDialog doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());

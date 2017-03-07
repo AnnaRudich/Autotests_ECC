@@ -5,9 +5,10 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuation;
+import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -15,6 +16,7 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -45,7 +47,7 @@ public class DeprecationDeductedTests extends BaseTest {
     public void ecc3288_1_displayVoucherValueWithDeprecationDeductedOFF(User user, Claim claim, Voucher voucher) {
 
         VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
-        VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
+        VoucherValuationWithDepreciation expectedCalculation = SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
 
         Double expectedCashValue = expectedCalculation.getCashCompensationOfVoucher();
         Double expectedFaceValue = Constants.PRICE_2400;
@@ -80,7 +82,7 @@ public class DeprecationDeductedTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (on)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     public void ecc3288_2_displayVoucherValueWithDeprecationDeductedON(User user, Claim claim, ClaimItem claimItem) {
-        VoucherValuation expectedCalculation = SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
+        VoucherValuationWithDepreciation expectedCalculation = SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
 
         Double expectedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
         Double expectedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
@@ -103,7 +105,6 @@ public class DeprecationDeductedTests extends BaseTest {
                             .withCategory(category)
                             .withSubCategory(subCategory)
                             .withVoucher(voucherNameSP);
-                    return sid;
                 })
                 .closeSidWithOk()
                 .doAssert(page -> page.assertFaceValueTooltipIs(expectedVoucherFaceValue))
@@ -116,9 +117,9 @@ public class DeprecationDeductedTests extends BaseTest {
                 .findLoginToShopLinkAndOpenIt()
                 .enterPassword(Constants.PASSWORD)
                 .login()
-                .doAssert(welcomePage -> {
-                    welcomePage.assertProductCashValueIs(expectedVoucherCashValue);
-                    welcomePage.assertProductFaceValueIs(expectedVoucherFaceValue);
+                .doAssert(shopWelcomePage -> {
+                    shopWelcomePage.assertProductCashValueIs(expectedVoucherCashValue);
+                    shopWelcomePage.assertProductFaceValueIs(expectedVoucherFaceValue);
                 })
                 .logout();
 
