@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -55,7 +54,7 @@ public class DeprecationDeductedTests extends BaseTest {
 
         String category = categoryInfo.getCategory();
         String subCategory = categoryInfo.getSubCategory();
-        String voucherName = voucher.getVoucherNameSP();
+        String voucherName = voucher.getVoucherGeneratedName();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, category, subCategory, voucherName);
     }
@@ -87,8 +86,8 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
         Double expectedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
 
-        String category = claimItem.getCategoryBorn();
-        String subcategory = claimItem.getSubcategoryBornBabyudstyr();
+        String category = claimItem.getCategoryGroupBorn();
+        String subcategory = claimItem.getCategoryBornBabyudstyr();
         String voucherName = claimItem.getExistingVoucher_10();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, expectedCashValue, category, subcategory, voucherName);
@@ -97,9 +96,8 @@ public class DeprecationDeductedTests extends BaseTest {
     private void verify(User user, Claim claim, Double expectedVoucherCashValue, Double expectedVoucherFaceValue, Double customerCashValue,
                         String category, String subCategory, String voucherNameSP) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withCustomerDemandPrice(Constants.PRICE_100_000)
+                .openSidAndFill(sidForm -> {
+                    sidForm.withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
                             .withCategory(category)

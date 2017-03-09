@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -70,14 +70,13 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
     private void verify(User user, Claim claim, ClaimItem claimItem, double expectedNewPrice, double expectedCashValue, boolean setDiscountAndDepreciation) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withText(Constants.TEXT_LINE)
+                .openSidAndFill(sidForm -> {
+                    sidForm.withText(Constants.TEXT_LINE)
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
-                            .withCategory(claimItem.getCategoryBorn())
-                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                             .withVoucher(claimItem.getExistingVoucher_10());
                 });
 

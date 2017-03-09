@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditFunctionTemplatePag
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.jsoup.Jsoup;

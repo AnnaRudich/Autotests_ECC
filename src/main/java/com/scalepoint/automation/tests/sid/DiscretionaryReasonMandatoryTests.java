@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -40,7 +40,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .setValuation(NEW_PRICE)
                 .clickOK()
-                .doAssert(sid->{
+                .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
                     sid.assertDiscretionaryReasonHasRedBorder();
                 });
@@ -61,7 +61,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDiscretionaryPrice(300.00)
                 .setValuation(DISCRETIONARY)
                 .clickOK()
-                .doAssert(sid->{
+                .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
                     sid.assertDiscretionaryReasonHasRedBorder();
                 });
@@ -81,7 +81,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
         createClaimAndFillSid(user, claim, claimItem)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
-                .doAssert(sid->{
+                .doAssert(sid -> {
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
                 });
@@ -103,19 +103,19 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setDepreciationType(DepreciationType.POLICY)
                 .setValuation(NEW_PRICE)
-                .doAssert(sid->{
+                .doAssert(sid -> {
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
                 });
     }
 
-     /*
-     * WHEN: Enable the Make "Discretionary reason" mandatory to fill option in FT
-     * AND: Add the item with discretionary depreciation = 0%
-     * AND: Select depreciable valuation
-     * AND: click OK button
-     * THEN: the field is disabled; the dialog is closed
-     */
+    /*
+    * WHEN: Enable the Make "Discretionary reason" mandatory to fill option in FT
+    * AND: Add the item with discretionary depreciation = 0%
+    * AND: Select depreciable valuation
+    * AND: click OK button
+    * THEN: the field is disabled; the dialog is closed
+    */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation=0%")
     public void charlie_508_5_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
@@ -124,7 +124,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciation(0)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .setValuation(NEW_PRICE)
-                .doAssert(sid->{
+                .doAssert(sid -> {
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
                 });
@@ -132,9 +132,8 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
 
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
         return loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withCategory(claimItem.getExistingCat4())
+                .openSidAndFill(sidForm -> {
+                    sidForm.withCategory(claimItem.getExistingCat4())
                             .withSubCategory(claimItem.getExistingSubCat4())
                             .withCustomerDemandPrice(1000.00)
                             .withNewPrice(100.00)

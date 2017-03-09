@@ -128,5 +128,10 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             editMappingsBtn.click();
             return BaseDialog.at(EditCategoryMappingsDialog.class);
         }
+
+        public CategoriesTab mapToCategory(String categoryGroup, String categoryName) {
+            return openEditMappingsDialog()
+                    .mapCategory(categoryGroup, categoryName);
+        }
     }
 }

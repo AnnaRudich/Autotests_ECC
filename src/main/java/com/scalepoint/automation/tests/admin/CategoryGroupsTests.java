@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.admin;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;

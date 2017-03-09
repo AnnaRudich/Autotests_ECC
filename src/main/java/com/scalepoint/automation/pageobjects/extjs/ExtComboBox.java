@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;

@@ -1,15 +1,16 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi.AssignedCategory;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -32,7 +33,7 @@ public class SidTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(categoryInfo)
-                .doAssert(sid -> sid.assertVoucherListed(voucher.getVoucherNameSP()));
+                .doAssert(sid -> sid.assertVoucherListed(voucher.getVoucherGeneratedName()));
     }
 
     /**
@@ -55,12 +56,12 @@ public class SidTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCustomerDemandPrice(PRICE_100_000)
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
                             .withCategory(categoryInfo)
-                            .withVoucher(voucher.getVoucherNameSP());
+                            .withVoucher(voucher.getVoucherGeneratedName());
                 })
                 .doAssert(sid -> {
                     sid.assertCashValueIs(calculatedCashValue);
@@ -82,9 +83,9 @@ public class SidTests extends BaseTest {
         String existingVoucher = voucher.getExistingVoucher_10();
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withCategory(item.getCategoryBorn())
-                            .withSubCategory(item.getSubcategoryBornBabyudstyr())
+                    sid
+                            .withCategory(item.getCategoryGroupBorn())
+                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withCustomerDemandPrice(1000.00)
                             .withNewPrice(100.00)
                             .withVoucher(existingVoucher);
@@ -127,9 +128,9 @@ public class SidTests extends BaseTest {
         String existingVoucherShopName = "Test shop " + existingVoucher;
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withCategory(item.getCategoryBorn())
-                            .withSubCategory(item.getSubcategoryBornBabyudstyr())
+                    sid
+                            .withCategory(item.getCategoryGroupBorn())
+                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withNewPrice(100.00)
                             .withVoucher(existingVoucher);
                 })
@@ -228,50 +229,29 @@ public class SidTests extends BaseTest {
     public void ecc3025_voucherTradesTermsConditionsCorrectInfo(User user, Claim claim, Supplier supplier, Voucher voucher, ClaimItem claimItem) {
         String conditionsText = "Autotest Sample Conditions";
         int discount = 10;
-        String voucherName = voucher.getVoucherNameSP();
+        String voucherName = voucher.getVoucherGeneratedName();
         String supplierPhone = supplier.getSupplierPhone();
 
-        login(getSystemUser())
+        SuppliersPage suppliersPage = login(getSystemUser())
                 .getMainMenu()
                 .toEccAdminPage()
-                .toSuppliersPage()
-                .selectCreateSupplier()
-                .fill(createSupplierDialog -> {
-                    new CreateSupplierDialog.FormFiller(createSupplierDialog)
-                            .withSupplierName(supplier.getSupplierName())
-                            .withCvr(supplier.getSupplierCVR())
-                            .withAddress1(supplier.getAddress1())
-                            .withAddress2(supplier.getAddress2())
-                            .withCity(supplier.getCity())
-                            .withPostalCode(supplier.getPostCode())
-                            .withPhone(supplierPhone)
-                            .withOrderEmail(supplier.getSupplierEmail());
-                })
-                .createSupplier()
-                .selectAgreementsTab()
-                .openCreateVoucherAgreementDialog()
-                .fill(createVoucherAgreementDialog -> {
-                    new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucherName)
-                            .withAgreementDiscount(discount);
-                })
-                .saveVoucherAgreement()
-                .selectCategoriesTab()
-                .openEditMappingsDialog()
-                .mapCategory(claimItem.getCategoryBorn(), claimItem.getSubcategoryBornBabyudstyr())
-                .selectGeneralTab()
-                .selectLegalTab()
-                .setConditions(conditionsText)
-                .saveVoucherAgreement()
+                .toSuppliersPage();
+
+        SupplierDialog.GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier);
+        SharedEccAdminFlows.createVoucherAgreement(generalTab,
+                SharedEccAdminFlows.VoucherAgreementData.newBuilder(voucher, discount)
+                        .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                        .withTermsAndConditions(conditionsText)
+                        .build())
                 .saveSupplier()
                 .logout();
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryBorn())
-                            .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                             .withVoucher(voucherName);
                 })
                 .openVoucherTermAndConditions()
@@ -299,7 +279,7 @@ public class SidTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withNewPrice(PRICE_2400)
                             .withCategory(category.getGroupName())
                             .withSubCategory(category.getCategoryName());
@@ -329,10 +309,10 @@ public class SidTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withNewPrice(Constants.PRICE_2400)
-                            .withCategory(item.getCategoryBorn())
-                            .withSubCategory(item.getSubcategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryGroupBorn())
+                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withVoucher(item.getExistingVoucher_10());
                 })
                 .doAssert(sid -> {
@@ -345,9 +325,9 @@ public class SidTests extends BaseTest {
     private void testDiscountDistributionUpdate(User user, Claim claim, ClaimItem item, String existingVoucher, int customerDiscount, SidCalculator.VoucherValuation voucherValuation, boolean dialogMode) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
-                            .withCategory(item.getCategoryBorn())
-                            .withSubCategory(item.getSubcategoryBornBabyudstyr())
+                    sid
+                            .withCategory(item.getCategoryGroupBorn())
+                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withNewPrice(PRICE_2400)
                             .withVoucher(existingVoucher);
                 });

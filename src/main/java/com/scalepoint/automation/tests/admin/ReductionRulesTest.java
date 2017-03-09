@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.admin;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.RRLinesFields;

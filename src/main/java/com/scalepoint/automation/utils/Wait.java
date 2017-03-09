@@ -3,7 +3,7 @@ package com.scalepoint.automation.utils;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;

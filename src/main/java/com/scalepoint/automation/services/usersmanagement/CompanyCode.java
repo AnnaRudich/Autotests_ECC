@@ -10,5 +10,6 @@ public enum CompanyCode {
     LB,
     BAUTA,
     TRYGFORSIKRING,
+    TRYGHOLDING,
     ALKA
 }

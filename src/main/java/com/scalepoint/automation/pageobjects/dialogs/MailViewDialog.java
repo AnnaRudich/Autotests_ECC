@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfservice.LoginSelfServicePage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 

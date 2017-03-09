@@ -27,6 +27,11 @@ interface SupplierTabs {
         return Page.at(SuppliersPage.class);
     }
 
+    default SuppliersPage closeSupplier() {
+        $(By.className(" edit-supplier-close-btn")).click();
+        return Page.at(SuppliersPage.class);
+    }
+
     /*public void selectOrdersTab() {
         switchToTab(SupplierDialog.Tab.ORDERS);
     }

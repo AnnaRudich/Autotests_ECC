@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -133,7 +133,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_6_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getTrygCategory())
                             .withSubCategory(claimItem.getTrygSubCategory())
                             .withDiscretionaryPrice(PRICE_500)
@@ -158,7 +158,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_7_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getTrygCategory())
                             .withSubCategory(claimItem.getTrygSubCategory())
                             .withDiscretionaryPrice(PRICE_500)
@@ -184,7 +184,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
         String reasonText = discretionaryReason.getDiscretionaryReason2();
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getAlkaCategory())
                             .withSubCategory(claimItem.getExistingSubCat2())
                             .withDiscountAndDepreciation(false)
@@ -230,7 +230,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                             DepreciationType depreciationType) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getTrygCategory1())
                             .withNewPrice(PRICE_500)
                             .withAge(1, 4)
@@ -256,7 +256,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                              DepreciationType depreciationType) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getTrygCategory1())
                             .withNewPrice(PRICE_500)
                             .withAge(1, 4)
@@ -282,7 +282,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                              DepreciationType depreciationType) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getTrygCategory1())
                             .withNewPrice(10.00)
                             .withAge(3, 0)
@@ -312,7 +312,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  DiscretionaryReason discretionaryReason) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getExistingCat4())
                             .withSubCategory(claimItem.getExistingSubCat4())
                             .withAgeDisabled()
@@ -349,7 +349,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                                                                  DiscretionaryReason discretionaryReason) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getExistingCat4())
                             .withSubCategory(claimItem.getExistingSubCat4())
                             .withCustomerDemandPrice(1000.00)
@@ -501,7 +501,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
         return loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withCategory(claimItem.getExistingCat4())
                             .withSubCategory(claimItem.getExistingSubCat4())
                             .withCustomerDemandPrice(1000.00)

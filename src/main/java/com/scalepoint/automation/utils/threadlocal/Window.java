@@ -1,8 +1,8 @@
-package com.scalepoint.automation.utils;
+package com.scalepoint.automation.utils.threadlocal;
 
 import com.google.common.base.Function;
 import com.scalepoint.automation.Actions;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.JavascriptHelper;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,7 +13,7 @@ import java.util.Set;
 import static org.openqa.selenium.support.ui.WebDriverWait.DEFAULT_SLEEP_TIMEOUT;
 
 @SuppressWarnings("ConstantConditions")
-public class Window implements Actions {
+public class Window {
 
     private static ThreadLocal<WindowManager> holder = new ThreadLocal<>();
 

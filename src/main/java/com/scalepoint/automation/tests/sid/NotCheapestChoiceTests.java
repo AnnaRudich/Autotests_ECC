@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.NotCheapestChoiceDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.DepreciationType;
@@ -155,12 +155,12 @@ public class NotCheapestChoiceTests extends BaseTest {
         return selectedReason;
     }
 
-    private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, SettlementDialog sid) {
-        return new SettlementDialog.FormFiller(sid)
+    private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, SettlementDialog.FormFiller sid) {
+        return sid
                 .withCustomerDemandPrice(1.00)
                 .withNewPrice(48.00)
-                .withCategory(claimItem.getCategoryBorn())
-                .withSubCategory(claimItem.getSubcategoryBornBabyudstyr());
+                .withCategory(claimItem.getCategoryGroupBorn())
+                .withSubCategory(claimItem.getCategoryBornBabyudstyr());
     }
 
 }

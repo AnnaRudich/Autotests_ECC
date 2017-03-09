@@ -1,6 +1,6 @@
 package com.scalepoint.automation.utils;
 
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
 

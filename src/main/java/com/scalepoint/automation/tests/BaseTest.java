@@ -1,4 +1,4 @@
-package com.scalepoint.automation;
+package com.scalepoint.automation.tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
@@ -14,14 +15,14 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.spring.Application;
-import com.scalepoint.automation.utils.CurrentUser;
+import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.Window;
+import com.scalepoint.automation.utils.threadlocal.Window;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
@@ -135,6 +136,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return AuthenticationApi.createServerApi().login(user, returnPageClass, parameters);
     }
 
+    protected SuppliersPage loginToEccAdmin(User user) {
+        return login(user)
+                .getMainMenu()
+                .toEccAdminPage()
+                .toSuppliersPage();
+    }
+
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
         return functionalTemplatesApi.updateTemplate(user.getFtId(), returnPageClass, operations);
@@ -151,13 +159,27 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return params;
     }
 
-    public static List<Object> getTestDataParameters(Method method) {
+    private static List<Object> getTestDataParameters(Method method) {
+        MDC.put("sessionid", method.getName());
+        UsersManager.lockQueue();
+
         Class<?>[] parameterTypes = method.getParameterTypes();
         List<Object> instances = new ArrayList<>(parameterTypes.length);
         try {
-            for (Class<?> parameterType : parameterTypes) {
+            for (int i = 0; i < parameterTypes.length; i++) {
+                Class<?> parameterType = parameterTypes[i];
                 if (parameterType.equals(User.class)) {
-                    User user = getRequestedUser(method);
+                    CompanyCode companyCode = CompanyCode.FUTURE1;
+                    Annotation[] annotations = method.getParameterAnnotations()[i];
+                    if (annotations.length > 0) {
+                        Annotation annotation = annotations[0];
+                        if (annotation.annotationType().equals(UserCompany.class)) {
+                            companyCode = ((UserCompany) annotation).value();
+                        }
+                    }
+                    User user = UsersManager.takeUser(companyCode);
+                    CurrentUser.setUser(user);
+
                     instances.add(user);
                 } else {
                     try {
@@ -170,6 +192,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             }
         } catch (Exception e) {
             LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
+        } finally {
+            UsersManager.unlockQueue();
         }
         return instances;
     }

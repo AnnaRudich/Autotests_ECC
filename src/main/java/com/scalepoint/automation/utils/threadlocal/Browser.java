@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.driver;
+package com.scalepoint.automation.utils.threadlocal;
 
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;

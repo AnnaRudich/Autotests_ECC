@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.driver;
+package com.scalepoint.automation.utils.threadlocal;
 
 import org.openqa.selenium.WebDriver;
 
@@ -7,16 +7,16 @@ class DriverData {
     private WebDriver driver;
     private String windowHandle;
 
-    public DriverData(WebDriver driver) {
+    DriverData(WebDriver driver) {
         this.driver = driver;
         this.windowHandle = driver.getWindowHandle();
     }
 
-    public WebDriver getDriver() {
+    WebDriver getDriver() {
         return driver;
     }
 
-    public String getWindowHandle() {
+    String getWindowHandle() {
         return windowHandle;
     }
 

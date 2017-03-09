@@ -119,7 +119,7 @@ public class Voucher {
         return trygVoucher;
     }
 
-    public String getVoucherNameSP() {
+    public String getVoucherGeneratedName() {
         return voucherNameSP;
     }
 

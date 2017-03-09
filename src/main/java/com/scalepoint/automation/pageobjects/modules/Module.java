@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.Actions;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

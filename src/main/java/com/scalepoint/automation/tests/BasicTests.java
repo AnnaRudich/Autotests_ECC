@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests;
 
-import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.Constants;
@@ -10,7 +9,7 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;

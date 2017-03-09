@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -37,11 +36,11 @@ public class SettlementSummaryTests extends BaseTest {
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withCategory(item.getCategoryBorn())
-                            .withSubCategory(item.getSubcategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryGroupBorn())
+                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withVoucher(voucher.getExistingVoucher_10());
                 })
                 .closeSidWithOk()
@@ -76,11 +75,11 @@ public class SettlementSummaryTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
-                    new SettlementDialog.FormFiller(sid)
+                    sid
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withCategory(item.getCategoryBorn())
-                            .withSubCategory(item.getSubcategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryGroupBorn())
+                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withVoucher(voucher.getExistingVoucher_10());
                 })
                 .closeSidWithOk()

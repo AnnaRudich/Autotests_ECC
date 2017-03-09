@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
 import com.scalepoint.automation.pageobjects.pages.BestFitPage;
@@ -31,7 +31,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getCategoryBorn())
+                .chooseCategory(claimItem.getCategoryGroupBorn())
                 .doAssert(TextSearchPage.Asserts::assertMarketPriceInvisible)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()

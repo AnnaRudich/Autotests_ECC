@@ -10,7 +10,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;

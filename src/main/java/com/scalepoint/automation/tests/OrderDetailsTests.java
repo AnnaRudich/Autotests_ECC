@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests;
 
-import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -75,8 +74,8 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .setCategory(claimItem.getCategoryBorn())
-                .setSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
                 .setNewPrice(900.00)
                 .setDescription(claimItem.getTextFieldSP());
 
@@ -128,8 +127,8 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .setCategory(claimItem.getCategoryBorn())
-                .setSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
                 .setNewPrice(5000.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);

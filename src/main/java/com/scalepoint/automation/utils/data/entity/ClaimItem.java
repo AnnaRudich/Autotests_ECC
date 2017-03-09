@@ -180,7 +180,7 @@ public class ClaimItem {
         return ssDescriptionSP;
     }
 
-    public String getCategoryBorn() {
+    public String getCategoryGroupBorn() {
         return existingCat1;
     }
 
@@ -188,7 +188,7 @@ public class ClaimItem {
         return existingCat2;
     }
 
-    public String getSubcategoryBornBabyudstyr() {
+    public String getCategoryBornBabyudstyr() {
         return existingSubCat1;
     }
 

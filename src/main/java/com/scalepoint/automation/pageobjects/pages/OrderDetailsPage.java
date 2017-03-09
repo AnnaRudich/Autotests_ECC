@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Window;
+import com.scalepoint.automation.utils.threadlocal.Window;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

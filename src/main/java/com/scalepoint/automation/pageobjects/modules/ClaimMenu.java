@@ -4,7 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.Window;
+import com.scalepoint.automation.utils.threadlocal.Window;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;

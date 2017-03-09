@@ -6,9 +6,11 @@ import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForEnabled;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -28,7 +30,6 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(website);
             return this;
         }
     }
@@ -47,6 +48,28 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
             createNewVoucherAgreementBtn.click();
             return at(CreateVoucherAgreementDialog.class);
+        }
+
+        public AgreementsTab leaveAgreement(String voucherAgreementName) {
+            By voucherRow = By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherAgreementName + "']/ancestor::tr");
+            $(voucherRow).click();
+
+            By leaveButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
+            Wait.waitForEnabled(leaveButtonBy);
+
+            WebElement leaveButton = $(leaveButtonBy);
+            Assert.assertEquals(leaveButton.getText(), "Leave");
+            leaveButton.click();
+
+            By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
+            Wait.waitForDisplayed(alertMessageBy);
+            $(alertMessageBy).click();
+
+            Wait.waitForAjaxCompleted();
+            $(voucherRow).click();
+
+            Assert.assertEquals($(leaveButton).getText(), "Join");
+            return this;
         }
     }
 

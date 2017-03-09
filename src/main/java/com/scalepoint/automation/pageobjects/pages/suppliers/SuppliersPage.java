@@ -75,7 +75,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         return BaseDialog.at(SupplierDialog.class);
     }
 
-    public void openEditSupplierDialog(Supplier supplier) {
+    public SupplierDialog.GeneralTab openEditSupplierDialog(Supplier supplier) {
         find(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplier.getSupplierName());
         WebElement option = find(bySupplierNameXpath, supplier.getSupplierName());
@@ -85,6 +85,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
             doubleClick(option);
             waitForStaleElement((By.xpath("//span[contains(text(),'General')]")));
         }
+        return BaseDialog.at(SupplierDialog.GeneralTab.class);
     }
 
     public void makeSupplierSearch(String query) {

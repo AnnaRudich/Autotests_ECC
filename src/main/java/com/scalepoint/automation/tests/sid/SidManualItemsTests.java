@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -18,7 +18,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -61,14 +61,14 @@ public class SidManualItemsTests extends BaseTest {
         String currentUrl = Browser.driver().getCurrentUrl();
 
         List<String> allSubCategories = Page.to(PseudoCategoryGroupPage.class)
-                .editGroup(claimItem.getCategoryBorn())
+                .editGroup(claimItem.getCategoryGroupBorn())
                 .getAllPseudoCategories();
 
         Browser.driver().get(currentUrl);
 
         Page.at(SettlementPage.class)
                 .openSid()
-                .setCategory(claimItem.getCategoryBorn())
+                .setCategory(claimItem.getCategoryGroupBorn())
                 .doAssert(sid -> sid.assertSubCategoriesListEqualTo(allSubCategories));
     }
 
@@ -122,7 +122,7 @@ public class SidManualItemsTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_500)
                 .setCategory(categoryInfo)
-                .fillVoucher(voucher.getVoucherNameSP())
+                .fillVoucher(voucher.getVoucherGeneratedName())
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setValuation(CUSTOMER_DEMAND);
 
@@ -156,8 +156,8 @@ public class SidManualItemsTests extends BaseTest {
                 .findClaimLine(claimItem.getTextFieldSP()).editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
-                    claimLine.assertCategoryTextIs(claimItem.getCategoryBorn());
-                    claimLine.assertSubCategoryTextIs(claimItem.getSubcategoryBornBabyudstyr());
+                    claimLine.assertCategoryTextIs(claimItem.getCategoryGroupBorn());
+                    claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(Constants.PRICE_500))
@@ -186,8 +186,8 @@ public class SidManualItemsTests extends BaseTest {
                 .editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
-                    claimLine.assertCategoryTextIs(claimItem.getCategoryBorn());
-                    claimLine.assertSubCategoryTextIs(claimItem.getSubcategoryBornBabyudstyr());
+                    claimLine.assertCategoryTextIs(claimItem.getCategoryGroupBorn());
+                    claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(Constants.PRICE_500))
@@ -199,8 +199,8 @@ public class SidManualItemsTests extends BaseTest {
                 .editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
-                    claimLine.assertCategoryTextIs(claimItem.getCategoryBorn());
-                    claimLine.assertSubCategoryTextIs(claimItem.getSubcategoryBornBabyudstyr());
+                    claimLine.assertCategoryTextIs(claimItem.getCategoryGroupBorn());
+                    claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_500))

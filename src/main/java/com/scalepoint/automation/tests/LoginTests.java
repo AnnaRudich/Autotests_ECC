@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests;
 
-import com.scalepoint.automation.BaseTest;
 import com.scalepoint.automation.exceptions.LoginInvalidException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;

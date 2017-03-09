@@ -1,23 +1,31 @@
-package com.scalepoint.automation.utils;
+package com.scalepoint.automation.utils.threadlocal;
 
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CurrentUser {
 
     private static Logger logger = LoggerFactory.getLogger(CurrentUser.class);
 
-    private static ThreadLocal<User> userHolder = new ThreadLocal<>();
+    private static ThreadLocal<List<User>> usersHolder = new ThreadLocal<>();
     private static ThreadLocal<String> claimIdHolder = new ThreadLocal<>();
 
     public static void setUser(User user) {
-        userHolder.set(user);
+        List<User> users = usersHolder.get();
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+        users.add(user);
     }
 
-    public static User getUser() {
-        return userHolder.get();
+    private static boolean hasUsers() {
+        List<User> users = usersHolder.get();
+        return users != null && !users.isEmpty();
     }
 
     public static void setClaimId(String claimId) {
@@ -30,15 +38,14 @@ public class CurrentUser {
 
     public static void cleanUp() {
         logger.info("Clean up CurrentUser");
-        if (getUser() != null) {
-            UsersManager.releaseUser(getUser());
+        if (hasUsers()) {
+            usersHolder.get().forEach(UsersManager::releaseUser);
         }
 
-        userHolder.remove();
+        usersHolder.remove();
 
         if (claimIdHolder.get() != null) {
             claimIdHolder.remove();
         }
     }
-
 }

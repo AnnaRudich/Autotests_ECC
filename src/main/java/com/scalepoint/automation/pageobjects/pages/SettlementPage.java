@@ -172,7 +172,7 @@ public class SettlementPage extends BaseClaimPage {
                 .closeSidWithOk();
     }
 
-    public SettlementDialog openSidAndFill(Consumer<SettlementDialog> fillfunc) {
+    public SettlementDialog openSidAndFill(Consumer<SettlementDialog.FormFiller> fillfunc) {
         return openSid().setDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
 

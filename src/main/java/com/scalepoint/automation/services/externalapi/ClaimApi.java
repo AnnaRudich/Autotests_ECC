@@ -2,10 +2,10 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.services.externalapi.exception.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.CurrentUser;
+import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.BaseTest;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
@@ -149,10 +149,10 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
     }
 
-    private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, double purchasePrice, SettlementDialog sid) {
-        return new SettlementDialog.FormFiller(sid)
-                .withCategory(claimItem.getCategoryBorn())
-                .withSubCategory(claimItem.getSubcategoryBornBabyudstyr())
+    private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, double purchasePrice, SettlementDialog.FormFiller sid) {
+        return sid
+                .withCategory(claimItem.getCategoryGroupBorn())
+                .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                 .withNewPrice(purchasePrice);
     }
 }

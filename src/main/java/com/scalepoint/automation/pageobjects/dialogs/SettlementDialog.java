@@ -11,7 +11,7 @@ import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.driver.Browser;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.*;
@@ -314,8 +314,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementDialog fill(Consumer<SettlementDialog> fillFunc) {
-        fillFunc.accept(this);
+    public SettlementDialog fill(Consumer<SettlementDialog.FormFiller> fillFunc) {
+        fillFunc.accept(new FormFiller(this));
         return this;
     }
 
@@ -323,8 +323,8 @@ public class SettlementDialog extends BaseDialog {
         return setDescription(claimItem.getTextFieldSP()).
                 setCustomerDemand(Constants.PRICE_500).
                 setNewPrice(Constants.PRICE_2400).
-                setCategory(claimItem.getCategoryBorn()).
-                setSubCategory(claimItem.getSubcategoryBornBabyudstyr());
+                setCategory(claimItem.getCategoryGroupBorn()).
+                setSubCategory(claimItem.getCategoryBornBabyudstyr());
     }
 
     public SettlementDialog fill(String description, String category, String subcategory, Double newPrice) {
@@ -930,13 +930,29 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertVoucherListed(String voucherTitle) {
-            List<String> options;
-            if (voucher.isDisplayed())
-                options = voucher.getComboBoxOptions();
-            else
-                options = availableVoucher.getComboBoxOptions();
-            Assert.assertTrue(options.stream().anyMatch(i -> i.contains(voucherTitle)), "Voucher " + voucherTitle + " must be present");
+            System.out.println("AssertVoucherListed: "+voucherTitle);
+            Assert.assertTrue(getVouchersList().stream().anyMatch(i -> {
+                System.out.println("Found: "+i);
+                return i.contains(voucherTitle);
+            }), "Voucher " + voucherTitle + " must be present");
             return this;
+        }
+
+        public Asserts assertVoucherNotListed(String voucherTitle) {
+            System.out.println("assertVoucherNotListed: "+voucherTitle);
+            Assert.assertFalse(getVouchersList().stream().anyMatch(i -> {
+                System.out.println("Found: "+i);
+                return i.contains(voucherTitle);
+            }), "Voucher " + voucherTitle + " must not be present");
+            return this;
+        }
+
+        private List<String> getVouchersList() {
+            if (voucher.isDisplayed()) {
+                return voucher.getComboBoxOptions();
+            } else {
+                return availableVoucher.getComboBoxOptions();
+            }
         }
 
         public Asserts assertIncludeInClaimSelected() {

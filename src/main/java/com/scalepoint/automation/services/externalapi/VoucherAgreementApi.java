@@ -75,7 +75,7 @@ public class VoucherAgreementApi extends AuthenticationApi {
 
     private String createNewVoucherAgreement(String supplierId, Voucher voucher) {
         List<NameValuePair> params = Http.ParamsBuilder.create().
-                add("voucherName", voucher.getVoucherNameSP()).
+                add("voucherName", voucher.getVoucherGeneratedName()).
                 add("agreementStatus", "ACTIVE").
                 add("useSupplierLogo", "true").
                 add("useSupplierUrl", "true").
