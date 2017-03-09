@@ -101,6 +101,45 @@ public class BasicTests extends BaseTest {
                 .login();
     }
 
+    @Test(dataProvider = "testDataProvider",
+            description = "It's possible to login to Self Service 2.0 from email")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = true)
+    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
+    public void loginToSelfService2_0(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .enterPassword(Constants.PASSWORD)
+                .login();
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "It's possible submit product match from Self Service 2.0 and Audit automatically approved claim")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = true)
+    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
+    public void charlie_1585_auditApprovedClaimAfterFnolSubmit(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .enableAuditForIc(user.getCompanyName())
+                .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .enterPassword(Constants.PASSWORD)
+                .login()
+                .addDescription("Apple")
+                .saveItem()
+                .sendResponseToEcc();
+
+        login(user)
+                .openActiveRecentClaim()
+                .ensureAuditInfoPanelVisible()
+                .checkStatusFromAudit("APPROVED");
+    }
+
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",

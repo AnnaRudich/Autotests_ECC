@@ -24,6 +24,9 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     @FindBy(id = "sendPasswordSmsCheckbox-bodyEl")
     private ExtCheckbox sendSms;
 
+    @FindBy(id = "closeAutomatically-bodyEl")
+    private ExtCheckbox closeAutomatically;
+
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
     private Button ok;
 
@@ -59,6 +62,13 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     private SendSelfServiceRequestDialog disableSendSms() {
         if (sendSms.isSelected()) {
             sendSms.set(false);
+        }
+        return this;
+    }
+
+    public SendSelfServiceRequestDialog enableAutoClose() {
+        if (!closeAutomatically.isSelected()) {
+            closeAutomatically.set(true);
         }
         return this;
     }

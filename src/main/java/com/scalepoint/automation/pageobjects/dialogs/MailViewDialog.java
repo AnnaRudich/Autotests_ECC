@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfservice.LoginSelfServicePage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.driver.Browser;
@@ -29,6 +30,13 @@ public class MailViewDialog extends BaseDialog {
         String link = selfServiceLink.getWrappedElement().getAttribute("href");
         Browser.open(link);
         return Page.at(LoginSelfServicePage.class);
+    }
+
+    public LoginSelfService2Page findSelfServiceNewLinkAndOpenIt() {
+        waitForVisible(selfServiceLink);
+        String link = selfServiceLink.getWrappedElement().getAttribute("href");
+        Browser.open(link);
+        return Page.at(LoginSelfService2Page.class);
     }
 
     public LoginShopPage findLoginToShopLinkAndOpenIt() {

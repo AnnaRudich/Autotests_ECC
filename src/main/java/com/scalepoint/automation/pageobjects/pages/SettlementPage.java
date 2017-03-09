@@ -1,8 +1,10 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -11,17 +13,20 @@ import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
@@ -47,6 +52,10 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
+    @FindBy(id = "draft-status-inputEl")
+    private WebElement auditStatus;
+    @FindBy(id = "auditInfoPanel")
+    private WebElement auditInfoPanel;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
@@ -106,9 +115,30 @@ public class SettlementPage extends BaseClaimPage {
                 send();
     }
 
+    public SettlementPage requestSelfServiceWithEnabledAutoClose(Claim claim, String password) {
+        return claimOperationsMenu.requestSelfService()
+                .fill(claim, password)
+                .enableAutoClose()
+                .send();
+    }
+
     public SettlementPage addGenericItemToClaim(GenericItem genericItem) {
         return claimOperationsMenu.addGenericItem().
                 chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
+    }
+
+    public ImportDialog openImportSelfServiceDialog() {
+        return claimOperationsMenu.openImportDialog();
+    }
+
+    public SettlementPage ensureAuditInfoPanelVisible() {
+        waitForVisible(auditInfoPanel);
+        return this;
+    }
+
+    public SettlementPage checkStatusFromAudit(String status){
+        ExpectedConditions.textToBePresentInElement(auditStatus, status);
+        return this;
     }
 
     public ClaimOperationsMenu getClaimOperationsMenu() {
@@ -148,6 +178,13 @@ public class SettlementPage extends BaseClaimPage {
 
     public void cancelClaim() {
         settlementSummary.cancel();
+    }
+
+    public SettlementPage enableAuditForIc(String icName) {
+        to(InsCompaniesPage.class)
+        .editCompany(icName)
+        .enableAuditOptionAndSave();
+        return to(SettlementPage.class);
     }
 
     public MyPage saveClaim() {

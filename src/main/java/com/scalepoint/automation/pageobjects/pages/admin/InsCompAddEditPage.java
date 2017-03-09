@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import org.openqa.selenium.By;
@@ -60,6 +61,8 @@ public class InsCompAddEditPage extends AdminBasePage {
 
     private String byICCultureXpath = "//select[@name='icCulture']/option[contains(.,'$1')]";
 
+    private String byAuditXpath = "//select[@name='auditEnabled']/option[contains(.,'$1')]";
+
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
@@ -115,6 +118,14 @@ public class InsCompAddEditPage extends AdminBasePage {
         companyNameField.sendKeys(insuranceCompany.getIcName());
         selectSaveOption();
         return at(InsCompaniesPage.class);
+    }
+
+    public void enableAuditOptionAndSave() {
+        WebElement option = find(byAuditXpath, "Enabled");
+        if (option.getText().equals("Enabled")) {
+            option.click();
+        }
+        selectSaveOption();
     }
 
     public void selectParentCompany(InsuranceCompany insuranceCompany) {

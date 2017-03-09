@@ -58,6 +58,11 @@ public class MyPage extends Page {
         return at(CustomerDetailsPage.class);
     }
 
+    public SettlementPage openActiveRecentClaim() {
+        activeCustomerLink.click();
+        return at(SettlementPage.class);
+    }
+
     public NewCustomerPage clickCreateNewCase() {
         createNewCase.click();
         return Page.at(NewCustomerPage.class);
