@@ -178,6 +178,17 @@ public class SupplierTests extends BaseTest {
         checkVisibility(parentCompanyUser, childCompanyUser, supplier, true);
     }
 
+    /**
+     * GIVEN: IC1 parent and IC2 child users with Supply Manager credentials
+     * WHEN: IC1 child user creates supplier S1
+     * THEN: S1 is available for IC1 parent user
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3037 Child IC supplier is available for parent IC")
+    public void ecc3037_childICSupplierAvailableForParentIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
+        checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
+    }
+
     private void checkVisibility(User userWhoCreates, User userWhoReads, Supplier supplier, boolean mustBeVisible) {
         SuppliersPage suppliersPage = loginToEccAdmin(userWhoCreates);
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
