@@ -43,7 +43,6 @@ public class CurrentUser {
         }
 
         usersHolder.remove();
-
         if (claimIdHolder.get() != null) {
             claimIdHolder.remove();
         }

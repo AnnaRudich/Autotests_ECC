@@ -161,7 +161,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     private static List<Object> getTestDataParameters(Method method) {
         MDC.put("sessionid", method.getName());
-        UsersManager.lockQueue();
 
         Class<?>[] parameterTypes = method.getParameterTypes();
         List<Object> instances = new ArrayList<>(parameterTypes.length);
@@ -192,8 +191,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             }
         } catch (Exception e) {
             LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
-        } finally {
-            UsersManager.unlockQueue();
         }
         return instances;
     }

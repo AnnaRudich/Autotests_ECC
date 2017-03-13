@@ -9,12 +9,24 @@ import static com.codeborne.selenide.Selenide.$;
 
 interface SupplierTabs {
 
+    default SupplierDialog.GeneralTab selectGeneralTab() {
+        return selectTab(SupplierDialog.GeneralTab.class, "General");
+    }
+
     default SupplierDialog.ShopsTab selectShopsTab() {
         return selectTab(SupplierDialog.ShopsTab.class, "Shops");
     }
 
     default SupplierDialog.AgreementsTab selectAgreementsTab() {
         return selectTab(SupplierDialog.AgreementsTab.class, "Agreements");
+    }
+
+    default SupplierDialog.BannerTab selectBannerTab() {
+        return selectTab(SupplierDialog.BannerTab.class, "Banner");
+    }
+
+    default SupplierDialog.OrdersTab selectOrdersTab() {
+        return selectTab(SupplierDialog.OrdersTab.class, "Orders");
     }
 
     default <T extends BaseDialog & SupplierTabs> T selectTab(Class<T> tabClass, String tabName) {

@@ -1,6 +1,10 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
@@ -17,16 +21,290 @@ import static org.testng.Assert.assertTrue;
 
 public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
+    public enum OrderMailFormat {
+        PLAIN("Plain text", "PLAIN_TEXT_MAIL"),
+        XML_ATTACHMENT("XML attachment", "NAVISION_XML_MAIL_ATTACHMENT"),
+        XML_MAIL_BODY("XML mail body", "XML_MAIL_BODY"),
+        VOUCHERS_ONLY_PLAIN("Voucher orders only Plain text", "VOUCHER_ORDER_ONLY_PLAIN_TEXT_MAIL"),
+        VOUCHERS_ONLY_XML_ATTACHMENT("Voucher orders only XML attachment", "VOUCHER_ORDER_ONLY_XML_ATTACHMENT"),
+        VOUCHERS_ONLY_XML_MAIL_BODY("Voucher orders only XML mail body", "VOUCHER_ORDER_ONLY_XML");
+
+        private String option;
+        private String value;
+
+        OrderMailFormat(String optionText, String value) {
+            this.option = optionText;
+            this.value = value;
+        }
+    }
+
     @Override
     protected BaseDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
         return this;
     }
 
+    public static class OrdersTab extends BaseDialog implements SupplierTabs {
+
+        @FindBy(name = "orderEmail")
+        private ExtInput emailField;
+
+        @FindBy(xpath = "//table[contains(@class, 'supplier-order-mail-format')]")
+        private ExtComboBox orderMailFormatSelect;
+
+        @FindBy(id = "deliverySupportedId")
+        private ExtCheckbox deliverySupportedCheckbox;
+
+        @FindBy(name = "deliveryTime")
+        private ExtInput defaultDeliveryTimeField;
+
+        @FindBy(xpath = "//table[contains(@class, 'supplier-add-freight-price')]")
+        private ExtCheckbox addFreightPriceCheckbox;
+
+        @FindBy(xpath = "//table[contains(@class, 'supplier-products-only-for-claim-handling')]")
+        private ExtCheckbox claimHandlingProductsCheckbox;
+
+        public OrdersTab setOrderEmail(String email) {
+            emailField.clear();
+            emailField.sendKeys(email);
+            return this;
+        }
+
+        public OrdersTab setOrderMailFormat(OrderMailFormat orderMailFormat) {
+            orderMailFormatSelect.select(orderMailFormat.option);
+            return this;
+        }
+
+        public OrdersTab setDefaultDeliveryTime(Integer deliveryTime) {
+            deliverySupportedCheckbox.set(true);
+            defaultDeliveryTimeField.clear();
+            defaultDeliveryTimeField.sendKeys(deliveryTime.toString());
+            return this;
+        }
+
+        public OrdersTab useFreightPrice() {
+            addFreightPriceCheckbox.set(true);
+            return this;
+        }
+
+        public OrdersTab useProductsAsVouchers() {
+            claimHandlingProductsCheckbox.set(true);
+            return this;
+        }
+
+        public OrdersTab doAssert(Consumer<OrdersTab.Asserts> assertFunc) {
+            assertFunc.accept(new OrdersTab.Asserts());
+            return OrdersTab.this;
+        }
+
+        public class Asserts {
+            public Asserts assertOrderEmailIs(String email) {
+                Assert.assertEquals(emailField.getText(), email);
+                return this;
+            }
+
+            public Asserts assertOrderEmailFormatIs(OrderMailFormat orderMailFormat) {
+                Assert.assertEquals(orderMailFormatSelect.getValue(), orderMailFormat.value);
+                return this;
+            }
+
+            public Asserts assertDeliveryTimeIs(Integer deliveryTime) {
+                Assert.assertTrue(deliverySupportedCheckbox.isSelected());
+                Assert.assertEquals(defaultDeliveryTimeField.getText(), deliveryTime.toString());
+                return this;
+            }
+
+            public Asserts assertFreightPriceUsed() {
+                Assert.assertTrue(addFreightPriceCheckbox.isSelected());
+                return this;
+            }
+
+            public Asserts assertProductsUsedAsVouchers() {
+                Assert.assertTrue(claimHandlingProductsCheckbox.isSelected());
+                return this;
+            }
+        }
+
+        @Override
+        protected BaseDialog ensureWeAreAt() {
+            return this;
+        }
+    }
+
+    public static class BannerTab extends BaseDialog implements SupplierTabs {
+
+        public BannerTab uploadBanner(String bannerPath) {
+            WebElement elem = find(By.xpath("//input[contains(@id, 'supplierBannerFileId') and contains(@type, 'file')]"));
+            enterToHiddenUploadFileField(elem, bannerPath);
+            return this;
+        }
+
+        public BannerTab doAssert(Consumer<BannerTab.Asserts> assertFunc) {
+            assertFunc.accept(new BannerTab.Asserts());
+            return BannerTab.this;
+        }
+
+        public class Asserts {
+            public BannerTab.Asserts assertBannerIsPresent() {
+                assertTrue(JavascriptHelper.isImagePresent(driver.findElement(By.className("bannerUploadImg"))));
+                return this;
+            }
+        }
+
+        @Override
+        protected BaseDialog ensureWeAreAt() {
+            return this;
+        }
+    }
+
     public static class GeneralTab extends BaseDialog implements SupplierTabs {
+
+        @FindBy(name = "name")
+        private WebElement name;
+
+        @FindBy(name = "cvr")
+        private WebElement cvr;
+
+        @FindBy(name = "address")
+        private WebElement address1;
+
+        @FindBy(name = "address2")
+        private WebElement address2;
+
+        @FindBy(name = "city")
+        private WebElement city;
+
+        @FindBy(name = "postalCode")
+        private WebElement postalCode;
+
+        @FindBy(name = "phone")
+        private WebElement phone;
+
+        @FindBy(xpath = ".//*[contains(@class,'x-window-header-text')]")
+        private WebElement windowHeader;
+
+        @FindBy(xpath = ".//*[contains(@class,'add-supplier-create-btn')]")
+        private WebElement createSupplierButton;
 
         @FindBy(name = "website")
         private WebElement website;
+
+        @FindBy(name = "fileData")
+        private WebElement supplierLogo;
+
+        public GeneralTab setName(String name) {
+            this.name.clear();
+            this.name.sendKeys(name);
+            return this;
+        }
+
+        public GeneralTab fill(Consumer<GeneralTab> fillFunc) {
+            fillFunc.accept(this);
+            return this;
+        }
+
+        public GeneralTab setWebsite(String webSite) {
+            this.website.sendKeys(webSite);
+            return this;
+        }
+
+        public GeneralTab uploadLogo(String logoPath) {
+            WebElement elem = find(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
+            enterToHiddenUploadFileField(elem, logoPath);
+            Wait.waitForDisplayed(By.cssSelector(("img.imageUploadImg")));
+            return this;
+        }
+
+        public GeneralTab doAssert(Consumer<GeneralTab.Asserts> assertFunc) {
+            assertFunc.accept(new GeneralTab.Asserts());
+            return GeneralTab.this;
+        }
+
+        public class Asserts {
+            public GeneralTab.Asserts assertLogoPresent() {
+                assertTrue(JavascriptHelper.isImagePresent(driver.findElement(By.className("imageUploadImg"))));
+                return this;
+            }
+
+            public Asserts assertCvr(String cvrValue) {
+                Assert.assertEquals(cvr.getAttribute("value"), cvrValue);
+                return this;
+            }
+
+            public Asserts assertAddress(String address1Value, String address2Value) {
+                Assert.assertEquals(address1.getAttribute("value"), address1Value);
+                Assert.assertEquals(address2.getAttribute("value"), address2Value);
+                return this;
+            }
+
+            public Asserts assertCity(String cityValue) {
+                Assert.assertEquals(city.getAttribute("value"), cityValue);
+                return this;
+            }
+
+            public Asserts assertPostalCode(String postalCodeValue) {
+                Assert.assertEquals(postalCode.getAttribute("value"), postalCodeValue);
+                return this;
+            }
+
+            public Asserts assertWebsite(String websiteValue) {
+                Assert.assertEquals(website.getAttribute("value"), websiteValue);
+                return this;
+            }
+        }
+
+        public static class FormFiller {
+
+            private GeneralTab dialog;
+
+            public FormFiller(GeneralTab dialog) {
+                this.dialog = dialog;
+            }
+
+            public GeneralTab.FormFiller withSupplierName(String supplierName) {
+                dialog.name.clear();
+                dialog.name.sendKeys(supplierName);
+                return this;
+            }
+
+            public GeneralTab.FormFiller withCvr(String cvr) {
+                dialog.cvr.clear();
+                dialog.cvr.sendKeys(cvr);
+                return this;
+            }
+
+            public GeneralTab.FormFiller withAddress1(String address1) {
+                dialog.address1.clear();
+                dialog.address1.sendKeys(address1);
+                return this;
+            }
+
+            public GeneralTab.FormFiller withAddress2(String address2) {
+                dialog.address2.clear();
+                dialog.address2.sendKeys(address2);
+                return this;
+            }
+
+            public GeneralTab.FormFiller withCity(String city) {
+                dialog.city.clear();
+                dialog.city.sendKeys(city);
+                return this;
+            }
+
+            public GeneralTab.FormFiller withPostalCode(String postalCode) {
+                dialog.postalCode.clear();
+                dialog.postalCode.sendKeys(postalCode);
+                return this;
+            }
+
+            public GeneralTab.FormFiller withWebsite(String website) {
+                dialog.website.clear();
+                dialog.website.sendKeys(website);
+                return this;
+            }
+
+
+        }
 
         @Override
         protected BaseDialog ensureWeAreAt() {
@@ -149,4 +427,6 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
         }
     }
+
+
 }

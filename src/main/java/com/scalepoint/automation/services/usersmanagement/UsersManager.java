@@ -12,8 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class UsersManager {
 
-    private static final Lock lock = new ReentrantLock();
-
     private static Logger logger = LoggerFactory.getLogger(UsersManager.class);
 
     private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
@@ -36,7 +34,6 @@ public class UsersManager {
     }
 
     public static User takeUser(CompanyCode companyCode) {
-        lockQueue();
         logger.info("Requested: {}", companyCode.name());
         try {
             User taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
@@ -45,8 +42,6 @@ public class UsersManager {
         } catch (Exception e) {
             logger.error("Can't driver user for {} cause {}", companyCode.name(), e.toString());
             throw new RuntimeException(e);
-        } finally {
-            unlockQueue();
         }
     }
 
@@ -57,14 +52,6 @@ public class UsersManager {
             return;
         }
         exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
-    }
-
-    public static void lockQueue() {
-        lock.lock();
-    }
-
-    public static void unlockQueue() {
-        lock.unlock();
     }
 
     public static User getSystemUser() {

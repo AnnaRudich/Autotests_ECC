@@ -3,6 +3,7 @@ package com.scalepoint.automation.utils;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,5 +43,18 @@ public class JavascriptHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean isImagePresent(WebElement imageElement) {
+        Object result = ((JavascriptExecutor) Browser.driver()).executeScript(
+                "return arguments[0].complete && "+
+                        "typeof arguments[0].naturalWidth != \"undefined\" && "+
+                        "arguments[0].naturalWidth > 0", imageElement);
+        boolean loaded = false;
+        if (result instanceof Boolean) {
+            loaded = (Boolean) result;
+            System.out.println(loaded);
+        }
+        return loaded;
     }
 }

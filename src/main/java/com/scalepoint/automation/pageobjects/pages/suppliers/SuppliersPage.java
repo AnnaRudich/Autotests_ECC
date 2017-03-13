@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
@@ -13,8 +14,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.*;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 
 /**
@@ -95,15 +99,14 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         Wait.waitForAjaxCompleted();
     }
 
-    public boolean isSupplierCreated(Supplier supplier) {
+    public boolean isSupplierCreated(String supplierName) {
         find(By.xpath("//input[contains(@name,'searchfield')]")).click();
-        makeSupplierSearch(supplier.getSupplierName());
+        makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        String xpath = bySupplierNameXpath.replace("$1", supplier.getSupplierName());
+        String xpath = bySupplierNameXpath.replace("$1", supplierName);
         try {
             WebElement option = find(By.xpath(xpath));
-            return option.getText().contains(supplier.getSupplierName())
-                    && option.getText().contains(supplier.getSupplierCVR());
+            return option.getText().contains(supplierName);
         } catch (Exception e) {
             return false;
         }
@@ -115,6 +118,23 @@ public class SuppliersPage extends BaseEccAdminNavigation {
 
     public boolean isExclOrVoucherFieldTicked() {
         return tickedExclOrVouchersField.isDisplayed();
+    }
+
+    public SuppliersPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return SuppliersPage.this;
+    }
+
+    public class Asserts {
+        public Asserts assertSupplierPresent(String supplierName) {
+            assertTrue(isSupplierCreated(supplierName));
+            return this;
+        }
+
+        public Asserts assertSupplierAbsent(String supplierName) {
+            assertFalse(isSupplierCreated(supplierName));
+            return this;
+        }
     }
 
 }
