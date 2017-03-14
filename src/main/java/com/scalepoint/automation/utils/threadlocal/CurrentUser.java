@@ -21,6 +21,7 @@ public class CurrentUser {
             users = new ArrayList<>();
         }
         users.add(user);
+        usersHolder.set(users);
     }
 
     private static boolean hasUsers() {
