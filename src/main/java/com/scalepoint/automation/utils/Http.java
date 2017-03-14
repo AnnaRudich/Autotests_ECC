@@ -25,7 +25,7 @@ public class Http {
     public static Response get(String url) throws IOException {
         HttpClient httpClient = HttpClientBuilder.create().build();
         Executor executor = Executor.newInstance(httpClient);
-        logger.info("Get to: " + url);
+        logger.debug("Get to: " + url);
         return executor.execute(
                 Request.Get(url)
                         .useExpectContinue()
@@ -34,7 +34,7 @@ public class Http {
     }
 
     public static Response get(String url, Executor executor) throws IOException {
-        logger.info("Get to: " + url);
+        logger.debug("Get to: " + url);
         return executor.execute(
                 Request.Get(url)
                         .useExpectContinue()
@@ -43,7 +43,7 @@ public class Http {
     }
 
     public static Response post(String url, List<NameValuePair> namedParams, Executor executor) throws IOException {
-        logger.info("Post to: " + url);
+        logger.debug("Post to: " + url);
         return executor.execute(
                 Request.Post(url)
                         .useExpectContinue()

@@ -82,7 +82,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         driver.manage().window().maximize();
 
         Configuration.savePageSource = false;
-        logger.info("MainHandle " + Browser.driver().getWindowHandle());
     }
 
     @AfterMethod

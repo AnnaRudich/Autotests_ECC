@@ -19,7 +19,7 @@ public class FtTextField extends FtOperation {
     @Override
     public boolean hasSameState(Document document) {
         String currentValue = document.select(setting.getLocator()).val();
-        logger.info("Setting: {} Current: {} Change to: {}", setting.name(), currentValue, newValue);
+        logger.info("{}: {} --> {}", setting.name(), currentValue, newValue);
 
         rollbackOperation = FTSettings.setValue(setting, currentValue);
         return currentValue.equals(newValue);

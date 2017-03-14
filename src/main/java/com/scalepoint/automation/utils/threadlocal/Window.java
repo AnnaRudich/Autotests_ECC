@@ -92,7 +92,7 @@ public class Window {
             for (String winHandle : windowHandles) {
                 driver.switchTo().window(winHandle);
             }
-            logger.info("url after switchToLast: " + driver.getCurrentUrl());
+            logger.debug("url after switchToLast: " + driver.getCurrentUrl());
         }
     }
 

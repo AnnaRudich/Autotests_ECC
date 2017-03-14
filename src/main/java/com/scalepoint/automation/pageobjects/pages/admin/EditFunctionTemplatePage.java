@@ -98,7 +98,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
             logger.info("Disabling: " + description);
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         }
-        logger.info("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
+        logger.debug("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }
 
     public EditFunctionTemplatePage selectComboBoxValue(FTSetting ftSetting, String option) {

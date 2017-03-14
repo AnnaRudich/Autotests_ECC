@@ -24,7 +24,7 @@ public class FtCheckbox extends FtOperation {
     }
 
     private boolean compareStates(boolean checked) {
-        logger.info("Setting: {} Current: {} Change to: {}", setting.name(), checked, (operationType == OperationType.ENABLE));
+        logger.info("{}: {} --> {}", setting.name(), checked, (operationType == OperationType.ENABLE));
         return (operationType == OperationType.ENABLE) == checked;
     }
 

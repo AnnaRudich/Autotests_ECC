@@ -59,12 +59,19 @@ public abstract class Page implements Actions {
         Wait.forCondition(webDriver -> {
             try {
                 String currentUrl = driver.getCurrentUrl();
-                logger.info("Expected: {} Current url: {}", expectedUrl, currentUrl);
 
                 assert webDriver != null;
                 switchToLast();
 
-                return currentUrl.contains(expectedUrl) || (alternativeUrl != null && currentUrl.contains(alternativeUrl));
+                boolean urlsMatched = currentUrl.contains(expectedUrl) || (alternativeUrl != null && currentUrl.contains(alternativeUrl));
+
+                if (!urlsMatched) {
+                    logger.error("Expected: {} Current url: {}", expectedUrl, currentUrl);
+                } else {
+                    logger.debug("Expected: {} Current url: {}", expectedUrl, currentUrl);
+                }
+
+                return urlsMatched;
             } catch (UnhandledAlertException e) {
                 closeAlert();
             }
