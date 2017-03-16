@@ -1,8 +1,6 @@
 package com.scalepoint.automation.tests.eccadmin;
 
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
@@ -10,7 +8,6 @@ import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Supplier;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -47,7 +44,7 @@ public class SupplierTests extends BaseTest {
         String updatedWebsite = "http://google.com";
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier1)
                 .saveSupplier()
-                .openEditSupplierDialog(supplier1)
+                .editSupplier(supplier1.getSupplierName())
                 .fill(editSupplierDialog -> {
                     new SupplierDialog.GeneralTab.FormFiller(editSupplierDialog)
                             .withSupplierName(supplier2.getSupplierName())
@@ -59,7 +56,7 @@ public class SupplierTests extends BaseTest {
                             .withWebsite(updatedWebsite);
                 })
                 .saveSupplier()
-                .openEditSupplierDialog(supplier2)
+                .editSupplier(supplier2.getSupplierName())
                 .doAssert(generalTab -> {
                     generalTab.assertCity(supplier2.getCity());
                     generalTab.assertPostalCode(supplier2.getPostCode());
@@ -134,7 +131,7 @@ public class SupplierTests extends BaseTest {
 
         SharedEccAdminFlows.createVoucherAgreement(generalTabTab, SharedEccAdminFlows.VoucherAgreementData.newBuilder(voucher, 10).build())
                 .saveSupplier()
-                .openEditSupplierDialog(supplier)
+                .editSupplier(supplier.getSupplierName())
                 .selectOrdersTab()
                 .doAssert(ordersTab -> {
                     ordersTab.assertOrderEmailIs(supplier.getSupplierEmail());

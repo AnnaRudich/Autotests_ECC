@@ -79,12 +79,12 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         return BaseDialog.at(SupplierDialog.class);
     }
 
-    public SupplierDialog.GeneralTab openEditSupplierDialog(Supplier supplier) {
+    public SupplierDialog.GeneralTab editSupplier(String supplierName) {
         find(By.xpath("//input[contains(@name, 'searchfield')]")).click();
-        makeSupplierSearch(supplier.getSupplierName());
-        WebElement option = find(bySupplierNameXpath, supplier.getSupplierName());
+        makeSupplierSearch(supplierName);
+        WebElement option = find(bySupplierNameXpath, supplierName);
         waitForStaleElements((By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")));
-        if (option.getText().contains(supplier.getSupplierName()) && option.getText().contains(supplier.getSupplierCVR())) {
+        if (option.getText().contains(supplierName)) {
             scrollTo(option);
             doubleClick(option);
             waitForStaleElement((By.xpath("//span[contains(text(),'General')]")));

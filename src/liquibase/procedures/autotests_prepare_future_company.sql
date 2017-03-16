@@ -15,14 +15,18 @@ SET NOCOUNT ON
     declare @masterTemplateName varchar(50) = 'mastr'
     declare @serviceAgreementName varchar(50) = 'AutoTest Agreement'
     declare @serviceAgreementNameForWizard varchar(50) = 'AutoTest Agreement For Wizard'
+    declare @supplierName varchar(50) = concat('AutotestSupplier-', @companyId, '-ForVaTests')
 
-    declare @companyName nvarchar(254) = concat('Future-', @companyId)
+    declare @companyName nvarchar(254) = concat('Future', @companyId)
     declare @userName nvarchar(254) = concat('autotest-future', @companyId)
 
     EXEC autotests_create_ic @companyId, @companyName
     EXEC autotests_create_user @companyId, @userName, @userRights
     EXEC autotests_create_choice_reasons @companyId
     EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
+
+    declare @SupplierId int
+    EXEC autotests_create_supplier @supplierName, @companyId, '4321', @SupplierId OUTPUT
 
 SET NOCOUNT OFF
 

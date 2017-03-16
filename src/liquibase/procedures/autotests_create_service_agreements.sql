@@ -14,8 +14,6 @@ AS
 
 	SET NOCOUNT ON
 
-	BEGIN TRANSACTION
-
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 	declare @ServiceAgreementTemplateID int = (Select id from ServiceAgreementTemplate where name = @baseTemplateName)
@@ -37,7 +35,7 @@ AS
 		RETURN
 
   declare @SupplierId int;
-  execute autotests_create_supplier @SupplierName, @Email, @insCompanyId, @PostalCode, @SupplierId OUTPUT;
+  execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SupplierId OUTPUT;
 
 	declare @AgreementTags varchar(100) = ''
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive
@@ -101,8 +99,6 @@ AS
 	declare @LocationId2 int = @@IDENTITY
 
 	insert into [Location_ZipCode] ([locationId],[zipCodeId]) select distinct @LocationId2,ZIPCODE from ZipCodes
-
-	COMMIT TRANSACTION
 
 	SET NOCOUNT OFF
 

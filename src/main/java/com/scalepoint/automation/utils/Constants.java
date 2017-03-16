@@ -1,5 +1,7 @@
 package com.scalepoint.automation.utils;
 
+import com.scalepoint.automation.utils.data.entity.credentials.User;
+
 public class Constants {
 
     public static final String TEXT_LINE = "AutomatedTest-ClaimLine";
@@ -10,7 +12,11 @@ public class Constants {
     public static final Double PRICE_500 = 500.00;
 
     public static final Integer DEPRECIATION_10 = 10;
-
     public static final Integer VOUCHER_DISCOUNT_10 = 10;
 
+    private static final String SUPPLIER_FOR_VOUCHERAGREEMENTS = "AutotestSupplier-$CompanyId-ForVaTests";
+
+    public static String getSupplierNameForVATests(User user) {
+        return SUPPLIER_FOR_VOUCHERAGREEMENTS.replace("$CompanyId", user.getCompanyId().toString());
+    }
 }

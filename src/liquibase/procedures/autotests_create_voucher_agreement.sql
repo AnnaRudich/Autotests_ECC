@@ -73,7 +73,6 @@ DECLARE @PseudocatModelId INT = (
     JOIN PSEUDOCAT_Model pm ON pm.PseudoCatModelId = ft.PseudoCatModelId
     WHERE ic.ICRFNBR = @MainInsuranceCompanyId)
 
-BEGIN TRANSACTION
 	INSERT INTO [VoucherAgreement] ([Status]
     , [Url]
     , [StepAmount]
@@ -150,9 +149,6 @@ BEGIN TRANSACTION
 	/*SUPPLIER SHOP #1 - R&V LOCATION #1*/
 	declare @PickupId int
 	exec autotests_create_shop @ShopName, @SupplierID, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, @PickupId OUTPUT
-
-
-COMMIT TRANSACTION
 
 SET NOCOUNT OFF
 

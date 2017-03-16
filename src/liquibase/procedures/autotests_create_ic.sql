@@ -46,8 +46,6 @@ DECLARE @ICFTNBR INT = @ICRFNBR
 IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICRFNBR = @ICRFNBR)
     RETURN
 
-BEGIN TRANSACTION
-
 	DECLARE @icTextId INT = (SELECT MAX([TextId])+1 FROM dbo.Text)
 	SET IDENTITY_INSERT [Text] ON
 	INSERT INTO [Text] (TextId, TextType) values (@icTextId, 11)
@@ -324,8 +322,6 @@ INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insu
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
 
     PRINT 'Insurance company was successfully created with id = ' + CAST(@ICRFNBR AS VARCHAR)
-
-COMMIT TRANSACTION
 
 SET NOCOUNT OFF
 

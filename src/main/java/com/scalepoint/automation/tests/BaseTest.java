@@ -50,9 +50,8 @@ import org.testng.annotations.Listeners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringApplicationConfiguration(classes = Application.class)
 @IntegrationTest
@@ -69,6 +68,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
+        Thread.currentThread().setName("Thread "+method.getName());
         MDC.put("sessionid", method.getName());
         logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
@@ -153,6 +153,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @DataProvider(name = "testDataProvider")
     public static Object[][] provide(Method method) {
+        Thread.currentThread().setName("Thread "+method.getName());
         Object[][] params = new Object[1][];
         params[0] = getTestDataParameters(method).toArray();
         return params;
@@ -160,24 +161,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     private static List<Object> getTestDataParameters(Method method) {
         MDC.put("sessionid", method.getName());
-
         Class<?>[] parameterTypes = method.getParameterTypes();
         List<Object> instances = new ArrayList<>(parameterTypes.length);
         try {
+            Map<UsersManager.CompanyMethodArgument, User> requestedUsers = UsersManager.fetchUsersWhenAvailable(extractAllCompanyCodesRequested(method));
+            Map<Integer, User> indexToUser = requestedUsers.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getIndex(), Map.Entry::getValue));
             for (int i = 0; i < parameterTypes.length; i++) {
                 Class<?> parameterType = parameterTypes[i];
-                if (parameterType.equals(User.class)) {
-                    CompanyCode companyCode = CompanyCode.FUTURE1;
-                    Annotation[] annotations = method.getParameterAnnotations()[i];
-                    if (annotations.length > 0) {
-                        Annotation annotation = annotations[0];
-                        if (annotation.annotationType().equals(UserCompany.class)) {
-                            companyCode = ((UserCompany) annotation).value();
-                        }
-                    }
-                    User user = UsersManager.takeUser(companyCode);
+                if (indexToUser.containsKey(i)) {
+                    User user = indexToUser.get(i);
                     CurrentUser.setUser(user);
-
                     instances.add(user);
                 } else {
                     try {
@@ -194,24 +187,30 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return instances;
     }
 
+    private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {
+        Map<UsersManager.CompanyMethodArgument, User>companyCodes = new HashMap<>();
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Class<?> parameterType = parameterTypes[i];
+            if (parameterType.equals(User.class)) {
+                CompanyCode companyCode = CompanyCode.FUTURE50;
+                Annotation[] annotations = method.getParameterAnnotations()[i];
+                if (annotations.length > 0) {
+                    Annotation annotation = annotations[0];
+                    if (annotation.annotationType().equals(UserCompany.class)) {
+                        companyCode = ((UserCompany) annotation).value();
+                    }
+                }
+                companyCodes.put(UsersManager.CompanyMethodArgument.create(i, companyCode), null);
+            }
+        }
+        return companyCodes;
+    }
+
     public static Object[] combine(List<Object> testDataParameters, Object... additionalParams) {
         List<Object> params = Lists.newArrayList(testDataParameters);
         params.addAll(Arrays.asList(additionalParams));
         return params.toArray();
-    }
-
-    private static User getRequestedUser(Method method) {
-        CompanyCode companyCode = CompanyCode.FUTURE1;
-        Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-        if (parameterAnnotations[0].length > 0) {
-            Annotation annotation = parameterAnnotations[0][0];
-            if (annotation.annotationType().equals(UserCompany.class)) {
-                companyCode = ((UserCompany) annotation).value();
-            }
-        }
-        User user = UsersManager.takeUser(companyCode);
-        CurrentUser.setUser(user);
-        return user;
     }
 }
 

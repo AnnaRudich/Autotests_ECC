@@ -8,6 +8,7 @@ import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -16,6 +17,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForEnabled;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -328,16 +330,27 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             return at(CreateVoucherAgreementDialog.class);
         }
 
-        public AgreementsTab leaveAgreement(String voucherAgreementName) {
+        public VoucherAgreementDialog.GeneralTab editVoucherAgreement(String agreementName) {
+            doubleClick(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'"+agreementName+"')]"));
+            Wait.waitForAjaxCompleted();
+            return at(VoucherAgreementDialog.GeneralTab.class);
+        }
+
+        public enum  ActionType {
+            LEAVE,
+            JOIN
+        }
+
+        public AgreementsTab doWithAgreement(String voucherAgreementName, ActionType actionType) {
             By voucherRow = By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherAgreementName + "']/ancestor::tr");
             $(voucherRow).click();
 
-            By leaveButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
-            Wait.waitForEnabled(leaveButtonBy);
+            By actionButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
+            Wait.waitForEnabled(actionButtonBy);
 
-            WebElement leaveButton = $(leaveButtonBy);
-            Assert.assertEquals(leaveButton.getText(), "Leave");
-            leaveButton.click();
+            WebElement actionButton = $(actionButtonBy);
+            Assert.assertEquals(actionButton.getText(), actionType == ActionType.JOIN ? "Join" : "Leave");
+            actionButton.click();
 
             By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
             Wait.waitForDisplayed(alertMessageBy);
@@ -346,8 +359,26 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             Wait.waitForAjaxCompleted();
             $(voucherRow).click();
 
-            Assert.assertEquals($(leaveButton).getText(), "Join");
+            Assert.assertEquals($(actionButton).getText(), actionType == ActionType.JOIN ? "Leave" : "Join");
             return this;
+        }
+
+        public AgreementsTab doAssert(Consumer<Asserts> assertFunc) {
+            assertFunc.accept(new Asserts());
+            return AgreementsTab.this;
+        }
+
+        public class Asserts {
+            public Asserts assertVoucherStatus(String voucherName, boolean active) {
+                By voucherRowActive = By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherName + "']/ancestor::tr//td[4]");
+                assertEquals($(voucherRowActive).getText(), active ? "Yes" : "No");
+                return this;
+            }
+
+            public Asserts assertVoucherAbsent(String voucherName) {
+                Assert.assertFalse($(By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherName + "']")).exists());
+                return this;
+            }
         }
     }
 

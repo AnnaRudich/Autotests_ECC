@@ -28,6 +28,14 @@ interface VoucherAgreementTabs {
         return selectTab(VoucherAgreementDialog.CategoriesTab.class, "Categories");
     }
 
+    default VoucherAgreementDialog.AdvancedTab selectAdvancedTab() {
+        return selectTab(VoucherAgreementDialog.AdvancedTab.class, "Advanced");
+    }
+
+    default VoucherAgreementDialog.DiscountDistributionTab selectDiscountDistributionTab() {
+        return selectTab(VoucherAgreementDialog.DiscountDistributionTab.class, "Discount Distribution");
+    }
+
     default <T extends BaseDialog & VoucherAgreementTabs> T selectTab(Class<T> tabClass, String tabName) {
         $(By.xpath("//div[contains(@class,'editSupplierVoucherWindow')]//span[contains(text(),'"+tabName+"')]")).click();
         return at(tabClass);

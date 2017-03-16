@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.sid;
 
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
@@ -76,9 +77,9 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
         loginAndCheckVoucherPresence(trygUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
 
         loginToEccAdmin(trygUser)
-                .openEditSupplierDialog(supplier)
+                .editSupplier(supplier.getSupplierName())
                 .selectAgreementsTab()
-                .leaveAgreement(voucherName)
+                .doWithAgreement(voucherName, SupplierDialog.AgreementsTab.ActionType.LEAVE)
                 .closeSupplier()
                 .logout();
 

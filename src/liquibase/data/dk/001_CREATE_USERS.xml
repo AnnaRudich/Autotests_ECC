@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="1" author="ipo" runOnChange="true" failOnError="true" >
+    <changeSet id="1" author="ipo" runOnChange="true">
 
         <comment>Create ICs/Users</comment>
 
@@ -13,6 +13,9 @@
             declare @adminUserRights int = 14 -- admin/claims handler/supply manager
             declare @chUserRights int = 10 -- claims handler/supply manager
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
+
+            declare @SupplierId int
+            EXEC autotests_create_supplier 'Autotest-Supplier-VA-Tests', @scalepointCompany, '4321', @SupplierId OUTPUT
 
             update [User] set UserName = concat(UserName,'-old-',UserID) where Email = 'ecc_auto@scalepoint.com' and UserName like 'autotest-%'
 

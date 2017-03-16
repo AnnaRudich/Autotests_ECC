@@ -2,17 +2,17 @@
 <existingUsers>
     <user login="autotest-system" password="12341234" company="SCALEPOINT" companyId="7" ftId="1" system="true"/>
 
-    <user login="autotest-future50" password="12341234" companyCode="FUTURE-50" companyName="Future-50" companyId="50" ftId="50" basic="true"/>
-    <user login="autotest-future51" password="12341234" companyCode="FUTURE-51" companyName="Future-51" companyId="51" ftId="51" basic="true"/>
-    <user login="autotest-future52" password="12341234" companyCode="FUTURE-52" companyName="Future-52" companyId="52" ftId="52" basic="true"/>
-    <user login="autotest-future53" password="12341234" companyCode="FUTURE-53" companyName="Future-53" companyId="53" ftId="53" basic="true"/>
-    <user login="autotest-future54" password="12341234" companyCode="FUTURE-54" companyName="Future-54" companyId="54" ftId="54" basic="true"/>
-    <user login="autotest-future55" password="12341234" companyCode="FUTURE-55" companyName="Future-55" companyId="55" ftId="55" basic="true"/>
-    <user login="autotest-future56" password="12341234" companyCode="FUTURE-56" companyName="Future-56" companyId="56" ftId="56" basic="true"/>
-    <user login="autotest-future57" password="12341234" companyCode="FUTURE-57" companyName="Future-57" companyId="57" ftId="57" basic="true"/>
-    <user login="autotest-future58" password="12341234" companyCode="FUTURE-58" companyName="Future-58" companyId="58" ftId="58" basic="true"/>
-    <user login="autotest-future59" password="12341234" companyCode="FUTURE-59" companyName="Future-59" companyId="59" ftId="59" basic="true"/>
-    <user login="autotest-future60" password="12341234" companyCode="FUTURE-60" companyName="Future-60" companyId="60" ftId="60" basic="true"/>
+    <user login="autotest-future50" password="12341234" companyCode="FUTURE50" companyName="Future50" companyId="50" ftId="50" basic="true"/>
+    <user login="autotest-future51" password="12341234" companyCode="FUTURE51" companyName="Future51" companyId="51" ftId="51" basic="true"/>
+    <user login="autotest-future52" password="12341234" companyCode="FUTURE52" companyName="Future52" companyId="52" ftId="52" basic="true"/>
+    <user login="autotest-future53" password="12341234" companyCode="FUTURE53" companyName="Future53" companyId="53" ftId="53" basic="true"/>
+    <user login="autotest-future54" password="12341234" companyCode="FUTURE54" companyName="Future54" companyId="54" ftId="54" basic="true"/>
+    <user login="autotest-future55" password="12341234" companyCode="FUTURE55" companyName="Future55" companyId="55" ftId="55" basic="true"/>
+    <user login="autotest-future56" password="12341234" companyCode="FUTURE56" companyName="Future56" companyId="56" ftId="56" basic="true"/>
+    <user login="autotest-future57" password="12341234" companyCode="FUTURE57" companyName="Future57" companyId="57" ftId="57" basic="true"/>
+    <user login="autotest-future58" password="12341234" companyCode="FUTURE58" companyName="Future58" companyId="58" ftId="58" basic="true"/>
+    <user login="autotest-future59" password="12341234" companyCode="FUTURE59" companyName="Future59" companyId="59" ftId="59" basic="true"/>
+    <user login="autotest-future60" password="12341234" companyCode="FUTURE60" companyName="Future60" companyId="60" ftId="60" basic="true"/>
 
     <user login="autotest-sp"       password="12341234" companyCode="SCALEPOINT"     companyName="Scalepoint" companyId="7"     ftId="1"/>
     <user login="autotest-lb"       password="12341234" companyCode="LB"             companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052"/>

@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER})
 public @interface UserCompany {
-    CompanyCode value() default CompanyCode.FUTURE1;
+    CompanyCode value() default CompanyCode.FUTURE50;
 }

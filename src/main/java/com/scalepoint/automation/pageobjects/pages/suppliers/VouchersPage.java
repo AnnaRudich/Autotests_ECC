@@ -14,6 +14,11 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
+import java.util.function.Consumer;
+
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 @EccAdminPage
 public class VouchersPage extends BaseEccAdminNavigation {
@@ -34,6 +39,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
     private WebElement tickedActiveOrExclField;
     @FindBy(xpath = "id('vouchersGridId-body')//tr")
     private List<WebElement> allVouchersList;
+
     private String byVoucherNameXpath = "id('vouchersGridId')//div[contains(.,'$1')]";
 
     @Override
@@ -77,12 +83,13 @@ public class VouchersPage extends BaseEccAdminNavigation {
      * @param query Query value
      */
     public void makeVouchersSearch(String query) {
+        find(By.xpath("//input[contains(@name,'searchfield')]")).click();
         vouchersSearchField.clear();
-        System.out.println("Search for voucher "+query);
+        logger.info("Search for voucher "+query);
         vouchersSearchField.sendKeys(query);
         vouchersSearchField.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElements(By.xpath("id('vouchersGridId')"));
+        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
     }
 
     public boolean isVouchersListContainsNewVoucher(String voucherName) {
@@ -169,6 +176,32 @@ public class VouchersPage extends BaseEccAdminNavigation {
         return this;
     }
 
+    public boolean isVoucherCreated(String voucherName) {
+        makeVouchersSearch(voucherName);
+        String xpath = byVoucherNameXpath.replace("$1", voucherName);
+        try {
+            WebElement option = find(By.xpath(xpath));
+            return option.getText().contains(voucherName);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    public VouchersPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return VouchersPage.this;
+    }
+
+    public class Asserts {
+        public Asserts assertVoucherPresent(String voucherName) {
+            assertTrue(isVoucherCreated(voucherName));
+            return this;
+        }
+
+        public Asserts assertVoucherAbsent(String voucherName) {
+            assertFalse(isVoucherCreated(voucherName));
+            return this;
+        }
+    }
 }
 

@@ -30,8 +30,6 @@ DECLARE @shopperAddressId INT = (SELECT max(ShopperAddressId) + 1 FROM [ShopperA
 DECLARE @hashedPassword NVARCHAR(256) = 'wSmzJK7mYrBOzPaLq7qFhRNG3/k='
 DECLARE @hashType VARCHAR(10) = 'SHA1'
 
-BEGIN TRANSACTION
-
   IF @userId IS NOT NULL
   BEGIN
     IF NOT EXISTS(SELECT 1 FROM [UserRoleMapping] WHERE UserId = @userId)
@@ -59,8 +57,6 @@ BEGIN TRANSACTION
 	  INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USERROLE_ITMANAGER)
 
 	PRINT 'User was successfully created with id = ' + CAST(@userId AS VARCHAR)
-
-COMMIT TRANSACTION
 
 SET NOCOUNT OFF
 

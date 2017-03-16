@@ -37,7 +37,7 @@ public class SharedEccAdminFlows implements Actions {
                             .withVoucherName(voucherAgreementData.voucherGeneralData.getVoucherGeneratedName())
                             .withAgreementDiscount(voucherAgreementData.discount);
                 })
-                .saveVoucherAgreement();
+                .createVoucherAgreement();
 
         if (StringUtils.isNotBlank(voucherAgreementData.categoryGroup)) {
             generalTab.selectCategoriesTab()

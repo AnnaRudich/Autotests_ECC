@@ -11,8 +11,10 @@ public class EditCategoryMappingsDialog extends BaseDialog {
 
     @FindBy(xpath = ".//a[contains(@class,'supplier-voucher-save-mappings')]")
     private WebElement saveMappings;
+
     @FindBy(xpath = ".//*[@id='from-list']//li")
     private List<WebElement> unmappedCategories;
+
     @FindBy(xpath = ".//*[@id='to-list']//li")
     private List<WebElement> mappedCategories;
 
@@ -23,8 +25,16 @@ public class EditCategoryMappingsDialog extends BaseDialog {
     }
 
     public VoucherAgreementDialog.CategoriesTab mapCategory(String categoryName, String subcategoryName) {
+        return clickOnCategoryAndSave(categoryName, subcategoryName, unmappedCategories);
+    }
+
+    public VoucherAgreementDialog.CategoriesTab removeMapping(String categoryName, String subcategoryName) {
+        return clickOnCategoryAndSave(categoryName, subcategoryName, mappedCategories);
+    }
+
+    private VoucherAgreementDialog.CategoriesTab clickOnCategoryAndSave(String categoryName, String subcategoryName, List<WebElement> categories) {
         String optionToFind = formatCategoryOption(categoryName, subcategoryName);
-        for (WebElement unmappedCategory : unmappedCategories) {
+        for (WebElement unmappedCategory : categories) {
             String option = unmappedCategory.getText();
             if (option.equals(optionToFind)) {
                 doubleClick(unmappedCategory);
@@ -35,7 +45,7 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         return at(VoucherAgreementDialog.CategoriesTab.class);
     }
 
-    private String formatCategoryOption(String categoryName, String subcategoryName) {
+    public static String formatCategoryOption(String categoryName, String subcategoryName) {
         return categoryName + " - " + subcategoryName;
     }
 
