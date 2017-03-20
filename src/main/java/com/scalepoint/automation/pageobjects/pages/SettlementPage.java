@@ -13,7 +13,6 @@ import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -26,7 +25,6 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;

@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
-import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
+import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -12,6 +12,8 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
+
+import java.util.function.Supplier;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-587")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -30,51 +32,105 @@ public class RecommendedItemsTests extends BaseTest {
      * THEN: Search returns P1 with PP1 is located
      * THEN: Search returns P2 with RP2 is located
      * THEN: Search returns P3 with PP3 is located
+     *
+     * ecc3278_productPricesInShopWelcome
      */
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-587 Only product prices are displayed in Product catalog in Shop")
-    public void charlie587_productPricesInShopCatalog(User user, Claim claim) {
+    public void ecc3278_productPricesInShopCatalog(User user, Claim claim) {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductCashValue productInvoiceGtMarketCash = new ProductCashValue(findProductAndOpenSid(SolrApi.findProductInvoiceHigherMarket(), textSearchPage), true);
+        ProductCashValue productInvoiceGtMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceHigherMarket, textSearchPage, null);
+        ProductCashValue productInvoiceEqualMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceEqualMarket, textSearchPage, null);
+        ProductCashValue productInvoiceLtMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceLowerMarket, textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
 
-        ProductInfo productWithEqualPrices = SolrApi.findProductInvoiceEqualMarket();
-        ProductCashValue productInvoiceEqualMarketCash = new ProductCashValue(findProductAndOpenSid(productWithEqualPrices, textSearchPage), true);
-
-        ProductInfo productWithLtPrices = SolrApi.findProductInvoiceLowerMarket();
-        SettlementDialog sid = findProductAndOpenSid(productWithLtPrices, textSearchPage);
-        ProductCashValue productInvoiceLtMarketCash = new ProductCashValue(sid, false);
-
-        SettlementPage settlementPage = sid.setValuation(SettlementDialog.Valuation.MARKET_PRICE).closeSidWithOk();
-        ShopProductSearchPage shopProductSearchPage = settlementPage.toCompleteClaimPage()
+        ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
+                .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmailAndLoginToShop()
-                .toProductSearchPage();
+                .completeWithEmailAndLoginToShop();
 
-        shopProductSearchPage
+        shopWelcomePage.doAssert(welcomePage->{
+            welcomePage.assertItemWithPricePresent(productInvoiceGtMarketCash.name, productInvoiceGtMarketCash.lowestPrice);
+            welcomePage.assertItemWithPricePresent(productInvoiceEqualMarketCash.name, productInvoiceEqualMarketCash.lowestPrice);
+            welcomePage.assertItemWithPricePresent(productInvoiceLtMarketCash.name, productInvoiceLtMarketCash.lowestPrice);
+        });
+
+        shopWelcomePage.toProductSearchPage()
                 .searchForProduct(productInvoiceGtMarketCash.name)
-                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceGtMarketCash.cashCompensationFieldValue))
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceGtMarketCash.lowestPrice))
                 .searchForProduct(productInvoiceEqualMarketCash.name)
-                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceEqualMarketCash.cashCompensationFieldValue))
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceEqualMarketCash.lowestPrice))
                 .searchForProduct(productInvoiceLtMarketCash.name)
-                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLtMarketCash.cashCompensationFieldValue));
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLtMarketCash.lowestPrice));
     }
 
-    private SettlementDialog findProductAndOpenSid(ProductInfo productInfo, TextSearchPage textSearchPage) {
-        return textSearchPage.searchByProductName(productInfo.getModel()).matchStrict(productInfo.getModel());
+    /**
+     * GIVEN: Existing CH user U1, product P1 where Retail Price RP1 > product price PP1
+     * GIVEN: product P2 where Retail Price RP2 == product price PP2
+     * product P3 where Retail Price RP3 > product price PP3 and Retail price is elected as valuation in SID
+     * WHEN: U1 completes claim, navigates to Shop, observes Catalog page
+     * THEN: Search returns P1 with PP1 is located
+     * THEN: Search returns P2 with RP2 is located
+     * THEN: Search returns P3 with PP3 is located
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-3278 Only product prices are displayed in Product catalog in Shop, we don't add products to the claim")
+    public void ecc3278_productPricesInShopCatalogNotAdding(User user, Claim claim) {
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        ProductInfo productInvoiceHigherMarket = SolrApi.findProductInvoiceHigherMarket();
+        ProductInfo productInvoiceEqualMarket = SolrApi.findProductInvoiceEqualMarket();
+        ProductInfo productInvoiceLowerMarket = SolrApi.findProductInvoiceLowerMarket();
+
+        ShopWelcomePage shopWelcomePage = settlementPage
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim)
+                .completeWithEmailAndLoginToShop();
+
+        shopWelcomePage.doAssert(welcomePage->{
+            welcomePage.assertItemNotPresent(productInvoiceHigherMarket.getModel());
+            welcomePage.assertItemNotPresent(productInvoiceEqualMarket.getModel());
+            welcomePage.assertItemNotPresent(productInvoiceLowerMarket.getModel());
+        });
+
+        shopWelcomePage.toProductSearchPage()
+                .searchForProduct(productInvoiceHigherMarket.getModel())
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceHigherMarket.getInvoicePrice()))
+                .searchForProduct(productInvoiceEqualMarket.getModel())
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceEqualMarket.getInvoicePrice()))
+                .searchForProduct(productInvoiceLowerMarket.getModel())
+                .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLowerMarket.getInvoicePrice()));
     }
+
+    private ProductCashValue findProductAdnAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
+        ProductInfo productInfo = searchStrategy.get();
+        SettlementDialog settlementDialog = textSearchPage
+                .searchByProductName(productInfo.getModel())
+                .matchStrict(productInfo.getModel());
+
+        Double cashCompensationFieldValue = settlementDialog.getCashCompensationValue();
+        Double lowestPrice = productInfo.getLowestPrice();
+        String name = settlementDialog.getDescriptionText();
+        settlementDialog.selectOtherCategoryIfNotChosen();
+        if (valuation !=null) {
+            settlementDialog.setValuation(valuation);
+        }
+        settlementDialog.closeSidWithAdd();
+        return new ProductCashValue(cashCompensationFieldValue, lowestPrice, name);
+    }
+
 
     private class ProductCashValue {
-        private Double cashCompensationFieldValue;
+        private Double invoicePrice;
+        private Double lowestPrice;
         private String name;
 
-        ProductCashValue(SettlementDialog settlementDialog, boolean addToClaim) {
-            cashCompensationFieldValue = settlementDialog.getCashCompensationValue();
-            name = settlementDialog.getDescriptionText();
-            if (addToClaim) {
-                settlementDialog.selectOtherCategoryIfNotChosen().closeSidWithAdd();
-            }
+        ProductCashValue(Double invoicePrice, Double lowestPrice, String name) {
+            this.invoicePrice = invoicePrice;
+            this.lowestPrice = lowestPrice;
+            this.name = name;
         }
     }
 }

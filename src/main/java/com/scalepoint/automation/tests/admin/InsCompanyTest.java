@@ -1,7 +1,7 @@
 package com.scalepoint.automation.tests.admin;
 
-import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;

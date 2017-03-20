@@ -1,6 +1,9 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.scalepoint.automation.pageobjects.dialogs.*;
+import com.scalepoint.automation.pageobjects.dialogs.AddGenericItemDialog;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SendSelfServiceRequestDialog;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 

@@ -1,8 +1,6 @@
 package com.scalepoint.automation.services.usersmanagement;
 
-import com.google.common.collect.Table;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.slf4j.Logger;
@@ -10,12 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Predicate;
 
 public class UsersManager {
 

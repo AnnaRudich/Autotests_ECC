@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import org.openqa.selenium.By;

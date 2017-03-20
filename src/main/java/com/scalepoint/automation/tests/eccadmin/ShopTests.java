@@ -1,7 +1,7 @@
 package com.scalepoint.automation.tests.eccadmin;
 
-import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.testng.annotations.Test;

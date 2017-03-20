@@ -1,12 +1,12 @@
 package com.scalepoint.automation.tests.admin;
 
-import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Roles;

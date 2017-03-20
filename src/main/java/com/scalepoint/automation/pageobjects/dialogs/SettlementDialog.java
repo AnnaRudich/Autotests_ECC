@@ -485,6 +485,7 @@ public class SettlementDialog extends BaseDialog {
             Wait.waitForAjaxCompleted();
         } catch (UnhandledAlertException ignored) {
         }
+
         if (acceptAlert) {
             acceptAlert();
         }

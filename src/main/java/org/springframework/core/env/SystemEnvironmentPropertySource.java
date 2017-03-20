@@ -16,9 +16,9 @@
 
 package org.springframework.core.env;
 
-import java.util.Map;
-
 import org.springframework.util.Assert;
+
+import java.util.Map;
 
 /**
  * Specialization of {@link MapPropertySource} designed for use with

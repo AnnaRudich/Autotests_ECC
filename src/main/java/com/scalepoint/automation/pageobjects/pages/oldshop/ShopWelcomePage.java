@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -92,6 +93,26 @@ public class ShopWelcomePage extends ShopFlow {
     public class Asserts {
         public Asserts assertProductCashValueIs(Double expectedPrice) {
             assertEqualsDouble(getProductCashValue(), expectedPrice, "Voucher cash value %s should be assertEqualsDouble to not depreciated voucher cash value %s");
+            return this;
+        }
+
+        public Asserts assertItemNotPresent(String productName) {
+            List<WebElement> items = findItemsByProductName(productName);
+            Assert.assertTrue(items.isEmpty(), "Product with name " + productName + " is found");
+            return this;
+        }
+
+        private List<WebElement> findItemsByProductName(String productName) {
+            return driver.findElements(By.xpath(".//div[@class='ProductList']//a[contains(text(),'" + productName + "')]"));
+        }
+
+        public Asserts assertItemWithPricePresent(String productName, Double expectedPrice) {
+            String expectedPriceValue = OperationalUtils.format(expectedPrice);
+            List<WebElement> items = findItemsByProductName(productName);
+            Assert.assertTrue(items.size() == 1, "Product with name " + productName + " not found");
+
+            List<WebElement> prices = driver.findElements(By.xpath(".//div[@class='ProductList']//td[contains(@class,'purchase_price') and contains(text(),'" + expectedPriceValue + "')]"));
+            Assert.assertTrue(prices.size() == 1, "Product with price" + expectedPriceValue + " not found");
             return this;
         }
 

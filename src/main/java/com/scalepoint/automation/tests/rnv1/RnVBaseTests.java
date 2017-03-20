@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.rnv1;
 
-import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvCommunicationPage;
@@ -9,8 +8,8 @@ import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonPr
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonType;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.ExcelDocUtil.FeedbackActionType;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;

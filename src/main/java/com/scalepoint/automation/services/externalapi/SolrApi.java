@@ -29,17 +29,23 @@ public class SolrApi {
 
     public static ProductInfo findProductInvoiceHigherMarket() {
         String filterQuery = "{!frange l=0 incl=false}sub(price_invoice_1,market_price)";
-        return findOrderableProduct(filterQuery, "ProductInvoiceHigherMarket");
+        ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceHigherMarket");
+        assert product.getInvoicePrice() > product.getMarketPrice();
+        return product;
     }
 
     public static ProductInfo findProductInvoiceLowerMarket() {
-        String filterQuery = "{!frange l=0 incl=false}sub(market_price, price_invoice_1)";
-        return findOrderableProduct(filterQuery, "ProductInvoiceLowerMarket");
+        String filterQuery = "{!frange l=1 incl=false}sub(market_price, price_invoice_1)";
+        ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceLowerMarket");
+        assert product.getInvoicePrice() < product.getMarketPrice();
+        return product;
     }
 
     public static ProductInfo findProductInvoiceEqualMarket() {
-        String filterQuery = "{!frange =0 incl=false}sub(price_invoice_1,market_price)";
-        return findOrderableProduct(filterQuery, "ProductInvoiceEqualMarket");
+        String filterQuery = "{!frange l=0 u=0}sub(price_invoice_1,market_price)";
+        ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceEqualMarket");
+        assert product.getInvoicePrice() == product.getMarketPrice();
+        return product;
     }
 
     private static ProductInfo findOrderableProduct(String filterQuery, String message) {

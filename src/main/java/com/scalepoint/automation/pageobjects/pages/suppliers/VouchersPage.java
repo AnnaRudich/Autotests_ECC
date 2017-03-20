@@ -16,7 +16,6 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 

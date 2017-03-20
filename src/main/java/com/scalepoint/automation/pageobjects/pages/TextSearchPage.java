@@ -60,6 +60,9 @@ public class TextSearchPage extends Page {
     @FindBy(xpath = "//img[@id='sortOrderableImg' and contains(@src,'text_search\\icon_order_az.gif')]")
     private Image ascendingOrderable;
 
+    @FindBy(xpath = "//button[contains(@onclick, 'backToSettlement()')]")
+    private WebElement backToSettlementButton;
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/matching_engine/TextSearch.jsp";
@@ -93,6 +96,11 @@ public class TextSearchPage extends Page {
             currentAttempt++;
         }
         return this;
+    }
+
+    public SettlementPage toSettlementPage() {
+        backToSettlementButton.click();
+        return Page.to(SettlementPage.class);
     }
 
     public TextSearchPage sortMarketPricesAscending() {
