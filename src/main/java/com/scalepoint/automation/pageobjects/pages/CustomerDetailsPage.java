@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
@@ -41,7 +42,9 @@ public class CustomerDetailsPage extends BaseClaimPage {
 
     public CustomerDetailsPage cancelClaim() {
         cancelClaimButton.click();
-        acceptAlert();
+        By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
+        Wait.waitForDisplayed(alertMessageBy);
+        $(alertMessageBy).click();
         return at(CustomerDetailsPage.class);
     }
 
