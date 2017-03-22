@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -41,7 +42,7 @@ public class NotCheapestChoiceTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         String selectedReason = selectFirstNotCheapestReason(claimItem, settlementPage);
         settlementPage
-                .findClaimLine(claimItem.getTextFieldSP())
+                .findClaimLine(Constants.TEXT_LINE)
                 .editLine()
                 .doAssert(sid -> sid.assertNotCheapestReasonIs(selectedReason));
     }
@@ -135,7 +136,7 @@ public class NotCheapestChoiceTests extends BaseTest {
         selectFirstNotCheapestReason(claimItem, settlementPage);
 
         SettlementDialog settlementDialog = settlementPage
-                .findClaimLine(claimItem.getTextFieldSP())
+                .findClaimLine(Constants.TEXT_LINE)
                 .editLine();
         NotCheapestChoiceDialog notCheapestChoiceDialog = settlementDialog.editNotCheapestReason();
         String updatedReason = notCheapestChoiceDialog.selectSecondReason();

@@ -175,7 +175,7 @@ public class SidTests extends BaseTest {
         int companyDiscount = 5;
 
         SidCalculator.VoucherValuation voucherValuation =
-                SidCalculator.calculateVoucherValuationWithDiscountDistribution(1000.0, voucherDiscount, companyDiscount);
+                SidCalculator.calculateVoucherValuationWithDiscountDistribution(Constants.PRICE_2400, voucherDiscount, companyDiscount);
 
         testDiscountDistributionUpdate(user, claim, item, existingVoucher, customerDiscount, voucherValuation, true);
     }
@@ -212,7 +212,7 @@ public class SidTests extends BaseTest {
         int companyDiscount = 5;
 
         SidCalculator.VoucherValuation voucherValuation =
-                SidCalculator.calculateVoucherValuationWithDiscountDistribution(1000.0, voucherDiscount, companyDiscount);
+                SidCalculator.calculateVoucherValuationWithDiscountDistribution(Constants.PRICE_2400, voucherDiscount, companyDiscount);
 
         testDiscountDistributionUpdate(user, claim, item, existingVoucher, customerDiscount, voucherValuation, false);
     }
