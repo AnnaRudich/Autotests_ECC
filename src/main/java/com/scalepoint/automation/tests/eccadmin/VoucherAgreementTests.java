@@ -568,6 +568,7 @@ public class VoucherAgreementTests extends BaseTest {
                     switch (voucherAgreementData.voucherAgreementState) {
                         case ACTIVE:
                             tab.assertVoucherStatus(voucherAgreementData.voucherName, true);
+                            break;
                         case NOT_ACTIVE:
                             tab.assertVoucherStatus(voucherAgreementData.voucherName, false);
                             break;

@@ -24,8 +24,6 @@ import static com.scalepoint.automation.utils.Http.*;
 public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
-    private static String DATE_FORMAT = "yyyy-MM-dd";
-
     private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
 
     public ClaimApi(User user) {
@@ -47,13 +45,14 @@ public class ClaimApi extends AuthenticationApi {
     private void createClaim(Claim claim, int attempt, String policyType) {
         log.info("Create client: " + claim.getClaimNumber());
 
+        String DATE_FORMAT = "yyyy-MM-dd";
         List<NameValuePair> clientParams = ParamsBuilder.create().
                 add("policytype", policyType).
                 add("damageDate", new SimpleDateFormat(DATE_FORMAT).format(new Date())).
                 add("last_name", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
                 add("policy_number", claim.getPolicyNumber()).
-                add("claim_number", claim.getClaimNumber()).
+                add("claim_number", "9433019").
                 add("url", "").get();
 
         try {
@@ -64,6 +63,10 @@ public class ClaimApi extends AuthenticationApi {
                     createUserResponse.getHeaders("Location")[0] :
                     null;
 
+            if (location.getValue().contains("error=1")) {
+                throw new IllegalStateException("Response contains wrong location: "+location.getValue());
+            }
+
             log.info("CreateUser redirected to: " + location);
             log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
@@ -71,7 +74,7 @@ public class ClaimApi extends AuthenticationApi {
             CurrentUser.setClaimId(claimId);
 
             Browser.driver().get(location.getValue() + "settlement.jsp");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {
                 createClaim(claim, ++attempt, policyType);

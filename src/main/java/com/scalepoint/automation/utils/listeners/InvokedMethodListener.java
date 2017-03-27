@@ -89,7 +89,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
-        if (iTestResult.getThrowable() != null) {
+        if (!iTestResult.isSuccess()) {
             Selenide.screenshot(method.getName());
         }
     }
