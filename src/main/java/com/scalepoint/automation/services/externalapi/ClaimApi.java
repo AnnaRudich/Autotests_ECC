@@ -52,7 +52,7 @@ public class ClaimApi extends AuthenticationApi {
                 add("last_name", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
                 add("policy_number", claim.getPolicyNumber()).
-                add("claim_number", "9433019").
+                add("claim_number", claim.getClaimNumber()).
                 add("url", "").get();
 
         try {
