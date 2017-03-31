@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.eccadmin;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog;
@@ -328,14 +329,9 @@ public class VoucherAgreementTests extends BaseTest {
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
 
-        testVoucherVisibilityAcrossCompanies(data);
-
         String vname = voucher.getVoucherGeneratedName();
 
-        Page.at(VouchersPage.class)
-                .toSuppliersPage()
-                .editSupplier(supplier.getSupplierName())
-                .selectAgreementsTab()
+        testVoucherVisibilityAcrossCompanies(data)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, true))
                 .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
                 .closeSupplier()
@@ -377,13 +373,8 @@ public class VoucherAgreementTests extends BaseTest {
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
 
-        testVoucherVisibilityAcrossCompanies(data);
-
         String vname = voucher.getVoucherGeneratedName();
-        Page.at(VouchersPage.class)
-                .toSuppliersPage()
-                .editSupplier(supplier.getSupplierName())
-                .selectAgreementsTab()
+        testVoucherVisibilityAcrossCompanies(data)
                 .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, false))
                 .closeSupplier()
@@ -500,7 +491,7 @@ public class VoucherAgreementTests extends BaseTest {
         }
     }
 
-    private void testVoucherVisibilityAcrossCompanies(VoucherAgreementData voucherAgreementData) {
+    private SupplierDialog.AgreementsTab testVoucherVisibilityAcrossCompanies(VoucherAgreementData voucherAgreementData) {
         SuppliersPage suppliersPage = loginToEccAdmin(voucherAgreementData.creator);
 
         String supplierName;
@@ -576,6 +567,7 @@ public class VoucherAgreementTests extends BaseTest {
                             tab.assertVoucherAbsent(voucherAgreementData.voucherName);
                     }
                 });
+        return BaseDialog.at(SupplierDialog.AgreementsTab.class);
     }
 
     public enum VoucherAgreementState {
