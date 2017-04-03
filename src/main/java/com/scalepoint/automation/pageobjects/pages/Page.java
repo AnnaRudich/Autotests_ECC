@@ -140,7 +140,7 @@ public abstract class Page implements Actions {
 
     private static <T extends Page> void loadJavascriptHelpersIfNeeds(T page) {
         if (page instanceof RequiresJavascriptHelpers) {
-            Object o = ((JavascriptExecutor) Browser.driver()).executeScript("try { return isUtilsInitialized(); } catch (e) { return false;}");
+            Object o = ((JavascriptExecutor) Browser.driver()).executeScript("try { return isUtilsInitialized != 'undefined' && isUtilsInitialized(); } catch (e) { return false;}");
             if (!(o instanceof Boolean && Boolean.valueOf(o.toString()))) {
                 JavascriptHelper.initializeCommonFunctions();
             }
