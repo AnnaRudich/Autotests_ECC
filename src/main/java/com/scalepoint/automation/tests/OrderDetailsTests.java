@@ -286,6 +286,7 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(textSearch.getCatProduct1())
+                .sortOrderableFirst()
                 .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
 
@@ -329,6 +330,7 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(textSearch.getCatProduct1())
+                .sortOrderableFirst()
                 .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
 
