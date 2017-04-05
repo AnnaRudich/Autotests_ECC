@@ -115,9 +115,10 @@ public class ClaimTests extends BaseTest {
                 .login();
     }
 
+    //TODO
     @Test(dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approved claim")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = true)
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void charlie_1585_auditApprovedClaimAfterFnolSubmit(User user, Claim claim) {
@@ -237,6 +238,7 @@ public class ClaimTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
+    @RequiredSetting(type = FTSetting.PAYOUT_TO_CHEQUE_CLAIMSHANDLER)
     public void charlie544_2632_completeSPSimpleClaimWizard(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()

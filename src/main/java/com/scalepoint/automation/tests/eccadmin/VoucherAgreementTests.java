@@ -549,6 +549,7 @@ public class VoucherAgreementTests extends BaseTest {
                 break;
             case NOT_VISIBLE:
                 vouchersPage.doAssert(page -> page.assertVoucherAbsent(voucherAgreementData.voucherName));
+                return null;
         }
 
         /* test voucher state in supplier window*/
@@ -574,7 +575,6 @@ public class VoucherAgreementTests extends BaseTest {
         ACTIVE,
         NOT_ACTIVE,
         NOT_VISIBLE
-
     }
 
 }
