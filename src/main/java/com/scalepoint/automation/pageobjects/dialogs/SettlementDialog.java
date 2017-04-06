@@ -497,7 +497,7 @@ public class SettlementDialog extends BaseDialog {
                 element.click();
                 acceptAlert();
                 return element;
-            });
+            }, 10, 1);
         } catch (Exception ignored) {
         }
         return Page.at(pageClass);

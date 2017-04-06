@@ -102,7 +102,7 @@ public class ClaimTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = true)
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void loginToSelfService2_0(User user, Claim claim) {
