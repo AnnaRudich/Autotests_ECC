@@ -43,11 +43,11 @@
 
             declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
             EXEC autotests_create_user @tryg_id, 'autotest-trygfors', @chUserRights
-            EXEC autotests_create_redrule_tryg
+            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
             declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
             EXEC autotests_create_user @tryghold_id, 'autotest-trygholding', @chUserRights
-            EXEC autotests_create_redrule_tryg
+            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
             declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'ALKA')
             EXEC autotests_create_user @alka_id, 'autotest-alka', @chUserRights

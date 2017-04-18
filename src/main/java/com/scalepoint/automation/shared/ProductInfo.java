@@ -16,6 +16,9 @@ public class ProductInfo {
     @Field("model")
     private String model;
 
+    @Field("price")
+    private double price;
+
     @Field("market_price")
     private double marketPrice;
 
@@ -54,6 +57,10 @@ public class ProductInfo {
 
     public String getModel() {
         return model;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public double getMarketPrice() {
@@ -95,6 +102,7 @@ public class ProductInfo {
                 ", model='" + model + '\'' +
                 ", orderable=" + orderable +
                 ", sku='" + sku + '\'' +
+                ", price=" + price +
                 ", lowestPrice=" + lowestPrice +
                 ", invoicePrice=" + invoicePrice +
                 ", supplierName='" + supplierName + '\'' +

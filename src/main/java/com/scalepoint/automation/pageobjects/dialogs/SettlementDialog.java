@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.commands.Val;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -23,6 +24,8 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -35,6 +38,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.*;
+
 
 public class SettlementDialog extends BaseDialog {
 
@@ -190,7 +194,9 @@ public class SettlementDialog extends BaseDialog {
         VOUCHER("valuation-type-VOUCHER"),
         NEW_PRICE("valuation-type-NEW_PRICE"),
         MARKET_PRICE("valuation-type-MARKET_PRICE"),
-        DISCRETIONARY("valuation-type-DISCRETIONARY_VALUATION");
+        DISCRETIONARY("valuation-type-DISCRETIONARY_VALUATION"),
+        CATALOG_PRICE("valuation-type-CATALOG_PRICE"),
+        USED_PRICE("valuation-type-USED_PRICE");
 
         private String className;
 
@@ -792,13 +798,24 @@ public class SettlementDialog extends BaseDialog {
         private Double totalPrice;
         private String description;
 
-        public ValuationRow makeActive() {
-            WebDriver driver = Browser.driver();
-            By xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
+        WebDriver driver;
+        By xpath;
+        WebElement webElement;
+
+        private void setUp(){
+            driver = Browser.driver();
+            xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
             Wait.waitForStaleElement(xpath);
-            WebElement webElement = driver.findElement(xpath);
-            boolean checked = webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
-            if (!checked) {
+            webElement = driver.findElement(xpath);
+        }
+
+        public Boolean isChecked(){
+            setUp();
+            return webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
+        }
+
+        public ValuationRow makeActive() {
+            if (!isChecked()) {
                 //one click doesn't work, each click renew dom so we should wait for stale element each time
                 for (int i = 0; i < 3; i++) {
                     Wait.waitForStaleElement(xpath);
@@ -1118,6 +1135,35 @@ public class SettlementDialog extends BaseDialog {
             assertFalse(voucherDropdownElement.distanceCalculated);
             return this;
         }
+
+        public Asserts assertCashCompensationIsDepreciated(int percentage, Valuation valuation){
+            ValuationRow valuationRow = parseValuationRow(valuation);
+            assertTrue(valuationRow.getCashCompensation() == valuationRow.getTotalPrice()*(1-(Double.valueOf(percentage)/100)));
+            return this;
+        }
+
+        public Asserts assertIsLowestPriceValuationSelected(Valuation... valuations){
+            List<ValuationRow> valuationRows = new ArrayList<>();
+            Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
+            assertTrue(valuationRows.stream()
+                    .sorted(Comparator.comparing(valuationRow -> valuationRow.getCashCompensation()))
+                    .findFirst().get()
+                    .isChecked());
+            return this;
+        }
+
+        public Asserts assertPriceIsSameInTwoColumns(Valuation valuation){
+            ValuationRow valuationRow = parseValuationRow(valuation);
+            assertEquals(valuationRow.cashCompensation, valuationRow.totalPrice);
+            return this;
+        }
+
+        public Asserts assertIsVoucherDiscountApplied(Double newPrice){
+            ValuationRow valuationRow = parseValuationRow(Valuation.VOUCHER);
+            assertTrue(valuationRow.getCashCompensation() == newPrice - (newPrice * getVoucherPercentage() / 100));
+            return this;
+        }
+
     }
 
 

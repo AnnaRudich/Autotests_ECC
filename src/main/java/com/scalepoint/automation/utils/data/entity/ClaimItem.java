@@ -262,6 +262,10 @@ public class ClaimItem {
 
     }
 
+    public Double getCustomerDemand() {
+        return customerDemand;
+    }
+
     public Double getUsedPrice() {
         return usedPrice;
     }

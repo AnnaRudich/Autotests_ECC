@@ -41,6 +41,13 @@ public class SolrApi {
         return product;
     }
 
+    public static ProductInfo findProductPriceLowerMarket() {
+        String filterQuery = "{!frange l=1 incl=false}sub(market_price, price)";
+        ProductInfo product = findOrderableProduct(filterQuery, "ProductPriceLowerMarket");
+        assert product.getPrice() < product.getMarketPrice();
+        return product;
+    }
+
     public static ProductInfo findProductInvoiceEqualMarket() {
         String filterQuery = "{!frange l=0 u=0}sub(price_invoice_1,market_price)";
         ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceEqualMarket");
