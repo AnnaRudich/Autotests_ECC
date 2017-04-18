@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="bza" runOnChange="true">
+
+        <comment>Create Reduction rules</comment>
+
+        <sql>
+            /* add reduction rule for all companies for test_category */
+            EXEC autotests_create_pseudo_category 'test_category', 'test_category_group', 'All Categories'
+            EXEC autotests_create_redrule 'autotest-example2', NULL, 'test_category', 'test_category_group', 'test1', 0, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_redrule 'autotest-example3', NULL, 'Videokamera', 'Foto &amp; Video', 'example3', 5, 10, NULL, NULL, 0.2, 0, 1
+        </sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>
+
+
+
