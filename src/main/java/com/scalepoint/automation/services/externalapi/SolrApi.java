@@ -44,7 +44,7 @@ public class SolrApi {
     public static ProductInfo findProductPriceLowerMarket() {
         String filterQuery = "{!frange l=1 incl=false}sub(market_price, price)";
         ProductInfo product = findOrderableProduct(filterQuery, "ProductPriceLowerMarket");
-        assert product.getInvoicePrice() < product.getMarketPrice();
+        assert product.getPrice() < product.getMarketPrice();
         return product;
     }
 

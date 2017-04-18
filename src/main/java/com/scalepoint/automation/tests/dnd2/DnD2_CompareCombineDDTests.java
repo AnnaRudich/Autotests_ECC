@@ -10,7 +10,6 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -28,13 +27,11 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     private int deprecationValue = 10;
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "")
+    @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if new price is discounted")
     public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
-                .openSid()
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setCustomerDemand(claimItem.getCustomerDemand())
                 .openAddValuationForm()
@@ -55,14 +52,12 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    @Test(dataProvider = "testDataProvider", description = "")
+    @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is lower than voucher discount correct item is selected")
     public void charlie586_addManuallyWithVoucherAndDepreciationLowerThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem){
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSid();
-        settlementDialog.setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
-                .setNewPrice(claimItem.getTrygNewPrice())
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()));
+        settlementDialog.setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(settlementDialog.getVoucherPercentage()/2)
                 .doAssert(asserts -> {
@@ -75,13 +70,11 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    @Test(dataProvider = "testDataProvider", description = "")
+    @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is bigger than voucher discount correct item is selected")
     public void charlie586_addManuallyWithVoucherAndDepreciationHigherThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem){
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSid();
-        settlementDialog.setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP());
         int depreciationPercentage = settlementDialog.getVoucherPercentage()*2;
@@ -96,13 +89,11 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    @Test(dataProvider = "testDataProvider", description = "")
+    @Test(dataProvider = "testDataProvider", description = "Add item manually with comparision of dd disabled, check if both are depreciated and lower price is selected")
     public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem){
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSid();
-        settlementDialog.setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP());
         int depreciationPercentage = settlementDialog.getVoucherPercentage()*2;
@@ -115,11 +106,10 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     }
 
     //@TODO: find solution how to deal with react.js components in ss
-    @Ignore
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider", description = "")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())

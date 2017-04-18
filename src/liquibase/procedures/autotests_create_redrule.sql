@@ -30,8 +30,6 @@ AS
 	DECLARE @CompanyID int
   IF @CompanyName IS NOT NULL
     SET @CompanyID = (select ICRFNBR from InsComp where CompanyCode = @CompanyName)
-  ELSE
-    SET @CompanyID = NULL
 
 	DECLARE @PseudoCategoryId int = (SELECT pseudocategoryid FROM PsuedoCategory pc
     JOIN Text_Pseudocat tp on pc.PseudoCategoryText = tp.textid
