@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.codeborne.selenide.commands.Val;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -13,6 +12,7 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import com.sun.java.swing.plaf.windows.WindowsTreeUI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.*;
@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -1048,12 +1049,21 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertMarketPriceVisible() {
             String failMessage = "Market price must be visible";
+            return checkVisibilityOfValuationRow(failMessage, Valuation.MARKET_PRICE);
+        }
+
+        public Asserts assertCatalogPriceVisible() {
+            String failMessage = "Catalog price must be visible";
+            return checkVisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
+        }
+
+        private Asserts checkVisibilityOfValuationRow(String message, Valuation valuation){
             try {
-                if (parseValuationRow(Valuation.MARKET_PRICE).getDescription() == null) {
-                    Assert.fail(failMessage);
+                if (parseValuationRow(valuation).getDescription() == null) {
+                    Assert.fail(message);
                 }
             } catch (Exception e) {
-                Assert.fail(failMessage);
+                Assert.fail(message);
             }
             return this;
         }
@@ -1155,6 +1165,16 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertPriceIsSameInTwoColumns(Valuation valuation){
             ValuationRow valuationRow = parseValuationRow(valuation);
             assertEquals(valuationRow.cashCompensation, valuationRow.totalPrice);
+            return this;
+        }
+
+        public Asserts assertTotalPriceIsSameInRows(Valuation... valuations) {
+            List<ValuationRow> valuationRows = new ArrayList<>();
+            Arrays.stream(valuations).forEach(valuation -> valuationRows.add(parseValuationRow(valuation)));
+            assertTrue(valuationRows.stream()
+                    .map(price -> price.getTotalPrice()).collect(Collectors.toList()).stream()
+                    .distinct().count() <= 1,
+                    "Total prices are not equal");
             return this;
         }
 

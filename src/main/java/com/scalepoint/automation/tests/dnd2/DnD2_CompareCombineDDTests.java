@@ -2,7 +2,9 @@ package com.scalepoint.automation.tests.dnd2;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -13,6 +15,8 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import java.time.Year;
+
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
 
 
 /**
@@ -25,6 +29,26 @@ import java.time.Year;
 public class DnD2_CompareCombineDDTests extends BaseTest {
 
     private int deprecationValue = 10;
+
+    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
+    @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
+    public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim){
+        ProductInfo productInfo = SolrApi.findProductInvoiceHigherMarket();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(productInfo.getModel())
+                .openSidForFirstProduct()
+                .setDepreciation(deprecationValue)
+                .doAssert(asserts -> {
+                    asserts.assertMarketPriceVisible();
+                    asserts.assertCatalogPriceVisible();
+                    asserts.assertPriceIsSameInTwoColumns(CATALOG_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(deprecationValue, MARKET_PRICE);
+                    asserts.assertIsLowestPriceValuationSelected(MARKET_PRICE, CATALOG_PRICE);
+                });
+    }
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if new price is discounted")
@@ -41,12 +65,12 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
-                    asserts.assertCashCompensationIsDepreciated(deprecationValue, SettlementDialog.Valuation.NEW_PRICE);
-                    asserts.assertCashCompensationIsDepreciated(deprecationValue, SettlementDialog.Valuation.CUSTOMER_DEMAND);
-                    asserts.assertPriceIsSameInTwoColumns(SettlementDialog.Valuation.USED_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(deprecationValue, NEW_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(deprecationValue, CUSTOMER_DEMAND);
+                    asserts.assertPriceIsSameInTwoColumns(USED_PRICE);
                     asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
-                    asserts.assertIsLowestPriceValuationSelected(SettlementDialog.Valuation.VOUCHER, SettlementDialog.Valuation.NEW_PRICE,
-                            SettlementDialog.Valuation.USED_PRICE, SettlementDialog.Valuation.CUSTOMER_DEMAND);
+                    asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE,
+                            USED_PRICE, CUSTOMER_DEMAND);
                 });
     }
 
@@ -61,10 +85,10 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(settlementDialog.getVoucherPercentage()/2)
                 .doAssert(asserts -> {
-                    asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage()/2, SettlementDialog.Valuation.NEW_PRICE);
-                    asserts.assertIsLowestPriceValuationSelected(SettlementDialog.Valuation.VOUCHER, SettlementDialog.Valuation.NEW_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage()/2, NEW_PRICE);
+                    asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
                 })
-                .parseValuationRow(SettlementDialog.Valuation.VOUCHER)
+                .parseValuationRow(VOUCHER)
                 .doAssert(asserts -> asserts.assertDepreciationPercentageIs(0));
     }
 
@@ -80,10 +104,10 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         int depreciationPercentage = settlementDialog.getVoucherPercentage()*2;
         settlementDialog.setDepreciation(depreciationPercentage)
                 .doAssert(asserts -> {
-                    asserts.assertCashCompensationIsDepreciated(depreciationPercentage, SettlementDialog.Valuation.NEW_PRICE);
-                    asserts.assertIsLowestPriceValuationSelected(SettlementDialog.Valuation.VOUCHER, SettlementDialog.Valuation.NEW_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
+                    asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
                 })
-                .parseValuationRow(SettlementDialog.Valuation.NEW_PRICE)
+                .parseValuationRow(NEW_PRICE)
                 .doAssert(asserts -> asserts.assertDepreciationPercentageIs(depreciationPercentage));
     }
 
@@ -99,9 +123,9 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         int depreciationPercentage = settlementDialog.getVoucherPercentage()*2;
         settlementDialog.setDepreciation(depreciationPercentage)
                 .doAssert(asserts -> {
-                    asserts.assertCashCompensationIsDepreciated(depreciationPercentage, SettlementDialog.Valuation.NEW_PRICE);
-                    asserts.assertCashCompensationIsDepreciated(depreciationPercentage, SettlementDialog.Valuation.VOUCHER);
-                    asserts.assertIsLowestPriceValuationSelected(SettlementDialog.Valuation.VOUCHER, SettlementDialog.Valuation.NEW_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(depreciationPercentage, VOUCHER);
+                    asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
                 });
     }
 
