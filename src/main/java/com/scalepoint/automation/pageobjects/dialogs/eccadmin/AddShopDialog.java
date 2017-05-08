@@ -6,6 +6,9 @@ import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
+
+import java.util.function.Consumer;
 
 import static org.testng.Assert.assertTrue;
 
@@ -20,6 +23,8 @@ public class AddShopDialog extends BaseDialog {
     private static final String updateShopButtonXpath = "//a[contains(@class,'supplier-save-shop-btn')]";
     private static final String cancelButtonXpath = "//a[contains(@class,'supplier-cancel-edit-shop-btn')]";
 
+    @FindBy(xpath = "//label[contains(text(),'Name:')]")
+    private WebElement nameLabel;
     @FindBy(name = "shopName")
     private WebElement nameField;
     @FindBy(name = "shopAddress")
@@ -43,9 +48,12 @@ public class AddShopDialog extends BaseDialog {
     @FindBy(id = "cancelCreateSupplierBtnId")
     private WebElement cancelButton;
 
+    @FindBy(id = "editSupplierShopTabFormId")
+    private WebElement editableShopDialog;
+
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(nameField);
+        Wait.waitForVisible(nameLabel);
         return this;
     }
 
@@ -112,6 +120,19 @@ public class AddShopDialog extends BaseDialog {
         cityField.sendKeys(shop.getShopCity());
         phoneField.sendKeys(shop.getPhone());
         eVoucherNotificationEmails.sendKeys(shop.geteVoucherEmail());
+    }
+
+    public AddShopDialog doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return AddShopDialog.this;
+    }
+
+    public class Asserts {
+
+        public Asserts assertIsShopDialogNotEditable() {
+            Assert.assertTrue(Wait.invisible(editableShopDialog));
+            return this;
+        }
     }
 
 }

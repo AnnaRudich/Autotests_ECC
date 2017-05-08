@@ -27,6 +27,16 @@
 
             /* Webhallen */
             EXEC autotests_create_voucher_agreement 'Autotest-BO', 24398, '200018', 6, 7
+
+            /* Autotest-Supplier-Bauta_SP,  bauta */
+            declare @SupplierId int
+            EXEC autotests_create_supplier 'Autotest-Supplier-Bauta_SP', 7, '9200', @SupplierId OUTPUT
+            EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, 12
+
+            /* Autotest-Supplier-Bauta,  bauta */
+            declare @SupplierIdBauta int
+            EXEC autotests_create_supplier 'Autotest_Supplier_Bauta', 12, '9200', @SupplierIdBauta OUTPUT
+            EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
         </sql>
         <rollback/>
     </changeSet>

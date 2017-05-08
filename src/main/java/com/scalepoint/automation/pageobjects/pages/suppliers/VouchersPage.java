@@ -16,6 +16,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -40,6 +41,8 @@ public class VouchersPage extends BaseEccAdminNavigation {
     private List<WebElement> allVouchersList;
 
     private String byVoucherNameXpath = "id('vouchersGridId')//div[contains(.,'$1')]";
+    private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-voucherListExclusiveId ')]";
+    private String byActiveXpath = "//td[contains(@class, 'x-grid-cell-voucherListActiveId ')]";
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -186,6 +189,11 @@ public class VouchersPage extends BaseEccAdminNavigation {
         }
     }
 
+    private boolean isTickDisplayed(String query, String XpathLocator){
+        makeVouchersSearch(query);
+        return $(By.xpath(XpathLocator)).getAttribute("class").contains("tick");
+    }
+
     public VouchersPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return VouchersPage.this;
@@ -199,6 +207,31 @@ public class VouchersPage extends BaseEccAdminNavigation {
 
         public Asserts assertVoucherAbsent(String voucherName) {
             assertFalse(isVoucherCreated(voucherName));
+            return this;
+        }
+
+        public Asserts assertsIsExclusiveColumnDisplayed(){
+            assertTrue(isExclusiveColumnDisplayed());
+            return this;
+        }
+
+        public Asserts assertsIsExclusiveColumnNotDisplayed(){
+            assertFalse(isExclusiveColumnDisplayed());
+            return this;
+        }
+
+        public Asserts assertsIsExclusiveTickForVoucherDisplayed(String voucherName){
+            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
+            return this;
+        }
+
+        public Asserts assertsIsActiveTickForVoucherDisplayed(String voucherName){
+            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
+            return this;
+        }
+
+        public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName){
+            assertFalse(isTickDisplayed(voucherName, byExclusiveXpath));
             return this;
         }
     }

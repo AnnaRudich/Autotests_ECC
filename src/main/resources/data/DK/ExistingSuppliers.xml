@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<exisitingSuppliers>
+    <simpleSupplier name="Autotest-Supplier-Bauta_SP" agreement="Autotest-Bauta-Voucher-10" insuranceCompany="SCALEPOINT" agreementCompany="Bauta" shopName="Test shop Autotest-Bauta-Voucher"/>
+    <simpleSupplier name="Autotest_Supplier_Bauta" agreement="Autotest_Bauta_Voucher-15" insuranceCompany="BAUTA" agreementCompany="Bauta"/>
+</exisitingSuppliers>

@@ -191,6 +191,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(name = "fileData")
         private WebElement supplierLogo;
 
+        @FindBy(id = "editSupplierTabPanelId")
+        private WebElement editableSupplierDialog;
+
         public GeneralTab setName(String name) {
             this.name.clear();
             this.name.sendKeys(name);
@@ -248,6 +251,11 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             public Asserts assertWebsite(String websiteValue) {
                 Assert.assertEquals(website.getAttribute("value"), websiteValue);
+                return this;
+            }
+
+            public Asserts assertIsDialogNotEditable(){
+                Assert.assertTrue(Wait.invisible(editableSupplierDialog));
                 return this;
             }
         }
@@ -313,6 +321,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
     public static class AgreementsTab extends BaseDialog implements SupplierTabs {
 
+        @FindBy(xpath = "//td[contains(@class, 'agreementsPanelExclusiveId')]")
+        private WebElement exclusiveGridCell;
+
         @FindBy(className = "supplier-new-voucher-agreement-btn")
         private WebElement createNewVoucherAgreementBtn;
 
@@ -336,6 +347,10 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public enum  ActionType {
             LEAVE,
             JOIN
+        }
+
+        public boolean isExclusiveTickForFirstVoucherAvaiable(){
+            return exclusiveGridCell.getAttribute("class").contains("tick");
         }
 
         public AgreementsTab doWithAgreement(String voucherAgreementName, ActionType actionType) {
@@ -376,6 +391,16 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
                 Assert.assertFalse($(By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherName + "']")).exists());
                 return this;
             }
+
+            public Asserts assertIsExclusiveTickForVoucherVisible(){
+                Assert.assertTrue(isExclusiveTickForFirstVoucherAvaiable());
+                return this;
+            }
+
+            public Asserts assertIsExclusiveTickForVoucherNotVisible(){
+                Assert.assertFalse(isExclusiveTickForFirstVoucherAvaiable());
+                return this;
+            }
         }
     }
 
@@ -393,11 +418,14 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(xpath = "//div[contains(@class,'supplier-delete-shop-confirm-window')]//span[contains(text(),'Yes')]")
         private WebElement deleteShopYesButton;
 
+        @FindBy(id = "supplierShopsGridId")
+        private WebElement shopsGridId;
+
         private String byShopNameXpath = "id('supplierShopsGridId')//div[contains(text(),'$1')]";
 
         @Override
         protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(addShopButton);
+            Wait.waitForVisible(shopsGridId);
             return this;
         }
 
@@ -421,6 +449,13 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             scrollTo(item);
             clickAndWaitForEnabling(item, By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]"));
             return this;
+        }
+
+        public AddShopDialog openShop(String shopName) {
+            WebElement item = find(byShopNameXpath, shopName);
+            scrollTo(item);
+            doubleClick(item);
+            return at(AddShopDialog.class);
         }
 
         public AddShopDialog openEditShopDialog(String shopName) {

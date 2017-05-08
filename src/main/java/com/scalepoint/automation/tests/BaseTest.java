@@ -16,9 +16,12 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
+import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
@@ -172,7 +175,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                     User user = indexToUser.get(i);
                     CurrentUser.setUser(user);
                     instances.add(user);
-                } else {
+                }
+                else if(parameterType.equals(SimpleSupplier.class)){
+                    Annotation[] annotations = method.getParameterAnnotations()[i];
+                    instances.add(getTestDataForExistingSuppliers(annotations));
+                }
+                else {
                     try {
                         instances.add(TestData.Data.getInstance(parameterType));
                     } catch (Exception e) {
@@ -185,6 +193,18 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
         }
         return instances;
+    }
+
+    private static Object getTestDataForExistingSuppliers(Annotation[] annotations) {
+        ExistingSuppliers existingSuppliers = (ExistingSuppliers) TestData.Data.getInstance(ExistingSuppliers.class);
+        if(annotations.length > 0) {
+            Annotation annotation = annotations[0];
+            if (annotation.annotationType().equals(SupplierCompany.class)) {
+                SupplierCompany supplierCompany = (SupplierCompany) annotation;
+                return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(supplierCompany.value().name())).findFirst().get();
+            }
+        }
+        return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().get();
     }
 
     private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {

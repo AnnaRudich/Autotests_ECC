@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -47,7 +48,12 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     @FindBy(xpath = "//*[contains(@id, 'suggest_item_td')]")
     private List<WebElement> allSuggestionsList;
 
+    @FindBy(xpath = "//a[@href='toME.action']")
+    private WebElement toMatchingEngineLink;
+
     private String bySupplierNameXpath = "//tbody[contains(@id,'gridview')]//tr[contains(.,'$1')]";
+    private String byVoucherXpath = "//td[contains(@class, 'x-grid-cell-supplierListVouchersId ')]";
+    private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-supplierListExclusiveId ')]";
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -110,8 +116,17 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         }
     }
 
+    private boolean isTickDisplayed(String query, String XpathLocator){
+        makeSupplierSearch(query);
+        return $(By.xpath(XpathLocator)).getAttribute("class").contains("tick");
+    }
+
     public boolean isExclusiveColumnDisplayed() {
         return columnsTitles.getText().contains("Exclusive");
+    }
+
+    public boolean isColumnDisplayed(String columnName) {
+        return columnsTitles.getText().contains(columnName);
     }
 
     public boolean isExclOrVoucherFieldTicked() {
@@ -131,6 +146,36 @@ public class SuppliersPage extends BaseEccAdminNavigation {
 
         public Asserts assertSupplierAbsent(String supplierName) {
             assertFalse(isSupplierCreated(supplierName));
+            return this;
+        }
+
+        public Asserts assertsIsToMatchingEngineLinkDisplayed(){
+            assertTrue(toMatchingEngineLink.isDisplayed());
+            return this;
+        }
+
+        public Asserts assertsIsExclusiveColumnDisplayed(){
+            assertTrue(isExclusiveColumnDisplayed());
+            return this;
+        }
+
+        public Asserts assertsIsExclusiveColumnNotDisplayed(){
+            assertFalse(isExclusiveColumnDisplayed());
+            return this;
+        }
+
+        public Asserts assertsIsVoucherTickForSupllierDisplayed(String supplierName){
+            assertTrue(isTickDisplayed(supplierName, byVoucherXpath));
+            return this;
+        }
+
+        public Asserts assertsIsExclusiveTickForSupplierDisplayed(String supplierName){
+            assertTrue(isTickDisplayed(supplierName, byExclusiveXpath));
+            return this;
+        }
+
+        public Asserts assertsIsVouchersColumnNotDisplayed(){
+            assertFalse(isColumnDisplayed("Vouchers"));
             return this;
         }
     }

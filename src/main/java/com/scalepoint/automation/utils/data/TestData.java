@@ -22,6 +22,10 @@ public class TestData {
 
     private static Logger log = LoggerFactory.getLogger(TestData.class);
 
+    public static ExistingSuppliers getSuppliers() {
+        return (ExistingSuppliers) getData(Data.EXISTING_SUPPLIER);
+    }
+
     public static Supplier getSupplier() {
         return (Supplier) getData(Data.SUPPLIER);
     }
@@ -183,6 +187,7 @@ public class TestData {
     }
 
     public enum Data {
+        EXISTING_SUPPLIER("ExistingSuppliers.xml", ExistingSuppliers.class),
         SUPPLIER("Supplier.xml", Supplier.class),
         LINKS("Links.xml", Links.class),
         SHOP("Shop.xml", Shop.class),
