@@ -14,10 +14,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -287,6 +284,7 @@ public class SettlementPage extends BaseClaimPage {
         private double purchasePrice;
         private int depreciation;
         private double replacementPrice;
+        private double voucherPurchaseAmount;
         private String actualColor;
         private String computedColor;
         private WebElement descriptionElement;
@@ -313,6 +311,11 @@ public class SettlementPage extends BaseClaimPage {
             String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
+            try {
+                this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")).getText());
+            }catch (NoSuchElementException e){
+                logger.warn(e.getMessage());
+            }
 
         }
 
@@ -435,6 +438,11 @@ public class SettlementPage extends BaseClaimPage {
 
             public Asserts assertReplacementPriceIs(double expectedPrice) {
                 OperationalUtils.assertEqualsDouble(replacementPrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+                return this;
+            }
+
+            public Asserts assertVoucherPurchaseAmount(double expectedAmount) {
+                OperationalUtils.assertEqualsDouble(voucherPurchaseAmount, expectedAmount, "Expected amount is: "+expectedAmount);
                 return this;
             }
 

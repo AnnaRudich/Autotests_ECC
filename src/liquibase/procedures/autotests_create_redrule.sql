@@ -17,7 +17,8 @@ CREATE PROCEDURE [dbo].[autotests_create_redrule]
   @PriceTo DECIMAL(15,2),
   @ClaimReduction FLOAT,
   @CashReduction FLOAT,
-  @Sequence INT
+  @Sequence INT,
+  @DepreciationType INT = 1
 AS
 
 	SET NOCOUNT ON
@@ -39,7 +40,7 @@ AS
 
 	INSERT INTO [dbo].[ReductionRule]
          ([Description], [PublishState], [DepreciationTypeId], [MaxDepreciationPct], [LifeSpan], [YearsBeforeReduction])
-  VALUES (@RuleName, 1, 1, 100, 0, 0)
+  VALUES (@RuleName, 1, @DepreciationType, 100, 0, 0)
   DECLARE @ReductionRuleId INT = SCOPE_IDENTITY()
 
   INSERT INTO [dbo].[ReductionRuleConfiguration]

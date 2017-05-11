@@ -19,6 +19,18 @@ public class ClaimItem {
     @XmlElement
     private String ssDescriptionSP;
     @XmlElement
+    private String existingCatWithoutVoucherAndSubCategory;
+    @XmlElement
+    private String existingGroupWithPolicyDepreciationTypeAndReductionRule;
+    @XmlElement
+    private String existingGroupWithDiscretionaryDepreciationTypeAndReductionRule;
+    @XmlElement
+    private String existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy;
+    @XmlElement
+    private String existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType;
+    @XmlElement
+    private String existingGroupFotoAndVideo;
+    @XmlElement
     private String existingCat1;
     @XmlElement
     private String existingCat2;
@@ -182,6 +194,31 @@ public class ClaimItem {
 
     public String getCategoryGroupBorn() {
         return existingCat1;
+    }
+
+    public String getExistingCatWithoutVoucherAndSubCategory() {
+        return existingCatWithoutVoucherAndSubCategory;
+    }
+
+    public String getExistingGroupWithPolicyDepreciationTypeAndReductionRule() {
+        return existingGroupWithPolicyDepreciationTypeAndReductionRule;
+    }
+
+    public String getExistingGroupWithDiscretionaryDepreciationTypeAndReductionRule() {
+        return existingGroupWithDiscretionaryDepreciationTypeAndReductionRule;
+    }
+
+
+    public String getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy() {
+        return existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy;
+    }
+
+    public String getExistingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType() {
+        return existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType;
+    }
+
+    public String getExistingGroupFotoAndVideo() {
+        return existingGroupFotoAndVideo;
     }
 
     public String getExistingCat2() {

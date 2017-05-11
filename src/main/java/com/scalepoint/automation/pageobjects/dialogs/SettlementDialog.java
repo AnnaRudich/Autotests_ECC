@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.extjs.*;
+import com.scalepoint.automation.pageobjects.modules.Module;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;

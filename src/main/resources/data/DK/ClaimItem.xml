@@ -3,6 +3,12 @@
     <newPriceSP>2400</newPriceSP>
     <purchasePriceSP>500</purchasePriceSP>
     <ssDescriptionSP>APPLE</ssDescriptionSP>
+    <existingCatWithoutVoucherAndSubCategory>Øvrige</existingCatWithoutVoucherAndSubCategory>
+    <existingGroupWithPolicyDepreciationTypeAndReductionRule>test_category_group</existingGroupWithPolicyDepreciationTypeAndReductionRule>
+    <existingGroupWithDiscretionaryDepreciationTypeAndReductionRule>test_category_group_1</existingGroupWithDiscretionaryDepreciationTypeAndReductionRule>
+    <existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy>Memorycard &amp; Batteri</existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy>
+    <existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType>Videokameratilbehør</existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType>
+    <existingGroupFotoAndVideo>Foto &amp; Video</existingGroupFotoAndVideo>
     <existingCat1>Børn</existingCat1>
     <existingCat2>Smykker</existingCat2>
     <existingCat3>Telefoni</existingCat3>

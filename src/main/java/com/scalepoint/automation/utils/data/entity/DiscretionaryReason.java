@@ -22,6 +22,8 @@ public class DiscretionaryReason {
     private String discretionaryReason6;
     @XmlElement
     private String discretionaryReason7;
+    @XmlElement
+    private String discretionaryReasonScalepoint;
 
     public String getDiscretionaryReason1(){
         return discretionaryReason1;
@@ -49,6 +51,10 @@ public class DiscretionaryReason {
 
     public String getDiscretionaryReason7() {
         return discretionaryReason7;
+    }
+
+    public String getDiscretionaryReasonScalepoint() {
+        return discretionaryReasonScalepoint;
     }
 
 }
