@@ -132,7 +132,6 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .doAssert(asserts -> {
                     asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
                     asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
-                    asserts.assertVoucherPurchaseAmount(claimItem.getTrygNewPrice()*(1-depreciationPercentage/100));
                 });
         settlementPage.getSettlementSummary()
                 .doAssert(asserts -> {
