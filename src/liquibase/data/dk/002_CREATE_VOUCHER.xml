@@ -41,8 +41,8 @@
             EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
 
             /* Supplier without vouchers */
-            declare @SupplierId int
-            EXEC autotests_create_supplier 'Autotest-scalepoint-supplier', 7, '9200', @SupplierId OUTPUT
+            declare @SupplierIdScalepoint int
+            EXEC autotests_create_supplier 'Autotest-scalepoint-supplier', 7, '9200', @SupplierIdScalepoint OUTPUT
         </sql>
         <rollback/>
     </changeSet>
