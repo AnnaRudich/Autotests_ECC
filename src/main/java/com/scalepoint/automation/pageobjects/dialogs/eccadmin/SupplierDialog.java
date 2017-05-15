@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -324,6 +325,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(xpath = "//td[contains(@class, 'agreementsPanelExclusiveId')]")
         private WebElement exclusiveGridCell;
 
+        @FindBy(xpath = "//td[contains(@class, 'voucherNameId')]/div")
+        private List<WebElement> voucherNameGridCell;
+
         @FindBy(className = "supplier-new-voucher-agreement-btn")
         private WebElement createNewVoucherAgreementBtn;
 
@@ -349,8 +353,20 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             JOIN
         }
 
-        public boolean isExclusiveTickForFirstVoucherAvaiable(){
+        public boolean isExclusiveTickForFirstVoucherAvailable(){
             return exclusiveGridCell.getAttribute("class").contains("tick");
+        }
+
+        private WebElement findVoucher(String voucherName){
+            return voucherNameGridCell.stream()
+                    .filter(element -> element.getText().equals(voucherName))
+                    .findAny()
+                    .get();
+        }
+
+        public boolean isExclusiveTickForVoucherAvailable(String voucherName){
+            return findVoucher(voucherName).findElement(By.xpath("./ancestor::tr//td[contains(@class, 'agreementsPanelExclusiveId')]"))
+                    .getAttribute("class").contains("tick");
         }
 
         public AgreementsTab doWithAgreement(String voucherAgreementName, ActionType actionType) {
@@ -393,12 +409,17 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
 
             public Asserts assertIsExclusiveTickForVoucherVisible(){
-                Assert.assertTrue(isExclusiveTickForFirstVoucherAvaiable());
+                Assert.assertTrue(isExclusiveTickForFirstVoucherAvailable());
+                return this;
+            }
+
+            public Asserts assertIsExclusiveTickForVoucherNotVisible(String voucherName){
+                Assert.assertFalse(isExclusiveTickForVoucherAvailable(voucherName));
                 return this;
             }
 
             public Asserts assertIsExclusiveTickForVoucherNotVisible(){
-                Assert.assertFalse(isExclusiveTickForFirstVoucherAvaiable());
+                Assert.assertFalse(isExclusiveTickForFirstVoucherAvailable());
                 return this;
             }
         }

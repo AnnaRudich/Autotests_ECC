@@ -164,8 +164,13 @@ public class SuppliersPage extends BaseEccAdminNavigation {
             return this;
         }
 
-        public Asserts assertsIsVoucherTickForSupllierDisplayed(String supplierName){
+        public Asserts assertsIsVoucherTickForSupplierDisplayed(String supplierName){
             assertTrue(isTickDisplayed(supplierName, byVoucherXpath));
+            return this;
+        }
+
+        public Asserts assertsIsVoucherTickForSupplierNotDisplayed(String supplierName){
+            assertFalse(isTickDisplayed(supplierName, byVoucherXpath));
             return this;
         }
 

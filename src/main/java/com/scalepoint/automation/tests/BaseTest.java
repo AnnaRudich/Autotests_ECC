@@ -201,7 +201,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             Annotation annotation = annotations[0];
             if (annotation.annotationType().equals(SupplierCompany.class)) {
                 SupplierCompany supplierCompany = (SupplierCompany) annotation;
-                return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(supplierCompany.value().name())).findFirst().get();
+
+                List<SimpleSupplier> simpleSuppliers = existingSuppliers.getSuppliers().stream()
+                        .filter(sup -> sup.getInsuranceCompany().equals(supplierCompany.value().name()))
+                        .collect(Collectors.toList());
+
+                if(supplierCompany.areWithVouchers()) {
+                    return simpleSuppliers.stream().filter(sup -> sup.isWithVouchers()).findAny().get();
+                }else{
+                    return simpleSuppliers.stream().filter(sup -> !sup.isWithVouchers()).findAny().get();
+                }
             }
         }
         return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().get();

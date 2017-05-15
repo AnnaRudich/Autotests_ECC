@@ -15,7 +15,8 @@ CREATE PROCEDURE [dbo].[autotests_create_voucher_agreement]
     @StepAmount INT = 1,
     @EVoucherA BIT = 0,
     @Conditions ntext = 'Conditions',
-    @Limitations ntext = 'Limitations'
+    @Limitations ntext = 'Limitations',
+    @Status BIT = 1
 AS
 
 SET NOCOUNT ON
@@ -28,7 +29,6 @@ DECLARE @DeliveryCost DECIMAL(15, 2) = 0.00
 DECLARE @LowestPrice DECIMAL(15, 2) = 1.0
 DECLARE @InvoicePriceVA DECIMAL(15, 4) = 1.000
 DECLARE @EmailType CHAR(1) = 'G'
-DECLARE @Status BIT = 1
 DECLARE @IncludeDelivery BIT = 0
 DECLARE @CreationDate DATETIME = GETDATE()
 DECLARE @IsSupplierUrl BIT = 1

@@ -32,11 +32,17 @@
             declare @SupplierId int
             EXEC autotests_create_supplier 'Autotest-Supplier-Bauta_SP', 7, '9200', @SupplierId OUTPUT
             EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, 12
+            EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, 7, 0
+            EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, 7, 0
 
             /* Autotest-Supplier-Bauta,  bauta */
             declare @SupplierIdBauta int
             EXEC autotests_create_supplier 'Autotest_Supplier_Bauta', 12, '9200', @SupplierIdBauta OUTPUT
             EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
+
+            /* Supplier without vouchers */
+            declare @SupplierId int
+            EXEC autotests_create_supplier 'Autotest-scalepoint-supplier', 7, '9200', @SupplierId OUTPUT
         </sql>
         <rollback/>
     </changeSet>

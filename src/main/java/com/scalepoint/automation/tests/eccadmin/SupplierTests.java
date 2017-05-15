@@ -223,13 +223,14 @@ public class SupplierTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Voucher tick should be visible in supply management, suppliers list")
     public void ecc3039_voucherTickIsAvailableInSuppliersList(@UserCompany(CompanyCode.BAUTA) User user, SimpleSupplier simpleSupplier){
        loginToEccAdmin(user)
-                .doAssert(asserts -> asserts.assertsIsVoucherTickForSupllierDisplayed(simpleSupplier.getName()));
+                .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierDisplayed(simpleSupplier.getName()));
     }
 
     @Test(dataProvider = "testDataProvider", description = "Voucher tick should not be visible in supply management, suppliers list")
-    public void ecc3039_voucherTickIsNotAvailableInSuppliersList(User user, SimpleSupplier simpleSupplier){
+    public void ecc3039_voucherTickIsNotAvailableInSuppliersList(
+            @UserCompany(CompanyCode.SCALEPOINT) User user, @SupplierCompany(areWithVouchers = false) SimpleSupplier simpleSupplier){
         loginToEccAdmin(user)
-                .doAssert(asserts -> asserts.assertsIsVoucherTickForSupllierDisplayed(simpleSupplier.getName()));
+                .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierNotDisplayed(simpleSupplier.getName()));
     }
 
     @Test(dataProvider = "testDataProvider", description = "Exclusive tick should be visible in supply management, suppliers list")
@@ -250,10 +251,10 @@ public class SupplierTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertsIsActiveTickForVoucherDisplayed(simpleSupplier.getAgreement()));
     }
 
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Active tick should be not visible in supply management, vouchers list")
+    @Test(dataProvider = "testDataProvider", description = "Active tick should be not visible in supply management, vouchers list")
     public void ecc3039_activeTickIsNotAvailableInVoucherList(@UserCompany(CompanyCode.SCALEPOINT)User user, SimpleSupplier simpleSupplier){
         loginToEccAdmin(user).toVouchersPage()
-                .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(simpleSupplier.getAgreement()));
+                .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(simpleSupplier.getInactiveAgreement()));
     }
 
     @Test(dataProvider = "testDataProvider", description = "Exclusive tick for voucher should be visible on agreements tab when open supplier from suppliers list")
@@ -264,12 +265,12 @@ public class SupplierTests extends BaseTest {
                 .doAssert(SupplierDialog.AgreementsTab.Asserts::assertIsExclusiveTickForVoucherVisible);
     }
 
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Exclusive tick for voucher should be not visible on agreements tab when open supplier from suppliers list")
+    @Test(dataProvider = "testDataProvider", description = "Exclusive tick for voucher should be not visible on agreements tab when open supplier from suppliers list")
     public void ecc3039_exclusiveTickShouldBeNotVisibleForVoucherInSupplierDialog(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier){
         loginToEccAdmin(user)
                 .editSupplier(simpleSupplier.getName())
                 .selectAgreementsTab()
-                .doAssert(SupplierDialog.AgreementsTab.Asserts::assertIsExclusiveTickForVoucherNotVisible);
+                .doAssert(asserts -> asserts.assertIsExclusiveTickForVoucherNotVisible(simpleSupplier.getScalepointAgreement()));
     }
 
     @Test(dataProvider = "testDataProvider")

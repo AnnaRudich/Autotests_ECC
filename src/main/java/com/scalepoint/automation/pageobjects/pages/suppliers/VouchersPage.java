@@ -231,7 +231,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
         }
 
         public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName){
-            assertFalse(isTickDisplayed(voucherName, byExclusiveXpath));
+            assertFalse(isTickDisplayed(voucherName, byActiveXpath));
             return this;
         }
     }

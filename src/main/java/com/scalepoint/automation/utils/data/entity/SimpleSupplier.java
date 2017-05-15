@@ -15,12 +15,18 @@ public class SimpleSupplier {
     private String name;
     @XmlAttribute(name = "agreement")
     private String agreement;
+    @XmlAttribute(name = "inactiveAgreement")
+    private String inactiveAgreement;
+    @XmlAttribute(name = "scalepointAgreement")
+    private String scalepointAgreement;
     @XmlAttribute(name = "insuranceCompany")
     private String insuranceCompany;
     @XmlAttribute(name = "agreementCompany")
     private String agreementCompany;
     @XmlAttribute(name = "shopName")
     private String shopName;
+    @XmlAttribute(name = "withVouchers")
+    private Boolean withVouchers;
 
     public String getName() {
         return name;
@@ -36,6 +42,22 @@ public class SimpleSupplier {
 
     public void setAgreement(String agreement) {
         this.agreement = agreement;
+    }
+
+    public String getInactiveAgreement() {
+        return inactiveAgreement;
+    }
+
+    public void setInactiveAgreement(String inactiveAgreement) {
+        this.inactiveAgreement = inactiveAgreement;
+    }
+
+    public String getScalepointAgreement() {
+        return scalepointAgreement;
+    }
+
+    public void setScalepointAgreement(String scalepointAgreement) {
+        this.scalepointAgreement = scalepointAgreement;
     }
 
     public String getInsuranceCompany() {
@@ -60,5 +82,13 @@ public class SimpleSupplier {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
+    }
+
+    public Boolean isWithVouchers() {
+        return withVouchers;
+    }
+
+    public void setWithVouchers(Boolean haveVoucher) {
+        this.withVouchers = haveVoucher;
     }
 }
