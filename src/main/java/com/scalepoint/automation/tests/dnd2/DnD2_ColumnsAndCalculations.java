@@ -205,4 +205,30 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                     asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1- (double) depreciationValue /100));
                 });
     }
+
+    @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+    @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem){
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+                .openSidAndFill(formFiller -> formFiller
+                        .withNewPrice(claimItem.getTrygNewPrice())
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .setDepreciation(depreciationValue)
+                .setDiscountAndDepreciation(true);
+        double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
+        double depreciationPercentage = Double.valueOf(settlementDialog.getDepreciationPercentage());
+        SettlementPage settlementPage = settlementDialog.closeSidWithOk();
+        settlementPage.parseFirstClaimLine()
+                .doAssert(asserts -> {
+                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
+                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                });
+        settlementPage.getSettlementSummary()
+                .doAssert(asserts -> {
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                });
+    }
 }
