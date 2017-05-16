@@ -109,7 +109,7 @@ public class Wait {
     }
 
     private static <T> T wrap(Function<WebDriver, T> condition) {
-        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).until(condition);
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
     }
 
     private static <T> T wrap(ExpectedCondition<T> expectedCondition) {

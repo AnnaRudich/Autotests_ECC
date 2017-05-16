@@ -165,6 +165,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "not-cheapest-reason-display-inputEl")
     private TextBlock notCheapestReasonDisplay;
 
+    @FindBy(xpath = "//div[@id='status_product_match_card']//div[contains(@id, 'displayfield')]/b")
+    private WebElement statusMatchedDisplayField;
+
     public enum ValuationGridColumn {
         CHECK_COLUMN("active-valuation-checkcolumn"),
         TYPE("description"),
@@ -1185,6 +1188,11 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertIsStatusMatchedNotificationContainsText(String text) {
+            String statusText = statusMatchedDisplayField.getText();
+            assertTrue(statusText.contains(text), "Status Matched text is: '" + statusText + "' and should contain: '" + text + "'");
+            return this;
+        }
     }
 
 

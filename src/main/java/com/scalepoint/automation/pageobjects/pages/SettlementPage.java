@@ -451,6 +451,11 @@ public class SettlementPage extends BaseClaimPage {
                 assertTrue(voucherPresent, "Voucher icon should be displayed");
                 return this;
             }
+
+            public Asserts assertProductDetailsIconIsDisplayed(){
+                boolean productInfoPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='typeColumn']//img[contains(@src, 'info.png')]")).isDisplayed();
+                return this;
+            }
         }
     }
 }

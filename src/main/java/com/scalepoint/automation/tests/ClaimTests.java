@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.utils.Constants;
@@ -11,6 +12,8 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
+
+import java.time.Year;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
@@ -217,7 +220,7 @@ public class ClaimTests extends BaseTest {
     public void ecc2631_quickMatchFromExcel(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
 
-        loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPath1())
                 .doAssert(sid -> sid.assertItemIsPresent(claimItem.getXlsDescr1()))
                 .findClaimLine(claimLineDescription)
@@ -226,7 +229,98 @@ public class ClaimTests extends BaseTest {
                 .toProductMatchPage()
                 .sortOrderableFirst()
                 .match(claimLineDescription)
-                .cancel(TextSearchPage.class);
+                .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
+
+        String description = settlementDialog.getDescriptionText();
+        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
+
+        settlementDialog.closeSidWithOk(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description))
+                .parseFirstClaimLine()
+                .doAssert(asserts -> {
+                    asserts.assertPurchasePriceIs(price);
+                    asserts.assertProductDetailsIconIsDisplayed();
+                });
+    }
+
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
+    @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
+    @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
+    @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
+    public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
+
+        loginAndCreateClaim(user, claim)
+                .enableAuditForIc(user.getCompanyName())
+                .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .enterPassword(Constants.PASSWORD)
+                .login()
+                .addDescriptionWithOutSuggestions(claimLineDescription)
+                .selectCategory(claimItem.getExistingCat3_Telefoni())
+                .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .selectPurchaseYear(String.valueOf(Year.now().getValue()))
+                .selectPurchaseMonth("Apr")
+                .saveItem()
+                .sendResponseToEcc();
+
+        SettlementDialog settlementDialog = login(user)
+                .openActiveRecentClaim()
+                .findClaimLine(claimLineDescription)
+                .selectLine()
+                .getToolBarMenu()
+                .toProductMatchPage()
+                .sortOrderableFirst()
+                .match(claimLineDescription)
+                .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
+
+        String description = settlementDialog.getDescriptionText();
+        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
+
+        settlementDialog.closeSidWithOk(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description))
+                .parseFirstClaimLine()
+                .doAssert(asserts -> {
+                    asserts.assertPurchasePriceIs(price);
+                    asserts.assertProductDetailsIconIsDisplayed();
+                });
+    }
+
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
+    @Test(dataProvider = "testDataProvider",
+            description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
+    @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
+    @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
+    @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
+    @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
+    public void ecc2631_addMatchedProductFromCatalog(User user, Claim claim, ClaimItem claimItem) {
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
+
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(claimLineDescription)
+                .sortOrderableFirst()
+                .match(claimLineDescription)
+                .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
+
+        String description = settlementDialog.getDescriptionText();
+        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
+
+        settlementDialog.closeSidWithOk(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description))
+                .parseFirstClaimLine()
+                .doAssert(asserts -> {
+                    asserts.assertPurchasePriceIs(price);
+                    asserts.assertProductDetailsIconIsDisplayed();
+                });
     }
 
     /**

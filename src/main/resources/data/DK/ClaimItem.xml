@@ -44,6 +44,7 @@
     <zeroDistance>0 km</zeroDistance>
     <validDistance1>3 km</validDistance1>
     <setDialogTextMatch>samsung</setDialogTextMatch>
+    <matchedText>Matchet</matchedText>
     <procuraLimitPrice>2100</procuraLimitPrice>
     <customerDemand>500</customerDemand>
     <usedPrice>500</usedPrice>

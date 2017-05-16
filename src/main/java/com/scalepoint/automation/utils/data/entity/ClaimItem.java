@@ -142,6 +142,8 @@ public class ClaimItem {
     private String existingCat4;
     @XmlElement
     private String existingSubCat4;
+    @XmlElement
+    private String matchedText;
 
 
     public String getExistingCat4(){
@@ -405,6 +407,10 @@ public class ClaimItem {
 
     public String getBrandLinkVoucher4() {
         return brandLinkVoucher4;
+    }
+
+    public String getMatchedText() {
+        return matchedText;
     }
 
     @Override
