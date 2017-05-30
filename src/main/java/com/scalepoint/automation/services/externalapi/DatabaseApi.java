@@ -1,17 +1,16 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 
 @SuppressWarnings("SqlDialectInspection")
 public class DatabaseApi {
@@ -21,6 +20,7 @@ public class DatabaseApi {
 
     private static Logger logger = LoggerFactory.getLogger(DatabaseApi.class);
     private JdbcTemplate jdbcTemplate;
+    private List<CwaTaskLog> cwaTaskLogs;
 
     public DatabaseApi(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -74,6 +74,31 @@ public class DatabaseApi {
         parameters.put("insuranceCompanyId", insuranceCompanyId);
         Number key = insert.executeAndReturnKey(parameters);
         return key.intValue();
+    }
+
+    public Integer getUserIdByClaimToken(String claimToken){
+        return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where UserToken = ?", Integer.class, claimToken.replace("c.", ""));
+    }
+
+    public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId){
+        return cwaTaskLogs = this.jdbcTemplate.query(
+                "select claimId, taskType, taskId, taskStatus, taskPayload from CwaTaskLog where claimId = ?",
+                new CwaTaskLogMapper(),
+                claimId
+        );
+    }
+
+    private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {
+
+        public CwaTaskLog mapRow(ResultSet rs, int rowNum) throws SQLException {
+            CwaTaskLog cwaTaskLog = new CwaTaskLog();
+            cwaTaskLog.setClaimId(rs.getInt("claimId"));
+            cwaTaskLog.setTaskType(rs.getString("taskType"));
+            cwaTaskLog.setTaskStatus(rs.getString("taskStatus"));
+            cwaTaskLog.setTaskId(rs.getString("taskId"));
+            cwaTaskLog.setTaskPayload(rs.getString("taskPayload"));
+            return cwaTaskLog;
+        }
     }
 
     private void assignTemplateToServiceAgreements(Integer rvTemplateId) {

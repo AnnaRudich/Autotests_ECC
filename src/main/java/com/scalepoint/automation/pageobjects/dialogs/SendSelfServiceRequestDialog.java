@@ -8,6 +8,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.scalepoint.automation.utils.Wait.waitForInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SendSelfServiceRequestDialog extends BaseDialog {
@@ -75,6 +76,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     public SettlementPage send() {
         ok.click();
+        waitForInvisible(ok);
         return Page.at(SettlementPage.class);
     }
 }
