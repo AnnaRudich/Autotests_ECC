@@ -65,6 +65,7 @@ public class SidReductionRulesTests extends BaseTest {
                     sid.assertDepreciationAmountIs(calculatedDepreciation);
                     sid.assertDepreciationValueIs(Constants.DEPRECIATION_10.doubleValue());
                 })
+                .automaticDepreciation(true)
                 .applyReductionRuleByValue(claimItem.getReductionRule_30())
                 .doAssert(sid -> {
                     sid.assertCashValueIs(calculatedCashValueReduction);

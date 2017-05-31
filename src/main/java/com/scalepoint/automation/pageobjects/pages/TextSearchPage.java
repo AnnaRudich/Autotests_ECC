@@ -84,7 +84,7 @@ public class TextSearchPage extends Page {
     }
 
     private TextSearchPage sort(WebElement sortLink, Image sortIconToWait) {
-        int totalAttempts = 2;
+        int totalAttempts = 5;
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
             sortLink.click();

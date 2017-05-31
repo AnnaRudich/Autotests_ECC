@@ -15,6 +15,9 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-539")
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
@@ -130,6 +133,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         int depreciationPercentage = 13;
         double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
+        double depreciationAmountRoundHalfDown = new BigDecimal(depreciationAmount).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
         double replacementPrice = voucherCashValue - depreciationAmount;
         double voucherFaceValue = (replacementPrice * 100) / (100 - voucherPercentage);
 
@@ -139,7 +143,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
                 .setDepreciation(depreciationPercentage)
-                .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
+                .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmountRoundHalfDown, sid))
                 .closeSidWithOk()
                 .parseFirstClaimLine()
                 .doAssert(claimLine -> {
