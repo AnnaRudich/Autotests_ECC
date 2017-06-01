@@ -56,6 +56,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.scalepoint.automation.utils.Configuration.getEccUrl;
+
 @SpringApplicationConfiguration(classes = Application.class)
 @IntegrationTest
 @TestExecutionListeners(inheritListeners = false, listeners = {
@@ -121,6 +123,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
+    }
+
+    protected SettlementPage loginAndOpenCwaClaim(User user, String claimToken){
+        login(user, null);
+        Browser.open(getEccUrl()+ "Integration/Open?token=" + claimToken);
+        return new SettlementPage();
     }
 
     protected MyPage login(User user) {

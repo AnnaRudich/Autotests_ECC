@@ -1,6 +1,8 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
+import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +94,8 @@ public class DatabaseApi {
         public CwaTaskLog mapRow(ResultSet rs, int rowNum) throws SQLException {
             CwaTaskLog cwaTaskLog = new CwaTaskLog();
             cwaTaskLog.setClaimId(rs.getInt("claimId"));
-            cwaTaskLog.setTaskType(rs.getString("taskType"));
-            cwaTaskLog.setTaskStatus(rs.getString("taskStatus"));
+            cwaTaskLog.setTaskType( TaskType.valueOf(rs.getString("taskType")));
+            cwaTaskLog.setTaskStatus( EventType.valueOf(rs.getString("taskStatus")));
             cwaTaskLog.setTaskId(rs.getString("taskId"));
             cwaTaskLog.setTaskPayload(rs.getString("taskPayload"));
             return cwaTaskLog;

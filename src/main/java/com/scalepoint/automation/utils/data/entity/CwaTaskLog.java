@@ -1,14 +1,17 @@
 package com.scalepoint.automation.utils.data.entity;
 
+import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
+
 /**
  * Created by bza on 5/26/2017.
  */
 public class CwaTaskLog {
 
     private int claimId;
-    private String taskType;
+    private TaskType taskType;
     private String taskId;
-    private String taskStatus;
+    private EventType taskStatus;
     private String taskPayload;
 
     public int getClaimId() {
@@ -19,11 +22,11 @@ public class CwaTaskLog {
         this.claimId = claimId;
     }
 
-    public String getTaskType() {
+    public TaskType getTaskType() {
         return taskType;
     }
 
-    public void setTaskType(String taskType) {
+    public void setTaskType(TaskType taskType) {
         this.taskType = taskType;
     }
 
@@ -35,11 +38,11 @@ public class CwaTaskLog {
         this.taskId = taskId;
     }
 
-    public String getTaskStatus() {
+    public EventType getTaskStatus() {
         return taskStatus;
     }
 
-    public void setTaskStatus(String taskStatus) {
+    public void setTaskStatus(EventType taskStatus) {
         this.taskStatus = taskStatus;
     }
 
