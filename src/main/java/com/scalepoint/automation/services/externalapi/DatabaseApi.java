@@ -20,7 +20,6 @@ public class DatabaseApi {
 
     private static Logger logger = LoggerFactory.getLogger(DatabaseApi.class);
     private JdbcTemplate jdbcTemplate;
-    private List<CwaTaskLog> cwaTaskLogs;
 
     public DatabaseApi(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -81,7 +80,7 @@ public class DatabaseApi {
     }
 
     public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId){
-        return cwaTaskLogs = this.jdbcTemplate.query(
+        return this.jdbcTemplate.query(
                 "select claimId, taskType, taskId, taskStatus, taskPayload from CwaTaskLog where claimId = ?",
                 new CwaTaskLogMapper(),
                 claimId
