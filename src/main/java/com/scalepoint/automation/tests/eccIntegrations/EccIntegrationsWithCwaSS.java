@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import java.time.Year;
 import java.util.UUID;
 
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EccIntegrationsWithCwaSS extends BaseTest {
 
@@ -52,9 +52,9 @@ public class EccIntegrationsWithCwaSS extends BaseTest {
         SettlementPage settlementPage = loginAndOpenCwaClaim(user, claimToken)
                 .requestSelfService(claim, Constants.PASSWORD);
 
-        assertTrue(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
+        assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
             cwa.getTaskType().equals(TaskType.OTHER) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
-        ));
+        )).isTrue();
 
         settlementPage
                 .toMailsPage()
@@ -68,11 +68,11 @@ public class EccIntegrationsWithCwaSS extends BaseTest {
                 .saveItem()
                 .sendResponseToEcc();
 
-        assertTrue(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
+        assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
                 cwa.getTaskType().equals(TaskType.OTHER) && cwa.getTaskStatus().equals(EventType.TASK_COMPLETED)
-        ));
-        assertTrue(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
+        )).isTrue();
+        assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
                 cwa.getTaskType().equals(TaskType.SELF_SERVICE) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
-        ));
+        )).isTrue();
     }
 }
