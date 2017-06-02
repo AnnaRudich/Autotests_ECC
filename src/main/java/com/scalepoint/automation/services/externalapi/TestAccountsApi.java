@@ -1,6 +1,7 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.utils.data.response.Token;
+import org.apache.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 
@@ -16,7 +17,7 @@ public class TestAccountsApi {
                 .formParam("scope", "case_integration")
                 .when()
                 .post()
-                .then().log().all().statusCode(200).extract().as(Token.class);
+                .then().log().all().statusCode(HttpStatus.SC_OK).extract().as(Token.class);
         return this;
     }
 

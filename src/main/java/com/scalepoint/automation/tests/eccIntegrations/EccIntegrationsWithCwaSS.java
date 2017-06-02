@@ -9,21 +9,22 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestData;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.response.Token;
 import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.Year;
+import java.util.UUID;
 
-import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertTrue;
 
 public class EccIntegrationsWithCwaSS extends BaseTest {
@@ -37,8 +38,9 @@ public class EccIntegrationsWithCwaSS extends BaseTest {
 
     @BeforeMethod
     public void setUp(){
+        ClaimRequest claimRequest = TestData.getClaimRequest().withCaseNumber(String.valueOf(UUID.randomUUID()));
         token = new TestAccountsApi().sendRequest().getToken();
-        claimToken = new IntegrationClaimApi(token).sendRequest().getClaimTokenString();
+        claimToken = new IntegrationClaimApi(token).sendRequest(claimRequest).getClaimTokenString();
         userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken);
     }
 
