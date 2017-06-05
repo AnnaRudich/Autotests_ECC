@@ -6,9 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by bza on 5/25/2017.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "firstName",

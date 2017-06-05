@@ -45,6 +45,11 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
                 .disableSendSms();
     }
 
+    public SendSelfServiceRequestDialog fill(String password) {
+        return enterPassword(password)
+                .disableSendSms();
+    }
+
     private SendSelfServiceRequestDialog enterEmail(String email) {
         this.email.enter(email);
         return this;

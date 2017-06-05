@@ -110,6 +110,12 @@ public class SettlementPage extends BaseClaimPage {
                 send();
     }
 
+    public SettlementPage requestSelfService(String password) {
+        return claimOperationsMenu.requestSelfService().
+                fill(password).
+                send();
+    }
+
     public SettlementPage requestSelfServiceWithEnabledAutoClose(Claim claim, String password) {
         return claimOperationsMenu.requestSelfService()
                 .fill(claim, password)

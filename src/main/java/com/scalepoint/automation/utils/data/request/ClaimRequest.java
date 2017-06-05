@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -32,7 +33,7 @@ public class ClaimRequest {
     @JsonProperty("caseType")
     private String caseType;
     @JsonProperty("caseNumber")
-    private String caseNumber;
+    private String caseNumber = UUID.randomUUID().toString();
     @JsonProperty("itemizationCaseReference")
     private String itemizationCaseReference;
     @JsonProperty("externalReference")

@@ -11,6 +11,8 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
+import com.scalepoint.automation.services.externalapi.IntegrationClaimApi;
+import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -23,6 +25,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
 import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.data.response.Token;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
@@ -53,7 +57,11 @@ import org.testng.annotations.Listeners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
@@ -125,7 +133,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return loginAndCreateClaim(user, claim, null);
     }
 
-    protected SettlementPage loginAndOpenCwaClaim(User user, String claimToken){
+    protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest){
+        Token token = new TestAccountsApi().sendRequest().getToken();
+        return new IntegrationClaimApi(token).sendRequest(claimRequest).getClaimTokenString();
+    }
+
+    protected SettlementPage loginAndOpenCwaClaimByToken(User user, String claimToken){
         login(user, null);
         Browser.open(getEccUrl()+ "Integration/Open?token=" + claimToken);
         return new SettlementPage();
