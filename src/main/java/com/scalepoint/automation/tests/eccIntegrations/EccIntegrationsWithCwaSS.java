@@ -19,6 +19,7 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
+import static com.scalepoint.automation.utils.Constants.APRIL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EccIntegrationsWithCwaSS extends BaseTest {
@@ -54,7 +55,7 @@ public class EccIntegrationsWithCwaSS extends BaseTest {
                 .login()
                 .addDescription(claimItem.getSetDialogTextMatch())
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
-                .selectPurchaseMonth("Apr")
+                .selectPurchaseMonth(APRIL)
                 .saveItem()
                 .sendResponseToEcc();
 

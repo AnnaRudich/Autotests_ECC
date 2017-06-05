@@ -1,7 +1,6 @@
 package com.scalepoint.automation.utils.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.net.MediaType;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.Category;
@@ -33,7 +32,6 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,15 +170,15 @@ public class TestData {
         String locale = Configuration.getLocale().getValue();
         String filePath = buildDataFilePath(locale, data.fileName);
         Object resultObject;
+        InputStream inputStream = TestData.class.getClassLoader().getResourceAsStream(filePath);
         try {
-            if(isFileType(filePath, MediaType.XML_UTF_8)) {
-                resultObject = data.context.createUnmarshaller().unmarshal(getInputStreamForFile(filePath));
+            if(data.fileName.endsWith(".xml")) {
+                resultObject = data.context.createUnmarshaller().unmarshal(inputStream);
             }
-            else if(isFileType(filePath, MediaType.JSON_UTF_8)){
-                ObjectMapper mapper = new ObjectMapper();
-                resultObject = mapper.readValue(getInputStreamForFile(filePath), data.dataClass);
+            else if(data.fileName.endsWith(".json")){
+                resultObject = new ObjectMapper().readValue(inputStream, data.dataClass);
             }else{
-                throw new IOException("File should be xml (starts with < ) or json (starts with { ), file is not valid " + filePath);
+                throw new IOException("File should be xml or json, file is not valid " + filePath);
             }
             preprocess(resultObject, buildParams());
             return (T) resultObject;
@@ -188,25 +186,6 @@ public class TestData {
             log.error(e.getMessage(), e);
         }
         return null;
-    }
-
-    private static Boolean isFileType(String filePath, MediaType mediaType){
-        try {
-            String StringFromInputStream = IOUtils.toString(getInputStreamForFile(filePath), "UTF-8");
-            if(mediaType.equals(MediaType.JSON_UTF_8)){
-                return StringFromInputStream.startsWith("{");
-            }
-            if(mediaType.equals(MediaType.XML_UTF_8)){
-                return StringFromInputStream.startsWith("<");
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-        return false;
-    }
-
-    private static InputStream getInputStreamForFile(String filePath){
-        return TestData.class.getClassLoader().getResourceAsStream(filePath);
     }
 
     private static Map<String, String> buildParams() {
