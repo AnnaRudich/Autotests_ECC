@@ -22,7 +22,7 @@ import java.time.Year;
 import static com.scalepoint.automation.utils.Constants.APRIL;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EccIntegrationsWithCwaSS extends BaseTest {
+public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
 
     @Autowired
     private DatabaseApi databaseApi;
