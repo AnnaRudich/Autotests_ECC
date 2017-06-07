@@ -50,6 +50,10 @@ public class InsuranceCompany {
     private String ftAlka;
     @XmlElement
     private String ftLB;
+    @XmlElement
+    private String sendTimeFrom;
+    @XmlElement
+    private String sendTimeTo;
 
     public String getFtTrygHolding(){
         return ftTrygHolding;
@@ -146,5 +150,21 @@ public class InsuranceCompany {
 
     public String getFtLB() {
         return ftLB;
+    }
+
+    public String getSendTimeFrom() {
+        return sendTimeFrom;
+    }
+
+    public void setSendTimeFrom(String sendTimeFrom) {
+        this.sendTimeFrom = sendTimeFrom;
+    }
+
+    public String getSendTimeTo() {
+        return sendTimeTo;
+    }
+
+    public void setSendTimeTo(String sendTimeTo) {
+        this.sendTimeTo = sendTimeTo;
     }
 }

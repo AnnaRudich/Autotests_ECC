@@ -15,4 +15,6 @@
     <officeHours>8a.m. - 4p.m.</officeHours>
     <spFTName>Default</spFTName>
     <dkCompanyDepartment>Ålborg - B/E</dkCompanyDepartment>
+    <sendTimeFrom>00:00</sendTimeFrom>
+    <sendTimeTo>20:30</sendTimeTo>
 </insuranceCompany>

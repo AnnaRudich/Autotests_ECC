@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -54,6 +55,12 @@ public class InsCompAddEditPage extends AdminBasePage {
     @FindBy(id = "btnOk")
     private WebElement saveButton;
 
+    @FindBy(name = "auditSendTimeFrom")
+    private WebElement sendTimeFromField;
+
+    @FindBy(name = "auditSendTimeTo")
+    private WebElement sendTimeToField;
+
     private String byFTXpath = "//select[@name='icftnbr']/option[contains(.,'$1')]";
 
     private String byGUIXpath = "//select[@name='icgtnbr']/option[contains(.,'$1')]";
@@ -90,6 +97,14 @@ public class InsCompAddEditPage extends AdminBasePage {
         zipCodeField.sendKeys(insuranceCompany.getZipCode());
         cityField.sendKeys(insuranceCompany.getIcCity());
         icCommonMailField.sendKeys(insuranceCompany.getCompanyCommonMail());
+
+        if(StringUtils.isEmpty(sendTimeFromField.getText())){
+            sendTimeFromField.sendKeys(insuranceCompany.getSendTimeFrom());
+        }
+
+        if(StringUtils.isEmpty(sendTimeToField.getText())){
+            sendTimeToField.sendKeys(insuranceCompany.getSendTimeTo());
+        }
 
         WebElement option = find(byFTXpath, insuranceCompany.getFunctionTemplate());
         if (option.getText().equals(insuranceCompany.getFunctionTemplate())) {
