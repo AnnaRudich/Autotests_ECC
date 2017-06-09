@@ -76,6 +76,10 @@ public interface Actions {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView();", element);
     }
 
+    default  void scrollToElement(WebElement element){
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);",element);
+    }
+
     default String getCookies() {
         Set<Cookie> cookies = Browser.driver().manage().getCookies();
         StringBuilder cookieString = new StringBuilder();

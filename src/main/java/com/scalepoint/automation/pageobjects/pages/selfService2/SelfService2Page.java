@@ -1,14 +1,11 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -96,9 +93,10 @@ public class SelfService2Page extends Page {
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
-        forCondition(ExpectedConditions
-                .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))))
-                .click();
+        WebElement e1 = forCondition(ExpectedConditions
+                .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
+        scrollToElement(e1);
+        e1.click();
         forCondition(ExpectedConditions.textToBePresentInElement(e, text));
     }
 
