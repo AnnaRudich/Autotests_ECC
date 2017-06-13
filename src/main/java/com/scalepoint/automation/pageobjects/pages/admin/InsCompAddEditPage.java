@@ -98,11 +98,11 @@ public class InsCompAddEditPage extends AdminBasePage {
         cityField.sendKeys(insuranceCompany.getIcCity());
         icCommonMailField.sendKeys(insuranceCompany.getCompanyCommonMail());
 
-        if(StringUtils.isEmpty(sendTimeFromField.getText())){
+        if(StringUtils.isEmpty(sendTimeFromField.getAttribute("value"))){
             sendTimeFromField.sendKeys(insuranceCompany.getSendTimeFrom());
         }
 
-        if(StringUtils.isEmpty(sendTimeToField.getText())){
+        if(StringUtils.isEmpty(sendTimeFromField.getAttribute("value"))){
             sendTimeToField.sendKeys(insuranceCompany.getSendTimeTo());
         }
 
