@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.Set;
@@ -209,7 +210,7 @@ public interface Actions {
     }
 
     default void doubleClick(By by) {
-        Wait.waitForStaleElement(by);
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(by));
         doubleClick(Browser.driver().findElement(by));
     }
 

@@ -1,7 +1,10 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.pageobjects.extjs.*;
-import com.scalepoint.automation.pageobjects.modules.Module;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtElement;
+import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -13,10 +16,13 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import com.sun.java.swing.plaf.windows.WindowsTreeUI;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -32,14 +38,17 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertEqualsNoOrder;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 
 public class SettlementDialog extends BaseDialog {
@@ -1152,7 +1161,7 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertCashCompensationIsDepreciated(int percentage, Valuation valuation){
             ValuationRow valuationRow = parseValuationRow(valuation);
-            assertTrue(valuationRow.getCashCompensation() == valuationRow.getTotalPrice()*(1-(Double.valueOf(percentage)/100)));
+            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice()*(1-(Double.valueOf(percentage)/100)));
             return this;
         }
 

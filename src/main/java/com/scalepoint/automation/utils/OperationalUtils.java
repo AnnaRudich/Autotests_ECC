@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class OperationalUtils {
 
@@ -56,6 +57,11 @@ public class OperationalUtils {
         String actual = toString(actualAmount);
         String expected = toString(expectedAmount);
         assertEquals(actual, expected, String.format(message, actualAmount, expectedAmount));
+    }
+
+    public static void assertEqualsDoubleWithTolerance(Double actualAmount, Double expectedAmount) {
+        int tolerance = 3;
+        assertTrue(Math.abs(actualAmount-expectedAmount) <= Math.pow(10,-tolerance), String.format("Actual: %s Expected: %s", actualAmount, expectedAmount) );
     }
 
     public static String toString(Double actualAmount) {
