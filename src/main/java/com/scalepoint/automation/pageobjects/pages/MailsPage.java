@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.types.SortType;
+import org.apache.commons.lang.BooleanUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,8 +17,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static org.testng.Assert.assertTrue;
 
 @EccPage
 public class MailsPage extends BaseClaimPage {
@@ -152,6 +156,7 @@ public class MailsPage extends BaseClaimPage {
         public MailType getMailType() {
             return mailType;
         }
+
     }
 
     public enum MailType {
@@ -188,6 +193,18 @@ public class MailsPage extends BaseClaimPage {
                 }
             }
             return null;
+        }
+    }
+
+    public MailsPage doAssert(Consumer<MailsPage.Asserts> assertFunc) {
+        assertFunc.accept(new MailsPage.Asserts());
+        return MailsPage.this;
+    }
+
+    public class Asserts {
+
+        public void isMailExist(MailType mailType){
+            assertTrue(parseMails().findMailByType(mailType) != null);
         }
     }
 }

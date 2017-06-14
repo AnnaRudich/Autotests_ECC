@@ -26,6 +26,9 @@ public class SettlementSummary extends Module {
     @FindBy(id = "finishCaseBtn")
     private Button completeClaim;
 
+    @FindBy(id = "settleExternallyBtn")
+    private Button completeClaimExternally;
+
     @FindBy(xpath = "//div[contains(@class, 'x-tool-expand-top')]")
     private WebElement expand;
 
@@ -51,6 +54,13 @@ public class SettlementSummary extends Module {
             expand();
         }
         completeClaim.click();
+    }
+
+    public void completeClaimWithoutMail() {
+        if (!completeClaimExternally.isDisplayed()) {
+            expand();
+        }
+        completeClaimExternally.click();
     }
 
     private void expand() {

@@ -40,6 +40,12 @@ public class CustomerDetailsPage extends BaseClaimPage {
         return this;
     }
 
+    //do we have implemented somewhere tab navigation for CustomerDetailsPage?
+    public MailsPage openMailsTab(){
+        $(By.id("mailsButton")).click();
+        return at(MailsPage.class);
+    }
+
     public CustomerDetailsPage cancelClaim() {
         cancelClaimButton.click();
         By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
