@@ -30,21 +30,18 @@ public class CompleteClaimExternally extends BaseTest {
                 .completeWithoutEmail()
                 .doAssert(myPage ->
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
-                );
-
-        new MyPage()
+                )
                 .openRecentClaim()
-                .openMailsTab();
-        new MailsPage()
+                .openMailsTab()
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }
 
-    //related bug https://jira.scalepoint.com/browse/CHARLIE-2152
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
-    @Test(dataProvider = "testDataProvider",
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-2152")
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
                     "Possible to Complete claim Externally from Settlement page")
     public void charlie515_completeClaimExternallyFromSettlementPage(User user, Claim claim) {
@@ -52,12 +49,9 @@ public class CompleteClaimExternally extends BaseTest {
                 .completeClaimWithoutMail()
                 .doAssert(myPage ->
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
-                );
-
-        new MyPage()
+                )
                 .openRecentClaim()
-                .openMailsTab();
-        new MailsPage()
+                .openMailsTab()
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }
