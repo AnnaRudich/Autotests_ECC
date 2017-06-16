@@ -1,7 +1,5 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -32,7 +30,7 @@ public class CompleteClaimExternally extends BaseTest {
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
-                .openMailsTab()
+                .toMailsPage()
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }
@@ -51,7 +49,7 @@ public class CompleteClaimExternally extends BaseTest {
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
-                .openMailsTab()
+                .toMailsPage()
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }
