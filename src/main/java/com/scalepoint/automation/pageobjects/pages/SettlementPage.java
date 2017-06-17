@@ -187,6 +187,11 @@ public class SettlementPage extends BaseClaimPage {
         return at(MyPage.class);
     }
 
+    public MyPage completeClaimWithoutMail() {
+        settlementSummary.completeClaimWithoutMail();
+        return at(MyPage.class);
+    }
+
     public CompleteClaimPage toCompleteClaimPage() {
         settlementSummary.completeClaim();
         try {
