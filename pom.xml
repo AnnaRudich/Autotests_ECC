@@ -261,12 +261,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>ru.yandex.qatools.htmlelements</groupId>
             <artifactId>htmlelements-java</artifactId>
             <version>${htmlelements.version}</version>
@@ -341,6 +335,24 @@
             <version>1.8.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.scalepoint.ecc</groupId>
+            <artifactId>ecc-third-party-integrations</artifactId>
+            <version>1.1.28</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -348,6 +360,14 @@
             <id>jcenter</id>
             <name>bintray</name>
             <url>http://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <id>internal</id>
+            <url>http://ecc-build.spcph.local:8083/nexus/content/repositories/internal</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
         </repository>
     </repositories>
 

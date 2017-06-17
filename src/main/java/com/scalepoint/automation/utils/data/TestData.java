@@ -1,16 +1,44 @@
 package com.scalepoint.automation.utils.data;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
+import com.scalepoint.automation.utils.data.entity.Category;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
+import com.scalepoint.automation.utils.data.entity.DepreciationType;
+import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
+import com.scalepoint.automation.utils.data.entity.Errors;
+import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
+import com.scalepoint.automation.utils.data.entity.GenericItem;
+import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
+import com.scalepoint.automation.utils.data.entity.Integration;
+import com.scalepoint.automation.utils.data.entity.Links;
+import com.scalepoint.automation.utils.data.entity.Mail;
+import com.scalepoint.automation.utils.data.entity.Notifications;
+import com.scalepoint.automation.utils.data.entity.OrderDetails;
+import com.scalepoint.automation.utils.data.entity.PasswordsVerification;
+import com.scalepoint.automation.utils.data.entity.PriceRule;
+import com.scalepoint.automation.utils.data.entity.RRLinesFields;
+import com.scalepoint.automation.utils.data.entity.ReductionRule;
+import com.scalepoint.automation.utils.data.entity.Roles;
+import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.Shop;
+import com.scalepoint.automation.utils.data.entity.Supplier;
+import com.scalepoint.automation.utils.data.entity.SystemUser;
+import com.scalepoint.automation.utils.data.entity.TextSearch;
+import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -134,20 +162,29 @@ public class TestData {
         return (DiscretionaryReason) getData(Data.DISCRETIONARYREASON);
     }
 
+    public static ClaimRequest getClaimRequest(){
+        return (ClaimRequest) getData(Data.CWA_CLAIM);
+    }
+
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
-        String xmlPath = buildXmlFilePath(locale, data.fileName);
+        String filePath = buildDataFilePath(locale, data.fileName);
+        Object resultObject;
+        InputStream inputStream = TestData.class.getClassLoader().getResourceAsStream(filePath);
         try {
-            Unmarshaller u = data.context.createUnmarshaller();
-            InputStream resourceAsStream = TestData.class.getClassLoader()
-                    .getResourceAsStream(xmlPath);
-            Object resultObject = (u.unmarshal(resourceAsStream));
+            if(data.fileName.endsWith(".xml")) {
+                resultObject = data.context.createUnmarshaller().unmarshal(inputStream);
+            }
+            else if(data.fileName.endsWith(".json")){
+                resultObject = new ObjectMapper().readValue(inputStream, data.dataClass);
+            }else{
+                throw new IOException("File should be xml or json, file is not valid " + filePath);
+            }
             preprocess(resultObject, buildParams());
             return (T) resultObject;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
         return null;
     }
 
@@ -178,7 +215,7 @@ public class TestData {
         }
     }
 
-    private static String buildXmlFilePath(String locale, String fileName) {
+    private static String buildDataFilePath(String locale, String fileName) {
         return "data" + File.separator + locale + File.separator + fileName;
     }
 
@@ -215,16 +252,19 @@ public class TestData {
         CLGROUP("ClaimLineGroup.xml", ClaimLineGroup.class),
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
-        DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class);
+        DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
+        CWA_CLAIM("ClaimRequest.json", ClaimRequest.class);
 
         private String fileName;
         private JAXBContext context;
         private Class dataClass;
 
-        Data(String xmlPath, Class dataClass) {
-            this.fileName = xmlPath;
+        Data(String filePath, Class dataClass) {
+            this.fileName = filePath;
             try {
-                this.context = JAXBContext.newInstance(dataClass);
+                if(fileName.endsWith(".xml")) {
+                    this.context = JAXBContext.newInstance(dataClass);
+                }
                 this.dataClass = dataClass;
             } catch (JAXBException e) {
                 log.error(e.getMessage(), e);

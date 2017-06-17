@@ -1,0 +1,35 @@
+{
+  "tenant": "scalepoint",
+  "company": "scalepoint",
+  "country": "dk",
+  "caseType": "contentClaim",
+  "itemizationCaseReference": "",
+  "externalReference": "",
+  "allowAutoClose": false,
+  "policy": {
+    "number": ""
+  },
+  "customer": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@gmail.com",
+    "mobile": "88 81 80 00",
+    "address": {
+      "street1": "",
+      "postalCode": "",
+      "city": ""
+    }
+  },
+  "extraModifiers": [{
+    "type": "postItemizationCompletedUrl",
+    "value": "http://www.google.com"
+  },
+    {
+      "type": "cwaServiceId",
+      "value": "6666"
+    },
+    {
+      "type": "replyToCaseEmail",
+      "value": "ecc_auto@scalepoint.com"
+    }]
+}
