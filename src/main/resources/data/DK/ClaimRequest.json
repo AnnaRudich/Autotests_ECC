@@ -12,7 +12,7 @@
   "customer": {
     "firstName": "John",
     "lastName": "Doe",
-    "email": "john.doe@gmail.com",
+    "email": "john.doe@scalepoint.com",
     "mobile": "88 81 80 00",
     "address": {
       "street1": "",

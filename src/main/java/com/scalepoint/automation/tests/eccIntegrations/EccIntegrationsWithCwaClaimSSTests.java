@@ -44,7 +44,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
                 .requestSelfService(Constants.PASSWORD);
 
         assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
-            cwa.getTaskType().equals(TaskType.OTHER) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
+            cwa.getTaskType().equals(TaskType.SELF_SERVICE_OTHER) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
         )).isTrue();
 
         settlementPage
@@ -60,7 +60,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
                 .sendResponseToEcc();
 
         assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
-                cwa.getTaskType().equals(TaskType.OTHER) && cwa.getTaskStatus().equals(EventType.TASK_COMPLETED)
+                cwa.getTaskType().equals(TaskType.SELF_SERVICE_OTHER) && cwa.getTaskStatus().equals(EventType.TASK_COMPLETED)
         )).isTrue();
         assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
                 cwa.getTaskType().equals(TaskType.SELF_SERVICE) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)

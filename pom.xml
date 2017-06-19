@@ -344,7 +344,7 @@
         <dependency>
             <groupId>com.scalepoint.ecc</groupId>
             <artifactId>ecc-third-party-integrations</artifactId>
-            <version>1.1.28</version>
+            <version>1.1.36</version>
         </dependency>
 
         <dependency>
