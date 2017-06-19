@@ -88,16 +88,16 @@ public class SelfService2Page extends Page {
     }
 
     private void selectItem(WebElement element, String text){
-        WebElement e = waitForVisible(element.findElement(By.xpath(".//span//span")));
-        e.click();
+        WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
+        selectElement.click();
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
-        WebElement e1 = forCondition(ExpectedConditions
+        WebElement selectItemElement = forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
-        scrollToElement(e1);
-        e1.click();
-        forCondition(ExpectedConditions.textToBePresentInElement(e, text));
+        scrollToElement(selectItemElement);
+        selectItemElement.click();
+        forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }
 
     public SelfService2Page selectCategory(String categoryGroupName){

@@ -113,7 +113,7 @@ public class Wait {
     }
 
     private static <T> T wrap(ExpectedCondition<T> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(expectedCondition);
     }
 
     public static <E extends ExtElement> E waitForVisible(E element) {

@@ -532,7 +532,8 @@ public class SidManualItemsTests extends BaseTest {
      * AND: U1 opens SID again
      * THEN: Age option is disabled
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to disable age checkbox")
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-1382")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to disable age checkbox")
     public void ecc3144_24_disableAgeAndSave(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
