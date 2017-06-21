@@ -191,19 +191,21 @@ public class ClaimTests extends BaseTest {
                 });
 
 
-        updateFT(user, NotesPage.class,
+        updateFT(user, SettlementPage.class,
                 disable(FTSetting.USE_INTERNAL_NOTES),
                 disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
+                .toNotesPage()
                 .doAssert(notesPage -> {
                     notesPage.assertEditCustomerNoteButtonPresent();
                     notesPage.assertInternalNoteButtonNotPresent();
                 });
 
-        updateFT(user, NotesPage.class,
+        updateFT(user, SettlementPage.class,
                 enable(FTSetting.USE_INTERNAL_NOTES),
                 enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
+                .toNotesPage()
                 .doAssert(notesPage -> {
                     notesPage.assertEditCustomerNoteButtonPresent();
                     notesPage.assertInternalNoteFieldsPresent();
