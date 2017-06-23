@@ -2,6 +2,7 @@ package com.scalepoint.automation.utils.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -166,6 +167,8 @@ public class TestData {
         return (ClaimRequest) getData(Data.CWA_CLAIM);
     }
 
+    public static Assignment getAssignment(){ return (Assignment) getData(Data.ASSIGNMENT); }
+
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
         String filePath = buildDataFilePath(locale, data.fileName);
@@ -253,7 +256,8 @@ public class TestData {
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
         DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
-        CWA_CLAIM("ClaimRequest.json", ClaimRequest.class);
+        CWA_CLAIM("ClaimRequest.json", ClaimRequest.class),
+        ASSIGNMENT("Assignment.xml", Assignment.class);
 
         private String fileName;
         private JAXBContext context;

@@ -1,10 +1,13 @@
 package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.RRLinesFields;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -13,6 +16,9 @@ import static org.testng.Assert.assertEquals;
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-546")
 public class ReductionRulesTest extends BaseTest {
+
+    @Autowired
+    DatabaseApi databaseApi;
 
     private static String sufficientDocumentation = "Sufficient documentation";
     private static String undefined = "Undefined";
@@ -672,6 +678,32 @@ public class ReductionRulesTest extends BaseTest {
                 .cancel()
                 .searchRule(rule)
                 .assertRuleNotDisplayed(rule);
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
+    public void charlie_497_verifyCreateDiscretionaryRule(ReductionRule rule){
+        toNewReductionRulePage()
+                .fillSimpleDiscretionaryRRAndSave(rule)
+                .assertRuleDisplayed(rule);
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
+    public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(ReductionRule rule){
+        toNewReductionRulePage()
+                .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
+                .assertRuleDisplayed(rule);
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
+    public void charlie_497_verifyCreateRuleAndAssignIt(ReductionRule rule, Assignment assignment) {
+        databaseApi.removeAssignment(assignment);
+        toNewReductionRulePage()
+                .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
+                .assertRuleDisplayed(rule)
+                .selectAssignmentsOption()
+                .fillAssignment(assignment)
+                .save()
+                .doAssert(asserts -> asserts.assertIsFirstLineAssignmentAdded(assignment));
     }
 
     private AddEditReductionRulePage toNewReductionRulePage() {

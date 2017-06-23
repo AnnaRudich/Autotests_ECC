@@ -1,5 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
@@ -93,6 +94,16 @@ public class DatabaseApi {
                 new CwaTaskLogMapper(),
                 claimId
         );
+    }
+
+    String delete = " DELETE FROM ReductionRuleConfiguration " +
+    " WHERE PseudoCategory = (SELECT PG.DefaultPseudoCatId FROM PSEUDOCAT_Group as PG " +
+            "WHERE PG.groupTextId = (SELECT TPG.TextId FROM Text_PSEUDOCAT_Group as TPG WHERE TPG.GroupName = ?))" +
+    " AND InsuranceCompany = (SELECT IC.ICRFNBR FROM INSCOMP as IC WHERE IC.CompanyCode = ?)" +
+    " AND Policy = ?";
+
+    public void removeAssignment(Assignment assignment){
+        this.jdbcTemplate.update(delete, assignment.getPseudoCategory(), assignment.getCompany(), assignment.getPolicy());
     }
 
     private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {
