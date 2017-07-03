@@ -4,6 +4,7 @@
         <packages>
             <package name=".*" >
                 <exclude name="com.scalepoint.automation.tests.rnv1"/>
+                <exclude name="com.scalepoint.automation.tests.api"/>
             </package>
         </packages>
     </test>

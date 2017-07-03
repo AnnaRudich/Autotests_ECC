@@ -11,6 +11,8 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.data.request.ExtraModifier;
 import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,10 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
 
     @BeforeMethod
     public void setUp(){
-        claimToken = createCwaClaimAndGetClaimToken(TestData.getClaimRequest());
-        userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken);
+        ClaimRequest claimRequest = TestData.getClaimRequest();
+        claimRequest.getExtraModifiers().add(new ExtraModifier().withType("cwaServiceId").withValue("1234"));
+        claimToken = createCwaClaimAndGetClaimToken(claimRequest);
+        userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken.replace("c.",""));
     }
 
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)

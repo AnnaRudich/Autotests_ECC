@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.restassured.http.Header;
 
 /**
  * Created by bza on 5/25/2017.
@@ -41,5 +42,9 @@ public class Token {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
+    }
+
+    public Header getAuthorizationHeder(){
+        return new Header("Authorization", tokenType +" "+ accessToken);
     }
 }

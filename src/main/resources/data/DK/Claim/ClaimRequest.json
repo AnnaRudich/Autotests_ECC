@@ -20,13 +20,10 @@
       "city": ""
     }
   },
-  "extraModifiers": [{
-    "type": "postItemizationCompletedUrl",
-    "value": "http://www.google.com"
-  },
+  "extraModifiers": [
     {
-      "type": "cwaServiceId",
-      "value": "6666"
+      "type": "postItemizationCompletedUrl",
+      "value": "http://www.google.com"
     },
     {
       "type": "replyToCaseEmail",
