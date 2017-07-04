@@ -3,6 +3,7 @@ package com.scalepoint.automation.services.restService;
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.response.Token;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
@@ -27,7 +28,12 @@ public class LoginProcessService extends BaseService {
     }
 
     public LoginProcessService login(User user){
-        Response loginProcessResponse = given().log().all().baseUri(getEccAdminUrl()).port(80)
+
+        if(getEccAdminUrl().contains("localhost")) {
+            RestAssured.port = 80;
+        }
+
+        Response loginProcessResponse = given().log().all().baseUri(getEccAdminUrl())
                 .redirects().follow(false)
                 .formParam("j_username", user.getLogin())
                 .formParam("j_password", user.getPassword())
@@ -36,18 +42,18 @@ public class LoginProcessService extends BaseService {
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 
-        Response loginActionResponse = given().log().all().baseUri(getLocationHeader(loginProcessResponse)).port(80)
+        Response loginActionResponse = given().log().all().baseUri(getLocationHeader(loginProcessResponse))
                 .redirects().follow(false)
                 .sessionId(loginProcessResponse.getSessionId())
                 .get()
                 .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).log().all().extract().response();
 
-        this.response = given().log().all().baseUri(getLocationHeader(loginActionResponse)).port(80)
+        this.response = given().log().all().baseUri(getLocationHeader(loginActionResponse))
                 .redirects().follow(false)
                 .get(getLocationHeader(loginActionResponse))
                 .then().log().all().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
 
-        given().log().all().baseUri(getEccUrl()).port(80)
+        given().log().all().baseUri(getEccUrl())
                 .sessionId(response.getSessionId())
                 .queryParam("sessionident", response.getSessionId())
                 .get("webshop/jsp/matching_engine/start.jsp")
@@ -57,6 +63,7 @@ public class LoginProcessService extends BaseService {
 
         data.setSessionId(response.getSessionId());
 
+        RestAssured.reset();
         return this;
     }
 
