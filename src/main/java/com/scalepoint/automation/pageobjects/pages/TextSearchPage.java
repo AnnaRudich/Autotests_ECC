@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Image;
@@ -145,7 +146,7 @@ public class TextSearchPage extends Page {
         if (matchButtons.isEmpty()) {
             throw new IllegalStateException("No text search results found!");
         }
-        matchButtons.get(0).click();
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(matchButtons.get(0))).click();
         return BaseDialog.at(SettlementDialog.class);
     }
 
