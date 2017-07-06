@@ -25,9 +25,15 @@ public class CaseSettlementDataService extends BaseService {
     }
 
     public CaseSettlementDataService getSettlementData(String revisionToken){
+        getSettlementData(revisionToken, "scalepoint");
+        return this;
+    }
+
+    public CaseSettlementDataService getSettlementData(String revisionToken, String tenant){
         this.response = given().baseUri(getEccUrl()).log().all()
                 .header(token.getAuthorizationHeder())
                 .pathParam("revisionToken", revisionToken)
+                .pathParam("tenant", tenant)
                 .get(CASE_GET_REVISION)
                 .then().log().all();
         return this;

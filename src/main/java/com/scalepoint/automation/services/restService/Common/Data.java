@@ -7,7 +7,8 @@ import com.scalepoint.automation.services.externalapi.DatabaseApi;
  */
 public class Data {
 
-    private String sessionId;
+    private String eccSessionId;
+    private String rnvSessionId;
     private String claimToken;
     private Integer userId;
     private static DatabaseApi databaseApi;
@@ -15,12 +16,20 @@ public class Data {
     public Data(){
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getEccSessionId() {
+        return eccSessionId;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setEccSessionId(String eccSessionId) {
+        this.eccSessionId = eccSessionId;
+    }
+
+    public String getRnvSessionId() {
+        return rnvSessionId;
+    }
+
+    public void setRnvSessionId(String rnvSessionId) {
+        this.rnvSessionId = rnvSessionId;
     }
 
     public String getClaimToken() {

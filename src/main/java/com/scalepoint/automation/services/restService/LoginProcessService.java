@@ -61,7 +61,7 @@ public class LoginProcessService extends BaseService {
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
-        data.setSessionId(response.getSessionId());
+        data.setEccSessionId(response.getSessionId());
 
         RestAssured.reset();
         return this;

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.scalepoint.automation.services.restService.Common.BasePath.SAVE_CLAIM;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
@@ -64,23 +65,28 @@ public class SettlementClaimService extends BaseService {
         return saveCustomerParams;
     }
 
-    private SettlementClaimService saveCustomer(ClaimRequest claimRequest, CloseCaseReason closeCaseReason){
-        saveCustomer(getFilledSaveCustomerParams(claimRequest), closeCaseReason);
+    public SettlementClaimService saveCustomer(ClaimRequest claimRequest, CloseCaseReason closeCaseReason){
+        Map<String,String> params = getFilledSaveCustomerParams(claimRequest);
+        if(closeCaseReason.equals(REPLACEMENT)){
+            params.put("claim_number", claimRequest.getCaseNumber());
+            params.put("replacement", "true");
+        }
+        saveCustomer(params, closeCaseReason);
         return this;
     }
 
-    private SettlementClaimService saveCustomer(Map<String,String> formParams, CloseCaseReason closeCaseReason){
+    public SettlementClaimService saveCustomer(Map<String,String> formParams, CloseCaseReason closeCaseReason){
         formParams.put("url", "/webapp/ScalePoint/dk"+ closeCaseReason.getPath().replace("{userId}", data.getUserId().toString()));
 
         this.response = given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getSessionId())
+                .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
                 .formParams(formParams)
                 .post(SAVE_CLAIM)
                 .then().log().headers().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
 
         given().log().all().baseUri(response.getHeader("Location"))
-                .sessionId(data.getSessionId())
+                .sessionId(data.getEccSessionId())
                 .port(80)
                 .get(response.getHeader("Location"))
                 .then();
@@ -90,19 +96,24 @@ public class SettlementClaimService extends BaseService {
 
     public SettlementClaimService close(ClaimRequest claimRequest, CloseCaseReason reason ){
         saveCustomer(claimRequest, reason);
-
-        this.response = given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getSessionId())
-                .pathParam("userId", data.getUserId())
-                .get(reason.getPath())
-                .then().statusCode(HttpStatus.SC_OK).extract().response();
+        if(reason.equals(REPLACEMENT)){
+            new ReplacementService().makeReplacement(claimRequest);
+        }
+        else{
+            this.response = given().baseUri(getEccUrl()).log().all()
+                    .sessionId(data.getEccSessionId())
+                    .pathParam("userId", data.getUserId())
+                    .get(reason.getPath())
+                    .then().statusCode(HttpStatus.SC_OK).extract().response();
+        }
         return this;
     }
 
     public enum CloseCaseReason{
 
         CLOSE_EXTERNAL(BasePath.CLOSE_EXTERNAL),
-        CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL);
+        CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL),
+        REPLACEMENT(BasePath.REPLACEMENT);
 
         private String path;
 

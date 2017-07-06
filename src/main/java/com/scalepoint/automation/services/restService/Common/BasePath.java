@@ -1,8 +1,6 @@
 package com.scalepoint.automation.services.restService.Common;
 
-/**
- * Created by bza on 6/29/2017.
- */
+
 public interface BasePath {
 
     String UNIFIED_INTEGRATION = "/Integration/UnifiedIntegration";
@@ -11,6 +9,7 @@ public interface BasePath {
     String SAVE_CLAIM = "/{userId}/SaveUserInfo";
     String CLOSE_EXTERNAL = "/{userId}/CloseCaseExternal";
     String CLOSE_WITH_MAIL = "/{userId}/SettleCustomer";
+    String REPLACEMENT = "{userId}/PostReplacedFromME";
+    String CASE_GET_REVISION = "case/{tenant}/revision/{revisionToken}";
 
-    String CASE_GET_REVISION = "case/scalepoint/revision/{revisionToken}";
 }

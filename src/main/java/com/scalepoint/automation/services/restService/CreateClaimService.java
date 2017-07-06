@@ -52,7 +52,7 @@ public class CreateClaimService extends BaseService {
 
         given().log().all().baseUri(getEccUrl()).queryParam("token", data.getClaimToken())
                 .basePath(OPEN_CLAIM)
-                .sessionId(data.getSessionId())
+                .sessionId(data.getEccSessionId())
                 .post()
                 .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).log().all();
         return this;

@@ -42,7 +42,7 @@ public class ClaimSettlementItemService extends BaseService {
         setItemCaseAndClaimNumber();
 
         this.response = given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getSessionId())
+                .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
                 .formParam("xml", TestData.objectAsXml(this.item))
                 .formParam("productId", -1)

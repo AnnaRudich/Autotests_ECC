@@ -14,10 +14,11 @@
     "lastName": "Doe",
     "email": "john.doe@scalepoint.com",
     "mobile": "88 81 80 00",
+    "phone": "12 12 12 12",
     "address": {
-      "street1": "",
-      "postalCode": "",
-      "city": ""
+      "street1": "street 11",
+      "postalCode": "4000",
+      "city": "city"
     }
   },
   "extraModifiers": [
