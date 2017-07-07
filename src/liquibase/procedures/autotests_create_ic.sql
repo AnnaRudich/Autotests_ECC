@@ -284,7 +284,8 @@ INSERT INTO [INSCOMP]
        ,[invoicePaymentByInsuranceCompany]
        ,[reminderDays]
        ,[autoApproveDays]
-       ,[icReceiveCancelClaimNotification])
+       ,[icReceiveCancelClaimNotification]
+       ,[auditCompanyCode])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -316,7 +317,8 @@ INSERT INTO [INSCOMP]
 		   ,0
 		   ,5
 		   ,2
-		   ,1)
+		   ,1
+		   ,'scalepoint')
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
