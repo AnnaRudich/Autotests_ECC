@@ -318,7 +318,7 @@ INSERT INTO [INSCOMP]
 		   ,5
 		   ,2
 		   ,1
-		   ,'scalepoint')
+		   ,@ICNAME)
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
