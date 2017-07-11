@@ -85,7 +85,7 @@ public class DatabaseApi {
     }
 
     public Integer getUserIdByClaimToken(String claimToken){
-        return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where UserToken = ?", Integer.class, claimToken.replace("c.", ""));
+        return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where UserToken = ?", Integer.class, claimToken);
     }
 
     public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId){
@@ -104,6 +104,10 @@ public class DatabaseApi {
 
     public void removeAssignment(Assignment assignment){
         this.jdbcTemplate.update(delete, assignment.getPseudoCategory(), assignment.getCompany(), assignment.getPolicy());
+    }
+
+    public String getSettlementRevisionTokenByClaimNumber(String claimNumber){
+        return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ?", String.class, claimNumber);
     }
 
     private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {

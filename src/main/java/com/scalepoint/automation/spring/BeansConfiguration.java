@@ -26,6 +26,8 @@ public class BeansConfiguration {
     private String eccContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_ADMIN + "}")
     private String eccAdminContext;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_RNV + "}")
+    private String eccRnvContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_SOLR_PRODUCTS_URL + "}")
     private String solrProductsUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_URL+ "}")
@@ -42,7 +44,7 @@ public class BeansConfiguration {
         return new ApplicationListener<ApplicationReadyEvent>() {
             @Override
             public void onApplicationEvent(ApplicationReadyEvent event) {
-                com.scalepoint.automation.utils.Configuration.init(locale, serverUrl, eccContext, eccAdminContext, solrProductsUrl);
+                com.scalepoint.automation.utils.Configuration.init(locale, serverUrl, eccContext, eccAdminContext, eccRnvContext, solrProductsUrl);
                 UsersManager.initManager(TestData.getSystemUsers());
             }
         };

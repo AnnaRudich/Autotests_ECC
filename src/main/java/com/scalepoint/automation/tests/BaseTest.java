@@ -11,7 +11,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
-import com.scalepoint.automation.services.externalapi.IntegrationClaimApi;
+import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -135,7 +135,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest){
         Token token = new TestAccountsApi().sendRequest().getToken();
-        return new IntegrationClaimApi(token).sendRequest(claimRequest).getClaimTokenString();
+        return new CreateClaimService(token).addClaim(claimRequest).getClaimToken();
     }
 
     protected SettlementPage loginAndOpenCwaClaimByToken(User user, String claimToken){

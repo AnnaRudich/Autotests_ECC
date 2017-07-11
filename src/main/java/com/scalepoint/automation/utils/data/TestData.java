@@ -33,14 +33,17 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,6 +172,10 @@ public class TestData {
 
     public static Assignment getAssignment(){ return (Assignment) getData(Data.ASSIGNMENT); }
 
+    public static InsertSettlementItem getInsertSettlementItem() {
+        return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
+    }
+
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
         String filePath = buildDataFilePath(locale, data.fileName);
@@ -189,6 +196,19 @@ public class TestData {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static String objectAsXml(Object object) {
+        java.io.StringWriter sw = new StringWriter();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(object.getClass());
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+            marshaller.marshal(object, sw);
+        }catch (JAXBException exception){
+           log.error(exception.getMessage());
+        }
+        return sw.toString();
     }
 
     private static Map<String, String> buildParams() {
@@ -256,8 +276,9 @@ public class TestData {
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
         DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
-        CWA_CLAIM("ClaimRequest.json", ClaimRequest.class),
-        ASSIGNMENT("Assignment.xml", Assignment.class);
+        CWA_CLAIM("Claim\\ClaimRequest.json", ClaimRequest.class),
+        ASSIGNMENT("Assignment.xml", Assignment.class),
+        CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class);
 
         private String fileName;
         private JAXBContext context;
