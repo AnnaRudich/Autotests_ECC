@@ -15,11 +15,6 @@ public class CreateClaimService extends BaseService {
 
     private Token token;
     private Response response;
-    private String claimToken;
-
-    public String getClaimToken() {
-        return claimToken;
-    }
 
     public CreateClaimService(Token token){
         this.token = token;
@@ -42,12 +37,11 @@ public class CreateClaimService extends BaseService {
                 .post()
                 .then().log().all().statusCode(HttpStatus.SC_OK)
                 .extract().response();
-        this.claimToken = response.jsonPath().get("token");
+        data.setClaimToken(response.jsonPath().get("token"));
         return this;
     }
 
     public CreateClaimService openClaim(){
-        data.setClaimToken(this.claimToken);
         setUserIdByClaimToken();
 
         given().log().all().baseUri(getEccUrl()).queryParam("token", data.getClaimToken())

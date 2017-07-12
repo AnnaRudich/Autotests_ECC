@@ -15,9 +15,6 @@ import static com.scalepoint.automation.services.restService.SettlementClaimServ
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
-/**
- * Created by bza on 6/29/2017.
- */
 public class SettlementClaimService extends BaseService {
 
     private Response response;

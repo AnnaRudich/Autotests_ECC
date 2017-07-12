@@ -135,7 +135,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest){
         Token token = new TestAccountsApi().sendRequest().getToken();
-        return new CreateClaimService(token).addClaim(claimRequest).getClaimToken();
+        return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
     protected SettlementPage loginAndOpenCwaClaimByToken(User user, String claimToken){
