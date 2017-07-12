@@ -10,9 +10,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
 import static com.scalepoint.automation.utils.Wait.*;
+import static org.testng.Assert.assertTrue;
 
 public class SelfServicePage extends Page {
 
@@ -118,12 +120,12 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//input[@id='agreement']")
     private WebElement shopAgreementCheckBox;
 
-    private String descriptionColumnXpath = "//td[contains(@class, 'descriptionColumn')]";
-    private String categoryColumnXpath = "//td[contains(@class, 'categoryColumn')]";
-    private String purchaseDateColumnXpath = "//td[contains(@class, 'purchaseDate')]";
-    private String purchasePriceColumnXpath = "//td[contains(@class, 'purchasePrice')]";
-    private String newPriceColumnXpath = "//td[contains(@class, 'newPrice')]";
-    private String descSuggestionsXpath = "//div[contains(@class, 'x-combo-list-item')]";
+    private String descriptionColumn = "//td[contains(@class, 'descriptionColumn')]";
+    private String categoryColumn = "//td[contains(@class, 'categoryColumn')]";
+    private String purchaseDateColumn = "//td[contains(@class, 'purchaseDate')]";
+    private String purchasePriceColumn = "//td[contains(@class, 'purchasePrice')]";
+    private String newPriceColumn = "//td[contains(@class, 'newPrice')]";
+    private String descSuggestions = "//div[contains(@class, 'x-combo-list-item')]";
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -134,26 +136,6 @@ public class SelfServicePage extends Page {
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/shop/self_service.jsp";
-    }
-
-    public boolean isDescriptionRequired() {
-        return isColumnRequired(descriptionColumnXpath);
-    }
-
-    public boolean isCategoryRequired() {
-        return isColumnRequired(categoryColumnXpath);
-    }
-
-    public boolean isPurchaseDateRequired() {
-        return isColumnRequired(purchaseDateColumnXpath);
-    }
-
-    public boolean isPurchasePriceRequired() {
-        return isColumnRequired(purchasePriceColumnXpath);
-    }
-
-    public boolean isNewPriceRequired() {
-        return isColumnRequired(newPriceColumnXpath);
     }
 
     public boolean isColumnRequired(String columnXpath) {
@@ -195,8 +177,8 @@ public class SelfServicePage extends Page {
 
     public boolean isFirst10SuggestionContainQuery(String query) {
         String[] queryList = query.split(" ");
-        waitForStaleElement(By.xpath(descSuggestionsXpath));
-        List<WebElement> suggestionItem = driver.findElements(By.xpath(descSuggestionsXpath));
+        waitForStaleElement(By.xpath(descSuggestions));
+        List<WebElement> suggestionItem = driver.findElements(By.xpath(descSuggestions));
         for (int i = 0; i < 10; i++) {
             System.out.println("Query: " + unifyStr(query).toUpperCase() + " present in " + unifyStr(suggestionItem.get(i).getText()) + "?");
             for (String aQueryList : queryList) {
@@ -455,4 +437,44 @@ public class SelfServicePage extends Page {
     public String getFirstLineCategoryText() {
         return getText(categoryFirstField);
     }
+
+    public SelfServicePage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return this;
+    }
+
+    public class Asserts {
+        public Asserts assertRequiredFieldIconPresent(String columnXpath) {
+            assertTrue(isColumnRequired(columnXpath), "Required field icon should be displayed");
+            return this;
+        }
+
+        public Asserts assertDescriptionColumnIsMarkedAsRequired(){
+            assertRequiredFieldIconPresent(descriptionColumn);
+            return this;
+        }
+
+        public Asserts assertCategoryColumnIsMarkedAsRequired(){
+            assertRequiredFieldIconPresent(categoryColumn);
+            return this;
+        }
+
+        public Asserts assertPurchaseDateColumnIsMarkedAsRequired(){
+            assertRequiredFieldIconPresent(purchaseDateColumn);
+            return this;
+        }
+
+        public Asserts assertPurchasePriceColumnIsMarkedAsRequired(){
+            assertRequiredFieldIconPresent(purchasePriceColumn);
+            return this;
+        }
+
+        public Asserts assertNewPriceColumnIsMarkedAsRequired(){
+            assertRequiredFieldIconPresent(newPriceColumn);
+            return this;
+        }
+    }
 }
+
+
+
