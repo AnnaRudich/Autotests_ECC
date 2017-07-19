@@ -60,8 +60,12 @@ public class OperationalUtils {
     }
 
     public static void assertEqualsDoubleWithTolerance(Double actualAmount, Double expectedAmount) {
+        assertEqualsDoubleWithTolerance(actualAmount,expectedAmount,"Actual: %s Expected: %s");
+    }
+
+    public static void assertEqualsDoubleWithTolerance(Double actualAmount, Double expectedAmount, String message) {
         int tolerance = 3;
-        assertTrue(Math.abs(actualAmount-expectedAmount) <= Math.pow(10,-tolerance), String.format("Actual: %s Expected: %s", actualAmount, expectedAmount) );
+        assertTrue(Math.abs(actualAmount-expectedAmount) <= Math.pow(10,-tolerance), String.format(message, actualAmount, expectedAmount) );
     }
 
     public static String toString(Double actualAmount) {
