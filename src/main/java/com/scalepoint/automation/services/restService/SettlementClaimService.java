@@ -65,17 +65,12 @@ public class SettlementClaimService extends BaseService {
         return saveCustomerParams;
     }
 
-    public SettlementClaimService saveCustomer(ClaimRequest claimRequest, CloseCaseReason closeCaseReason){
-        Map<String,String> params = getFilledSaveCustomerParams(claimRequest);
-        if(closeCaseReason.equals(REPLACEMENT)){
-            params.put("claim_number", claimRequest.getCaseNumber());
-            params.put("replacement", "true");
-        }
-        saveCustomer(params, closeCaseReason);
+    private SettlementClaimService saveCustomer(ClaimRequest claimRequest, CloseCaseReason closeCaseReason){
+        saveCustomer(getFilledSaveCustomerParams(claimRequest), closeCaseReason);
         return this;
     }
 
-    public SettlementClaimService saveCustomer(Map<String,String> formParams, CloseCaseReason closeCaseReason){
+    private SettlementClaimService saveCustomer(Map<String,String> formParams, CloseCaseReason closeCaseReason){
         formParams.put("url", "/webapp/ScalePoint/dk"+ closeCaseReason.getPath().replace("{userId}", data.getUserId().toString()));
 
         this.response = given().baseUri(getEccUrl()).log().all()
@@ -106,6 +101,25 @@ public class SettlementClaimService extends BaseService {
                     .get(reason.getPath())
                     .then().statusCode(HttpStatus.SC_OK).extract().response();
         }
+
+        this.response = given().baseUri(getEccUrl()).log().all()
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .queryParam("userId", data.getUserId())
+                .get(reason.getPath())
+                .then().statusCode(HttpStatus.SC_OK).extract().response();
+        return this;
+    }
+
+    public SettlementClaimService cancel(ClaimRequest claimRequest, CloseCaseReason reason ){
+        saveCustomer(claimRequest, reason);
+
+        this.response = given().baseUri(getEccUrl()).log().all()
+                .sessionId(data.getEccSessionId())
+                .queryParam("shnbr", data.getUserId())
+                .queryParam("closeClaim", false)
+                .get(reason.getPath())
+                .then().statusCode(HttpStatus.SC_OK).extract().response();
         return this;
     }
 
@@ -113,6 +127,7 @@ public class SettlementClaimService extends BaseService {
 
         CLOSE_EXTERNAL(BasePath.CLOSE_EXTERNAL),
         CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL),
+        CANCEL_CLAIM(BasePath.CANCEL_CLAIM),
         REPLACEMENT(BasePath.REPLACEMENT);
 
         private String path;

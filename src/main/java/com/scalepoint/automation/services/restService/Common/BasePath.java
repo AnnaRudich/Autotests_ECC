@@ -11,5 +11,6 @@ public interface BasePath {
     String CLOSE_WITH_MAIL = "/{userId}/SettleCustomer";
     String REPLACEMENT = "{userId}/PostReplacedFromME";
     String CASE_GET_REVISION = "case/{tenant}/revision/{revisionToken}";
+    String CANCEL_CLAIM = "/CancelClaim";
 
 }
