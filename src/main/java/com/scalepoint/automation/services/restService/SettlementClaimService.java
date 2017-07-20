@@ -66,7 +66,12 @@ public class SettlementClaimService extends BaseService {
     }
 
     private SettlementClaimService saveCustomer(ClaimRequest claimRequest, CloseCaseReason closeCaseReason){
-        saveCustomer(getFilledSaveCustomerParams(claimRequest), closeCaseReason);
+        Map<String,String> params = getFilledSaveCustomerParams(claimRequest);
+        if(closeCaseReason.equals(REPLACEMENT)){
+            params.put("claim_number", claimRequest.getCaseNumber());
+            params.put("replacement", "true");
+        }
+        saveCustomer(params, closeCaseReason);
         return this;
     }
 
@@ -102,12 +107,6 @@ public class SettlementClaimService extends BaseService {
                     .then().statusCode(HttpStatus.SC_OK).extract().response();
         }
 
-        this.response = given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getEccSessionId())
-                .pathParam("userId", data.getUserId())
-                .queryParam("userId", data.getUserId())
-                .get(reason.getPath())
-                .then().statusCode(HttpStatus.SC_OK).extract().response();
         return this;
     }
 
