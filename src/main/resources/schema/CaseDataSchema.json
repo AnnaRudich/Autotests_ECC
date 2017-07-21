@@ -12,20 +12,12 @@
         },
         "policyNumber": {
           "type": "string"
-        },
-        "caseType": {
-          "type": "string",
-          "enum" : [
-            "contentClaim",
-            "propertyClaim"
-          ]
         }
       },
       "required": [
         "token",
         "number",
-        "policyNumber",
-        "caseType"
+        "policyNumber"
       ]
     },
     "product": {

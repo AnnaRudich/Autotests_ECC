@@ -110,6 +110,10 @@ public class DatabaseApi {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ?", String.class, claimNumber);
     }
 
+    public String getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(String claimNumber){
+        return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'X'", String.class, claimNumber);
+    }
+
     private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {
 
         public CwaTaskLog mapRow(ResultSet rs, int rowNum) throws SQLException {

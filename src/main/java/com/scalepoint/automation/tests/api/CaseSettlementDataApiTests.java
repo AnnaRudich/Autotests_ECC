@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.api;
 
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
+import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -12,7 +13,6 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.services.externalapi.TestAccountsApi.Scope.PLATFORM_CASE_READ;
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItem;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.is;
@@ -41,7 +41,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
     public void getCaseRevisionByTokenForClosedWithMailClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItem(user, claimRequest, item)
                 .closeCase()
-                .close(claimRequest, CLOSE_WITH_MAIL);
+                .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL);
 
         new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()))
@@ -83,9 +83,25 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .close(claimRequest, CLOSE_EXTERNAL);
 
         new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
-                .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()),"BadScalepoint")
+                .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()), "BadScalepoint")
                 .getResponse()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    public void getCaseRevisionByTokenForCanceledClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
+        loginAndOpenClaimWithItem(user, claimRequest, item)
+                .closeCase()
+                .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL)
+                .cancel(claimRequest, SettlementClaimService.CloseCaseReason.CANCEL_CLAIM);
+
+        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+                .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(claimRequest.getCaseNumber()))
+                .getResponse()
+                .statusCode(HttpStatus.SC_OK)
+                .body(status, is("CANCELLED"))
+                .body(settlementType, is("CANCELLED"))
+                .body(matchesJsonSchemaInClasspath("schema/CaseDataSchema.json"));
+
+    }
 }
