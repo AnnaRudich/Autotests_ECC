@@ -443,12 +443,12 @@ public class SettlementPage extends BaseClaimPage {
             }
 
             public Asserts assertPurchasePriceIs(double expectedPrice) {
-                OperationalUtils.assertEqualsDouble(purchasePrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+                OperationalUtils.assertEqualsDoubleWithTolerance(purchasePrice, expectedPrice);
                 return this;
             }
 
             public Asserts assertReplacementPriceIs(double expectedPrice) {
-                OperationalUtils.assertEqualsDouble(replacementPrice, expectedPrice, "Expected purchase price is: "+expectedPrice);
+                OperationalUtils.assertEqualsDoubleWithTolerance(replacementPrice, expectedPrice);
                 return this;
             }
 

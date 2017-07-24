@@ -91,12 +91,12 @@ public class SidTests extends BaseTest {
                             .withVoucher(existingVoucher);
                 });
         SettlementPage settlementPage = settlementDialog.doAssert(sid -> sid.assertVoucherDropdownWithoutDistance(existingVoucher)).closeSidWithOk();
-        changePostalCodeAndReturnToSid(settlementPage, "2000", claim)
-                .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 162))
+        changePostalCodeAndReturnToSid(settlementPage, "3000", claim)
+                .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 45))
                 .closeSidWithOk();
 
-        changePostalCodeAndReturnToSid(settlementPage, "5000", claim)
-                .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 0))
+        changePostalCodeAndReturnToSid(settlementPage, "6000", claim)
+                .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 72))
                 .closeSidWithOk();
     }
 
@@ -136,8 +136,8 @@ public class SidTests extends BaseTest {
                 })
                 .openFindShopDialog()
                 .doAssert(findShop -> {
-                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "5000", 0);
-                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "2000", 162);
+                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "6000", 72);
+                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "3000", 203);
                     findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "1000", 166);
                     findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "9990", 366);
                 });

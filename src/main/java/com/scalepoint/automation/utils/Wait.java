@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
 @SuppressWarnings({"Guava", "ConstantConditions"})
 public class Wait {
@@ -45,7 +46,7 @@ public class Wait {
     }
 
     public static Boolean visible(WebElement element) {
-        List<WebElement> webElements = wrapShort(ExpectedConditions.visibilityOfAllElements(Lists.newArrayList(element)));
+        List<WebElement> webElements = wrapShort(visibilityOfAllElements(Lists.newArrayList(element)));
         return webElements.size() == 1;
     }
 
@@ -119,6 +120,11 @@ public class Wait {
     public static <E extends ExtElement> E waitForVisible(E element) {
         waitForVisible(element.getRootElement());
         return element;
+    }
+
+    public static List<WebElement> waitForAllElementsVisible(List<WebElement> elements) {
+        wrap(visibilityOfAllElements(elements));
+        return elements;
     }
 
     public static <E extends TypifiedElement> E waitForVisible(E element) {
