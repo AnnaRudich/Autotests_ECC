@@ -26,14 +26,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
 
-    @Autowired
-    private DatabaseApi databaseApi;
-
     private String claimToken;
     private Integer userIdByClaimToken;
 
     @BeforeMethod
-    public void setUp(){
+    public void setUpForEccIntegrationsTest(){
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.getExtraModifiers().add(new ExtraModifier().withType("cwaServiceId").withValue("1234"));
         claimToken = createCwaClaimAndGetClaimToken(claimRequest);
