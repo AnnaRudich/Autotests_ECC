@@ -919,22 +919,26 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertCashValueIs(Double expectedCashValue) {
-            assertEqualsDouble(getCashCompensationValue(), expectedCashValue, "Cash compensation is incorrect");
+            OperationalUtils.assertEqualsDoubleWithTolerance(getCashCompensationValue(), expectedCashValue,
+                    "Cash compensation is incorrect. Actual %s, Expected %s");
             return this;
         }
 
         public Asserts assertVoucherCashValueIs(Double expectedVoucherCashValue) {
-            assertEqualsDouble(voucherCashValueFieldText(), expectedVoucherCashValue, "Voucher cash value is incorrect");
+            OperationalUtils.assertEqualsDoubleWithTolerance(voucherCashValueFieldText(), expectedVoucherCashValue,
+                    "Voucher cash value is incorrect. Actual %s, Expected %s");
             return this;
         }
 
         public Asserts assertVoucherFaceValueIs(Double expectedVoucherCashValue) {
-            assertEqualsDouble(voucherFaceValueFieldText(), expectedVoucherCashValue, "Voucher face value is incorrect");
+            OperationalUtils.assertEqualsDoubleWithTolerance(voucherFaceValueFieldText(), expectedVoucherCashValue,
+                    "Voucher face value is incorrect. Actual %s, Expected %s");
             return this;
         }
 
         public Asserts assertDepreciationAmountIs(Double expectedDepreciation) {
-            assertEqualsDouble(fetchDepreciationAmount(), expectedDepreciation, "Depreciation is incorrect");
+            OperationalUtils.assertEqualsDoubleWithTolerance(fetchDepreciationAmount(), expectedDepreciation,
+                    "Depreciation is incorrect. Actual %s, Expected %s");
             return this;
         }
 

@@ -95,19 +95,32 @@ public class SelfService2Page extends Page {
         String itemLocator = ".//span[contains(text(),'%s')]";
         WebElement selectItemElement = forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
+        waitForVisible(selectItemElement);
         scrollToElement(selectItemElement);
+        waitForVisible(selectItemElement);
         selectItemElement.click();
+        waitForVisible(selectElement);
         forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }
 
+    private void trySelectItem(WebElement element, String text){
+        WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
+        int count = 0;
+        while(!selectElement.getText().equals(text) && count<5){
+            selectItem(element, text);
+            count++;
+            logger.info("\nCount: " + count);
+        }
+    }
+
     public SelfService2Page selectCategory(String categoryGroupName){
-        selectItem(categoryCombo, categoryGroupName);
+        trySelectItem(categoryCombo, categoryGroupName);
         waitForValidationMark(categoryCombo);
         return this;
     }
 
     public SelfService2Page selectSubCategory(String categoryName){
-        selectItem(subCategoryCombo, categoryName);
+        trySelectItem(subCategoryCombo, categoryName);
         waitForValidationMark(subCategoryCombo);
         return this;
     }

@@ -8,6 +8,7 @@ public class Configuration {
     public static final String KEY_LOCALE = "app.locale";
     public static final String KEY_CONTEXT_ECC = "context.ecc";
     public static final String KEY_CONTEXT_ECC_ADMIN = "context.ecc.admin";
+    public static final String KEY_CONTEXT_ECC_RNV = "context.ecc.rnv";
     public static final String KEY_SERVER_URL = "url.base.server";
     public static final String KEY_ECC_SOLR_PRODUCTS_URL = "url.solr.products";
     public static final String KEY_ECC_DB_URL = "url";
@@ -21,15 +22,18 @@ public class Configuration {
     private static String serverUrl;
     private static String eccContext;
     private static String eccAdminContext;
+    private static String eccRnvContext;
     private static String eccBaseUrl;
     private static String eccAdminBaseUrl;
+    private static String eccRnvBaseUrl;
     private static String solrProductsUrl;
 
-    public static void init(String locale, String serverUrl, String eccContext, String eccAdminContext, String solrProductsUrl) {
+    public static void init(String locale, String serverUrl, String eccContext, String eccAdminContext, String eccRnvContext, String solrProductsUrl) {
         Assert.notNull(locale, errorMessage(KEY_LOCALE));
         Assert.notNull(serverUrl, errorMessage(KEY_SERVER_URL));
         Assert.notNull(eccContext, errorMessage(KEY_CONTEXT_ECC));
         Assert.notNull(eccAdminContext, errorMessage(KEY_CONTEXT_ECC_ADMIN));
+        Assert.notNull(eccRnvContext, errorMessage(KEY_CONTEXT_ECC_RNV));
         Assert.notNull(solrProductsUrl, errorMessage(KEY_ECC_SOLR_PRODUCTS_URL));
 
         String httpServerUrl = HTTP +serverUrl;
@@ -38,10 +42,12 @@ public class Configuration {
         Configuration.serverUrl =  httpServerUrl;
         Configuration.eccContext = eccContext;
         Configuration.eccAdminContext = eccAdminContext;
+        Configuration.eccRnvContext = eccRnvContext;
         Configuration.solrProductsUrl = solrProductsUrl;
 
         Configuration.eccBaseUrl = httpServerUrl + SLASH + eccContext + SLASH + locale + SLASH;
         Configuration.eccAdminBaseUrl = httpServerUrl + SLASH + eccAdminContext + SLASH + locale + SLASH;
+        Configuration.eccRnvBaseUrl = httpServerUrl + SLASH + eccRnvContext + SLASH + locale + SLASH;
     }
 
     private static String errorMessage(String parameter) {
@@ -64,12 +70,20 @@ public class Configuration {
         return eccAdminContext;
     }
 
+    public static String getEccRnvContext() {
+        return eccRnvContext;
+    }
+
     public static String getEccUrl() {
         return eccBaseUrl;
     }
 
     public static String getEccAdminUrl() {
         return eccAdminBaseUrl;
+    }
+
+    public static String getEccRnvUrl() {
+        return eccRnvBaseUrl;
     }
 
     public static boolean isDK() {

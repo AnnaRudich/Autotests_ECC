@@ -284,7 +284,8 @@ INSERT INTO [INSCOMP]
        ,[invoicePaymentByInsuranceCompany]
        ,[reminderDays]
        ,[autoApproveDays]
-       ,[icReceiveCancelClaimNotification])
+       ,[icReceiveCancelClaimNotification]
+       ,[auditCompanyCode])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -316,12 +317,38 @@ INSERT INTO [INSCOMP]
 		   ,0
 		   ,5
 		   ,2
-		   ,1)
+		   ,1
+		   ,@ICNAME)
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
 
     PRINT 'Insurance company was successfully created with id = ' + CAST(@ICRFNBR AS VARCHAR)
+
+INSERT INTO [InsuranceCompanyCalendar]([insuranceCompanyId]
+      ,[workingDayMonday]
+      ,[workingDayTuesday]
+      ,[workingDayWednesday]
+      ,[workingDayThursday]
+      ,[workingDayFriday]
+      ,[workingDaySaturday]
+      ,[workingDaySunday]
+      ,[automaticMailStartTime]
+      ,[automaticMailEndTime]
+      ,[automaticMailDelayFrom]
+      ,[automaticMailDelayTo])
+VALUES (@ICRFNBR,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      '01:00:00',
+      '23:00:00',
+      10,
+        120)
 
 SET NOCOUNT OFF
 

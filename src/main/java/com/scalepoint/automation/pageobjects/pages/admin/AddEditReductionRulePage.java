@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.google.common.base.Strings;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
@@ -7,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
@@ -25,6 +27,12 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
     @FindBy(id = "depreciation_discretionary")
     private WebElement discretionaryButton;
+
+    @FindBy(name = "use_rounding")
+    private CheckBox useRounding;
+
+    @FindBy(name = "roundbase")
+    private WebElement roundbase;
 
     @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]/td[2]/input[@id='desc|0']")
     private WebElement descriptionFirstField;
@@ -193,7 +201,7 @@ public class AddEditReductionRulePage extends AdminBasePage {
     }
 
 
-    public void fillSimpleDiscretionaryRRAndSave(ReductionRule rr) {
+    public ReductionRulesPage fillSimpleDiscretionaryRRAndSave(ReductionRule rr) {
         nameField.sendKeys(rr.getRrName());
         publishRR();
         selectDiscretionaryRuleOption();
@@ -203,23 +211,39 @@ public class AddEditReductionRulePage extends AdminBasePage {
         clReductiontoFirstField.sendKeys(rr.getClaimReduction1());
         priceFromFirstField.sendKeys(rr.getPriceRangeFrom2());
         priceToFirstField.sendKeys(rr.getPriceRangeTo2());
-        save();
+        return save();
     }
 
-    public void fillDiscretionaryRRAndSave(ReductionRule rr, String ageFrom, String ageTo, String claimReduction, String priceRangeFrom,
-                                           String priceRangeTo, String documentationValue, String ratingDropValue) {
+    public ReductionRulesPage fillSimpleDiscretionaryRRWithRoundingsAndSave(ReductionRule rr) {
+        return  fillDiscretionaryRRAndSave(rr, "5", rr.getAgeFrom1(), rr.getAgeTo1(), rr.getClaimReduction1(),
+                rr.getPriceRangeFrom1(), rr.getPriceRangeTo1(), null, null);
+    }
+
+    public ReductionRulesPage fillDiscretionaryRRAndSave(ReductionRule rr, String roundbase, String ageFrom, String ageTo,
+                                                         String claimReduction, String priceRangeFrom, String priceRangeTo,
+                                                         String documentationValue, String ratingDropValue) {
         nameField.sendKeys(rr.getRrName());
         publishRR();
         selectDiscretionaryRuleOption();
         descriptionFirstField.sendKeys(rr.getDescription1());
+        if(Strings.isNullOrEmpty(roundbase)){
+            this.useRounding.deselect();
+        }else{
+            this.useRounding.select();
+            this.roundbase.sendKeys(roundbase);
+        }
         ageFromFirstField.sendKeys(ageFrom);
         ageToFirstField.sendKeys(ageTo);
         clReductiontoFirstField.sendKeys(claimReduction);
         priceFromFirstField.sendKeys(priceRangeFrom);
         priceToFirstField.sendKeys(priceRangeTo);
-        selectDocumentationDropValue(0, documentationValue);
-        selectRatingDropValue(0, ratingDropValue);
-        save();
+        if(!Strings.isNullOrEmpty(documentationValue)) {
+            selectDocumentationDropValue(0, documentationValue);
+        }
+        if(!Strings.isNullOrEmpty(ratingDropValue)) {
+            selectRatingDropValue(0, ratingDropValue);
+        }
+        return save();
     }
 
     public String getDescriptionColumnHeader() {

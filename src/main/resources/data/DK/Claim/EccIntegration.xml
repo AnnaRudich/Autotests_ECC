@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ECCIntegration updateAction="UPDATE">
+    <Claim allowAutoClose="false">
+        <ClaimedItems>
+            <ClaimedItem description="Nokia E71" quantity="1" depreciation="10" ageMonths="3" itemId="NOK_E71_BLK" brand="Nokia" model="E71" status="ACTIVE" activeValuation="CUSTOMER_DEMAND">
+                <Valuations>
+                    <Valuation price="2100" type="CUSTOMER_DEMAND"/>
+                </Valuations>
+                <CompanySpecificItemData/>
+            </ClaimedItem>
+        </ClaimedItems>
+    </Claim>
+    <Claimant firstName="John" lastName="Cardona" address1="729 Southcrest Rd" postalCode="6220" city="Harrisville" phone="48005102" email="ecc@scalepoint.com"/>
+</ECCIntegration>

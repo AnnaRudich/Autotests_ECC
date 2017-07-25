@@ -95,8 +95,9 @@ public class ReductionRulesPage extends AdminBasePage {
         return this;
     }
 
-    public void selectAssignmentsOption() {
+    public ReductionRuleAssignmentsPage selectAssignmentsOption() {
         assignmentsButton.click();
+        return new ReductionRuleAssignmentsPage();
     }
 
     public void selectNewICAndRefresh(InsuranceCompany ic) {

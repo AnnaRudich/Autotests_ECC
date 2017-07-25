@@ -1,0 +1,16 @@
+<InsertSettlementItem caseId="2327141">
+    <SettlementItem id="-1" active="true" reviewed="false" rejected="false" documentationOk="true" reductionRuleLineId="null" preDepreciation="0" postDepreciation="0" depreciateDiscounted="false" depreciationType="1" policyRuleDepreciation="0" discretionaryRuleDepreciation="0" cashReduction="0" automaticDepreciation="true" depreciationChanged="false" taxRate="0.25" includeTax="true">
+        <Claim description="item1" quantity="1" newItem="false" category="22" claimToken="E96A1045-A0D8-43C4-8A4E-37B42DD63678" room="0" originalDescription=""/>
+        <Valuations>
+            <Valuation id="-3" quantity="1" preDepreciation="0" active="true" dirty="true" hidden="false" valuationType="VOUCHER" priceAfterAllDeductions="375" baseValuation="-2"><Price name="price" netAmount="300" amount="375"/>
+                <VoucherReplacement voucher="2405199">
+                    <Price name="cashValue" netAmount="300" amount="375"/>
+                    <Price name="faceValue" netAmount="400" amount="500"/>
+                </VoucherReplacement>
+            </Valuation>
+            <Valuation id="-2" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="CUSTOMER_DEMAND" priceAfterAllDeductions="500">
+                <Price name="price" netAmount="400" amount="500"/>
+            </Valuation>
+        </Valuations>
+    </SettlementItem>
+</InsertSettlementItem>

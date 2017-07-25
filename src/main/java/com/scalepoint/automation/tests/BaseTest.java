@@ -11,12 +11,11 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
-import com.scalepoint.automation.services.externalapi.IntegrationClaimApi;
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
+import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
-import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -39,15 +38,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.Logs;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -66,18 +57,10 @@ import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 
-@SpringApplicationConfiguration(classes = Application.class)
-@IntegrationTest
-@TestExecutionListeners(inheritListeners = false, listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class})
+
 @Listeners({InvokedMethodListener.class})
-public class BaseTest extends AbstractTestNGSpringContextTests {
+public class BaseTest extends AbstractBaseTest {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Value("${driver.type}")
-    private String browserMode;
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
@@ -135,7 +118,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest){
         Token token = new TestAccountsApi().sendRequest().getToken();
-        return new IntegrationClaimApi(token).sendRequest(claimRequest).getClaimTokenString();
+        return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
     protected SettlementPage loginAndOpenCwaClaimByToken(User user, String claimToken){

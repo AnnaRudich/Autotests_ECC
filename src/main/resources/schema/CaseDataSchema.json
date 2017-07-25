@@ -1,0 +1,243 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "case": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "policyNumber": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "token",
+        "number",
+        "policyNumber"
+      ]
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "brand": {
+          "type": "string"
+        },
+        "catalogCategory": {
+          "type": "string"
+        },
+        "productCode": {
+          "type": "string"
+        },
+        "retailPrice": {
+          "type": "number"
+        },
+        "scalepointPrice": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "brand",
+        "catalogCategory",
+        "productCode",
+        "retailPrice",
+        "scalepointPrice"
+      ]
+    },
+    "voucher": {
+      "type": "object",
+      "properties": {
+        "voucherCode": {
+          "type": "string"
+        },
+        "faceValue": {
+          "type": "number"
+        },
+        "voucherBasePrice": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "voucherCode",
+        "faceValue",
+        "voucherBasePrice"
+      ]
+    },
+    "group": {
+      "type": "object",
+      "properties": {
+        "internalId": {
+          "type": "number"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "OVERVIEW",
+            "VALUATION",
+            "VOUCHER"
+          ]
+        }
+      },
+      "required": [
+        "internalId",
+        "amount",
+        "type",
+        "name"
+      ]
+    },
+    "settledItem": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "subCategory": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "itemId": {
+          "type": "string"
+        },
+        "depreciation": {
+          "type": "number"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "replacementAmount": {
+          "type": "number"
+        },
+        "ageMonths": {
+          "type": "number"
+        },
+        "basePrice": {
+          "type": "number"
+        },
+        "group": {
+          "type": "object",
+          "properties": {
+            "internalId": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "internalId"
+          ]
+        },
+        "product": {
+          "$ref": "#/definitions/product"
+        },
+        "voucher": {
+          "$ref": "#/definitions/voucher"
+        }
+      },
+      "required": [
+        "category",
+        "depreciation",
+        "quantity",
+        "itemId",
+        "description",
+        "replacementAmount"
+      ]
+    },
+    "settlementDetails": {
+      "type": "object",
+      "properties": {
+        "deductible": {
+          "type": "number"
+        },
+        "revisionToken": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "WORKING",
+            "SETTLED",
+            "IN_PROGRESS",
+            "LOCKED",
+            "CANCELLED",
+            "DROPPED",
+            "CLOSED_EXTERNAL"
+          ]
+        },
+        "approvedBy": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "settlementType": {
+          "type": "string",
+          "enum": [
+            "SETTLED_EXTERNALLY",
+            "SETTLED_WITH_EMAIL",
+            "SETTLED_FOR_REPLACEMENT",
+            "CANCELLED",
+            "UNKNOWN"
+          ]
+        },
+        "repairAmount": {
+          "type": "number"
+        },
+        "subTotalAmount": {
+          "type": "number"
+        },
+        "replacementAmount": {
+          "type": "number"
+        },
+        "manualReduction": {
+          "type": "number"
+        },
+        "settledItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/settledItem"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/group"
+          }
+        }
+      },
+      "required": [
+        "deductible",
+        "revisionToken",
+        "status",
+        "approvedBy",
+        "timestamp",
+        "subTotalAmount",
+        "replacementAmount",
+        "settlementType"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "settlementDetails": {
+      "$ref": "#/definitions/settlementDetails"
+    },
+    "case": {
+      "$ref": "#/definitions/case"
+    }
+  },
+  "required": [
+    "settlementDetails",
+    "case"
+  ]
+
+}
