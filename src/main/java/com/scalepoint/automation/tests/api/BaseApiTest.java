@@ -17,7 +17,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     protected DatabaseApi databaseApi;
 
     @BeforeMethod
-    public void setUp(){
+    public void setUpData(){
         ServiceData.init(databaseApi);
     }
 

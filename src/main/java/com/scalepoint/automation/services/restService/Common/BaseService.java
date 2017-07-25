@@ -2,7 +2,6 @@ package com.scalepoint.automation.services.restService.Common;
 
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.restService.ClaimSettlementItemService;
-import com.scalepoint.automation.services.restService.CreateClaim.CreateClaimStrategy;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -44,9 +43,4 @@ public class BaseService {
         new LoginProcessService()
                 .login(user);
     }
-
-    public static CreateClaimStrategy createClaim(CreateClaimStrategy createClaimStrategy){
-        return createClaimStrategy.createClaim().saveData();
-    }
-
 }
