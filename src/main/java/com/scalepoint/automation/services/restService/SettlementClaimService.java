@@ -2,12 +2,11 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BasePath;
 import com.scalepoint.automation.services.restService.Common.BaseService;
-import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.services.restService.helper.PrepareSaveCustomerParams;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.scalepoint.automation.services.restService.Common.BasePath.SAVE_CLAIM;
@@ -15,62 +14,27 @@ import static com.scalepoint.automation.services.restService.SettlementClaimServ
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
-/**
- * Created by bza on 6/29/2017.
- */
 public class SettlementClaimService extends BaseService {
 
     private Response response;
-    private Map<String,String> saveCustomerParams = new HashMap<>();
+    private PrepareSaveCustomerParams prepareSaveCustomerParams;
 
-    public Map<String, String> getSaveCustomerParams() {
-        return saveCustomerParams;
-    }
-
-    public void setSaveCustomerParams(Map<String, String> saveCustomerParams) {
-        this.saveCustomerParams = saveCustomerParams;
+    public SettlementClaimService(){
+        this.prepareSaveCustomerParams = new PrepareSaveCustomerParams();
     }
 
     public Response getResponse(){
         return this.response;
     }
 
-    public Map<String, String> getFilledSaveCustomerParams(ClaimRequest claimRequest){
-        saveCustomerParams.put("last_name", "");
-        saveCustomerParams.put("first_name", "");
-        saveCustomerParams.put("replacement", "");
-        saveCustomerParams.put("validate_zipcode", "");
-        saveCustomerParams.put("send_settlement_preview", "");
-        saveCustomerParams.put("customer_id", data.getUserId().toString());
-        saveCustomerParams.put("sendSMSPassword", "false");
-        saveCustomerParams.put("smsPassword", "");
-        saveCustomerParams.put("checkForCancelProcura", "");
-        saveCustomerParams.put("isNewProcuraRequested", "");
-        saveCustomerParams.put("policy_number", claimRequest.getCaseNumber());
-        saveCustomerParams.put("cellPhoneNumber", claimRequest.getCustomer().getMobile());
-        saveCustomerParams.put("phone", claimRequest.getCustomer().getMobile());
-        saveCustomerParams.put("fname", claimRequest.getCustomer().getFirstName());
-        saveCustomerParams.put("lname", claimRequest.getCustomer().getLastName());
-        saveCustomerParams.put("shopper_id", "");
-        saveCustomerParams.put("adr1", claimRequest.getCustomer().getAddress().getStreet1());
-        saveCustomerParams.put("adr2", "");
-        saveCustomerParams.put("zipcode", claimRequest.getCustomer().getAddress().getPostalCode());
-        saveCustomerParams.put("city", claimRequest.getCustomer().getAddress().getCity());
-        saveCustomerParams.put("email", "ecc_auto@scalepoint.com");
-        saveCustomerParams.put("changepassword", "1");
-        saveCustomerParams.put("password", Constants.PASSWORD);
-        saveCustomerParams.put("customer_note", "");
-        saveCustomerParams.put("caseid", data.getUserId().toString());
+    private SettlementClaimService saveCustomer(Object object, CloseCaseReason closeCaseReason){
+        Map<String,String> params = prepareSaveCustomerParams.prepareSaveCustomerParams(object, data).getSaveCustomerParams();
 
-        return saveCustomerParams;
-    }
-
-    private SettlementClaimService saveCustomer(ClaimRequest claimRequest, CloseCaseReason closeCaseReason){
-        Map<String,String> params = getFilledSaveCustomerParams(claimRequest);
         if(closeCaseReason.equals(REPLACEMENT)){
-            params.put("claim_number", claimRequest.getCaseNumber());
+            params.put("claim_number", ((ClaimRequest) object).getCaseNumber());
             params.put("replacement", "true");
         }
+
         saveCustomer(params, closeCaseReason);
         return this;
     }
@@ -94,7 +58,7 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    public SettlementClaimService close(ClaimRequest claimRequest, CloseCaseReason reason ){
+    public SettlementClaimService close(Object claimRequest, CloseCaseReason reason ){
         saveCustomer(claimRequest, reason);
         if(reason.equals(REPLACEMENT)){
             new ReplacementService().makeReplacement(claimRequest);
@@ -110,7 +74,7 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    public SettlementClaimService cancel(ClaimRequest claimRequest, CloseCaseReason reason ){
+    public SettlementClaimService cancel(Object claimRequest, CloseCaseReason reason ){
         saveCustomer(claimRequest, reason);
 
         this.response = given().baseUri(getEccUrl()).log().all()

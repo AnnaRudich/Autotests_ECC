@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.scalepoint.automation.utils.Wait.waitForAllElementsVisible;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class FindShopDialog extends BaseDialog {
@@ -59,7 +60,7 @@ public class FindShopDialog extends BaseDialog {
     }
 
     public List<ShopRow> parseShopResults() {
-        List<WebElement> rows = driver.findElements(By.xpath("//div[@id='search-voucher-shop-list']//tr"));
+        List<WebElement> rows = waitForAllElementsVisible(driver.findElements(By.xpath("//div[@id='search-voucher-shop-list']//tr")));
         return rows.stream().map(ShopRow::new).collect(Collectors.toList());
     }
 
@@ -101,7 +102,7 @@ public class FindShopDialog extends BaseDialog {
         }
 
         private String getText(WebElement row, String dataColumnId) {
-            return row.findElement(By.xpath("//td[@data-columnid='"+dataColumnId+"']")).getText();
+            return row.findElement(By.xpath(".//td[@data-columnid='"+dataColumnId+"']")).getText();
         }
 
     }

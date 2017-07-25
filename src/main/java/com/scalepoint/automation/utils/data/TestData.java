@@ -31,6 +31,7 @@ import com.scalepoint.automation.utils.data.entity.SystemUser;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
+import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
@@ -176,6 +177,10 @@ public class TestData {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
     }
 
+    public static EccIntegration getEccIntegration(){
+        return  (EccIntegration) getData(Data.ECC_INTEGRATION);
+    }
+
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
         String filePath = buildDataFilePath(locale, data.fileName);
@@ -278,7 +283,8 @@ public class TestData {
         DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
         CWA_CLAIM("Claim\\ClaimRequest.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
-        CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class);
+        CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class),
+        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class);
 
         private String fileName;
         private JAXBContext context;

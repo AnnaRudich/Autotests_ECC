@@ -137,8 +137,8 @@ public class SidTests extends BaseTest {
                 .openFindShopDialog()
                 .doAssert(findShop -> {
                     findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "6000", 72);
-                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "3000", 45);
-                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "1000", 5);
+                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "3000", 203);
+                    findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "1000", 166);
                     findShop.assertDistanceToShopIs(existingVoucher, existingVoucherShopName, "9990", 366);
                 });
     }

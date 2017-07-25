@@ -88,6 +88,10 @@ public class DatabaseApi {
         return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where UserToken = ?", Integer.class, claimToken);
     }
 
+    public Integer getUserIdByClaimNumber(String claimNumber){
+        return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where ClaimNumber = ?", Integer.class, claimNumber);
+    }
+
     public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId){
         return this.jdbcTemplate.query(
                 "select claimId, taskType, taskId, taskStatus, taskPayload from CwaTaskLog where claimId = ?",
