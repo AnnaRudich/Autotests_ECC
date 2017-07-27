@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.selfservice;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -8,15 +10,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import java.util.List;
 import java.util.function.Consumer;
-
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertTrue;
 
 public class SelfServicePage extends Page {
+
+    @FindBy(xpath = ".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]")
+    private List<WebElement> selfServiceLines;
 
     @FindBy(xpath = "//a[contains(@onclick, 'javascript:logout()')]")
     private WebElement logoutOption;
@@ -27,11 +32,11 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//a[contains(@onclick, 'closeSelfService')]")
     private WebElement closeButton;
 
-    @FindBy(id = "cell1_1")
-    private WebElement descriptionFirstField;
+    @FindBy(xpath = "//div[contains(@class,'descriptionColumn')]/div")//use after selfServiceLines.get()
+    private WebElement descriptionField;
 
-    @FindBy(xpath = "(//div[contains(@class, 'categoryColumn')])[3]/div")
-    private WebElement categoryFirstField;
+    @FindBy(id = "cell1_2")
+    private WebElement categoryField;
 
     @FindBy(xpath = "//input[@id='cs_category_group']")
     private WebElement groupInputField;
@@ -45,32 +50,39 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//div[contains(@id,'cs_cat_item')]")
     private List<WebElement> allCategories;
 
-    @FindBy(xpath = "//div[4]/div/div/table/tbody/tr/td/div/img")
-    private WebElement chooseCategoryField;
 
-    @FindBy(xpath = "//div[@id='cell1_4']")
-    private WebElement purDateFirstField;
+    @FindBy(id = "//div[contains(@class,'purchaseDate')]/div")
+    private WebElement purchaseDateFirstField;
 
-    @FindBy(xpath = "//div[@id='cell1_6']")
-    private WebElement purPriceFirstField;
+    @FindBy(xpath = "//div[contains(@class,'acquired')]/div")
+    private WebElement acquiredField;
 
-    @FindBy(xpath = "//div[@id='cell1_7']")
-    private WebElement purPriceFirstSeField;
+    @FindBy(xpath = "//div[contains(@class,'purchasePrice')]/div")
+    private WebElement purchasePriceFirstField;
 
-    @FindBy(xpath = "//input[contains(@class, 'x-form-num-field')]")
+    @FindBy(xpath = "//td[contains(@class,'newPrice')]/div")
+    private WebElement newPriceFirstField;
+
+    @FindBy(xpath = "//div[contains(@class,'customerDemand')]/div")
+    private WebElement customerDemandFirstField;
+
+    @FindBy(xpath = "//div[contains(@class,'documentation')]/div")
+    private WebElement documentationFirstField;
+
+    @FindBy(xpath = ".//input[contains(@class, 'num-field')]")
     private List<WebElement> priceInputs;
 
-    @FindBy(xpath = "//div[@id='cell1_7']")
-    private WebElement newPriceField;
-
-    @FindBy(xpath = "//div[@id='cell1_8']")
-    private WebElement newPriceSeField;
+    @FindBy(id = "cell1_7")
+    private WebElement newPriceFirstSeField;
 
     @FindBy(xpath = "//*[contains(@id,'cg_item')]")
     private List<WebElement> allCategoriesList;
 
     @FindBy(xpath = "//img[contains(@class, 'x-form-date-trigger')]")
     private WebElement calendarImage;
+
+    @FindBy(xpath = ".//*[@id='ext-comp-1005']")
+    private WebElement calendarPopUp;
 
     @FindBy(xpath = "//button[@class='x-date-mp-ok']")
     private WebElement calendarOKOption;
@@ -105,27 +117,16 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//a[contains(@href, 'removeRecord')]")
     private WebElement deleteLineIcon;
 
-    @FindBy(xpath = "//div[@id='cell1_9']")
-    private WebElement documentationFirstField;
-
-    @FindBy(id = "ext-comp-1009")
-    private WebElement purPriceField;
-
-    @FindBy(id = "ext-comp-1010")
-    private WebElement newPriceValueField;
-
     @FindBy(xpath = "//div[contains(text(),'[Choose category]')]")
     private WebElement chooseCategoryButton;
+
 
     @FindBy(xpath = "//input[@id='agreement']")
     private WebElement shopAgreementCheckBox;
 
-    private String descriptionColumn = "//td[contains(@class, 'descriptionColumn')]";
-    private String categoryColumn = "//td[contains(@class, 'categoryColumn')]";
-    private String purchaseDateColumn = "//td[contains(@class, 'purchaseDate')]";
-    private String purchasePriceColumn = "//td[contains(@class, 'purchasePrice')]";
-    private String newPriceColumn = "//td[contains(@class, 'newPrice')]";
-    private String descSuggestions = "//div[contains(@class, 'x-combo-list-item')]";
+    @FindBy(xpath = "(//div[contains(@class, 'categoryColumn')])[3]/div")
+    private WebElement categoryFirstField;
+
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -139,27 +140,21 @@ public class SelfServicePage extends Page {
     }
 
     public boolean isColumnRequired(String columnXpath) {
-        String requiredXpath = columnXpath + "//tr[2]/td/span";
+        String requiredXpath = columnXpath + "//img[@src]";
         WebElement item = find(By.xpath(requiredXpath));
-        return item.getAttribute("CLASS").contains("required");
+        return item.getAttribute("src").contains("question_mark.png");
+    }
+
+    public void selectSubmitOption() {
+        clickAndWaitForDisplaying(submitButton, By.id("menu_id_1"));
     }
 
     public void ssLogout() {
         logoutOption.click();
     }
 
-    public SelfServicePage addDescription(String text) {
-        sendKeys(descriptionFirstField, text);
-        waitForStaleElement(By.xpath("(//div[contains(@class, 'categoryColumn')])[3]/div"));
-        find(By.xpath("//input[contains(@class, 'focus')]")).sendKeys(Keys.TAB);
-        //Wait.waitForStaleElement(By.xpath("//div[contains(text(),'[Choose category]')]"));
-        waitForStaleElement(By.cssSelector("div#cell1_2"));
-        return this;
-    }
-
-    public void justAddDescription(String text) {
-        sendKeys(descriptionFirstField, text);
-        waitForStaleElements(By.xpath("//*[contains(@class, 'x-combo-list-item')]"));
+    public void unfocusField() {
+        driver.findElement(By.xpath("//div[@class='body_text']")).click();
     }
 
     public boolean isSuggestionsContainQuery(String query) {
@@ -177,8 +172,8 @@ public class SelfServicePage extends Page {
 
     public boolean isFirst10SuggestionContainQuery(String query) {
         String[] queryList = query.split(" ");
-        waitForStaleElement(By.xpath(descSuggestions));
-        List<WebElement> suggestionItem = driver.findElements(By.xpath(descSuggestions));
+        waitForStaleElement(By.xpath("//div[contains(@class, 'x-combo-list-item')]"));
+        List<WebElement> suggestionItem = driver.findElements(By.xpath("//div[contains(@class, 'x-combo-list-item')]"));
         for (int i = 0; i < 10; i++) {
             System.out.println("Query: " + unifyStr(query).toUpperCase() + " present in " + unifyStr(suggestionItem.get(i).getText()) + "?");
             for (String aQueryList : queryList) {
@@ -190,66 +185,62 @@ public class SelfServicePage extends Page {
         return true;
     }
 
-    /**
-     * The method waits for file upload is completed
-     */
-    public void waitForUploadCompleted() {
-        waitForDisplayed(By.xpath("//div[contains(text(),'100 %')]"));
-    }
-
-    /**
-     * The method adds text in the description field, waits for suggestion, selects firs suggestion by clicking DOWN and Enter
-     */
-    public void addDescriptionSelectFirstSuggestion(String text) {
-        descriptionFirstField.sendKeys(text);
-        descriptionFirstField.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
-    }
-
-    /**
-     * The method selects random year and random month for Purchase date. To avoid failure with future years selected randomly, it was decided
-     * to use previous Years page
-     */
-    public SelfServicePage addPurchaseDate() {
-        Wait.waitForDisplayed(By.xpath("//div[@id='cell1_4']"));
-        purDateFirstField.click();
-        if (!System.getProperty("locale").equals("DK")) {
-            clickAndWaitForStable(By.xpath("//div[contains(@class,'x-grid3-scroller')]/div/div[2]//td[contains(@class,'x-grid3-td-purchaseDate')]/div/div"), By.xpath("//*[contains(@class, 'date-trigger')]"));
+    //IS SELECTED BLOCK
+    private boolean isCategorySelected(int lineNumber) {
+        String category = getCategoryText(lineNumber);
+        if (category != null) {
+            return true;
         }
-        waitForDisplayed(By.xpath("//img[contains(@class, 'x-form-date-trigger')]"));
-        calendarImage.click();
-        previousYearButton.click();
-        WebElement year = allVisibleYears.get(RandomUtils.randomInt(allVisibleYears.size()));
-        year.click();
-        WebElement month = allVisibleMonths.get(RandomUtils.randomInt(allVisibleMonths.size()));
-        month.click();
-        calendarOKOption.click();
-        unfocusField();
-        return this;
+        return false;
     }
 
-    /**
-     * The method selects random year and random month for Purchase date. To avoid failure with future years selected randomly, it was decided
-     * to use previous Years page
-     */
-    public void addPurchaseDate(String year, int month) {
-        purDateFirstField.click();
-        if (!System.getProperty("locale").equals("DK")) {
-            clickAndWaitForStable(By.xpath("//div[contains(@class,'x-grid3-scroller')]/div/div[2]//td[contains(@class,'x-grid3-td-purchaseDate')]/div/div"), By.xpath("//*[contains(@class, 'date-trigger')]"));
+    public boolean isPurchaseDateSelected(int lineNumber) {
+        String purchaseDate = getPurchaseDate(lineNumber);
+        if (purchaseDate != null) {
+            return true;
         }
-        clickAndWaitForStable(calendarImage, By.xpath("//*[contains(@class,'date-mp-ok')]"));
-        find("//td[@class='x-date-mp-month']/a[@month='$1']", Integer.toString(month)).click();
-        find("//td[@class='x-date-mp-year']/a[contains(text(), '$1')]", year).click();
-        clickAndWaitForStable(calendarOKOption, By.xpath("//*[contains(@class,'cell-selected')]"));
-        unfocusField();
+        return false;
     }
 
-    public void unfocusField() {
-        driver.findElement(By.xpath("//div[@class='body_text']")).click();
+    public boolean isNewPriceSelected(int lineNumber) {
+        String newPrice = getNewPrice(lineNumber);
+        if (newPrice != null) {
+            return true;
+        }
+        return false;
     }
 
+
+    private boolean isPurchasePriceSelected(int lineNumber) {
+        String purchasePrice = getPurchasePrice(lineNumber);
+        if (purchasePrice != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isDescriptionSelected(int lineNumber) {
+        String description = getDescriptionText(lineNumber);
+        if (description != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isCustomerDemandSelected(int lineNumber) {
+        String customerDemand = getCustomerDemandPrice(lineNumber);
+        if (customerDemand != null) {
+            return true;
+        }
+        return false;
+    }
+
+//IS SELECTED BLOCK END
+
+    //Category&Group
     public void selectCategoryField() {
        /*categoryFirstField.click();
-        find(By.xpath("(//div[contains(@class, 'categoryColumn')])[3]/div")).sendKeys(Keys.ENTER); */
+        find(By.xpath("(//div[contains(@class, 'categoryColumnHeaderXpath')])[3]/div")).sendKeys(Keys.ENTER); */
         clickAndWaitForDisplaying(categoryFirstField, By.xpath("//input[@id='cs_category_group']"));
     }
 
@@ -271,9 +262,83 @@ public class SelfServicePage extends Page {
     }
 
     public void selectCategory(Integer n) {
-        clickAndWaitForStable(allCategories.get(n), By.xpath("(//div[contains(@class, 'categoryColumn')])[3]"));
+        clickAndWaitForStable(allCategories.get(n), By.xpath("(//div[contains(@class, 'categoryColumnHeaderXpath')])[3]"));
         Wait.waitForAjaxCompleted();
         unfocusField();
+    }
+
+//ADD RANDOM VALUE
+
+    /**
+     * The method adds text in the description field, waits for suggestion, selects firs suggestion by clicking DOWN and Enter
+     */
+    public SelfServicePage addDescriptionSelectFirstSuggestion(String text) {
+        descriptionField.sendKeys(text);
+        descriptionField.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+        return this;
+    }
+
+    /**
+     * The method selects random year and random month for Purchase date. To avoid failure with future years selected randomly, it was decided
+     * to use previous Years page
+     */
+    public SelfServicePage addRandomPurchaseDate() {
+        waitForDisplayed(By.xpath("//td[contains(@class, 'purchaseDate')]"));
+        //        if (!System.getProperty("locale").equals("DK")) {
+//            clickAndWaitForStable(By.xpath("//div[contains(@class,'x-grid3-scroller')]/div/div[2]//td[contains(@class,'x-grid3-td-purchaseDate')]/div/div"), By.xpath("//*[contains(@class, 'date-trigger')]"));
+//        }
+        clickAndWaitForStable(calendarImage, By.xpath("//img[contains(@class, 'x-form-date-trigger')]"));
+        previousYearButton.click();
+        WebElement year = allVisibleYears.get(RandomUtils.randomInt(allVisibleYears.size()));
+        year.click();
+        WebElement month = allVisibleMonths.get(RandomUtils.randomInt(allVisibleMonths.size()));
+        month.click();
+        calendarOKOption.click();
+        unfocusField();
+        return this;
+    }
+
+    public void addRandomCategory() {
+        doubleClick(categoryField);
+        waitForStaleElements(By.xpath("//*[contains(@id,'cg_item')]"));
+        WebElement category = allCategoriesList.get(RandomUtils.randomInt(allCategoriesList.size()));
+        scrollTo(category);
+        category.click();
+    }
+
+    public SelfServicePage addRandomAcquired(int lineNumber) {
+        SelenideElement acquiredArrowTrigger = $$(By.xpath("//*[contains(@class, 'arrow-trigger')]")).get(1);
+
+        findTheFieldInSsGrid("acquired", lineNumber).click();
+        acquiredArrowTrigger.click();
+        acquiredArrowTrigger.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+        return this;
+    }
+
+//ADD BLOCK
+
+    public SelfServicePage addDescription(String text, int lineNumber) {
+        findTheFieldInSsGrid("descriptionColumn", lineNumber);
+        findField("descriptionColumn").pressEnter();
+        setValueToTheInput(text);
+//        sendKeys(descriptionField, text);
+//        waitForStaleElement(By.xpath("(//div[contains(@class, 'categoryColumnHeaderXpath')])[3]/div"));
+//        find(By.xpath("//input[contains(@class, 'focus')]")).sendKeys(Keys.TAB);
+//        //Wait.waitForStaleElement(By.xpath("//div[contains(text(),'[Choose category]')]"));
+//        waitForStaleElement(By.cssSelector("div#cell1_2"));
+        return this;
+    }
+    /**
+     * The method selects specified year and month for Purchase date
+     */
+    public SelfServicePage addPurchaseDate(String year, int month) {
+        waitForDisplayed(By.xpath("//td[contains(@class, 'purchaseDate')]"));
+        clickAndWaitForStable(calendarImage, By.xpath("//img[contains(@class, 'x-form-date-trigger')]"));
+        find("//td[@class='x-date-mp-month']/a[@month='$']", month).click();
+        find("//td[@class='x-date-mp-year']/a[contains(text(),'$1')]", year).click();
+        clickAndWaitForStable(calendarOKOption, By.xpath("//*[contains(@class,'cell-selected')]"));
+        unfocusField();
+        return this;
     }
 
     public SelfServicePage addCategory(Integer group, Integer category) {
@@ -285,29 +350,58 @@ public class SelfServicePage extends Page {
         return this;
     }
 
-    public void addRandomCategory() {
-        doubleClick(chooseCategoryField);
-        waitForStaleElements(By.xpath("//*[contains(@id,'cg_item')]"));
-        WebElement category = allCategoriesList.get(RandomUtils.randomInt(allCategoriesList.size()));
-        scrollTo(category);
-        category.click();
+    //find the field section
+    public SelenideElement findTheFieldInSsGrid(String fieldName, int lineNumber) {
+        ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
+        return selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'" + fieldName + "')]/div"));
     }
 
-    public SelfServicePage addPurchasePrice(String text) {
-        purPriceFirstField.click();
-        Wait.waitForDisplayed(By.xpath("//input[contains(@class, 'x-form-num-field')]"));
-        setValue(priceInputs.get(0), text);
+    public SelenideElement findField(String fieldName) {
+        return $(By.xpath(".//div[contains(@class,'" + fieldName + "')]/div"));
+    }
+
+    public void setValueToTheInput(String text) {
+        $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text).pressEnter();
+    }
+
+
+    public SelfServicePage addNewPrice(String text, int lineNumber) {
+        findTheFieldInSsGrid("newPrice", lineNumber).click();
+        findField("newPrice").pressEnter();
+        setValueToTheInput(text);
         return this;
     }
 
-    public SelfServicePage addNewPrice(String text) {
-        newPriceField.click();
-        setValue(priceInputs.get(1), text);
+    public SelfServicePage addPurchasePrice(String text, int lineNumber) {
+        findTheFieldInSsGrid("purchasePrice", lineNumber).click();
+        findField("purchasePrice").pressEnter();
+        setValueToTheInput(text);
+        return this;
+    }
+
+    public SelfServicePage addCustomerDemandPrice(String text, int lineNumber) {
+        findTheFieldInSsGrid("customerDemand", lineNumber).click();
+        findField("customerDemand").pressEnter();
+        setValueToTheInput(text);
+        return this;
+    }
+
+
+    public SelfServicePage addDocumentationSetting(int lineNumber, boolean hasDocumentation) {
+        SelenideElement documentationArrowTrigger = $$(By.xpath("//img[contains(@class, 'arrow-trigger')]")).get(2);
+
+        findTheFieldInSsGrid("documentation", lineNumber).click();
+        documentationArrowTrigger.click();
+
+        if (hasDocumentation) {
+            documentationArrowTrigger.sendKeys(Keys.ENTER);
+        } else {
+            documentationArrowTrigger.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+        }
         return this;
     }
 
     public SelfServicePage uploadDocument(boolean hasDocumentation, ClaimItem claimItem) {
-        documentationFirstField.click();
         documentInput.click();
         String yes = claimItem.getYesOption();
         String no = claimItem.getNoOption();
@@ -326,6 +420,13 @@ public class SelfServicePage extends Page {
             uploadOKButton.click();
         }
         return this;
+    }
+
+    /**
+     * The method waits for file upload is completed
+     */
+    public void waitForUploadCompleted() {
+        waitForDisplayed(By.xpath("//div[contains(text(),'100 %')]"));
     }
 
     /**
@@ -349,94 +450,51 @@ public class SelfServicePage extends Page {
         commonCommentsField.sendKeys(Keys.TAB);
     }
 
-    /**
-     * The method selects Submit option
-     */
-    public void selectSubmitOption() {
-        clickAndWaitForDisplaying(submitButton, By.id("menu_id_1"));
+
+    public String getDescriptionText(int lineNumber) {
+        findTheFieldInSsGrid("descriptionColumn", lineNumber).click();
+        return findField("descriptionColumn").getText();
     }
 
-    /**
-     * The method return description text
-     */
-    public String getDescriptionText() {
-        return getText(descriptionFirstField);
+    public String getPurchasePrice(int lineNumber) {
+        findTheFieldInSsGrid("purchasePrice", lineNumber).click();
+        return findField("purchasePrice").getText();
     }
 
-    /**
-     * The method return purchase date (age)
-     */
-    public String getAge() {
-        return getText(purDateFirstField);
+    public String getPurchaseDate(int lineNumber) {
+        findTheFieldInSsGrid("purchaseDate", lineNumber).click();
+        return findField("purchaseDate").getText();
     }
 
-    /**
-     * The method return purchase price
-     */
-    public String getPurchasePrice() {
-        return getText(purPriceFirstField);
+    public String getNewPrice(int lineNumber) {
+        findTheFieldInSsGrid("newPrice", lineNumber).click();
+        return findField("newPrice").getText();
     }
 
-    /**
-     * The method return new price(price of the new item)
-     */
-    public String getNewPrice() {
-        return getText(newPriceField);
+    public String getCategoryText(int lineNumber) {
+        findTheFieldInSsGrid("categoryColumn", lineNumber).click();
+        return findField("categoryColumn").getText();
     }
 
-    public void clickOnInactiveDescription() {
-        descriptionFirstField.click();
-    }
-
-    public void clickOnInactiveCategory() {
-        categoryFirstField.click();
-    }
-
-    public void clickOnInactivePurchaseDate() {
-        purDateFirstField.click();
-    }
-
-    public void clickOnInactivePurchasePrice() {
-        purPriceFirstField.click();
-    }
-
-    public void clickOnInactiveNewPrice() {
-        newPriceValueField.click();
-    }
-
-    public void clickOnInactiveDocumentation() {
-        documentationFirstField.click();
-    }
-
-    public void clearNewPriceValue() {
-        clear(newPriceValueField);
-    }
-
-    public void clearPurchasePriceField() {
-        clear(purPriceField);
+    public String getCustomerDemandPrice(int lineNumber) {
+        findTheFieldInSsGrid("customerDemand", lineNumber).click();
+        return findField("customerDemand").getText();
     }
 
 
-    public void deleteFirstLine() {
-        deleteLineIcon.click();
+    //CLEAR AND DELETE
+    public void clearNewPriceValue(int lineNumber) {
+        clear(findTheFieldInSsGrid("newPrice", lineNumber));
     }
 
-    public void addManualLineFromSuggestionsByText(String descriptionText, ClaimItem claimItem) {
-        addDescriptionSelectFirstSuggestion(descriptionText);
-        clickOnInactivePurchaseDate();
-        addPurchaseDate();
-        addPurchasePrice("10000");
-        addNewPrice("20000");
-        uploadDocument(false, claimItem);
+    public void clearPurchasePriceField(int lineNumber) {
+        clear(findTheFieldInSsGrid("purchasePrice", lineNumber));
     }
 
-    public String getPageText() {
-        return getText(By.cssSelector("div.body_text"));
+    public void deleteLine(int lineNumber) {
+        findTheFieldInSsGrid("delete-icon", lineNumber).click();
     }
 
-    public String getFirstLineCategoryText() {
-        return getText(categoryFirstField);
-    }
 
     public SelfServicePage doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
@@ -449,32 +507,72 @@ public class SelfServicePage extends Page {
             return this;
         }
 
-        public Asserts assertDescriptionColumnIsMarkedAsRequired(){
-            assertRequiredFieldIconPresent(descriptionColumn);
+        public Asserts assertDescriptionColumnIsMarkedAsRequired() {
+            assertRequiredFieldIconPresent("//td[contains(@class, 'descriptionColumn')]");
             return this;
         }
 
-        public Asserts assertCategoryColumnIsMarkedAsRequired(){
-            assertRequiredFieldIconPresent(categoryColumn);
+        public Asserts assertCategoryColumnIsMarkedAsRequired() {
+            assertRequiredFieldIconPresent("//td[contains(@class, 'categoryColumn')]");
             return this;
         }
 
-        public Asserts assertPurchaseDateColumnIsMarkedAsRequired(){
-            assertRequiredFieldIconPresent(purchaseDateColumn);
+        public Asserts assertPurchaseDateColumnIsMarkedAsRequired() {
+            assertRequiredFieldIconPresent("//td[contains(@class, 'purchaseDate')]");
             return this;
         }
 
-        public Asserts assertPurchasePriceColumnIsMarkedAsRequired(){
-            assertRequiredFieldIconPresent(purchasePriceColumn);
+        public Asserts assertPurchasePriceColumnIsMarkedAsRequired() {
+            assertRequiredFieldIconPresent("//td[contains(@class, 'purchasePrice')]");
             return this;
         }
 
-        public Asserts assertNewPriceColumnIsMarkedAsRequired(){
-            assertRequiredFieldIconPresent(newPriceColumn);
+        public Asserts assertNewPriceColumnIsMarkedAsRequired() {
+            assertRequiredFieldIconPresent("//td[contains(@class, 'newPrice')]");
+            return this;
+        }
+
+        public Asserts assertDocumentationOrNoteIsMarkedAsRequired() {
+            assertRequiredFieldIconPresent("//td[contains(@class, 'documentation')]");
+            return this;
+        }
+
+        public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
+            assertTrue(isPurchaseDateSelected(lineNumber), "Purchase Date should be selected");
+            return this;
+        }
+
+        public Asserts assertNewPriceIsNotEmpty(int lineNumber) {
+            assertTrue(isNewPriceSelected(lineNumber), "New Price should be selected");
+            return this;
+        }
+
+        public Asserts assertPurchasePriceIsNotEmpty(int lineNumber) {
+            assertTrue(isPurchasePriceSelected(lineNumber), "Purchase Price should be selected");
+            return this;
+        }
+
+        public Asserts assertDescriptionIsNotEmpty(int lineNumber) {
+            assertTrue(isDescriptionSelected(lineNumber), "Description should be selected");
+            return this;
+        }
+
+        public Asserts assertCategoryIsNotEmpty(int lineNumber) {
+            assertTrue(isCategorySelected(lineNumber), "Category should be selected");
+            return this;
+        }
+
+        public Asserts assertCustomerDemandIsNotEmpty(int lineNumber) {
+            assertTrue(isCustomerDemandSelected(lineNumber), "Customer demand should be selected");
             return this;
         }
     }
 }
+
+
+
+
+
 
 
 
