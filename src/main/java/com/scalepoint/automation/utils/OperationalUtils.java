@@ -64,7 +64,7 @@ public class OperationalUtils {
     }
 
     public static void assertEqualsDoubleWithTolerance(Double actualAmount, Double expectedAmount, String message) {
-        int tolerance = 3;
+        int tolerance = 2;
         assertTrue(Math.abs(actualAmount-expectedAmount) <= Math.pow(10,-tolerance), String.format(message, actualAmount, expectedAmount) );
     }
 

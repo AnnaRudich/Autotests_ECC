@@ -133,7 +133,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         int depreciationPercentage = 13;
         double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
-        double depreciationAmountRoundHalfDown = new BigDecimal(depreciationAmount).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+        double depreciationAmountRoundHalfDown = new BigDecimal(depreciationAmount).setScale(2, RoundingMode.HALF_UP).doubleValue();
         double replacementPrice = voucherCashValue - depreciationAmount;
         double voucherFaceValue = (replacementPrice * 100) / (100 - voucherPercentage);
 
