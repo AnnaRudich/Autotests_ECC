@@ -140,6 +140,67 @@ public class SidManualItemsTests extends BaseTest {
 
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3953 Verify depreciation is not updated if type of depreciation is changed")
+    @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+    @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
+    @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
+    public void charlie_532_depreciationFromSuggestionShouldBeNotUpdatedAfterChanging(User user, Claim claim, ClaimItem claimItem, Voucher voucher){
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setNewPrice(Constants.PRICE_500)
+                .setCategory(claimItem.getExistingGroupFotoAndVideo())
+                .setSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
+                .fillVoucher(voucher.getVoucherGeneratedName())
+                .automaticDepreciation(false)
+                .doAssert(SettlementDialog.Asserts::assertAutomaticDepreciationLabelColor)
+                .enableAge()
+                .setValuation(NEW_PRICE)
+                .applyReductionRuleByValue(20)
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("20"))
+                .setCategory(claimItem.getExistingGroupWithPolicyDepreciationTypeAndReductionRule())
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("20"))
+                .setNewPrice(Constants.PRICE_2400)
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("20"))
+                .enterAgeYears("5")
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("20"))
+                .closeSidWithOk()
+                .editFirstClaimLine()
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("20"));
+    }
+
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3953 .doAssert(sid -> sid.assertDepreciationPercentageIs(\"10\"))")
+    @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
+    @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
+    public void charlie_532_depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSid(User user, Claim claim, ClaimItem claimItem, Voucher voucher){
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setNewPrice(Constants.PRICE_500)
+                .setCategory(claimItem.getExistingGroupFotoAndVideo())
+                .setSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
+                .fillVoucher(voucher.getVoucherGeneratedName())
+                .automaticDepreciation(false)
+                .doAssert(SettlementDialog.Asserts::assertAutomaticDepreciationLabelColor)
+                .enableAge()
+                .setValuation(NEW_PRICE)
+                .setDepreciation(15)
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
+                .setCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
+                .setCategory(claimItem.getExistingGroupWithDiscretionaryDepreciationTypeAndReductionRule())
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
+                .setNewPrice(Constants.PRICE_2400)
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
+                .enterAgeYears("20")
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
+                .closeSidWithOk()
+                .editFirstClaimLine()
+                .doAssert(sid -> sid.assertDepreciationPercentageIs("15"));
+    }
+
     /**
      * WHEN: fill in all the fields
      * WHEN: Click Save button

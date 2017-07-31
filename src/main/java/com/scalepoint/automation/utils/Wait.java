@@ -5,7 +5,12 @@ import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -28,13 +33,18 @@ public class Wait {
 
     private static Logger log = LoggerFactory.getLogger(Wait.class);
 
+    private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling(){
+        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)
+                .pollingEvery(500, TimeUnit.MILLISECONDS);
+    }
+
     public static void waitForAjaxCompleted() {
-        new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT).until((ExpectedCondition<Boolean>) wrapWait ->
+        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }
 
     public static void waitForPageLoaded() {
-        new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT).until((ExpectedCondition<Boolean>) wrapWait ->
+        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
 
@@ -90,7 +100,8 @@ public class Wait {
 
     public static void waitElementDisappeared(By element) {
         Browser.driver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT).until((Function<WebDriver, Boolean>) webDriver -> {
+        getWebDriverWaitWithDefaultTimeoutAndPooling()
+                .until((Function<WebDriver, Boolean>) webDriver -> {
             try {
                 Browser.driver().findElement(element);
                 return false;
