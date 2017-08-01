@@ -156,6 +156,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "automatic-depreciation-checkbox")
     private ExtCheckbox automaticDepreciation;
 
+    @FindBy(id = "automatic-depreciation-checkbox-labelEl")
+    private WebElement automaticDepreciationLabel;
+
     @FindBy(id = "marketprice-card-supplier-inputEl")
     private WebElement marketPriceSupplier;
 
@@ -517,7 +520,7 @@ public class SettlementDialog extends BaseDialog {
                 element.click();
                 acceptAlert();
                 return element;
-            }, 10, 1);
+            }, 10, 1000);
         } catch (Exception ignored) {
         }
         return Page.at(pageClass);
@@ -1204,6 +1207,17 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertIsStatusMatchedNotificationContainsText(String text) {
             String statusText = statusMatchedDisplayField.getText();
             assertTrue(statusText.contains(text), "Status Matched text is: '" + statusText + "' and should contain: '" + text + "'");
+            return this;
+        }
+
+        public Asserts assertDepreciationPercentageIs(String percentage) {
+            assertEquals(depreciationPercentage.getText(), percentage);
+            return this;
+        }
+
+        public Asserts assertAutomaticDepreciationLabelColor(){
+            boolean isLabelInRedColor = automaticDepreciationLabel.getAttribute("style").contains("color: red;");
+            assertTrue(automaticDepreciation.isSelected() == !isLabelInRedColor);
             return this;
         }
     }
