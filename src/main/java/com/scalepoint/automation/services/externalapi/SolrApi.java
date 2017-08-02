@@ -94,4 +94,20 @@ public class SolrApi {
             throw new IllegalStateException("no products found", e);
         }
     }
+
+    public static ProductInfo findProductAsVoucherWithPriceLowerThanMarketPrice(){
+        try{
+            SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
+            SolrQuery query = new SolrQuery();
+            query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
+                    .setFilterQueries("{!frange 1=0 incl=false}sub(price_invoice_1,market_price)");
+            QueryResponse response = solr.query(query);
+            ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
+            logger.info("FindBaOProduct: {}", productInfo);
+            return productInfo;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new IllegalStateException("no products found", e);
+        }
+    }
 }

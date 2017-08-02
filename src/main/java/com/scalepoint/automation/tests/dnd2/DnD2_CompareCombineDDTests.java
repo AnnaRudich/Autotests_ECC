@@ -16,7 +16,12 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.MARKET_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.USED_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
 
 
 /**
@@ -29,6 +34,7 @@ import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Val
 public class DnD2_CompareCombineDDTests extends BaseTest {
 
     private int deprecationValue = 10;
+
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
@@ -47,6 +53,26 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                     asserts.assertPriceIsSameInTwoColumns(CATALOG_PRICE);
                     asserts.assertCashCompensationIsDepreciated(deprecationValue, MARKET_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(MARKET_PRICE, CATALOG_PRICE);
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
+    @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
+    @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
+    public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim){
+        ProductInfo productInfo = SolrApi.findProductAsVoucher();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(productInfo.getModel())
+                .openSidForFirstProduct()
+                .setDepreciation(deprecationValue)
+                .doAssert(asserts -> {
+                    asserts.assertMarketPriceVisible();
+                    asserts.assertCatalogPriceVisible();
+                    asserts.assertPriceIsSameInTwoColumns(CATALOG_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(deprecationValue, MARKET_PRICE);
+                    asserts.assertIsLowestPriceValuationSelected(VOUCHER);
                 });
     }
 
@@ -133,7 +159,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
+    @Test(dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())
