@@ -9,7 +9,6 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -341,8 +340,8 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setBaseData(ClaimItem claimItem) {
         return setDescription(claimItem.getTextFieldSP()).
-                setCustomerDemand(Constants.PRICE_500).
-                setNewPrice(Constants.PRICE_2400).
+                setCustomerDemand(claimItem.getCustomerDemand()).
+                setNewPrice(claimItem.getNewPriceSP()).
                 setCategory(claimItem.getCategoryGroupBorn()).
                 setSubCategory(claimItem.getCategoryBornBabyudstyr());
     }
