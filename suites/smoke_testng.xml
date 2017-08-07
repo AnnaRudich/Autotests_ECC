@@ -14,7 +14,7 @@
             <class name="com.scalepoint.automation.tests.sid.DepreciationDeductedCombinedTests"/>
             <class name="com.scalepoint.automation.tests.sid.PostDepreciationCalculationOrderTests"/>
             <class name="com.scalepoint.automation.tests.sid.SidShowVoucherDetails"/>
-
+            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>
             <class name="com.scalepoint.automation.tests.admin.UserRolesTest"/>
         </classes>
     </test>

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
+import com.scalepoint.automation.services.externalapi.EventDatabaseApi;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.spring.Application;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ public abstract class AbstractBaseTest extends AbstractTestNGSpringContextTests 
 
     @Autowired
     protected DatabaseApi databaseApi;
+
+    @Autowired
+    protected EventDatabaseApi eventApiDatabaseApi;
 
     @Value("${driver.type}")
     protected String browserMode;

@@ -93,7 +93,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
         loginAndOpenClaimWithItem(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL)
-                .cancel(claimRequest, SettlementClaimService.CloseCaseReason.CANCEL_CLAIM);
+                .cancel(claimRequest);
 
         new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(claimRequest.getCaseNumber()))

@@ -9,6 +9,7 @@ import org.apache.http.HttpStatus;
 
 import java.util.Map;
 
+import static com.scalepoint.automation.services.restService.Common.BasePath.CANCEL_CLAIM;
 import static com.scalepoint.automation.services.restService.Common.BasePath.SAVE_CLAIM;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
@@ -35,12 +36,12 @@ public class SettlementClaimService extends BaseService {
             params.put("replacement", "true");
         }
 
-        saveCustomer(params, closeCaseReason);
+        saveCustomer(params, closeCaseReason.getPath());
         return this;
     }
 
-    private SettlementClaimService saveCustomer(Map<String,String> formParams, CloseCaseReason closeCaseReason){
-        formParams.put("url", "/webapp/ScalePoint/dk"+ closeCaseReason.getPath().replace("{userId}", data.getUserId().toString()));
+    private SettlementClaimService saveCustomer(Map<String,String> formParams, String path){
+        formParams.put("url", "/webapp/ScalePoint/dk"+ path.replace("{userId}", data.getUserId().toString()));
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
@@ -74,14 +75,14 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    public SettlementClaimService cancel(Object claimRequest, CloseCaseReason reason ){
-        saveCustomer(claimRequest, reason);
+    public SettlementClaimService cancel(Object claimRequest){
+        saveCustomer(prepareSaveCustomerParams.prepareSaveCustomerParams(claimRequest, data).getSaveCustomerParams(), CANCEL_CLAIM);
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
                 .queryParam("shnbr", data.getUserId())
                 .queryParam("closeClaim", false)
-                .get(reason.getPath())
+                .get(CANCEL_CLAIM)
                 .then().statusCode(HttpStatus.SC_OK).extract().response();
         return this;
     }
@@ -90,7 +91,6 @@ public class SettlementClaimService extends BaseService {
 
         CLOSE_EXTERNAL(BasePath.CLOSE_EXTERNAL),
         CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL),
-        CANCEL_CLAIM(BasePath.CANCEL_CLAIM),
         REPLACEMENT(BasePath.REPLACEMENT);
 
         private String path;
