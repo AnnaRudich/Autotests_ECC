@@ -226,7 +226,15 @@ public interface Actions {
         for (int i = 1; i <= params.length; i++) {
             xpath = xpath.replace("$" + i, params[i - 1]);
         }
-        return Wait.waitForDisplayed(By.xpath(xpath)); //find(By.xpath(xpath));
+        return Wait.waitForDisplayed(By.xpath(xpath));
+    }
+    /**
+     * this method decrements element index to translate java enumeration to human readable one
+     */
+    default WebElement find(String xpath, int param) {
+            String decrementedParam = Integer.toString(--param);
+            xpath = xpath.replace("$", decrementedParam);
+        return Wait.waitForDisplayed(By.xpath(xpath));
     }
 
     default void setValue(WebElement element, String value) {

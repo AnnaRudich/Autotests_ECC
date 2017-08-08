@@ -8,8 +8,6 @@ public enum FTSetting {
     //Various function around the system
     SETTLE_WITHOUT_MAIL("input[name=ftfunctionflag][value=1]", CHECKBOX),
     ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE("input[name=ftfunctionflag3][value=4194304]", CHECKBOX),
-    ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value=1]", CHECKBOX),
-    USE_SELF_SERVICE2("input[name=ftSelfServiceFlag][value=65536]", CHECKBOX),
     ENABLE_REGISTRATION_LINE_SELF_SERVICE("input[name=ftSelfServiceFlag][value=2048]", CHECKBOX),
     USE_INTERNAL_NOTES("input[name=ftfunctionflag][value=2048]", CHECKBOX),
     SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON("input[name=ftfunctionflag][value=4096]", CHECKBOX),
@@ -32,6 +30,14 @@ public enum FTSetting {
     MAKE_REJECT_REASON_MANDATORY("input[name=ftfunctionflag5][value=67108864]", CHECKBOX),
     SHOW_NOT_CHEAPEST_CHOICE_POPUP("input[name=ftfunctionflag5][value=16384]", CHECKBOX),
     MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG("input[name=ftfunctionflag3][value=262144]", CHECKBOX),
+
+    //Settings for Self Service
+    ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value=1]", CHECKBOX),
+    USE_SELF_SERVICE2("input[name=ftSelfServiceFlag][value=65536]", CHECKBOX),
+    INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value=256]", CHECKBOX),
+    INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value=32]", CHECKBOX),
+    INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value=64]", CHECKBOX),
+    INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value=512]", CHECKBOX),
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value=1]", CHECKBOX),
