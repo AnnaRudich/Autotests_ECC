@@ -17,6 +17,10 @@ public class BaseService {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Data data;
 
+    public Data getData(){
+        return data;
+    }
+
     public BaseService(){
         this.data = ServiceData.getData();
     }
@@ -39,8 +43,8 @@ public class BaseService {
                 .addLines(item);
     }
 
-    public static void loginUser(User user){
-        new LoginProcessService()
+    public static LoginProcessService loginUser(User user){
+        return new LoginProcessService()
                 .login(user);
     }
 }
