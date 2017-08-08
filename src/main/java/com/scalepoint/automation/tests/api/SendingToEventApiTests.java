@@ -59,7 +59,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void cancelClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
+    public void cancelClaimShouldBeNotSendToEventApi(User user, InsertSettlementItem item) {
         loginAndOpenClaimWithItem(user, claimRequest, item)
                 .closeCase()
                 .cancel(claimRequest);
