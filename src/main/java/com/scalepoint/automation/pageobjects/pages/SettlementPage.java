@@ -208,9 +208,9 @@ public class SettlementPage extends BaseClaimPage {
         return at(CompleteClaimPage.class);
     }
 
-    public boolean isItemPresent(String _item) {
+    public boolean isItemPresent(String item) {
         List<WebElement> claims = claimDescription;
-        return claims.stream().anyMatch(claim -> claim.getText().equals(_item));
+        return claims.stream().anyMatch(claim -> claim.getText().equals(item));
     }
 
     public boolean isSettlementPagePresent() {

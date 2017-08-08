@@ -39,7 +39,7 @@ public class CompleteClaimExternally extends BaseTest {
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2152")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
                     "Possible to Complete claim Externally from Settlement page")
     public void charlie515_completeClaimExternallyFromSettlementPage(User user, Claim claim) {

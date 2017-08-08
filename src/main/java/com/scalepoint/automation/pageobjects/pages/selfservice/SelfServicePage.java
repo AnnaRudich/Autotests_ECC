@@ -6,15 +6,22 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.refresh;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
 import static com.scalepoint.automation.utils.Wait.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class SelfServicePage extends Page {
@@ -25,104 +32,17 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//a[contains(@onclick, 'submitSelfServiceLines()')]")
     private WebElement submitButton;
 
-    @FindBy(xpath = "//a[contains(@onclick, 'closeSelfService')]")
-    private WebElement closeButton;
-
-    @FindBy(xpath = "//div[contains(@class,'descriptionColumn')]/div")//use after selfServiceLines.get()
-    private WebElement descriptionField;
-
-    @FindBy(id = "cell1_2")
-    private WebElement categoryField;
-
-    @FindBy(xpath = "//input[@id='cs_category_group']")
-    private WebElement groupInputField;
-
-    @FindBy(xpath = "//div[contains(@id,'cg_item')]")
-    private List<WebElement> allGroups;
-
-    @FindBy(xpath = "//input[@id='cs_pseudo_category']")
-    private WebElement categoriesInputField;
-
-    @FindBy(xpath = "//div[contains(@id,'cs_cat_item')]")
-    private List<WebElement> allCategories;
-
-
-    @FindBy(id = "//div[contains(@class,'purchaseDate')]/div")
-    private WebElement purchaseDateFirstField;
-
-    @FindBy(xpath = "//div[contains(@class,'acquired')]/div")
-    private WebElement acquiredField;
-
-    @FindBy(xpath = "//div[contains(@class,'purchasePrice')]/div")
-    private WebElement purchasePriceFirstField;
-
-    @FindBy(xpath = "//td[contains(@class,'newPrice')]/div")
-    private WebElement newPriceFirstField;
-
-    @FindBy(xpath = "//div[contains(@class,'customerDemand')]/div")
-    private WebElement customerDemandFirstField;
-
-    @FindBy(xpath = "//div[contains(@class,'documentation')]/div")
-    private WebElement documentationFirstField;
-
-    @FindBy(xpath = ".//input[contains(@class, 'num-field')]")
-    private List<WebElement> priceInputs;
-
-    @FindBy(id = "cell1_7")
-    private WebElement newPriceFirstSeField;
-
-    @FindBy(xpath = "//*[contains(@id,'cg_item')]")
-    private List<WebElement> allCategoriesList;
-
     @FindBy(xpath = "//img[contains(@class, 'x-form-date-trigger')]")
     private WebElement calendarImage;
-
-    @FindBy(xpath = ".//*[@id='ext-comp-1005']")
-    private WebElement calendarPopUp;
 
     @FindBy(xpath = "//button[@class='x-date-mp-ok']")
     private WebElement calendarOKOption;
 
-    @FindBy(xpath = "//*[contains(@class,'date-mp-year')]")
-    private List<WebElement> allVisibleYears;
-
-    @FindBy(xpath = "//*[contains(@class,'date-mp-month')]")
-    private List<WebElement> allVisibleMonths;
-
-    @FindBy(xpath = "//*[contains(@class,'date-mp-prev')]")
-    private WebElement previousYearButton;
-
-    @FindBy(xpath = "//input[contains(@class, 'x-form-focus')]")
-    private WebElement documentInput;
-
-    @FindBy(xpath = "//div[@class='x-combo-list-inner']/div[contains(@class, 'x-combo-list-item')]")
-    private List<WebElement> documentSelects;
-
     @FindBy(id = "uploadokbutton")
     private WebElement uploadOKButton;
 
-    @FindBy(xpath = "//input[@class='x-form-file']")
-    private WebElement file;
-
     @FindBy(xpath = "//*[contains(@class, 'x-combo-list-item')]")
     private List<WebElement> allDescriptionSuggestions;
-
-    @FindBy(id = "customer_comment")
-    private WebElement commonCommentsField;
-
-    @FindBy(xpath = "//a[contains(@href, 'removeRecord')]")
-    private WebElement deleteLineIcon;
-
-    @FindBy(xpath = "//div[contains(text(),'[Choose category]')]")
-    private WebElement chooseCategoryButton;
-
-
-    @FindBy(xpath = "//input[@id='agreement']")
-    private WebElement shopAgreementCheckBox;
-
-    @FindBy(xpath = "(//div[contains(@class, 'categoryColumn')])[3]/div")
-    private WebElement categoryFirstField;
-
 
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
@@ -189,95 +109,15 @@ public class SelfServicePage extends Page {
         return true;
     }
 
-
-    private boolean isCategorySelected(int lineNumber) {
-        String category = getCategoryText(lineNumber);
-        if (category != null) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isPurchaseDateSelected(int lineNumber) {
-        String purchaseDate = getPurchaseDate(lineNumber);
-        if (purchaseDate != null) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isNewPriceSelected(int lineNumber) {
-        String newPrice = getNewPrice(lineNumber);
-        if (newPrice != null) {
-            return true;
-        }
-        return false;
-    }
-
-
-    private boolean isPurchasePriceSelected(int lineNumber) {
-        String purchasePrice = getPurchasePrice(lineNumber);
-        if (purchasePrice != null) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isDescriptionSelected(int lineNumber) {
-        String description = getDescriptionText(lineNumber);
-        if (description != null) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isCustomerDemandSelected(int lineNumber) {
-        String customerDemand = getCustomerDemandPrice(lineNumber);
-        if (customerDemand != null) {
-            return true;
-        }
-        return false;
-    }
-
-
-    //Category&Group
-    public void selectCategoryField() {
-       /*categoryFirstField.click();
-        find(By.xpath("(//div[contains(@class, 'categoryColumnHeaderXpath')])[3]/div")).sendKeys(Keys.ENTER); */
-        clickAndWaitForDisplaying(categoryFirstField, By.xpath("//input[@id='cs_category_group']"));
-    }
-
-    public void selectGroupInput() {
-        groupInputField.sendKeys(Keys.DOWN);
-        waitForStaleElements(By.xpath("//div[contains(@id,'cg_item')]"));
-    }
-
-    public void selectGroup(Integer n) {
-        clickAndWaitForStable(allGroups.get(n), By.xpath("//input[@id='cs_pseudo_category']"));
-
-    }
-
-    public void selectCategoryInput() {
-        groupInputField.sendKeys(Keys.TAB);
-        waitForStaleElement(By.xpath("//input[@id='cs_pseudo_category']"));
-        categoriesInputField.sendKeys(Keys.DOWN);
-        waitForStaleElements(By.xpath("//div[contains(@id,'cs_cat_item')]"));
-    }
-
-    public void selectCategory(Integer n) {
-        clickAndWaitForStable(allCategories.get(n), By.xpath("(//div[contains(@class, 'categoryColumnHeaderXpath')])[3]"));
-        Wait.waitForAjaxCompleted();
-        unfocusField();
-    }
-
-//ADD RANDOM VALUE
-
     /**
      * The method adds text in the description field, waits for suggestion, selects firs suggestion by clicking DOWN and Enter
      */
-    public SelfServicePage addDescriptionSelectFirstSuggestion(String text) {
-        descriptionField.sendKeys(text);
-        descriptionField.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+    public SelfServicePage addDescriptionSelectFirstSuggestion(String text, int lineNumber) {
+
+        findField("descriptionColumn").sendKeys(text);
+        findField("descriptionColumn").sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+//        descriptionField.sendKeys(text);
+//        descriptionField.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
         return this;
     }
 
@@ -285,25 +125,21 @@ public class SelfServicePage extends Page {
      * The method selects random year and random month for Purchase date. The date is not shown, but it presents in DOM.
      */
     public SelfServicePage addRandomPurchaseDate(int lineNumber) {
-        ElementsCollection visibleYears = $$(By.xpath("//*[contains(@class,'date-mp-year')]"));
-        ElementsCollection visibleMonths = $$(By.xpath("//*[contains(@class,'date-mp-month')]"));
-
         findTheFieldInSsGrid("purchaseDate", lineNumber).click();
         $(By.xpath("//img[contains(@class, 'x-form-date-trigger')]")).click();
-        SelenideElement year = visibleYears.get(3);
-        year.click();
-        SelenideElement month = visibleMonths.get(1);
-        month.click();
+
+        List<SelenideElement> monthList=$$(By.xpath("//*[contains(@class,'date-mp-month')]/a"));
+        getRandomElement(monthList).click();
+        List<SelenideElement> yearList=$$(By.xpath("//*[contains(@class,'date-mp-year')]/a"));
+        getRandomElement(yearList).click();
+
         $(By.xpath("//button[@class='x-date-mp-ok']")).click();
         return this;
     }
-
-    public void addRandomCategory() {
-        doubleClick(categoryField);
-        waitForStaleElements(By.xpath("//*[contains(@id,'cg_item')]"));
-        WebElement category = allCategoriesList.get(RandomUtils.randomInt(allCategoriesList.size()));
-        scrollTo(category);
-        category.click();
+//looks like has to be moved to other class
+    public SelenideElement getRandomElement(List<SelenideElement> list){
+        int index = new Random().nextInt(list.size()-1);
+        return list.get(index);
     }
 
     public SelfServicePage addRandomAcquired(int lineNumber) {
@@ -335,24 +171,6 @@ public class SelfServicePage extends Page {
         return this;
     }
 
-    public SelfServicePage addCategory(Integer group, Integer category) {
-        SelenideElement categoryArrowTrigger = $$(By.xpath("//*[contains(@class, 'arrow-trigger')]")).get(0);
-
-        findTheFieldInSsGrid("categoryColumn", 1).click();
-        categoryArrowTrigger.click();
-        categoryArrowTrigger.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
-
-
-
-        selectCategoryField();
-        selectGroupInput();
-        selectGroup(group);
-        selectCategoryInput();
-        selectCategory(category);
-        return this;
-    }
-
-
     public SelfServicePage addNewPrice(String text, int lineNumber) {
         findTheFieldInSsGrid("newPrice", lineNumber).click();
         findField("newPrice").pressEnter();
@@ -377,21 +195,21 @@ public class SelfServicePage extends Page {
 
     public SelfServicePage uploadDocumentation(int lineNumber, boolean hasDocumentation) {
         SelenideElement documentationArrowTrigger = $$(By.xpath("//img[contains(@class, 'arrow-trigger')]")).get(2);
-//        SelenideElement statusList = $(".//div[contains(@class, 'combo-list-inner')]//div");
-//
-        findTheFieldInSsGrid("documentation", lineNumber).click();
 
+        findTheFieldInSsGrid("documentation", lineNumber).click();
 
         if (hasDocumentation) {
             documentationArrowTrigger.click();
-            documentationArrowTrigger.sendKeys(Keys.ENTER);
+           $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Ja']")).click();
+           uploadDocument(lineNumber);
         } else {
-            documentationArrowTrigger.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+            documentationArrowTrigger.click();
+            $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Nej']")).click();
         }
         return this;
     }
 
-
+    //TODO
     public SelfServicePage uploadDocument(int lineNumber) {
 
         //assertTrue(isElementPresent($("#addMultipleAttachmentsWindow")), "addMultipleAttachmentsWindow should be opened");
@@ -424,30 +242,8 @@ public class SelfServicePage extends Page {
         waitForDisplayed(By.xpath("//div[contains(text(),'100 %')]"));
     }
 
-    /**
-     * This method adds comment to the claim line
-     */
-    public void addLineNote(String text) {
-        Wait.waitForAjaxCompleted();
-        find(By.xpath("//*[contains(@class,'cell-selected')]")).sendKeys(Keys.TAB);
-        clickAndWaitForDisplaying(By.xpath("//a[contains(@href, 'showCustomerNoteDialog')]"), By.id("cutomer_note"));
-        sendKeys(By.id("cutomer_note"), text);
-        clickAndWaitForDisplaying(By.id("ok"), By.xpath("//*[@id='bd']//td[2]/a"));
-    }
-
-    /**
-     * This method adds common comment in the page bottom
-     */
-    public void addCommonComment(String text) {
-        sendKeys(commonCommentsField, text);
-        /*commonCommentsField.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxCompleted();  */
-        commonCommentsField.sendKeys(Keys.TAB);
-    }
-
-
     public String getDescriptionText(int lineNumber) {
-        return findTheFieldInSsGrid("descriptionColumn", lineNumber).getText();
+         return findTheFieldInSsGrid("descriptionColumn", lineNumber).getText();
     }
 
     public String getPurchasePrice(int lineNumber) {
@@ -470,18 +266,13 @@ public class SelfServicePage extends Page {
         return findTheFieldInSsGrid("customerDemand", lineNumber).getText();
     }
 
+    public SelfServicePage deleteLine() {
+        SelenideElement e = $(By.xpath(".//div[contains(@class,'delete-icon')]/a"));
 
-    //CLEAR AND DELETE
-    public void clearNewPriceValue(int lineNumber) {
-        clear(findTheFieldInSsGrid("newPrice", lineNumber));
-    }
-
-    public void clearPurchasePriceField(int lineNumber) {
-        clear(findTheFieldInSsGrid("purchasePrice", lineNumber));
-    }
-
-    public void deleteLine(int lineNumber) {
-        findTheFieldInSsGrid("delete-icon", lineNumber).$(".//a[contains(@href, 'removeRecord')]").click();
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(e));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", e);
+        waitForAjaxCompleted();
+        return this;
     }
 
     public SelfServicePage doAssert(Consumer<Asserts> assertFunc) {
@@ -491,35 +282,43 @@ public class SelfServicePage extends Page {
 
     public class Asserts {
 
-         public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
-            assertTrue(isPurchaseDateSelected(lineNumber), "Purchase Date should be selected");
+        public Asserts assertLineIsDeleted(){
+            refresh();
+            ElementsCollection ssLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
+            assertEquals(ssLines.size(), 2, "Line was not deleted");
             return this;
         }
 
+         public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
+             assertFalse(getPurchaseDate(lineNumber).equals(" "), "Purchase Date should not be empty");
+             return this;
+        }
+
         public Asserts assertNewPriceIsNotEmpty(int lineNumber) {
-            assertTrue(isNewPriceSelected(lineNumber), "New Price should be selected");
+            assertFalse(getNewPrice(lineNumber).equals(" "), "Purchase Price should not be empty");
             return this;
         }
 
         public Asserts assertPurchasePriceIsNotEmpty(int lineNumber) {
-            assertTrue(isPurchasePriceSelected(lineNumber), "Purchase Price should be selected");
+            assertFalse(getPurchasePrice(lineNumber).equals(" "), "Purchase Price should not be empty");
             return this;
         }
 
         public Asserts assertDescriptionIsNotEmpty(int lineNumber) {
-            assertTrue(isDescriptionSelected(lineNumber), "Description should be selected");
+            assertFalse(getDescriptionText(lineNumber).equals(" "), "Description should not be empty");
             return this;
         }
 
         public Asserts assertCategoryIsNotEmpty(int lineNumber) {
-            assertTrue(isCategorySelected(lineNumber), "Category should be selected");
+            assertFalse(getCategoryText(lineNumber).equals(" "), "Category should not be empty");
             return this;
         }
 
         public Asserts assertCustomerDemandIsNotEmpty(int lineNumber) {
-            assertTrue(isCustomerDemandSelected(lineNumber), "Customer demand should be selected");
+            assertFalse(getCustomerDemandPrice(lineNumber).equals(" "), "Customer demand should not be empty");
             return this;
         }
+
     }
 }
 

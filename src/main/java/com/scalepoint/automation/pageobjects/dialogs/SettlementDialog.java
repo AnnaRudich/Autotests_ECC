@@ -341,7 +341,7 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setBaseData(ClaimItem claimItem) {
         return setDescription(claimItem.getTextFieldSP()).
-                setCustomerDemand(Constants.PRICE_500).
+                setCustomerDemand(Constants.PRICE_1000).
                 setNewPrice(Constants.PRICE_2400).
                 setCategory(claimItem.getCategoryGroupBorn()).
                 setSubCategory(claimItem.getCategoryBornBabyudstyr());
