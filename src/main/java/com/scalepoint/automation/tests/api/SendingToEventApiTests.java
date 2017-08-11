@@ -100,13 +100,17 @@ public class SendingToEventApiTests extends BaseApiTest {
     public void cancelClaimPreviouslySettledShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
-        EventClaimSettled eventClaimSettledAfterClose = eventDatabaseApi.getEventClaimSettled(claimRequest);
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        EventClaimSettled eventClaimSettledAfterClose = assertEvent();
 
         settlementClaimService
                 .cancel(claimRequest);
 
         EventClaimSettled eventClaimSettledAfterCanceled = eventDatabaseApi.getEventClaimSettled(claimRequest);
+
+        assertThat(eventClaimSettledAfterCanceled.getTotal()).isEqualTo(eccSettlementSummaryService.getSubtotalCashPayoutValue());
+        assertThat(eventClaimSettledAfterCanceled.getTotal()).isEqualTo(getSettlementData(claimRequest).getSubTotal());
+        assertThat(eventClaimSettledAfterCanceled.getPayments().get(0).getPayeeParty()).isEqualTo(eventClaimSettledAfterClose.getPayments().get(0).getPayerParty());
+        assertThat(eventClaimSettledAfterClose.getPayments().get(0).getPayeeParty()).isEqualTo(eventClaimSettledAfterCanceled.getPayments().get(0).getPayerParty());
         eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,2);
     }
 
@@ -118,12 +122,13 @@ public class SendingToEventApiTests extends BaseApiTest {
         return settlementClaimService;
     }
 
-    private void assertEvent() {
+    private EventClaimSettled assertEvent() {
         EventClaimSettled eventClaimSettled = eventDatabaseApi.getEventClaimSettled(claimRequest);
 
         assertThat(eventClaimSettled.getTotal()).isEqualTo(eccSettlementSummaryService.getSubtotalCashPayoutValue());
         assertThat(eventClaimSettled.getTotal()).isEqualTo(getSettlementData(claimRequest).getSubTotal());
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        return eventClaimSettled;
     }
 
 }

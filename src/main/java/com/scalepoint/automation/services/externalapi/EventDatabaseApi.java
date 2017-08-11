@@ -49,7 +49,7 @@ public class EventDatabaseApi {
 
     private <T> List getEventsForType(Class<T> t, EventType type, String company){
         logger.info("Looking for events with type: " + type.getType());
-        String query = "select Payload from dk_outbound_queue_%s where Type = ? ";
+        String query = "select Payload from dk_outbound_queue_%s where Type = ? order by id desc";
         return this.jdbcTemplate.query(
                 String.format(query, company),
                 new EventsMapper(type),
