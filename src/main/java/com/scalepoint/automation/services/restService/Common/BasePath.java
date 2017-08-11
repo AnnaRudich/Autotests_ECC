@@ -17,4 +17,5 @@ public interface BasePath {
     String SETTLEMENT = "/{userId}/webshop/jsp/matching_engine/settlement.jsp";
     String OWN_RISK = "/{userId}/rest/settlement/ownRisk";
     String REOPEN = "ReopenCustomer";
+    String SETTLEMENT_TOTALS = "/{userId}/rest/settlement/settlementSummaryTotals.json";
 }

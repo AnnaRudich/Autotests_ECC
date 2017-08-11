@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.eventsApiEntity;
+package com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

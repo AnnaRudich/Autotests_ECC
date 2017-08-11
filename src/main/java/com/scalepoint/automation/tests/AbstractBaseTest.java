@@ -29,7 +29,7 @@ public abstract class AbstractBaseTest extends AbstractTestNGSpringContextTests 
     protected DatabaseApi databaseApi;
 
     @Autowired
-    protected EventDatabaseApi eventApiDatabaseApi;
+    protected EventDatabaseApi eventDatabaseApi;
 
     @Value("${driver.type}")
     protected String browserMode;
