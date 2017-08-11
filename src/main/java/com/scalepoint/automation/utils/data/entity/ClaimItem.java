@@ -413,6 +413,10 @@ public class ClaimItem {
         return matchedText;
     }
 
+    public Double getNewPriceSP() {
+        return newPriceSP;
+    }
+
     @Override
     public String toString() {
         return "ClaimItem{" +

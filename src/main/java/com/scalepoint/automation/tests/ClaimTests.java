@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -20,6 +21,7 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
+import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 
@@ -362,6 +364,8 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
+        ProductInfo productInfo = findProductWithPriceLowerThan(claimItem.getCustomerDemand().toString());
+
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -371,7 +375,8 @@ public class ClaimTests extends BaseTest {
                 .openReplacementWizard()
                 .goToShop()
                 .toProductSearchPage()
-                .addProductToCart(1)
+                .searchForProduct(productInfo.getModel())
+                .addProductToCart(0)
                 .toShoppingCart()
                 .toCashPayoutPage()
                 .keepMoneyOnAccountAndProceed()
