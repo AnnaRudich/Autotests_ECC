@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.given;
  */
 public class CaseSettlementDataService extends BaseService {
 
-    public static final String SETTLEMENT_DATA_SUBTOTAL_VALUE = "settlementDetails.subTotalAmount";
+    private final String SETTLEMENT_DATA_SUBTOTAL_VALUE = "settlementDetails.subTotalAmount";
 
     private ValidatableResponse response;
     private Token token;

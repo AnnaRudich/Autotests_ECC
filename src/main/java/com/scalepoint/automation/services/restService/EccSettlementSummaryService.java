@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 
 public class EccSettlementSummaryService extends BaseService{
 
-    public static final String SUBTOTAL_CASH_PAYOUT_VALUE = "subtotalCashPayoutValue";
+    private final String SUBTOTAL_CASH_PAYOUT_VALUE = "subtotalCashPayoutValue";
 
     public ValidatableResponse response;
 

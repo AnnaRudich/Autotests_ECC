@@ -96,6 +96,20 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasNotCreated(claimRequest);
     }
 
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    public void cancelClaimPreviouslySettledShouldBeSendToEventApi(User user, InsertSettlementItem item) {
+        createClaimWithItem(user, item)
+                .close(claimRequest, CLOSE_WITH_MAIL);
+        EventClaimSettled eventClaimSettledAfterClose = eventDatabaseApi.getEventClaimSettled(claimRequest);
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+
+        settlementClaimService
+                .cancel(claimRequest);
+
+        EventClaimSettled eventClaimSettledAfterCanceled = eventDatabaseApi.getEventClaimSettled(claimRequest);
+        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,2);
+    }
+
     private SettlementClaimService createClaimWithItem(User user, InsertSettlementItem item){
         settlementClaimService =
                 loginAndOpenClaimWithItem(user, claimRequest, item).closeCase();
