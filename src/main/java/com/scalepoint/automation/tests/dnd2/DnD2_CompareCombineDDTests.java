@@ -159,7 +159,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())
