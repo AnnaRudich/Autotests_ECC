@@ -41,9 +41,9 @@ public class RecommendedItemsTests extends BaseTest {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductCashValue productInvoiceGtMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceHigherMarket, textSearchPage, null);
-        ProductCashValue productInvoiceEqualMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceEqualMarket, textSearchPage, null);
-        ProductCashValue productInvoiceLtMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceLowerMarket, textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
+        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceHigherMarket, textSearchPage, null);
+        ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceEqualMarket, textSearchPage, null);
+        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceLowerMarket, textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
 
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
                 .toCompleteClaimPage()
@@ -104,10 +104,10 @@ public class RecommendedItemsTests extends BaseTest {
                 .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLowerMarket.getInvoicePrice()));
     }
 
-    private ProductCashValue findProductAdnAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
+    private ProductCashValue findProductAndAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
         ProductInfo productInfo = searchStrategy.get();
         SettlementDialog settlementDialog = textSearchPage
-                .searchByProductName(productInfo.getModel())
+                .searchByProductName(productInfo.getModelAndCategory())
                 .matchStrict(productInfo.getModel());
 
         Double cashCompensationFieldValue = settlementDialog.getCashCompensationValue();

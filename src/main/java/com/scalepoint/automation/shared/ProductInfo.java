@@ -102,6 +102,10 @@ public class ProductInfo {
         return voucherOnlyInShop;
     }
 
+    public String getModelAndCategory(){
+        return model + " " + category;
+    }
+
     @Override
     public String toString() {
         return "ProductInfo{" +
