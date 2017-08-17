@@ -4,7 +4,8 @@ public enum DriverType {
     IE("ie.local"),
     IE_REMOTE("ie.remote"),
     FF("ff.remote"),
-    CHROME("chrome.local");
+    CHROME("chrome.local"),
+    CHROME_REMOTE("chrome.remote");
 
     private String profile;
 
