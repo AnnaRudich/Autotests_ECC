@@ -72,24 +72,42 @@ public enum DriversFactory {
             return driver;
         }
     },
+    CHROME_REMOTE(DriverType.CHROME_REMOTE) {
+        @Override
+        protected WebDriver getDriverInstance() throws MalformedURLException {
 
+            defaultImplicitWait = 15;
+            defaultScriptTimeout = 60;
+
+            DesiredCapabilities capabilities = getDesiredCapabilitiesForChrome();
+            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
+            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+            return driver;
+        }
+
+    },
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance() {
             if (System.getProperty("webdriver.chrome.driver") == null) {
                 File chromeDriver = new File("src/main/resources/drivers/chromedriver.exe");
                 System.setProperty("webdriver.chrome.driver", chromeDriver.getAbsolutePath());
             }
-            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("operations-type");
-            options.addArguments("start-maximized");
-            options.addArguments("--disable-popup-blocking");
-            options.addArguments("-incognito");
-            capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-
-            return new ChromeDriver(capabilities);
+            return new ChromeDriver(getDesiredCapabilitiesForChrome());
         }
     };
+
+    private static DesiredCapabilities getDesiredCapabilitiesForChrome() {
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("operations-type");
+        options.addArguments("start-maximized");
+        options.addArguments("--disable-popup-blocking");
+        options.addArguments("-incognito");
+        options.addArguments("--disable-web-security");
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        return capabilities;
+    }
 
     private static DesiredCapabilities getDesiredCapabilitiesForIE() {
         DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
