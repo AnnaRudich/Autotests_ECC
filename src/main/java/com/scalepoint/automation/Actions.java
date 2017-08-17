@@ -1,12 +1,17 @@
 package com.scalepoint.automation;
 
-import com.google.common.base.Predicate;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -196,7 +201,7 @@ public interface Actions {
             new FluentWait<>(element).
                     withTimeout(5, TimeUnit.SECONDS).
                     pollingEvery(1000, TimeUnit.MILLISECONDS).
-                    until((Predicate<WebElement>) WebElement::isDisplayed);
+                    until(e -> element.isDisplayed());
             return element.isDisplayed();
         } catch (Exception e) {
             return false;

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.driver;
 
 import com.scalepoint.automation.utils.data.TestData;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,7 +21,11 @@ import java.util.logging.Level;
 
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultImplicitWait;
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultScriptTimeout;
-import static org.openqa.selenium.ie.InternetExplorerDriver.*;
+import static org.openqa.selenium.ie.InternetExplorerDriver.IGNORE_ZOOM_SETTING;
+import static org.openqa.selenium.ie.InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS;
+import static org.openqa.selenium.ie.InternetExplorerDriver.NATIVE_EVENTS;
+import static org.openqa.selenium.ie.InternetExplorerDriver.REQUIRE_WINDOW_FOCUS;
+import static org.openqa.selenium.ie.InternetExplorerDriver.UNEXPECTED_ALERT_BEHAVIOR;
 
 public enum DriversFactory {
 
@@ -52,7 +57,6 @@ public enum DriversFactory {
 
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
             WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
-            driver = new Augmenter().augment(driver);
             driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;
@@ -72,8 +76,8 @@ public enum DriversFactory {
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance() {
             if (System.getProperty("webdriver.chrome.driver") == null) {
-                File ieDriver = new File("src/main/resources/drivers/chromedriver.exe");
-                System.setProperty("webdriver.chrome.driver", ieDriver.getAbsolutePath());
+                File chromeDriver = new File("src/main/resources/drivers/chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", chromeDriver.getAbsolutePath());
             }
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
             ChromeOptions options = new ChromeOptions();
@@ -89,6 +93,8 @@ public enum DriversFactory {
 
     private static DesiredCapabilities getDesiredCapabilitiesForIE() {
         DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+        capabilities.setBrowserName("internet explorer");
+        capabilities.setPlatform(Platform.WINDOWS);
         capabilities.setCapability(INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
         capabilities.setCapability(IGNORE_ZOOM_SETTING, true);
         capabilities.setCapability(NATIVE_EVENTS, false);
@@ -98,7 +104,7 @@ public enum DriversFactory {
         capabilities.setCapability("driverAttachTimeout", 60000);
         capabilities.setJavascriptEnabled(true);
 
-//        addLoggingPreferences(capabilities);
+        addLoggingPreferences(capabilities);
         return capabilities;
     }
 
