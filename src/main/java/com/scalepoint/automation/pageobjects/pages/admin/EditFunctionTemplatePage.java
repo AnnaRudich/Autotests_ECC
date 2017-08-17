@@ -5,7 +5,6 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -90,13 +89,13 @@ public class EditFunctionTemplatePage extends AdminBasePage {
 
         if (enable && !checkBox.isSelected()) {
             logger.info("Enabling: " + description);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            ClickElementUsingJS(element);
             checkBox.select();
         }
 
         if (!enable && checkBox.isSelected()) {
             logger.info("Disabling: " + description);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            ClickElementUsingJS(element);
         }
         logger.debug("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }
