@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -38,7 +39,8 @@ public class PseudoCategoryModelPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelAddEditPage toAddModelPage() {
-        clickAndWaitForDisplaying(addButton, By.xpath("//input[contains(@id, 'modelname')]"));
+        ((JavascriptExecutor) driver).executeScript("addPseudoCategoryModel();");
+        Wait.waitForDisplayed(By.xpath("//input[contains(@id, 'modelname')]"));
         return at(PseudoCategoryModelAddEditPage.class);
     }
 
@@ -53,7 +55,7 @@ public class PseudoCategoryModelPage extends AdminBasePage {
 
     public PseudoCategoryModelAddEditPage toEditPage(String model) {
         modelsList.selectByVisibleText(model);
-        editButton.click();
+        ((JavascriptExecutor) driver).executeScript("editPseudoCategoryModel();");
         return at(PseudoCategoryModelAddEditPage.class);
     }
 

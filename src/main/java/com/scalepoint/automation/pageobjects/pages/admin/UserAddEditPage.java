@@ -79,7 +79,7 @@ public class UserAddEditPage extends AdminBasePage {
     @FindBy(id = "btnGenerate")
     private List<WebElement> generatePasswordButton;
 
-    private String byCompanyXpath = "//select/option[text() = '$1']";
+    private String byCompanyXpath = "//select/option[normalize-space(text()) = '$1']";
     private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[text()='$1']";
     private String bySubDepartmentXpath = "//div[@id='SubDepartmentDiv']/select/option[contains(.,'$1')]";
     private String byRolesXpath = "//*[@id='rolesDiv']/table/tbody/tr/td[1][contains(.,'$1')]";

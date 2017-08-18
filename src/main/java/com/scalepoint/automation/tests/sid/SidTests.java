@@ -14,13 +14,19 @@ import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Category;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.Supplier;
+import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static com.scalepoint.automation.utils.Constants.*;
+import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
+import static com.scalepoint.automation.utils.Constants.PRICE_100_000;
+import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-512")
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)

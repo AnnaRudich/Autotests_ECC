@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -324,7 +325,7 @@ public class SettlementPage extends BaseClaimPage {
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
             try {
                 this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")).getText());
-            }catch (NoSuchElementException e){
+            }catch (Exception e){
                 logger.warn(e.getMessage());
             }
 
@@ -341,6 +342,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public SettlementDialog editLine() {
             doubleClick(descriptionElement);
+            waitForAjaxCompleted();
             String js =
                     "var callback = arguments[arguments.length - 1];" +
                             "function groupsLoaded() {" +

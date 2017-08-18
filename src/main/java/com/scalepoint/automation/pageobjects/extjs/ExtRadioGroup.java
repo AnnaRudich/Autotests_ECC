@@ -19,14 +19,7 @@ public class ExtRadioGroup extends ExtElement implements Actions{
     }
 
     public void select(int index) {
-        WebElement element =  getWrappedElement().findElements(By.tagName("input")).get(index);
-        try {
-            element.click();
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            logger.info("Using JS click for element");
-            clickElementUsingJS(element);
-        }
+        clickUsingJsIfSeleniumClickReturnError(getWrappedElement().findElements(By.tagName("input")).get(index));
     }
 
     public void select() {

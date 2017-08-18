@@ -250,5 +250,13 @@ public interface Actions {
     default void clickElementUsingJS(WebElement element){
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
     }
+
+    default void clickUsingJsIfSeleniumClickReturnError(WebElement element) {
+        try {
+            element.click();
+        }catch (Exception e){
+            clickElementUsingJS(element);
+        }
+    }
 }
 
