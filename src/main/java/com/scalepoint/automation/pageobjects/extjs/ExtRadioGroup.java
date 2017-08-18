@@ -25,7 +25,7 @@ public class ExtRadioGroup extends ExtElement implements Actions{
         }catch (Exception e){
             logger.error(e.getMessage());
             logger.info("Using JS click for element");
-            ClickElementUsingJS(element);
+            clickElementUsingJS(element);
         }
     }
 

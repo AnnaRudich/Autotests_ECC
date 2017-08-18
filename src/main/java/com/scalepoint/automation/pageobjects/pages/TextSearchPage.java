@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Image;
@@ -146,8 +145,20 @@ public class TextSearchPage extends Page {
         if (matchButtons.isEmpty()) {
             throw new IllegalStateException("No text search results found!");
         }
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(matchButtons.get(0))).click();
+        clickOnFirstMatchingAndWaitForSID();
+
         return BaseDialog.at(SettlementDialog.class);
+    }
+
+    private void clickOnFirstMatchingAndWaitForSID() {
+        int i = 1;
+        logger.info("Trying open SID attempt: " + i);
+        waitForDisplayed(By.xpath("//button[@class='matchbutton']/img[1]")).click();
+        while(!BaseDialog.isOn(SettlementDialog.class) && i<6){
+            i++;
+            logger.info("Trying open SID attempt: " + i);
+            driver.findElement(By.xpath("//button[@class='matchbutton']/img[1]")).click();
+        }
     }
 
     public SettlementDialog matchStrict(String productDescription) {

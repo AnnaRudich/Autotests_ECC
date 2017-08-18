@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.utils.annotations.BrowserType;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -15,6 +16,7 @@ import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Dankort;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -71,6 +73,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+    @BrowserType(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make product order")
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
@@ -123,6 +126,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+    @BrowserType(value = DriverType.IE_REMOTE)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make voucher order")
@@ -189,6 +193,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  350
      * Tilbageværende erstatning :  0,00
      */
+    @BrowserType(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount")
     public void charlie540_ordersPageWhenWeUseBankAccount(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
@@ -237,6 +242,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+    @BrowserType(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Complete claim (2)")
     public void charlie540_ordersPageWhenWeRecompleteAfterCreditCardPayment(User user, Claim claim, OrderDetails orderDetails, Payments payments) {
@@ -289,6 +295,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+    @BrowserType(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
@@ -333,6 +340,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+    @BrowserType(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Complete claim (1)")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {

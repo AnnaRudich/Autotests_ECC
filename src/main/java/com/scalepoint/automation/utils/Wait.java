@@ -35,7 +35,8 @@ public class Wait {
 
     private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling(){
         return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)
-                .pollingEvery(500, TimeUnit.MILLISECONDS);
+                .pollingEvery(500, TimeUnit.MILLISECONDS)
+                .ignoring(StaleElementReferenceException.class);
     }
 
     public static void waitForAjaxCompleted() {
@@ -117,7 +118,7 @@ public class Wait {
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
-        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).until(condition);
+        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).ignoring(StaleElementReferenceException.class).until(condition);
     }
 
     private static <T> T wrap(Function<WebDriver, T> condition) {

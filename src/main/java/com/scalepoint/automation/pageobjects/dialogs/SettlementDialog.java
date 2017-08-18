@@ -336,6 +336,17 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    @Override
+    protected boolean areWeAt() {
+        Wait.waitForAjaxCompleted();
+        try {
+            return cancelButton.isDisplayed();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
     public SettlementDialog fill(Consumer<SettlementDialog.FormFiller> fillFunc) {
         fillFunc.accept(new FormFiller(this));
         return this;

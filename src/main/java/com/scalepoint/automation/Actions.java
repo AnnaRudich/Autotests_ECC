@@ -247,7 +247,7 @@ public interface Actions {
         executor.executeScript("arguments[0].value=arguments[1];", element, value);
     }
 
-    default void ClickElementUsingJS(WebElement element){
+    default void clickElementUsingJS(WebElement element){
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
     }
 }

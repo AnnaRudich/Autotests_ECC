@@ -490,7 +490,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public SupplierDialog.ShopsTab deleteShop(Shop shop) {
             selectShop(shop);
             deleteShopButton.click();
-            ClickElementUsingJS(deleteShopYesButton);
+            clickElementUsingJS(deleteShopYesButton);
             return this;
         }
 
