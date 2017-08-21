@@ -24,6 +24,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
@@ -465,6 +466,12 @@ public class SettlementPage extends BaseClaimPage {
 
             public Asserts assertProductDetailsIconIsDisplayed(){
                 boolean productInfoPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='typeColumn']//img[contains(@src, 'info.png')]")).isDisplayed();
+                return this;
+            }
+
+            public Asserts assertAttachmentsIconIsDisplayed(){
+                boolean attachmentsIconPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='hasAttachmentColumn']//img[contains(@src, 'paperclip.png')]")).isDisplayed();
+                assertTrue(attachmentsIconPresent, "Attachment icon should be displayed");
                 return this;
             }
         }

@@ -1,20 +1,18 @@
 package com.scalepoint.automation.pageobjects.pages.selfservice;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.Wait;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.refresh;
@@ -29,17 +27,11 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//a[contains(@onclick, 'javascript:logout()')]")
     private WebElement logoutOption;
 
-    @FindBy(xpath = "//a[contains(@onclick, 'submitSelfServiceLines()')]")
-    private WebElement submitButton;
-
     @FindBy(xpath = "//img[contains(@class, 'x-form-date-trigger')]")
     private WebElement calendarImage;
 
     @FindBy(xpath = "//button[@class='x-date-mp-ok']")
     private WebElement calendarOKOption;
-
-    @FindBy(id = "uploadokbutton")
-    private WebElement uploadOKButton;
 
     @FindBy(xpath = "//*[contains(@class, 'x-combo-list-item')]")
     private List<WebElement> allDescriptionSuggestions;
@@ -68,9 +60,19 @@ public class SelfServicePage extends Page {
         $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text).pressEnter();
     }
 
+    public SelfServicePage reloadPage(){
+        refresh();
+        return this;
+    }
+
 
     public void selectSubmitOption() {
-        clickAndWaitForDisplaying(submitButton, By.id("menu_id_1"));
+        $(By.xpath("//a[contains(@onclick, 'submitSelfServiceLines()')]")).click();
+    }
+
+//TODO
+    public void selectCloseOption() {
+        $(By.xpath("//a[contains(@onclick, 'closeSelfService()')]")).shouldBe(visible).click();
     }
 
     public void ssLogout() {
@@ -112,12 +114,10 @@ public class SelfServicePage extends Page {
     /**
      * The method adds text in the description field, waits for suggestion, selects firs suggestion by clicking DOWN and Enter
      */
-    public SelfServicePage addDescriptionSelectFirstSuggestion(String text, int lineNumber) {
+    public SelfServicePage addDescriptionSelectFirstSuggestion(String text) {
 
         findField("descriptionColumn").sendKeys(text);
         findField("descriptionColumn").sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
-//        descriptionField.sendKeys(text);
-//        descriptionField.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
         return this;
     }
 
@@ -155,7 +155,8 @@ public class SelfServicePage extends Page {
      * The method adds Description. The field should be in focus
      */
     public SelfServicePage addDescription(String text, int lineNumber) {
-        $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text).pressTab();
+        $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text);
+        unfocusField();
         return this;
     }
     /**
@@ -192,49 +193,43 @@ public class SelfServicePage extends Page {
         return this;
     }
 
+    public SelfServicePage addCustomerComment(String commentText){
+        $(By.id("customer_comment")).click();
+        $(By.id("customer_comment")).sendKeys(commentText);
+        unfocusField();
+        return this;
+    }
+
+    public SelfServicePage addCustomerNote (String noteText){
+        unfocusField();
+        clickJS($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
+        $("#cutomer_note").sendKeys(noteText);
+        $(By.xpath(".//button[.='OK']")).click();
+        return this;
+    }
 
     public SelfServicePage uploadDocumentation(int lineNumber, boolean hasDocumentation) {
         SelenideElement documentationArrowTrigger = $$(By.xpath("//img[contains(@class, 'arrow-trigger')]")).get(2);
 
         findTheFieldInSsGrid("documentation", lineNumber).click();
+        documentationArrowTrigger.click();
 
         if (hasDocumentation) {
-            documentationArrowTrigger.click();
-           $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Ja']")).click();
-           uploadDocument(lineNumber);
+            $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Ja']")).click();
+            uploadDocument(new ClaimItem().getFile2Loc());
         } else {
-            documentationArrowTrigger.click();
             $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Nej']")).click();
         }
         return this;
     }
 
-    //TODO
-    public SelfServicePage uploadDocument(int lineNumber) {
-
-        //assertTrue(isElementPresent($("#addMultipleAttachmentsWindow")), "addMultipleAttachmentsWindow should be opened");
-        $("#addMultipleAttachmentsWindow").$(By.xpath("//div[contains(@class, 'file-wrap')]//input[@type='file']")).click();
-        $("#addMultipleAttachmentsWindow").$(By.xpath("//div[contains(@class, 'file-wrap')]//input[@type='file']")).sendKeys("C:\\Users\\aru\\Desktop\\toUpload.txt");
+    public SelfServicePage uploadDocument(String filePath) {
+       $(By.name("Filedata")).sendKeys(filePath);
         waitForUploadCompleted();
-        uploadOKButton.click();
-
-
-//
-//        for (WebElement select : documentSelects) {
-//            if (select.getText().contains(hasDocumentation ? yes : no)) {
-//                select.click();
-//                break;
-//            }
-//        }
-//        if (hasDocumentation) {
-//            waitForDisplayed(By.name("isInternal"));
-//            file.sendKeys(claimItem.getFileLoc());
-//            waitForUploadCompleted();
-//            uploadOKButton.click();
-//        }
+        $(By.xpath(".//button[.='Ok']")).click();
+        waitForAjaxCompleted();
         return this;
     }
-
     /**
      * The method waits for file upload is completed
      */
@@ -267,13 +262,13 @@ public class SelfServicePage extends Page {
     }
 
     public SelfServicePage deleteLine() {
-        SelenideElement e = $(By.xpath(".//div[contains(@class,'delete-icon')]/a"));
+        SelenideElement deleteButton = $(By.xpath(".//div[contains(@class,'delete-icon')]/a"));
 
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(e));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", e);
+        clickJS(deleteButton);
         waitForAjaxCompleted();
         return this;
     }
+
 
     public SelfServicePage doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
@@ -319,6 +314,28 @@ public class SelfServicePage extends Page {
             return this;
         }
 
+        public Asserts assertCategoryIsMarkedAsRequired(int lineNumber){
+            ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
+            selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'categoryColumn')]")).shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
+            return this;
+        }
+
+        public Asserts assertDocumentationIsMarkedAsRequired(int lineNumber){
+            ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
+            selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'documentation')]")).shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
+            return this;
+        }
+
+        public Asserts assertRequiredFieldsAlertIsPresent(){
+            assertTrue(isAlertPresent());
+            acceptAlert();
+            return this;
+        }
+
+        public  Asserts assertAttachIconIsPresent(){
+            assertTrue($(By.xpath(".//div[contains(@class, 'fileName')]//a/img[contains(@src, 'attach_icon.png')]")).isDisplayed(), "Attach icon should be displayed");
+            return this;
+        }
     }
 }
 

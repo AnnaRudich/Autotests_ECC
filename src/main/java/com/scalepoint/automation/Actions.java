@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 public interface Actions {
 
@@ -201,6 +202,10 @@ public interface Actions {
         } catch (Exception e) {
             return false;
         }
+    }
+    default void clickJS(WebElement element) {
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(element));
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
     }
 
     default void doubleClick(WebElement element) {
