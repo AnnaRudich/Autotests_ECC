@@ -8,6 +8,7 @@ import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -16,8 +17,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForEnabled;
-import static org.testng.Assert.*;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
@@ -127,6 +132,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
+            waitForAjaxCompleted();
             return this;
         }
     }
@@ -153,6 +159,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
+            waitForAjaxCompleted();
             return this;
         }
     }
@@ -194,6 +201,17 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @FindBy(id = "editSupplierTabPanelId")
         private WebElement editableSupplierDialog;
+
+        @Override
+        protected boolean areWeAt() {
+            Wait.waitForAjaxCompleted();
+            try {
+                return name.isDisplayed();
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                return false;
+            }
+        }
 
         public GeneralTab setName(String name) {
             this.name.clear();
@@ -241,7 +259,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
 
             public Asserts assertCity(String cityValue) {
-                Assert.assertEquals(city.getAttribute("value"), cityValue);
+                Assert.assertEquals(waitForVisible(city).getAttribute("value"), cityValue);
                 return this;
             }
 
@@ -270,47 +288,53 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
 
             public GeneralTab.FormFiller withSupplierName(String supplierName) {
-                dialog.name.clear();
+                clearField(dialog.name);
                 dialog.name.sendKeys(supplierName);
                 return this;
             }
 
             public GeneralTab.FormFiller withCvr(String cvr) {
-                dialog.cvr.clear();
+                clearField(dialog.cvr);
                 dialog.cvr.sendKeys(cvr);
                 return this;
             }
 
             public GeneralTab.FormFiller withAddress1(String address1) {
-                dialog.address1.clear();
+                clearField(dialog.address1);
                 dialog.address1.sendKeys(address1);
                 return this;
             }
 
             public GeneralTab.FormFiller withAddress2(String address2) {
-                dialog.address2.clear();
+                clearField(dialog.address2);
                 dialog.address2.sendKeys(address2);
                 return this;
             }
 
             public GeneralTab.FormFiller withCity(String city) {
-                dialog.city.clear();
+                clearField(dialog.city);
                 dialog.city.sendKeys(city);
                 return this;
             }
 
             public GeneralTab.FormFiller withPostalCode(String postalCode) {
-                dialog.postalCode.clear();
+                clearField(dialog.postalCode);
                 dialog.postalCode.sendKeys(postalCode);
                 return this;
             }
 
             public GeneralTab.FormFiller withWebsite(String website) {
-                dialog.website.clear();
+                clearField(dialog.website);
                 dialog.website.sendKeys(website);
                 return this;
             }
 
+            private void clearField(WebElement element) {
+                element.sendKeys(Keys.chord(Keys.CONTROL, "a"), "");
+                if(!element.equals("")){
+                    element.clear();
+                }
+            }
 
         }
 

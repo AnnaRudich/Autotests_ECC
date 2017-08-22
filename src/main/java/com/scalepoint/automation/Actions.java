@@ -258,5 +258,17 @@ public interface Actions {
             clickElementUsingJS(element);
         }
     }
+
+    default void doubleClickElementUsingJS(WebElement element){
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
+    }
+
+    default void doubleClickUsingJsIfSeleniumClickReturnError(WebElement element) {
+        try {
+            doubleClick(element);
+        }catch (Exception e){
+            doubleClickElementUsingJS(element);
+        }
+    }
 }
 

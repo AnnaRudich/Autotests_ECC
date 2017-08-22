@@ -109,7 +109,6 @@ public enum DriversFactory {
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
         capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-        capabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, "accept");
         return capabilities;
     }
 
