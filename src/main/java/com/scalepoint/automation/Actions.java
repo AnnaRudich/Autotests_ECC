@@ -207,6 +207,10 @@ public interface Actions {
             return false;
         }
     }
+    default void clickJS(WebElement element) {
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(element));
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
+    }
 
     default void doubleClick(WebElement element) {
         org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
