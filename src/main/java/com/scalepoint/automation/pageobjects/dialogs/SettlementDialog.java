@@ -43,6 +43,8 @@ import java.util.stream.IntStream;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertEqualsNoOrder;
@@ -725,7 +727,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.VOUCHER.className + "')]//img")).click());
+        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.VOUCHER.className + "')]//img"))));
         return at(EditVoucherValuationDialog.class);
     }
 
@@ -754,8 +756,8 @@ public class SettlementDialog extends BaseDialog {
 
         By xpath = By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td");
         Wait.waitForStaleElement(xpath);
-
-        List<WebElement> elements = Browser.driver().findElements(xpath);
+        waitForAjaxCompleted();
+        List<WebElement> elements = waitForStaleElements(xpath);
         for (WebElement td : elements) {
             String attribute = td.getAttribute("data-columnid");
             switch (ValuationGridColumn.getColumn(attribute)) {

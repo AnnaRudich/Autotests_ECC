@@ -65,7 +65,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public EditDiscountDistributionDialog updatePercentageFromDialog(DistributeTo distributeTo, Integer percentage) {
-        editDistributionButton.click();
+        clickUsingJsIfSeleniumClickReturnError(editDistributionButton);
         return BaseDialog.at(EditDiscountDistributionDialog.class).updatePercentage(distributeTo, percentage);
     }
 
@@ -93,7 +93,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public SettlementDialog saveVoucherValuation() {
-        ok.click();
+        clickUsingJsIfSeleniumClickReturnError(ok);
         return at(SettlementDialog.class);
     }
 

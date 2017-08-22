@@ -104,6 +104,17 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         }
 
         @Override
+        protected boolean areWeAt() {
+            Wait.waitForAjaxCompleted();
+            try {
+                return voucherNameInput.isDisplayed();
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                return false;
+            }
+        }
+
+        @Override
         protected BaseDialog ensureWeAreAt() {
             Wait.waitForVisible(voucherNameInput);
             return this;

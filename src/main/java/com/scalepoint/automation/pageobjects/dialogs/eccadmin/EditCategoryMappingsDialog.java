@@ -41,7 +41,7 @@ public class EditCategoryMappingsDialog extends BaseDialog {
                 break;
             }
         }
-        saveMappings.click();
+        clickElementUsingJS(saveMappings);
         return at(VoucherAgreementDialog.CategoriesTab.class);
     }
 
