@@ -136,6 +136,7 @@ public class SupplierTests extends BaseTest {
 
         SharedEccAdminFlows.createVoucherAgreement(generalTabTab, SharedEccAdminFlows.VoucherAgreementData.newBuilder(voucher, 10).build())
                 .saveSupplier()
+                .toSuppliersPage()
                 .editSupplier(supplier.getSupplierName())
                 .selectOrdersTab()
                 .doAssert(ordersTab -> {

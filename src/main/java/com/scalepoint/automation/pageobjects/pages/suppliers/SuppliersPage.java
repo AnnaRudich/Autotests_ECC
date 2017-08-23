@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.refresh;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -94,9 +95,9 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     }
 
     public SupplierDialog.GeneralTab editSupplier(String supplierName) {
-        clickUsingJsIfSeleniumClickReturnError(find(By.xpath("//input[contains(@name, 'searchfield')]")));
+        clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath("//input[contains(@name, 'searchfield')]")));
         makeSupplierSearch(supplierName);
-        waitForStaleElements((By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")));
+        waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
         if (getOption(supplierName).getText().contains(supplierName)) {
             scrollTo(getOption(supplierName));
             int i = 0;
