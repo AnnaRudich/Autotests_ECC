@@ -4,7 +4,6 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -22,7 +21,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.*;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.EMAIL_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PERSONAL_CODE_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PHONE_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.USE_PORTAL_REQUIRED;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
 public class VoucherAgreementTests extends BaseTest {

@@ -13,7 +13,9 @@ import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.SUPPLYMANAGER;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
 @SuppressWarnings("AccessStaticViaInstance")

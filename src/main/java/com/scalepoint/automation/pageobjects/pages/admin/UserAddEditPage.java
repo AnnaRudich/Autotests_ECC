@@ -80,7 +80,7 @@ public class UserAddEditPage extends AdminBasePage {
     private List<WebElement> generatePasswordButton;
 
     private String byCompanyXpath = "//select/option[normalize-space(text()) = '$1']";
-    private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[text()='$1']";
+    private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[normalize-space(text())='$1']";
     private String bySubDepartmentXpath = "//div[@id='SubDepartmentDiv']/select/option[contains(.,'$1')]";
     private String byRolesXpath = "//*[@id='rolesDiv']/table/tbody/tr/td[1][contains(.,'$1')]";
 
@@ -358,12 +358,12 @@ public class UserAddEditPage extends AdminBasePage {
 
     public UsersPage createNewSPAdminNewRole(SystemUser user, Roles roles) {
         WebElement option = find(byCompanyXpath, user.getCompany());
-        if (option.getText().equals(user.getCompany())) {
+        if (option.getText().trim().equals(user.getCompany())) {
             option.click();
         }
 
         WebElement option1 = find(byDepartmentXpath, user.getDepartment());
-        if (option1.getText().equals(user.getDepartment())) {
+        if (option1.getText().trim().equals(user.getDepartment())) {
             option1.click();
         }
 

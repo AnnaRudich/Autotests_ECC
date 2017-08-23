@@ -154,7 +154,7 @@ public class TextSearchPage extends Page {
         int i = 1;
         logger.info("Trying open SID attempt: " + i);
         waitForDisplayed(By.xpath("//button[@class='matchbutton']/img[1]")).click();
-        while(!BaseDialog.isOn(SettlementDialog.class) && i<6){
+        while(!BaseDialog.isOn(SettlementDialog.class) && i<4){
             i++;
             logger.info("Trying open SID attempt: " + i);
             driver.findElement(By.xpath("//button[@class='matchbutton']/img[1]")).click();
