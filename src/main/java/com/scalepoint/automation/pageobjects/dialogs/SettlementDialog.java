@@ -44,6 +44,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
@@ -726,9 +727,20 @@ public class SettlementDialog extends BaseDialog {
                 && driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
     }
 
+    String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
+
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.VOUCHER.className + "')]//img"))));
+        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className)))));
         return at(EditVoucherValuationDialog.class);
+    }
+
+    public boolean isDicountDistributionDisplayed(){
+        try{
+            return waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className))).isDisplayed();
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return false;
+        }
     }
 
     public SettlementDialog distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo distributeTo, Integer percentage) {

@@ -8,11 +8,13 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.BrowserType;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -118,6 +120,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 });
     }
 
+    @BrowserType(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
     public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
@@ -125,8 +128,8 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         ProductInfo product = SolrApi.findProductAsVoucher();
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .toTextSearchPage(product.getModel())
-                .openSidForFirstProduct();
+                .toTextSearchPage(product.getModelAndCategory())
+                .openSidForProductWithVoucher();
 
         int voucherPercentage = settlementDialog.getVoucherPercentage();
         double voucherCashValue = settlementDialog.parseValuationRow(Valuation.VOUCHER).getTotalPrice();

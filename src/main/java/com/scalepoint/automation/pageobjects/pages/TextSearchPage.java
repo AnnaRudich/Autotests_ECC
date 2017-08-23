@@ -30,6 +30,9 @@ public class TextSearchPage extends Page {
     @FindBy(css = ".matchbutton")
     private Button match;
 
+    @FindBy(css = ".matchbutton")
+    private List<Button> matchButtons;
+
     @FindBy(css = ".bestfitbutton")
     private Button bestFit;
 
@@ -134,6 +137,18 @@ public class TextSearchPage extends Page {
         Wait.waitForAjaxCompleted();
         Wait.waitForVisible(match);
         match.click();
+        return BaseDialog.at(SettlementDialog.class);
+    }
+
+    public SettlementDialog openSidForProductWithVoucher() {
+        Wait.waitForAjaxCompleted();
+        Wait.waitForVisible(match);
+        match.click();
+        SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
+        if(!settlementDialog.isDicountDistributionDisplayed()){
+            settlementDialog.cancel(TextSearchPage.class);
+            matchButtons.get(1).click();
+        }
         return BaseDialog.at(SettlementDialog.class);
     }
 
