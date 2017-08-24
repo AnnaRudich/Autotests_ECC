@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
 
@@ -291,10 +292,10 @@ public class AddEditReductionRulePage extends AdminBasePage {
         nameField.sendKeys(rr.getRrName());
         publishRR();
         selectPolicyRuleOption();
-        descriptionFirstField.sendKeys(rr.getDescription1());
-        clReductiontoFirstField.sendKeys(rr.getClaimReduction1());
-        descriptionSecondField.sendKeys(rr.getDescription1());
-        clReductiontoSecondField.sendKeys(rr.getClaimReduction1());
+        $(descriptionFirstField).setValue(rr.getDescription1());
+        $(clReductiontoFirstField).setValue(rr.getClaimReduction1());
+        $(descriptionSecondField).setValue(rr.getDescription1());
+        $(clReductiontoSecondField).setValue(rr.getClaimReduction1());
         return this;
     }
 
@@ -322,18 +323,18 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
 
     public AddEditReductionRulePage fillPriceRangeForTwoLines(String priceFromValueFirstLine, String priceToValueFirstLine, String priceFromValueSecondLine, String priceToValueSecondLine) {
-        priceFromFirstField.sendKeys(priceFromValueFirstLine);
-        priceToFirstField.sendKeys(priceToValueFirstLine);
-        priceFromSecondField.sendKeys(priceFromValueSecondLine);
-        priceToSecondField.sendKeys(priceToValueSecondLine);
+        $(priceFromFirstField).setValue(priceFromValueFirstLine);
+        $(priceToFirstField).setValue(priceToValueFirstLine);
+        $(priceFromSecondField).setValue(priceFromValueSecondLine);
+        $(priceToSecondField).setValue(priceToValueSecondLine);
         return this;
     }
 
     public AddEditReductionRulePage fillAgeRangeForTwoLines(String ageFromValueFirstLine, String ageToValueFirstLine, String ageFromValueSecondLine, String ageToValueSecondLine) {
-        ageFromFirstField.sendKeys(ageFromValueFirstLine);
-        ageToFirstField.sendKeys(ageToValueFirstLine);
-        ageFromSecondField.sendKeys(ageFromValueSecondLine);
-        ageToSecondField.sendKeys(ageToValueSecondLine);
+        $(ageFromFirstField).setValue(ageFromValueFirstLine);
+        $(ageToFirstField).setValue(ageToValueFirstLine);
+        $(ageFromSecondField).setValue(ageFromValueSecondLine);
+        $(ageToSecondField).setValue(ageToValueSecondLine);
         return this;
     }
 

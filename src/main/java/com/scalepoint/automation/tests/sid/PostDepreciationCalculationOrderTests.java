@@ -119,7 +119,6 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                     line.assertReplacementPriceIs(replacementPrice);
                 });
     }
-
     @BrowserType(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
