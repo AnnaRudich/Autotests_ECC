@@ -6,7 +6,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.BrowserType;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -42,7 +42,7 @@ public class DeprecationDeductedTests extends BaseTest {
      * WHEN: CH review completed claim details
      * THAN: Face value = New Price, Cash Value = New Price - VD1%
      */
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Bug(bug = "CHARLIE-404")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (off)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION, enabled = false)
@@ -80,7 +80,7 @@ public class DeprecationDeductedTests extends BaseTest {
      * WHEN: CH review completed claim details
      * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
      */
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Bug(bug = "CHARLIE-416")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (on)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)

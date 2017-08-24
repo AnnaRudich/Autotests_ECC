@@ -10,7 +10,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.BrowserType;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -305,7 +305,7 @@ public class ClaimTests extends BaseTest {
                 });
     }
 
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
@@ -340,7 +340,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with wizard
      * THEN: C1 status is "Completed"
      */
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
@@ -364,7 +364,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with shop
      * THEN: C1 status is "Completed"
      */
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")

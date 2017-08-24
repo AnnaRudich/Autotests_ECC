@@ -17,7 +17,7 @@ import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.annotations.BrowserType;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
@@ -69,8 +69,8 @@ public class BaseTest extends AbstractBaseTest {
         MDC.put("sessionid", method.getName());
         logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
-        WebDriver driver = DriversFactory.getDriver(method.getAnnotation(BrowserType.class) != null
-                ? method.getAnnotation(BrowserType.class).value() : DriverType.findByProfile(browserMode));
+        WebDriver driver = DriversFactory.getDriver(method.getAnnotation(RunOn.class) != null
+                ? method.getAnnotation(RunOn.class).value() : DriverType.findByProfile(browserMode));
 
         Browser.init(driver);
         Window.init(driver);

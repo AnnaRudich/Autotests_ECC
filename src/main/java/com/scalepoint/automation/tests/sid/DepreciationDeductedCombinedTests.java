@@ -6,7 +6,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.BrowserType;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -51,7 +51,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
             Constants.DEPRECIATION_10
     );
 
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Bug(bug = "CHARLIE-417,CHARLIE-772")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
@@ -61,7 +61,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, false);
     }
 
-    @BrowserType(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Bug(bug = "CHARLIE-417")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
