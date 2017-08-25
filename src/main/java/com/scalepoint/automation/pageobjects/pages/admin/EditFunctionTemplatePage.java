@@ -4,6 +4,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,7 +14,9 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -69,7 +72,12 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     public boolean isSettingHasSameOptionSelected(FTSetting ftSetting, String text) {
         Select comboBox = new Select(driver.findElement(By.cssSelector(ftSetting.getLocator())));
         WebElement firstSelectedOption = comboBox.getFirstSelectedOption();
-        return firstSelectedOption.getText().equalsIgnoreCase(text);
+        return clearTextFromNewLines(firstSelectedOption.getText()).equalsIgnoreCase(text);
+    }
+
+    private String clearTextFromNewLines(String text){
+        List<String> lines = Arrays.stream(text.split("\\r?\\n")).map(t -> t.trim()).collect(Collectors.toList());
+        return StringUtils.join(lines, " ").trim();
     }
 
     public EditFunctionTemplatePage enableFeature(FTSetting ftSetting) {

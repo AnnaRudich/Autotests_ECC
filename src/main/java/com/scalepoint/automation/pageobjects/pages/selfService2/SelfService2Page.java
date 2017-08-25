@@ -75,6 +75,8 @@ public class SelfService2Page extends Page {
     public SelfService2Page addDescriptionWithOutSuggestions(String text){
         descriptionField.clear();
         descriptionField.sendKeys(text);
+        descriptionField.sendKeys(Keys.TAB);
+        forCondition(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//ul[contains(@class, 'autosuggest__suggestions-list')]")));
         waitForValidationMark(descriptionField);
         return this;
     }
@@ -89,7 +91,7 @@ public class SelfService2Page extends Page {
 
     private void selectItem(WebElement element, String text){
         WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
-        selectElement.click();
+        clickUsingJsIfSeleniumClickReturnError(selectElement);
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
@@ -98,7 +100,7 @@ public class SelfService2Page extends Page {
         waitForVisible(selectItemElement);
         scrollToElement(selectItemElement);
         waitForVisible(selectItemElement);
-        selectItemElement.click();
+        clickUsingJsIfSeleniumClickReturnError(selectItemElement);
         waitForVisible(selectElement);
         forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }
