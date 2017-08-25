@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
+import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -707,6 +708,6 @@ public class ReductionRulesTest extends BaseTest {
     }
 
     private AddEditReductionRulePage toNewReductionRulePage() {
-        return login(getSystemUser(), AddEditReductionRulePage.class);
+        return login(getSystemUser(), AdminPage.class).to(AddEditReductionRulePage.class);
     }
 }
