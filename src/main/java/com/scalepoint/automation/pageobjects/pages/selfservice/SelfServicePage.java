@@ -5,7 +5,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -17,7 +19,9 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.refresh;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -53,7 +57,7 @@ public class SelfServicePage extends Page {
     }
 
     public SelenideElement findField(String fieldName) {
-        return $(By.xpath(".//div[contains(@class,'" + fieldName + "')]/div"));
+        return $(By.xpath(".//div[contains(@class,'" + fieldName + "')and not(contains(@class, 'sample-text'))]/div"));
     }
 
     public void setValueToTheInput(String text) {

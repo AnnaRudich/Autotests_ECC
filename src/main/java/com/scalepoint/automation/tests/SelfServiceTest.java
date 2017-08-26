@@ -8,7 +8,6 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -228,6 +227,7 @@ public class SelfServiceTest extends BaseTest {
             SelfServicePage.assertDocumentationIsMarkedAsRequired(1);
         });
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with Documentation attached")
