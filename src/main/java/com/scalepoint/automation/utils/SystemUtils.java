@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.types;
+package com.scalepoint.automation.utils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
