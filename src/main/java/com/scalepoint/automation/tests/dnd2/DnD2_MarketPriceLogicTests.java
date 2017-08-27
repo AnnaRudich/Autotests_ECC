@@ -10,7 +10,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.MARKET_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-526")
 public class DnD2_MarketPriceLogicTests extends BaseTest {
@@ -24,6 +25,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(productInfo.getModel())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
@@ -40,7 +42,8 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchByProductName(productInfo.getModelAndCategory())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();

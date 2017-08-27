@@ -130,7 +130,7 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
 
     public ReductionRulesPage saveAndExpectSuccess() {
-        saveButton.click();
+        saveButton.submit();
         acceptAlert();
         return at(ReductionRulesPage.class);
     }

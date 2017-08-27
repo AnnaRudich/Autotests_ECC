@@ -33,6 +33,7 @@ import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
+import com.scalepoint.automation.utils.types.SystemUtils;
 import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
@@ -62,15 +63,17 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 @Listeners({InvokedMethodListener.class})
 public class BaseTest extends AbstractBaseTest {
 
-
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
         Thread.currentThread().setName("Thread "+method.getName());
         MDC.put("sessionid", method.getName());
         logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
-        WebDriver driver = DriversFactory.getDriver(method.getAnnotation(RunOn.class) != null
-                ? method.getAnnotation(RunOn.class).value() : DriverType.findByProfile(browserMode));
+        DriverType driverType = method.getAnnotation(RunOn.class) != null
+                ? method.getAnnotation(RunOn.class).value() : DriverType.findByProfile(browserMode);
+        WebDriver driver = DriversFactory.getDriver(driverType);
+        logger.info("Using driver type: " + driverType.name());
+        logger.info("Running on host: " + SystemUtils.getHostname());
 
         Browser.init(driver);
         Window.init(driver);
