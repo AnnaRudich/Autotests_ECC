@@ -33,7 +33,6 @@ import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
-import com.scalepoint.automation.utils.types.SystemUtils;
 import org.apache.log4j.MDC;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
@@ -72,10 +71,8 @@ public class BaseTest extends AbstractBaseTest {
         DriverType driverType = method.getAnnotation(RunOn.class) != null
                 ? method.getAnnotation(RunOn.class).value() : DriverType.findByProfile(browserMode);
         WebDriver driver = DriversFactory.getDriver(driverType);
-        logger.info("Using driver type: " + driverType.name());
-        logger.info("Running on host: " + SystemUtils.getHostname());
 
-        Browser.init(driver);
+        Browser.init(driver, driverType);
         Window.init(driver);
         WebDriverRunner.setWebDriver(driver);
 

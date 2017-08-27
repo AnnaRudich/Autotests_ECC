@@ -3,8 +3,8 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.spring.Application;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -22,7 +22,7 @@ import org.testng.annotations.BeforeMethod;
 @IntegrationTest
 public abstract class AbstractBaseTest extends AbstractTestNGSpringContextTests {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LogManager.getLogger(AbstractBaseTest.class);
 
     @Autowired
     protected DatabaseApi databaseApi;

@@ -91,7 +91,7 @@
                         <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
                     </suiteXmlFiles>
                     <parallel>methods</parallel>
-                    <threadCount>5</threadCount>
+                    <threadCount>9</threadCount>
                     <argLine>
                         -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar
                         -Djava.library.path=${basedir}/src/main/resources/dll

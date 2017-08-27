@@ -11,25 +11,35 @@ import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.scalepoint.automation.utils.types.SystemUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
 
     private static final String ROLLBACK_CONTEXT = "rollback_context";
 
-    private static Logger logger = LoggerFactory.getLogger(InvokedMethodListener.class);
+    protected Logger logger = LogManager.getLogger(InvokedMethodListener.class);
 
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         if (invokedMethod.isTestMethod()) {
+
+            logger.info("Using driver type: " + Browser.getDriverType());
+            logger.info("Running on host: " + SystemUtils.getHostname());
+
             int attempt = 0;
             /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
             while (attempt <= 1) {
