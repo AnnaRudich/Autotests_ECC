@@ -2,7 +2,7 @@
 <links>
 
     <!--<hubLink>http://ecc-autotest:4444/wd/hub</hubLink>-->
-    <hubLink>http://ecc-build.spcph.local:4444/wd/hub</hubLink>
+    <hubLink>http://ecc-build.spcph.local:4444</hubLink>
     <startPage>{eccadmin}/login.action</startPage>
     <autoCancelClaimLink>{ecc}/dk/AutoCancelClaims</autoCancelClaimLink>
     <eccLogout>{eccadmin}/logout</eccLogout>

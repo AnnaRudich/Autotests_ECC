@@ -56,7 +56,7 @@ public enum DriversFactory {
             defaultScriptTimeout = 60;
 
             DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
+            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
             driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;
@@ -67,7 +67,7 @@ public enum DriversFactory {
     FF(DriverType.FF) {
         protected WebDriver getDriverInstance() throws MalformedURLException {
             DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
+            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
             driver = new Augmenter().augment(driver);
             return driver;
         }
@@ -80,7 +80,7 @@ public enum DriversFactory {
             defaultScriptTimeout = 60;
 
             DesiredCapabilities capabilities = getDesiredCapabilitiesForChrome();
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink()), capabilities);
+            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
             driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;

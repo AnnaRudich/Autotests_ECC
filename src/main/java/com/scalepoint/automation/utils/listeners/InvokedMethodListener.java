@@ -8,12 +8,14 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestNGMethod;
@@ -38,7 +40,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         if (invokedMethod.isTestMethod()) {
 
             logger.info("Using driver type: " + Browser.getDriverType());
-            logger.info("Running on host: " + SystemUtils.getHostname());
+            logger.info("Start from: " + SystemUtils.getHostname());
+            logger.info("Running on grid node: " + GridInfoUtils.getGridNodeName(((RemoteWebDriver)Browser.driver()).getSessionId()));
 
             int attempt = 0;
             /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
