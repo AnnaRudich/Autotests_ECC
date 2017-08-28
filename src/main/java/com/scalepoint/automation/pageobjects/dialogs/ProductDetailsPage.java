@@ -10,6 +10,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -53,7 +54,7 @@ public class ProductDetailsPage extends Page {
         }
 
         public Asserts assetMarketPriceSupplierInvisible(){
-            assertTrue(Wait.invisible(marketPriceSupplier), "Market price supplier must be hidden");
+            assertTrue(Wait.invisible($(marketPriceSupplier)), "Market price supplier must be hidden");
             return this;
         }
 
@@ -63,7 +64,7 @@ public class ProductDetailsPage extends Page {
         }
 
         public Asserts assertMarketPriceInvisible(){
-            assertTrue(Wait.invisible(marketPriceValue), "Market price must be hidden");
+            assertTrue(Wait.invisible($(marketPriceValue)), "Market price must be hidden");
             return this;
         }
     }

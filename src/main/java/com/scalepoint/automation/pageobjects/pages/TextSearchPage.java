@@ -235,7 +235,7 @@ public class TextSearchPage extends Page {
         }
 
         public Asserts assertMarketPriceInvisible() {
-            Assert.assertTrue(Wait.invisible(sortByMarketPrice), "Market price still visible");
+            Assert.assertTrue(Wait.invisible($(sortByMarketPrice)), "Market price still visible");
             return this;
         }
     }
