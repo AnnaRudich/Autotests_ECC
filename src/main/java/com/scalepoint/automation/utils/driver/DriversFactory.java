@@ -109,14 +109,14 @@ public enum DriversFactory {
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
         capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-        capabilities.setBrowserName("chrome");
-        capabilities.setPlatform(Platform.WINDOWS);
-        capabilities.setCapability(IGNORE_ZOOM_SETTING, true);
-        capabilities.setCapability(NATIVE_EVENTS, false);
-        capabilities.setCapability(REQUIRE_WINDOW_FOCUS, true);
-        capabilities.setCapability(UNEXPECTED_ALERT_BEHAVIOR, "accept");
-        capabilities.setCapability("driverAttachTimeout", 60000);
-        capabilities.setJavascriptEnabled(true);
+//        capabilities.setBrowserName("chrome");
+//        capabilities.setPlatform(Platform.WINDOWS);
+//        capabilities.setCapability(IGNORE_ZOOM_SETTING, true);
+//        capabilities.setCapability(NATIVE_EVENTS, false);
+//        capabilities.setCapability(REQUIRE_WINDOW_FOCUS, true);
+//        capabilities.setCapability(UNEXPECTED_ALERT_BEHAVIOR, "accept");
+//        capabilities.setCapability("driverAttachTimeout", 60000);
+//        capabilities.setJavascriptEnabled(true);
         return capabilities;
     }
 

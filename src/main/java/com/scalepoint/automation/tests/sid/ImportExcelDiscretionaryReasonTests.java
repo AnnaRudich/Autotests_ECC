@@ -5,11 +5,13 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Depreciati
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
@@ -26,6 +28,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
      * AND: Open SID
      * THEN: Drop-down for choosing reason is enabled
      */
+    @RunOn(DriverType.CHROME_REMOTE)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
@@ -46,6 +49,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
      * AND: Select any item form catalog.
      * THEN: Selected reason 1 is still applicable for the converted item.
      */
+    @RunOn(DriverType.CHROME_REMOTE)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
@@ -78,6 +82,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
      * AND: Select any item form catalog.
      * THEN: Selected reason 1 is still applicable for the converted item.
      */
+    @RunOn(DriverType.CHROME_REMOTE)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
