@@ -124,7 +124,6 @@ public class SelfServicePage extends Page {
         findField("descriptionColumn").sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
         return this;
     }
-
     /**
      * The method selects random year and random month for Purchase date. The date is not shown, but it presents in DOM.
      */
