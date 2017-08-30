@@ -45,6 +45,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(productInfo.getModel())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
@@ -65,6 +66,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(productInfo.getModel())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
