@@ -125,6 +125,7 @@ public enum DriversFactory {
         capabilities.setCapability(NATIVE_EVENTS, false);
         capabilities.setBrowserName("internet explorer");
         capabilities.setPlatform(Platform.WINDOWS);
+        capabilities.setJavascriptEnabled(true);
 
         addLoggingPreferences(capabilities);
         options.merge(capabilities);
