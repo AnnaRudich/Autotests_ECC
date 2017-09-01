@@ -2,6 +2,7 @@ package com.scalepoint.automation.utils.driver;
 
 import com.scalepoint.automation.utils.data.TestData;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -23,7 +24,6 @@ import java.util.logging.Level;
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultImplicitWait;
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultScriptTimeout;
 import static org.openqa.selenium.ie.InternetExplorerDriver.NATIVE_EVENTS;
-import static org.openqa.selenium.ie.InternetExplorerDriver.UNEXPECTED_ALERT_BEHAVIOR;
 
 public enum DriversFactory {
 
@@ -118,11 +118,11 @@ public enum DriversFactory {
         options.destructivelyEnsureCleanSession();
         options.requireWindowFocus();
         options.ignoreZoomSettings();
-        options.setCapability(UNEXPECTED_ALERT_BEHAVIOR, "accept");
-        options.setCapability(NATIVE_EVENTS, false);
+        options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
         options.waitForUploadDialogUpTo(20, TimeUnit.SECONDS);
         options.withAttachTimeout(90, TimeUnit.SECONDS);
 
+        capabilities.setCapability(NATIVE_EVENTS, false);
         capabilities.setBrowserName("internet explorer");
         capabilities.setPlatform(Platform.WINDOWS);
 

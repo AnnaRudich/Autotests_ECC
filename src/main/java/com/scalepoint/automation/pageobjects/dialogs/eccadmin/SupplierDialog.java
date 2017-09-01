@@ -519,6 +519,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             selectShop(shop);
             deleteShopButton.click();
             clickElementUsingJS(deleteShopYesButton);
+            waitForAjaxCompleted();
             return this;
         }
 
