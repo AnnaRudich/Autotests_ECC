@@ -30,7 +30,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
-    public void charlie508_1_ImportEcxelWithDiscretionaryValuation(@UserCompany(TRYGFORSIKRING) User trygUser,
+    public void charlie508_1_ImportExcelWithDiscretionaryValuation(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                                    Claim claim) {
         loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
