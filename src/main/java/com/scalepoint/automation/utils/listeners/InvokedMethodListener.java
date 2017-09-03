@@ -35,13 +35,16 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     protected Logger logger = LogManager.getLogger(InvokedMethodListener.class);
 
+    private String gridNode;
+
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         if (invokedMethod.isTestMethod()) {
 
             logger.info("Using driver type: " + Browser.getDriverType());
             logger.info("Start from: " + SystemUtils.getHostname());
-            logger.info("Running on grid node: " + GridInfoUtils.getGridNodeName(((RemoteWebDriver)Browser.driver()).getSessionId()));
+            gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver)Browser.driver()).getSessionId());
+            logger.info("Running on grid node: " + gridNode);
 
             int attempt = 0;
             /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
@@ -103,7 +106,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
         if (!iTestResult.isSuccess()) {
-            Selenide.screenshot(method.getName());
+            Selenide.screenshot("_node_" + gridNode + "_browser_" + Browser.getDriverType() + method.getName());
         }
     }
 
