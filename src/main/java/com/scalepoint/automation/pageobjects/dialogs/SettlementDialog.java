@@ -1101,9 +1101,25 @@ public class SettlementDialog extends BaseDialog {
             return checkVisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
         }
 
+        public Asserts assertCatalogPriceInvisible() {
+            String failMessage = "Catalog price must be invisible";
+            return checkInvisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
+        }
+
         private Asserts checkVisibilityOfValuationRow(String message, Valuation valuation){
             try {
                 if (parseValuationRow(valuation).getDescription() == null) {
+                    Assert.fail(message);
+                }
+            } catch (Exception e) {
+                Assert.fail(message);
+            }
+            return this;
+        }
+
+        private Asserts checkInvisibilityOfValuationRow(String message, Valuation valuation){
+            try {
+                if (parseValuationRow(valuation).getDescription() != null) {
                     Assert.fail(message);
                 }
             } catch (Exception e) {

@@ -95,7 +95,7 @@ public class SolrApi {
         }
     }
 
-    public static ProductInfo findProductAsVoucherWithPriceLowerThanMarketPrice(){
+    public static ProductInfo findProductAsVoucherWithProductPriceLowerThanMarketPrice(){
         try{
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
