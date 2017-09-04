@@ -322,8 +322,7 @@ public class SelfServiceTest extends BaseTest {
                 .addCustomerNote("customer note");
 
         String lineDescription = new SelfServicePage().getDescriptionText(1);
-        System.out.println(lineDescription);
-
+        
         new SelfServicePage().selectSubmitOption();
 
         login(user)
