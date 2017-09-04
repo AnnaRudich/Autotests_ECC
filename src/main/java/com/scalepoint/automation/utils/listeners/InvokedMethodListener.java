@@ -9,10 +9,10 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
+import com.scalepoint.automation.utils.SystemUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import com.scalepoint.automation.utils.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -106,8 +106,14 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
         if (!iTestResult.isSuccess()) {
-            Selenide.screenshot("_node_" + gridNode + "_browser_" + Browser.getDriverType() + method.getName());
+            Selenide.screenshot(getFileName(method));
         }
+    }
+
+    private String getFileName(Method method) {
+        return "node_" + gridNode.replace("http://","").replace(gridNode.substring(gridNode.lastIndexOf(":")), "")
+                + "_" + Browser.getDriverType()
+                + "_" + method.getName();
     }
 
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {

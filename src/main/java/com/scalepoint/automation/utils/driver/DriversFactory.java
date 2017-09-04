@@ -118,12 +118,10 @@ public enum DriversFactory {
         options.destructivelyEnsureCleanSession();
         options.requireWindowFocus();
         options.ignoreZoomSettings();
-        options.enablePersistentHovering();
         options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
         options.waitForUploadDialogUpTo(20, TimeUnit.SECONDS);
         options.withAttachTimeout(90, TimeUnit.SECONDS);
         options.setCapability("nativeEvents", Boolean.valueOf(false));
-
         capabilities.setCapability(NATIVE_EVENTS, false);
         capabilities.setBrowserName("internet explorer");
         capabilities.setPlatform(Platform.WINDOWS);
