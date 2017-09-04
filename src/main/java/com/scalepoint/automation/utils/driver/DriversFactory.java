@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.driver;
 
 import com.scalepoint.automation.utils.data.TestData;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
@@ -111,7 +112,7 @@ public enum DriversFactory {
         return capabilities;
     }
 
-    private static InternetExplorerOptions getOptionsForIE() {
+    private static MutableCapabilities getOptionsForIE() {
         DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
         InternetExplorerOptions options = new InternetExplorerOptions();
         options.introduceFlakinessByIgnoringSecurityDomains();
@@ -128,8 +129,8 @@ public enum DriversFactory {
         capabilities.setJavascriptEnabled(true);
 
         addLoggingPreferences(capabilities);
-        options.merge(capabilities);
-        return options;
+        return options.merge(capabilities);
+//        return options;
     }
 
     /*doesn't work with IE, but can be used with FF/Chrome*/
