@@ -22,7 +22,6 @@ import static com.scalepoint.automation.utils.Constants.TEXT_LINE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)

@@ -19,7 +19,6 @@ import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-529")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class SettlementSummaryTests extends BaseTest {
 
     /**

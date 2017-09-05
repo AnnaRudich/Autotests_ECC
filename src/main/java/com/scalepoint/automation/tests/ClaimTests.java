@@ -29,7 +29,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ClaimTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
