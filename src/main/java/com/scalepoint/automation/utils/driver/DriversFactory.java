@@ -109,6 +109,9 @@ public enum DriversFactory {
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
         capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        capabilities.setCapability("nativeEvents", false);
+        capabilities.setPlatform(Platform.WINDOWS);
+        capabilities.setJavascriptEnabled(true);
         return capabilities;
     }
 
@@ -130,7 +133,6 @@ public enum DriversFactory {
 
         addLoggingPreferences(capabilities);
         return options.merge(capabilities);
-//        return options;
     }
 
     /*doesn't work with IE, but can be used with FF/Chrome*/
