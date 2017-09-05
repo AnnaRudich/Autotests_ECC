@@ -33,6 +33,12 @@ public class TextSearchPage extends Page {
     @FindBy(css = ".matchbutton")
     private List<Button> matchButtons;
 
+    @FindBy(xpath = "//label/span[contains(@id,'brand')]")
+    private List<WebElement> brandList;
+
+    @FindBy(xpath = "//label/span[contains(@id,'model')]")
+    private List<WebElement> modelList;
+
     @FindBy(css = ".bestfitbutton")
     private Button bestFit;
 
@@ -241,6 +247,16 @@ public class TextSearchPage extends Page {
 
         public Asserts assertMarketPriceInvisible() {
             Assert.assertTrue(Wait.invisible($(sortByMarketPrice)), "Market price still visible");
+            return this;
+        }
+
+        public Asserts assertSearchResultsContainsSearchModel(String target){
+            Assert.assertTrue(modelList.stream().allMatch(element -> element.getText().contains(target)));
+            return this;
+        }
+
+        public Asserts assertSearchResultsContainsSearchBrand(String target){
+            Assert.assertTrue(brandList.stream().allMatch(element -> element.getText().contains(target)));
             return this;
         }
     }
