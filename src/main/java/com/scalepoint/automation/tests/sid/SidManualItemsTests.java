@@ -29,7 +29,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class SidManualItemsTests extends BaseTest {
 

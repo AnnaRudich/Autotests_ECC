@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-505")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
 public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
 
