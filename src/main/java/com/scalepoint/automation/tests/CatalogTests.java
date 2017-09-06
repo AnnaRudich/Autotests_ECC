@@ -14,21 +14,37 @@ import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Val
 @RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class CatalogTests extends BaseTest{
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Add BnO product from catalog")
-    public void charlie543_addFromCatalogOrderableProductsWithBnO(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProductAsVoucherWithProductPriceLowerThanMarketPrice();//run me on upToDate Solr!
+    @Test(enabled=false, dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice lower than Market price")
+    public void charlie543_addFromCatalogOrderableProductsWithBnoProductPriceLowerThanMarketPrice(User user, Claim claim){
+        ProductInfo productInfo = SolrApi.findProductAsVoucherWithProductPriceLowerThanMarketPrice();
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(productInfo.getModel())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
 
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
-                    asserts.assertCatalogPriceInvisible();
+                    asserts.assertCatalogPriceVisible();
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER);
                 });
     }
+        @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
+        @Test(enabled = false, dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice equals Market price")
+        public void charlie543_addFromCatalogOrderableProductsWithBnoProductPriceEqualsMarketPrice(User user, Claim claim){
+            ProductInfo productInfo = SolrApi.findProductAsVoucherWithProductPriceEqualsMarketPrice();
+
+            loginAndCreateClaim(user, claim)
+                    .toTextSearchPage()
+                    .searchByProductName(productInfo.getModel())
+                    .sortOrderableFirst()
+                    .openSidForFirstProduct()
+
+                    .doAssert(asserts -> {
+                        asserts.assertMarketPriceVisible();
+                        asserts.assertCatalogPriceInvisible();
+                        asserts.assertIsLowestPriceValuationSelected(VOUCHER);
+                    });
+        }
 }
-//does it make sense to have a Test class with one test?
