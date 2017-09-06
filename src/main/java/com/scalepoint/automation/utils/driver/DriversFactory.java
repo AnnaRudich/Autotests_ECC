@@ -1,11 +1,14 @@
 package com.scalepoint.automation.utils.driver;
 
 import com.scalepoint.automation.utils.data.TestData;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.Augmenter;
@@ -21,11 +24,7 @@ import java.util.logging.Level;
 
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultImplicitWait;
 import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultScriptTimeout;
-import static org.openqa.selenium.ie.InternetExplorerDriver.IGNORE_ZOOM_SETTING;
-import static org.openqa.selenium.ie.InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS;
 import static org.openqa.selenium.ie.InternetExplorerDriver.NATIVE_EVENTS;
-import static org.openqa.selenium.ie.InternetExplorerDriver.REQUIRE_WINDOW_FOCUS;
-import static org.openqa.selenium.ie.InternetExplorerDriver.UNEXPECTED_ALERT_BEHAVIOR;
 
 public enum DriversFactory {
 
@@ -40,8 +39,7 @@ public enum DriversFactory {
                 File ieDriver = new File("src/main/resources/drivers/IEDriverServer.exe");
                 System.setProperty("webdriver.ie.driver", ieDriver.getAbsolutePath());
             }
-            DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
-            InternetExplorerDriver driver = new InternetExplorerDriver(capabilities);
+            InternetExplorerDriver driver = new InternetExplorerDriver(getOptionsForIE());
             driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;
@@ -55,8 +53,7 @@ public enum DriversFactory {
             defaultImplicitWait = 15;
             defaultScriptTimeout = 60;
 
-            DesiredCapabilities capabilities = getDesiredCapabilitiesForIE();
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
+            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), getOptionsForIE());
             driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
             return driver;
@@ -64,6 +61,7 @@ public enum DriversFactory {
 
 
     },
+
     FF(DriverType.FF) {
         protected WebDriver getDriverInstance() throws MalformedURLException {
             DesiredCapabilities capabilities = DesiredCapabilities.firefox();
@@ -72,6 +70,7 @@ public enum DriversFactory {
             return driver;
         }
     },
+
     CHROME_REMOTE(DriverType.CHROME_REMOTE) {
         @Override
         protected WebDriver getDriverInstance() throws MalformedURLException {
@@ -87,6 +86,7 @@ public enum DriversFactory {
         }
 
     },
+
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance() {
             if (System.getProperty("webdriver.chrome.driver") == null) {
@@ -109,32 +109,30 @@ public enum DriversFactory {
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
         capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-        capabilities.setBrowserName("chrome");
+        capabilities.setCapability("nativeEvents", false);
         capabilities.setPlatform(Platform.WINDOWS);
-        capabilities.setCapability(IGNORE_ZOOM_SETTING, true);
-        capabilities.setCapability(NATIVE_EVENTS, false);
-        capabilities.setCapability(REQUIRE_WINDOW_FOCUS, true);
-        capabilities.setCapability(UNEXPECTED_ALERT_BEHAVIOR, "accept");
-        capabilities.setCapability("driverAttachTimeout", 60000);
         capabilities.setJavascriptEnabled(true);
         return capabilities;
     }
 
-    private static DesiredCapabilities getDesiredCapabilitiesForIE() {
+    private static MutableCapabilities getOptionsForIE() {
         DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+        InternetExplorerOptions options = new InternetExplorerOptions();
+        options.introduceFlakinessByIgnoringSecurityDomains();
+        options.destructivelyEnsureCleanSession();
+        options.requireWindowFocus();
+        options.ignoreZoomSettings();
+        options.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT);
+        options.waitForUploadDialogUpTo(20, TimeUnit.SECONDS);
+        options.withAttachTimeout(90, TimeUnit.SECONDS);
+        options.setCapability("nativeEvents", Boolean.valueOf(false));
+        capabilities.setCapability(NATIVE_EVENTS, false);
         capabilities.setBrowserName("internet explorer");
         capabilities.setPlatform(Platform.WINDOWS);
-        capabilities.setCapability(INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-        capabilities.setCapability(IGNORE_ZOOM_SETTING, true);
-        capabilities.setCapability(NATIVE_EVENTS, false);
-        capabilities.setCapability(REQUIRE_WINDOW_FOCUS, true);
-        capabilities.setCapability(UNEXPECTED_ALERT_BEHAVIOR, "accept");
-        capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-        capabilities.setCapability("driverAttachTimeout", 60000);
         capabilities.setJavascriptEnabled(true);
 
         addLoggingPreferences(capabilities);
-        return capabilities;
+        return options.merge(capabilities);
     }
 
     /*doesn't work with IE, but can be used with FF/Chrome*/

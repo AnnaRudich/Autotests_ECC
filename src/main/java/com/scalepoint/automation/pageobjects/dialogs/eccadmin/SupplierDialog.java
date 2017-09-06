@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForEnabled;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
@@ -152,7 +153,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public class Asserts {
             public BannerTab.Asserts assertBannerIsPresent() {
-                assertTrue(JavascriptHelper.isImagePresent(driver.findElement(By.className("bannerUploadImg"))));
+                assertTrue(JavascriptHelper.isImagePresent(waitForDisplayed(By.className("bannerUploadImg"))));
                 return this;
             }
         }
@@ -519,6 +520,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             selectShop(shop);
             deleteShopButton.click();
             clickElementUsingJS(deleteShopYesButton);
+            waitForAjaxCompleted();
             return this;
         }
 

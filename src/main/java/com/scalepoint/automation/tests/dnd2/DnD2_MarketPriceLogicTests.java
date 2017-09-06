@@ -38,7 +38,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
             "then valuation should be them same in both")
     public void charlie526_checkIsProductPriceVisibleForCatalogPriceHigherMarketPrice(User user, Claim claim){
 
-        ProductInfo productInfo = SolrApi.findProductAsVoucher();
+        ProductInfo productInfo = SolrApi.findProductInvoiceHigherMarket();
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

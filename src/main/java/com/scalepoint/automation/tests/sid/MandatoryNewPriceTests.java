@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
  */
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-625")
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_3RD_VALUATION_FIELD)
 @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
 public class MandatoryNewPriceTests extends BaseTest {

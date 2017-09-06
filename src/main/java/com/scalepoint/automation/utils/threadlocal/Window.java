@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.openqa.selenium.support.ui.WebDriverWait.DEFAULT_SLEEP_TIMEOUT;
 
 @SuppressWarnings("ConstantConditions")
@@ -42,7 +43,7 @@ public class Window {
         public boolean openDialog(WebElement openButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
             if (openButton.isDisplayed()) {
-                openButton.click();
+                $(openButton).click();
             } else {
                 logger.error("Button is not displayed");
             }

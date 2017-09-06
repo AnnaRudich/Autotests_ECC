@@ -87,12 +87,17 @@ public class TextSearchPage extends Page {
     }
 
     private TextSearchPage sort(WebElement sortLink, Image sortIconToWait) {
-        int totalAttempts = 5;
+        int totalAttempts = 10;
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
-            sortLink.click();
+            $(sortLink).click();
             Wait.waitForAjaxCompleted();
-            Boolean isDisplayed = Wait.forCondition(webDriver -> sortIconToWait.isDisplayed());
+            Boolean isDisplayed = false;
+            try {
+                isDisplayed = sortIconToWait.isDisplayed();
+            }catch (Exception e){
+                logger.info(e.getMessage());
+            }
             if (isDisplayed) {
                 break;
             }

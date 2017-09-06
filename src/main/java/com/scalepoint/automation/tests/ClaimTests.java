@@ -10,9 +10,9 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -29,7 +29,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ClaimTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
@@ -221,7 +220,6 @@ public class ClaimTests extends BaseTest {
                 });
     }
 
-    @RunOn(DriverType.CHROME_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
