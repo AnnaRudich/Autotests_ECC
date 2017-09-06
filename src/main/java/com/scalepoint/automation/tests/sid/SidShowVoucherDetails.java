@@ -4,13 +4,11 @@ import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.VoucherTermsAndConditionsDialog;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
@@ -164,7 +162,6 @@ public class SidShowVoucherDetails extends BaseTest {
      * THEN: Check that another voucher is displayed
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify that Brands and Tags are visible in compact mode")
-    @RequiredSetting(type = FTSetting.SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG)
     public void ecc5519_3_voucherBrandTagInSIDCompactMode(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         loginAndCreateClaim(user, claim)
                 .openSid()
