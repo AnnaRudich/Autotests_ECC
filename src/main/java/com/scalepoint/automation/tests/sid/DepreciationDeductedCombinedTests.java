@@ -42,7 +42,6 @@ import org.testng.annotations.Test;
 @RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
 @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class DepreciationDeductedCombinedTests extends BaseTest {
 
     private static final VoucherValuationWithDepreciation VOUCHER_VALUATION_WITH_DEPRECIATION = SidCalculator.calculateVoucherValuation(

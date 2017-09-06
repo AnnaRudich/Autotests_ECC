@@ -14,7 +14,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-613")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
 public class SidReductionRulesTests extends BaseTest {
 

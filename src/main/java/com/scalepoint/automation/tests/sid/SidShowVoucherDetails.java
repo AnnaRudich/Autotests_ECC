@@ -18,7 +18,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-557")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class SidShowVoucherDetails extends BaseTest {
 
     /**
