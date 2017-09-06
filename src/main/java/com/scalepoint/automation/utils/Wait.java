@@ -29,7 +29,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllE
 public class Wait {
     private static final int TIME_OUT_IN_SECONDS = 60;
     private static final int POLL_IN_MS = 1000;
-    public static final int DEFAULT_TIMEOUT = 30;
+    public static final int DEFAULT_TIMEOUT = 60;
 
     private static Logger log = LoggerFactory.getLogger(Wait.class);
 
@@ -200,7 +200,7 @@ public class Wait {
     }
 
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), 15, 1000).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), 60, 1000).until(expectedCondition);
     }
 
     public static void waitForElementWithPageReload(By locator) {
