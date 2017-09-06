@@ -14,12 +14,15 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Image;
 import ru.yandex.qatools.htmlelements.element.Link;
+import ru.yandex.qatools.htmlelements.element.Select;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
 public class TextSearchPage extends Page {
@@ -71,6 +74,18 @@ public class TextSearchPage extends Page {
 
     @FindBy(xpath = "//button[contains(@onclick, 'backToSettlement()')]")
     private WebElement backToSettlementButton;
+
+    @FindBy(id = "brandSelectionObj")
+    private Select brandSelect;
+
+    @FindBy(id = "brandsButton")
+    private Button brandButton;
+
+    @FindBy(id = "modelSelectObj")
+    private Select modelSelect;
+
+    @FindBy(id = "modelsButton")
+    private Button modelButton;
 
     @Override
     protected String getRelativeUrl() {
@@ -227,6 +242,20 @@ public class TextSearchPage extends Page {
         Wait.waitForAjaxCompleted();
         Wait.waitForDisplayed(By.xpath("(.//*[@id='productsTable']/table//td[@productId])[1]"));
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
+    }
+
+    public TextSearchPage selectBrand(String text){
+        brandButton.click();
+        waitForVisible(brandSelect).selectByVisibleText(text);
+        waitForAjaxCompleted();
+        return this;
+    }
+
+    public TextSearchPage selectModel(String text){
+        modelButton.click();
+        waitForVisible(modelSelect).selectByVisibleText(text);
+        waitForAjaxCompleted();
+        return this;
     }
 
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
