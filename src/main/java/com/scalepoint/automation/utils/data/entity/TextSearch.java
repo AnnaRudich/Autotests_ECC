@@ -74,6 +74,10 @@ public class TextSearch {
     private String nonorderableProduct2;
     @XmlElement
     private String bnOProduct;
+    @XmlElement
+    private String brand1;
+    @XmlElement
+    private String model1;
 
     @XmlElement
     private String bnOProduct2;
@@ -213,5 +217,13 @@ public class TextSearch {
 
     public String getProductWithOnlyVoucherHandling2() {
         return bnOProduct2;
+    }
+
+    public String getBrand1() {
+        return brand1;
+    }
+
+    public String getModel1() {
+        return model1;
     }
 }

@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Image;
@@ -20,9 +21,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class TextSearchPage extends Page {
@@ -36,7 +39,7 @@ public class TextSearchPage extends Page {
     @FindBy(css = ".matchbutton")
     private List<Button> matchButtons;
 
-    @FindBy(xpath = "//label/span[contains(@id,'brand')]")
+    @FindBy(xpath = "//div[@id='productsTable']//span[contains(@id,'brand')]")
     private List<WebElement> brandList;
 
     @FindBy(xpath = "//label/span[contains(@id,'model')]")
@@ -87,6 +90,9 @@ public class TextSearchPage extends Page {
     @FindBy(id = "modelsButton")
     private Button modelButton;
 
+    private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
+    private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/matching_engine/TextSearch.jsp";
@@ -116,7 +122,7 @@ public class TextSearchPage extends Page {
             Boolean isDisplayed = false;
             try {
                 isDisplayed = sortIconToWait.isDisplayed();
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.info(e.getMessage());
             }
             if (isDisplayed) {
@@ -171,7 +177,7 @@ public class TextSearchPage extends Page {
         Wait.waitForVisible(match);
         match.click();
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
-        if(!settlementDialog.isDicountDistributionDisplayed()){
+        if (!settlementDialog.isDicountDistributionDisplayed()) {
             settlementDialog.cancel(TextSearchPage.class);
             matchButtons.get(1).click();
         }
@@ -195,7 +201,7 @@ public class TextSearchPage extends Page {
         int i = 1;
         logger.info("Trying open SID attempt: " + i);
         waitForDisplayed(By.xpath("//button[@class='matchbutton']/img[1]")).click();
-        while(!BaseDialog.isOn(SettlementDialog.class) && i<4){
+        while (!BaseDialog.isOn(SettlementDialog.class) && i < 4) {
             i++;
             logger.info("Trying open SID attempt: " + i);
             driver.findElement(By.xpath("//button[@class='matchbutton']/img[1]")).click();
@@ -244,18 +250,28 @@ public class TextSearchPage extends Page {
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
     }
 
-    public TextSearchPage selectBrand(String text){
-        brandButton.click();
+    public TextSearchPage selectBrand(String text) {
+        forCondition(ExpectedConditions.elementToBeClickable(brandButton)).click();
         waitForVisible(brandSelect).selectByVisibleText(text);
-        waitForAjaxCompleted();
+        waitForResultsLoad();
         return this;
     }
 
-    public TextSearchPage selectModel(String text){
-        modelButton.click();
+    public TextSearchPage selectModel(String text) {
+        forCondition(ExpectedConditions.elementToBeClickable(modelButton)).click();
         waitForVisible(modelSelect).selectByVisibleText(text);
-        waitForAjaxCompleted();
+        waitForResultsLoad();
         return this;
+    }
+
+    private void waitForResultsLoad() {
+        try {
+            waitForDisplayed(fieldSetDisabled);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+        waitForDisplayed(fieldSetNotDisabled);
+        waitForAjaxCompleted();
     }
 
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
@@ -279,13 +295,15 @@ public class TextSearchPage extends Page {
             return this;
         }
 
-        public Asserts assertSearchResultsContainsSearchModel(String target){
-            Assert.assertTrue(modelList.stream().allMatch(element -> element.getText().contains(target)));
+        public Asserts assertSearchResultsContainsSearchModel(String target) {
+            //assertThat(modelList.stream().map(WebElement::getText).collect(Collectors.toList())).contains(target);
+            assertThat(modelList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
             return this;
         }
 
-        public Asserts assertSearchResultsContainsSearchBrand(String target){
-            Assert.assertTrue(brandList.stream().allMatch(element -> element.getText().contains(target)));
+        public Asserts assertSearchResultsContainsSearchBrand(String target) {
+            //assertThat(brandList.stream().map(WebElement::getText).collect(Collectors.toList())).containsOnly(target);
+            assertThat(brandList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
             return this;
         }
     }

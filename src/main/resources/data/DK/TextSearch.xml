@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <textSearch>
+    <brand1>Samsung</brand1>
+    <model1>Galaxy S7 Edge 32GB Guld</model1>
     <simpleQuery>samsung</simpleQuery>
     <complexQuery>apple iphone 4S</complexQuery>
     <spec_characters><![CDATA[&*^]]></spec_characters>
