@@ -296,13 +296,11 @@ public class TextSearchPage extends Page {
         }
 
         public Asserts assertSearchResultsContainsSearchModel(String target) {
-            //assertThat(modelList.stream().map(WebElement::getText).collect(Collectors.toList())).contains(target);
             assertThat(modelList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
             return this;
         }
 
         public Asserts assertSearchResultsContainsSearchBrand(String target) {
-            //assertThat(brandList.stream().map(WebElement::getText).collect(Collectors.toList())).containsOnly(target);
             assertThat(brandList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
             return this;
         }
