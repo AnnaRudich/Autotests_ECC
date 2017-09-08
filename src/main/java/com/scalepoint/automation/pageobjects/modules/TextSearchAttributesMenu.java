@@ -1,14 +1,24 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import java.util.Arrays;
 
+import static com.scalepoint.automation.utils.Wait.forCondition;
+
 public class TextSearchAttributesMenu extends Module {
+
+    @FindBy(id = "attSearchButton")
+    private Button attributeSearchButton;
 
     private void yesNoSelect(By by, String[] options) {
         WebElement initialElement = null;
@@ -57,24 +67,34 @@ public class TextSearchAttributesMenu extends Module {
         return this;
     }
 
+    public TextSearchPage searchAttributes(){
+        forCondition(ExpectedConditions.elementToBeClickable(attributeSearchButton)).click();
+        return Page.at(TextSearchPage.class);
+    }
 
     private enum Type {
-        YES_NO_SELECT;
+        YES_NO_SELECT
     }
 
     public enum Attributes {
-        SMARTPHONE_NEJ("Smartphone", Type.YES_NO_SELECT, "Nej", "og kun denne");
+        SMARTPHONE_NEJ("Smartphone", Type.YES_NO_SELECT, "Nej", "og kun denne"),
+        GPS_NEJ("GPS", Type.YES_NO_SELECT, "Nej", "og kun denne");
 
-
+        private String name;
         private By by;
         private Type type;
         private String[] options;
 
 
         Attributes(String name, Type type, String... options) {
+            this.name = name;
             this.by = By.xpath(String.format("//span[text()='%s']", name));
             this.type = type;
             this.options = options;
+        }
+
+        public String getName() {
+            return name;
         }
 
         public By getBy() {

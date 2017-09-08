@@ -17,7 +17,9 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Image;
 import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Select;
+import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -25,6 +27,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -93,6 +96,12 @@ public class TextSearchPage extends Page {
 
     @FindBy(id = "attButton")
     private Button attributeButton;
+
+    @FindBy(xpath = "//span[contains(@id,'productSpecificationToggle')]")
+    private List<WebElement> productsSpecifications;
+
+    @FindBy(xpath = "//div[contains(@id,'productAttributeSelect')][@class='resultsTableNorm']/table")
+    private List<Table> atrributeTables;
 
     private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
     private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
@@ -278,9 +287,16 @@ public class TextSearchPage extends Page {
         waitForAjaxCompleted();
     }
 
-    public TextSearchAttributesMenu openAttributesMenu(){
+    public TextSearchAttributesMenu openAttributesMenu() {
         forCondition(ExpectedConditions.elementToBeClickable(attributeButton)).click();
         return new TextSearchAttributesMenu();
+    }
+
+    public TextSearchPage openSpecificationForItem(int index) {
+        waitForResultsLoad();
+        forCondition(ExpectedConditions.elementToBeClickable(productsSpecifications.get(index))).click();
+        waitForElementContainsText(productsSpecifications.get(index), "-");
+        return this;
     }
 
 
@@ -312,6 +328,22 @@ public class TextSearchPage extends Page {
 
         public Asserts assertSearchResultsContainsSearchBrand(String target) {
             assertThat(brandList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertAttributeResultsContains(int index, TextSearchAttributesMenu.Attributes... attributes) {
+            final Boolean[] isMatchingItemAttributes = {true};
+            Arrays.stream(attributes).forEach(
+                    attribute -> {
+                        String itemAttr = atrributeTables.get(index).getRowsAsString()
+                                .stream().filter(row -> row.get(0).contains(attribute.getName())).findAny().get().get(1);
+                        if (Arrays.stream(attribute.getOptions()).noneMatch(option -> option.contains(itemAttr.trim()))) {
+                            isMatchingItemAttributes[0] = false;
+                            logger.info("Attribute " + attribute.getName() + " have incorrect options " + itemAttr+ " current options should be " + Arrays.toString(attribute.getOptions()));
+                        }
+                    }
+            );
+            assertThat(isMatchingItemAttributes[0]).isTrue();
             return this;
         }
     }

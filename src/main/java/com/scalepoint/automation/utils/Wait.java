@@ -103,6 +103,20 @@ public class Wait {
         });
     }
 
+    public static WebElement waitForElementContainsText(WebElement element, String text) {
+        return wrapShort((WebDriver d) -> {
+            try {
+                if (!element.getText().contains(text)) {
+                    return null;
+                }
+                return element;
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+                return null;
+            }
+        });
+    }
+
     public static void waitElementDisappeared(By element) {
         Browser.driver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         getWebDriverWaitWithDefaultTimeoutAndPooling()
