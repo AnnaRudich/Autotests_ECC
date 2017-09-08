@@ -11,7 +11,6 @@ import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Val
 
 
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class CatalogTests extends BaseTest{
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(enabled=false, dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice lower than Market price")
