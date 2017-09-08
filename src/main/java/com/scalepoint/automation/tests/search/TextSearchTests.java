@@ -3,10 +3,14 @@ package com.scalepoint.automation.tests.search;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
+
+import static com.scalepoint.automation.pageobjects.modules.TextSearchAttributesMenu.Attributes.SMARTPHONE_NEJ;
 
 public class TextSearchTests extends BaseTest {
 
@@ -36,5 +40,18 @@ public class TextSearchTests extends BaseTest {
                     asserts.assertSearchResultsContainsSearchModel(textSearch.getModel1());
                     asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
                 });
+    }
+
+
+    @RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
+    public void charlie510_selectAttributes(User user, Claim claim, TextSearch textSearch){
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName("phone")
+                .selectBrand(textSearch.getBrand1())
+                .selectModel(textSearch.getModel1())
+                .openAttributesMenu()
+                .selectAttribute(SMARTPHONE_NEJ);
     }
 }

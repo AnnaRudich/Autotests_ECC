@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.modules.TextSearchAttributesMenu;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
@@ -89,6 +90,9 @@ public class TextSearchPage extends Page {
 
     @FindBy(id = "modelsButton")
     private Button modelButton;
+
+    @FindBy(id = "attButton")
+    private Button attributeButton;
 
     private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
     private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
@@ -273,6 +277,12 @@ public class TextSearchPage extends Page {
         waitForDisplayed(fieldSetNotDisabled);
         waitForAjaxCompleted();
     }
+
+    public TextSearchAttributesMenu openAttributesMenu(){
+        forCondition(ExpectedConditions.elementToBeClickable(attributeButton)).click();
+        return new TextSearchAttributesMenu();
+    }
+
 
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
