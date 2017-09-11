@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.modules.TextSearchAttributesMenu;
+import com.scalepoint.automation.pageobjects.modules.textSearch.TextSearchAttributesMenu;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
@@ -349,7 +349,7 @@ public class TextSearchPage extends Page {
                                 .stream().filter(row -> row.get(0).contains(attribute.getName())).findAny().get().get(1);
                         if (Arrays.stream(attribute.getOptions()).noneMatch(option -> option.contains(itemAttr.trim()))) {
                             isMatchingItemAttributes[0] = false;
-                            logger.info("Attribute " + attribute.getName() + " have incorrect options " + itemAttr+ " current options should be " + Arrays.toString(attribute.getOptions()));
+                            logger.info("Attribute " + attribute.getName() + " have incorrect options " + itemAttr + " current options should be " + Arrays.toString(attribute.getOptions()));
                         }
                     }
             );
