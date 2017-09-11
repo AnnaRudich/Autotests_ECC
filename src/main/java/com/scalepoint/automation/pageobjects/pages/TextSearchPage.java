@@ -49,6 +49,9 @@ public class TextSearchPage extends Page {
     @FindBy(xpath = "//label/span[contains(@id,'model')]")
     private List<WebElement> modelList;
 
+    @FindBy(xpath = "//div[@id='productsTable']//span[contains(@id,'brand')]/parent::td")
+    private List<WebElement> resultsCategoriesList;
+
     @FindBy(css = ".bestfitbutton")
     private Button bestFit;
 
@@ -235,8 +238,9 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage chooseCategory(String _category) {
         waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
-        List<WebElement> categories = categoriesList;
-        categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get().click();
+        List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
+        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get())).click();
+        waitForResultsLoad();
         return this;
     }
 
@@ -277,7 +281,7 @@ public class TextSearchPage extends Page {
         return this;
     }
 
-    private void waitForResultsLoad() {
+    public TextSearchPage waitForResultsLoad() {
         try {
             waitForDisplayed(fieldSetDisabled);
         } catch (Exception e) {
@@ -285,6 +289,7 @@ public class TextSearchPage extends Page {
         }
         waitForDisplayed(fieldSetNotDisabled);
         waitForAjaxCompleted();
+        return this;
     }
 
     public TextSearchAttributesMenu openAttributesMenu() {
@@ -331,7 +336,12 @@ public class TextSearchPage extends Page {
             return this;
         }
 
-        public Asserts assertAttributeResultsContains(int index, TextSearchAttributesMenu.Attributes... attributes) {
+        public Asserts assertSearchResultsContainsSearchCategory(String target) {
+            assertThat(resultsCategoriesList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertAttributeResultContains(int index, TextSearchAttributesMenu.Attributes... attributes) {
             final Boolean[] isMatchingItemAttributes = {true};
             Arrays.stream(attributes).forEach(
                     attribute -> {

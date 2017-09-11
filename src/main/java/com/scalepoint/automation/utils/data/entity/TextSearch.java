@@ -78,6 +78,10 @@ public class TextSearch {
     private String brand1;
     @XmlElement
     private String model1;
+    @XmlElement
+    private String group1;
+    @XmlElement
+    private String subgroup1;
 
     @XmlElement
     private String bnOProduct2;
@@ -225,5 +229,13 @@ public class TextSearch {
 
     public String getModel1() {
         return model1;
+    }
+
+    public String getGroup1() {
+        return group1;
+    }
+
+    public String getSubgroup1() {
+        return subgroup1;
     }
 }

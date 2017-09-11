@@ -4,11 +4,9 @@ import com.scalepoint.automation.pageobjects.modules.TextSearchAttributesMenu;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.modules.TextSearchAttributesMenu.Attributes.GPS_NEJ;
@@ -45,7 +43,6 @@ public class TextSearchTests extends BaseTest {
     }
 
 
-    @RunOn(DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
     public void charlie510_selectAttributes(User user, Claim claim, TextSearch textSearch) {
         int index = 0;
@@ -60,7 +57,18 @@ public class TextSearchTests extends BaseTest {
                 .searchAttributes()
                 .openSpecificationForItem(index)
                 .doAssert(
-                        asserts -> asserts.assertAttributeResultsContains(index, attributes)
+                        asserts -> asserts.assertAttributeResultContains(index, attributes)
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
+    public void charlie510_selectCategory(User user, Claim claim, TextSearch textSearch) {
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(textSearch.getGroup1())
+                .chooseCategory(textSearch.getSubgroup1())
+                .doAssert(
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
                 );
     }
 }
