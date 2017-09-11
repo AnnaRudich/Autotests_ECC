@@ -42,7 +42,6 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
     public void charlie510_selectAttributes(User user, Claim claim, TextSearch textSearch) {
         int index = 0;

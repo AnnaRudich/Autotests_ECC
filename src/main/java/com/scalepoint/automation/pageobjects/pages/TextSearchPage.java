@@ -343,18 +343,13 @@ public class TextSearchPage extends Page {
         }
 
         public Asserts assertAttributeResultContains(int index, Attributes... attributes) {
-            final Boolean[] isMatchingItemAttributes = {true};
             Arrays.stream(attributes).forEach(
                     attribute -> {
                         String itemAttr = atrributeTables.get(index).getRowsAsString()
                                 .stream().filter(row -> row.get(0).contains(attribute.getName())).findAny().get().get(1);
-                        if (Arrays.stream(attribute.getOptions()).noneMatch(option -> option.contains(itemAttr.trim()))) {
-                            isMatchingItemAttributes[0] = false;
-                            logger.info("Attribute " + attribute.getName() + " have incorrect options " + itemAttr + " current options should be " + Arrays.toString(attribute.getOptions()));
-                        }
+                        assertThat(Arrays.stream(attribute.getOptions()).anyMatch(option -> option.contains(itemAttr.trim()))).isTrue();
                     }
             );
-            assertThat(isMatchingItemAttributes[0]).isTrue();
             return this;
         }
     }
