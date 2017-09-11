@@ -5,7 +5,8 @@ public interface SearchAttributesActions {
     /**
      * Method to choose action basing on attribute type
      * @param attributes
-     * @see com.scalepoint.automation.pageobjects.modules.textSearch.TextSearchAttributesMenu.Attributes
+     * @see com.scalepoint.automation.pageobjects.modules.textSearch.Attributes
      */
-    void selectAttribute(TextSearchAttributesMenu.Attributes attributes);
+    void selectAttribute(Attributes attributes);
+
 }

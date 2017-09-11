@@ -15,7 +15,7 @@ public class YesNoAttributeAction implements SearchAttributesActions {
     protected Logger logger = LogManager.getLogger(getClass());
 
     @Override
-    public void selectAttribute(TextSearchAttributesMenu.Attributes attribute) {
+    public void selectAttribute(Attributes attribute) {
         yesNoSelect(attribute.getBy(), attribute.getOptions());
     }
 

@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
 import com.scalepoint.automation.pageobjects.modules.textSearch.TextSearchAttributesMenu;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -341,7 +342,7 @@ public class TextSearchPage extends Page {
             return this;
         }
 
-        public Asserts assertAttributeResultContains(int index, TextSearchAttributesMenu.Attributes... attributes) {
+        public Asserts assertAttributeResultContains(int index, Attributes... attributes) {
             final Boolean[] isMatchingItemAttributes = {true};
             Arrays.stream(attributes).forEach(
                     attribute -> {
