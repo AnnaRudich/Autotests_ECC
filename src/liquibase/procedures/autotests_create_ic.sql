@@ -165,8 +165,7 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
          ,[ftDefaultInvoicePayer]
          ,[hide_customer_demand_for_claimant]
          ,[hide_voucher_face_value_for_claimant]
-         ,[ftAutoApprovalFlag]
-         ,[ftEnableNewSettlementItemDialog])
+         ,[ftAutoApprovalFlag])
       SELECT @ICRFNBR
           ,[FTREDUCFLAGS]
           ,[FTSHOPMENUFLAGS]
@@ -231,7 +230,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
           ,[hide_customer_demand_for_claimant]
           ,[hide_voucher_face_value_for_claimant]
           ,[ftAutoApprovalFlag]
-          ,[ftEnableNewSettlementItemDialog]
         FROM [FUNCTEMPLATE] where FTRFNBR = @scalepointFtId
         SET IDENTITY_INSERT [FUNCTEMPLATE] OFF
 	END
