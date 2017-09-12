@@ -108,6 +108,9 @@ public class TextSearchPage extends Page {
     @FindBy(xpath = "//div[contains(@id,'productAttributeSelect')][@class='resultsTableNorm']/table")
     private List<Table> atrributeTables;
 
+    @FindBy(id = "createManualLineButton")
+    private Button createManually;
+
     private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
     private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
 
@@ -328,6 +331,10 @@ public class TextSearchPage extends Page {
         return this;
     }
 
+    public SettlementDialog openSid(){
+        createManually.click();
+        return BaseDialog.at(SettlementDialog.class);
+    }
 
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());

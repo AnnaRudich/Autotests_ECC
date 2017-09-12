@@ -6,6 +6,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
@@ -80,6 +81,18 @@ public class TextSearchTests extends BaseTest {
                 .chooseCategory(textSearch.getSubgroup1())
                 .doAssert(
                         asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
+    public void charlie510_createClaimManuallyFromSearch(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .doAssert(
+                        asserts -> asserts.assertItemIsPresent(claimItem.getTextFieldSP())
                 );
     }
 }
