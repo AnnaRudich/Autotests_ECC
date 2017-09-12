@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.search;
 
 import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
+import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
@@ -28,6 +29,17 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
+    @Test(dataProvider = "testDataProvider", description = "Check if results are matching selected suggestion")
+    public void charlie510_useSuggestionsToFindProduct(User user, Claim claim) {
+        TextSearchPage textSearchPage = loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchProductAndSelectFirstSuggestion("samsung");
+        String searchText = textSearchPage.getSearchInputText();
+        textSearchPage.doAssert(
+                asserts -> asserts.assertSearchQueryContainsBrandAndModel(searchText)
+        );
+    }
+
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
     public void charlie510_selectBrandAndModel(User user, Claim claim, TextSearch textSearch) {
         loginAndCreateClaim(user, claim)
@@ -42,7 +54,7 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
     public void charlie510_selectAttributes(User user, Claim claim, TextSearch textSearch) {
         int index = 0;
         Attributes[] attributes = {GPS_NEJ, SMARTPHONE_NEJ};

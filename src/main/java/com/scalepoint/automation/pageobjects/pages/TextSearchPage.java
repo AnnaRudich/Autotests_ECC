@@ -10,6 +10,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -246,6 +247,14 @@ public class TextSearchPage extends Page {
     }
 
     public TextSearchPage searchByProductName(String productName) {
+        searchProduct(productName);
+        search.click();
+        Wait.waitForAjaxCompleted();
+        Wait.waitForStaleElement(By.cssSelector("#productsTable table tbody"));
+        return this;
+    }
+
+    private void searchProduct(String productName) {
         try {
             int attempt = 0;
             do {
@@ -256,10 +265,24 @@ public class TextSearchPage extends Page {
         } catch (InvalidElementStateException e) {
             logger.error("The Product name has not been entered!");
         }
-        search.click();
+    }
+
+    private void waitForSuggestions(){
+        waitForDisplayed(By.xpath("//div[@id='suggest_div']/table"));
+    }
+
+    public TextSearchPage searchProductAndSelectFirstSuggestion(String productName){
+        searchInput.sendKeys(productName);
+        waitForSuggestions();
+        searchInput.sendKeys(Keys.ARROW_DOWN);
+        searchInput.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
         Wait.waitForStaleElement(By.cssSelector("#productsTable table tbody"));
         return this;
+    }
+
+    public String getSearchInputText(){
+        return searchInput.getText();
     }
 
     public String getFirstProductId() {
@@ -334,6 +357,12 @@ public class TextSearchPage extends Page {
 
         public Asserts assertSearchResultsContainsSearchBrand(String target) {
             assertThat(brandList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSearchQueryContainsBrandAndModel(String query) {
+            assertThat(modelList.stream().allMatch(element -> query.contains(element.getText()))).isTrue();
+            assertThat(brandList.stream().allMatch(element -> query.contains(element.getText()))).isTrue();
             return this;
         }
 
