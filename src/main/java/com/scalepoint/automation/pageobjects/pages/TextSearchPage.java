@@ -4,22 +4,33 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
+import com.scalepoint.automation.pageobjects.modules.textSearch.TextSearchAttributesMenu;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Image;
 import ru.yandex.qatools.htmlelements.element.Link;
+import ru.yandex.qatools.htmlelements.element.Select;
+import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class TextSearchPage extends Page {
@@ -32,6 +43,15 @@ public class TextSearchPage extends Page {
 
     @FindBy(css = ".matchbutton")
     private List<Button> matchButtons;
+
+    @FindBy(xpath = "//div[@id='productsTable']//span[contains(@id,'brand')]")
+    private List<WebElement> brandList;
+
+    @FindBy(xpath = "//label/span[contains(@id,'model')]")
+    private List<WebElement> modelList;
+
+    @FindBy(xpath = "//div[@id='productsTable']//span[contains(@id,'brand')]/parent::td")
+    private List<WebElement> resultsCategoriesList;
 
     @FindBy(css = ".bestfitbutton")
     private Button bestFit;
@@ -66,6 +86,30 @@ public class TextSearchPage extends Page {
     @FindBy(xpath = "//button[contains(@onclick, 'backToSettlement()')]")
     private WebElement backToSettlementButton;
 
+    @FindBy(id = "brandSelectionObj")
+    private Select brandSelect;
+
+    @FindBy(id = "brandsButton")
+    private Button brandButton;
+
+    @FindBy(id = "modelSelectObj")
+    private Select modelSelect;
+
+    @FindBy(id = "modelsButton")
+    private Button modelButton;
+
+    @FindBy(id = "attButton")
+    private Button attributeButton;
+
+    @FindBy(xpath = "//span[contains(@id,'productSpecificationToggle')]")
+    private List<WebElement> productsSpecifications;
+
+    @FindBy(xpath = "//div[contains(@id,'productAttributeSelect')][@class='resultsTableNorm']/table")
+    private List<Table> atrributeTables;
+
+    private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
+    private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/matching_engine/TextSearch.jsp";
@@ -95,7 +139,7 @@ public class TextSearchPage extends Page {
             Boolean isDisplayed = false;
             try {
                 isDisplayed = sortIconToWait.isDisplayed();
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.info(e.getMessage());
             }
             if (isDisplayed) {
@@ -150,7 +194,7 @@ public class TextSearchPage extends Page {
         Wait.waitForVisible(match);
         match.click();
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
-        if(!settlementDialog.isDicountDistributionDisplayed()){
+        if (!settlementDialog.isDicountDistributionDisplayed()) {
             settlementDialog.cancel(TextSearchPage.class);
             matchButtons.get(1).click();
         }
@@ -174,7 +218,7 @@ public class TextSearchPage extends Page {
         int i = 1;
         logger.info("Trying open SID attempt: " + i);
         waitForDisplayed(By.xpath("//button[@class='matchbutton']/img[1]")).click();
-        while(!BaseDialog.isOn(SettlementDialog.class) && i<4){
+        while (!BaseDialog.isOn(SettlementDialog.class) && i < 4) {
             i++;
             logger.info("Trying open SID attempt: " + i);
             driver.findElement(By.xpath("//button[@class='matchbutton']/img[1]")).click();
@@ -195,8 +239,9 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage chooseCategory(String _category) {
         waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
-        List<WebElement> categories = categoriesList;
-        categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get().click();
+        List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
+        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get())).click();
+        waitForResultsLoad();
         return this;
     }
 
@@ -223,6 +268,44 @@ public class TextSearchPage extends Page {
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
     }
 
+    public TextSearchPage selectBrand(String text) {
+        forCondition(ExpectedConditions.elementToBeClickable(brandButton)).click();
+        waitForVisible(brandSelect).selectByVisibleText(text);
+        waitForResultsLoad();
+        return this;
+    }
+
+    public TextSearchPage selectModel(String text) {
+        forCondition(ExpectedConditions.elementToBeClickable(modelButton)).click();
+        waitForVisible(modelSelect).selectByVisibleText(text);
+        waitForResultsLoad();
+        return this;
+    }
+
+    public TextSearchPage waitForResultsLoad() {
+        try {
+            waitForDisplayed(fieldSetDisabled);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+        waitForDisplayed(fieldSetNotDisabled);
+        waitForAjaxCompleted();
+        return this;
+    }
+
+    public TextSearchAttributesMenu openAttributesMenu() {
+        forCondition(ExpectedConditions.elementToBeClickable(attributeButton)).click();
+        return new TextSearchAttributesMenu();
+    }
+
+    public TextSearchPage openSpecificationForItem(int index) {
+        waitForResultsLoad();
+        forCondition(ExpectedConditions.elementToBeClickable(productsSpecifications.get(index))).click();
+        waitForElementContainsText(productsSpecifications.get(index), "-");
+        return this;
+    }
+
+
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return TextSearchPage.this;
@@ -241,6 +324,32 @@ public class TextSearchPage extends Page {
 
         public Asserts assertMarketPriceInvisible() {
             Assert.assertTrue(Wait.invisible($(sortByMarketPrice)), "Market price still visible");
+            return this;
+        }
+
+        public Asserts assertSearchResultsContainsSearchModel(String target) {
+            assertThat(modelList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSearchResultsContainsSearchBrand(String target) {
+            assertThat(brandList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSearchResultsContainsSearchCategory(String target) {
+            assertThat(resultsCategoriesList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertAttributeResultContains(int index, Attributes... attributes) {
+            Arrays.stream(attributes).forEach(
+                    attribute -> {
+                        String itemAttr = atrributeTables.get(index).getRowsAsString()
+                                .stream().filter(row -> row.get(0).contains(attribute.getName())).findAny().get().get(1);
+                        assertThat(Arrays.stream(attribute.getOptions()).anyMatch(option -> option.contains(itemAttr.trim()))).isTrue();
+                    }
+            );
             return this;
         }
     }
