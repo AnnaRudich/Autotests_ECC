@@ -228,7 +228,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with Documentation attached")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -262,7 +262,7 @@ public class SelfServiceTest extends BaseTest {
    }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with customer comment")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
