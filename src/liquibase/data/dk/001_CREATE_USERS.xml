@@ -63,9 +63,6 @@
             -- switch off password change on first login
             UPDATE [FUNCTEMPLATE] SET ftfunctionflags5 = ftfunctionflags5 &amp; ~2
 
-            -- enable new settlement item dialog
-            UPDATE [FUNCTEMPLATE] SET [ftEnableNewSettlementItemDialog] = 1
-
             -- disable RnV2
             UPDATE [FUNCTEMPLATE] SET [ftAutoApprovalFlag] = 0
 
