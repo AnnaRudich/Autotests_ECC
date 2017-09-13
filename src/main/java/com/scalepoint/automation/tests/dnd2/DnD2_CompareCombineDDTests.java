@@ -61,7 +61,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
     public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProductAsVoucher();
+        ProductInfo productInfo = SolrApi.findProductAsVoucher();//for now no such data => ProductAsVoucherWithProductInvoiceEqualsMarketPrice()
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

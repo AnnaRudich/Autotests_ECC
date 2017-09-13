@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
@@ -791,6 +793,13 @@ public class SettlementDialog extends BaseDialog {
 
     }
 
+    public boolean isValuationDisabled(Valuation valuation) {
+       SelenideElement unselectable = $(By.xpath(".//tr[contains(@class, '" + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]")).shouldHave(Condition.attribute("unselectable"));
+        if (unselectable == null)
+            return false;
+        return true;
+    }
+
     public static class VoucherDropdownElement {
         private String voucherName;
         private boolean distanceCalculated;
@@ -942,6 +951,11 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertDiscretionaryReasonValuePresent(String expectedValue) {
             List<String> options = discretionaryReason.getComboBoxOptions();
             Assert.assertTrue(options.stream().anyMatch(i -> i.contains(expectedValue)));
+            return this;
+        }
+
+        public Asserts assertValuationIsDisabled(Valuation valuation){
+            assertTrue(isValuationDisabled(valuation));
             return this;
         }
 
