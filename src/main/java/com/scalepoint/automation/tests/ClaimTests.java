@@ -254,7 +254,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -275,10 +275,10 @@ public class ClaimTests extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
                 .addDescriptionWithOutSuggestions(claimLineDescription)
-                .selectCategory(claimItem.getExistingCat3_Telefoni())
-                .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth("Apr")
+                .selectCategory(claimItem.getExistingCat3_Telefoni())
+                .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .saveItem()
                 .sendResponseToEcc();
 
