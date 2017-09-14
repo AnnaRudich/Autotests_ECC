@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -73,10 +74,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addDescriptionWithOutSuggestions(String text){
-        descriptionField.clear();
-        descriptionField.sendKeys(text);
-        descriptionField.sendKeys(Keys.TAB);
-        forCondition(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//ul[contains(@class, 'autosuggest__suggestions-list')]")));
+        $("#description-text").setValue(text).pressTab();
         waitForValidationMark(descriptionField);
         return this;
     }
