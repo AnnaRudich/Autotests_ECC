@@ -75,6 +75,7 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page addDescriptionWithOutSuggestions(String text){
         $("#description-text").setValue(text).pressTab();
+        waitForValidationMark(descriptionField);
         return this;
     }
 
