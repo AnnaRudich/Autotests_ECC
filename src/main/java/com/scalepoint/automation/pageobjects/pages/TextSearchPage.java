@@ -24,6 +24,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
@@ -66,6 +67,9 @@ public class TextSearchPage extends Page {
     @FindBy(xpath = "//a[contains(@onclick,'market_price')]")
     private WebElement sortByMarketPrice;
 
+    @FindBy(xpath = "//a[contains(@onclick,'popularity')]")
+    private WebElement sortByPopularity;
+
     @FindBy(id = "textSearchInput")
     private ExtInput searchInput;
 
@@ -83,6 +87,12 @@ public class TextSearchPage extends Page {
 
     @FindBy(xpath = "//img[@id='sortOrderableImg' and contains(@src,'text_search\\icon_order_az.gif')]")
     private Image ascendingOrderable;
+
+    @FindBy(xpath = "//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")
+    private Image descendingPopularity;
+
+    @FindBy(xpath = "//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_az.gif')]")
+    private Image ascendingPopularity;
 
     @FindBy(xpath = "//button[contains(@onclick, 'backToSettlement()')]")
     private WebElement backToSettlementButton;
@@ -161,6 +171,14 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage sortMarketPricesAscending() {
         return sort(sortByMarketPrice, ascendantMarketPrice);
+    }
+
+    public TextSearchPage sortPopularityAscending() {
+        return sort(sortByPopularity, ascendingPopularity);
+    }
+
+    public TextSearchPage sortPopularityDescending() {
+        return sort(sortByPopularity, descendingPopularity);
     }
 
     public TextSearchPage sortMarketPricesDescending() {
@@ -336,6 +354,14 @@ public class TextSearchPage extends Page {
         return BaseDialog.at(SettlementDialog.class);
     }
 
+    public List<WebElement> getBrandList() {
+        return brandList;
+    }
+
+    public List<WebElement> getModelList() {
+        return modelList;
+    }
+
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return TextSearchPage.this;
@@ -386,6 +412,16 @@ public class TextSearchPage extends Page {
                         assertThat(Arrays.stream(attribute.getOptions()).anyMatch(option -> option.contains(itemAttr.trim()))).isTrue();
                     }
             );
+            return this;
+        }
+
+        public Asserts assertActualBrandListIsDifferentThan(List<String> list) {
+            assertThat(brandList.stream().map(WebElement::getText).collect(Collectors.toList())).isNotEqualTo(list);
+            return this;
+        }
+
+        public Asserts assertActualModelListIsDifferentThan(List<String> list) {
+            assertThat(modelList.stream().map(WebElement::getText).collect(Collectors.toList())).isNotEqualTo(list);
             return this;
         }
     }
