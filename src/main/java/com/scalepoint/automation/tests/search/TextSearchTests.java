@@ -5,17 +5,13 @@ import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.GPS_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.SMARTPHONE_NEJ;
@@ -102,45 +98,48 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
-    public void charlie516_checkSortingByPopularity(User user, Claim claim) {
+    public void charlie516_checkSortingByPopularity(User user, Claim claim, TextSearch textSearch) {
         String brand = "samsung";
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(brand);
 
-        List<String> brandsDefault = tsp.getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
-        List<String> modelsDefault = tsp.getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
+        List<String> modelsDefault = tsp.getModelListAsString();
 
         tsp.sortPopularityDescending()
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            //asserts.assertActualBrandListIsDifferentThan(brandsDefault);
                             asserts.assertActualModelListIsDifferentThan(modelsDefault);
                         });
 
-        List<String> brandsDesc = tsp.getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
-        List<String> modelsDesc = tsp.getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
+        List<String> modelsDesc = tsp.getModelListAsString();
 
         tsp.sortPopularityAscending()
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            //asserts.assertActualBrandListIsDifferentThan(brandsDesc);
                             asserts.assertActualModelListIsDifferentThan(modelsDesc);
                         });
 
-        List<String> brandsAsc = tsp.getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
-        List<String> modelsAsc = tsp.getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
+        List<String> modelsAsc = tsp.getModelListAsString();
+
+        tsp.selectBrand(textSearch.getBrand1())
+                .selectModel(textSearch.getModel1())
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertActualModelListIsDifferentThan(modelsAsc);
+                        });
+
+        List<String> models = tsp.getModelListAsString();
 
         tsp.searchByProductName(brand)
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            //asserts.assertActualBrandListIsDifferentThan(brandsAsc);
-                            asserts.assertActualModelListIsDifferentThan(modelsAsc);
+                            asserts.assertActualModelListIsDifferentThan(models);
                         });
     }
 }

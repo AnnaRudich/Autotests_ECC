@@ -358,8 +358,16 @@ public class TextSearchPage extends Page {
         return brandList;
     }
 
+    public List<String> getBrandListAsString(){
+        return getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
+    }
+
     public List<WebElement> getModelList() {
         return modelList;
+    }
+
+    public List<String> getModelListAsString(){
+        return getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
