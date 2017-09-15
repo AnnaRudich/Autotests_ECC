@@ -5,10 +5,12 @@ import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -100,11 +102,13 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
     public void charlie516_checkSortingByPopularity(User user, Claim claim) {
+        String brand = "samsung";
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("phone");
+                .searchByProductName(brand);
 
         List<String> brandsDefault = tsp.getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
         List<String> modelsDefault = tsp.getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
@@ -113,7 +117,7 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            asserts.assertActualBrandListIsDifferentThan(brandsDefault);
+                            //asserts.assertActualBrandListIsDifferentThan(brandsDefault);
                             asserts.assertActualModelListIsDifferentThan(modelsDefault);
                         });
 
@@ -124,9 +128,19 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            asserts.assertActualBrandListIsDifferentThan(brandsDesc);
+                            //asserts.assertActualBrandListIsDifferentThan(brandsDesc);
                             asserts.assertActualModelListIsDifferentThan(modelsDesc);
                         });
 
+        List<String> brandsAsc = tsp.getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
+        List<String> modelsAsc = tsp.getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
+
+        tsp.searchByProductName(brand)
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            //asserts.assertActualBrandListIsDifferentThan(brandsAsc);
+                            asserts.assertActualModelListIsDifferentThan(modelsAsc);
+                        });
     }
 }
