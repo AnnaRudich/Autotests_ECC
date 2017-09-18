@@ -38,9 +38,11 @@ public class TextSearchTests extends BaseTest {
                 .toTextSearchPage()
                 .searchProductAndSelectFirstSuggestion("samsung");
         String searchText = textSearchPage.getSearchInputText();
-        textSearchPage.doAssert(
-                asserts -> asserts.assertSearchQueryContainsBrandAndModel(searchText)
-        );
+        textSearchPage
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> asserts.assertSearchQueryContainsBrandAndModel(searchText)
+                );
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")

@@ -32,6 +32,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -410,8 +411,8 @@ public class TextSearchPage extends Page {
         }
 
         public Asserts assertSearchQueryContainsBrandAndModel(String query) {
-            assertThat(modelList.stream().allMatch(element -> query.contains(element.getText()))).isTrue();
-            assertThat(brandList.stream().allMatch(element -> query.contains(element.getText()))).isTrue();
+            assertThat(modelList.stream().allMatch(element -> containsIgnoreCase(query, element.getText()))).isTrue();
+            assertThat(brandList.stream().allMatch(element -> containsIgnoreCase(query, element.getText()))).isTrue();
             return this;
         }
 
