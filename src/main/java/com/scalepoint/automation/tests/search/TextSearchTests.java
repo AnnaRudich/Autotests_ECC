@@ -11,6 +11,8 @@ import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.GPS_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.SMARTPHONE_NEJ;
 
@@ -94,5 +96,50 @@ public class TextSearchTests extends BaseTest {
                 .doAssert(
                         asserts -> asserts.assertItemIsPresent(claimItem.getTextFieldSP())
                 );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
+    public void charlie516_checkSortingByPopularity(User user, Claim claim, TextSearch textSearch) {
+        String brand = "samsung";
+        TextSearchPage tsp = loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(brand);
+
+        List<String> modelsDefault = tsp.getModelListAsString();
+
+        tsp.sortPopularityDescending()
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertActualModelListIsDifferentThan(modelsDefault);
+                        });
+
+        List<String> modelsDesc = tsp.getModelListAsString();
+
+        tsp.sortPopularityAscending()
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertActualModelListIsDifferentThan(modelsDesc);
+                        });
+
+        List<String> modelsAsc = tsp.getModelListAsString();
+
+        tsp.selectBrand(textSearch.getBrand1())
+                .selectModel(textSearch.getModel1())
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertActualModelListIsDifferentThan(modelsAsc);
+                        });
+
+        List<String> models = tsp.getModelListAsString();
+
+        tsp.searchByProductName(brand)
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertActualModelListIsDifferentThan(models);
+                        });
     }
 }
