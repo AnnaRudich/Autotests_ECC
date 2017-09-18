@@ -268,6 +268,14 @@ public class TextSearchPage extends Page {
     }
 
     public TextSearchPage searchByProductName(String productName) {
+        return searchBy(productName);
+    }
+
+    public TextSearchPage searchBySku(String sku){
+        return searchBy("SKU:" + sku);
+    }
+
+    private TextSearchPage searchBy(String productName) {
         searchProduct(productName);
         search.click();
         Wait.waitForAjaxCompleted();

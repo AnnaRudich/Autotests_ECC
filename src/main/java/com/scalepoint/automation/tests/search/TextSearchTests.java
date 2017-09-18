@@ -142,4 +142,18 @@ public class TextSearchTests extends BaseTest {
                             asserts.assertActualModelListIsDifferentThan(models);
                         });
     }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
+    public void charlie510_checkSearchBySku(User user, Claim claim) {
+        ProductInfo productInfo = SolrApi.findProductInvoiceEqualMarket();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchBySku(productInfo.getSku())
+                .doAssert(
+                        asserts -> {
+                            asserts.assertSearchResultsContainsSearchModel(productInfo.getModel());
+                            asserts.assertSearchResultsContainsSearchBrand(productInfo.getBrand());
+                        });
+    }
 }
