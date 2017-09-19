@@ -256,7 +256,7 @@ public class TextSearchPage extends Page {
         if (matchButtons.isEmpty()) {
             throw new IllegalStateException("No text search results found!");
         }
-        matchButtons.get(0).click();
+        $(matchButtons.get(0)).click();
         return BaseDialog.at(SettlementDialog.class);
     }
 

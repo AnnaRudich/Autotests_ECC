@@ -34,6 +34,7 @@ public class RecommendedItemsTests extends BaseTest {
      *
      * ecc3278_productPricesInShopWelcome
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-587 Only product prices are displayed in Product catalog in Shop")
     public void ecc3278_productPricesInShopCatalog(User user, Claim claim) {
@@ -106,7 +107,7 @@ public class RecommendedItemsTests extends BaseTest {
     private ProductCashValue findProductAndAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
         ProductInfo productInfo = searchStrategy.get();
         SettlementDialog settlementDialog = textSearchPage
-                .searchByProductName(productInfo.getModelAndCategory())
+                .searchBySku(productInfo.getSku())
                 .matchStrict(productInfo.getModel());
 
         Double cashCompensationFieldValue = settlementDialog.getCashCompensationValue();
