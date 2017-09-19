@@ -6,9 +6,11 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
+import static com.scalepoint.automation.utils.Wait.forCondition;
 
 public class ClaimMenu extends Module {
     /**
@@ -27,6 +29,7 @@ public class ClaimMenu extends Module {
     }
 
     public LoginPage logout() {
+        forCondition(ExpectedConditions.elementToBeClickable(By.id("signOutButton")));
         $(By.id("signOutButton")).click();
         try {
             Window.get().acceptAlert();
