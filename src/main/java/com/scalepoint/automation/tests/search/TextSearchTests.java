@@ -158,4 +158,39 @@ public class TextSearchTests extends BaseTest {
                             asserts.assertSearchResultsContainsSearchBrand(productInfo.getBrand());
                         });
     }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
+    public void charlie510_checkDidYouMean(User user, Claim claim, TextSearch textSearch) {
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(textSearch.getBrokenQuery1())
+                .doAssert(
+                        TextSearchPage.Asserts::assertIsDidYouMeanDisplayed
+                )
+                .clickOnDidYouMean()
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
+                        });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
+    public void charlie510_checkDidYouMeanWithSpecialCharacters(User user, Claim claim, TextSearch textSearch) {
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(textSearch.getBrokenQueryWithSpecialSymbols1())
+                .doAssert(
+                        asserts -> {
+                            asserts.assertIsDidYouMeanDisplayed();
+                            asserts.assertQueryContainsDidYouMeanText(textSearch.getBrokenQueryWithSpecialSymbols1());
+                        }
+                )
+                .clickOnDidYouMean()
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> {
+                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
+                        });
+    }
 }

@@ -122,6 +122,9 @@ public class TextSearchPage extends Page {
     @FindBy(id = "createManualLineButton")
     private Button createManually;
 
+    @FindBy(id = "didYouMeanHrefId")
+    private WebElement didYouMeanLink;
+
     private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
     private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
 
@@ -379,6 +382,11 @@ public class TextSearchPage extends Page {
         return getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
+    public TextSearchPage clickOnDidYouMean(){
+        didYouMeanLink.click();
+        return this;
+    }
+
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return TextSearchPage.this;
@@ -439,6 +447,16 @@ public class TextSearchPage extends Page {
 
         public Asserts assertActualModelListIsDifferentThan(List<String> list) {
             assertThat(modelList.stream().map(WebElement::getText).collect(Collectors.toList())).isNotEqualTo(list);
+            return this;
+        }
+
+        public Asserts assertIsDidYouMeanDisplayed(){
+            assertThat(didYouMeanLink.isDisplayed()).isTrue();
+            return this;
+        }
+
+        public Asserts assertQueryContainsDidYouMeanText(String query){
+            assertThat(query).contains(didYouMeanLink.getText());
             return this;
         }
     }
