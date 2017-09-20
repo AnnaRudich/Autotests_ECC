@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
+import static com.scalepoint.automation.pageobjects.pages.Page.isOn;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 
 public class ClaimMenu extends Module {
@@ -31,6 +32,18 @@ public class ClaimMenu extends Module {
     public LoginPage logout() {
         forCondition(ExpectedConditions.elementToBeClickable(By.id("signOutButton")));
         $(By.id("signOutButton")).click();
+        acceptLogoutAlert();
+        int i=0;
+        while(!isOn(LoginPage.class) && i<3){
+            i++;
+            logger.info("Trying logout, attempt: " + i);
+            $(By.id("signOutButton")).click();
+            acceptLogoutAlert();
+        }
+        return at(LoginPage.class);
+    }
+
+    private void acceptLogoutAlert() {
         try {
             Window.get().acceptAlert();
         } catch (Exception e) {
@@ -39,7 +52,6 @@ public class ClaimMenu extends Module {
                 gemaktive.click();
             }
         }
-        return at(LoginPage.class);
     }
 
     public boolean isAdminLinkDisplayed() {

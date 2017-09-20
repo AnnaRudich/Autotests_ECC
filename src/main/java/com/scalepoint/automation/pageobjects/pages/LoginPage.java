@@ -46,6 +46,15 @@ public class LoginPage extends Page {
         return this;
     }
 
+    @Override
+    public Boolean areWeAt(){
+        try {
+            return username.isDisplayed() && password.isDisplayed() && loginButton.isDisplayed();
+        }catch (Exception ex) {
+            return false;
+        }
+    }
+
     public SettlementPage login(User user) {
         return login(user.getLogin(), user.getPassword());
     }
