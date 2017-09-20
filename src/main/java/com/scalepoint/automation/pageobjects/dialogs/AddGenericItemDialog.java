@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class AddGenericItemDialog extends BaseDialog {
@@ -34,7 +35,7 @@ public class AddGenericItemDialog extends BaseDialog {
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {
         selectCategory(categoryGroup, category);
 
-        ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(driver.findElement(By.id("generic-item-dialog-grid")),
+        ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(waitForDisplayed(By.id("generic-item-dialog-grid")),
                 "description", "checked", 0);
         extCheckboxColumn.enable(itemName);
         ok.click();
