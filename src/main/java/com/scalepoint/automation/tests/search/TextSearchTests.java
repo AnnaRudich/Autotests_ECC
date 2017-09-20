@@ -202,10 +202,10 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
-                ).searchByProductName("Kameraobjektiver")
+                ).searchByProductName(textSearch.getSubgroup2())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory("Kameraobjektiver")
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())
                 );
 
     }
@@ -219,14 +219,14 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
-                ).searchByProductName("Kameraobjektiver")
+                ).searchByProductName(textSearch.getSubgroup2())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsCategoryIsEmpty()
+                        TextSearchPage.Asserts::assertSearchResultsCategoryIsEmpty
                 ).snappCategory()
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory("Kameraobjektiver")
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())
                 );
     }
-}q
+}

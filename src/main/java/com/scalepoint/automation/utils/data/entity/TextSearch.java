@@ -83,6 +83,8 @@ public class TextSearch {
     @XmlElement
     private String subgroup1;
     @XmlElement
+    private String subgroup2;
+    @XmlElement
     private String brokenQuery1;
     @XmlElement
     private String brokenQueryWithSpecialSymbols1;
@@ -241,6 +243,10 @@ public class TextSearch {
 
     public String getSubgroup1() {
         return subgroup1;
+    }
+
+    public String getSubgroup2() {
+        return subgroup2;
     }
 
     public String getBrokenQuery1() {
