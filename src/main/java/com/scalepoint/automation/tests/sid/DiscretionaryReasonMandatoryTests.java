@@ -32,7 +32,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * THEN: the field has red frame; the dialog is not closed
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
-    public void charlie_508_1_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_508_1_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.SCALEPOINT) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)

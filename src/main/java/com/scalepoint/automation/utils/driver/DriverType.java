@@ -3,9 +3,10 @@ package com.scalepoint.automation.utils.driver;
 public enum DriverType {
     IE("ie.local"),
     IE_REMOTE("ie.remote"),
-    FF("ff.remote"),
+    FF_REMOTE("ff.remote"),
     CHROME("chrome.local"),
-    CHROME_REMOTE("chrome.remote");
+    CHROME_REMOTE("chrome.remote"),
+    FF("ff.local");
 
     private String profile;
 

@@ -92,7 +92,7 @@ public class BaseTest extends AbstractBaseTest {
         MDC.clear();
     }
 
-    /*doesn't work with IE, but can be used with FF/Chrome*/
+    /*doesn't work with IE, but can be used with FF_REMOTE/Chrome*/
     private void logJavaScriptErrors() {
         try {
             Logs logs = Browser.driver().manage().logs();

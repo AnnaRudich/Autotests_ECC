@@ -7,6 +7,9 @@ import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.logging.LogType;
@@ -63,8 +66,26 @@ public enum DriversFactory {
     },
 
     FF(DriverType.FF) {
+        @Override
+        protected WebDriver getDriverInstance() {
+
+            defaultImplicitWait = 10;
+            defaultScriptTimeout = 30;
+
+            if (System.getProperty("webdriver.gecko.driver") == null) {
+                File ffDriver = new File("src/main/resources/drivers/geckodriver.exe");
+                System.setProperty("webdriver.gecko.driver", ffDriver.getAbsolutePath());
+            }
+            FirefoxDriver driver = new FirefoxDriver(getFireFoxCapabilities());
+            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+            return driver;
+        }
+    },
+
+    FF_REMOTE(DriverType.FF_REMOTE) {
         protected WebDriver getDriverInstance() throws MalformedURLException {
-            DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+            DesiredCapabilities capabilities = getFireFoxCapabilities();
             WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
             driver = new Augmenter().augment(driver);
             return driver;
@@ -135,7 +156,24 @@ public enum DriversFactory {
         return options.merge(capabilities);
     }
 
-    /*doesn't work with IE, but can be used with FF/Chrome*/
+    private static DesiredCapabilities getFireFoxCapabilities(){
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.acceptInsecureCerts();
+        desiredCapabilities.setJavascriptEnabled(true);
+        desiredCapabilities.setCapability("marionette", true);
+
+        FirefoxProfile profile = new FirefoxProfile();
+        profile.setAcceptUntrustedCertificates(true);
+
+        FirefoxOptions ffOptions = new FirefoxOptions();
+        ffOptions.setProfile(profile);
+
+        desiredCapabilities.merge(ffOptions.toCapabilities());
+
+        return desiredCapabilities;
+    }
+
+    /*doesn't work with IE, but can be used with FF_REMOTE/Chrome*/
     private static void addLoggingPreferences(DesiredCapabilities capabilities) {
         LoggingPreferences logs = new LoggingPreferences();
         logs.enable(LogType.BROWSER, Level.ALL);
