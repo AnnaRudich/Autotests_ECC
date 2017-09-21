@@ -7,6 +7,7 @@ import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -63,6 +64,24 @@ public enum DriversFactory {
         }
 
 
+    },
+
+    EDGE(DriverType.EDGE) {
+        @Override
+        protected WebDriver getDriverInstance() throws MalformedURLException {
+            defaultImplicitWait = 15;
+            defaultScriptTimeout = 60;
+
+            if (System.getProperty("webdriver.edge.driver") == null) {
+                File edgeDriver = new File("src/main/resources/drivers/MicrosoftWebDriver.exe");
+                System.setProperty("webdriver.edge.driver", edgeDriver.getAbsolutePath());
+            }
+
+            EdgeDriver driver = new EdgeDriver();
+            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+            return driver;
+        }
     },
 
     FF(DriverType.FF) {
