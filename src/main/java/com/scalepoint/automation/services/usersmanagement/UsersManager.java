@@ -3,8 +3,8 @@ package com.scalepoint.automation.services.usersmanagement;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.concurrent.*;
 
 public class UsersManager {
 
-    private static Logger logger = LoggerFactory.getLogger(UsersManager.class);
+    private static Logger logger = LogManager.getLogger(UsersManager.class);
 
     private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();

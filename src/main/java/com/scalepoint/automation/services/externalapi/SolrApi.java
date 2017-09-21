@@ -2,18 +2,18 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Configuration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SolrApi {
 
-    private static Logger logger = LoggerFactory.getLogger(SolrApi.class);
+    private static Logger logger = LogManager.getLogger(SolrApi.class);
 
     public static ProductInfo findProduct(String productId) {
         try {

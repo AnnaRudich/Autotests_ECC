@@ -5,8 +5,8 @@ import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -27,7 +27,7 @@ public class DatabaseApi {
     public static final String RV_TEMPLATE_FILENAME = "latest_master_template_29-06-2016.xlsm";
     public static final String RV_SERVICE_AGREEMENT_NAME = "AutotestTemplate";
 
-    private static Logger logger = LoggerFactory.getLogger(DatabaseApi.class);
+    private static Logger logger = LogManager.getLogger(DatabaseApi.class);
     private JdbcTemplate jdbcTemplate;
 
     public DatabaseApi(JdbcTemplate jdbcTemplate) {

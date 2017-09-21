@@ -4,9 +4,9 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtCh
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtSelect;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtTextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class FTSettings {
 
-    private static Logger logger = LoggerFactory.getLogger(FTSettings.class);
+    private static Logger logger = LogManager.getLogger(FTSettings.class);
 
     public static FtOperation enable(FTSetting ftSetting) {
         return new FtCheckbox(ftSetting, FtCheckbox.OperationType.ENABLE);

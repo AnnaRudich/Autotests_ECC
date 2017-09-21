@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -15,8 +17,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class Wait {
     private static final int POLL_IN_MS = 1000;
     public static final int DEFAULT_TIMEOUT = 60;
 
-    private static Logger log = LoggerFactory.getLogger(Wait.class);
+    private static Logger log = LogManager.getLogger(Wait.class);
 
     private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling(){
         return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)

@@ -35,8 +35,8 @@ import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -53,7 +53,7 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class TestData {
 
-    private static Logger log = LoggerFactory.getLogger(TestData.class);
+    private static Logger log = LogManager.getLogger(TestData.class);
 
     public static ExistingSuppliers getSuppliers() {
         return (ExistingSuppliers) getData(Data.EXISTING_SUPPLIER);

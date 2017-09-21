@@ -34,12 +34,12 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.log4j.MDC;
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.Logs;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -190,13 +190,13 @@ public class BaseTest extends AbstractBaseTest {
                     try {
                         instances.add(TestData.Data.getInstance(parameterType));
                     } catch (Exception e) {
-                        LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
+                        LogManager.getLogger(BaseTest.class).error(e.getMessage());
                         break;
                     }
                 }
             }
         } catch (Exception e) {
-            LoggerFactory.getLogger(BaseTest.class).error(e.getMessage());
+            LogManager.getLogger(BaseTest.class).error(e.getMessage());
         }
         return instances;
     }

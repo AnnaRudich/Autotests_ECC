@@ -1,14 +1,14 @@
 package com.scalepoint.automation.utils.threadlocal;
 
 import com.scalepoint.automation.utils.driver.DriverType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class Browser {
 
-    private static final Logger logger = LoggerFactory.getLogger(Browser.class);
+    private static final Logger logger = LogManager.getLogger(Browser.class);
 
     private static ThreadLocal<DriverData> holder = new ThreadLocal<>();
 
