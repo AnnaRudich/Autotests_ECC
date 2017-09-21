@@ -125,6 +125,9 @@ public class TextSearchPage extends Page {
     @FindBy(id = "didYouMeanHrefId")
     private WebElement didYouMeanLink;
 
+    @FindBy(id = "startSnappingHrefId")
+    private WebElement snappingCategory;
+
     private By fieldSetDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [@disabled]");
     private By fieldSetNotDisabled = By.xpath("//fieldset[@id='resultFieldSet'] [not(@disabled)]");
 
@@ -387,6 +390,11 @@ public class TextSearchPage extends Page {
         return this;
     }
 
+    public TextSearchPage snappCategory(){
+        snappingCategory.click();
+        return this;
+    }
+
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return TextSearchPage.this;
@@ -426,6 +434,11 @@ public class TextSearchPage extends Page {
 
         public Asserts assertSearchResultsContainsSearchCategory(String target) {
             assertThat(resultsCategoriesList.stream().allMatch(element -> element.getText().contains(target))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSearchResultsCategoryIsEmpty(){
+            assertThat(resultsCategoriesList).isEmpty();
             return this;
         }
 

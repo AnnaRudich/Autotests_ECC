@@ -193,4 +193,40 @@ public class TextSearchTests extends BaseTest {
                             asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
                         });
     }
+
+    @Test(dataProvider = "testDataProvider", description = "Check category selection")
+    public void charlie520_checkIfCorrectCategoryWasSelected(User user, Claim claim, TextSearch textSearch) {
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(textSearch.getSubgroup1())
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
+                ).searchByProductName(textSearch.getSubgroup2())
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())
+                );
+
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check manual category selection")
+    public void charlie520_checkIfManuallySelectedCategoryIsNotDiscardedAfterQuery(User user, Claim claim, TextSearch textSearch) {
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .chooseCategory(textSearch.getGroup1())
+                .chooseCategory(textSearch.getSubgroup1())
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
+                ).searchByProductName(textSearch.getSubgroup2())
+                .waitForResultsLoad()
+                .doAssert(
+                        TextSearchPage.Asserts::assertSearchResultsCategoryIsEmpty
+                ).snappCategory()
+                .waitForResultsLoad()
+                .doAssert(
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())
+                );
+    }
 }
