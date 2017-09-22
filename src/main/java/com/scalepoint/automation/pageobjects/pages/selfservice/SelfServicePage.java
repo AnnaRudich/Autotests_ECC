@@ -2,8 +2,10 @@ package com.scalepoint.automation.pageobjects.pages.selfservice;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -64,7 +66,7 @@ public class SelfServicePage extends Page {
         $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text).pressEnter();
     }
 
-    public SelfServicePage reloadPage(){
+    public SelfServicePage reloadPage() {
         refresh();
         return this;
     }
@@ -74,7 +76,7 @@ public class SelfServicePage extends Page {
         $(By.xpath("//a[contains(@onclick, 'submitSelfServiceLines()')]")).click();
     }
 
-//TODO
+    //TODO
     public void selectCloseOption() {
         $(By.xpath("//a[contains(@onclick, 'closeSelfService()')]")).shouldBe(visible).click();
     }
@@ -119,11 +121,21 @@ public class SelfServicePage extends Page {
      * The method adds text in the description field, waits for suggestion, selects firs suggestion by clicking DOWN and Enter
      */
     public SelfServicePage addDescriptionSelectFirstSuggestion(String text) {
-
         findField("descriptionColumn").sendKeys(text);
         findField("descriptionColumn").sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
         return this;
     }
+
+    public SelfServicePage addRandomCategory() {
+        findField("categoryColumn").click();
+        findField("categoryColumn").sendKeys(Keys.ARROW_DOWN);
+
+        List<SelenideElement> categoryGroupList = $$(By.xpath("//div[contains(@id, 'cg_item')]"));
+        getRandomElement(categoryGroupList).click();
+        pressKeys(Keys.ENTER);
+        return this;
+    }
+
     /**
      * The method selects random year and random month for Purchase date. The date is not shown, but it presents in DOM.
      */
@@ -131,17 +143,18 @@ public class SelfServicePage extends Page {
         findTheFieldInSsGrid("purchaseDate", lineNumber).click();
         $(By.xpath("//img[contains(@class, 'x-form-date-trigger')]")).click();
 
-        List<SelenideElement> monthList=$$(By.xpath("//*[contains(@class,'date-mp-month')]/a"));
+        List<SelenideElement> monthList = $$(By.xpath("//*[contains(@class,'date-mp-month')]/a"));
         getRandomElement(monthList).click();
-        List<SelenideElement> yearList=$$(By.xpath("//*[contains(@class,'date-mp-year')]/a"));
+        List<SelenideElement> yearList = $$(By.xpath("//*[contains(@class,'date-mp-year')]/a"));
         getRandomElement(yearList).click();
 
         $(By.xpath("//button[@class='x-date-mp-ok']")).click();
         return this;
     }
-//looks like has to be moved to other class
-    public SelenideElement getRandomElement(List<SelenideElement> list){
-        int index = new Random().nextInt(list.size()-1);
+
+    //looks like has to be moved to other class
+    public SelenideElement getRandomElement(List<SelenideElement> list) {
+        int index = new Random().nextInt(list.size() - 1);
         return list.get(index);
     }
 
@@ -162,6 +175,7 @@ public class SelfServicePage extends Page {
         unfocusField();
         return this;
     }
+
     /**
      * The method selects specified year and month for Purchase date
      */
@@ -196,14 +210,14 @@ public class SelfServicePage extends Page {
         return this;
     }
 
-    public SelfServicePage addCustomerComment(String commentText){
+    public SelfServicePage addCustomerComment(String commentText) {
         $(By.id("customer_comment")).click();
         $(By.id("customer_comment")).sendKeys(commentText);
         unfocusField();
         return this;
     }
 
-    public SelfServicePage addCustomerNote (String noteText){
+    public SelfServicePage addCustomerNote(String noteText) {
         unfocusField();
         clickJS($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
         $("#cutomer_note").sendKeys(noteText);
@@ -219,7 +233,7 @@ public class SelfServicePage extends Page {
 
         if (hasDocumentation) {
             $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Ja']")).click();
-            uploadDocument(new ClaimItem().getFile2Loc());
+            uploadDocument(TestData.getClaimItem().getFileLoc());
         } else {
             $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Nej']")).click();
         }
@@ -227,12 +241,13 @@ public class SelfServicePage extends Page {
     }
 
     public SelfServicePage uploadDocument(String filePath) {
-       $(By.name("Filedata")).sendKeys(filePath);
+        $(By.name("Filedata")).sendKeys(filePath);
         waitForUploadCompleted();
         $(By.xpath(".//button[.='Ok']")).click();
         waitForAjaxCompleted();
         return this;
     }
+
     /**
      * The method waits for file upload is completed
      */
@@ -241,7 +256,7 @@ public class SelfServicePage extends Page {
     }
 
     public String getDescriptionText(int lineNumber) {
-         return findTheFieldInSsGrid("descriptionColumn", lineNumber).getText();
+        return findTheFieldInSsGrid("descriptionColumn", lineNumber).getText();
     }
 
     public String getPurchasePrice(int lineNumber) {
@@ -280,16 +295,16 @@ public class SelfServicePage extends Page {
 
     public class Asserts {
 
-        public Asserts assertLineIsDeleted(){
+        public Asserts assertLineIsDeleted() {
             refresh();
             ElementsCollection ssLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
             assertEquals(ssLines.size(), 2, "Line was not deleted");
             return this;
         }
 
-         public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
-             assertFalse(getPurchaseDate(lineNumber).equals(" "), "Purchase Date should not be empty");
-             return this;
+        public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
+            assertFalse(getPurchaseDate(lineNumber).equals(" "), "Purchase Date should not be empty");
+            return this;
         }
 
         public Asserts assertNewPriceIsNotEmpty(int lineNumber) {
@@ -317,25 +332,25 @@ public class SelfServicePage extends Page {
             return this;
         }
 
-        public Asserts assertCategoryIsMarkedAsRequired(int lineNumber){
+        public Asserts assertCategoryIsMarkedAsRequired(int lineNumber) {
             ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
             selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'categoryColumn')]")).shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
             return this;
         }
 
-        public Asserts assertDocumentationIsMarkedAsRequired(int lineNumber){
+        public Asserts assertDocumentationIsMarkedAsRequired(int lineNumber) {
             ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
             selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'documentation')]")).shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
             return this;
         }
 
-        public Asserts assertRequiredFieldsAlertIsPresent(){
+        public Asserts assertRequiredFieldsAlertIsPresent() {
             assertTrue(isAlertPresent());
             acceptAlert();
             return this;
         }
 
-        public  Asserts assertAttachIconIsPresent(){
+        public Asserts assertAttachIconIsPresent() {
             assertTrue($(By.xpath(".//div[contains(@class, 'fileName')]//a/img[contains(@src, 'attach_icon.png')]")).isDisplayed(), "Attach icon should be displayed");
             return this;
         }

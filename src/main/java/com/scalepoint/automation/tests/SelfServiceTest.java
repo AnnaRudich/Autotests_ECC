@@ -27,7 +27,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-504 Self Service sending. Add line. Required fields only")
+            description = "CHARLIE-504 Self Service sending. Add line. Required fields only. Category auto match")
     public void charlie504_addSSLineWithoutDocsAndNotes(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
@@ -37,7 +37,8 @@ public class SelfServiceTest extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
 
-                .addDescriptionSelectFirstSuggestion("Iphone 6")
+                .addDescription("test", 1)
+                .addRandomCategory()
                 .addRandomPurchaseDate(1)
                 .addRandomAcquired(1)
                 .addPurchasePrice("1500", 1)
@@ -110,7 +111,8 @@ public class SelfServiceTest extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
 
-                .addDescriptionSelectFirstSuggestion("Iphone 6")
+                .addDescription("test", 1)
+                .addRandomCategory()
                 .addRandomPurchaseDate(1)
                 .addRandomAcquired(1)
                 .addPurchasePrice("1500", 1)
@@ -139,7 +141,8 @@ public class SelfServiceTest extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
 
-                .addDescriptionSelectFirstSuggestion("Iphone 6")
+                .addDescription("test", 1)
+                .addRandomCategory()
                 .addRandomPurchaseDate(1)
                 .addRandomAcquired(1)
                 .addPurchasePrice("1500", 1)
@@ -186,6 +189,7 @@ public class SelfServiceTest extends BaseTest {
                 .uploadDocumentation(1, false);
 
         String lineDescription = new SelfServicePage().getDescriptionText(1);
+        System.out.println(lineDescription);
 
         new SelfServicePage().selectCloseOption();
 
@@ -228,7 +232,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with Documentation attached")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -244,7 +248,8 @@ public class SelfServiceTest extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
 
-                .addDescriptionSelectFirstSuggestion("iphone6")
+                .addDescription("test", 1)
+                .addRandomCategory()
                 .addRandomPurchaseDate(1)
                 .addRandomAcquired(1)
 
@@ -262,7 +267,7 @@ public class SelfServiceTest extends BaseTest {
    }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with customer comment")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -278,7 +283,8 @@ public class SelfServiceTest extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
 
-                .addDescriptionSelectFirstSuggestion("iphone6")
+                .addDescription("test",1)
+                .addRandomCategory()
                 .addRandomPurchaseDate(1)
                 .addRandomAcquired(1)
 
