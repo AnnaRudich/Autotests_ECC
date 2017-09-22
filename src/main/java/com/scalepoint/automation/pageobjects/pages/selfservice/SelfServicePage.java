@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -128,7 +129,6 @@ public class SelfServicePage extends Page {
     public SelfServicePage addRandomCategory() {
         findField("categoryColumn").click();
         findField("categoryColumn").sendKeys(Keys.ARROW_DOWN);
-        //$(By.xpath(".//div[@id='categorySelectorPanel']//td[1]//div/img[contains(@class, 'x-form-arrow-trigger')]")).sendKeys(Keys.ARROW_DOWN);
 
         List<SelenideElement> categoryGroupList = $$(By.xpath("//div[contains(@id, 'cg_item')]"));
         getRandomElement(categoryGroupList).click();
@@ -233,7 +233,7 @@ public class SelfServicePage extends Page {
 
         if (hasDocumentation) {
             $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Ja']")).click();
-            uploadDocument(new ClaimItem().getFileLoc());
+            uploadDocument(TestData.getClaimItem().getFileLoc());
         } else {
             $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Nej']")).click();
         }
