@@ -482,7 +482,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog clickOK() {
-        ok.click();
+        $(ok).click();
         return this;
     }
 
