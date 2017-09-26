@@ -11,13 +11,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Executor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.scalepoint.automation.utils.Http.*;
+import static com.scalepoint.automation.utils.Http.ParamsBuilder;
+import static com.scalepoint.automation.utils.Http.ensure302Code;
+import static com.scalepoint.automation.utils.Http.post;
 
 @SuppressWarnings("ConstantConditions")
 public class ClaimApi extends AuthenticationApi {
@@ -47,7 +47,7 @@ public class ClaimApi extends AuthenticationApi {
         String DATE_FORMAT = "yyyy-MM-dd";
         List<NameValuePair> clientParams = ParamsBuilder.create().
                 add("policytype", policyType).
-                add("damageDate", new SimpleDateFormat(DATE_FORMAT).format(new Date())).
+                add("damageDate", claim.getDamageDate()).
                 add("last_name", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
                 add("policy_number", claim.getPolicyNumber()).
