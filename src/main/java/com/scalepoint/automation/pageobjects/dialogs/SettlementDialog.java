@@ -27,6 +27,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Table;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
@@ -183,6 +184,9 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(xpath = "//div[@id='status_product_match_card']//div[contains(@id, 'displayfield')]/b")
     private WebElement statusMatchedDisplayField;
+
+    @FindBy(id = "documentation-ok-checkbox-inputEl")
+    private CheckBox sufficientDocumentation;
 
     public enum ValuationGridColumn {
         CHECK_COLUMN("active-valuation-checkcolumn"),
@@ -1272,6 +1276,11 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertAutomaticDepreciationLabelColor(){
             boolean isLabelInRedColor = automaticDepreciationLabel.getAttribute("style").contains("color: red;");
             assertTrue(automaticDepreciation.isSelected() == !isLabelInRedColor);
+            return this;
+        }
+
+        public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsCheecked(){
+            assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("true"));
             return this;
         }
     }
