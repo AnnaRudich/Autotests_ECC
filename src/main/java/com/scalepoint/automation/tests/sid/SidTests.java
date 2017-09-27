@@ -97,7 +97,7 @@ public class SidTests extends BaseTest {
                 });
         SettlementPage settlementPage = settlementDialog.doAssert(sid -> sid.assertVoucherDropdownWithoutDistance(existingVoucher)).closeSidWithOk();
         changePostalCodeAndReturnToSid(settlementPage, "3000", claim)
-                .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 203))
+                .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 45))
                 .closeSidWithOk();
 
         changePostalCodeAndReturnToSid(settlementPage, "6000", claim)
