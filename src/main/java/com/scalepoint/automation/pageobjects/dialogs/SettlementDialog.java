@@ -25,6 +25,7 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
@@ -46,6 +47,7 @@ import java.util.stream.IntStream;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
+import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
@@ -381,6 +383,14 @@ public class SettlementDialog extends BaseDialog {
         input.clear();
         input.enter(value);
         simulateBlurEvent(input);
+        return this;
+    }
+
+    public SettlementDialog uncheckedDocumentation() {
+        if(sufficientDocumentation.getAttribute("aria-checked").equals("true")){
+            forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
+            clickUsingJsIfSeleniumClickReturnError(sufficientDocumentation);
+        }
         return this;
     }
 
@@ -1279,8 +1289,13 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsCheecked(){
+        public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked(){
             assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("true"));
+            return this;
+        }
+
+        public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsUnchecked(){
+            assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("false"));
             return this;
         }
     }
