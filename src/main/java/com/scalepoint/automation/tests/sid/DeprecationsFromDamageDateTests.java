@@ -2,9 +2,11 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.RunOn;
+import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -44,7 +46,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
 
     //17 18
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-    public void charlie_554_createClaimUsingIP1ReintegrateClaim(User user, Claim claim) {
+    public void charlie_554_createClaimUsingIP1ReintegrateClaim(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
         claim.setDamageDate(localDateToString(LocalDate.now()));
 
         CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
