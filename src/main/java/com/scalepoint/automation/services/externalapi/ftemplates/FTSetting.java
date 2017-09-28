@@ -29,6 +29,7 @@ public enum FTSetting {
     MAKE_REJECT_REASON_MANDATORY("input[name=ftfunctionflag5][value='67108864']", CHECKBOX),
     SHOW_NOT_CHEAPEST_CHOICE_POPUP("input[name=ftfunctionflag5][value='16384']", CHECKBOX),
     MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG("input[name=ftfunctionflag3][value='262144']", CHECKBOX),
+    SUFFICIENT_DOCUMENTATION_CHECKBOX("input[name=ftfunctionflag5][value='8192']", CHECKBOX),
 
     //Settings for Self Service
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='1']", CHECKBOX),
