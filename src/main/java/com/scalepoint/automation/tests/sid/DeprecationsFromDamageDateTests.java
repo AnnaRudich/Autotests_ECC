@@ -17,6 +17,7 @@ import static com.scalepoint.automation.utils.DateUtils.localDateToString;
 
 public class DeprecationsFromDamageDateTests extends BaseTest {
 
+    //4
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed while creating new claim")
     public void charlie_554_verifyDamageDateIsDisplayed(User user, Claim claim) {
         login(user)
@@ -29,6 +30,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
+    //6
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimUsingIP1WithoutDamageDate(User user, Claim claim) {
         claim.setDamageDate("");
@@ -39,6 +41,8 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
+
+    //17 18
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimUsingIP1ReintegrateClaim(User user, Claim claim) {
         claim.setDamageDate(localDateToString(LocalDate.now()));
@@ -59,6 +63,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
+    //7
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimUsingIP1WithFutureDamageDate(User user, Claim claim) {
         claim.setDamageDate(localDateToString(LocalDate.now().plusDays(1L)));
@@ -69,6 +74,8 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
+
+    //14
     @RunOn(DriverType.CHROME) // TO DO
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimCurrentDamageDateAndCheckIsRRuleApplied(User user, Claim claim, ClaimItem claimItem) {
@@ -83,6 +90,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 .enableAge();
     }
 
+    //15
     @RunOn(DriverType.CHROME) // TO DO
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimCurrentDamageDateAndCheckAreRRuleApplied(User user, Claim claim, ClaimItem claimItem) {
