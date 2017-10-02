@@ -114,6 +114,15 @@ public class BaseTest extends AbstractBaseTest {
         return Page.at(SettlementPage.class);
     }
 
+    protected void createClaimIgnoringExceptions(User user, Claim claim){
+        try {
+            ClaimApi claimApi = new ClaimApi(user);
+            claimApi.createClaim(claim, null);
+        }catch (Exception ex){
+            logger.error(ex.getMessage());
+        }
+    }
+
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
     }

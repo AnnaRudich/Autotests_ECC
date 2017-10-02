@@ -43,10 +43,33 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-
-    //17 18
+    //17
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-    public void charlie_554_createClaimUsingIP1ReintegrateClaim(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
+    public void charlie_554_createClaimUsingIP1ReintegrateClaimWithUpdatedNotAllowed(User user, Claim claim) {
+        claim.setDamageDate(localDateToString(LocalDate.now()));
+
+        CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                );
+
+        claim.setClaimNumber(detailsPage.getClaimNumber());
+        claim.setDamageDate(localDateToString(LocalDate.now().minusDays(1L)));
+
+        createClaimIgnoringExceptions(user, claim);
+
+        login(user)
+                .openActiveRecentClaim()
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                );
+    }
+
+    //18
+    @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
+    public void charlie_554_createClaimUsingIP1ReintegrateClaimWithUpdateAllowed(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
         claim.setDamageDate(localDateToString(LocalDate.now()));
 
         CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
@@ -65,6 +88,68 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
+
+    //21
+    @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
+    public void charlie_554_createClaimUsingIP1ReintegrateClaimWithLineExisting(User user, Claim claim, ClaimItem claimItem) {
+        claim.setDamageDate(localDateToString(LocalDate.now()));
+
+        CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                );
+
+        claim.setClaimNumber(detailsPage.getClaimNumber());
+        claim.setDamageDate(localDateToString(LocalDate.now().minusDays(1L)));
+
+        detailsPage.toSettlementPageUsingNavigationMenu()
+                .openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setNewPrice(Constants.PRICE_2400)
+                .closeSidWithOk();
+
+        createClaimIgnoringExceptions(user, claim);
+
+        login(user)
+                .openActiveRecentClaim()
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                );
+    }
+
+    //22
+    @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
+    public void charlie_554_createClaimUsingIP1ReintegrateClaimWithLineExistingUpdateNotAllowed(User user, Claim claim, ClaimItem claimItem) {
+        claim.setDamageDate(localDateToString(LocalDate.now()));
+
+        CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                );
+
+        claim.setClaimNumber(detailsPage.getClaimNumber());
+        claim.setDamageDate(localDateToString(LocalDate.now().minusDays(1L)));
+
+        detailsPage.toSettlementPageUsingNavigationMenu()
+                .openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setNewPrice(Constants.PRICE_2400)
+                .closeSidWithOk();
+
+        loginAndCreateClaim(user, claim)
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                );
+    }
+
     //7
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimUsingIP1WithFutureDamageDate(User user, Claim claim) {
@@ -75,6 +160,15 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                         CustomerDetailsPage.Asserts::assertDamgeDateIsEmpty
                 );
     }
+
+
+
+
+
+
+
+
+
 
 
     //14
