@@ -2,8 +2,6 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
-import com.scalepoint.automation.services.restService.EccIntegrationService;
-import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
@@ -14,12 +12,12 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.driver.DriverType;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
 
 import static com.scalepoint.automation.utils.DateUtils.localDateToString;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeprecationsFromDamageDateTests extends BaseTest {
 
@@ -196,20 +194,12 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
 
 
 
-
-
    //not working as expected 23
-    @Test(dataProvider = "testDataProvider", description = "")
-    public void charlie_554_createClaimWithWrongDataFormat(User user, Claim claim, EccIntegration eccIntegration){
-//        claim.setDamageDate("2008-19-01");
-        new LoginProcessService().login(user);
-        eccIntegration.setUpdateAction("IGNORE");
-        eccIntegration.getClaim().getDamage().setDamageDate("01-09-2017T00:00:00");
-        String location = new EccIntegrationService().createAndOpenClaim(eccIntegration).getResponse().extract().response().getBody().print();
-        login(user);
-
-        //not navigate but parse html
-        Browser.driver().navigate().to(location);
+    @Test(dataProvider = "testDataProvider", description = "create claim with wrong damage date")
+    public void charlie_554_createClaimWithWrongDataFormat(User user, EccIntegration eccIntegration){
+        eccIntegration.getClaim().getDamage().setDamageDate("2017-19-01");
+        String response = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().response().getBody().asString();
+        assertThat(response).contains("The entered Damage Date is not valid.");
     }
 
     //14
