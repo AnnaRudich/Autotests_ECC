@@ -105,8 +105,6 @@ public class NewCustomerPage extends Page {
         return this;
     }
 
-
-
     public NewCustomerPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return this;
@@ -114,7 +112,7 @@ public class NewCustomerPage extends Page {
 
     public class Asserts {
 
-        public Asserts assertThatDamgeDateIsDisplayed(){
+        public Asserts assertThatDamgeDateIsDisplayed() {
             assertThat(damageDate.isDisplayed()).isTrue();
             return this;
         }

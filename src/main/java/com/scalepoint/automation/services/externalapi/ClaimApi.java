@@ -24,6 +24,11 @@ public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
     private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
+    private Header headerLocation;
+
+    public Header getHeaderLocation() {
+        return headerLocation;
+    }
 
     public ClaimApi(User user) {
         super(user);
@@ -58,21 +63,21 @@ public class ClaimApi extends AuthenticationApi {
             HttpResponse createUserResponse = post(URL_CREATE_CUSTOMER, clientParams, executor).returnResponse();
             ensure302Code(createUserResponse.getStatusLine().getStatusCode());
 
-            Header location = createUserResponse.getHeaders("Location").length > 0 ?
+            headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
                     createUserResponse.getHeaders("Location")[0] :
                     null;
 
-            if (location.getValue().contains("error=1")) {
-                throw new IllegalStateException("Response contains wrong location: "+location.getValue());
+            if (headerLocation.getValue().contains("error=1")) {
+                throw new IllegalStateException("Response contains wrong location: "+headerLocation.getValue());
             }
 
-            log.info("CreateUser redirected to: " + location);
+            log.info("CreateUser redirected to: " + headerLocation);
             log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
-            String claimId = location.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
+            String claimId = headerLocation.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
             CurrentUser.setClaimId(claimId);
 
-            Browser.driver().get(location.getValue() + "settlement.jsp");
+            Browser.driver().get(headerLocation.getValue() + "settlement.jsp");
         } catch (Exception e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {

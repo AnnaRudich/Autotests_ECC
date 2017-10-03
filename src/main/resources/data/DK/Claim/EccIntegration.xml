@@ -9,6 +9,7 @@
                 <CompanySpecificItemData/>
             </ClaimedItem>
         </ClaimedItems>
+        <Damage damageDescription=""/>
     </Claim>
     <Claimant firstName="John" lastName="Cardona" address1="729 Southcrest Rd" postalCode="6220" city="Harrisville" phone="48005102" email="ecc@scalepoint.com"/>
 </ECCIntegration>

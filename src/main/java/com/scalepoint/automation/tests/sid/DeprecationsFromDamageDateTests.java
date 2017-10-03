@@ -2,6 +2,8 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
+import com.scalepoint.automation.services.restService.EccIntegrationService;
+import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
@@ -10,7 +12,9 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.driver.DriverType;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -157,7 +161,31 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCustomerDetails()
                 .doAssert(
-                        CustomerDetailsPage.Asserts::assertDamgeDateIsEmpty
+                        CustomerDetailsPage.Asserts::assertDamageDateIsEmpty
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
+    public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem){
+        loginAndCreateClaim(user,claim)
+                .openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setNewPrice(Constants.PRICE_2400)
+                .closeSidWithOk()
+                .toCustomerDetails()
+                .doAssert(
+                        CustomerDetailsPage.Asserts::assertIsDamageDateEditNotAvailable
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
+    public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim){
+        loginAndCreateClaim(user,claim)
+                .toCustomerDetails()
+                .doAssert(
+                        CustomerDetailsPage.Asserts::assertIsDamageDateEditAvailable
                 );
     }
 
@@ -170,6 +198,19 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
 
 
 
+   //not working as expected 23
+    @Test(dataProvider = "testDataProvider", description = "")
+    public void charlie_554_createClaimWithWrongDataFormat(User user, Claim claim, EccIntegration eccIntegration){
+//        claim.setDamageDate("2008-19-01");
+        new LoginProcessService().login(user);
+        eccIntegration.setUpdateAction("IGNORE");
+        eccIntegration.getClaim().getDamage().setDamageDate("01-09-2017T00:00:00");
+        String location = new EccIntegrationService().createAndOpenClaim(eccIntegration).getResponse().extract().response().getBody().print();
+        login(user);
+
+        //not navigate but parse html
+        Browser.driver().navigate().to(location);
+    }
 
     //14
     @RunOn(DriverType.CHROME) // TO DO

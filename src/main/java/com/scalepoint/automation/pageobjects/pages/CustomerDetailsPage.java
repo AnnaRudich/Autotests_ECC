@@ -5,6 +5,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -15,6 +16,7 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.DateUtils.getDateFromString;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.Wait.visible;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -105,8 +107,25 @@ public class CustomerDetailsPage extends BaseClaimPage {
             return this;
         }
 
-        public Asserts assertDamgeDateIsEmpty(){
+        public Asserts assertDamageDateIsEmpty(){
             assertThat(damageDate.getText().equals(""));
+            return this;
+        }
+
+        public Asserts assertIsDamageDateEditAvailable(){
+            assertThat(visible(damageDateEdit)).isTrue();
+            return this;
+        }
+
+        public Asserts assertIsDamageDateEditNotAvailable(){
+            Boolean isDisplayed;
+            try {
+                isDisplayed = damageDateEdit.isDisplayed();
+            }catch (NoSuchElementException ex){
+                logger.info(ex.getMessage());
+                isDisplayed = false;
+            }
+            assertThat(isDisplayed).isFalse();
             return this;
         }
     }

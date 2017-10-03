@@ -11,6 +11,8 @@ import java.util.UUID;
 @XmlType(name = "Claime")
 public class Claim {
 
+    @XmlElement(name = "Damage")
+    private Damage damage;
     @XmlAttribute
     private String claimNumber = UUID.randomUUID().toString();
     @XmlAttribute
@@ -46,10 +48,20 @@ public class Claim {
         return this;
     }
 
+    public Damage getDamage() {
+        return damage;
+    }
+
+    public Claim setDamage(Damage damage) {
+        this.damage = damage;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Claim{" +
-                "claimNumber='" + claimNumber + '\'' +
+                "damage=" + damage +
+                ", claimNumber='" + claimNumber + '\'' +
                 ", allowAutoClose='" + allowAutoClose + '\'' +
                 ", claimedItems=" + claimedItems +
                 '}';
