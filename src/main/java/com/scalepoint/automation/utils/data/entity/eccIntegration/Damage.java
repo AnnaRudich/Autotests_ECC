@@ -4,16 +4,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
-import java.time.LocalDate;
-
-import static com.scalepoint.automation.utils.DateUtils.localDateToString;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Damage")
 public class Damage {
 
     @XmlAttribute
-    private String damageDate = localDateToString(LocalDate.now());
+    private String damageDate;
     @XmlAttribute
     private String damageDescription;
 

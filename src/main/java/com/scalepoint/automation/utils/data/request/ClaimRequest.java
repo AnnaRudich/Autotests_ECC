@@ -15,6 +15,7 @@ import java.util.UUID;
         "country",
         "caseType",
         "caseNumber",
+        "damageDate",
         "itemizationCaseReference",
         "externalReference",
         "allowAutoClose",
@@ -34,6 +35,8 @@ public class ClaimRequest {
     private String caseType;
     @JsonProperty("caseNumber")
     private String caseNumber = UUID.randomUUID().toString();
+    @JsonProperty("damageDate")
+    private String damageDate;
     @JsonProperty("itemizationCaseReference")
     private String itemizationCaseReference;
     @JsonProperty("externalReference")
@@ -121,6 +124,21 @@ public class ClaimRequest {
 
     public ClaimRequest withCaseNumber(String caseNumber) {
         this.caseNumber = caseNumber;
+        return this;
+    }
+
+    @JsonProperty("damageDate")
+    public String getDamageDate() {
+        return damageDate;
+    }
+
+    @JsonProperty("damageDate")
+    public void setDamageDate(String damageDate) {
+        this.damageDate = damageDate;
+    }
+
+    public ClaimRequest withDamageDate(String damageDate) {
+        this.damageDate = damageDate;
         return this;
     }
 

@@ -265,6 +265,11 @@ public class BaseTest extends AbstractBaseTest {
         new LoginProcessService().login(user);
         return new EccIntegrationService().createAndOpenClaim(eccIntegration);
     }
+
+    public static EccIntegrationService createClaimAndLineUsingEccIntegration(User user, EccIntegration eccIntegration) {
+        new LoginProcessService().login(user);
+        return new EccIntegrationService().createClaim(eccIntegration);
+    }
 }
 
 

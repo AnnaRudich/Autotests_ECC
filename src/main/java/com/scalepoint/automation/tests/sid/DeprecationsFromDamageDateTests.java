@@ -11,6 +11,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
@@ -90,7 +91,6 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-
     //21
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
     public void charlie_554_createClaimUsingIP1ReintegrateClaimWithLineExisting(User user, Claim claim, ClaimItem claimItem) {
@@ -164,8 +164,8 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
-    public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem){
-        loginAndCreateClaim(user,claim)
+    public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCategory(claimItem.getCategoryGroupBorn())
@@ -179,11 +179,28 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
-    public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim){
-        loginAndCreateClaim(user,claim)
+    public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
                 .toCustomerDetails()
                 .doAssert(
                         CustomerDetailsPage.Asserts::assertIsDamageDateEditAvailable
+                );
+    }
+
+    //23
+    @Test(dataProvider = "testDataProvider", description = "create claim with wrong damage date")
+    public void charlie_554_createClaimWithWrongDataFormat(User user, EccIntegration eccIntegration) {
+        eccIntegration.getClaim().getDamage().setDamageDate("2017-19-01");
+        String response = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().response().getBody().asString();
+        assertThat(response).contains("The entered Damage Date is not valid.");
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "")
+    public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest){
+        loginAndOpenCwaClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
                 );
     }
 
@@ -194,27 +211,24 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
 
 
 
-   //not working as expected 23
-    @Test(dataProvider = "testDataProvider", description = "create claim with wrong damage date")
-    public void charlie_554_createClaimWithWrongDataFormat(User user, EccIntegration eccIntegration){
-        eccIntegration.getClaim().getDamage().setDamageDate("2017-19-01");
-        String response = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().response().getBody().asString();
-        assertThat(response).contains("The entered Damage Date is not valid.");
-    }
-
     //14
     @RunOn(DriverType.CHROME) // TO DO
     @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-    public void charlie_554_createClaimCurrentDamageDateAndCheckIsRRuleApplied(User user, Claim claim, ClaimItem claimItem) {
-        claim.setDamageDate(localDateToString(LocalDate.now().minusMonths(6L)));
-        loginAndCreateClaim(user, claim)
-                .openSid()
-                .automaticDepreciation(false)
-                .setDescription(claimItem.getTextFieldSP())
-                .setCustomerDemand(Constants.PRICE_100_000)
-                .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getExistingGroupWithPolicyDepreciationTypeAndReductionRule())
-                .enableAge();
+    public void charlie_554_createClaimCurrentDamageDateAndCheckIsRRuleApplied(User user, Claim claim, EccIntegration eccIntegration, ClaimItem claimItem) {
+//        claim.setDamageDate(localDateToString(LocalDate.now().minusMonths(6L)));
+        eccIntegration.getClaim().getDamage().setDamageDate("2017-10-01T18:52:58");
+        createClaimAndLineUsingEccIntegration(user, eccIntegration).openCaseAndRedirect();
+        login(user)
+                .openActiveRecentClaim()
+                .editFirstClaimLine();
+//        loginAndCreateClaim(user, claim)
+//                .openSid()
+//                .automaticDepreciation(false)
+//                .setDescription(claimItem.getTextFieldSP())
+//                .setCustomerDemand(Constants.PRICE_100_000)
+//                .setNewPrice(Constants.PRICE_2400)
+//                .setCategory(claimItem.getExistingGroupWithPolicyDepreciationTypeAndReductionRule())
+//                .enableAge();
     }
 
     //15
@@ -232,7 +246,6 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 .setSubCategory(claimItem.getAlkaSubCategory())
                 .enableAge();
     }
-
 
 
 }
