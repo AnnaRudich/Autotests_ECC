@@ -136,7 +136,12 @@ public class BaseTest extends AbstractBaseTest {
         return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
-    protected SettlementPage loginAndOpenCwaClaimByToken(User user, String claimToken){
+    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest){
+        Token token = new TestAccountsApi().sendRequest().getToken();
+        return new CreateClaimService(token).addClaim(claimRequest);
+    }
+
+    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken){
         login(user, null);
         Browser.open(getEccUrl()+ "Integration/Open?token=" + claimToken);
         return new SettlementPage();
