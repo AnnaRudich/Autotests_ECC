@@ -22,6 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeprecationsFromDamageDateTests extends BaseTest {
 
+
+    @Test(dataProvider = "testDataProvider", description = "")
+    public void charlie_554_editDamageDateUsingCalendar(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCustomerDetails()
+                .editDamageDate();
+
+    }
+
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed while creating new claim")
     public void charlie_554_verifyDamageDateIsDisplayed(User user, Claim claim) {
         login(user)
@@ -208,7 +217,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
-    public void charlie_554_createClaimUsingUnifiedIntegrationWithWrongDamageDate(User user, ClaimRequest claimRequest) {
+    public void charlie_554_createClaimUsingUnifiedIntegrationWithWrongDamageDate(ClaimRequest claimRequest) {
         claimRequest.setAccidentDate("2017-19-01");
         String response = createCwaClaim(claimRequest).getResponse().body().asString();
         assertThat(response).contains("Failure: Invalid damageDate");

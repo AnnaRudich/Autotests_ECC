@@ -5,9 +5,11 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.time.LocalDate;
@@ -16,7 +18,9 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.DateUtils.getDateFromString;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.visible;
+import static com.scalepoint.automation.utils.Wait.waitForInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,6 +64,19 @@ public class CustomerDetailsPage extends BaseClaimPage {
             waitForVisible(claimNumber);
         }
         return this;
+    }
+
+    public void editDamageDate(){
+        ((JavascriptExecutor) driver).executeScript("EditDamageDate()");
+        switchToLast();
+        $(forCondition(ExpectedConditions.elementToBeClickable(By.id("damageDate-trigger-picker")))).click();
+        waitForInvisible($(By.xpath("//div[contains(@class, 'x-datepicker') and @aria-hidden='true']")));
+//        waitForVisible($(By.xpath("//div[@data-ref='prevEl']//ancestor::div[contains(@class, 'x-datepicker') and @aria-hidden='false']")))
+//                .sendKeys(Keys.chord(Keys.CONTROL, Keys.ARROW_LEFT));
+        driver.findElements(By.xpath("//td[@role='gridcell' and not(contains(@class, 'x-datepicker-disabled') or contains(@class, 'x-datepicker-prevday'))][1]")).get(0).click();
+//        clickElementUsingJS(forCondition(ExpectedConditions.elementToBeClickable(By.xpath("//div[@data-ref='prevEl']//ancestor::div[contains(@class, 'x-datepicker') and @aria-hidden='false']"))));
+        $(By.xpath("//span[@data-ref='btnInnerEl']//ancestor::div[contains(@class, 'x-datepicker') and @aria-hidden='false']")).click();
+
     }
 
     public String getClaimNumber(){

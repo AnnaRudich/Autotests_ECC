@@ -175,7 +175,7 @@ public class Wait {
         waitForInvisible(element.getWrappedElement());
     }
 
-    private static void waitForInvisible(final WebElement element) {
+    public static void waitForInvisible(final WebElement element) {
         wrap(d -> {
             try {
                 return !element.isDisplayed();

@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
  */
 public class GridInfoUtils {
 
-    public static String getGridNodeName(SessionId sessionId){
+    public static String getGridNodeName(SessionId sessionId) {
         String nodeAddress;
         try {
             nodeAddress = given().baseUri(TestData.getLinks().getHubLink())
@@ -18,9 +18,9 @@ public class GridInfoUtils {
                     .queryParam("session", sessionId.toString())
                     .when().get()
                     .then().extract().jsonPath().get("proxyId");
-        }catch (Exception e){
+        } catch (Exception e) {
             nodeAddress = e.getMessage();
         }
-        return nodeAddress;
+        return nodeAddress == null ? "localhost" : nodeAddress;
     }
 }
