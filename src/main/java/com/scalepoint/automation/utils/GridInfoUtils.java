@@ -21,6 +21,6 @@ public class GridInfoUtils {
         }catch (Exception e){
             nodeAddress = e.getMessage();
         }
-        return nodeAddress;
+        return nodeAddress == null ? "localhost" : nodeAddress;
     }
 }
