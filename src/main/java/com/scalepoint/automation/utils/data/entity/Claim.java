@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 /**
  * SystemUser: kke
@@ -22,7 +23,7 @@ public class Claim {
     private String fullNameWithTitle = title + " " + firstName + " " + lastName;
     private String policyNumber = Integer.toString(RandomUtils.randomInt());
     private String policyType = "ECC";
-    private String claimNumber = Integer.toString(RandomUtils.randomInt());
+    private String claimNumber = UUID.randomUUID().toString();
     private String phoneNumber = Integer.toString(RandomUtils.randomInt());
     private String damageDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     @XmlElement

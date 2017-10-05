@@ -1,11 +1,12 @@
 package com.scalepoint.automation.utils.data.entity.eccIntegration;
 
+import com.scalepoint.automation.utils.RandomUtils;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.UUID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Claime")
@@ -14,7 +15,7 @@ public class Claim {
     @XmlElement(name = "Damage")
     private Damage damage;
     @XmlAttribute
-    private String claimNumber = UUID.randomUUID().toString();
+    private String claimNumber = Integer.toString(RandomUtils.randomInt());
     @XmlAttribute
     private String allowAutoClose;
 

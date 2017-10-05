@@ -28,7 +28,7 @@ public class CatalogPricesTests extends BaseTest{
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
 
