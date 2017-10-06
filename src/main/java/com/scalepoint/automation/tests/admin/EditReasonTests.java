@@ -2,7 +2,6 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
@@ -20,7 +19,6 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
-import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
@@ -262,12 +260,6 @@ public class EditReasonTests extends BaseTest {
         return openEditReasonPage(insuranceCompany, false);
     }
 
-    private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
-        return login(getSystemUser(), AdminPage.class)
-                .to(EditReasonsPage.class)
-                .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, showDisabled)
-                .assertEditReasonsFormVisible();
-    }
 }
 
 

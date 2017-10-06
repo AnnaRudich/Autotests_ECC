@@ -7,6 +7,8 @@ import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
+import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
@@ -23,6 +25,7 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
+import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -56,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 
 
@@ -149,6 +153,17 @@ public class BaseTest extends AbstractBaseTest {
                 .getMainMenu()
                 .toEccAdminPage()
                 .toSuppliersPage();
+    }
+
+    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled){
+        return openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
+    }
+
+    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
+        return login(getSystemUser(), AdminPage.class)
+                .to(EditReasonsPage.class)
+                .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
+                .assertEditReasonsFormVisible();
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {

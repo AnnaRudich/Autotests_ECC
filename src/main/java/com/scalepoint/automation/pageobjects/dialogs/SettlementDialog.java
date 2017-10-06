@@ -190,6 +190,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "documentation-ok-checkbox-inputEl")
     private CheckBox sufficientDocumentation;
 
+    @FindBy(id = "reject-checkbox-displayEl")
+    private CheckBox rejectCheckbox;
+
     public enum ValuationGridColumn {
         CHECK_COLUMN("active-valuation-checkcolumn"),
         TYPE("description"),
@@ -622,6 +625,11 @@ public class SettlementDialog extends BaseDialog {
         return $(notCheapestReasonDisplay).getText();
     }
 
+    public SettlementDialog rejectClaim(){
+        rejectCheckbox.select();
+        return this;
+    }
+
     public EditVoucherValuationDialog openVoucherValuationCard() {
         $(voucherValuationCard).click();
         return BaseDialog.at(EditVoucherValuationDialog.class);
@@ -706,6 +714,12 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog selectRejectReason(String visibleText) {
+        waitForVisible(rejectReason);
+        rejectReason.select(visibleText);
+        return this;
+    }
+
     public SettlementDialog setDepreciationType(DepreciationType depreciation) {
         waitForVisible(depreciationTypeComboBox);
         depreciationTypeComboBox.select(depreciation.index);
@@ -735,6 +749,10 @@ public class SettlementDialog extends BaseDialog {
 
     private String getDiscretionaryReasonText() {
         return discretionaryReason.getValue();
+    }
+
+    private String getRejectReasonText() {
+        return rejectReason.getValue();
     }
 
     private boolean isDiscretionaryReasonHasRedBorder() {
@@ -1206,6 +1224,11 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertRejectReasonEqualTo(String reason) {
+            assertEquals(getRejectReasonText(), reason, "Wrong reason selected");
+            return this;
+        }
+
         public Asserts assertBrandTextIs(String brandLink) {
             assertEquals($(brand).getText(), brandLink, "Wrong Brand is Displayed");
             return this;
@@ -1298,6 +1321,7 @@ public class SettlementDialog extends BaseDialog {
             assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("false"));
             return this;
         }
+
     }
 
 
