@@ -22,15 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeprecationsFromDamageDateTests extends BaseTest {
 
-
-    @Test(dataProvider = "testDataProvider", description = "")
-    public void charlie_554_editDamageDateUsingCalendar(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
-                .toCustomerDetails()
-                .editDamageDate();
-
-    }
-
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed while creating new claim")
     public void charlie_554_verifyDamageDateIsDisplayed(User user, Claim claim) {
         login(user)
