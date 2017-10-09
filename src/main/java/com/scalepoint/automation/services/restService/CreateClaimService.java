@@ -35,7 +35,7 @@ public class CreateClaimService extends BaseService {
                 .header(token.getAuthorizationHeder())
                 .when()
                 .post()
-                .then().log().all().statusCode(HttpStatus.SC_OK)
+                .then().log().all()
                 .extract().response();
         data.setClaimToken(response.jsonPath().get("token"));
         return this;

@@ -8,7 +8,10 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class NewCustomerPage extends Page {
@@ -48,7 +51,7 @@ public class NewCustomerPage extends Page {
     @Override
     public NewCustomerPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(title);
+        waitForVisible(claimsNumber);
         waitForVisible(surname);
         return this;
     }
@@ -100,5 +103,18 @@ public class NewCustomerPage extends Page {
     public NewCustomerPage selectCompany(String company) {
         selectCompany.selectByVisibleText(company);
         return this;
+    }
+
+    public NewCustomerPage doAssert(Consumer<Asserts> assertsFunc) {
+        assertsFunc.accept(new Asserts());
+        return this;
+    }
+
+    public class Asserts {
+
+        public Asserts assertThatDamgeDateIsDisplayed() {
+            assertThat(damageDate.isDisplayed()).isTrue();
+            return this;
+        }
     }
 }

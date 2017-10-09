@@ -43,6 +43,7 @@ public class EccIntegrationService extends BaseService {
         claimParams.put("zipCode", eccIntegration.getClaimant().getPostalCode());
         claimParams.put("city", eccIntegration.getClaimant().getCity());
         claimParams.put("phone1", eccIntegration.getClaimant().getPhone());
+        claimParams.put("damageDate", eccIntegration.getClaim().getDamage().getDamageDate());
         claimParams.put("deductible", "600");
         claimParams.put("claimsNumber", eccIntegration.getClaim().getClaimNumber());
         claimParams.put("updateAction", "U");

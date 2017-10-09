@@ -11,19 +11,24 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Executor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.scalepoint.automation.utils.Http.*;
+import static com.scalepoint.automation.utils.Http.ParamsBuilder;
+import static com.scalepoint.automation.utils.Http.ensure302Code;
+import static com.scalepoint.automation.utils.Http.post;
 
 @SuppressWarnings("ConstantConditions")
 public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
     private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
+    private Header headerLocation;
+
+    public Header getHeaderLocation() {
+        return headerLocation;
+    }
 
     public ClaimApi(User user) {
         super(user);
@@ -47,7 +52,7 @@ public class ClaimApi extends AuthenticationApi {
         String DATE_FORMAT = "yyyy-MM-dd";
         List<NameValuePair> clientParams = ParamsBuilder.create().
                 add("policytype", policyType).
-                add("damageDate", new SimpleDateFormat(DATE_FORMAT).format(new Date())).
+                add("damageDate", claim.getDamageDate()).
                 add("last_name", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
                 add("policy_number", claim.getPolicyNumber()).
@@ -58,21 +63,21 @@ public class ClaimApi extends AuthenticationApi {
             HttpResponse createUserResponse = post(URL_CREATE_CUSTOMER, clientParams, executor).returnResponse();
             ensure302Code(createUserResponse.getStatusLine().getStatusCode());
 
-            Header location = createUserResponse.getHeaders("Location").length > 0 ?
+            headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
                     createUserResponse.getHeaders("Location")[0] :
                     null;
 
-            if (location.getValue().contains("error=1")) {
-                throw new IllegalStateException("Response contains wrong location: "+location.getValue());
+            if (headerLocation.getValue().contains("error=1")) {
+                throw new IllegalStateException("Response contains wrong location: "+headerLocation.getValue());
             }
 
-            log.info("CreateUser redirected to: " + location);
+            log.info("CreateUser redirected to: " + headerLocation);
             log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
-            String claimId = location.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
+            String claimId = headerLocation.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
             CurrentUser.setClaimId(claimId);
 
-            Browser.driver().get(location.getValue() + "settlement.jsp");
+            Browser.driver().get(headerLocation.getValue() + "settlement.jsp");
         } catch (Exception e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {

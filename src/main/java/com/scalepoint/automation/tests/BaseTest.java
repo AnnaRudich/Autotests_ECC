@@ -14,6 +14,8 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.restService.CreateClaimService;
+import com.scalepoint.automation.services.restService.EccIntegrationService;
+import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.JavascriptHelper;
@@ -25,6 +27,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
 import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.response.Token;
 import com.scalepoint.automation.utils.driver.DriverType;
@@ -114,6 +117,16 @@ public class BaseTest extends AbstractBaseTest {
         return Page.at(SettlementPage.class);
     }
 
+    protected ClaimApi createClaimIgnoringExceptions(User user, Claim claim){
+        ClaimApi claimApi = new ClaimApi(user);
+        try {
+            claimApi.createClaim(claim, null);
+        }catch (Exception ex){
+            logger.error(ex.getMessage());
+        }
+        return claimApi;
+    }
+
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
     }
@@ -123,7 +136,12 @@ public class BaseTest extends AbstractBaseTest {
         return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
-    protected SettlementPage loginAndOpenCwaClaimByToken(User user, String claimToken){
+    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest){
+        Token token = new TestAccountsApi().sendRequest().getToken();
+        return new CreateClaimService(token).addClaim(claimRequest);
+    }
+
+    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken){
         login(user, null);
         Browser.open(getEccUrl()+ "Integration/Open?token=" + claimToken);
         return new SettlementPage();
@@ -246,6 +264,16 @@ public class BaseTest extends AbstractBaseTest {
         List<Object> params = Lists.newArrayList(testDataParameters);
         params.addAll(Arrays.asList(additionalParams));
         return params.toArray();
+    }
+
+    public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {
+        new LoginProcessService().login(user);
+        return new EccIntegrationService().createAndOpenClaim(eccIntegration);
+    }
+
+    public static EccIntegrationService createClaimAndLineUsingEccIntegration(User user, EccIntegration eccIntegration) {
+        new LoginProcessService().login(user);
+        return new EccIntegrationService().createClaim(eccIntegration);
     }
 }
 

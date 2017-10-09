@@ -12,6 +12,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Claime")
 public class Claim {
 
+    @XmlElement(name = "Damage")
+    private Damage damage;
     @XmlAttribute
     private String claimNumber = Integer.toString(RandomUtils.randomInt());
     @XmlAttribute
@@ -47,10 +49,20 @@ public class Claim {
         return this;
     }
 
+    public Damage getDamage() {
+        return damage;
+    }
+
+    public Claim setDamage(Damage damage) {
+        this.damage = damage;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Claim{" +
-                "claimNumber='" + claimNumber + '\'' +
+                "damage=" + damage +
+                ", claimNumber='" + claimNumber + '\'' +
                 ", allowAutoClose='" + allowAutoClose + '\'' +
                 ", claimedItems=" + claimedItems +
                 '}';
