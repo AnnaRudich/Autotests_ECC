@@ -6,12 +6,14 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
@@ -53,7 +55,7 @@ public class RejectReasonTests extends BaseTest {
     }
 
 
-    //    @RunOn(DriverType.IE)  //there is no reason after disabling
+    @RunOn(DriverType.IE)  //there is no reason after disabling
     @Test(dataProvider = "testDataProvider", description = "")
     public void charlie_549_disableReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
@@ -94,12 +96,31 @@ public class RejectReasonTests extends BaseTest {
                 .doAssert(SettlementDialog.Asserts::assertRejectReasonDisabled);
     }
 
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "")
-    public void charlie_549_makeRejectReasonMandatory(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
-        ;
+    public void charlie_549_makeRejectReasonMandatory(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> {
+                    sid
+                            .withCustomerDemandPrice(PRICE_100_000)
+                            .withNewPrice(PRICE_2400)
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withAge(0, 6);
+                })
+                .openAddValuationForm()
+                .addValuationType(claimItem.getValuationTypeDiscretionary())
+                .addValuationPrice(1000.00)
+                .closeValuationDialogWithOk();
+        settlementDialog.closeSidWithOk();
+        settlementDialog.doAssert(asserts -> {
+                    asserts.assertDiscretionaryReasonHasRedBorder();
+                    asserts.assertDiscretionaryReasonEnabled();
+                });
+
+
     }
 
 
