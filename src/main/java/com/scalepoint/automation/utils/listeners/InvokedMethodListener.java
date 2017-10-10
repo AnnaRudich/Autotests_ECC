@@ -31,7 +31,7 @@ import java.util.Set;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
 
-    private static final String ROLLBACK_CONTEXT = "rollback_context";
+    public static final String ROLLBACK_CONTEXT = "rollback_context";
 
     protected Logger logger = LogManager.getLogger(InvokedMethodListener.class);
 
@@ -86,7 +86,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 printErrorStackTraceIfAny(iTestResult);
 
                 RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
-                if (rollbackContext == null || rollbackContext.operations.isEmpty()) {
+                if (rollbackContext == null || rollbackContext.getOperations().isEmpty()) {
                     logger.info("No ft settings found to rollback");
                     return;
                 }
@@ -94,8 +94,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 Page.to(LoginPage.class);
 
                 FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-                List<FtOperation> operations = rollbackContext.operations;
-                functionalTemplatesApi.updateTemplate(rollbackContext.user.getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
+                List<FtOperation> operations = rollbackContext.getOperations();
+                functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
             } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
                 logger.error(e.getMessage(), e);
@@ -154,16 +154,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         Throwable e = iTestResult.getThrowable();
         if (e != null) {
             logger.error(e.getMessage(), e);
-        }
-    }
-
-    private class RollbackContext {
-        private User user;
-        private List<FtOperation> operations;
-
-        RollbackContext(User user, List<FtOperation> operations) {
-            this.user = user;
-            this.operations = operations;
         }
     }
 

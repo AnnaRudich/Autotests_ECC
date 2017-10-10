@@ -197,7 +197,11 @@ public class BaseTest extends AbstractBaseTest {
     public static Object[][] provide(Method method) {
         Thread.currentThread().setName("Thread "+method.getName());
         Object[][] params = new Object[1][];
-        params[0] = getTestDataParameters(method).toArray();
+        try {
+            params[0] = getTestDataParameters(method).toArray();
+        }catch (Exception ex){
+            LogManager.getLogger(BaseTest.class).error(ex);
+        }
         return params;
     }
 
