@@ -89,7 +89,12 @@ public class DatabaseApi {
     }
 
     public Integer getUserIdByClaimNumber(String claimNumber){
-        return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where ClaimNumber = ?", Integer.class, claimNumber);
+        try {
+            return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where ClaimNumber = ?", Integer.class, claimNumber);
+        }catch (Exception ex){
+            logger.error(ex.getMessage());
+            return null;
+        }
     }
 
     public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId){

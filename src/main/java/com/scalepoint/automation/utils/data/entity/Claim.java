@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -23,6 +25,7 @@ public class Claim {
     private String policyType = "ECC";
     private String claimNumber = UUID.randomUUID().toString();
     private String phoneNumber = Integer.toString(RandomUtils.randomInt());
+    private String damageDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     @XmlElement
     private String cellNumber;
     private String address = RandomUtils.randomName("addr");
@@ -209,6 +212,15 @@ public class Claim {
 
     public String getPolicyTypeFF() {
         return policyTypeFF;
+    }
+
+    public String getDamageDate() {
+        return damageDate;
+    }
+
+    public Claim setDamageDate(String damageDate) {
+        this.damageDate = damageDate;
+        return this;
     }
 
     @Override
