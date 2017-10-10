@@ -77,6 +77,8 @@ public class RejectReasonTests extends BaseTest {
         new SettlementPage()
                 .editFirstClaimLine()
                 .rejectClaim()
+                .clickOK()
+                .doAssert(SettlementDialog.Asserts::assertRejectReasonHasRedBorder)
                 .selectRejectReason(reason)
                 .closeSidWithOk()
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
