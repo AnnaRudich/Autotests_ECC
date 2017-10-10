@@ -96,12 +96,21 @@ public class RejectReasonTests extends BaseTest {
                 .doAssert(SettlementDialog.Asserts::assertRejectReasonDisabled);
     }
 
-    @RunOn(DriverType.CHROME)
+    @RunOn(DriverType.IE)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "")
-    public void charlie_549_makeRejectReasonMandatory(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+    public void charlie_549_makeRejectReasonMandatory(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+        String reason = "Discretionary reason åæéø " + System.currentTimeMillis();
+
+        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+                .addReason(reason)
+                .findReason(reason)
+                .getPage()
+                .logout();
+
+        loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
                             .withCustomerDemandPrice(PRICE_100_000)
@@ -113,14 +122,18 @@ public class RejectReasonTests extends BaseTest {
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
-                .closeValuationDialogWithOk();
-        settlementDialog.closeSidWithOk();
-        settlementDialog.doAssert(asserts -> {
+                .closeValuationDialogWithOk()
+                .clickOK()
+                .doAssert(asserts -> {
                     asserts.assertDiscretionaryReasonHasRedBorder();
                     asserts.assertDiscretionaryReasonEnabled();
+                })
+                .selectDiscretionaryReason(reason)
+                .clickOK()
+                .doAssert(asserts -> {
+                    asserts.assertRejectReasonHasRedBorder();
+                    asserts.assertRejectReasonEnabled();
                 });
-
-
     }
 
 

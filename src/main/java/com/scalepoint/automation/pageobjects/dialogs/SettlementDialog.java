@@ -761,6 +761,12 @@ public class SettlementDialog extends BaseDialog {
                 && driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
     }
 
+    private boolean isRejectReasonHasRedBorder() {
+        String redBorder = "#c30";
+        return driver.findElement(By.id("reject-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
+                && driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
+    }
+
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
@@ -1209,8 +1215,18 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertRejectReasonEnabled() {
+            assertTrue(isRejectReasonEnabled(), "Reject Reason must be enabled");
+            return this;
+        }
+
         public Asserts assertDiscretionaryReasonHasRedBorder() {
             Assert.assertTrue(isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have red border");
+            return this;
+        }
+
+        public Asserts assertRejectReasonHasRedBorder() {
+            Assert.assertTrue(isRejectReasonHasRedBorder(), "Reject Reason field should have red border");
             return this;
         }
 
