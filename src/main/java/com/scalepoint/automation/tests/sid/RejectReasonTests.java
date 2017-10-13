@@ -84,7 +84,7 @@ public class RejectReasonTests extends BaseTest {
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
 
-    //there is no reason after disabling
+    //there is no reason after disabling ?
     @Test(dataProvider = "testDataProvider", description = "")
     public void charlie_549_disableReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                           ClaimItem claimItem, InsuranceCompany insuranceCompany, EccIntegration eccIntegration) {
@@ -377,6 +377,100 @@ public class RejectReasonTests extends BaseTest {
                 });
     }
 
+    @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "Check if any reason is mandatory and filled claim will be created")
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+                                                                           Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+        createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
+    }
+
+    @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithoutReasons(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+                                                                                        Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> {
+                    sid
+                            .withCustomerDemandPrice(PRICE_100_000)
+                            .withNewPrice(PRICE_2400)
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withAge(0, 6);
+                })
+                .openAddValuationForm()
+                .addValuationType(claimItem.getValuationTypeDiscretionary())
+                .addValuationPrice(1000.00)
+                .closeValuationDialogWithOk()
+                .rejectClaim()
+                .closeSidWithOk()
+                .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
+    }
+
+    @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithRejectReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+                                                                                        Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+        String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
+
+        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+                .addReason(reasonR)
+                .findReason(reasonR)
+                .getPage()
+                .logout();
+
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> {
+                    sid
+                            .withCustomerDemandPrice(PRICE_100_000)
+                            .withNewPrice(PRICE_2400)
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withAge(0, 6);
+                })
+                .openAddValuationForm()
+                .addValuationType(claimItem.getValuationTypeDiscretionary())
+                .addValuationPrice(1000.00)
+                .closeValuationDialogWithOk()
+                .rejectClaim()
+                .selectRejectReason(reasonR)
+                .closeSidWithOk()
+                .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
+    }
+
+    @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+                                                                                Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+        String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
+
+        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+                .addReason(reasonD)
+                .findReason(reasonD)
+                .getPage()
+                .logout();
+
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> {
+                    sid
+                            .withCustomerDemandPrice(PRICE_100_000)
+                            .withNewPrice(PRICE_2400)
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withAge(0, 6);
+                })
+                .openAddValuationForm()
+                .addValuationType(claimItem.getValuationTypeDiscretionary())
+                .addValuationPrice(1000.00)
+                .closeValuationDialogWithOk()
+                .selectDiscretionaryReason(reasonD)
+                .rejectClaim()
+                .closeSidWithOk()
+                .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
+    }
 
 
     private void createClaimWithItemAndCloseWithReasons(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
