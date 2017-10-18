@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
@@ -24,6 +25,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -699,6 +701,12 @@ public class SettlementDialog extends BaseDialog {
         return $(rejectReason).isEnabled();
     }
 
+    private boolean isRejectReasonDisabled(String visibleText){
+        new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
+        $(By.id("reject-reason-combobox-inputEl")).setValue(visibleText);
+        return driver.findElement(By.xpath("//span[text()='"+visibleText+"']")).getAttribute("style").equalsIgnoreCase("color: silver;");
+    }
+
     private boolean isDiscretionaryReasonVisible() {
         return (discretionaryReason.exists());
     }
@@ -716,7 +724,10 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog selectRejectReason(String visibleText) {
         waitForVisible(rejectReason);
-        rejectReason.select(visibleText);
+        new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
+        $(By.id("reject-reason-combobox-inputEl")).setValue(visibleText);
+        new Actions(driver).click(driver.findElement(By.xpath("//span[text()='"+visibleText+"']"))).build().perform();
+        new Events().fireEvent($(By.id("reject-reason-combobox-inputEl")), "focus", "keydown", "keypress", "input", "keyup", "change");
         return this;
     }
 
@@ -763,8 +774,10 @@ public class SettlementDialog extends BaseDialog {
 
     private boolean isRejectReasonHasRedBorder() {
         String redBorder = "#c30";
+        String redBorderRGB = "rgb(204, 51, 0)";
         return driver.findElement(By.id("reject-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
-                && driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
+                &&  (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
+                (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
     }
 
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
@@ -774,7 +787,7 @@ public class SettlementDialog extends BaseDialog {
         return at(EditVoucherValuationDialog.class);
     }
 
-    public boolean isDicountDistributionDisplayed(){
+    public boolean isDiscountDistributionDisplayed(){
         try{
             return waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className))).isDisplayed();
         }catch (Exception e){
@@ -1217,6 +1230,11 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertRejectReasonEnabled() {
             assertTrue(isRejectReasonEnabled(), "Reject Reason must be enabled");
+            return this;
+        }
+
+        public Asserts assertRejectReasonIsDisabled(String visibleText) {
+            assertTrue(isRejectReasonDisabled(visibleText), "Reject Reason should be disabled");
             return this;
         }
 

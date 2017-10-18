@@ -84,22 +84,20 @@ public class RejectReasonTests extends BaseTest {
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
 
-    //there is no reason after disabling ?
+    @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "")
     public void charlie_549_disableReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                          ClaimItem claimItem, InsuranceCompany insuranceCompany, EccIntegration eccIntegration) {
+                                          ClaimItem claimItem, InsuranceCompany insuranceCompany,Claim claim, EccIntegration eccIntegration) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        String location = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().header("Location");
-        login(user);
-        Browser.driver().get(location);
-        new SettlementPage().openSidAndFill(sid -> {
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> {
                     sid
                             .withCustomerDemandPrice(PRICE_100_000)
                             .withNewPrice(PRICE_2400)
@@ -115,20 +113,19 @@ public class RejectReasonTests extends BaseTest {
                 .getMainMenu()
                 .logOut();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
                 .findReason(reason)
                 .disable()
                 .assertReasonDisabled(reason)
                 .logout();
 
-        login(user);
-        Browser.driver().get(location);
-        new SettlementPage()
+        login(user)
+                .openRecentClaim()
+                .reopenClaim()
                 .editFirstClaimLine()
-                .clickOK()
-                .doAssert(asserts -> {
-                    asserts.assertRejectReasonHasRedBorder();
-                    asserts.assertRejectReasonEnabled();
+                .doAssert(sid -> {
+                    sid.assertRejectReasonEqualTo(reason);
+                    sid.assertRejectReasonIsDisabled(reason);
                 });
     }
 

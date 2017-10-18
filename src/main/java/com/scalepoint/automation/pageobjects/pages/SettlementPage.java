@@ -21,6 +21,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.ScriptTimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -355,20 +356,31 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public SettlementDialog editLine() {
+
+            String js3 = "var targLink    = arguments[0];\n" +
+                    "var clickEvent  = document.createEvent ('MouseEvents');\n" +
+                    "clickEvent.initEvent ('dblclick', true, true);\n" +
+                    "targLink.dispatchEvent (clickEvent);";
+
             doubleClick(descriptionElement);
             waitForAjaxCompleted();
-            String js =
-                    "var callback = arguments[arguments.length - 1];" +
-                            "function groupsLoaded() {" +
-                            "var groups = Ext.getCmp('group-combobox');" +
-                            "if (!groups || (groups.getStore().count() <= 0)) {" +
-                            "setTimeout(groupsLoaded, 1000);" +
-                            "} else {" +
-                            "callback();" +
-                            "}" +
-                            "}" +
-                            "groupsLoaded();";
-            ((JavascriptExecutor) driver).executeAsyncScript(js);
+            try {
+                String js =
+                        "var callback = arguments[arguments.length - 1];" +
+                                "function groupsLoaded() {" +
+                                "var groups = Ext.getCmp('group-combobox');" +
+                                "if (!groups || (groups.getStore().count() <= 0)) {" +
+                                "setTimeout(groupsLoaded, 1000);" +
+                                "} else {" +
+                                "callback();" +
+                                "}" +
+                                "}" +
+                                "groupsLoaded();";
+                ((JavascriptExecutor) driver).executeAsyncScript(js);
+            }catch (ScriptTimeoutException e){
+                logger.error(e.getMessage());
+                ((JavascriptExecutor) driver).executeScript(js3,descriptionElement);
+            }
             return BaseDialog.at(SettlementDialog.class);
         }
 
