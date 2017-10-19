@@ -1,12 +1,7 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
@@ -23,6 +18,8 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
+import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
@@ -302,6 +299,15 @@ public class ClaimTests extends BaseTest {
                     asserts.assertPurchasePriceIs(price);
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
+
+            to(MyPage.class).openActiveRecentClaim()
+                .toMailsPage()
+
+                .doAssert(mail -> {
+                    mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);
+                    mail.isMailExist(ITEMIZATION_CONFIRMATION_IC_MAIL);
+                });
+
     }
 
     @RunOn(value = DriverType.IE_REMOTE)
@@ -388,5 +394,13 @@ public class ClaimTests extends BaseTest {
                 .selectPlaceMyOrderOption()
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
+
+
+                new MyPage().openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail -> {
+                    mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);
+                    mail.isMailExist(ORDER_CONFIRMATION_BY_IC);
+                });
     }
 }
