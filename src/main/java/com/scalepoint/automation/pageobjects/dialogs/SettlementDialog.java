@@ -1072,18 +1072,18 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertVoucherListed(String voucherTitle) {
-            System.out.println("AssertVoucherListed: " + voucherTitle);
+            logger.info("AssertVoucherListed: " + voucherTitle);
             Assert.assertTrue(getVouchersList().stream().anyMatch(i -> {
-                System.out.println("Found: " + i);
+                logger.info("Found: " + i);
                 return i.contains(voucherTitle);
             }), "Voucher " + voucherTitle + " must be present");
             return this;
         }
 
         public Asserts assertVoucherNotListed(String voucherTitle) {
-            System.out.println("assertVoucherNotListed: " + voucherTitle);
+            logger.info("assertVoucherNotListed: " + voucherTitle);
             Assert.assertFalse(getVouchersList().stream().anyMatch(i -> {
-                System.out.println("Found: " + i);
+                logger.info("Found: " + i);
                 return i.contains(voucherTitle);
             }), "Voucher " + voucherTitle + " must not be present");
             return this;
