@@ -223,7 +223,7 @@ public class TextSearchPage extends Page {
         Wait.waitForVisible(match);
         match.click();
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
-        if (!settlementDialog.isDicountDistributionDisplayed()) {
+        if (!settlementDialog.isDiscountDistributionDisplayed()) {
             settlementDialog.cancel(TextSearchPage.class);
             matchButtons.get(1).click();
         }

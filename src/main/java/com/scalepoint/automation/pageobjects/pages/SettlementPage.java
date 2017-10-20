@@ -21,6 +21,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.ScriptTimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -31,9 +32,11 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -288,6 +291,11 @@ public class SettlementPage extends BaseClaimPage {
             Assert.assertFalse(genericItemIsPresent);
             return this;
         }
+
+        public Asserts assertFirstLineIsRejected() {
+            assertThat($(By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1])")).getAttribute("class")).contains("rejected");
+            return this;
+        }
     }
 
 
@@ -348,20 +356,30 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public SettlementDialog editLine() {
-            doubleClick(descriptionElement);
-            waitForAjaxCompleted();
-            String js =
-                    "var callback = arguments[arguments.length - 1];" +
-                            "function groupsLoaded() {" +
-                            "var groups = Ext.getCmp('group-combobox');" +
-                            "if (!groups || (groups.getStore().count() <= 0)) {" +
-                            "setTimeout(groupsLoaded, 1000);" +
-                            "} else {" +
-                            "callback();" +
-                            "}" +
-                            "}" +
-                            "groupsLoaded();";
-            ((JavascriptExecutor) driver).executeAsyncScript(js);
+            String dblClick = "var targLink    = arguments[0];\n" +
+                    "var clickEvent  = document.createEvent ('MouseEvents');\n" +
+                    "clickEvent.initEvent ('dblclick', true, true);\n" +
+                    "targLink.dispatchEvent (clickEvent);";
+
+            try {
+                doubleClick(descriptionElement);
+                waitForAjaxCompleted();
+                String js =
+                        "var callback = arguments[arguments.length - 1];" +
+                                "function groupsLoaded() {" +
+                                "var groups = Ext.getCmp('group-combobox');" +
+                                "if (!groups || (groups.getStore().count() <= 0)) {" +
+                                "setTimeout(groupsLoaded, 1000);" +
+                                "} else {" +
+                                "callback();" +
+                                "}" +
+                                "}" +
+                                "groupsLoaded();";
+                ((JavascriptExecutor) driver).executeAsyncScript(js);
+            }catch (ScriptTimeoutException e){
+                logger.error(e.getMessage());
+                ((JavascriptExecutor) driver).executeScript(dblClick,descriptionElement);
+            }
             return BaseDialog.at(SettlementDialog.class);
         }
 

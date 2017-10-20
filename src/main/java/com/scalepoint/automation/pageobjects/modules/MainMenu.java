@@ -47,7 +47,7 @@ public class MainMenu extends Module {
     }
 
     public void logOut() {
-        $(signOut).click();
+        clickUsingJsIfSeleniumClickReturnError(signOut);
         acceptAlert();
     }
 
