@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -536,9 +537,13 @@ public class SettlementDialog extends BaseDialog {
         try {
             WebElement button = driver.findElement(buttonBy);
             waitForVisible(button);
-            button.click();
-
-            Wait.waitElementDisappeared(buttonBy);
+            forCondition(ExpectedConditions.elementToBeClickable(button));
+            try {
+                clickAndWait(buttonBy, button);
+            } catch (TimeoutException e) {
+                logger.error(e.getMessage());
+                clickAndWait(buttonBy, button);
+            }
             Wait.waitForAjaxCompleted();
         } catch (UnhandledAlertException ignored) {
         }
@@ -558,6 +563,11 @@ public class SettlementDialog extends BaseDialog {
         } catch (Exception ignored) {
         }
         return Page.at(pageClass);
+    }
+
+    private void clickAndWait(By buttonBy, WebElement button) {
+        button.click();
+        Wait.waitElementDisappeared(buttonBy);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {

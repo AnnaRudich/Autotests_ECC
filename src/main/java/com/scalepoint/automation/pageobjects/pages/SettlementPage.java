@@ -356,15 +356,14 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public SettlementDialog editLine() {
-
-            String js3 = "var targLink    = arguments[0];\n" +
+            String dblClick = "var targLink    = arguments[0];\n" +
                     "var clickEvent  = document.createEvent ('MouseEvents');\n" +
                     "clickEvent.initEvent ('dblclick', true, true);\n" +
                     "targLink.dispatchEvent (clickEvent);";
 
-            doubleClick(descriptionElement);
-            waitForAjaxCompleted();
             try {
+                doubleClick(descriptionElement);
+                waitForAjaxCompleted();
                 String js =
                         "var callback = arguments[arguments.length - 1];" +
                                 "function groupsLoaded() {" +
@@ -379,7 +378,7 @@ public class SettlementPage extends BaseClaimPage {
                 ((JavascriptExecutor) driver).executeAsyncScript(js);
             }catch (ScriptTimeoutException e){
                 logger.error(e.getMessage());
-                ((JavascriptExecutor) driver).executeScript(js3,descriptionElement);
+                ((JavascriptExecutor) driver).executeScript(dblClick,descriptionElement);
             }
             return BaseDialog.at(SettlementDialog.class);
         }

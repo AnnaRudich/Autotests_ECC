@@ -11,6 +11,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -18,6 +19,7 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.listeners.RollbackContext;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.ITestResult;
@@ -37,27 +39,24 @@ public class RejectReasonTests extends BaseTest {
     private ITestResult iTestResult;
 
     @BeforeMethod
-    public void setITestResult(ITestResult iTestResult){
+    public void setITestResult(ITestResult iTestResult) {
         this.iTestResult = iTestResult;
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if reject reason dropdown is disabled if there is 0 or 1 reason available for IC")
     public void charlie_549_checkIsRejectReasonDropdownDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withDepreciation(DEPRECIATION_10)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr());
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withDepreciation(DEPRECIATION_10)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .rejectClaim()
                 .doAssert(SettlementDialog.Asserts::assertRejectReasonDisabled)
                 .closeSidWithOk()
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
-
 
     @Test(dataProvider = "testDataProvider", description = "Add reason to claim created before reason was created")
     public void charlie_549_checkIfCanAddNewRejectReasonToClaimCreatedBefore(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
@@ -84,10 +83,11 @@ public class RejectReasonTests extends BaseTest {
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
 
+    @RunOn(DriverType.CHROME_REMOTE)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
-    @Test(dataProvider = "testDataProvider", description = "")
+    @Test(dataProvider = "testDataProvider", description = "Check what happens with reasone after disabling it")
     public void charlie_549_disableReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                          ClaimItem claimItem, InsuranceCompany insuranceCompany,Claim claim, EccIntegration eccIntegration) {
+                                          ClaimItem claimItem, InsuranceCompany insuranceCompany, Claim claim) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
@@ -97,14 +97,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(2, 2);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(2, 2))
                 .rejectClaim()
                 .selectRejectReason(reason)
                 .doAssert(sid -> sid.assertRejectReasonEqualTo(reason))
@@ -143,14 +141,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -173,7 +169,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if reason is mandatory w/o discretionary but with filled reject")
     public void charlie_549_makeRejectReasonMandatoryWithRejectReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
@@ -183,14 +179,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -208,7 +202,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if reasons are mandatory and filled claim will be created")
     public void charlie_549_makeRejectReasonMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                 Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
 
@@ -216,7 +210,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if DISCREATIONARY reason is mandatory and filled claim will be created")
     public void charlie_549_makeRejectReasonNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                 Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                    Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
 
@@ -225,7 +219,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if reject reasons will be not filled claim will be created")
     public void charlie_549_makeRejectReasonNotMandatoryRejectClaimWithoutReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                    Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                                 Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
@@ -235,14 +229,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -257,7 +249,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if reject reasons will be not filled claim will be created")
     public void charlie_549_makeRejectReasonNotMandatoryRejectClaimWithoutDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                                 Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                                              Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
@@ -267,14 +259,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -306,7 +296,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaimWithoutReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                                 Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                                        Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
@@ -316,14 +306,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -338,7 +326,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaimWithoutDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                                              Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                                                     Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
@@ -348,14 +336,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -378,7 +364,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if any reason is mandatory and filled claim will be created")
     public void charlie_549_makeAnyReasonsNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                           Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                  Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
 
@@ -386,16 +372,14 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithoutReasons(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                                        Claim claim, ClaimItem claimItem) {
+                                                                                Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -409,7 +393,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithRejectReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                                        Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                                  Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
@@ -419,14 +403,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -441,7 +423,7 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
-                                                                                Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+                                                                                         Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
@@ -451,14 +433,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
@@ -487,14 +467,12 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCustomerDemandPrice(PRICE_100_000)
-                            .withNewPrice(PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withAge(0, 6);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCustomerDemandPrice(PRICE_100_000)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
                 .addValuationPrice(1000.00)
