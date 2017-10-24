@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.Wait.visible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -294,6 +295,11 @@ public class SettlementPage extends BaseClaimPage {
 
         public Asserts assertFirstLineIsRejected() {
             assertThat($(By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1])")).getAttribute("class")).contains("rejected");
+            return this;
+        }
+
+        public Asserts assertSettlementPageIsInFlatView(){
+            assertThat(visible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isFalse();
             return this;
         }
     }
