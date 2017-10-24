@@ -20,20 +20,24 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.ScriptTimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.Wait.invisible;
 import static com.scalepoint.automation.utils.Wait.visible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -66,6 +70,9 @@ public class SettlementPage extends BaseClaimPage {
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
+
+    @FindBy(xpath = "//span[text()='Opret gruppe']")
+    private WebElement groupButton;
 
     private String sendNotToRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
     private String lockForRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'wrench.png')]";
@@ -220,6 +227,23 @@ public class SettlementPage extends BaseClaimPage {
         return at(CompleteClaimPage.class);
     }
 
+    public SettlementGroupDialog openGroupCreationDialog(){
+        $(groupButton).click();
+        return BaseDialog.at(SettlementGroupDialog.class);
+    }
+
+    public SettlementPage selectLinesByIndex(int... lines) {
+        try {
+            Arrays.stream(lines).forEach(line -> new Actions(driver)
+                    .keyDown(Keys.CONTROL)
+                    .click(claimDescription.get(line))
+                    .keyUp(Keys.CONTROL).build().perform());
+        }catch (IndexOutOfBoundsException e){
+            logger.error(e.getMessage());
+        }
+        return this;
+    }
+
     public boolean isItemPresent(String item) {
         List<WebElement> claims = claimDescription;
         return claims.stream().anyMatch(claim -> claim.getText().equals(item));
@@ -299,7 +323,17 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public Asserts assertSettlementPageIsInFlatView(){
-            assertThat(visible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isFalse();
+            assertThat(invisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSettlementPageIsNotInFlatView(){
+            assertThat(visible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSettlementContainsLinesWithDescriptions(String... descriptions){
+            assertThat(Arrays.stream(descriptions).anyMatch(desc -> claimDescription.stream().anyMatch(claim -> claim.getText().equals(desc)))).isTrue();
             return this;
         }
     }
