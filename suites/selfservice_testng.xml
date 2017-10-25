@@ -8,6 +8,7 @@
                     <include name="loginToSelfService2_0"/>
                     <include name="charlie_1585_auditApprovedClaimAfterFnolSubmit"/>
                     <include name="ecc2631_quickMatchFromSS"/>
+                    <include name="ecc3256_3050_loginToSelfService"/>
                 </methods>
             </class>
         </classes>
