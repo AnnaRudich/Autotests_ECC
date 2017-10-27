@@ -34,6 +34,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
@@ -101,14 +102,14 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public ClaimLine findClaimLine(String description) {
-        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
+        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table | .//*[@id='settlementTreeGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
     }
 
     public ClaimLine parseFirstClaimLine() {
-        By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1]");
+        By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table)[1]");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
@@ -282,6 +283,10 @@ public class SettlementPage extends BaseClaimPage {
         return mainMenu;
     }
 
+    public List<ClaimLine> getLinesByDescription(String... descriptions) {
+        return Arrays.stream(descriptions).map(this::findClaimLine).collect(Collectors.toList());
+    }
+
     public SettlementPage doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
         return SettlementPage.this;
@@ -374,7 +379,11 @@ public class SettlementPage extends BaseClaimPage {
                 this.age = Integer.valueOf(ageValue);
             }
 
-            purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
+            try {
+                purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
+            }catch (Exception e){
+                logger.warn(e.getMessage());
+            }
             String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
@@ -441,6 +450,38 @@ public class SettlementPage extends BaseClaimPage {
 
         public int getDepreciation() {
             return depreciation;
+        }
+
+        public Table getClaimLine() {
+            return claimLine;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public double getPurchasePrice() {
+            return purchasePrice;
+        }
+
+        public double getVoucherPurchaseAmount() {
+            return voucherPurchaseAmount;
+        }
+
+        public String getActualColor() {
+            return actualColor;
+        }
+
+        public String getComputedColor() {
+            return computedColor;
+        }
+
+        public WebElement getDescriptionElement() {
+            return descriptionElement;
+        }
+
+        public double getReplacementPrice() {
+            return replacementPrice;
         }
 
         boolean isTooltipPresent(String expectedText) {
@@ -538,6 +579,11 @@ public class SettlementPage extends BaseClaimPage {
             public Asserts assertAttachmentsIconIsDisplayed(){
                 boolean attachmentsIconPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='hasAttachmentColumn']//img[contains(@src, 'paperclip.png')]")).isDisplayed();
                 assertTrue(attachmentsIconPresent, "Attachment icon should be displayed");
+                return this;
+            }
+
+            public Asserts assertQuanityIs(int quantity){
+                assertThat(getQuantity()).isEqualTo(quantity);
                 return this;
             }
         }
