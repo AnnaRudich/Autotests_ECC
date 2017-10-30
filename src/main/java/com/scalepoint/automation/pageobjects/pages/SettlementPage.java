@@ -235,14 +235,30 @@ public class SettlementPage extends BaseClaimPage {
 
     public SettlementPage selectLinesByIndex(int... lines) {
         try {
-            Arrays.stream(lines).forEach(line -> new Actions(driver)
+            selectLines(lines, claimDescription);
+        }catch (IndexOutOfBoundsException e){
+            logger.error(e.getMessage());
+        }
+        return this;
+    }
+
+    public SettlementPage selectLinesByDescriptions(String... descriptions) {
+        try {
+            Arrays.stream(descriptions).forEach(desc -> new Actions(driver)
                     .keyDown(Keys.CONTROL)
-                    .click(claimDescription.get(line))
+                    .click(claimDescription.stream().filter(line -> line.getText().equals(desc)).findFirst().get())
                     .keyUp(Keys.CONTROL).build().perform());
         }catch (IndexOutOfBoundsException e){
             logger.error(e.getMessage());
         }
         return this;
+    }
+
+    private void selectLines(int[] lines, List<WebElement> element) {
+        Arrays.stream(lines).forEach(line -> new Actions(driver)
+                .keyDown(Keys.CONTROL)
+                .click(element.get(line))
+                .keyUp(Keys.CONTROL).build().perform());
     }
 
     public boolean isItemPresent(String item) {

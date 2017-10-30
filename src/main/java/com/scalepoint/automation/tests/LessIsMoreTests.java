@@ -2,11 +2,9 @@ package com.scalepoint.automation.tests;
 
 
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -24,7 +22,6 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Claim should have group view")
     public void charlie550_createGroups(User user, Claim claim, ClaimItem claimItem) {
         String groupName = "GroupName" + System.currentTimeMillis();
@@ -42,7 +39,7 @@ public class LessIsMoreTests extends BaseTest {
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .closeSidWithOk()
-                .selectLinesByIndex(0, 1)
+                .selectLinesByDescriptions(descriptions)
                 .openGroupCreationDialog()
                 .enterGroupName(groupName)
                 .saveGroup()
@@ -59,6 +56,47 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertAgeIs("-");
                     asserts.assertPurchasePriceIs(0.0);
                     asserts.assertDepreciationIs(-1);
+                });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Claim should have group view")
+    public void charlie550_createGroupsValidateAgeAndQuantity(User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String[] descriptions = {"item1", "item2", "item3"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(1,1))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[1])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(2,2))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[2])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(descriptions)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                });
+
+        settlementPage.findClaimLine(groupName)
+                .doAssert(asserts -> {
+                    asserts.assertQuantityIs(3);
+                    asserts.assertAgeIs("1/7");
                 });
     }
 
