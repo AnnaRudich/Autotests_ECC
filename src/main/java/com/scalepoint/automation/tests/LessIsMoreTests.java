@@ -51,12 +51,14 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.getLinesByDescription(descriptions);
         settlementPage.findClaimLine(groupName)
                 .doAssert(asserts -> {
                     asserts.assertReplacementPriceIs(settlementPage.getLinesByDescription(descriptions).stream()
                             .mapToDouble(SettlementPage.ClaimLine::getReplacementPrice).sum());
-                    asserts.assertQuanityIs(2);
+                    asserts.assertQuantityIs(2);
+                    asserts.assertAgeIs("-");
+                    asserts.assertPurchasePriceIs(0.0);
+                    asserts.assertDepreciationIs(-1);
                 });
     }
 

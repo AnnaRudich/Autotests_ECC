@@ -352,7 +352,7 @@ public class SettlementPage extends BaseClaimPage {
         private String description;
         private String category;
         private int quantity;
-        private int age;
+        private String age;
         private double purchasePrice;
         private int depreciation;
         private double replacementPrice;
@@ -374,10 +374,7 @@ public class SettlementPage extends BaseClaimPage {
             this.category = claimLine.findElement(By.xpath(".//*[@data-columnid='categoryGroupColumn']")).getText();
             this.quantity = Integer.valueOf(claimLine.findElement(By.xpath(".//*[@data-columnid='quantityColumn']")).getText());
 
-            String ageValue = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
-            if (NumberUtils.isNumber(ageValue)) {
-                this.age = Integer.valueOf(ageValue);
-            }
+            this.age  = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
 
             try {
                 purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
@@ -444,7 +441,7 @@ public class SettlementPage extends BaseClaimPage {
             return category;
         }
 
-        public int getAge() {
+        public String getAge() {
             return age;
         }
 
@@ -582,8 +579,18 @@ public class SettlementPage extends BaseClaimPage {
                 return this;
             }
 
-            public Asserts assertQuanityIs(int quantity){
+            public Asserts assertQuantityIs(int quantity){
                 assertThat(getQuantity()).isEqualTo(quantity);
+                return this;
+            }
+
+            public Asserts assertAgeIs(String age){
+                assertThat(getAge()).containsIgnoringCase(age);
+                return this;
+            }
+
+            public Asserts assertDepreciationIs(int depreciation) {
+                assertThat(getDepreciation()).isEqualTo(depreciation);
                 return this;
             }
         }
