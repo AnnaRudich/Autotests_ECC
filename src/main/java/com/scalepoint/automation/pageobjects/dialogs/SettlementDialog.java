@@ -503,6 +503,11 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog clickOK() {
         $(ok).click();
+        try {
+            $(ok).click();
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
         return this;
     }
 
@@ -779,16 +784,30 @@ public class SettlementDialog extends BaseDialog {
     private boolean isDiscretionaryReasonHasRedBorder() {
         String redBorder = "#c30";
         String redBorderRGB = "rgb(204, 51, 0)";
-        waitForDisplayed(By.xpath("//*[@id='discretionary-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]"));
+        if (waitForReasonInvalidAttribute("//*[@id='discretionary-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]")) {
+            return false;
+        }
         return driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
                 && (driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
                 (driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
     }
 
+    private boolean waitForReasonInvalidAttribute(String xpath) {
+        try {
+            waitForDisplayed(By.xpath(xpath));
+        } catch (TimeoutException e) {
+            logger.info(e.getMessage());
+            return true;
+        }
+        return false;
+    }
+
     private boolean isRejectReasonHasRedBorder() {
         String redBorder = "#c30";
         String redBorderRGB = "rgb(204, 51, 0)";
-        waitForDisplayed(By.xpath("//*[@id='reject-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]"));
+        if (waitForReasonInvalidAttribute("//*[@id='reject-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]")) {
+            return false;
+        }
         return driver.findElement(By.id("reject-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
                 && (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
                 (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
