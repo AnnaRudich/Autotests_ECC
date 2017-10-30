@@ -13,8 +13,10 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SettlementGroupDialog extends BaseDialog {
 
@@ -36,23 +38,26 @@ public class SettlementGroupDialog extends BaseDialog {
     @FindBy(name = "valuation")
     private ExtInput valuation;
 
-    @FindBy(id = "create-show-line-amounts-in-mails-checkbox-displayEl")
+    @FindBy(xpath = "//*[contains(@id, 'show-line-amounts-in-mails-checkbox-inputEl')]")
     private ExtCheckbox showLineAmountsInMail;
 
-    @FindBy(xpath = "//input[@name='reason']/ancestor::div[@data-ref='bodyEl']")
+    @FindBy(name = "reason")
     private ExtComboBox reason;
 
     @FindBy(name = "note")
     private ExtText note;
 
-    @FindBy(id = "create-include-in-claim-checkbox-boxLabelEl")
+    @FindBy(xpath = "//*[contains(@id, 'include-in-claim-checkbox-inputEl')]")
     private ExtCheckbox includeInClaim;
 
-    @FindBy(id = "create-group-save-button-btnEl")
+    @FindBy(xpath = "//*[contains(@id, 'group-save-button-btnEl')]")
     private Button saveGroup;
 
-    @FindBy(id = "create-group-close-button-btnInnerEl")
+    @FindBy(xpath = "//*[contains(@id, 'group-close-button-btnInnerEl')]")
     private Button closeGroup;
+
+    @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
+    private WebElement averageAge;
 
     public SettlementGroupDialog enterGroupName(String name){
         groupName.setValue(name);
@@ -79,6 +84,11 @@ public class SettlementGroupDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementGroupDialog enterNote(String note){
+        this.note.sendKeys(note);
+        return this;
+    }
+
     public SettlementGroupDialog selectFirstReason(){
         reason.click();
         List<WebElement> options = driver.findElements(By.xpath("//li[@class='x-boundlist-item']"));
@@ -92,8 +102,8 @@ public class SettlementGroupDialog extends BaseDialog {
     }
 
     public enum GroupTypes{
-        VALUATION($(By.id("create-valuation-group-type-radio-displayEl"))),
-        OVERVIEW($(By.id("create-overview-group-type-radio-displayEl")));
+        VALUATION($(By.xpath("//*[contains(@id, 'valuation-group-type-radio-displayEl')]"))),
+        OVERVIEW($(By.xpath("//*[contains(@id, 'overview-group-type-radio-displayEl')]")));
 
         private WebElement element;
 
@@ -103,6 +113,59 @@ public class SettlementGroupDialog extends BaseDialog {
 
         public WebElement getRadioButton(){
             return element;
+        }
+    }
+
+    public SettlementGroupDialog doAssert(Consumer<SettlementGroupDialog.Asserts> func) {
+        func.accept(new Asserts());
+        return SettlementGroupDialog.this;
+    }
+
+    public class Asserts {
+
+        public Asserts assertAverageAgeIs(String age){
+            assertThat(averageAge.getText()).isEqualToIgnoringCase(age);
+            return this;
+        }
+
+        public Asserts assertIsOverviewChecked(){
+            assertThat(GroupTypes.OVERVIEW.getRadioButton().findElement(By.xpath("./../input")).getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsValuationChecked(){
+            assertThat(GroupTypes.VALUATION.getRadioButton().findElement(By.xpath("./../input")).getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsNewPriceFiledDisabled(){
+            assertThat(newPrice.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsCustomerDemandFiledDisabled(){
+            assertThat(customerDemand.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsReasonFiledDisabled(){
+            assertThat(reason.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsValuationFiledDisabled(){
+            assertThat(valuation.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsIncludeInClaimChecked(){
+            assertThat(includeInClaim.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsShowLineAmountInMailChecked(){
+            assertThat(showLineAmountsInMail.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            return this;
         }
     }
 }

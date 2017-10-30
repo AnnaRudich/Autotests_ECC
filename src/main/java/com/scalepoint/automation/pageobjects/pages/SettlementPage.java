@@ -425,7 +425,17 @@ public class SettlementPage extends BaseClaimPage {
             return SettlementPage.this;
         }
 
+        public SettlementGroupDialog editGroup() {
+            doubleClickClaimLine();
+            return BaseDialog.at(SettlementGroupDialog.class);
+        }
+
         public SettlementDialog editLine() {
+            doubleClickClaimLine();
+            return BaseDialog.at(SettlementDialog.class);
+        }
+
+        private void doubleClickClaimLine() {
             String dblClick = "var targLink    = arguments[0];\n" +
                     "var clickEvent  = document.createEvent ('MouseEvents');\n" +
                     "clickEvent.initEvent ('dblclick', true, true);\n" +
@@ -450,7 +460,6 @@ public class SettlementPage extends BaseClaimPage {
                 logger.error(e.getMessage());
                 ((JavascriptExecutor) driver).executeScript(dblClick,descriptionElement);
             }
-            return BaseDialog.at(SettlementDialog.class);
         }
 
         public String getTooltip() {

@@ -134,4 +134,47 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
+    @Test(dataProvider = "testDataProvider", description = "Create group and check form")
+    public void charlie550_createGroupAndValidateForm(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String[] descriptions = {"item1", "item2"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(2,2))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[1])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(1,1))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(descriptions)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                });
+
+        settlementPage.findClaimLine(groupName)
+                .editGroup()
+                .doAssert(asserts -> {
+                    asserts.assertAverageAgeIs("1/7");
+                    asserts.assertIsOverviewChecked();
+                    asserts.assertIsCustomerDemandFiledDisabled();
+                    asserts.assertIsNewPriceFiledDisabled();
+                    asserts.assertIsIncludeInClaimChecked();
+                    asserts.assertIsReasonFiledDisabled();
+                    asserts.assertIsShowLineAmountInMailChecked();
+                    asserts.assertIsValuationFiledDisabled();
+                });
+    }
+
+
 }
