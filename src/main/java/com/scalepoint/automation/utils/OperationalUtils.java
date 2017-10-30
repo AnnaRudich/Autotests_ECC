@@ -71,5 +71,9 @@ public class OperationalUtils {
     public static String toString(Double actualAmount) {
         return String.format("%.2f", actualAmount);
     }
+
+    public static String toStringWithComma(Double actualAmount) {
+        return String.format("%.2f", actualAmount);
+    }
 }
 

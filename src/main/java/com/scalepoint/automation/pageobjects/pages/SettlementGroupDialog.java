@@ -5,11 +5,14 @@ import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
+
+import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -36,7 +39,7 @@ public class SettlementGroupDialog extends BaseDialog {
     @FindBy(id = "create-show-line-amounts-in-mails-checkbox-displayEl")
     private ExtCheckbox showLineAmountsInMail;
 
-    @FindBy(name = "reason")
+    @FindBy(xpath = "//input[@name='reason']/ancestor::div[@data-ref='bodyEl']")
     private ExtComboBox reason;
 
     @FindBy(name = "note")
@@ -57,7 +60,29 @@ public class SettlementGroupDialog extends BaseDialog {
     }
 
     public SettlementGroupDialog chooseType(GroupTypes type){
-        type.getCheckBox().set(true);
+        type.getRadioButton().click();
+        return this;
+    }
+
+    public SettlementGroupDialog enterNewPrice(Double newPrice){
+        this.newPrice.setValue(OperationalUtils.toStringWithComma(newPrice));
+        return this;
+    }
+
+    public SettlementGroupDialog enterCustomerDemand(Double customerDemand){
+        this.customerDemand.setValue(OperationalUtils.toStringWithComma(customerDemand));
+        return this;
+    }
+
+    public SettlementGroupDialog enterValuation(Double valuation){
+        this.valuation.setValue(OperationalUtils.toStringWithComma(valuation));
+        return this;
+    }
+
+    public SettlementGroupDialog selectFirstReason(){
+        reason.click();
+        List<WebElement> options = driver.findElements(By.xpath("//li[@class='x-boundlist-item']"));
+        options.get(1).click();
         return this;
     }
 
@@ -67,16 +92,16 @@ public class SettlementGroupDialog extends BaseDialog {
     }
 
     public enum GroupTypes{
-        VALUATION($(By.id("create-valuation-group-type-radio-labelEl"))),
-        OVERVIEW($(By.id("create-overview-group-type-radio-bodyEl")));
+        VALUATION($(By.id("create-valuation-group-type-radio-displayEl"))),
+        OVERVIEW($(By.id("create-overview-group-type-radio-displayEl")));
 
-        private ExtCheckbox element;
+        private WebElement element;
 
         GroupTypes(WebElement element){
-            this.element = new ExtCheckbox(element);
+            this.element = element;
         }
 
-        public ExtCheckbox getCheckBox(){
+        public WebElement getRadioButton(){
             return element;
         }
     }

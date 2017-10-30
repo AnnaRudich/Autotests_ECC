@@ -1,7 +1,10 @@
 package com.scalepoint.automation.tests;
 
 
+import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -98,6 +101,37 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertQuantityIs(3);
                     asserts.assertAgeIs("1/7");
                 });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Create valuation group")
+    public void charlie550_createValuationGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String[] descriptions = {"item1"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(descriptions)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
+                .enterValuation(1234.56)
+                .selectFirstReason()
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                });
+
+        settlementPage.findClaimLine(groupName)
+                .doAssert(asserts -> {
+                    asserts.assertReplacementPriceIs(123456);
+                });
+        settlementPage.findClaimLine(descriptions[0])
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
 }
