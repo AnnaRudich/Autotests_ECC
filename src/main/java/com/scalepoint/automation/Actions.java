@@ -140,7 +140,7 @@ public interface Actions {
     }
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
-        element.click();
+        clickUsingJsIfSeleniumClickReturnError(element);
         Wait.waitForDisplayed(byWaitForElement);
     }
 
