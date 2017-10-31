@@ -160,8 +160,9 @@ public class LessIsMoreTests extends BaseTest {
 
         settlementPage.findClaimLine(groupName)
                 .doAssert(asserts -> {
-                    asserts.assertReplacementPriceIs(123456);
+                    asserts.assertReplacementPriceIs(1234.56);
                 });
+
         settlementPage.findClaimLine(descriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
         settlementPage.findClaimLine(descriptions[1])
