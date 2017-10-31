@@ -3,11 +3,15 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -101,41 +105,25 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertQuantityIs(3);
                     asserts.assertAgeIs("1/7");
                 });
-    }
-
-    @Test(dataProvider = "testDataProvider", description = "Create valuation group")
-    public void charlie550_createValuationGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
-        String groupName = "GroupName" + System.currentTimeMillis();
-        String[] descriptions = {"item1"};
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> sid
-                        .withText(descriptions[0])
-                        .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
-                .closeSidWithOk()
-                .selectLinesByDescriptions(descriptions)
-                .openGroupCreationDialog()
-                .enterGroupName(groupName)
-                .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
-                .enterValuation(1234.56)
-                .selectFirstReason()
-                .saveGroup()
-                .doAssert(asserts -> {
-                    asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
-                });
 
         settlementPage.findClaimLine(groupName)
+                .editGroup()
                 .doAssert(asserts -> {
-                    asserts.assertReplacementPriceIs(123456);
+                    asserts.assertAverageAgeIs("1/7");
+                    asserts.assertIsOverviewChecked();
+                    asserts.assertIsCustomerDemandFiledDisabled();
+                    asserts.assertIsNewPriceFiledDisabled();
+                    asserts.assertIsIncludeInClaimChecked();
+                    asserts.assertIsReasonFiledDisabled();
+                    asserts.assertIsShowLineAmountInMailChecked();
+                    asserts.assertIsValuationFiledDisabled();
                 });
-        settlementPage.findClaimLine(descriptions[0])
-                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Create group and check form")
-    public void charlie550_createGroupAndValidateForm(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
+    @Test(dataProvider = "testDataProvider", description = "Create valuation group")
+    public void charlie550_createValuationGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         String groupName = "GroupName" + System.currentTimeMillis();
         String[] descriptions = {"item1", "item2"};
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
@@ -156,6 +144,14 @@ public class LessIsMoreTests extends BaseTest {
                 .selectLinesByDescriptions(descriptions)
                 .openGroupCreationDialog()
                 .enterGroupName(groupName)
+                .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
+                .clickSave()
+                .doAssert(asserts -> {
+                    asserts.assertIsValuationRequired();
+                    asserts.assertIsReasonRequired();
+                })
+                .enterValuation(1234.56)
+                .selectFirstReason()
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
@@ -163,17 +159,121 @@ public class LessIsMoreTests extends BaseTest {
                 });
 
         settlementPage.findClaimLine(groupName)
+                .doAssert(asserts -> {
+                    asserts.assertReplacementPriceIs(123456);
+                });
+        settlementPage.findClaimLine(descriptions[0])
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
+        settlementPage.findClaimLine(descriptions[1])
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
+
+        settlementPage.findClaimLine(groupName)
                 .editGroup()
                 .doAssert(asserts -> {
                     asserts.assertAverageAgeIs("1/7");
-                    asserts.assertIsOverviewChecked();
-                    asserts.assertIsCustomerDemandFiledDisabled();
-                    asserts.assertIsNewPriceFiledDisabled();
+                    asserts.assertIsValuationChecked();
+                    asserts.assertIsCustomerDemandFiledEnabled();
+                    asserts.assertIsNewPriceFiledEnabled();
                     asserts.assertIsIncludeInClaimChecked();
-                    asserts.assertIsReasonFiledDisabled();
+                    asserts.assertIsReasonFiledEnabled();
                     asserts.assertIsShowLineAmountInMailChecked();
-                    asserts.assertIsValuationFiledDisabled();
+                    asserts.assertIsValuationFiledEnabled();
                 });
+    }
+
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "Check reason is not visible")
+    public void charlie550_createValuationGroupWithoutReason(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String description = "item1";
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(description)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withAge(2,2))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(description)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
+                .doAssert(SettlementGroupDialog.Asserts::assertReasonIsNotVisible)
+                .enterValuation(1234.56)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                });
+
+        settlementPage.findClaimLine(description)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
+    }
+
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
+    @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
+    @Test(dataProvider = "testDataProvider", description = "Check if new price is mandatory")
+    public void charlie550_createValuationGroupWithMandatoryNewPrice(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String description = "item1";
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(description)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(description)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
+                .enterValuation(1234.56)
+                .clearNewPriceField()
+                .clickSave()
+                .doAssert(SettlementGroupDialog.Asserts::assertNewPriceIsRequired)
+                .enterNewPrice(1234.56)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                })
+                .findClaimLine(description)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
+    }
+
+    @RunOn(DriverType.CHROME)
+    @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
+    @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "CUSTOMER_DEMAND")
+    @Test(dataProvider = "testDataProvider", description = "Check if new price is mandatory")
+    public void charlie550_createValuationGroupWithMandatoryCustomerDemand(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String description = "item1";
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(description)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(description)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
+                .enterValuation(1234.56)
+                .clearCustomerDemand()
+                .clickSave()
+                .doAssert(SettlementGroupDialog.Asserts::assertCustomerDemandIsRequired)
+                .enterCustomerDemand(1234.56)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                })
+                .findClaimLine(description)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
 
