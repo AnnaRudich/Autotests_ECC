@@ -319,4 +319,40 @@ public class LessIsMoreTests extends BaseTest {
         settlementPage.findClaimLine(description[1])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
     }
+
+    @Test(dataProvider = "testDataProvider", description = "Exclude group from claim")
+    public void charlie550_dragAndDropFromGroupToGroup(User user, Claim claim, ClaimItem claimItem) {
+        String groupName1 = "GroupName1" + System.currentTimeMillis();
+        String groupName2 = "GroupName2" + System.currentTimeMillis();
+        String[] description = {"item1", "item2"};
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(description[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(description[1])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(description[0])
+                .openGroupCreationDialog()
+                .enterGroupName(groupName1)
+                .saveGroup()
+                .selectLinesByDescriptions(description[1])
+                .openGroupCreationDialog()
+                .enterGroupName(groupName2)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName1, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName2, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                })
+                .moveLineFromGroupToGroup(description[0], groupName2)
+                .findClaimLine(groupName2)
+                .doAssert(asserts -> asserts.assertQuantityIs(2));
+    }
 }

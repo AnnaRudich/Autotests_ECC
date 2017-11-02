@@ -324,6 +324,12 @@ public class SettlementPage extends BaseClaimPage {
         return SettlementPage.this;
     }
 
+    public SettlementPage moveLineFromGroupToGroup(String claimLineDescription, String groupName) {
+        new Actions(driver).dragAndDrop(findClaimLine(claimLineDescription).descriptionElement, findClaimLine(groupName).descriptionElement).build().perform();
+        waitForAjaxCompleted();
+        return this;
+    }
+
     public class Asserts {
         public Asserts assertFaceValueTooltipIs(Double expectedPrice) {
             assertEqualsDouble(getFaceTooltipValue(), expectedPrice, "Tooltip face value %s should be assertEqualsDouble to not  depreciated new price %s");

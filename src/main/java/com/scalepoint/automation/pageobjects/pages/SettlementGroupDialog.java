@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SettlementGroupDialog extends BaseDialog {
@@ -103,6 +104,7 @@ public class SettlementGroupDialog extends BaseDialog {
 
     public SettlementPage saveGroup(){
         $(saveGroup).click();
+        waitForAjaxCompleted();
         return BaseClaimPage.at(SettlementPage.class);
     }
 
