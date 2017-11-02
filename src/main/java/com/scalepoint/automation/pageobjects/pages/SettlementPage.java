@@ -76,6 +76,8 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement groupButton;
     @FindBy(xpath = "//span[text()='Opløs gruppe']")
     private WebElement deleteGroupButton;
+    @FindBy(xpath = "//span[contains(@style,'rejectIcon.png')]")
+    private WebElement rejectButton;
 
     private String sendNotToRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
     private String lockForRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'wrench.png')]";
@@ -233,6 +235,12 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementGroupDialog openGroupCreationDialog(){
         $(groupButton).click();
         return BaseDialog.at(SettlementGroupDialog.class);
+    }
+
+    public SettlementPage rejectLines(){
+        $(rejectButton).click();
+        waitForAjaxCompleted();
+        return this;
     }
 
     public SettlementPage deleteGroup(){
@@ -631,6 +639,11 @@ public class SettlementPage extends BaseClaimPage {
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
+                return this;
+            }
+
+            public Asserts assertClaimLineIsRejected() {
+                assertThat(claimLine.findElement(By.xpath(".//tr")).getAttribute("class")).containsIgnoringCase("rejected");
                 return this;
             }
         }

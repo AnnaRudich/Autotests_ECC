@@ -5,13 +5,11 @@ import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -244,7 +242,6 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "CUSTOMER_DEMAND")
@@ -277,5 +274,49 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
+    @Test(dataProvider = "testDataProvider", description = "Exclude group from claim")
+    public void charlie550_excludeGroupFromClaim(User user, Claim claim, ClaimItem claimItem){
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String[] description = {"item1","item2"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(description[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(description[1])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText("itemNotInGroup")
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(description)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                });
 
+        settlementPage.selectLinesByDescriptions(groupName)
+                .rejectLines()
+                .getSettlementSummary()
+                .doAssert(asserts -> asserts.assertSubtotalSumValueIs(PRICE_2400));
+
+        settlementPage.findClaimLine(groupName)
+                .doAssert(asserts -> asserts.assertReplacementPriceIs(0.0));
+
+        settlementPage.findClaimLine(description[0])
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
+
+        settlementPage.findClaimLine(description[1])
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
+    }
 }
