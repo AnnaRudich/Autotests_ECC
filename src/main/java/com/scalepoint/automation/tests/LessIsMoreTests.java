@@ -5,11 +5,13 @@ import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -320,29 +322,30 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Exclude group from claim")
+    @RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider", description = "Move line from group to group")
     public void charlie550_dragAndDropFromGroupToGroup(User user, Claim claim, ClaimItem claimItem) {
         String groupName1 = "GroupName1" + System.currentTimeMillis();
         String groupName2 = "GroupName2" + System.currentTimeMillis();
-        String[] description = {"item1", "item2"};
-        loginAndCreateClaim(user, claim)
+        String[] descriptions = {"item1", "item2"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
-                        .withText(description[0])
+                        .withText(descriptions[0])
                         .withNewPrice(PRICE_2400)
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .closeSidWithOk()
                 .openSidAndFill(sid -> sid
-                        .withText(description[1])
+                        .withText(descriptions[1])
                         .withNewPrice(PRICE_2400)
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .closeSidWithOk()
-                .selectLinesByDescriptions(description[0])
+                .selectLinesByDescriptions(descriptions[0])
                 .openGroupCreationDialog()
                 .enterGroupName(groupName1)
                 .saveGroup()
-                .selectLinesByDescriptions(description[1])
+                .selectLinesByDescriptions(descriptions[1])
                 .openGroupCreationDialog()
                 .enterGroupName(groupName2)
                 .saveGroup()
@@ -350,9 +353,38 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertSettlementPageIsNotInFlatView();
                     asserts.assertSettlementContainsLinesWithDescriptions(groupName1, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                     asserts.assertSettlementContainsLinesWithDescriptions(groupName2, claimItem.getExistingCatWithoutVoucherAndSubCategory());
-                })
-                .moveLineFromGroupToGroup(description[0], groupName2)
+                });
+
+        settlementPage.moveLineFromGroupToGroup(descriptions[0], groupName2)
                 .findClaimLine(groupName2)
-                .doAssert(asserts -> asserts.assertQuantityIs(2));
+                .doAssert(asserts -> {
+                    asserts.assertQuantityIs(2);
+                    asserts.assertReplacementPriceIs(settlementPage.getLinesByDescription(descriptions).stream()
+                            .mapToDouble(SettlementPage.ClaimLine::getReplacementPrice).sum());
+                });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Edit default group")
+    public void charlie550_editDefaultGroup(User user, Claim claim, ClaimItem claimItem) {
+        String groupName1 = "GroupName" + System.currentTimeMillis();
+        String description = "item1";
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(description)
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(description)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName1)
+                .saveGroup()
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName1, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                });
+
+        //TODO: open default group change it name and see if it is visible on settlement page
+
     }
 }
