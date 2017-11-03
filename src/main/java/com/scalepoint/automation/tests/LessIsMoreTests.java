@@ -322,7 +322,6 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Move line from group to group")
     public void charlie550_dragAndDropFromGroupToGroup(User user, Claim claim, ClaimItem claimItem) {
         String groupName1 = "GroupName1" + System.currentTimeMillis();

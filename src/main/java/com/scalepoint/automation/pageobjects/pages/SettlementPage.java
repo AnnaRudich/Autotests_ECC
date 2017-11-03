@@ -113,7 +113,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public ClaimLine parseFirstClaimLine() {
-        By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table)[1]");
+        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table[1]");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
@@ -650,6 +650,16 @@ public class SettlementPage extends BaseClaimPage {
 
             public Asserts assertClaimLineIsRejected() {
                 assertThat(claimLine.findElement(By.xpath(".//tr")).getAttribute("class")).containsIgnoringCase("rejected");
+                return this;
+            }
+
+            public Asserts assertVoucherIconIsDisplayed() {
+                assertThat(claimLine.findElement(By.xpath(".//img[contains(@src, 'icons/voucherIcon.png')]")).isDisplayed()).isTrue();
+                return this;
+            }
+
+            public Asserts assertVoucherTooltipContains(String text) {
+                assertThat(tooltip).containsIgnoringCase(text);
                 return this;
             }
         }
