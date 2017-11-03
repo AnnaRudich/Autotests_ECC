@@ -36,6 +36,12 @@
                 <activatedProperties>qa08</activatedProperties>
             </properties>
         </profile>
+        <profile>
+            <id>stage</id>
+            <properties>
+                <activatedProperties>stage</activatedProperties>
+            </properties>
+        </profile>
     </profiles>
 
     <properties>
