@@ -351,8 +351,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupName1, claimItem.getExistingCatWithoutVoucherAndSubCategory());
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupName2, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName1, groupName2, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
         settlementPage.moveLineFromGroupToGroup(descriptions[0], groupName2)
@@ -364,10 +363,12 @@ public class LessIsMoreTests extends BaseTest {
                 });
     }
 
+    @RunOn(DriverType.CHROME_REMOTE)
     @Test(dataProvider = "testDataProvider", description = "Edit default group")
     public void charlie550_editDefaultGroup(User user, Claim claim, ClaimItem claimItem) {
-        String groupName1 = "GroupName" + System.currentTimeMillis();
+        String groupName = "GroupName" + System.currentTimeMillis();
         String description = "item1";
+        String newDefaultGroupName = "New group name";
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
                         .withText(description)
@@ -377,14 +378,17 @@ public class LessIsMoreTests extends BaseTest {
                 .closeSidWithOk()
                 .selectLinesByDescriptions(description)
                 .openGroupCreationDialog()
-                .enterGroupName(groupName1)
+                .enterGroupName(groupName)
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupName1, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupName, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        //TODO: open default group change it name and see if it is visible on settlement page
-
+        settlementPage.findClaimLine(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+                .editGroup()
+                .enterGroupName(newDefaultGroupName)
+                .saveGroup()
+                .doAssert(asserts -> asserts.assertSettlementContainsLinesWithDescriptions(newDefaultGroupName));
     }
 }
