@@ -4,14 +4,17 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
+@RunOn(value = DriverType.CHROME)
 public class LessIsMoreTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Claim should have flat structure")
@@ -174,6 +177,37 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertIsShowLineAmountInMailChecked();
                     asserts.assertIsValuationFiledDisabled();
                 });
+    }
+
+    @Test(dataProvider="testDataProvider", description = "Delete valuation group")
+    public void charlie_550_deleteGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String[] descriptions = {"item1", "item2"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[1])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(descriptions)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .saveGroup()
+                .selectGroupByName(groupName)
+                .deleteGroup()
+
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(descriptions);
+                 });
+
     }
 
 
