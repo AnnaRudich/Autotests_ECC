@@ -3,14 +3,17 @@ package com.scalepoint.automation.tests.admin;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
+import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
@@ -173,5 +176,19 @@ public class UserRolesTest extends BaseTest {
                 .toUserCreatePage()
                 .createNewSPAdminNewRole(user, role)
                 .doAssert(usersPage->usersPage.assertUserExists(user));
+    }
+
+    @RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-534 generate password works for new user")
+    public void charlie534_generatePasswordForNewUser(SystemUser user){
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUserWithoutSaving(user, ALL_ROLES);
+
+        userAddEditPage.doAssert(asserts -> {
+            asserts.assertIsGenerateButtonVisible();
+            asserts.assertsIsGeneratedPasswordCorect(userAddEditPage.generateAndGetNewPassword() + "1");
+        });
     }
 }
