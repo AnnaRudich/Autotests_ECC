@@ -144,6 +144,7 @@ public class ClaimTests extends BaseTest {
 
         login(user)
                 .openActiveRecentClaim()
+                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
                 .ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");
     }
@@ -281,6 +282,7 @@ public class ClaimTests extends BaseTest {
 
         SettlementDialog settlementDialog = login(user)
                 .openActiveRecentClaim()
+                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
                 .findClaimLine(claimLineDescription)
                 .selectLine()
                 .getToolBarMenu()

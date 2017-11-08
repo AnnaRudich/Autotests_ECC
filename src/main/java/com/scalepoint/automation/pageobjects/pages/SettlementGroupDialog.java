@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SettlementGroupDialog extends BaseDialog {
@@ -96,9 +97,25 @@ public class SettlementGroupDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementGroupDialog clickSave(){
+        $(saveGroup).click();
+        return this;
+    }
+
     public SettlementPage saveGroup(){
         $(saveGroup).click();
+        waitForAjaxCompleted();
         return BaseClaimPage.at(SettlementPage.class);
+    }
+
+    public SettlementGroupDialog clearNewPriceField() {
+        newPrice.clear();
+        return this;
+    }
+
+    public SettlementGroupDialog clearCustomerDemand() {
+        customerDemand.clear();
+        return this;
     }
 
     public enum GroupTypes{
@@ -158,6 +175,26 @@ public class SettlementGroupDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertIsNewPriceFiledEnabled(){
+            assertThat(newPrice.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            return this;
+        }
+
+        public Asserts assertIsCustomerDemandFiledEnabled(){
+            assertThat(customerDemand.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            return this;
+        }
+
+        public Asserts assertIsReasonFiledEnabled(){
+            assertThat(reason.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            return this;
+        }
+
+        public Asserts assertIsValuationFiledEnabled(){
+            assertThat(valuation.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            return this;
+        }
+
         public Asserts assertIsIncludeInClaimChecked(){
             assertThat(includeInClaim.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
@@ -165,6 +202,31 @@ public class SettlementGroupDialog extends BaseDialog {
 
         public Asserts assertIsShowLineAmountInMailChecked(){
             assertThat(showLineAmountsInMail.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsValuationRequired() {
+            assertThat(valuation.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertIsReasonRequired() {
+            assertThat(reason.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertReasonIsNotVisible() {
+            assertThat(isDisplayed(reason)).isFalse();
+            return this;
+        }
+
+        public Asserts assertNewPriceIsRequired() {
+            assertThat(newPrice.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+            return this;
+        }
+
+        public Asserts assertCustomerDemandIsRequired() {
+            assertThat(customerDemand.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
     }

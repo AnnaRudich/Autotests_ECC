@@ -121,7 +121,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public ClaimLine parseFirstClaimLine() {
-        By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table)[1]");
+        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table[1]");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
@@ -245,6 +245,12 @@ public class SettlementPage extends BaseClaimPage {
         return BaseDialog.at(SettlementGroupDialog.class);
     }
 
+    public SettlementPage rejectLines(){
+        $(rejectButton).click();
+        waitForAjaxCompleted();
+        return this;
+    }
+
     public SettlementPage deleteGroup(){
         $(deleteGroupButton).click();
         waitForAjaxCompleted();
@@ -332,6 +338,12 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
         return SettlementPage.this;
+    }
+
+    public SettlementPage moveLineFromGroupToGroup(String claimLineDescription, String groupName) {
+        new Actions(driver).dragAndDrop(findClaimLine(claimLineDescription).descriptionElement, findClaimLine(groupName).descriptionElement).build().perform();
+        waitForAjaxCompleted();
+        return this;
     }
 
     public class Asserts {
@@ -649,6 +661,21 @@ public class SettlementPage extends BaseClaimPage {
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
+                return this;
+            }
+
+            public Asserts assertClaimLineIsRejected() {
+                assertThat(claimLine.findElement(By.xpath(".//tr")).getAttribute("class")).containsIgnoringCase("rejected");
+                return this;
+            }
+
+            public Asserts assertVoucherIconIsDisplayed() {
+                assertThat(claimLine.findElement(By.xpath(".//img[contains(@src, 'icons/voucherIcon.png')]")).isDisplayed()).isTrue();
+                return this;
+            }
+
+            public Asserts assertVoucherTooltipContains(String text) {
+                assertThat(tooltip).containsIgnoringCase(text);
                 return this;
             }
         }
