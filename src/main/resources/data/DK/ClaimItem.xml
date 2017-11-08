@@ -32,6 +32,7 @@
     <existingVoucher4>Dreams for kids</existingVoucher4>
     <brandLinkVoucher4>Dreams for kids</brandLinkVoucher4>
     <excelPath1>C:\ExcelImport\ClaimSheetDK2003.xls</excelPath1>
+    <excelWithGroupingPath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</excelWithGroupingPath>
     <xlsDescr1>samsung</xlsDescr1>
     <depTypePolicy>Policy</depTypePolicy>
     <depTypeDisc>Discretionary</depTypeDisc>

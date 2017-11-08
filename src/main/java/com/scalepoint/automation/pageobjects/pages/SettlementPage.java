@@ -79,6 +79,7 @@ public class SettlementPage extends BaseClaimPage {
 
     private By groupButton = By.xpath("//span[text()='Opret gruppe']");
     private By deleteGroupButton = By.xpath("//span[text()='Opløs gruppe']");
+    private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
 
 
     private String sendNotToRepairLineIconByDescriptionXpath =
@@ -275,13 +276,6 @@ public class SettlementPage extends BaseClaimPage {
                     .keyUp(Keys.CONTROL).build().perform());
         }catch (IndexOutOfBoundsException e){
             logger.error(e.getMessage());
-        }
-        return this;
-    }
-
-    public SettlementPage selectGroupByName(String... groupNames){
-        for (String groupName: groupNames){
-            $(By.xpath("//span[contains(text(),'" + groupName + "') and @class='groupText']")).click();
         }
         return this;
     }

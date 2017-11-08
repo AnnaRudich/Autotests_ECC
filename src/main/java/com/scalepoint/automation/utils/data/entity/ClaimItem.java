@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.name;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -40,6 +43,8 @@ public class ClaimItem {
     private String existingVoucher1;
     @XmlElement
     private String excelPath1;
+    @XmlElement
+    private String excelWithGroupingPath;
     @XmlElement
     private String xlsDescr1;
     @XmlElement
@@ -241,6 +246,10 @@ public class ClaimItem {
 
     public String getExcelPath1() {
         return excelPath1;
+    }
+
+    public String getExcelWithGroupingPath(){
+        return excelWithGroupingPath;
     }
 
     public String getXlsDescr1() {

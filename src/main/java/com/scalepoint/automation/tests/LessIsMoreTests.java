@@ -10,6 +10,7 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
@@ -390,5 +391,47 @@ public class LessIsMoreTests extends BaseTest {
                 .enterGroupName(newDefaultGroupName)
                 .saveGroup()
                 .doAssert(asserts -> asserts.assertSettlementContainsLinesWithDescriptions(newDefaultGroupName));
+    }
+
+
+    @Test(dataProvider="testDataProvider", description = "Delete valuation group")
+    public void charlie_550_deleteGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+        String groupName = "GroupName" + System.currentTimeMillis();
+        String[] descriptions = {"item1", "item2"};
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[0])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .openSidAndFill(sid -> sid
+                        .withText(descriptions[1])
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(descriptions)
+                .openGroupCreationDialog()
+                .enterGroupName(groupName)
+                .saveGroup()
+                .selectLinesByDescriptions(groupName)
+                .deleteGroup()
+
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(descriptions);
+                });
+    }
+
+    @Test(dataProvider="testDataProvider", description = "Excel import with grouping")
+    public void charlie_550_excelImportWithGrouping(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimLineGroup claimLineGroup) {
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .importExcelFile(claimLineGroup.getExcelWithGroupsFilePath())
+                .doAssert(asserts -> {
+                    asserts.assertSettlementPageIsNotInFlatView();
+                    asserts.assertSettlementContainsLinesWithDescriptions(claimLineGroup.getExcelLineGroups());
+                });
     }
 }
