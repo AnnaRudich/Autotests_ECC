@@ -178,7 +178,6 @@ public class UserRolesTest extends BaseTest {
                 .doAssert(usersPage->usersPage.assertUserExists(user));
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-534 generate password works for new user")
     public void charlie534_generatePasswordForNewUser(SystemUser user){
@@ -188,7 +187,36 @@ public class UserRolesTest extends BaseTest {
 
         userAddEditPage.doAssert(asserts -> {
             asserts.assertIsGenerateButtonVisible();
-            asserts.assertsIsGeneratedPasswordCorect(userAddEditPage.generateAndGetNewPassword() + "1");
+            asserts.assertsIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
         });
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-534 generate password works for existing")
+    public void charlie534_generatePasswordForExistingUser(SystemUser user){
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUser(user, ALL_ROLES)
+                .filterByIC(user.getCompany())
+                .openUserForEditing(user.getLogin());
+
+        userAddEditPage.doAssert(asserts -> {
+            asserts.assertIsGenerateButtonVisible();
+            asserts.assertsIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
+        });
+    }
+
+    @RunOn(DriverType.IE)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-534 generate password from prefs")
+    public void charlie534_generatePasswordFromPreferences(SystemUser user){
+        login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUser(user, ALL_ROLES)
+                .toMatchingEngine()
+                .getClaimMenu()
+                .logout()
+                .login(user.getLogin(), user.getPassword(), MyPage.class);
+
     }
 }

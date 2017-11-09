@@ -14,6 +14,8 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -396,8 +398,11 @@ public class UserAddEditPage extends AdminBasePage {
             return this;
         }
 
-        public Asserts assertsIsGeneratedPasswordCorect(String generatedPassword){
-            assertThat(generatedPassword).containsPattern("[^a-zA-Z2-9]");
+        public Asserts assertsIsGeneratedPasswordCorrect(String generatedPassword){
+            String patternStr = "[a-hjkmnp-zA-HJKMNP-Z2-9]+";
+            Pattern pattern = Pattern.compile(patternStr);
+            Matcher matcher = pattern.matcher(generatedPassword);
+            assertThat(matcher.matches()).as("Password " + generatedPassword + " should match this pattern " + patternStr).isTrue();
             return this;
         }
 
