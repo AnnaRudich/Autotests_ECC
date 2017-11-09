@@ -15,7 +15,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
-import com.scalepoint.automation.utils.testng.Retrier;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
@@ -62,7 +61,7 @@ public class EditReasonTests extends BaseTest {
     @RunOn(DriverType.CHROME_REMOTE)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.", retryAnalyzer = Retrier.class)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
     public void charlie508_3_EditReasonPageFromAdmin(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                      Claim claim,
                                                      InsuranceCompany insuranceCompany,
@@ -100,7 +99,7 @@ public class EditReasonTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use", retryAnalyzer = Retrier.class)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
     public void charlie508_5_DeleteReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                Claim claim,
                                                InsuranceCompany insuranceCompany,

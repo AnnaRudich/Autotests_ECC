@@ -9,7 +9,6 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.testng.Retrier;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -19,7 +18,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
 public class GenericItemsTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item", retryAnalyzer = Retrier.class)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 
