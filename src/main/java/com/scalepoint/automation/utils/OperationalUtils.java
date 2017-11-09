@@ -3,7 +3,10 @@ package com.scalepoint.automation.utils;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -70,6 +73,12 @@ public class OperationalUtils {
 
     public static String toString(Double actualAmount) {
         return String.format("%.2f", actualAmount);
+    }
+
+    public static void assertStringMatchingPattern(String patternStr, String text){
+        Pattern pattern = Pattern.compile(patternStr);
+        Matcher matcher = pattern.matcher(text);
+        assertThat(matcher.matches()).as("Password " + text + " should match this pattern " + patternStr).isTrue();
     }
 }
 

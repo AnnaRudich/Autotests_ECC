@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.admin;
 
+import com.scalepoint.automation.pageobjects.pages.EditPreferencesPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
@@ -9,11 +10,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
@@ -206,17 +205,19 @@ public class UserRolesTest extends BaseTest {
         });
     }
 
-    @RunOn(DriverType.IE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-534 generate password from prefs")
     public void charlie534_generatePasswordFromPreferences(SystemUser user){
-        login(getSystemUser(), UsersPage.class)
+        EditPreferencesPage editPreferencesPage = login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, ALL_ROLES)
                 .toMatchingEngine()
-                .getClaimMenu()
-                .logout()
-                .login(user.getLogin(), user.getPassword(), MyPage.class);
+                .openEditPreferences();
+
+        editPreferencesPage.doAssert(asserts -> {
+            asserts.assertIsGenerateButtonVisible();
+            asserts.assertsIsGeneratedPasswordCorrect(editPreferencesPage.generateNewPassword());
+        });
 
     }
 }
