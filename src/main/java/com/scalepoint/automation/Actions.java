@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.forCondition;
 
 public interface Actions {
 
@@ -62,6 +63,7 @@ public interface Actions {
 
     default String getAlertTextAndAccept() {
         try {
+            forCondition(ExpectedConditions.alertIsPresent());
             Alert alert = Browser.driver().switchTo().alert();
             String text = alert.getText();
             alert.accept();
@@ -140,7 +142,7 @@ public interface Actions {
     }
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
-        element.click();
+        clickUsingJsIfSeleniumClickReturnError(element);
         Wait.waitForDisplayed(byWaitForElement);
     }
 
