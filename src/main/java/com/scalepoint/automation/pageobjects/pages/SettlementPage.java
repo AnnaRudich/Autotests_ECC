@@ -17,6 +17,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
@@ -39,6 +40,9 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
+import static com.scalepoint.automation.utils.Constants.AGE_YEAR;
+import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.invisible;
 import static com.scalepoint.automation.utils.Wait.visible;
@@ -209,6 +213,20 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementDialog openSidAndFill(Consumer<SettlementDialog.FormFiller> fillfunc) {
         return openSid().setDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
+
+    public SettlementPage addLines(ClaimItem claimItem, String... lineDescriptions) {
+        for (String lineDescription : lineDescriptions) {
+            openSidAndFill(sid -> sid
+                    .withText(lineDescription)
+                    .withNewPrice(PRICE_2400)
+                    .withCategory(claimItem.getCategoryGroupBorn())
+                    .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                    .withAge(AGE_YEAR, AGE_MONTH))
+                    .closeSidWithOk();
+        }
+        return this;
+    }
+
 
     public void cancelClaim() {
         settlementSummary.cancel();

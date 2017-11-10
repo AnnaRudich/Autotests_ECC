@@ -6,9 +6,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
-
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.name;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
