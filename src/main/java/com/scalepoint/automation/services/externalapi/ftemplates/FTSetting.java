@@ -56,7 +56,9 @@ public enum FTSetting {
     ENABLE_REPAIR_VALUATION_AUTO_SETTLING("input[name=ftAutoApprovalFlag][value='1']", CHECKBOX),
     ENABLE_COLLECTING_SELFRISK_BY_IC("input[name=ftCollectSelfRisk][value='1']", CHECKBOX),
 
-    PAYOUT_TO_CHEQUE_CLAIMSHANDLER("input[name=ftpaymentflag][value='1']", CHECKBOX);
+    PAYOUT_TO_CHEQUE_CLAIMSHANDLER("input[name=ftpaymentflag][value='1']", CHECKBOX),
+
+    USER_PASSWORD_VALIDATION_STRATEGY("select[name='ftUserPasswordValidationStrategy']", SELECT);
 
 
     private String locator;

@@ -5,7 +5,6 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
-import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.tests.BaseTest;
@@ -15,16 +14,14 @@ import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.SUPPLYMANAGER;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
+import static com.scalepoint.automation.utils.Constants.ALL_ROLES;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-537")
 public class UserRolesTest extends BaseTest {
-
-    private static final UserType[] ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
 
     /**
      * GIVEN: SP user U1 with Admin permissions

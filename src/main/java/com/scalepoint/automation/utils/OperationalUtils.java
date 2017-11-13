@@ -78,7 +78,7 @@ public class OperationalUtils {
     public static void assertStringMatchingPattern(String patternStr, String text){
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(text);
-        assertThat(matcher.matches()).as("Password " + text + " should match this pattern " + patternStr).isTrue();
+        assertThat(matcher.matches()).as("String " + text + " should match this pattern " + patternStr).isTrue();
     }
 }
 
