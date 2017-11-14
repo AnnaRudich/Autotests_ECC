@@ -41,6 +41,8 @@ public class ClaimItem {
     @XmlElement
     private String excelPath1;
     @XmlElement
+    private String excelWithGroupingPath;
+    @XmlElement
     private String xlsDescr1;
     @XmlElement
     private String depTypePolicy;
@@ -241,6 +243,10 @@ public class ClaimItem {
 
     public String getExcelPath1() {
         return excelPath1;
+    }
+
+    public String getExcelWithGroupingPath(){
+        return excelWithGroupingPath;
     }
 
     public String getXlsDescr1() {

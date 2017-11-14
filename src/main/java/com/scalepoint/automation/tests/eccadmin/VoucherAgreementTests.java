@@ -13,6 +13,7 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Supplier;
 import com.scalepoint.automation.utils.data.entity.Voucher;
@@ -25,11 +26,59 @@ import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgre
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PERSONAL_CODE_REQUIRED;
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PHONE_REQUIRED;
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.USE_PORTAL_REQUIRED;
+import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
 public class VoucherAgreementTests extends BaseTest {
 
     private static final String AUTOTEST_SUPPLIER_VA_TESTS = "Autotest-Supplier-VA-Tests";
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Create voucher with brands and tags and later use it in sid")
+    public void charlie550_createVoucherWithBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher){
+        String brand = "brand_test";
+        String tag = "tag_test";
+        loginToEccAdmin(user)
+                .editSupplier(Constants.getSupplierNameForVATests(user))
+                .selectAgreementsTab()
+                .openCreateVoucherAgreementDialog()
+                .fill(createVoucherAgreementDialog -> {
+                    new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
+                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withAgreementDiscount(10);
+                })
+                .createVoucherAgreement()
+                .selectCategoriesTab()
+                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .selectCoverageTab()
+                .setBrands(brand)
+                .setTags(tag)
+                .saveVoucherAgreement()
+                .saveSupplier()
+                .toVouchersPage()
+                .doAssert(page -> page.assertVoucherPresent(voucher.getVoucherGeneratedName()))
+                .signOut();
+
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withText("item1")
+                        .withNewPrice(PRICE_2400)
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withVoucher(voucher.getVoucherGeneratedName()))
+                .openEditDiscountDistributionForVoucher()
+                .doAssert(asserts -> {
+                    asserts.assertBrandsTextIs(brand);
+                    asserts.assertTagsTextIs(tag);
+                }).closeDialogWithOk()
+                .closeSidWithOk()
+                .parseFirstClaimLine()
+                .doAssert(asserts -> {
+                    asserts.assertVoucherIconIsDisplayed();
+                    asserts.assertVoucherTooltipContains(brand);
+                    asserts.assertVoucherTooltipContains(tag);
+                });
+    }
 
     /**
      * GIVEN: User with Supply Manager credentials

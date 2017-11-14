@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -25,6 +27,9 @@ public class ClaimLineGroup {
     private String valuation;
     @XmlElement
     private String filePath;
+    @XmlElement
+    private String[] excelLineGroups;
+
 
     public String getOverviewGroupName() {
         return overviewGroupName;
@@ -56,5 +61,8 @@ public class ClaimLineGroup {
 
     public String getExcelWithGroupsFilePath() {
         return filePath;
+    }
+    public String[] getExcelLineGroups(){
+        return excelLineGroups;
     }
 }
