@@ -13,7 +13,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.*;
@@ -22,56 +21,33 @@ import static com.scalepoint.automation.utils.Constants.*;
 @RunOn(DriverType.CHROME)
 public class LessIsMoreTests extends BaseTest {
 
-    private String groupDescription;
-    private String[] lineDescriptions;
-
-    public void setGroupDescription(String groupDescription) {
-        this.groupDescription = groupDescription;
-    }
-
-    public String getGroupDescription() {
-        return this.groupDescription;
-    }
-
-    public void setLineDescriptions(String... lineDescriptions) {
-        this.lineDescriptions = lineDescriptions;
-    }
-
-    public String[] getLineDescriptions() {
-        return this.lineDescriptions;
-    }
-
-
-    @BeforeTest
-    public void generateLineAndGroupDescriptions() {
-        setGroupDescription("GroupName" + System.currentTimeMillis());
-        setLineDescriptions("item1", "item2", "item3");
-    }
+    private String groupDescription = "GroupName" + System.currentTimeMillis();
+    private String[] lineDescriptions = new String[]{"item1", "item2", "item3"};
 
 
     @Test(dataProvider = "testDataProvider", description = "Claim should have flat structure")
     public void charlie550_claimHaveFlatStructure(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0])
+                .addLines(claimItem, lineDescriptions[0])
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
     }
 
     @Test(dataProvider = "testDataProvider", description = "Claim should have group view")
     public void charlie550_createGroups(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0], getLineDescriptions()[1])
-                .selectLinesByDescriptions(getLineDescriptions()[0], getLineDescriptions()[1])
+                .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
+                .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.findClaimLine(getGroupDescription())
+        settlementPage.findClaimLine(groupDescription)
                 .doAssert(asserts -> {
-                    asserts.assertReplacementPriceIs(settlementPage.getLinesByDescription(getLineDescriptions()[0], getLineDescriptions()[1]).stream()
+                    asserts.assertReplacementPriceIs(settlementPage.getLinesByDescription(lineDescriptions[0], lineDescriptions[1]).stream()
                             .mapToDouble(SettlementPage.ClaimLine::getReplacementPrice).sum());
                     asserts.assertQuantityIs(2);
                     asserts.assertAgeIs("1/1");
@@ -84,23 +60,23 @@ public class LessIsMoreTests extends BaseTest {
     public void charlie550_createGroupsValidateAgeAndQuantity(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
 
-                .addLines(claimItem, getLineDescriptions())
-                .selectLinesByDescriptions(getLineDescriptions())
+                .addLines(claimItem, lineDescriptions)
+                .selectLinesByDescriptions(lineDescriptions)
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.findClaimLine(getGroupDescription())
+        settlementPage.findClaimLine(groupDescription)
                 .doAssert(asserts -> {
                     asserts.assertQuantityIs(3);
                     asserts.assertAgeIs("1/1");
                 });
 
-        settlementPage.findClaimLine(getGroupDescription())
+        settlementPage.findClaimLine(groupDescription)
                 .editGroup()
                 .doAssert(asserts -> {
                     asserts.assertAverageAgeIs("1/1");
@@ -119,10 +95,10 @@ public class LessIsMoreTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Create valuation group")
     public void charlie550_createValuationGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0], getLineDescriptions()[1])
-                .selectLinesByDescriptions(getLineDescriptions()[0], getLineDescriptions()[1])
+                .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
+                .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
                 .clickSave()
                 .doAssert(asserts -> {
@@ -134,20 +110,20 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.findClaimLine(getGroupDescription())
+        settlementPage.findClaimLine(groupDescription)
                 .doAssert(asserts -> {
                     asserts.assertReplacementPriceIs(1234.56);
                 });
 
-        settlementPage.findClaimLine(getLineDescriptions()[0])
+        settlementPage.findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
-        settlementPage.findClaimLine(getLineDescriptions()[1])
+        settlementPage.findClaimLine(lineDescriptions[1])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
 
-        settlementPage.findClaimLine(getGroupDescription())
+        settlementPage.findClaimLine(groupDescription)
                 .editGroup()
                 .doAssert(asserts -> {
                     asserts.assertAverageAgeIs("1/1");
@@ -166,20 +142,20 @@ public class LessIsMoreTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check reason is not visible")
     public void charlie550_createValuationGroupWithoutReason(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-               .addLines(claimItem, getLineDescriptions()[0])
-                .selectLinesByDescriptions(getLineDescriptions()[0])
+               .addLines(claimItem, lineDescriptions[0])
+                .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
                 .doAssert(SettlementGroupDialog.Asserts::assertReasonIsNotVisible)
                 .enterValuation(1234.56)
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.findClaimLine(getLineDescriptions()[0])
+        settlementPage.findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
@@ -189,10 +165,10 @@ public class LessIsMoreTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if new price is mandatory")
     public void charlie550_createValuationGroupWithMandatoryNewPrice(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0])
-                .selectLinesByDescriptions(getLineDescriptions()[0])
+                .addLines(claimItem, lineDescriptions[0])
+                .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
                 .enterValuation(1234.56)
                 .clearNewPriceField()
@@ -202,9 +178,9 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 })
-                .findClaimLine(getLineDescriptions()[0])
+                .findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
@@ -214,10 +190,10 @@ public class LessIsMoreTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if new price is mandatory")
     public void charlie550_createValuationGroupWithMandatoryCustomerDemand(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0])
-                .selectLinesByDescriptions(getLineDescriptions()[0])
+                .addLines(claimItem, lineDescriptions[0])
+                .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .chooseType(SettlementGroupDialog.GroupTypes.VALUATION)
                 .enterValuation(1234.56)
                 .clearCustomerDemand()
@@ -227,64 +203,64 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 })
-                .findClaimLine(getLineDescriptions()[0])
+                .findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
     }
 
     @Test(dataProvider = "testDataProvider", description = "Exclude group from claim")
     public void charlie550_excludeGroupFromClaim(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0], getLineDescriptions()[1])
+                .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .addLines(claimItem, "itemNotInGroup")
-                .selectLinesByDescriptions(getLineDescriptions()[0], getLineDescriptions()[1])
+                .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getLineDescriptions()[0], getLineDescriptions()[1], claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(lineDescriptions[0], lineDescriptions[1], claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.selectLinesByDescriptions(getGroupDescription())
+        settlementPage.selectLinesByDescriptions(groupDescription)
                 .rejectLines()
                 .getSettlementSummary()
                 .doAssert(asserts -> asserts.assertSubtotalSumValueIs(PRICE_2400-PRICE_2400*0.2));//minus voucher depreciation, which is applied by default
 
-        settlementPage.findClaimLine(getGroupDescription())
+        settlementPage.findClaimLine(groupDescription)
                 .doAssert(asserts -> asserts.assertReplacementPriceIs(0.0));
 
-        settlementPage.findClaimLine(getLineDescriptions()[0])
+        settlementPage.findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
 
-        settlementPage.findClaimLine(getLineDescriptions()[1])
+        settlementPage.findClaimLine(lineDescriptions[1])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
     }
 
     @Test(dataProvider = "testDataProvider", description = "Move line from group to group")
     public void charlie550_dragAndDropFromGroupToGroup(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0], getLineDescriptions()[1])
+                .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
 
-                .selectLinesByDescriptions(getLineDescriptions()[0])
+                .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription() + "#1")
+                .enterGroupName(groupDescription + "#1")
                 .saveGroup()
-                .selectLinesByDescriptions(getLineDescriptions()[1])
+                .selectLinesByDescriptions(lineDescriptions[1])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription() + "#2")
+                .enterGroupName(groupDescription + "#2")
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription() + "#1", getGroupDescription() + "#2", claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription + "#1", groupDescription + "#2", claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
-        settlementPage.moveLineFromGroupToGroup(getLineDescriptions()[0], getGroupDescription() + "#2")
-                .findClaimLine(getGroupDescription() + "#2")
+        settlementPage.moveLineFromGroupToGroup(lineDescriptions[0], groupDescription + "#2")
+                .findClaimLine(groupDescription + "#2")
                 .doAssert(asserts -> {
                     asserts.assertQuantityIs(2);
-                    asserts.assertReplacementPriceIs(settlementPage.getLinesByDescription(getLineDescriptions()[0], getLineDescriptions()[1]).stream()
+                    asserts.assertReplacementPriceIs(settlementPage.getLinesByDescription(lineDescriptions[0], lineDescriptions[1]).stream()
                             .mapToDouble(SettlementPage.ClaimLine::getReplacementPrice).sum());
                 });
     }
@@ -292,38 +268,38 @@ public class LessIsMoreTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Edit default group")
     public void charlie550_editDefaultGroup(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0], getLineDescriptions()[1])
-                .selectLinesByDescriptions(getLineDescriptions()[0])
+                .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
+                .selectLinesByDescriptions(lineDescriptions[0])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription(), claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
                 });
 
         settlementPage.findClaimLine(claimItem.getExistingCatWithoutVoucherAndSubCategory())
                 .editGroup()
-                .enterGroupName(getGroupDescription() + "#newDefault")
+                .enterGroupName(groupDescription + "#newDefault")
                 .saveGroup()
-                .doAssert(asserts -> asserts.assertSettlementContainsLinesWithDescriptions(getGroupDescription() + "#newDefault"));
+                .doAssert(asserts -> asserts.assertSettlementContainsLinesWithDescriptions(groupDescription + "#newDefault"));
     }
 
 
     @Test(dataProvider = "testDataProvider", description = "Delete valuation group")
     public void charlie_550_deleteGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .addLines(claimItem, getLineDescriptions()[0], getLineDescriptions()[1])
-                .selectLinesByDescriptions(getLineDescriptions()[0], getLineDescriptions()[1])
+                .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
+                .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
                 .openGroupCreationDialog()
-                .enterGroupName(getGroupDescription())
+                .enterGroupName(groupDescription)
                 .saveGroup()
-                .selectLinesByDescriptions(getGroupDescription())
+                .selectLinesByDescriptions(groupDescription)
                 .deleteGroup()
 
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(getLineDescriptions()[0], getLineDescriptions()[1]);
+                    asserts.assertSettlementContainsLinesWithDescriptions(lineDescriptions[0], lineDescriptions[1]);
                 });
     }
 

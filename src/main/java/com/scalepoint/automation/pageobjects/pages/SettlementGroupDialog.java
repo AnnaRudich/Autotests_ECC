@@ -51,14 +51,13 @@ public class SettlementGroupDialog extends BaseDialog {
     @FindBy(xpath = "//*[contains(@id, 'include-in-claim-checkbox-inputEl')]")
     private ExtCheckbox includeInClaim;
 
-    @FindBy(xpath = "//*[contains(@id, 'group-save-button-btnEl')]")
-    private Button saveGroup;
-
-    @FindBy(xpath = "//*[contains(@id, 'group-close-button-btnInnerEl')]")
-    private Button closeGroup;
-
     @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
     private WebElement averageAge;
+
+
+    private By saveGroup = By.xpath("//*[contains(@id, 'group-save-button-btnEl')]");
+    private By closeGroup = By.xpath("//*[contains(@id, 'group-close-button-btnInnerEl')]");
+
 
     public SettlementGroupDialog enterGroupName(String name){
         groupName.setValue(name);
