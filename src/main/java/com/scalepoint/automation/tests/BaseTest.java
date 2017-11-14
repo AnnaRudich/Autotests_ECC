@@ -69,14 +69,16 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 @Listeners({InvokedMethodListener.class})
 public class BaseTest extends AbstractBaseTest {
 
+    private DriverType driverType = null;
+
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
         Thread.currentThread().setName("Thread "+method.getName());
         MDC.put("sessionid", method.getName());
         logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
-        DriverType driverType = method.getAnnotation(RunOn.class) != null
-                ? method.getAnnotation(RunOn.class).value() : DriverType.findByProfile(browserMode);
+        driverType = getDriverType(method);
+
         WebDriver driver = DriversFactory.getDriver(driverType);
 
         Browser.init(driver, driverType);
@@ -87,6 +89,27 @@ public class BaseTest extends AbstractBaseTest {
         driver.manage().window().maximize();
 
         Configuration.savePageSource = false;
+    }
+
+    public DriverType getDriverType(Method method) {
+
+        Class aClass = method.getDeclaringClass();
+
+        if (method.getAnnotation(RunOn.class) != null){
+            driverType = method.getAnnotation(RunOn.class).value();
+
+        } else if (driverType == null) {
+            Annotation[] annotations = aClass.getAnnotations();
+            for (Annotation annotation: annotations){
+                if(annotation instanceof RunOn){
+                    driverType = ((RunOn) annotation).value();
+                }
+            }
+            if (driverType == null){
+                driverType = DriverType.findByProfile(browserMode);
+            }
+        }
+        return driverType;
     }
 
     @AfterMethod

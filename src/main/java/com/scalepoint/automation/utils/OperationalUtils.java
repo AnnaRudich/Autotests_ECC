@@ -63,22 +63,27 @@ public class OperationalUtils {
     }
 
     public static void assertEqualsDoubleWithTolerance(Double actualAmount, Double expectedAmount) {
-        assertEqualsDoubleWithTolerance(actualAmount,expectedAmount,"Actual: %s Expected: %s");
+        assertEqualsDoubleWithTolerance(actualAmount, expectedAmount, "Actual: %s Expected: %s");
     }
 
     public static void assertEqualsDoubleWithTolerance(Double actualAmount, Double expectedAmount, String message) {
         int tolerance = 2;
-        assertTrue(Math.abs(actualAmount-expectedAmount) <= Math.pow(10,-tolerance), String.format(message, actualAmount, expectedAmount) );
+        assertTrue(Math.abs(actualAmount - expectedAmount) <= Math.pow(10, -tolerance), String.format(message, actualAmount, expectedAmount));
     }
 
     public static String toString(Double actualAmount) {
         return String.format("%.2f", actualAmount);
     }
 
-    public static void assertStringMatchingPattern(String patternStr, String text){
+    public static String toStringWithComma(Double actualAmount) {
+        return String.format("%.2f", actualAmount).replace(".", ",");
+    }
+
+    public static void assertStringMatchingPattern(String patternStr, String text) {
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(text);
         assertThat(matcher.matches()).as("String " + text + " should match this pattern " + patternStr).isTrue();
     }
 }
+
 

@@ -18,6 +18,9 @@ public class Constants {
     public static final Double PRICE_100_000 = 100_000.00;
     public static final Double PRICE_500 = 500.00;
 
+    public static final int AGE_MONTH = 1;
+    public static final int AGE_YEAR = 1;
+
     public static final Integer DEPRECIATION_10 = 10;
     public static final Integer VOUCHER_DISCOUNT_10 = 10;
 
