@@ -18,9 +18,7 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.ALL_ROLES;
 
-/**
- * Created by bza on 11/13/2017.
- */
+@RunOn(DriverType.CHROME_REMOTE)
 public class UserPasswordTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
@@ -32,7 +30,7 @@ public class UserPasswordTests extends BaseTest {
 
         userAddEditPage.doAssert(asserts -> {
             asserts.assertIsGenerateButtonVisible();
-            asserts.assertsIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
+            asserts.assertIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
         });
     }
 
@@ -47,7 +45,7 @@ public class UserPasswordTests extends BaseTest {
 
         userAddEditPage.doAssert(asserts -> {
             asserts.assertIsGenerateButtonVisible();
-            asserts.assertsIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
+            asserts.assertIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
         });
     }
 
@@ -66,17 +64,56 @@ public class UserPasswordTests extends BaseTest {
         });
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.USER_PASSWORD_VALIDATION_STRATEGY, value = "Basic")
     @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
     public void charlie528_basicPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser){
-        systemUser.setPassword("qwertyuiop");
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage();
 
-        login(getSystemUser(), UsersPage.class)
-                .toUserCreatePage()
-                .createUser(systemUser, ALL_ROLES)
+        trySetPassword(systemUser, userAddEditPage, "qwertyuio");
+        trySetPassword(systemUser, userAddEditPage, systemUser.getLogin()+"333");
+
+        systemUser.setPassword("dupadupa312");
+        userAddEditPage.createUser(systemUser, ALL_ROLES)
                 .doAssert(usersPage->usersPage.assertUserExists(systemUser))
                 .logout()
                 .login(systemUser.getLogin(), systemUser.getPassword(), MyPage.class);
+    }
+
+    @RequiredSetting(type = FTSetting.USER_PASSWORD_VALIDATION_STRATEGY, value = "Default")
+    @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
+    public void charlie528_defaultPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser){
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage();
+
+        trySetPassword(systemUser, userAddEditPage, "qwer");
+
+        systemUser.setPassword("qwertyuio");
+        userAddEditPage.createUser(systemUser, ALL_ROLES)
+                .doAssert(usersPage->usersPage.assertUserExists(systemUser))
+                .logout()
+                .login(systemUser.getLogin(), systemUser.getPassword(), MyPage.class);
+    }
+
+    @RequiredSetting(type = FTSetting.USER_PASSWORD_VALIDATION_STRATEGY, value = "Custom")
+    @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
+    public void charlie528_customPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser){
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage();
+
+        trySetPassword(systemUser, userAddEditPage, "dupadupa312");
+
+        systemUser.setPassword("DupaDupa213");
+        userAddEditPage.createUser(systemUser, ALL_ROLES)
+                .doAssert(usersPage->usersPage.assertUserExists(systemUser))
+                .logout()
+                .login(systemUser.getLogin(), systemUser.getPassword(), MyPage.class);
+    }
+
+    private void trySetPassword(SystemUser systemUser, UserAddEditPage userAddEditPage, String text) {
+        systemUser.setPassword(text);
+        userAddEditPage.createUserWithoutSaving(systemUser, ALL_ROLES)
+                .selectSaveOption(UserAddEditPage.class)
+                .doAssert(UserAddEditPage.Asserts::assertIsAlertPresent);
     }
 }
