@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 
 public class MainMenu extends Module {
@@ -36,43 +37,43 @@ public class MainMenu extends Module {
     private Button customerDetails;
 
     public VouchersPage toEccAdminPage() {
-        suppliers.click();
+        $(suppliers).click();
         return at(VouchersPage.class);
     }
 
     public AdminPage toAdminPage() {
-        admin.click();
+        $(admin).click();
         return at(AdminPage.class);
     }
 
     public void logOut() {
-        signOut.click();
+        clickUsingJsIfSeleniumClickReturnError(signOut);
         acceptAlert();
     }
 
     public void myPage() {
-        myPage.click();
+        $(myPage).click();
     }
 
     public NewCustomerPage newCustomer() {
-        newCustomer.click();
+        $(newCustomer).click();
         return at(NewCustomerPage.class);
     }
 
     public void search() {
-        search.click();
+        $(search).click();
     }
 
     public boolean isClaimInfoBlockPresent() {
-        return claimInfo.isDisplayed();
+        return $(claimInfo).isDisplayed();
     }
 
     public void customerDetailsOpen() {
-        customerDetails.click();
+        $(customerDetails).click();
     }
 
     public void claimInfoOpen() {
-        claimInfo.click();
+        $(claimInfo).click();
     }
 }
 

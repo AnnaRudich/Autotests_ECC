@@ -74,6 +74,20 @@ public class TextSearch {
     private String nonorderableProduct2;
     @XmlElement
     private String bnOProduct;
+    @XmlElement
+    private String brand1;
+    @XmlElement
+    private String model1;
+    @XmlElement
+    private String group1;
+    @XmlElement
+    private String subgroup1;
+    @XmlElement
+    private String subgroup2;
+    @XmlElement
+    private String brokenQuery1;
+    @XmlElement
+    private String brokenQueryWithSpecialSymbols1;
 
     @XmlElement
     private String bnOProduct2;
@@ -213,5 +227,33 @@ public class TextSearch {
 
     public String getProductWithOnlyVoucherHandling2() {
         return bnOProduct2;
+    }
+
+    public String getBrand1() {
+        return brand1;
+    }
+
+    public String getModel1() {
+        return model1;
+    }
+
+    public String getGroup1() {
+        return group1;
+    }
+
+    public String getSubgroup1() {
+        return subgroup1;
+    }
+
+    public String getSubgroup2() {
+        return subgroup2;
+    }
+
+    public String getBrokenQuery1() {
+        return brokenQuery1;
+    }
+
+    public String getBrokenQueryWithSpecialSymbols1() {
+        return brokenQueryWithSpecialSymbols1;
     }
 }

@@ -15,6 +15,8 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+
 @EccPage
 @ClaimSpecificPage
 public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelpers {
@@ -53,7 +55,7 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public NotesPage addInternalNote(String note) {
         Wait.waitForVisible(addInternalNote);
-        addInternalNote.click();
+        $(addInternalNote).click();
         return BaseDialog.at(AddInternalNoteDialog.class).addInternalNote(note, NotesPage.class);
     }
 

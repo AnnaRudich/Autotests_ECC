@@ -39,32 +39,32 @@ public class SettlementSummary extends Module {
     private WebElement subtotalValue;
 
     public void cancel() {
-        cancel.click();
+        clickUsingJsIfSeleniumClickReturnError(cancel);
     }
 
     public void saveClaim() {
         if (!saveClaim.isDisplayed()) {
             expand();
         }
-        saveClaim.click();
+        clickUsingJsIfSeleniumClickReturnError(saveClaim);
     }
 
     public void completeClaim() {
         if (!completeClaim.isDisplayed()) {
             expand();
         }
-        completeClaim.click();
+        clickUsingJsIfSeleniumClickReturnError(completeClaim);
     }
 
     public void completeClaimWithoutMail() {
         if (!completeClaimExternally.isDisplayed()) {
             expand();
         }
-        completeClaimExternally.click();
+        clickUsingJsIfSeleniumClickReturnError(completeClaimExternally);
     }
 
     private void expand() {
-        expand.click();
+        clickUsingJsIfSeleniumClickReturnError(expand);
         Wait.waitForDisplayed(By.id("finishCaseBtn"));
     }
 

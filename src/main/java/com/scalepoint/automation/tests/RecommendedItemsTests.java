@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-587")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class RecommendedItemsTests extends BaseTest {
 
@@ -35,15 +34,16 @@ public class RecommendedItemsTests extends BaseTest {
      *
      * ecc3278_productPricesInShopWelcome
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-587 Only product prices are displayed in Product catalog in Shop")
     public void ecc3278_productPricesInShopCatalog(User user, Claim claim) {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductCashValue productInvoiceGtMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceHigherMarket, textSearchPage, null);
-        ProductCashValue productInvoiceEqualMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceEqualMarket, textSearchPage, null);
-        ProductCashValue productInvoiceLtMarketCash = findProductAdnAddToClaim(SolrApi::findProductInvoiceLowerMarket, textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
+        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceHigherMarket, textSearchPage, null);
+        ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceEqualMarket, textSearchPage, null);
+        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceLowerMarket, textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
 
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
                 .toCompleteClaimPage()
@@ -104,10 +104,10 @@ public class RecommendedItemsTests extends BaseTest {
                 .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLowerMarket.getInvoicePrice()));
     }
 
-    private ProductCashValue findProductAdnAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
+    private ProductCashValue findProductAndAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
         ProductInfo productInfo = searchStrategy.get();
         SettlementDialog settlementDialog = textSearchPage
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
                 .matchStrict(productInfo.getModel());
 
         Double cashCompensationFieldValue = settlementDialog.getCashCompensationValue();

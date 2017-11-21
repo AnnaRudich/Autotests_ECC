@@ -20,6 +20,19 @@ public abstract class BaseDialog implements Actions {
 
     protected abstract BaseDialog ensureWeAreAt();
 
+    protected boolean areWeAt() {
+        return false;
+    }
+
+    public static <T extends BaseDialog> boolean isOn(Class<T> baseDialogClass) {
+        try {
+            T t = baseDialogClass.newInstance();
+            return t.areWeAt();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
+        }
+    }
+
     public static <T extends BaseDialog> T at(Class<T> baseDialogClass) {
         try {
             T t = baseDialogClass.newInstance();

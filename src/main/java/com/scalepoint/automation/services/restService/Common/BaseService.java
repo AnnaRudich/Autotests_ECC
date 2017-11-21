@@ -6,15 +6,15 @@ import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by bza on 6/29/2017.
  */
 public class BaseService {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LogManager.getLogger(getClass());
     protected Data data;
 
     public Data getData(){

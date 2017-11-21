@@ -1,5 +1,8 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
@@ -19,12 +22,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Link;
 import ru.yandex.qatools.htmlelements.element.Table;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
@@ -43,6 +50,10 @@ import java.util.stream.IntStream;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
+import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertEqualsNoOrder;
@@ -178,6 +189,12 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(xpath = "//div[@id='status_product_match_card']//div[contains(@id, 'displayfield')]/b")
     private WebElement statusMatchedDisplayField;
+
+    @FindBy(id = "documentation-ok-checkbox-inputEl")
+    private CheckBox sufficientDocumentation;
+
+    @FindBy(id = "reject-checkbox-displayEl")
+    private CheckBox rejectCheckbox;
 
     public enum ValuationGridColumn {
         CHECK_COLUMN("active-valuation-checkcolumn"),
@@ -336,6 +353,17 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    @Override
+    protected boolean areWeAt() {
+        Wait.waitForAjaxCompleted();
+        try {
+            return cancelButton.isDisplayed();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
     public SettlementDialog fill(Consumer<SettlementDialog.FormFiller> fillFunc) {
         fillFunc.accept(new FormFiller(this));
         return this;
@@ -361,6 +389,14 @@ public class SettlementDialog extends BaseDialog {
         input.clear();
         input.enter(value);
         simulateBlurEvent(input);
+        return this;
+    }
+
+    public SettlementDialog uncheckedDocumentation() {
+        if (sufficientDocumentation.getAttribute("aria-checked").equals("true")) {
+            forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
+            clickUsingJsIfSeleniumClickReturnError(sufficientDocumentation);
+        }
         return this;
     }
 
@@ -466,7 +502,12 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog clickOK() {
-        ok.click();
+        $(ok).click();
+        try {
+            $(ok).click();
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
         return this;
     }
 
@@ -501,9 +542,13 @@ public class SettlementDialog extends BaseDialog {
         try {
             WebElement button = driver.findElement(buttonBy);
             waitForVisible(button);
-            button.click();
-
-            Wait.waitElementDisappeared(buttonBy);
+            forCondition(ExpectedConditions.elementToBeClickable(button));
+            try {
+                clickAndWait(buttonBy, button);
+            } catch (TimeoutException e) {
+                logger.error(e.getMessage());
+                clickAndWait(buttonBy, button);
+            }
             Wait.waitForAjaxCompleted();
         } catch (UnhandledAlertException ignored) {
         }
@@ -523,6 +568,11 @@ public class SettlementDialog extends BaseDialog {
         } catch (Exception ignored) {
         }
         return Page.at(pageClass);
+    }
+
+    private void clickAndWait(By buttonBy, WebElement button) {
+        button.click();
+        Wait.waitElementDisappeared(buttonBy);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
@@ -590,6 +640,11 @@ public class SettlementDialog extends BaseDialog {
 
     public String getNotCheapestChoiceReason() {
         return $(notCheapestReasonDisplay).getText();
+    }
+
+    public SettlementDialog rejectClaim() {
+        rejectCheckbox.select();
+        return this;
     }
 
     public EditVoucherValuationDialog openVoucherValuationCard() {
@@ -661,6 +716,12 @@ public class SettlementDialog extends BaseDialog {
         return $(rejectReason).isEnabled();
     }
 
+    private boolean isRejectReasonDisabled(String visibleText) {
+        new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
+        $(By.id("reject-reason-combobox-inputEl")).setValue(visibleText);
+        return driver.findElement(By.xpath("//span[text()='" + visibleText + "']")).getAttribute("style").equalsIgnoreCase("color: silver;");
+    }
+
     private boolean isDiscretionaryReasonVisible() {
         return (discretionaryReason.exists());
     }
@@ -673,6 +734,15 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog selectDiscretionaryReason(String visibleText) {
         waitForVisible(discretionaryReason);
         discretionaryReason.select(visibleText);
+        return this;
+    }
+
+    public SettlementDialog selectRejectReason(String visibleText) {
+        waitForVisible(rejectReason);
+        new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
+        $(By.id("reject-reason-combobox-inputEl")).setValue(visibleText);
+        new Actions(driver).click(driver.findElement(By.xpath("//span[text()='" + visibleText + "']"))).build().perform();
+        new Events().fireEvent($(By.id("reject-reason-combobox-inputEl")), "focus", "keydown", "keypress", "input", "keyup", "change");
         return this;
     }
 
@@ -707,15 +777,56 @@ public class SettlementDialog extends BaseDialog {
         return discretionaryReason.getValue();
     }
 
-    private boolean isDiscretionaryReasonHasRedBorder() {
-        String redBorder = "#c30";
-        return driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
-                && driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder);
+    private String getRejectReasonText() {
+        return rejectReason.getValue();
     }
 
+    private boolean isDiscretionaryReasonHasRedBorder() {
+        String redBorder = "#c30";
+        String redBorderRGB = "rgb(204, 51, 0)";
+        if (waitForReasonInvalidAttribute("//*[@id='discretionary-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]")) {
+            return false;
+        }
+        return driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
+                && (driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
+                (driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
+    }
+
+    private boolean waitForReasonInvalidAttribute(String xpath) {
+        try {
+            waitForDisplayed(By.xpath(xpath));
+        } catch (TimeoutException e) {
+            logger.info(e.getMessage());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isRejectReasonHasRedBorder() {
+        String redBorder = "#c30";
+        String redBorderRGB = "rgb(204, 51, 0)";
+        if (waitForReasonInvalidAttribute("//*[@id='reject-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]")) {
+            return false;
+        }
+        return driver.findElement(By.id("reject-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
+                && (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
+                (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
+    }
+
+    String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
+
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.VOUCHER.className + "')]//img")).click());
+        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className)))));
         return at(EditVoucherValuationDialog.class);
+    }
+
+    public boolean isDiscountDistributionDisplayed() {
+        try {
+            return waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className))).isDisplayed();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return false;
+        }
     }
 
     public SettlementDialog distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo distributeTo, Integer percentage) {
@@ -743,8 +854,8 @@ public class SettlementDialog extends BaseDialog {
 
         By xpath = By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td");
         Wait.waitForStaleElement(xpath);
-
-        List<WebElement> elements = Browser.driver().findElements(xpath);
+        waitForAjaxCompleted();
+        List<WebElement> elements = waitForStaleElements(xpath);
         for (WebElement td : elements) {
             String attribute = td.getAttribute("data-columnid");
             switch (ValuationGridColumn.getColumn(attribute)) {
@@ -764,6 +875,13 @@ public class SettlementDialog extends BaseDialog {
         }
         return valuationRow;
 
+    }
+
+    public boolean isValuationDisabled(Valuation valuation) {
+        SelenideElement unselectable = $(By.xpath(".//tr[contains(@class, '" + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]")).shouldHave(Condition.attribute("unselectable"));
+        if (unselectable == null)
+            return false;
+        return true;
     }
 
     public static class VoucherDropdownElement {
@@ -818,14 +936,14 @@ public class SettlementDialog extends BaseDialog {
         By xpath;
         WebElement webElement;
 
-        private void setUp(){
+        private void setUp() {
             driver = Browser.driver();
             xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
             Wait.waitForStaleElement(xpath);
             webElement = driver.findElement(xpath);
         }
 
-        public Boolean isChecked(){
+        public Boolean isChecked() {
             setUp();
             return webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
         }
@@ -920,6 +1038,11 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertValuationIsDisabled(Valuation valuation) {
+            assertTrue(isValuationDisabled(valuation));
+            return this;
+        }
+
         public Asserts assertCashValueIs(Double expectedCashValue) {
             OperationalUtils.assertEqualsDoubleWithTolerance(getCashCompensationValue(), expectedCashValue,
                     "Cash compensation is incorrect. Actual %s, Expected %s");
@@ -968,18 +1091,18 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertVoucherListed(String voucherTitle) {
-            System.out.println("AssertVoucherListed: "+voucherTitle);
+            logger.info("AssertVoucherListed: " + voucherTitle);
             Assert.assertTrue(getVouchersList().stream().anyMatch(i -> {
-                System.out.println("Found: "+i);
+                logger.info("Found: " + i);
                 return i.contains(voucherTitle);
             }), "Voucher " + voucherTitle + " must be present");
             return this;
         }
 
         public Asserts assertVoucherNotListed(String voucherTitle) {
-            System.out.println("assertVoucherNotListed: "+voucherTitle);
+            logger.info("assertVoucherNotListed: " + voucherTitle);
             Assert.assertFalse(getVouchersList().stream().anyMatch(i -> {
-                System.out.println("Found: "+i);
+                logger.info("Found: " + i);
                 return i.contains(voucherTitle);
             }), "Voucher " + voucherTitle + " must not be present");
             return this;
@@ -1031,8 +1154,8 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertAgeIs(int years, int months) {
-            assertEquals($(ageYears).getText(), years+"");
-            assertEquals($(ageMonth).getText(), months+"");
+            assertEquals($(ageYears).getText(), years + "");
+            assertEquals($(ageMonth).getText(), months + "");
             return this;
         }
 
@@ -1076,9 +1199,25 @@ public class SettlementDialog extends BaseDialog {
             return checkVisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
         }
 
-        private Asserts checkVisibilityOfValuationRow(String message, Valuation valuation){
+        public Asserts assertCatalogPriceInvisible() {
+            String failMessage = "Catalog price must be invisible";
+            return checkInvisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
+        }
+
+        private Asserts checkVisibilityOfValuationRow(String message, Valuation valuation) {
             try {
                 if (parseValuationRow(valuation).getDescription() == null) {
+                    Assert.fail(message);
+                }
+            } catch (Exception e) {
+                Assert.fail(message);
+            }
+            return this;
+        }
+
+        private Asserts checkInvisibilityOfValuationRow(String message, Valuation valuation) {
+            try {
+                if (parseValuationRow(valuation).getDescription() != null) {
                     Assert.fail(message);
                 }
             } catch (Exception e) {
@@ -1122,8 +1261,23 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertRejectReasonEnabled() {
+            assertTrue(isRejectReasonEnabled(), "Reject Reason must be enabled");
+            return this;
+        }
+
+        public Asserts assertRejectReasonIsDisabled(String visibleText) {
+            assertTrue(isRejectReasonDisabled(visibleText), "Reject Reason should be disabled");
+            return this;
+        }
+
         public Asserts assertDiscretionaryReasonHasRedBorder() {
             Assert.assertTrue(isDiscretionaryReasonHasRedBorder(), "Discretionary Reason field should have red border");
+            return this;
+        }
+
+        public Asserts assertRejectReasonHasRedBorder() {
+            Assert.assertTrue(isRejectReasonHasRedBorder(), "Reject Reason field should have red border");
             return this;
         }
 
@@ -1134,6 +1288,11 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertDiscretionaryReasonEqualTo(String reason) {
             assertEquals(getDiscretionaryReasonText(), reason, "Wrong reason selected for New Price");
+            return this;
+        }
+
+        public Asserts assertRejectReasonEqualTo(String reason) {
+            assertEquals(getRejectReasonText(), reason, "Wrong reason selected");
             return this;
         }
 
@@ -1165,13 +1324,13 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertCashCompensationIsDepreciated(int percentage, Valuation valuation){
+        public Asserts assertCashCompensationIsDepreciated(int percentage, Valuation valuation) {
             ValuationRow valuationRow = parseValuationRow(valuation);
-            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice()*(1-(Double.valueOf(percentage)/100)));
+            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice() * (1 - (Double.valueOf(percentage) / 100)));
             return this;
         }
 
-        public Asserts assertIsLowestPriceValuationSelected(Valuation... valuations){
+        public Asserts assertIsLowestPriceValuationSelected(Valuation... valuations) {
             List<ValuationRow> valuationRows = new ArrayList<>();
             Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
             assertTrue(valuationRows.stream()
@@ -1181,7 +1340,7 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertPriceIsSameInTwoColumns(Valuation valuation){
+        public Asserts assertPriceIsSameInTwoColumns(Valuation valuation) {
             ValuationRow valuationRow = parseValuationRow(valuation);
             assertEquals(valuationRow.cashCompensation, valuationRow.totalPrice);
             return this;
@@ -1191,13 +1350,13 @@ public class SettlementDialog extends BaseDialog {
             List<ValuationRow> valuationRows = new ArrayList<>();
             Arrays.stream(valuations).forEach(valuation -> valuationRows.add(parseValuationRow(valuation)));
             assertTrue(valuationRows.stream()
-                    .map(price -> price.getTotalPrice()).collect(Collectors.toList()).stream()
-                    .distinct().count() <= 1,
+                            .map(price -> price.getTotalPrice()).collect(Collectors.toList()).stream()
+                            .distinct().count() <= 1,
                     "Total prices are not equal");
             return this;
         }
 
-        public Asserts assertIsVoucherDiscountApplied(Double newPrice){
+        public Asserts assertIsVoucherDiscountApplied(Double newPrice) {
             ValuationRow valuationRow = parseValuationRow(Valuation.VOUCHER);
             assertTrue(valuationRow.getCashCompensation() == newPrice - (newPrice * getVoucherPercentage() / 100));
             return this;
@@ -1214,11 +1373,22 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertAutomaticDepreciationLabelColor(){
+        public Asserts assertAutomaticDepreciationLabelColor() {
             boolean isLabelInRedColor = automaticDepreciationLabel.getAttribute("style").contains("color: red;");
             assertTrue(automaticDepreciation.isSelected() == !isLabelInRedColor);
             return this;
         }
+
+        public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked() {
+            assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("true"));
+            return this;
+        }
+
+        public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsUnchecked() {
+            assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("false"));
+            return this;
+        }
+
     }
 
 

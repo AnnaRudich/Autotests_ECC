@@ -27,7 +27,7 @@ public class FunctionalMenu extends Module {
     }
 
     public SettlementDialog addManually() {
-        addManually.click();
+        clickUsingJsIfSeleniumClickReturnError(addManually);
         return BaseDialog.at(SettlementDialog.class);
     }
 

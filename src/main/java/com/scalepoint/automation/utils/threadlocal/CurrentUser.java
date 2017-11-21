@@ -2,15 +2,15 @@ package com.scalepoint.automation.utils.threadlocal;
 
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentUser {
 
-    private static Logger logger = LoggerFactory.getLogger(CurrentUser.class);
+    private static Logger logger = LogManager.getLogger(CurrentUser.class);
 
     private static ThreadLocal<List<User>> usersHolder = new ThreadLocal<>();
     private static ThreadLocal<String> claimIdHolder = new ThreadLocal<>();

@@ -10,7 +10,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.MARKET_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-526")
 public class DnD2_MarketPriceLogicTests extends BaseTest {
@@ -23,7 +24,8 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
@@ -40,12 +42,69 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
                     asserts.assertTotalPriceIsSameInRows(CATALOG_PRICE, MARKET_PRICE);
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
+    @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice < Market price")
+    public void charlie526_addProductWhenProductPriceLowerThanMarketPrice(User user, Claim claim){
+        ProductInfo productInfo = SolrApi.findProductInvoiceLowerMarket();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchBySku(productInfo.getSku())
+                .sortOrderableFirst()
+                .openSidForFirstProduct()
+
+                .doAssert(asserts -> {
+                    asserts.assertMarketPriceVisible();
+                    asserts.assertCatalogPriceVisible();
+                    asserts.assertIsLowestPriceValuationSelected(CATALOG_PRICE);
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
+    @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice = Market price")
+    public void charlie526_addProductWhenProductPriceEqualsMarketPrice(User user, Claim claim){
+        ProductInfo productInfo = SolrApi.findProductInvoiceEqualMarket();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchBySku(productInfo.getSku())
+                .sortOrderableFirst()
+                .openSidForFirstProduct()
+
+                .doAssert(asserts -> {
+                    asserts.assertMarketPriceVisible();
+                    asserts.assertCatalogPriceVisible();
+                    asserts.assertTotalPriceIsSameInRows(CATALOG_PRICE, MARKET_PRICE);
+                    asserts.assertIsLowestPriceValuationSelected(CATALOG_PRICE);
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
+    @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice > Market price")
+    public void charlie526_addProductWhenProductPriceHigherThanMarketPrice(User user, Claim claim){
+        ProductInfo productInfo = SolrApi.findProductInvoiceHigherMarket();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchBySku(productInfo.getSku())
+                .sortOrderableFirst()
+                .openSidForFirstProduct()
+
+                .doAssert(asserts -> {
+                    asserts.assertMarketPriceVisible();
+                    asserts.assertCatalogPriceVisible();
+                    asserts.assertTotalPriceIsSameInRows(CATALOG_PRICE, MARKET_PRICE);
+                    asserts.assertIsLowestPriceValuationSelected(CATALOG_PRICE);
                 });
     }
 }

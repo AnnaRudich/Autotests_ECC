@@ -16,6 +16,9 @@ public class ProductInfo {
     @Field("model")
     private String model;
 
+    @Field("category")
+    private String category;
+
     @Field("price")
     private double price;
 
@@ -59,6 +62,10 @@ public class ProductInfo {
         return model;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -95,17 +102,27 @@ public class ProductInfo {
         return voucherOnlyInShop;
     }
 
+    public String getModelAndCategory(){
+        return model + " " + category;
+    }
+
     @Override
     public String toString() {
         return "ProductInfo{" +
                 "id=" + id +
+                ", parentId=" + parentId +
+                ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                ", marketPrice=" + marketPrice +
                 ", orderable=" + orderable +
                 ", sku='" + sku + '\'' +
-                ", price=" + price +
                 ", lowestPrice=" + lowestPrice +
                 ", invoicePrice=" + invoicePrice +
+                ", supplierShopPrice=" + supplierShopPrice +
                 ", supplierName='" + supplierName + '\'' +
+                ", voucherOnlyInShop=" + voucherOnlyInShop +
                 '}';
     }
 }

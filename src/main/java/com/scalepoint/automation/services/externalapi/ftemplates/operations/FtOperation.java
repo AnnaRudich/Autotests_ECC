@@ -2,13 +2,13 @@ package com.scalepoint.automation.services.externalapi.ftemplates.operations;
 
 import com.scalepoint.automation.pageobjects.pages.admin.EditFunctionTemplatePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class FtOperation {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LogManager.getLogger(getClass());
 
     public abstract boolean hasSameState(Document document);
 

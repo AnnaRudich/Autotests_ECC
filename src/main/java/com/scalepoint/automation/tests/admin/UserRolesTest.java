@@ -1,8 +1,10 @@
 package com.scalepoint.automation.tests.admin;
 
+import com.scalepoint.automation.pageobjects.pages.EditPreferencesPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
+import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
@@ -13,7 +15,9 @@ import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.SUPPLYMANAGER;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -171,5 +175,49 @@ public class UserRolesTest extends BaseTest {
                 .toUserCreatePage()
                 .createNewSPAdminNewRole(user, role)
                 .doAssert(usersPage->usersPage.assertUserExists(user));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-534 generate password works for new user")
+    public void charlie534_generatePasswordForNewUser(SystemUser user){
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUserWithoutSaving(user, ALL_ROLES);
+
+        userAddEditPage.doAssert(asserts -> {
+            asserts.assertIsGenerateButtonVisible();
+            asserts.assertsIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
+        });
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-534 generate password works for existing")
+    public void charlie534_generatePasswordForExistingUser(SystemUser user){
+        UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUser(user, ALL_ROLES)
+                .filterByIC(user.getCompany())
+                .openUserForEditing(user.getLogin());
+
+        userAddEditPage.doAssert(asserts -> {
+            asserts.assertIsGenerateButtonVisible();
+            asserts.assertsIsGeneratedPasswordCorrect(userAddEditPage.generateAndGetNewPassword());
+        });
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-534 generate password from prefs")
+    public void charlie534_generatePasswordFromPreferences(SystemUser user){
+        EditPreferencesPage editPreferencesPage = login(getSystemUser(), UsersPage.class)
+                .toUserCreatePage()
+                .createUser(user, ALL_ROLES)
+                .toMatchingEngine()
+                .openEditPreferences();
+
+        editPreferencesPage.doAssert(asserts -> {
+            asserts.assertIsGenerateButtonVisible();
+            asserts.assertsIsGeneratedPasswordCorrect(editPreferencesPage.generateNewPassword());
+        });
+
     }
 }

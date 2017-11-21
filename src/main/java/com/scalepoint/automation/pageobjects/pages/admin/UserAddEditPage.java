@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Roles;
@@ -13,8 +14,10 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class UserAddEditPage extends AdminBasePage {
@@ -77,10 +80,10 @@ public class UserAddEditPage extends AdminBasePage {
     private List<WebElement> existingRolesBox;
 
     @FindBy(id = "btnGenerate")
-    private List<WebElement> generatePasswordButton;
+    private WebElement generatePasswordButton;
 
-    private String byCompanyXpath = "//select/option[text() = '$1']";
-    private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[text()='$1']";
+    private String byCompanyXpath = "//select/option[normalize-space(text()) = '$1']";
+    private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[normalize-space(text())='$1']";
     private String bySubDepartmentXpath = "//div[@id='SubDepartmentDiv']/select/option[contains(.,'$1')]";
     private String byRolesXpath = "//*[@id='rolesDiv']/table/tbody/tr/td[1][contains(.,'$1')]";
 
@@ -281,6 +284,13 @@ public class UserAddEditPage extends AdminBasePage {
      * This method creates new SP Admin and IT manager user
      */
     public UsersPage createUser(SystemUser user, UserType... userTypesArr) {
+        createUserWithoutSaving(user, userTypesArr);
+
+        selectSaveOption();
+        return at(UsersPage.class);
+    }
+
+    public UserAddEditPage createUserWithoutSaving(SystemUser user, UserType[] userTypesArr) {
         ArrayList<UserType> userTypes = Lists.newArrayList(userTypesArr);
         find(byCompanyXpath, user.getCompany()).click();
         find(byDepartmentXpath, user.getDepartment()).click();
@@ -306,9 +316,7 @@ public class UserAddEditPage extends AdminBasePage {
         if (userTypes.contains(UserType.ADMIN) || userTypes.contains(UserType.CLAIMSHANDLER)) {
             selectCreateNewCaseManually();
         }
-
-        selectSaveOption();
-        return at(UsersPage.class);
+        return this;
     }
 
     public enum UserType {
@@ -352,24 +360,48 @@ public class UserAddEditPage extends AdminBasePage {
         }
     }
 
-    public void checkGeneratePasswordButton() {
-        find(By.id("btnGenerate"));
+    public boolean checkGeneratePasswordButton() {
+        return isDisplayed(generatePasswordButton);
+    }
+
+    public String generateAndGetNewPassword() {
+        clickUsingJsIfSeleniumClickReturnError(generatePasswordButton);
+        return getAlertTextAndAccept().split(" ")[1];
     }
 
     public UsersPage createNewSPAdminNewRole(SystemUser user, Roles roles) {
         WebElement option = find(byCompanyXpath, user.getCompany());
-        if (option.getText().equals(user.getCompany())) {
+        if (option.getText().trim().equals(user.getCompany())) {
             option.click();
         }
 
         WebElement option1 = find(byDepartmentXpath, user.getDepartment());
-        if (option1.getText().equals(user.getDepartment())) {
+        if (option1.getText().trim().equals(user.getDepartment())) {
             option1.click();
         }
 
         fillUserGeneralData(user);
         selectNewRoleSPUser(user, roles);
         return selectSaveOption();
+    }
+
+    public UserAddEditPage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return this;
+    }
+
+    public class Asserts {
+
+        public Asserts assertIsGenerateButtonVisible() {
+            assertThat(checkGeneratePasswordButton()).isTrue();
+            return this;
+        }
+
+        public Asserts assertsIsGeneratedPasswordCorrect(String generatedPassword) {
+            OperationalUtils.assertStringMatchingPattern("[a-hjkmnp-zA-HJKMNP-Z2-9]+", generatedPassword);
+            return this;
+        }
+
     }
 }
 

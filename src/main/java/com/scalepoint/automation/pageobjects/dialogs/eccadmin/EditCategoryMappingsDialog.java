@@ -2,8 +2,10 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -41,7 +43,8 @@ public class EditCategoryMappingsDialog extends BaseDialog {
                 break;
             }
         }
-        saveMappings.click();
+        clickElementUsingJS(saveMappings);
+        Wait.forCondition(ExpectedConditions.invisibilityOfElementLocated(By.xpath(".//a[contains(@class,'supplier-voucher-save-mappings')]")));
         return at(VoucherAgreementDialog.CategoriesTab.class);
     }
 

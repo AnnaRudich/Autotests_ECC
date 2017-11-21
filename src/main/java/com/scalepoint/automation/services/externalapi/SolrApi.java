@@ -2,18 +2,18 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Configuration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SolrApi {
 
-    private static Logger logger = LoggerFactory.getLogger(SolrApi.class);
+    private static Logger logger = LogManager.getLogger(SolrApi.class);
 
     public static ProductInfo findProduct(String productId) {
         try {
@@ -95,12 +95,44 @@ public class SolrApi {
         }
     }
 
-    public static ProductInfo findProductAsVoucherWithPriceLowerThanMarketPrice(){
+    public static ProductInfo findProductAsVoucherWithProductInvoiceLowerThanMarket(){
         try{
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
             query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
-                    .setFilterQueries("{!frange 1=0 incl=false}sub(price_invoice_1,market_price)");
+                    .setFilterQueries("{!frange l=1 incl=false}sub(market_price, price_invoice_1)");
+            QueryResponse response = solr.query(query);
+            ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
+            logger.info("FindBaOProduct: {}", productInfo);
+            return productInfo;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new IllegalStateException("no products found", e);
+        }
+    }
+//no such products for now
+    public static ProductInfo findProductAsVoucherWithProductInvoiceEqualsMarketPrice(){
+        try{
+            SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
+            SolrQuery query = new SolrQuery();
+            query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
+                    .setFilterQueries("{!frange l=0 u=0}sub(price_invoice_1,market_price)");
+            QueryResponse response = solr.query(query);
+            ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
+            logger.info("FindBaOProduct: {}", productInfo);
+            return productInfo;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new IllegalStateException("no products found", e);
+        }
+    }
+//no such products for now
+    public static ProductInfo findProductAsVoucherWithProductInvoiceHigherThanMarketPrice(){
+        try{
+            SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
+            SolrQuery query = new SolrQuery();
+            query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
+                    .setFilterQueries("{!frange l=0 incl=false}sub(price_invoice_1,market_price)");
             QueryResponse response = solr.query(query);
             ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
             logger.info("FindBaOProduct: {}", productInfo);

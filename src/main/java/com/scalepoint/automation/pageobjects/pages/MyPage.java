@@ -13,6 +13,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
@@ -25,7 +26,7 @@ public class MyPage extends Page {
     @FindBy(id = "EditPreferences")
     private Button editPreferences;
 
-    @FindBy(id = "CreateNewClaim")
+    @FindBy(id = "newCustomerButton-btnEl")
     private Button createNewCase;
 
     @FindBy(id = "cases-table")
@@ -64,8 +65,13 @@ public class MyPage extends Page {
     }
 
     public NewCustomerPage clickCreateNewCase() {
-        createNewCase.click();
+        $(createNewCase).click();
         return Page.at(NewCustomerPage.class);
+    }
+
+    public EditPreferencesPage openEditPreferences(){
+        editPreferences.click();
+        return Page.at(EditPreferencesPage.class);
     }
 
     public MainMenu getMainMenu() {

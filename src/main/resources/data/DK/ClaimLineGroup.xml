@@ -5,4 +5,11 @@
     <newPrice>222</newPrice>
     <valuation>333</valuation>
     <filePath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</filePath>
+
+    <excelLineGroups>DEFAULT</excelLineGroups>
+    <excelLineGroups>Test_Group_Overview111</excelLineGroups>
+    <excelLineGroups>Test_Group_Valuation</excelLineGroups>
+    <excelLineGroups>newExcelGroup2</excelLineGroups>
+    <excelLineGroups>group1</excelLineGroups>
+    <excelLineGroups>group2</excelLineGroups>
 </claimLineGroup>

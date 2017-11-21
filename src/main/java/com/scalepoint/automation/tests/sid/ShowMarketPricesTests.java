@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-588")
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ShowMarketPricesTests extends BaseTest {
     /**
      * GIVEN: FT "Show Market Price" OFF

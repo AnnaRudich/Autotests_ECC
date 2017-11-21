@@ -42,6 +42,10 @@ public abstract class Page implements Actions {
 
     protected abstract Page ensureWeAreOnPage();
 
+    protected Boolean areWeAt(){
+        return false;
+    }
+
     protected abstract String getRelativeUrl();
 
     protected void waitForUrl(String expectedUrl) {
@@ -53,7 +57,7 @@ public abstract class Page implements Actions {
             return;
         }
 
-        int totalTimeoutInSeconds = 20;
+        int totalTimeoutInSeconds = 80;
         int pollingMs = 1000;
 
         Wait.forCondition(webDriver -> {
@@ -136,6 +140,15 @@ public abstract class Page implements Actions {
         loadJavascriptHelpersIfNeeds(page);
         page.ensureWeAreOnPage();
         return page;
+    }
+
+    public static <T extends Page> boolean isOn(Class<T> page) {
+        try {
+            T t = page.newInstance();
+            return t.areWeAt();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
+        }
     }
 
     private static <T extends Page> void loadJavascriptHelpersIfNeeds(T page) {

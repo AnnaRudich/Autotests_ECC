@@ -5,8 +5,10 @@ import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -82,6 +84,7 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 moves C1 to G2
      * THEN: C1 mapped with G2
      */
+    @RunOn(DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-545 It's possible to move category from one group to another")
     public void charlie545_moveCatToAnotherGroup(User user, Category categoryToMove, Category category2) {

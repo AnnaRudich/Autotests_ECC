@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -73,8 +74,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addDescriptionWithOutSuggestions(String text){
-        descriptionField.clear();
-        descriptionField.sendKeys(text);
+        $("#description-text").setValue(text).pressTab();
         waitForValidationMark(descriptionField);
         return this;
     }
@@ -89,7 +89,7 @@ public class SelfService2Page extends Page {
 
     private void selectItem(WebElement element, String text){
         WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
-        selectElement.click();
+        clickUsingJsIfSeleniumClickReturnError(selectElement);
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
@@ -98,7 +98,7 @@ public class SelfService2Page extends Page {
         waitForVisible(selectItemElement);
         scrollToElement(selectItemElement);
         waitForVisible(selectItemElement);
-        selectItemElement.click();
+        clickUsingJsIfSeleniumClickReturnError(selectItemElement);
         waitForVisible(selectElement);
         forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }

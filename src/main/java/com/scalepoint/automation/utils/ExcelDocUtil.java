@@ -5,8 +5,8 @@ import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +16,7 @@ import static com.scalepoint.automation.utils.ExcelDocUtil.FeedbackActionType.NO
 
 public class ExcelDocUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(ExcelDocUtil.class);
+    private static Logger logger = LogManager.getLogger(ExcelDocUtil.class);
 
     private ActiveXComponent activexComponent;
     private Dispatch workBooks;

@@ -15,7 +15,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.codeborne.selenide.Selenide.refresh;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -58,6 +63,8 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     @Override
     protected Page ensureWeAreOnPage() {
         waitForVisible(createSupplierButton);
+        refresh();
+        waitForAjaxCompleted();
         return this;
     }
 
@@ -83,14 +90,21 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         return BaseDialog.at(SupplierDialog.class);
     }
 
+    private WebElement getOption(String supplierName){
+        return find(bySupplierNameXpath, supplierName);
+    }
+
     public SupplierDialog.GeneralTab editSupplier(String supplierName) {
-        find(By.xpath("//input[contains(@name, 'searchfield')]")).click();
+        clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath("//input[contains(@name, 'searchfield')]")));
         makeSupplierSearch(supplierName);
-        WebElement option = find(bySupplierNameXpath, supplierName);
-        waitForStaleElements((By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div")));
-        if (option.getText().contains(supplierName)) {
-            scrollTo(option);
-            doubleClick(option);
+        waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
+        if (getOption(supplierName).getText().contains(supplierName)) {
+            scrollTo(getOption(supplierName));
+            int i = 0;
+            while (!BaseDialog.isOn(SupplierDialog.GeneralTab.class) && i < 2){
+                i++;
+                doubleClickUsingJsIfSeleniumClickReturnError(getOption(supplierName));
+            }
             waitForStaleElement((By.xpath("//span[contains(text(),'General')]")));
         }
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
@@ -104,7 +118,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     }
 
     public boolean isSupplierCreated(String supplierName) {
-        find(By.xpath("//input[contains(@name,'searchfield')]")).click();
+        clickUsingJsIfSeleniumClickReturnError(find(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         String xpath = bySupplierNameXpath.replace("$1", supplierName);

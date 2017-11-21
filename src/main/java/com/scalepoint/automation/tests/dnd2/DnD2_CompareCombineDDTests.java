@@ -45,6 +45,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(productInfo.getModel())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
@@ -58,13 +59,14 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
+    @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
     public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim){
         ProductInfo productInfo = SolrApi.findProductAsVoucher();
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(productInfo.getModel())
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
@@ -159,7 +161,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())

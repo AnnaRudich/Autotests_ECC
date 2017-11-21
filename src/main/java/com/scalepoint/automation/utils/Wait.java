@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -15,8 +17,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 import java.util.List;
@@ -29,13 +29,14 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllE
 public class Wait {
     private static final int TIME_OUT_IN_SECONDS = 60;
     private static final int POLL_IN_MS = 1000;
-    public static final int DEFAULT_TIMEOUT = 30;
+    public static final int DEFAULT_TIMEOUT = 60;
 
-    private static Logger log = LoggerFactory.getLogger(Wait.class);
+    private static Logger log = LogManager.getLogger(Wait.class);
 
     private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling(){
         return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)
-                .pollingEvery(500, TimeUnit.MILLISECONDS);
+                .pollingEvery(500, TimeUnit.MILLISECONDS)
+                .ignoring(StaleElementReferenceException.class);
     }
 
     public static void waitForAjaxCompleted() {
@@ -62,6 +63,14 @@ public class Wait {
 
     public static Boolean invisible(WebElement element) {
         return wrapShort(ExpectedConditions.invisibilityOfAllElements(Lists.newArrayList(element)));
+    }
+
+    public static Boolean invisibleOfElement(WebElement element){
+        return wrapShort(ExpectedConditions.invisibilityOf(element));
+    }
+
+    public static Boolean invisibleOfElement(By locator) {
+        return wrapShort(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
     public static WebElement waitForEnabled(By locator) {
@@ -98,6 +107,20 @@ public class Wait {
         });
     }
 
+    public static WebElement waitForElementContainsText(WebElement element, String text) {
+        return wrapShort((WebDriver d) -> {
+            try {
+                if (!element.getText().contains(text)) {
+                    return null;
+                }
+                return element;
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+                return null;
+            }
+        });
+    }
+
     public static void waitElementDisappeared(By element) {
         Browser.driver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         getWebDriverWaitWithDefaultTimeoutAndPooling()
@@ -117,7 +140,7 @@ public class Wait {
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
-        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).until(condition);
+        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).ignoring(StaleElementReferenceException.class).until(condition);
     }
 
     private static <T> T wrap(Function<WebDriver, T> condition) {
@@ -152,7 +175,7 @@ public class Wait {
         waitForInvisible(element.getWrappedElement());
     }
 
-    private static void waitForInvisible(final WebElement element) {
+    public static void waitForInvisible(final WebElement element) {
         wrap(d -> {
             try {
                 return !element.isDisplayed();
@@ -195,7 +218,7 @@ public class Wait {
     }
 
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), 15, 1000).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), 60, 1000).until(expectedCondition);
     }
 
     public static void waitForElementWithPageReload(By locator) {

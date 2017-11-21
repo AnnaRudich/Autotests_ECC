@@ -8,6 +8,7 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -35,7 +36,7 @@ public class BestFitPage extends Page {
 
     public class Asserts {
         public Asserts assertMarketPriceInvisible() {
-            assertTrue(Wait.invisible(marketPrice), "Market Price must be hidden");
+            assertTrue(Wait.invisible($(marketPrice)), "Market Price must be hidden");
             return this;
         }
     }

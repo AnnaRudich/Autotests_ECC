@@ -1,9 +1,14 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
+import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
+import com.scalepoint.automation.pageobjects.modules.MainMenu;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.utils.Constants;
@@ -12,20 +17,40 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.ScriptTimeoutException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
+import static com.scalepoint.automation.utils.Constants.AGE_YEAR;
+import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static com.scalepoint.automation.utils.Wait.invisible;
+import static com.scalepoint.automation.utils.Wait.visible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -36,7 +61,7 @@ public class SettlementPage extends BaseClaimPage {
     @FindBy(css = "#settlementGrid-body table:first-child")
     private Table firstClaim;
     @FindBy(css = ".x-grid-cell-descriptionColumn")
-    private List<WebElement> claimDescription;
+    private List<WebElement> claimLineDescription;
     @FindBy(css = ".x-grid-cell-claimLineIDColumn")
     private List<WebElement> claimLineID;
     @FindBy(id = "settlementSummaryTotalsPanel-body")
@@ -55,9 +80,21 @@ public class SettlementPage extends BaseClaimPage {
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
 
-    private String sendNotToRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
-    private String lockForRepairLineIconByDescriptionXpath = "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'wrench.png')]";
-    private String byDescriptionItemsXpath = "//td[contains(@class,'descriptionColumn')][contains(.,'$1')]//span";
+
+    private By groupButton = By.xpath("//span[text()='Opret gruppe']");
+    private By deleteGroupButton = By.xpath("//span[text()='Opløs gruppe']");
+    private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
+
+
+    private String sendNotToRepairLineIconByDescriptionXpath =
+            "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
+
+    private String lockForRepairLineIconByDescriptionXpath =
+            "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'wrench.png')]";
+
+    private String byDescriptionItemsXpath =
+            "//td[contains(@class,'descriptionColumn')][contains(.,'$1')]//span";
+
 
     private SettlementSummary settlementSummary = new SettlementSummary();
 
@@ -82,14 +119,14 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public ClaimLine findClaimLine(String description) {
-        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
+        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table | .//*[@id='settlementTreeGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
     }
 
     public ClaimLine parseFirstClaimLine() {
-        By claimLineXpath = By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table)[1]");
+        By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table[1]");
         Wait.waitForDisplayed(claimLineXpath);
         Table table = new Table(driver.findElement(claimLineXpath));
         return new ClaimLine(table);
@@ -177,6 +214,20 @@ public class SettlementPage extends BaseClaimPage {
         return openSid().setDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
 
+    public SettlementPage addLines(ClaimItem claimItem, String... lineDescriptions) {
+        for (String lineDescription : lineDescriptions) {
+            openSidAndFill(sid -> sid
+                    .withText(lineDescription)
+                    .withNewPrice(PRICE_2400)
+                    .withCategory(claimItem.getCategoryGroupBorn())
+                    .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                    .withAge(AGE_YEAR, AGE_MONTH))
+                    .closeSidWithOk();
+        }
+        return this;
+    }
+
+
     public void cancelClaim() {
         settlementSummary.cancel();
     }
@@ -208,8 +259,54 @@ public class SettlementPage extends BaseClaimPage {
         return at(CompleteClaimPage.class);
     }
 
+    public SettlementGroupDialog openGroupCreationDialog(){
+        $(groupButton).click();
+        return BaseDialog.at(SettlementGroupDialog.class);
+    }
+
+    public SettlementPage rejectLines(){
+        $(rejectButton).click();
+        waitForAjaxCompleted();
+        return this;
+    }
+
+    public SettlementPage deleteGroup(){
+        $(deleteGroupButton).click();
+        waitForAjaxCompleted();
+        $(By.xpath("//span[text() = 'Ja']")).click();
+        return this;
+    }
+
+    public SettlementPage selectLinesByIndex(int... lines) {
+        try {
+            selectLines(lines, claimLineDescription);
+        }catch (IndexOutOfBoundsException e){
+            logger.error(e.getMessage());
+        }
+        return this;
+    }
+
+    public SettlementPage selectLinesByDescriptions(String... descriptions) {
+        try {
+            Arrays.stream(descriptions).forEach(desc -> new Actions(driver)
+                    .keyDown(Keys.CONTROL)
+                    .click(claimLineDescription.stream().filter(line -> line.getText().equals(desc)).findFirst().get())
+                    .keyUp(Keys.CONTROL).build().perform());
+        }catch (IndexOutOfBoundsException e){
+            logger.error(e.getMessage());
+        }
+        return this;
+    }
+
+    private void selectLines(int[] lines, List<WebElement> element) {
+        Arrays.stream(lines).forEach(line -> new Actions(driver)
+                .keyDown(Keys.CONTROL)
+                .click(element.get(line))
+                .keyUp(Keys.CONTROL).build().perform());
+    }
+
     public boolean isItemPresent(String item) {
-        List<WebElement> claims = claimDescription;
+        List<WebElement> claims = claimLineDescription;
         return claims.stream().anyMatch(claim -> claim.getText().equals(item));
     }
 
@@ -246,9 +343,19 @@ public class SettlementPage extends BaseClaimPage {
         return mainMenu;
     }
 
+    public List<ClaimLine> getLinesByDescription(String... descriptions) {
+        return Arrays.stream(descriptions).map(this::findClaimLine).collect(Collectors.toList());
+    }
+
     public SettlementPage doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
         return SettlementPage.this;
+    }
+
+    public SettlementPage moveLineFromGroupToGroup(String claimLineDescription, String groupName) {
+        new Actions(driver).dragAndDrop(findClaimLine(claimLineDescription).descriptionElement, findClaimLine(groupName).descriptionElement).build().perform();
+        waitForAjaxCompleted();
+        return this;
     }
 
     public class Asserts {
@@ -280,6 +387,26 @@ public class SettlementPage extends BaseClaimPage {
             Assert.assertFalse(genericItemIsPresent);
             return this;
         }
+
+        public Asserts assertFirstLineIsRejected() {
+            assertThat($(By.xpath("(.//*[@id='settlementGrid-body']//table//tr[1])")).getAttribute("class")).contains("rejected");
+            return this;
+        }
+
+        public Asserts assertSettlementPageIsInFlatView(){
+            assertThat(invisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSettlementPageIsNotInFlatView(){
+            assertThat(visible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
+            return this;
+        }
+
+        public Asserts assertSettlementContainsLinesWithDescriptions(String... descriptions){
+            assertThat(Arrays.stream(descriptions).anyMatch(desc -> claimLineDescription.stream().anyMatch(claim -> claim.getText().equals(desc)))).isTrue();
+            return this;
+        }
     }
 
 
@@ -291,7 +418,7 @@ public class SettlementPage extends BaseClaimPage {
         private String description;
         private String category;
         private int quantity;
-        private int age;
+        private String age;
         private double purchasePrice;
         private int depreciation;
         private double replacementPrice;
@@ -313,18 +440,19 @@ public class SettlementPage extends BaseClaimPage {
             this.category = claimLine.findElement(By.xpath(".//*[@data-columnid='categoryGroupColumn']")).getText();
             this.quantity = Integer.valueOf(claimLine.findElement(By.xpath(".//*[@data-columnid='quantityColumn']")).getText());
 
-            String ageValue = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
-            if (NumberUtils.isNumber(ageValue)) {
-                this.age = Integer.valueOf(ageValue);
-            }
+            this.age  = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
 
-            purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
+            try {
+                purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
+            }catch (Exception e){
+                logger.warn(e.getMessage());
+            }
             String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
             try {
                 this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")).getText());
-            }catch (NoSuchElementException e){
+            }catch (Exception e){
                 logger.warn(e.getMessage());
             }
 
@@ -339,21 +467,41 @@ public class SettlementPage extends BaseClaimPage {
             return SettlementPage.this;
         }
 
+        public SettlementGroupDialog editGroup() {
+            doubleClickClaimLine();
+            return BaseDialog.at(SettlementGroupDialog.class);
+        }
+
         public SettlementDialog editLine() {
-            doubleClick(descriptionElement);
-            String js =
-                    "var callback = arguments[arguments.length - 1];" +
-                            "function groupsLoaded() {" +
-                            "var groups = Ext.getCmp('group-combobox');" +
-                            "if (!groups || (groups.getStore().count() <= 0)) {" +
-                            "setTimeout(groupsLoaded, 1000);" +
-                            "} else {" +
-                            "callback();" +
-                            "}" +
-                            "}" +
-                            "groupsLoaded();";
-            ((JavascriptExecutor) driver).executeAsyncScript(js);
+            doubleClickClaimLine();
             return BaseDialog.at(SettlementDialog.class);
+        }
+
+        private void doubleClickClaimLine() {
+            String dblClick = "var targLink    = arguments[0];\n" +
+                    "var clickEvent  = document.createEvent ('MouseEvents');\n" +
+                    "clickEvent.initEvent ('dblclick', true, true);\n" +
+                    "targLink.dispatchEvent (clickEvent);";
+
+            try {
+                doubleClick(descriptionElement);
+                waitForAjaxCompleted();
+                String js =
+                        "var callback = arguments[arguments.length - 1];" +
+                                "function groupsLoaded() {" +
+                                "var groups = Ext.getCmp('group-combobox');" +
+                                "if (!groups || (groups.getStore().count() <= 0)) {" +
+                                "setTimeout(groupsLoaded, 1000);" +
+                                "} else {" +
+                                "callback();" +
+                                "}" +
+                                "}" +
+                                "groupsLoaded();";
+                ((JavascriptExecutor) driver).executeAsyncScript(js);
+            }catch (ScriptTimeoutException e){
+                logger.error(e.getMessage());
+                ((JavascriptExecutor) driver).executeScript(dblClick,descriptionElement);
+            }
         }
 
         public String getTooltip() {
@@ -368,12 +516,44 @@ public class SettlementPage extends BaseClaimPage {
             return category;
         }
 
-        public int getAge() {
+        public String getAge() {
             return age;
         }
 
         public int getDepreciation() {
             return depreciation;
+        }
+
+        public Table getClaimLine() {
+            return claimLine;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public double getPurchasePrice() {
+            return purchasePrice;
+        }
+
+        public double getVoucherPurchaseAmount() {
+            return voucherPurchaseAmount;
+        }
+
+        public String getActualColor() {
+            return actualColor;
+        }
+
+        public String getComputedColor() {
+            return computedColor;
+        }
+
+        public WebElement getDescriptionElement() {
+            return descriptionElement;
+        }
+
+        public double getReplacementPrice() {
+            return replacementPrice;
         }
 
         boolean isTooltipPresent(String expectedText) {
@@ -465,6 +645,49 @@ public class SettlementPage extends BaseClaimPage {
 
             public Asserts assertProductDetailsIconIsDisplayed(){
                 boolean productInfoPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='typeColumn']//img[contains(@src, 'info.png')]")).isDisplayed();
+                return this;
+            }
+
+            public Asserts assertAttachmentsIconIsDisplayed(){
+                boolean attachmentsIconPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='hasAttachmentColumn']//img[contains(@src, 'paperclip.png')]")).isDisplayed();
+                assertTrue(attachmentsIconPresent, "Attachment icon should be displayed");
+                return this;
+            }
+
+            public Asserts assertQuantityIs(int quantity){
+                assertThat(getQuantity()).isEqualTo(quantity);
+                return this;
+            }
+
+            public Asserts assertAgeIs(String age){
+                assertThat(getAge()).containsIgnoringCase(age);
+                return this;
+            }
+
+            public Asserts assertDepreciationIs(int depreciation) {
+                assertThat(getDepreciation()).isEqualTo(depreciation);
+                return this;
+            }
+
+            public Asserts assertClaimLineIsCrossedOut(){
+                assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
+                assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
+                assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
+                return this;
+            }
+
+            public Asserts assertClaimLineIsRejected() {
+                assertThat(claimLine.findElement(By.xpath(".//tr")).getAttribute("class")).containsIgnoringCase("rejected");
+                return this;
+            }
+
+            public Asserts assertVoucherIconIsDisplayed() {
+                assertThat(claimLine.findElement(By.xpath(".//img[contains(@src, 'icons/voucherIcon.png')]")).isDisplayed()).isTrue();
+                return this;
+            }
+
+            public Asserts assertVoucherTooltipContains(String text) {
+                assertThat(tooltip).containsIgnoringCase(text);
                 return this;
             }
         }

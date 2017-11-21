@@ -2,7 +2,6 @@ package com.scalepoint.automation.tests.eccIntegrations;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
@@ -15,7 +14,6 @@ import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.ExtraModifier;
 import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -41,7 +39,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider")
     public void selfServiceImport(User user, ClaimItem claimItem){
-        SettlementPage settlementPage = loginAndOpenCwaClaimByToken(user, claimToken)
+        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken)
                 .requestSelfService(Constants.PASSWORD);
 
         assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->

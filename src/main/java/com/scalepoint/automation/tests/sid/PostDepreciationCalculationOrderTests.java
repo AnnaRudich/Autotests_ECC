@@ -125,8 +125,8 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         ProductInfo product = SolrApi.findProductAsVoucher();
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .toTextSearchPage(product.getModel())
-                .openSidForFirstProduct();
+                .toTextSearchPage(product.getModelAndCategory())
+                .openSidForProductWithVoucher();
 
         int voucherPercentage = settlementDialog.getVoucherPercentage();
         double voucherCashValue = settlementDialog.parseValuationRow(Valuation.VOUCHER).getTotalPrice();

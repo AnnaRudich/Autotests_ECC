@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.Wait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertEquals;
 
 public class EditVoucherValuationDialog extends BaseDialog {
@@ -65,16 +67,16 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public EditDiscountDistributionDialog updatePercentageFromDialog(DistributeTo distributeTo, Integer percentage) {
-        editDistributionButton.click();
+        clickUsingJsIfSeleniumClickReturnError(editDistributionButton);
         return BaseDialog.at(EditDiscountDistributionDialog.class).updatePercentage(distributeTo, percentage);
     }
 
     public String getBrands() {
-        return brandsText.getText();
+        return $(By.name("edit-voucher-brands-text-inputEl")).getValue();
     }
 
     public String getTags() {
-        return tags.getWrappedElement().getAttribute("textContent");
+        return tags.getText();
     }
 
     public SettlementDialog closeDialogWithOk() {
@@ -93,7 +95,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public SettlementDialog saveVoucherValuation() {
-        ok.click();
+        clickUsingJsIfSeleniumClickReturnError(ok);
         return at(SettlementDialog.class);
     }
 

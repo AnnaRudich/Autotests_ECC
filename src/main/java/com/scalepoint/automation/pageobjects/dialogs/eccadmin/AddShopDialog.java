@@ -130,7 +130,7 @@ public class AddShopDialog extends BaseDialog {
     public class Asserts {
 
         public Asserts assertIsShopDialogNotEditable() {
-            Assert.assertTrue(Wait.invisible(editableShopDialog));
+            Assert.assertTrue(Wait.invisibleOfElement(By.id("editSupplierShopTabFormId")));
             return this;
         }
     }

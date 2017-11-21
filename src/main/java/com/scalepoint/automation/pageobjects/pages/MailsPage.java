@@ -5,12 +5,11 @@ import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.types.SortType;
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.time.LocalDateTime;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.testng.Assert.assertTrue;
 
@@ -98,7 +96,7 @@ public class MailsPage extends BaseClaimPage {
     }
 
     public static class Mails {
-        public static final Logger log = LoggerFactory.getLogger(Mails.class);
+        public static final Logger log = LogManager.getLogger(Mails.class);
 
         private List<Mail> mails = new ArrayList<>();
 
@@ -178,7 +176,7 @@ public class MailsPage extends BaseClaimPage {
         REMINDER_MAIL("Påmindelse vedr. lukning af adgang"),
         BLOCKED_ACCOUNT("Lukning af adgang"),
         ITEMIZATION_CUSTOMER_MAIL("Kundemail (fnol)"),
-        ITEMIZATION_CONFIRMATION_MAIL("Selskabsmail (fnol)");
+        ITEMIZATION_CONFIRMATION_IC_MAIL("Selskabsmail (fnol)");
 
         private String typeText;
 

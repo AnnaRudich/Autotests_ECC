@@ -1,33 +1,31 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
 
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
+import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-@RequiredSetting(type = FTSetting.ENABLE_NEW_SETTLEMENT_ITEM_DIALOG)
 public class ClaimTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
@@ -146,6 +144,7 @@ public class ClaimTests extends BaseTest {
 
         login(user)
                 .openActiveRecentClaim()
+                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
                 .ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");
     }
@@ -264,7 +263,6 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
-
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
@@ -274,15 +272,16 @@ public class ClaimTests extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
                 .addDescriptionWithOutSuggestions(claimLineDescription)
-                .selectCategory(claimItem.getExistingCat3_Telefoni())
-                .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth("Apr")
+                .selectCategory(claimItem.getExistingCat3_Telefoni())
+                .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .saveItem()
                 .sendResponseToEcc();
 
         SettlementDialog settlementDialog = login(user)
                 .openActiveRecentClaim()
+                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
                 .findClaimLine(claimLineDescription)
                 .selectLine()
                 .getToolBarMenu()
@@ -301,8 +300,18 @@ public class ClaimTests extends BaseTest {
                     asserts.assertPurchasePriceIs(price);
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
+
+            to(MyPage.class).openActiveRecentClaim()
+                .toMailsPage()
+
+                .doAssert(mail -> {
+                    mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);
+                    mail.isMailExist(ITEMIZATION_CONFIRMATION_IC_MAIL);
+                });
+
     }
 
+    @RunOn(value = DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
@@ -337,6 +346,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with wizard
      * THEN: C1 status is "Completed"
      */
+    @RunOn(value = DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
@@ -360,6 +370,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with shop
      * THEN: C1 status is "Completed"
      */
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")
@@ -384,5 +395,13 @@ public class ClaimTests extends BaseTest {
                 .selectPlaceMyOrderOption()
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
+
+
+                new MyPage().openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail -> {
+                    mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);
+                    mail.isMailExist(ORDER_CONFIRMATION_BY_IC);
+                });
     }
 }

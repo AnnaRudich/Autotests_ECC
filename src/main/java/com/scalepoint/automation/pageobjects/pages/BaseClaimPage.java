@@ -41,6 +41,11 @@ public abstract class BaseClaimPage extends Page {
         mainMenu.toEccAdminPage();
     }
 
+    public SettlementPage toSettlementPageUsingNavigationMenu(){
+        claimNavigationMenu.toSettlementPage();
+        return at(SettlementPage.class);
+    }
+
     public SettlementPage toSettlementPage() {
         clickAndWaitForDisplaying(By.xpath("//button[@onclick='backToSettlement()']"), By.id("finishCaseBtn-btnInnerEl"));
         return at(SettlementPage.class);
