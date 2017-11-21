@@ -263,7 +263,6 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
-
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
