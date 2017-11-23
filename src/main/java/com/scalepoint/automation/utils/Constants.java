@@ -1,6 +1,11 @@
 package com.scalepoint.automation.utils;
 
+import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.SUPPLYMANAGER;
 
 public class Constants {
 
@@ -24,4 +29,6 @@ public class Constants {
     public static String getSupplierNameForVATests(User user) {
         return SUPPLIER_FOR_VOUCHERAGREEMENTS.replace("$CompanyId", user.getCompanyId().toString());
     }
+
+    public static final UserAddEditPage.UserType[] ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
 }
