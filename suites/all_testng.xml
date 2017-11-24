@@ -1,11 +1,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="8">
+<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="10">
     <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
             <package name=".*" >
                 <exclude name="com.scalepoint.automation.tests.rnv1"/>
                 <exclude name="com.scalepoint.automation.tests.api"/>
+                <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
             </package>
         </packages>
     </test>
+    <suite-files>
+        <suite-file path="components/reduction_rules_testng.xml"/>
+    </suite-files>
 </suite>
