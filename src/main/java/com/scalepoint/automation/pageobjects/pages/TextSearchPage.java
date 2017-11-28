@@ -215,6 +215,9 @@ public class TextSearchPage extends Page {
         Wait.waitForAjaxCompleted();
         Wait.waitForVisible(match);
         clickUsingJsIfSeleniumClickReturnError(match);
+        if(!BaseDialog.isOn(SettlementDialog.class)){
+            clickUsingJsIfSeleniumClickReturnError(match);
+        }
         return BaseDialog.at(SettlementDialog.class);
     }
 
