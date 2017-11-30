@@ -11,12 +11,15 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.DateUtils.getDateFromString;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.visible;
+import static com.scalepoint.automation.utils.Wait.waitForInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -78,6 +81,23 @@ public class CustomerDetailsPage extends BaseClaimPage {
         $(By.id("genoptag")).click();
         $(By.id("reopen-claim-button")).click();
         return at(SettlementPage.class);
+    }
+
+    public CustomerDetailsPage selectDamageDate(LocalDate date){
+        $(By.xpath("//a[@href='javascript:EditDamageDate()']")).click();
+        $(By.id("damageDate-inputEl")).click();
+        waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
+        $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
+        waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH).substring(0,3).toLowerCase()+"']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='"+date.getYear()+"']")).click();
+        clickElementUsingJS($(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]")));
+        waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='"+date.getDayOfMonth()+"']")).click();
+        waitForInvisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
+        $(By.xpath("//div[contains(@id, 'toolbar')]//div[@class='x-box-inner']//a")).click();
+        waitForInvisible($(By.id("damageDate-inputEl")));
+        return this;
     }
 
     public CustomerDetailsPage doAssert(Consumer<Asserts> assertFunc) {
