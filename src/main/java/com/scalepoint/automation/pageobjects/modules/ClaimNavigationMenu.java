@@ -41,48 +41,48 @@ public class ClaimNavigationMenu extends Module {
     private Link history;
 
     public void toSettlementPage() {
-        settelment.click();
+        clickUsingJsIfSeleniumClickReturnError(settelment);
     }
 
     public MailsPage toMailsPage() {
-        mails.click();
+        clickUsingJsIfSeleniumClickReturnError(mails);
         return at(MailsPage.class);
     }
 
     public CustomerDetailsPage toCustomerDetailsPage() {
-        details.click();
+        clickUsingJsIfSeleniumClickReturnError(details);
         return at(CustomerDetailsPage.class);
     }
 
     public void ClickImports() {
-        imports.click();
+        clickUsingJsIfSeleniumClickReturnError(imports);
     }
 
     public RnvProjectsPage toRepairValuationProjectsPage() {
-        repairValuation.click();
+        clickUsingJsIfSeleniumClickReturnError(repairValuation);
         return at(RnvProjectsPage.class);
     }
 
     public void ClickSettlementSummary() {
-        settlementSummary.click();
+        clickUsingJsIfSeleniumClickReturnError(settlementSummary);
     }
 
     public OrderDetailsPage toOrderDetailsPage() {
-        order.click();
+        clickUsingJsIfSeleniumClickReturnError(order);
         return at(OrderDetailsPage.class);
     }
 
     public void ClickDetails() {
-        details.click();
+        clickUsingJsIfSeleniumClickReturnError(details);
     }
 
     public NotesPage toNotesPage() {
-        notes.click();
+        clickUsingJsIfSeleniumClickReturnError(notes);
         return at(NotesPage.class);
     }
 
     public void ClickHistory() {
-        history.click();
+        clickUsingJsIfSeleniumClickReturnError(history);
     }
 
 }
