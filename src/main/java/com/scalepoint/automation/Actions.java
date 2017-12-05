@@ -142,7 +142,11 @@ public interface Actions {
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
         clickUsingJsIfSeleniumClickReturnError(element);
-        Wait.waitForDisplayed(byWaitForElement);
+        try {
+            Wait.waitForDisplayed(byWaitForElement);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            clickUsingJsIfSeleniumClickReturnError(element);
+        }
     }
 
     default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
