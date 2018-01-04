@@ -23,6 +23,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
+import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -273,7 +274,7 @@ public class ClaimTests extends BaseTest {
                 .login()
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
-                .selectPurchaseMonth("Apr")
+                .selectPurchaseMonth(JANUARY)
                 .selectCategory(claimItem.getExistingCat3_Telefoni())
                 .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .saveItem()
