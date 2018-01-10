@@ -24,7 +24,7 @@ public class TextSearchTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
                 .doAssert(
                         asserts -> {
                             asserts.assertSearchResultsContainsSearchModel(productInfo.getModel());
