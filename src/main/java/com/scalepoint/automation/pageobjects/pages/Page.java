@@ -139,6 +139,7 @@ public abstract class Page implements Actions {
         T page = PagesCache.get(pageClass);
         loadJavascriptHelpersIfNeeds(page);
         page.ensureWeAreOnPage();
+        Wait.waitForAjaxCompleted();
         return page;
     }
 

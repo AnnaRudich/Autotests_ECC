@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -39,7 +38,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
 import static com.scalepoint.automation.utils.Constants.AGE_YEAR;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -47,8 +45,6 @@ import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubl
 import static com.scalepoint.automation.utils.Wait.invisible;
 import static com.scalepoint.automation.utils.Wait.visible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -250,6 +246,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public CompleteClaimPage toCompleteClaimPage() {
+        waitForAjaxCompleted();
         settlementSummary.completeClaim();
         try {
             driver.switchTo().alert().accept();
