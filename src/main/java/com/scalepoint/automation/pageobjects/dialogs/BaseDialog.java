@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.Actions;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +38,7 @@ public abstract class BaseDialog implements Actions {
         try {
             T t = baseDialogClass.newInstance();
             t.ensureWeAreAt();
+            Wait.waitForAjaxCompleted();
             return t;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
