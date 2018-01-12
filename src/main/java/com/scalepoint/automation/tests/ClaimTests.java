@@ -67,6 +67,13 @@ public class ClaimTests extends BaseTest {
                 .fillClaimForm(claim)
                 .completeWithEmail()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+
+                new MyPage().openRecentClaim()
+                    .toMailsPage()
+                    .doAssert(mail -> {
+                        mail.isMailExist(CUSTOMER_WELCOME);
+                });
+
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")

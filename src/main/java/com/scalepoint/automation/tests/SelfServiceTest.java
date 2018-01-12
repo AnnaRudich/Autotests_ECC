@@ -132,7 +132,8 @@ public class SelfServiceTest extends BaseTest {
     @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-504 Self Service sending. Submit SS. Auto import")
+            description = "CHARLIE-504 Self Service sending. Submit SS. " +
+                    "Auto import")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)

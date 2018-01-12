@@ -6,7 +6,13 @@
                 <methods>
                     <include name="ecc3256_3050_loginToSelfService"/>
                     <include name="loginToSelfService2_0"/>
-                    <include name="ecc2631_quickMatchFromSS"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.SelfServiceTest">
+                <methods>
+                    <include name="charlie504_submitLine_autoImport"/>
+
                 </methods>
             </class>
 

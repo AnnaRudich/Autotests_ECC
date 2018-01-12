@@ -13,6 +13,12 @@
                 </methods>
             </class>
 
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+                <methods>
+                    <include name="charlie515_completeClaimExternallyFromSettlementPage" />
+                </methods>
+            </class>
+
             <class name="com.scalepoint.automation.tests.sid.SidTests">
                 <methods>
                     <include name="ecc3025_selectVoucherExistingCatAddDialog" />
