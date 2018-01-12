@@ -32,7 +32,7 @@ public class CreateClaimService extends BaseService {
     public CreateClaimService addClaim(ClaimRequest claimRequest){
         this.response = given().baseUri(getEccUrl()).basePath(UNIFIED_INTEGRATION).log().all()
                 .body(claimRequest)
-                .header(token.getAuthorizationHeder())
+                .header(token.getAuthorizationHeader())
                 .when()
                 .post()
                 .then().log().all()

@@ -19,25 +19,25 @@
             </activation>
         </profile>
         <profile>
-            <id>qa01</id>
+            <id>QA01</id>
             <properties>
                 <activatedProperties>qa01</activatedProperties>
             </properties>
         </profile>
         <profile>
-            <id>qa09</id>
+            <id>QA09</id>
             <properties>
                 <activatedProperties>qa09</activatedProperties>
             </properties>
         </profile>
         <profile>
-            <id>qa08</id>
+            <id>QA08</id>
             <properties>
                 <activatedProperties>qa08</activatedProperties>
             </properties>
         </profile>
         <profile>
-            <id>stage</id>
+            <id>STAGE</id>
             <properties>
                 <activatedProperties>stage</activatedProperties>
             </properties>
@@ -68,6 +68,8 @@
         <selenium.version>3.7.1</selenium.version>
         <spring.version>1.3.3.RELEASE</spring.version>
         <testng.version>6.9.12</testng.version>
+        <suiteXmlFile/>
+        <activatedProperties/>
     </properties>
 
     <build>
