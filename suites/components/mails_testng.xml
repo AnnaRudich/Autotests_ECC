@@ -28,7 +28,7 @@
                     <include name="ecc3256_3050_loginToSelfService"/>
                 </methods>
             </class>
-            <class name="com.scalepoint.automation.tests.eccIntegrations.EccIntegrationsWithCwaClaimSSTests"/>
+            <class name="com.scalepoint.automation.tests.eccCwaIntegration.EccIntegrationsWithCwaClaimSSTests"/>
             <class name="com.scalepoint.automation.tests.dnd2.DnD2_CompareCombineDDTests">
                 <methods>
                     <include name="charlie586_addFromSelfServiceWithRedRule"/>

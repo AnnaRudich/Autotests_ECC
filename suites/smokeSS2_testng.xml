@@ -1,16 +1,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="9">
-    <test verbose="1" name="SelfService 2.x" group-by-instances="false" enabled="true" preserve-order="true">
+    <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
         <classes>
-            <class name="com.scalepoint.automation.tests.eccCwaIntegration.EccIntegrationsWithCwaClaimSSTests"/>
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
-                    <include name="loginToSelfService2_0"/>
-                    <include name="charlie_1585_auditApprovedClaimAfterFnolSubmit"/>
-                    <include name="ecc2631_quickMatchFromSS"/>
                     <include name="ecc3256_3050_loginToSelfService"/>
+                    <include name="loginToSelfService2_0"/>
+                    <include name="ecc2631_quickMatchFromSS"/>
                 </methods>
             </class>
+
         </classes>
     </test>
 </suite>

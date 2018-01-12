@@ -1,0 +1,42 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="9">
+    <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+                <methods>
+                    <include name="charlie544_2629_completeClaimWithMail"/>
+                    <include name="charlie544_cancelSavedClaim"/>
+                    <include name="charlie544_reopenSavedClaim"/>
+                    <include name="ecc2631_addMatchedProductFromCatalog"/>
+                    <include name="charlie544_2632_completeSPSimpleClaimWizard"/>
+                    <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.sid.SidTests">
+                <methods>
+                    <include name="ecc3025_selectVoucherExistingCatAddDialog" />
+                    <include name="ecc3025_cashCompensationWithAddedDepVoucher" />
+                    <include name="ecc3025_cashCompensationWithoutDepNoVoucher" />
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+                <methods>
+                    <exclude name="charlie_532_depreciationFromSuggestionShouldBeNotUpdatedAfterChanging" />
+                    <exclude name="charlie_532_depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSid" />
+                    <exclude name="ecc3144_14_ReviewedBoxNotDisplayed" />
+                    <exclude name="ecc3144_15_cancelledClaimNotAdded" />
+                    <exclude name="ecc3144_17_openAddValuationDialogInSID" />
+                    <exclude name="ecc3144_19_addNewValuationPriceInAddValuationDialog" />
+                    <exclude name="ecc3144_20_addNewValuationPriceInAddValuationDialog" />
+                    <exclude name="ecc3144_22_enableAgeOption" />
+                    <exclude name="ecc3144_23_addYearsAndMonthAndSave" />
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.OrderDetailsTests"/>
+
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,26 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods" thread-count="8">
+
+    <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+            <package name=".*">
+                <exclude name="com.scalepoint.automation.tests.rnv1"/>
+                <exclude name="com.scalepoint.automation.tests.api"/>
+            </package>
+        </packages>
+    </test>
+
+    <test verbose="1" name="IP1Tests" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests">
+            <methods>
+                <include name="" />
+               <!--
+                    <exclude name="testMakeOrder" />
+                 -->
+            </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
