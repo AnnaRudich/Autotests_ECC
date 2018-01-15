@@ -2,7 +2,7 @@
 <suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="9">
     <test verbose="1" name="SelfService 2.x" group-by-instances="false" enabled="true" preserve-order="true">
         <classes>
-            <class name="com.scalepoint.automation.tests.eccIntegrations.EccIntegrationsWithCwaClaimSSTests"/>
+            <class name="com.scalepoint.automation.tests.eccCwaIntegration.EccIntegrationsWithCwaClaimSSTests"/>
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
                     <include name="loginToSelfService2_0"/>

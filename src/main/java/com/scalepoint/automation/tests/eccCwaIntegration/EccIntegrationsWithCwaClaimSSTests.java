@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.eccIntegrations;
+package com.scalepoint.automation.tests.eccCwaIntegration;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;

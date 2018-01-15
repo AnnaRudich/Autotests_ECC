@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.sid;
+package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
