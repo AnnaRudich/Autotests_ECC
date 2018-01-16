@@ -44,7 +44,7 @@ public class Token {
         this.tokenType = tokenType;
     }
 
-    public Header getAuthorizationHeder(){
+    public Header getAuthorizationHeader(){
         return new Header("Authorization", tokenType +" "+ accessToken);
     }
 }

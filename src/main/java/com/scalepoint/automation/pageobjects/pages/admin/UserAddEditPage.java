@@ -9,13 +9,17 @@ import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -199,8 +203,18 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public UsersPage selectSaveOption() {
-        clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
+        try{
+            clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
+        }catch (TimeoutException e){
+            logger.error(e.getMessage());
+            clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
+        }
         return at(UsersPage.class);
+    }
+
+    public <T extends Page> T selectSaveOption(Class<T> page) {
+        clickUsingJsIfSeleniumClickReturnError(saveButton);
+        return at(page);
     }
 
     /**
@@ -292,8 +306,8 @@ public class UserAddEditPage extends AdminBasePage {
 
     public UserAddEditPage createUserWithoutSaving(SystemUser user, UserType[] userTypesArr) {
         ArrayList<UserType> userTypes = Lists.newArrayList(userTypesArr);
-        find(byCompanyXpath, user.getCompany()).click();
-        find(byDepartmentXpath, user.getDepartment()).click();
+        forCondition(ExpectedConditions.elementToBeClickable(find(byCompanyXpath, user.getCompany()))).click();
+        forCondition(ExpectedConditions.elementToBeClickable(find(byDepartmentXpath, user.getDepartment()))).click();
         fillUserGeneralData(user);
         if (userTypes.contains(UserType.ADMIN)) {
             enableAdminType();
@@ -397,8 +411,13 @@ public class UserAddEditPage extends AdminBasePage {
             return this;
         }
 
-        public Asserts assertsIsGeneratedPasswordCorrect(String generatedPassword) {
+        public Asserts assertIsGeneratedPasswordCorrect(String generatedPassword) {
             OperationalUtils.assertStringMatchingPattern("[a-hjkmnp-zA-HJKMNP-Z2-9]+", generatedPassword);
+            return this;
+        }
+
+        public Asserts assertIsAlertPresent() {
+            assertThat($(By.tagName("i")).isDisplayed()).isTrue();
             return this;
         }
 

@@ -23,6 +23,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
+import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -65,7 +66,11 @@ public class ClaimTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail()
-                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
+
+                .openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail ->  mail.isMailExist(CUSTOMER_WELCOME));
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
@@ -263,7 +268,6 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
-
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
@@ -274,7 +278,7 @@ public class ClaimTests extends BaseTest {
                 .login()
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
-                .selectPurchaseMonth("Apr")
+                .selectPurchaseMonth(JANUARY)
                 .selectCategory(claimItem.getExistingCat3_Telefoni())
                 .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .saveItem()

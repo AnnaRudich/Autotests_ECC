@@ -78,6 +78,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             }
 
             public FormFiller withActive(boolean active) {
+                Wait.waitForAjaxCompleted();
                 Wait.waitForVisible(dialog.agreementStatusCombo).select(active ? "Active" : "Inactive");
                 return this;
             }

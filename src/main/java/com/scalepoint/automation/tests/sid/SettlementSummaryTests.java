@@ -82,7 +82,8 @@ public class SettlementSummaryTests extends BaseTest {
                             .withVoucher(voucher.getExistingVoucher_10());
                 })
                 .closeSidWithOk()
-                .toTextSearchPage(productInfo.getModelAndCategory())
+                .toTextSearchPage()
+                .searchBySku(productInfo.getSku())
                 .openSidForFirstProduct()
                 .closeSidWithOk()
                 .getSettlementSummary()

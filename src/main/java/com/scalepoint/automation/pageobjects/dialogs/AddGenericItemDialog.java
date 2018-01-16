@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -33,6 +34,7 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {
+        $(By.id("generic-item-dialog-category-combo-inputEl")).click();
         selectCategory(categoryGroup, category);
 
         ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(waitForDisplayed(By.id("generic-item-dialog-grid")),
@@ -52,7 +54,7 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     public SettlementPage close() {
-        cancel.click();
+        clickUsingJsIfSeleniumClickReturnError(cancel);
         return Page.at(SettlementPage.class);
     }
 

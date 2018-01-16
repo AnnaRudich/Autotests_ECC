@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.JavascriptExecutor;
 
 import javax.net.ssl.SSLContext;
 import java.util.List;
@@ -105,14 +106,16 @@ public class AuthenticationApi {
                 if (!cookie.getPath().contains(Configuration.getEccContext())) {
                     continue;
                 }
-                Browser.driver().manage().addCookie(new org.openqa.selenium.Cookie(
+                org.openqa.selenium.Cookie superCookie = new org.openqa.selenium.Cookie(
                         cookie.getName(),
                         cookie.getValue(),
                         //ie will not set cookies if shared name is incorrect (localhost, nb-ian)
                         cookie.getDomain().contains(".") ? cookie.getDomain() : null,
                         cookie.getPath(),
                         cookie.getExpiryDate()
-                ));
+                );
+                Browser.driver().manage().addCookie(superCookie);
+                ((JavascriptExecutor) Browser.driver()).executeScript("document.cookie=" + "\"" + superCookie.toString() + "\"");
             } catch (Exception e) {
                 log.info(e.getMessage());
             }
