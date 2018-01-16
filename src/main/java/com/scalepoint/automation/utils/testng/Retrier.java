@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Retrier implements IRetryAnalyzer {
 
     // Default retry once.
-    private AtomicInteger count = new AtomicInteger(2);
+    private AtomicInteger count = new AtomicInteger(3);
 
     /**
      * Set the max number of time the method needs to be retried.

@@ -23,4 +23,8 @@
         </classes>
     </test>
 
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+
 </suite>
