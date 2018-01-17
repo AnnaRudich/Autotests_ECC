@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods" thread-count="8">
+<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods" thread-count="7">
 
     <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
@@ -10,18 +10,18 @@
         </packages>
     </test>
 
-    <test verbose="1" name="IP1Tests" group-by-instances="false" enabled="true" preserve-order="true">
-        <classes>
-            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests">
-            <methods>
-                <include name="" />
-               <!--
-                    <exclude name="testMakeOrder" />
-                 -->
-            </methods>
-            </class>
-        </classes>
-    </test>
+    <!--<test verbose="1" name="IP1Tests" group-by-instances="false" enabled="true" preserve-order="true">-->
+        <!--<classes>-->
+            <!--<class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests">-->
+            <!--<methods>-->
+                <!--<include name="" />-->
+               <!--&lt;!&ndash;-->
+                    <!--<exclude name="testMakeOrder" />-->
+                 <!--&ndash;&gt;-->
+            <!--</methods>-->
+            <!--</class>-->
+        <!--</classes>-->
+    <!--</test>-->
 
     <listeners>
         <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
