@@ -954,7 +954,7 @@ public class SettlementDialog extends BaseDialog {
                 for (int i = 0; i < 3; i++) {
                     Wait.waitForStaleElement(xpath);
                     webElement = driver.findElement(xpath);
-                    webElement.click();
+                    clickUsingJsIfSeleniumClickReturnError(webElement);
                 }
             }
             waitASecond();
@@ -1307,6 +1307,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertScalepointSupplierVisible(String supplier) {
+            waitForAjaxCompleted();
             assertTrue(statusSupplier.getText().contains(supplier), "Scalepoint supplier must be visible");
             return this;
         }

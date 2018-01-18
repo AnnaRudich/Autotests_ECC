@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public interface Actions {
 
@@ -141,7 +142,11 @@ public interface Actions {
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
         clickUsingJsIfSeleniumClickReturnError(element);
-        Wait.waitForDisplayed(byWaitForElement);
+        try {
+            Wait.waitForDisplayed(byWaitForElement);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            clickUsingJsIfSeleniumClickReturnError(element);
+        }
     }
 
     default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
@@ -247,8 +252,15 @@ public interface Actions {
     }
 
     default void setValue(WebElement element, String value) {
+        waitForVisible(element);
         JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
-        executor.executeScript("arguments[0].value=arguments[1];", element, value);
+        for(int i=0; i<3; i++){
+            if(element.getText().contains(value)){
+               break;
+            }else {
+                executor.executeScript("arguments[0].value=arguments[1];", element, value);
+            }
+        }
     }
 
     default void clickElementUsingJS(WebElement element){

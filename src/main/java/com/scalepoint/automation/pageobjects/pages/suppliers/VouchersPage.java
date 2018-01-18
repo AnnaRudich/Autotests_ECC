@@ -10,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -183,7 +184,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
         String xpath = byVoucherNameXpath.replace("$1", voucherName);
         try {
             WebElement option = find(By.xpath(xpath));
-            return option.getText().contains(voucherName);
+            return Wait.forCondition(ExpectedConditions.textToBePresentInElement(option, voucherName));
         } catch (Exception e) {
             return false;
         }

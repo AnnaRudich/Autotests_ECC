@@ -1,0 +1,27 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ReplacementDialog" configfailurepolicy="continue" parallel="methods" thread-count="1">
+<test verbose="1" name="ReplacementDialogTests" group-by-instances="false" enabled="true" preserve-order="true">
+    <classes>
+        <class name="com.scalepoint.automation.tests.ClaimTests">
+            <methods>
+                <include name="charlie544_2632_completeSPSimpleClaimWizard" />
+                <include name="charlie544_completeSimpleClaimWithShopExistingData" />
+            </methods>
+        </class>
+
+        <class name="com.scalepoint.automation.tests.OrderDetailsTests"> </class>
+
+        <class name="com.scalepoint.automation.tests.sid.DeprecationDeductedTests">
+            <methods>
+                <include name="ecc3288_2_displayVoucherValueWithDeprecationDeductedON" />
+            </methods>
+        </class>
+
+        <class name="com.scalepoint.automation.tests.sid.DepreciationDeductedCombinedTests">
+            <methods>
+                <include name="ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON" />
+            </methods>
+        </class>
+    </classes>
+</test>
+</suite>

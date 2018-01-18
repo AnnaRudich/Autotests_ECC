@@ -34,7 +34,7 @@ public class CaseSettlementDataService extends BaseService {
 
     public CaseSettlementDataService getSettlementData(String revisionToken, String tenant){
         this.response = given().baseUri(getEccUrl()).log().all()
-                .header(token.getAuthorizationHeder())
+                .header(token.getAuthorizationHeader())
                 .pathParam("revisionToken", revisionToken)
                 .pathParam("tenant", tenant)
                 .get(CASE_GET_REVISION)

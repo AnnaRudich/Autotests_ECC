@@ -215,6 +215,9 @@ public class TextSearchPage extends Page {
         Wait.waitForAjaxCompleted();
         Wait.waitForVisible(match);
         clickUsingJsIfSeleniumClickReturnError(match);
+        if(!BaseDialog.isOn(SettlementDialog.class)){
+            clickUsingJsIfSeleniumClickReturnError(match);
+        }
         return BaseDialog.at(SettlementDialog.class);
     }
 
@@ -323,8 +326,8 @@ public class TextSearchPage extends Page {
 
     public String getFirstProductId() {
         Wait.waitForAjaxCompleted();
-        Wait.waitForDisplayed(By.xpath("(.//*[@id='productsTable']/table//td[@productId])[1]"));
-        return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productId])")).attr("productId");
+        Wait.waitForDisplayed(By.xpath("(.//*[@id='productsTable']/table//td[@productid])[1]"));
+        return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productid])")).attr("productid");
     }
 
     public TextSearchPage selectBrand(String text) {

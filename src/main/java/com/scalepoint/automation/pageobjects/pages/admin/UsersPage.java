@@ -8,6 +8,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -86,7 +87,14 @@ public class UsersPage extends AdminBasePage {
         refreshUsersList();
         waitForAjaxCompleted();
         makeUserSearchByName(user.getLogin());
-        WebElement item = find(byUserLoginXpath, user.getLogin());
+        WebElement item;
+        try {
+            item = find(byUserLoginXpath, user.getLogin());
+        } catch (TimeoutException e){
+            logger.error(e.getMessage());
+            makeUserSearchByName(user.getLogin());
+            item = find(byUserLoginXpath, user.getLogin());
+        }
         return item.getText().contains(user.getLogin()) &&
                 item.getText().contains((user.getFirstName())) &&
                 item.getText().contains(user.getLastName());

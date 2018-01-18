@@ -105,6 +105,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
 
 
     public Integer getVoucherPercentage() {
+        Wait.waitForAjaxCompleted();
         String text = voucherRebate.getText();
         return Integer.valueOf(text.replaceAll("([0-9]+),.*", "$1"));
     }

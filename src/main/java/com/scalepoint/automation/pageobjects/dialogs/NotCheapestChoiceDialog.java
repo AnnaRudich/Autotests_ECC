@@ -70,7 +70,7 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         }
 
         public Asserts assertNotPossibleToCloseDialog() {
-            ok.click();
+            clickUsingJsIfSeleniumClickReturnError(ok);
             try {
                 at(NotCheapestChoiceDialog.class);
             } catch (Exception e) {

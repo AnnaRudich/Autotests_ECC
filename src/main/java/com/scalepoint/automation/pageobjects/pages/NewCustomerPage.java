@@ -3,13 +3,19 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -95,13 +101,27 @@ public class NewCustomerPage extends Page {
         return this;
     }
 
-    public void create() {
+    public SettlementPage create() {
         continueButton.click();
         Wait.waitForPageLoaded();
+        return Page.at(SettlementPage.class);
     }
 
     public NewCustomerPage selectCompany(String company) {
         selectCompany.selectByVisibleText(company);
+        return this;
+    }
+
+    public NewCustomerPage selectDamageDate(LocalDate date){
+        damageDate.click();
+        waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
+        $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
+        waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH).substring(0,3).toLowerCase()+"']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='"+date.getYear()+"']")).click();
+        clickElementUsingJS($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']")));
+        waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='"+date.getDayOfMonth()+"']")).click();
         return this;
     }
 
@@ -112,7 +132,7 @@ public class NewCustomerPage extends Page {
 
     public class Asserts {
 
-        public Asserts assertThatDamgeDateIsDisplayed() {
+        public Asserts assertThatDamageDateIsDisplayed() {
             assertThat(damageDate.isDisplayed()).isTrue();
             return this;
         }

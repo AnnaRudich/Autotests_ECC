@@ -109,10 +109,10 @@ public class ShopWelcomePage extends ShopFlow {
         public Asserts assertItemWithPricePresent(String productName, Double expectedPrice) {
             String expectedPriceValue = OperationalUtils.format(expectedPrice);
             List<WebElement> items = findItemsByProductName(productName);
-            Assert.assertTrue(items.size() == 1, "Product with name " + productName + " not found");
+            Assert.assertTrue(items.size() >= 1, "Product with name " + productName + " not found");
 
             List<WebElement> prices = driver.findElements(By.xpath(".//div[@class='ProductList']//td[contains(@class,'purchase_price') and contains(text(),'" + expectedPriceValue + "')]"));
-            Assert.assertTrue(prices.size() == 1, "Product with price" + expectedPriceValue + " not found");
+            Assert.assertTrue(prices.size() >= 1, "Product with price" + expectedPriceValue + " not found");
             return this;
         }
 

@@ -51,7 +51,7 @@ public class ClaimSettlementItemService extends BaseService {
                 .formParam("fromNewSid", true)
                 .when()
                 .post(INSERT_SETTLEMENT)
-                .then().statusCode(HttpStatus.SC_OK).log().all().extract().response();
+                .then().log().all().statusCode(HttpStatus.SC_OK).extract().response();
         return this;
     }
 

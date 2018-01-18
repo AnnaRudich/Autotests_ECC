@@ -1,16 +1,17 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -22,15 +23,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeprecationsFromDamageDateTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed while creating new claim")
-    public void charlie_554_verifyDamageDateIsDisplayed(User user, Claim claim) {
+    @RunOn(DriverType.CHROME_REMOTE)
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed and can be setup on creating new claim and on customer details page")
+    public void charlie_554_verifyDamageDateIsDisplayedAndCanBeSetOnCreatingAndDetails(User user, Claim claim) {
         login(user)
                 .clickCreateNewCase()
                 .enterClaimNumber(claim.getClaimNumber())
                 .enterFirstName(claim.getFirstName())
                 .enterSurname(claim.getLastName())
+                .selectDamageDate(LocalDate.now().minusDays(3))
+                .selectPolicyType(1)
+                .create()
+                .toCustomerDetails()
                 .doAssert(
-                        NewCustomerPage.Asserts::assertThatDamgeDateIsDisplayed
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(3))
+                )
+                .selectDamageDate(LocalDate.now().minusDays(5))
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(5))
                 );
     }
 
