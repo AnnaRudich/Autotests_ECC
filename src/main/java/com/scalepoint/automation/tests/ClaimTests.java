@@ -45,7 +45,6 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .saveClaim()
                 .openRecentClaim()
-
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
