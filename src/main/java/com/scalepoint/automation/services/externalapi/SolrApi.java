@@ -166,7 +166,7 @@ public class SolrApi {
             QueryResponse response = solr.query(query);
             if(response.getResults().size() == 0){
 
-                updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_50.toString(),
+                updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_10.toString(),
                         "market_price", "price_lowest_1", "product_as_voucher_supplier_shop_1");
                 response = solr.query(query);
             }

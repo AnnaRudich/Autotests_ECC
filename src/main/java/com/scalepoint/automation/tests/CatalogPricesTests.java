@@ -47,7 +47,7 @@ public class CatalogPricesTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RunOn(DriverType.IE)
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
+    @Test(enabled = true, dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceEqualsMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProductAsVoucherWithProductInvoiceEqualsMarketPrice();
 
@@ -67,7 +67,7 @@ public class CatalogPricesTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add BnO product with Product Invoice Price > than Market price")
+    @Test(enabled = true, dataProvider = "testDataProvider", description = "Add BnO product with Product Invoice Price > than Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceHigherThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProductAsVoucherWithProductInvoiceHigherThanMarketPrice();
 
