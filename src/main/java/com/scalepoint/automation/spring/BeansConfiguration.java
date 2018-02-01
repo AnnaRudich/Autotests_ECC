@@ -10,6 +10,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -32,6 +33,8 @@ public class BeansConfiguration {
     private String solrProductsUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_URL+ "}")
     private String dbUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL+ "}")
+    private String eventApiDbUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_USERNAME+ "}")
     private String dbUsername;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_PASSWORD+ "}")
@@ -55,7 +58,8 @@ public class BeansConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
-    @Bean
+    @Bean(name = "eccDb")
+    @Primary
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
