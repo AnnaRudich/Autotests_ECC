@@ -139,13 +139,13 @@ public class SolrApi {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
             query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
-                    .setFilterQueries("{!frange l=0 u=0}sub(price_invoice_1,market_price)");
+                    .setFilterQueries("{!frange l=0 u=0}sub(price_invoice_2,market_price)");
             QueryResponse response;
             response = solr.query(query);
             if(response.getResults().size() == 0){
 
                 updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_500.toString(),
-                        "market_price", "price_invoice_1", "price", "price_supplier_shop_1", "price_lowest_1");
+                        "market_price", "price_invoice_1","price_invoice_2", "price", "price_supplier_shop_1", "price_lowest_1");
                 response = solr.query(query);
             }
             ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
@@ -162,12 +162,12 @@ public class SolrApi {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
             query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
-                    .setFilterQueries("{!frange l=0 incl=false}sub(price_invoice_1,market_price)");
+                    .setFilterQueries("{!frange l=0 incl=false}sub(price_invoice_2,market_price)");
             QueryResponse response = solr.query(query);
             if(response.getResults().size() == 0){
 
                 updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_10.toString(),
-                        "market_price", "price_lowest_1", "product_as_voucher_supplier_shop_1");
+                        "market_price", "price_invoice_1","price_supplier_shop_1", "price_lowest_1");
                 response = solr.query(query);
             }
             ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
