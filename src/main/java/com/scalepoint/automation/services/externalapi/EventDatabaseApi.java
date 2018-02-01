@@ -14,6 +14,7 @@ import java.security.InvalidParameterException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_SETTLED;
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_UPDATED;
@@ -31,9 +32,21 @@ public class EventDatabaseApi {
     }
 
     public EventClaimSettled getEventClaimSettled(ClaimRequest claimRequest) {
-        return getEventsForClaimSettled(claimRequest.getCompany()).stream()
-                .filter(eventClaimUpdated -> eventClaimUpdated.getCase().getNumber().equals(claimRequest.getCaseNumber()))
-                .findFirst().get();
+        Boolean notFound = true;
+        Integer i = 0;
+        EventClaimSettled eventClaimSettled = new EventClaimSettled();
+        while(i<5 && notFound){
+            try {
+                i++;
+                eventClaimSettled = getEventsForClaimSettled(claimRequest.getCompany()).stream()
+                        .filter(eventClaimUpdated -> eventClaimUpdated.getCase().getNumber().equals(claimRequest.getCaseNumber()))
+                        .findFirst().get();
+                notFound = false;
+            } catch (NoSuchElementException ex){
+                logger.info("Not found element in events database");
+            }
+        }
+        return eventClaimSettled;
     }
 
     public List<EventClaimUpdated> getEventsForClaimUpdate(String company){

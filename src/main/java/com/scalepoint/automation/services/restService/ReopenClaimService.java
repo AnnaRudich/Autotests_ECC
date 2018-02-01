@@ -4,12 +4,10 @@ import com.scalepoint.automation.services.restService.Common.BasePath;
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.services.restService.Common.Data;
 import org.apache.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
-@Component
 public class ReopenClaimService extends BaseService {
 
     private Data data;

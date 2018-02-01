@@ -119,6 +119,10 @@ public class DatabaseApi {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ?", String.class, claimNumber);
     }
 
+    public String getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(String claimNumber){
+        return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'S'", String.class, claimNumber);
+    }
+
     public String getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(String claimNumber){
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'X'", String.class, claimNumber);
     }

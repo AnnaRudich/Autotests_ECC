@@ -13,4 +13,9 @@ public class BaseApiTest extends AbstractBaseTest {
         return new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()), claimRequest.getTenant());
     }
+
+    protected CaseSettlementDataService getSettlementDataForSettledClaims(ClaimRequest claimRequest){
+        return new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+                .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(claimRequest.getCaseNumber()), claimRequest.getTenant());
+    }
 }
