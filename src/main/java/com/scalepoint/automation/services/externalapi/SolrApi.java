@@ -2,14 +2,19 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+
+import java.io.IOException;
 
 public class SolrApi {
 
@@ -79,6 +84,24 @@ public class SolrApi {
         }
     }
 
+    /**
+     * this method updates product prices directly in Solr Index, to create test data which is missing in DB
+     */
+    private static void updatePricesInIndex(SolrClient solrClient, QueryResponse response, String priceValue, String... fieldNames) throws SolrServerException, IOException {
+        for (String fieldName : fieldNames) {
+            response.getResults().get(0).setField(fieldName, priceValue);
+        }
+
+        SolrDocument solrDoc = response.getResults().get(0);
+        SolrInputDocument solrInputDoc = new SolrInputDocument();
+        for (String name : solrDoc.getFieldNames()) {
+            solrInputDoc.addField(name, solrDoc.getFieldValue(name));
+        }
+        solrClient.add(solrInputDoc);
+        solrClient.commit();
+    }
+
+
     public static ProductInfo findProductAsVoucher() {
         try {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
@@ -110,14 +133,21 @@ public class SolrApi {
             throw new IllegalStateException("no products found", e);
         }
     }
-//no such products for now
+
     public static ProductInfo findProductAsVoucherWithProductInvoiceEqualsMarketPrice(){
         try{
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
             query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
-                    .setFilterQueries("{!frange l=0 u=0}sub(price_invoice_1,market_price)");
-            QueryResponse response = solr.query(query);
+                    .setFilterQueries("{!frange l=0 u=0}sub(price_invoice_2,market_price)");
+            QueryResponse response;
+            response = solr.query(query);
+            if(response.getResults().size() == 0){
+
+                updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_500.toString(),
+                        "market_price", "price_invoice_1","price_invoice_2", "price", "price_supplier_shop_1", "price_lowest_1");
+                response = solr.query(query);
+            }
             ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
             logger.info("FindBaOProduct: {}", productInfo);
             return productInfo;
@@ -126,14 +156,20 @@ public class SolrApi {
             throw new IllegalStateException("no products found", e);
         }
     }
-//no such products for now
+
     public static ProductInfo findProductAsVoucherWithProductInvoiceHigherThanMarketPrice(){
         try{
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
             SolrQuery query = new SolrQuery();
             query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
-                    .setFilterQueries("{!frange l=0 incl=false}sub(price_invoice_1,market_price)");
+                    .setFilterQueries("{!frange l=0 incl=false}sub(price_invoice_2,market_price)");
             QueryResponse response = solr.query(query);
+            if(response.getResults().size() == 0){
+
+                updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_10.toString(),
+                        "market_price", "price_invoice_1","price_supplier_shop_1", "price_lowest_1");
+                response = solr.query(query);
+            }
             ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
             logger.info("FindBaOProduct: {}", productInfo);
             return productInfo;
