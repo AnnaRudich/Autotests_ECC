@@ -15,5 +15,7 @@ public interface BasePath {
     String CASE_GET_REVISION = "case/{tenant}/revision/{revisionToken}";
     String CANCEL_CLAIM = "/CancelClaim";
     String SETTLEMENT = "/{userId}/webshop/jsp/matching_engine/settlement.jsp";
-
+    String OWN_RISK = "/{userId}/rest/settlement/ownRisk";
+    String REOPEN = "ReopenCustomer";
+    String SETTLEMENT_TOTALS = "/{userId}/rest/settlement/settlementSummaryTotals.json";
 }
