@@ -17,11 +17,11 @@ public class Browser {
     }
 
     public static WebDriver driver() {
-        return holder.get().getDriver();
+        return holder.get() != null ? holder.get().getDriver() : null;
     }
 
     public static String getDriverType() {
-        return holder.get().getDriverType().name();
+        return holder.get() != null ? holder.get().getDriverType().name() : "no_browser";
     }
 
     public static String getMainWindowHandle() {

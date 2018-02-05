@@ -12,6 +12,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
@@ -20,6 +21,7 @@ import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
@@ -41,11 +43,20 @@ import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.Logs;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -65,9 +76,21 @@ import java.util.stream.Collectors;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 
-
+@SpringApplicationConfiguration(classes = Application.class)
+@TestExecutionListeners(inheritListeners = false, listeners = {
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class})
+@IntegrationTest
 @Listeners({InvokedMethodListener.class})
-public class BaseTest extends AbstractBaseTest {
+public class BaseTest extends AbstractTestNGSpringContextTests {
+
+    protected Logger logger = LogManager.getLogger(BaseTest.class);
+
+    @Autowired
+    protected DatabaseApi databaseApi;
+
+    @Value("${driver.type}")
+    protected String browserMode;
 
     private DriverType driverType = null;
 

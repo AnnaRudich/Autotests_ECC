@@ -69,7 +69,7 @@ public class SettlementClaimService extends BaseService {
                     .sessionId(data.getEccSessionId())
                     .pathParam("userId", data.getUserId())
                     .get(reason.getPath())
-                    .then().statusCode(HttpStatus.SC_OK).extract().response();
+                    .then().log().headers().statusCode(HttpStatus.SC_OK).extract().response();
         }
 
         return this;

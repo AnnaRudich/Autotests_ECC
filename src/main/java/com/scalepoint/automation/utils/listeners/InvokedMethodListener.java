@@ -40,29 +40,33 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         if (invokedMethod.isTestMethod()) {
-
-            logger.info("Using driver type: " + Browser.getDriverType());
-            logger.info("Start from: " + SystemUtils.getHostname());
-            gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver)Browser.driver()).getSessionId());
-            logger.info("Running on grid node: " + gridNode);
-
-            int attempt = 0;
-            /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
-            while (attempt <= 1) {
-                try {
-                    updateTemplate(invokedMethod, iTestResult);
-                    break;
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                    logger.error("Next attempt");
-                    attempt++;
-                    if (attempt > 1) {
-                        throw e;
-                    }
-                }
+            if (Browser.driver() != null) {
+                logger.info("Using driver type: " + Browser.getDriverType());
+                logger.info("Start from: " + SystemUtils.getHostname());
+                gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
+                logger.info("Running on grid node: " + gridNode);
+                retryUpdateFtTemplate(invokedMethod, iTestResult);
             }
         }
 
+    }
+
+    private void retryUpdateFtTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult) {
+        int attempt = 0;
+            /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
+        while (attempt <= 1) {
+            try {
+                updateTemplate(invokedMethod, iTestResult);
+                break;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                logger.error("Next attempt");
+                attempt++;
+                if (attempt > 1) {
+                    throw e;
+                }
+            }
+        }
     }
 
     private void updateTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult) {
@@ -78,27 +82,29 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings("unchecked")
     @Override
     public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
-        if (iInvokedMethod.isTestMethod()) {
-            try {
-                takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
+        if(Browser.driver() != null) {
+            if (iInvokedMethod.isTestMethod()) {
+                try {
+                    takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
 
-                logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
-                printErrorStackTraceIfAny(iTestResult);
+                    logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
+                    printErrorStackTraceIfAny(iTestResult);
 
-                RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
-                if (rollbackContext == null || rollbackContext.getOperations().isEmpty()) {
-                    logger.info("No ft settings found to rollback");
-                    return;
-                }
+                    RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
+                    if (rollbackContext == null || rollbackContext.getOperations().isEmpty()) {
+                        logger.info("No ft settings found to rollback");
+                        return;
+                    }
 
-                Page.to(LoginPage.class);
+                    Page.to(LoginPage.class);
 
-                FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-                List<FtOperation> operations = rollbackContext.getOperations();
-                functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
-            } catch (Exception e) {
+                    FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
+                    List<FtOperation> operations = rollbackContext.getOperations();
+                    functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
+                } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
-                logger.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
+                }
             }
         }
     }
@@ -111,7 +117,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     }
 
     private String getFileName(Method method) {
-        return "node_" + gridNode.replace("http://","").replace(gridNode.substring(gridNode.lastIndexOf(":")), "")
+        return "node_" + gridNode.replace("http://", "").replace(gridNode.substring(gridNode.lastIndexOf(":")), "")
                 + "_" + Browser.getDriverType()
                 + "_" + method.getName();
     }
