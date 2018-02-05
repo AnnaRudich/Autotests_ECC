@@ -6,8 +6,14 @@ import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import io.restassured.RestAssured;
+import io.restassured.config.HttpClientConfig;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.params.CoreConnectionPNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static com.scalepoint.automation.utils.Configuration.getEccAdminUrl;
 
 /**
  * Created by bza on 6/29/2017.
@@ -23,6 +29,13 @@ public class BaseService {
 
     public BaseService(){
         this.data = ServiceData.getData();
+        if(getEccAdminUrl().contains("localhost")) {
+            RestAssured.port = 80;
+        }
+        RestAssured.config.set().httpClient(HttpClientConfig.httpClientConfig()
+                .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, 3000L)
+                .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000)
+                .setParam(CoreConnectionPNames.SO_TIMEOUT, 3000));
     }
 
     public String getClaimTokenWithoutPrefix(){

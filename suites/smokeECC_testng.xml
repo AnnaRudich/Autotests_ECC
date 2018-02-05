@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="7">
-    <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
+<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" >
+    <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true" thread-count="7">
         <classes>
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
@@ -62,6 +62,11 @@
             <class name="com.scalepoint.automation.tests.OrderDetailsTests"/>
 
         </classes>
+    </test>
+    <test verbose="1" name="api" enabled="true" preserve-order="true" thread-count="1">
+        <packages>
+            <package name="com.scalepoint.automation.tests.api"/>
+        </packages>
     </test>
 
     <listeners>

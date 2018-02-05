@@ -40,7 +40,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
         new SettlementClaimService().close(eccIntegration, CLOSE_EXTERNAL);
 
-        createClaimXmlIntegration(eccIntegration).statusCode(HttpStatus.SC_OK);
+        createClaimXmlIntegration(eccIntegration);
         openClaim().statusCode(HttpStatus.SC_OK);
 
     }
@@ -52,7 +52,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
         createClaimXmlIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
         openClaim().statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
 
-        createClaimXmlIntegration(eccIntegration).statusCode(HttpStatus.SC_OK);
+        createClaimXmlIntegration(eccIntegration);
         openClaim().statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
 
     }
@@ -74,7 +74,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
         new SettlementClaimService().close(eccIntegration, CLOSE_EXTERNAL);
 
-        createClaimGetIntegration(eccIntegration).statusCode(HttpStatus.SC_OK);
+        createClaimGetIntegration(eccIntegration);
         openClaim().statusCode(HttpStatus.SC_OK);
 
     }
@@ -86,7 +86,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
         createClaimGetIntegration(eccIntegration).statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
         openClaim().statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
 
-        createClaimGetIntegration(eccIntegration).statusCode(HttpStatus.SC_OK);
+        createClaimGetIntegration(eccIntegration);
         openClaim().statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
 
     }

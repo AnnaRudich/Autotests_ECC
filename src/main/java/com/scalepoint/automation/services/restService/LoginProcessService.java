@@ -29,10 +29,6 @@ public class LoginProcessService extends BaseService {
 
     public LoginProcessService login(User user){
 
-        if(getEccAdminUrl().contains("localhost")) {
-            RestAssured.port = 80;
-        }
-
         Response loginProcessResponse = given().log().all().baseUri(getEccAdminUrl())
                 .redirects().follow(false)
                 .formParam("j_username", user.getLogin())
