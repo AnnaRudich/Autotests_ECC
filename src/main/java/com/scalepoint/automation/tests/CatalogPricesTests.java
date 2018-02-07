@@ -4,11 +4,9 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
@@ -45,7 +43,6 @@ public class CatalogPricesTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
-    @RunOn(DriverType.IE)
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceEqualsMarketPrice(User user, Claim claim) {
@@ -53,7 +50,7 @@ public class CatalogPricesTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
                 .openSidForFirstProduct()
 
                 .doAssert(asserts -> {
@@ -72,7 +69,7 @@ public class CatalogPricesTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
                 .openSidForFirstProduct()
 
                 .doAssert(asserts -> {
