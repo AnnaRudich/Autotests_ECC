@@ -13,8 +13,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.GPS_NEJ;
-import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.SMARTPHONE_NEJ;
+import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
+import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
 
 public class TextSearchTests extends BaseTest {
 
@@ -62,7 +62,7 @@ public class TextSearchTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
     public void charlie510_selectAttributes(User user, Claim claim, TextSearch textSearch) {
         int index = 0;
-        Attributes[] attributes = {GPS_NEJ, SMARTPHONE_NEJ};
+        Attributes[] attributes = {DUAL_KAMERA_NEJ, NFC_NEJ};
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

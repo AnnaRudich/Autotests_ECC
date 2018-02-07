@@ -34,8 +34,12 @@ public class YesNoAttributeAction implements SearchAttributesActions {
             checkBox.select();
         }
         Select selectYesNo = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[1]")));
-        Select comparision = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[2]")));
-        Arrays.stream(options).forEach(option -> chooseOptionFromSelects(option, selectYesNo, comparision));
+        Select comparision = new Select(null);
+            if(options.length>1){
+                comparision = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[2]")));
+            }
+        Select finalComparision = comparision;
+        Arrays.stream(options).forEach(option -> chooseOptionFromSelects(option, selectYesNo, finalComparision));
     }
 
     private void chooseOptionFromSelects(String option, Select... selects) {

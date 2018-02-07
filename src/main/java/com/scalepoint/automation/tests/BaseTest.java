@@ -16,6 +16,7 @@ import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.TestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
+import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
@@ -107,6 +108,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Browser.init(driver, driverType);
         Window.init(driver);
         WebDriverRunner.setWebDriver(driver);
+        ServiceData.init(databaseApi);
 
         JavascriptHelper.initializeCommonFunctions();
         driver.manage().window().maximize();
