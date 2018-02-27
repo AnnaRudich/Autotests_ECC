@@ -1,0 +1,29 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="matching engine" configfailurepolicy="continue" parallel="methods" thread-count="2">
+    <test verbose="1" name="matchingEngine" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+           <!-- to be added:
+                CHARLIE-646 Sending
+                CHARLIE-514 Replacement wizard
+                CHARLIE-524 Remove vouchers on multiple lines
+                CHARLIE-503 SS2.0 auto-import-->
+
+            <package name="com.scalepoint.automation.tests.LessIsMoreTests"/>
+            <package name="com.scalepoint.automation.tests.OrderDetailsTests"/>
+            <package name="com.scalepoint.automation.tests.CatalogPricesTests"/>
+            <package name="com.scalepoint.automation.tests.ClaimTests"/>
+            <package name="com.scalepoint.automation.tests.CompleteClaimExternally"/>
+
+            <package name="com.scalepoint.automation.tests.admin.GenericItemsTests"/>
+
+            <package name="com.scalepoint.automation.tests.sid.DeprecationsFromDamageDateTests"/>
+            <package name="com.scalepoint.automation.tests.sid.SidManualItemsTests"/>
+            <package name="com.scalepoint.automation.tests.sid.SidReductionRulesDiscretionaryTests"/>
+            <package name="com.scalepoint.automation.tests.sid.SettlementSummaryTests"/>
+            <package name="com.scalepoint.automation.tests.sid.VoucherAgreementSharedExclusiveTests"/>
+            <package name="com.scalepoint.automation.tests.sid.PostDepreciationCalculationOrderTests"/>
+
+            <package name="com.scalepoint.automation.tests.dnd2.DnD2_ColumnsAndCalculations"/>
+        </packages>
+    </test>
+</suite>

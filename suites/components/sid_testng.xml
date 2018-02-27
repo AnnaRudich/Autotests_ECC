@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="sid" configfailurepolicy="continue" parallel="methods" thread-count="2">
+    <test verbose="1" name="sid" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+            <!-- to be added:
+                 CHARLIE-639 Coupons SE(maybe to country specific suite?)
+                 CHARLIE-501 RnV Smoke-->
+
+            <package name="com.scalepoint.automation.tests.sid"/>
+            <package name="com.scalepoint.automation.tests.CatalogPricesTests"/>
+
+        </packages>
+    </test>
+</suite>
