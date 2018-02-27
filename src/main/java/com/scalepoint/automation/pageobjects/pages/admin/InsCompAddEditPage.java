@@ -61,6 +61,9 @@ public class InsCompAddEditPage extends AdminBasePage {
     @FindBy(name = "auditSendTimeTo")
     private WebElement sendTimeToField;
 
+    @FindBy(xpath = "//input[contains(@id, 'localizedName')]")
+    private WebElement localizedNameInput;
+
     private String byFTXpath = "//select[@name='icftnbr']/option[contains(.,'$1')]";
 
     private String byGUIXpath = "//select[@name='icgtnbr']/option[contains(.,'$1')]";
@@ -97,6 +100,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         zipCodeField.sendKeys(insuranceCompany.getZipCode());
         cityField.sendKeys(insuranceCompany.getIcCity());
         icCommonMailField.sendKeys(insuranceCompany.getCompanyCommonMail());
+        localizedNameInput.sendKeys(insuranceCompany.getIcName());
 
         if(StringUtils.isEmpty(sendTimeFromField.getAttribute("value"))){
             sendTimeFromField.sendKeys(insuranceCompany.getSendTimeFrom());
