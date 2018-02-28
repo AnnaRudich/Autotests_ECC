@@ -28,7 +28,7 @@ public abstract class BaseEccAdminNavigation extends Page {
     }
 
     public LoginPage logout() {
-        logoutLink.click();
+        clickUsingJsIfSeleniumClickReturnError(logoutLink);
         return at(LoginPage.class);
     }
 }
