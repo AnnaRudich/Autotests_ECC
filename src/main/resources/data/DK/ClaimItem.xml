@@ -47,7 +47,7 @@
     <setDialogTextMatch>samsung</setDialogTextMatch>
     <matchedText>Matchet</matchedText>
     <procuraLimitPrice>2100</procuraLimitPrice>
-    <customerDemand>500</customerDemand>
+    <customerDemand>1000</customerDemand>
     <usedPrice>500</usedPrice>
     <lowerPrice>300</lowerPrice>
     <trygNewPrice>200</trygNewPrice>
