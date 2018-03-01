@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
@@ -37,7 +38,7 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  0,00
      */
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-540 ME: Order page; Verify Order page existance")
+            description = "CHARLIE-540 ME: Order page; Verify Order page default")
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, OrderDetails orderDetails) {
         String companyName = user.getCompanyName();
 
@@ -193,7 +194,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  350
      * Tilbageværende erstatning :  0,00
      */
-    @RunOn(value = DriverType.IE_REMOTE)
+    @RunOn(value = DriverType.IE)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount")
     public void charlie540_ordersPageWhenWeUseBankAccount(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
@@ -229,61 +230,7 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
 
-    /**
-     * GIVEN: SP User
-     * WHEN: User navigates to Order page
-     * WHEN:  Add product on settlement page = 129
-     * WHEN: Go to shop and buy product
-     * WHEN: Complete claim with/without mail
-     * THEN: The state on Order page is the following:
-     * Tryg har betalt til Scalepoint (Erstatning) :  129,00
-     * Scalepoint har betalt til leverandør (Varekøb) :  129,00
-     * Scalepoint har betalt til kunde (Udbetalinger) :  0,00
-     * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
-     * Tilbageværende erstatning :  0,00
-     */
-    @RunOn(value = DriverType.IE_REMOTE)
-    @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-540 ME: Order page; Complete claim (2)")
-    public void charlie540_ordersPageWhenWeRecompleteAfterCreditCardPayment(User user, Claim claim, OrderDetails orderDetails, Payments payments) {
-        ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .openReplacementWizard()
-                .goToShop()
-                .toProductSearchPage();
-
-        Double productPrice = shopProductSearchPage.getProductPrice(0);
-        Dankort dankort = payments.getDankort();
-        OrderDetailsPage ordersPage = shopProductSearchPage
-                .addProductToCart(0)
-                .checkoutWithBankTransfer(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc())
-                .reopenClaim()
-                .toCompleteClaimPage()
-                .completeWithEmail()
-                .openRecentClaim()
-                .toOrdersDetailsPage();
-
-        Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
-        Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
-
-        Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
-
-        Assert.assertEquals(ordersPage.getOrderedItemsValue() - productPrice, 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is product price=" + productPrice);
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
-
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
-
-        Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
-
-        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
-    }
-
-
-    /**
+     /**
      * GIVEN: SP User
      * WHEN: User navigates to Order page
      * WHEN:  Add cash on settlement page = 5000
@@ -332,7 +279,7 @@ public class OrderDetailsTests extends BaseTest {
      * WHEN: User navigates to Order page
      * WHEN:  Add product on settlement page = 129
      * WHEN: Go to shop and buy product
-     * WHEN: Complete claim with/without mail
+     * WHEN: Complete claim with mail
      * THEN: The state on Order page is the following:
      * Tryg har betalt til Scalepoint (Erstatning) :  129,00
      * Scalepoint har betalt til leverandør (Varekøb) :  129,00

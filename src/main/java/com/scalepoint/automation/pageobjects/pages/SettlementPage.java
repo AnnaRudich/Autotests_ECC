@@ -165,15 +165,16 @@ public class SettlementPage extends BaseClaimPage {
         return claimOperationsMenu.openImportDialog();
     }
 
-    public SettlementPage ensureAuditInfoPanelVisible() {
-        waitForVisible(auditInfoPanel);
-        return this;
-    }
-
-    public SettlementPage checkStatusFromAudit(String status){
-        ExpectedConditions.textToBePresentInElement(auditStatus, status);
-        return this;
-    }
+//    public SettlementPage ensureAuditInfoPanelVisible() {
+//        getSettlementSummary().expand();
+//        waitForVisible(auditInfoPanel);
+//        return this;
+//    }
+//
+//    public SettlementPage checkStatusFromAudit(String status){
+//        ExpectedConditions.textToBePresentInElement(auditStatus, status);
+//        return this;
+//    }
 
     public ClaimOperationsMenu getClaimOperationsMenu() {
         return claimOperationsMenu;

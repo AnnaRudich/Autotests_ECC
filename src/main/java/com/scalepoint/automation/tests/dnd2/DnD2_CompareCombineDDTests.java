@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.dnd2;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -184,8 +185,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .sendResponseToEcc();
 
         login(user)
-                .openActiveRecentClaim()
-                .ensureAuditInfoPanelVisible()
+                .openActiveRecentClaim();
+                new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");
     }
 

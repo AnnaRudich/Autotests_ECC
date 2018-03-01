@@ -1,8 +1,11 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class DibsPayType extends Page {
 
@@ -30,7 +33,7 @@ public class DibsPayType extends Page {
     }
 
     public DibsCard selectDankortOption() {
-        dankortOption.click();
+        $(By.xpath("//a[contains(text(),'Dankort')]")).click();
         return at(DibsCard.class);
     }
 }
