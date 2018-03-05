@@ -15,7 +15,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 import static org.testng.Assert.assertEquals;
 
 @SuppressWarnings("AccessStaticViaInstance")
-@Jira("https://jira.scalepoint.com/browse/CHARLIE-F546")
+@Jira("https://jira.scalepoint.com/browse/CHARLIE-546")
 public class ReductionRulesTest extends BaseTest {
 
     @Autowired
