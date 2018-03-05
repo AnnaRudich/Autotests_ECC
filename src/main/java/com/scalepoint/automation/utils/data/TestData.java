@@ -219,7 +219,7 @@ public class TestData {
     private static Map<String, String> buildParams() {
         Map<String, String> params = new HashMap<>();
         params.put("{ecc}", Configuration.getEccUrl());
-        params.put("{suppliermanager}", Configuration.getEccAdminUrl());
+        params.put("{eccadmin}", Configuration.getEccAdminUrl());
         return params;
     }
 
