@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Ecc integrations" configfailurepolicy="continue" parallel="methods" thread-count="2">
+<suite name="eccCwaIntegration" configfailurepolicy="continue" parallel="methods" thread-count="2">
     <test verbose="1" name="eccCwaIntegration" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
             <package name="com.scalepoint.automation.tests.eccCwaIntegration"/>

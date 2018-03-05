@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="search" configfailurepolicy="continue" parallel="methods" thread-count="9">
+    <test verbose="1" name="search" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+            <package name="com.scalepoint.automation.tests.search"/>
+        </packages>
+    </test>
+</suite>

@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.eccadmin;
+package com.scalepoint.automation.tests.suppliermanager;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;

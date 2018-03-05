@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="admin" configfailurepolicy="continue" parallel="methods" thread-count="9">
+    <test verbose="1" name="admin" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+            <package name="com.scalepoint.automation.tests.admin"/>
+        </packages>
+    </test>
+</suite>
