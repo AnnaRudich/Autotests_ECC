@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="dnd" configfailurepolicy="continue" parallel="methods" thread-count="9">
+    <test verbose="1" name="dnd" group-by-instances="false" enabled="true" preserve-order="true">
+
+        <packages>
+            <package name="com.scalepoint.automation.tests.dnd2"/>
+        </packages>
+
+        <classes>
+            <class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>
+            <class name="com.scalepoint.automation.tests.sid.ShowScalepointSupplierTests"/>
+        </classes>
+    </test>
+</suite>

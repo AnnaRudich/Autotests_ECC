@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="matching engine" configfailurepolicy="continue" parallel="methods" thread-count="2">
+<suite name="matchingEngine" configfailurepolicy="continue" parallel="methods" thread-count="9">
     <test verbose="1" name="matchingEngine" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
            <!-- to be added:

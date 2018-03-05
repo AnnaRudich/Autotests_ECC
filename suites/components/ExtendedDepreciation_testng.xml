@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="extendedDepreciation" configfailurepolicy="continue" parallel="methods" thread-count="9">
+    <test verbose="1" name="extendedDepreciation" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.sid.ShowAndRejectReason4DiscretionaryValuationTests"/>
+            <class name="com.scalepoint.automation.tests.sid.ShowMarketPricesTests"/>
+            <class name="com.scalepoint.automation.tests.sid.FillCalcDepr2RulesAndDepreciationTests"/>
+            <class name="com.scalepoint.automation.tests.sid.NotCheapestChoiceTests"/>
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests"/>
+            <class name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
+        </classes>
+    </test>
+</suite>
