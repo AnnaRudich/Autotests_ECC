@@ -17,6 +17,7 @@ public enum CompanyCode {
     BAUTA,
     TRYGFORSIKRING,
     TRYGHOLDING,
-    ALKA;
+    ALKA,
+    TOPDANMARK;
 
 }

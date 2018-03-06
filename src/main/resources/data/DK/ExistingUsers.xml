@@ -20,4 +20,5 @@
     <user login="autotest-trygfors" password="12341234" companyCode="TRYGFORSIKRING" companyId="17" companyName="Tryg Holding" ftId="140053"/>
     <user login="autotest-trygholding" password="12341234" companyCode="TRYGHOLDING" companyId="16" companyName="Tryg" ftId="140053"/>
     <user login="autotest-alka"     password="12341234" companyCode="ALKA"           companyId="6" companyName="ALKA"     ftId="5"/>
+    <user login="autotest-topdanmark"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
 </existingUsers>

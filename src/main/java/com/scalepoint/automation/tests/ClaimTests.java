@@ -9,11 +9,13 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
+import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -149,7 +151,7 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(User user, Claim claim) {
+    public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .enableAuditForIc(user.getCompanyName())
                 .toCompleteClaimPage()
@@ -170,8 +172,8 @@ public class ClaimTests extends BaseTest {
 
         login(user)
                 .openActiveRecentClaim()
-                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
-        new SettlementSummary().ensureAuditInfoPanelVisible()
+                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
+                .ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("Manuelt");//"APPROVED" does not work. Change later.
     }
 
