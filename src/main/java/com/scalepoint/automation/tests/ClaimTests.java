@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -19,6 +20,7 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.SystemUser;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -35,6 +37,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
+import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -143,6 +146,8 @@ public class ClaimTests extends BaseTest {
     the claim which will be validated in Audit must have mobile, zipcode, address and city as required fields
     IC Validation code should be = topdanmark always
     Product should not be Iphone to have APPROVED line
+
+    TOPDANMARK has NewPrice, CustomerDemand ang Age required. So after each db restore it has to be OFF.
      */
 
     @RunOn(value = DriverType.IE)
@@ -152,8 +157,10 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
+        login(getSystemUser());
+                new InsCompaniesPage().enableAuditForIc(user.getCompanyName());
+
         loginAndCreateClaim(user, claim)
-                .enableAuditForIc(user.getCompanyName())
                 .toCompleteClaimPage()
                 .enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode())
                 .saveClaim()
@@ -167,6 +174,7 @@ public class ClaimTests extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
                 .addDescription("Sony")
+
                 .saveItem()
                 .sendResponseToEcc();
 
@@ -277,7 +285,7 @@ public class ClaimTests extends BaseTest {
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
     }
-
+//TODO
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
@@ -291,7 +299,7 @@ public class ClaimTests extends BaseTest {
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
-                .enableAuditForIc(user.getCompanyName())
+                //.enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)

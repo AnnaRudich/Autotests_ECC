@@ -228,12 +228,7 @@ public class SettlementPage extends BaseClaimPage {
         settlementSummary.cancel();
     }
 
-    public SettlementPage enableAuditForIc(String icName) {
-        to(InsCompaniesPage.class)
-        .editCompany(icName)
-        .enableAuditOptionAndSave();
-        return to(SettlementPage.class);
-    }
+
 
     public MyPage saveClaim() {
         settlementSummary.saveClaim();
