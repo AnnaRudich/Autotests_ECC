@@ -68,10 +68,6 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
-    @FindBy(id = "draft-status-inputEl")
-    private WebElement auditStatus;
-    @FindBy(id = "auditInfoPanel")
-    private WebElement auditInfoPanel;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
@@ -163,16 +159,6 @@ public class SettlementPage extends BaseClaimPage {
 
     public ImportDialog openImportSelfServiceDialog() {
         return claimOperationsMenu.openImportDialog();
-    }
-
-    public SettlementPage ensureAuditInfoPanelVisible() {
-        waitForVisible(auditInfoPanel);
-        return this;
-    }
-
-    public SettlementPage checkStatusFromAudit(String status){
-        ExpectedConditions.textToBePresentInElement(auditStatus, status);
-        return this;
     }
 
     public ClaimOperationsMenu getClaimOperationsMenu() {

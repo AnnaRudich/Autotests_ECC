@@ -147,7 +147,7 @@ public class ClaimTests extends BaseTest {
     IC Validation code should be = topdanmark always
     Product should not be Iphone to have APPROVED line
 
-    TOPDANMARK has NewPrice, CustomerDemand ang Age required. So after each db restore it has to be OFF.
+    TOPDANMARK has NewPrice, CustomerDemand and Age required. So after each db restore it has to be OFF.
      */
 
     @RunOn(value = DriverType.IE)
@@ -174,14 +174,13 @@ public class ClaimTests extends BaseTest {
                 .enterPassword(Constants.PASSWORD)
                 .login()
                 .addDescription("Sony")
-
                 .saveItem()
                 .sendResponseToEcc();
 
         login(user)
                 .openActiveRecentClaim()
-                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
-                .ensureAuditInfoPanelVisible()
+                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
+                new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("Manuelt");//"APPROVED" does not work. Change later.
     }
 
