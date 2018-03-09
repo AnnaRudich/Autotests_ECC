@@ -27,17 +27,16 @@ public abstract class ShopFlow extends Page {
                 to(MyPage.class);
     }
 
-    public MyPage checkoutWithBankTransfer() {
+    public CustomerDetailsPage checkoutWithBankTransfer() {
         return getAccountBox().
                 toShoppingCart().
                 toDepositPage().
                 selectBankTransfer().
                 selectAgreeOption().
-                selectPlaceMyOrderOption().
-                to(MyPage.class);
+                selectPlaceMyOrderOption();
     }
 
-    public CustomerDetailsPage checkoutWithBankTransfer(String number, String month, String year, String cvc) {
+    public CustomerDetailsPage checkoutWithCreditCard(String number, String month, String year, String cvc) {
         return getAccountBox().
                 toShoppingCart().
                 toDepositPage().

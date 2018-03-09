@@ -33,7 +33,7 @@ public class DibsPayType extends Page {
     }
 
     public DibsCard selectDankortOption() {
-        $(By.xpath("//a[contains(text(),'Dankort')]")).click();
+        dankortOption.click();
         return at(DibsCard.class);
     }
 }
