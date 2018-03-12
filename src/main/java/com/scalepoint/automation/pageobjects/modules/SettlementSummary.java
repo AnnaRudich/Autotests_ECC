@@ -97,7 +97,6 @@ public class SettlementSummary extends Module {
         return completeClaim.isEnabled();
     }
 
-
     public SettlementSummary ensureAuditInfoPanelVisible() {
         expand();
         waitForVisible(auditInfoPanel);

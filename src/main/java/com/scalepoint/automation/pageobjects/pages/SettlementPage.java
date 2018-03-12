@@ -67,10 +67,6 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
-    @FindBy(id = "draft-status-inputEl")
-    private WebElement auditStatus;
-    @FindBy(id = "auditInfoPanel")
-    private WebElement auditInfoPanel;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
@@ -217,12 +213,7 @@ public class SettlementPage extends BaseClaimPage {
         settlementSummary.cancel();
     }
 
-    public SettlementPage enableAuditForIc(String icName) {
-        to(InsCompaniesPage.class)
-        .editCompany(icName)
-        .enableAuditOptionAndSave();
-        return to(SettlementPage.class);
-    }
+
 
     public MyPage saveClaim() {
         settlementSummary.saveClaim();
