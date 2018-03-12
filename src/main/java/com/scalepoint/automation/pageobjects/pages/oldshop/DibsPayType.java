@@ -1,11 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static com.codeborne.selenide.Selenide.$;
 
 public class DibsPayType extends Page {
 

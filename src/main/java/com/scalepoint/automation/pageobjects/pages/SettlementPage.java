@@ -27,7 +27,6 @@ import org.openqa.selenium.ScriptTimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
@@ -164,17 +163,6 @@ public class SettlementPage extends BaseClaimPage {
     public ImportDialog openImportSelfServiceDialog() {
         return claimOperationsMenu.openImportDialog();
     }
-
-//    public SettlementPage ensureAuditInfoPanelVisible() {
-//        getSettlementSummary().expand();
-//        waitForVisible(auditInfoPanel);
-//        return this;
-//    }
-//
-//    public SettlementPage checkStatusFromAudit(String status){
-//        ExpectedConditions.textToBePresentInElement(auditStatus, status);
-//        return this;
-//    }
 
     public ClaimOperationsMenu getClaimOperationsMenu() {
         return claimOperationsMenu;
