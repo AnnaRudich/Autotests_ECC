@@ -36,6 +36,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Verify Order page default")
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, OrderDetails orderDetails) {
@@ -73,7 +74,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
@@ -126,7 +127,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make product order using shop product search")
@@ -150,7 +151,7 @@ public class OrderDetailsTests extends BaseTest {
 
         ProductInfo productInfo = findProductWithPriceLowerThan(claimItem.getCustomerDemand().toString());
 
-       int productIndex = 0;
+        int productIndex = 0;
         ShopProductSearchPage searchForProductPage = searchPage
                 .searchForProduct(productInfo.getModel());
         double productPrice = searchPage.getProductPrice(productIndex);
@@ -193,7 +194,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  350
      * Tilbageværende erstatning :  0,00
      */
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Credit card")
     public void charlie540_ordersPageWhenWeUseCreditCard(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
@@ -229,7 +230,7 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
 
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Bank transfer")
     public void charlie540_ordersPageWhenWeUseBankTransfer(User user, Claim claim, OrderDetails orderDetails) {
@@ -241,7 +242,7 @@ public class OrderDetailsTests extends BaseTest {
                 .toProductSearchPage();
 
         Double productPrice = shopProductSearchPage.getProductPrice(0);
-               OrderDetailsPage ordersPage = shopProductSearchPage
+        OrderDetailsPage ordersPage = shopProductSearchPage
                 .addProductToCart(0)
                 .checkoutWithBankTransfer()
                 .toOrdersDetailsPage();
@@ -270,7 +271,7 @@ public class OrderDetailsTests extends BaseTest {
      * WHEN: User creates claim
      * WHEN:  Add line on settlement 949.00
      * WHEN: Make an order using Replacement
-      * WHEN: Cancel order
+     * WHEN: Cancel order
      * THEN: The state on Order page is the following:
      * Scalepoint har betalt til Scalepoint (Erstatning) :  949.00
      * Scalepoint har betalt til leverandør (Varekøb) :  0.00
@@ -278,7 +279,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0.00
      * Tilbageværende erstatning :  949.00
      */
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
@@ -309,12 +310,10 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue() - price, 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is equal to " + price);
     }
 
-//OK
 
-
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-540 ME: Order page; Complete claim (1)")
+            description = "CHARLIE-540 ME: Order page; Recomplete claim")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(textSearch.getCatProduct1())
@@ -335,12 +334,66 @@ public class OrderDetailsTests extends BaseTest {
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
-        Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value("+ordersPage.getIdemnityValue()+") is equal to price="+price);
+        Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
         Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
         Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value("+ordersPage.getWithdrawValue()+") is equals to 0");
+        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is equals to 0");
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
-        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value("+ordersPage.getRemainingValue()+" is 0");
+        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
+    }
+
+    /**
+     * create claim
+     * add voucher to Settlement
+     * go to shop
+     * add voucher from suggestions
+     * add product from search
+     * complete order using Credit card
+     */
+
+    @RunOn(value = DriverType.IE_REMOTE)
+    @Test(dataProvider = "testDataProvider",
+            description = "shopSmokeE2E")
+    public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem) {
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementDialog dialog = settlementPage
+                .openSid()
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setNewPrice(900.00)
+                .setDescription(claimItem.getTextFieldSP());
+
+        Double activeValuation = dialog.getCashCompensationValue();
+        ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .goToShop()
+                .addFirstRecommendedItemToCart()
+                .toProductSearchPage();
+
+        Dankort dankort = payments.getDankort();
+        Double productPrice = searchPage.getProductPrice(0);
+        OrderDetailsPage ordersPage = searchPage
+                .addProductToCart(0)
+                .checkoutWithCreditCard(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc())
+                .toOrdersDetailsPage();
+
+        Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
+        Assert.assertEquals(Math.abs(ordersPage.getIdemnityValue() - activeValuation), 0.0, "Idemnity value " + ordersPage.getIdemnityValue() + " must be equal to cashValue " + activeValuation + " of the voucher");
+
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsValue() - (productPrice + activeValuation), 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is voucher price=" + activeValuation + " + product price=" + productPrice);
+
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
+
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
+
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
 }
+
