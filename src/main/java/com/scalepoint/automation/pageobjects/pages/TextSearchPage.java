@@ -31,6 +31,8 @@ import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -235,7 +237,7 @@ public class TextSearchPage extends Page {
 
     public SettlementDialog match(String productDescription) {
         Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElement(By.cssSelector("#productsTable table td"));
+        waitForStaleElement(By.cssSelector("#productsTable table td"));
         List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//*[text()[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), " +
                 "'" + productDescription + "')]]/../..//button[@class='matchbutton']"));
         if (matchButtons.isEmpty()) {
@@ -259,13 +261,14 @@ public class TextSearchPage extends Page {
 
     public SettlementDialog matchStrict(String productDescription) {
         Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElement(By.cssSelector("#productsTable table td"));
+        waitForStaleElement(By.cssSelector("#productsTable table td"));
         sortOrderableFirst();
-        List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//span[contains(text(), '" + productDescription + "')]/ancestor::td[1]/..//button[@class='matchbutton']"));
+        By matchButtonsLocator = By.xpath(".//*[@id='productsTable']//span[contains(text(), '" + productDescription + "')]/ancestor::td[1]/..//button[@class='matchbutton']");
+        List<WebElement> matchButtons = driver.findElements(matchButtonsLocator);
         if (matchButtons.isEmpty()) {
             throw new IllegalStateException("No text search results found!");
         }
-        $(matchButtons.get(0)).click();
+        waitForStaleElements(matchButtonsLocator).get(0).click();
         return BaseDialog.at(SettlementDialog.class);
     }
 
@@ -289,7 +292,7 @@ public class TextSearchPage extends Page {
         searchProduct(productName);
         search.click();
         Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElement(By.cssSelector("#productsTable table tbody"));
+        waitForStaleElement(By.cssSelector("#productsTable table tbody"));
         return this;
     }
 
@@ -316,7 +319,7 @@ public class TextSearchPage extends Page {
         searchInput.sendKeys(Keys.ARROW_DOWN);
         searchInput.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElement(By.cssSelector("#productsTable table tbody"));
+        waitForStaleElement(By.cssSelector("#productsTable table tbody"));
         return this;
     }
 

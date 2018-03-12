@@ -175,7 +175,6 @@ public class ClaimTests extends BaseTest {
                 .checkStatusFromAudit("Manuelt");//"APPROVED" does not work. Change later.
     }
 
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")

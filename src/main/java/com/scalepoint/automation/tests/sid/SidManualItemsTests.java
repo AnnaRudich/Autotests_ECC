@@ -220,7 +220,7 @@ public class SidManualItemsTests extends BaseTest {
                     claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
-                .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(Constants.PRICE_500))
+                .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
@@ -250,7 +250,7 @@ public class SidManualItemsTests extends BaseTest {
                     claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
-                .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(Constants.PRICE_500))
+                .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400))
                 .setBaseData(claimItem)
@@ -263,7 +263,7 @@ public class SidManualItemsTests extends BaseTest {
                     claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
-                .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_500))
+                .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(claimItem.getCustomerDemand()))
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
@@ -450,7 +450,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
-                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500));
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()));
     }
 
     /**
@@ -485,7 +485,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
-                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500))
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()))
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeUsedPrice(), claimItem.getLowerPrice())
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
@@ -507,7 +507,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
-                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500))
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()))
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), claimItem.getLowerPrice())
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
@@ -531,7 +531,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
-                .doAssert(sid -> sid.assertCashValueIs(Constants.PRICE_500))
+                .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()))
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeRepair(), claimItem.getLowerPrice())
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));

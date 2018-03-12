@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.eccadmin;
+package com.scalepoint.automation.tests.suppliermanager;
 
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
