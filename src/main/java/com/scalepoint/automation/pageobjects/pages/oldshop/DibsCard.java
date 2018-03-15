@@ -35,6 +35,7 @@ public class DibsCard extends Page {
         return "https://payment.architrade.com/payment/card.pfml";
     }
 
+    //maybe we can just pass here dankort instead all those parameters ?
     public DibsAccept submitCardData(String number, String month, String year, String cvc) {
         setValue(cardNumberField, number);
         setValue(expMonthInput, month);

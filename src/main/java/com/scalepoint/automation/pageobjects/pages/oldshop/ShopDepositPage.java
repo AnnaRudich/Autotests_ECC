@@ -15,6 +15,9 @@ public class ShopDepositPage extends Page {
     @FindBy(xpath = "//input[@id='deposit_method_external_creditcard']")
     private WebElement creditCardBox;
 
+    @FindBy(xpath = "//input[@id='deposit_method_banktransfer']")
+    private WebElement bankTransferBox;
+
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
@@ -28,7 +31,7 @@ public class ShopDepositPage extends Page {
     }
 
     public ShopOrderVerificationPage selectBankTransfer() {
-        creditCardBox.click();
+        bankTransferBox.click();
         checkOutButton.click();
         return at(ShopOrderVerificationPage.class);
     }

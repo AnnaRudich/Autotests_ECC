@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -30,6 +31,8 @@ public class SelfService2Page extends Page {
 
     @FindBy(xpath = "//div[@data-for='purchase-date-select-month-tooltip']")
     private WebElement monthCombo;
+
+
 
     @FindBy(id = "new-price-text")
     private WebElement newPriceField;
@@ -80,14 +83,14 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addNewPrice(String text) {
-        newPriceField.clear();
-        newPriceField.sendKeys(text);
-
+        $("#new-price-text").click();
+        $("#new-price-text").pressEnter();
+        $("#new-price-text").setValue(text);
         waitForValidationMark(newPriceField);
         return this;
     }
 
-    private void selectItem(WebElement element, String text){
+     private void selectItem(WebElement element, String text){
         WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
         clickUsingJsIfSeleniumClickReturnError(selectElement);
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";

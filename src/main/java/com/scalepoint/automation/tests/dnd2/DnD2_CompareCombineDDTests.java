@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.dnd2;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -161,13 +162,14 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     }
 
     //@TODO: find solution how to deal with react.js components in ss
+    //TODO
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .enableAuditForIc(user.getCompanyName())
+                //.enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -184,8 +186,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .sendResponseToEcc();
 
         login(user)
-                .openActiveRecentClaim()
-                .ensureAuditInfoPanelVisible()
+                .openActiveRecentClaim();
+                new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");
     }
 

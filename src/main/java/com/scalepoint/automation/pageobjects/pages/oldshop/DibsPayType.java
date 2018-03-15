@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+
 public class DibsPayType extends Page {
 
     @FindBy(xpath = "//a[contains(text(),'MasterCard')]")
