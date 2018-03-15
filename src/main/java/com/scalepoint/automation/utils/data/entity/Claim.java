@@ -32,7 +32,7 @@ public class Claim {
     private String address2 = RandomUtils.randomName("addr2");
     private String city = RandomUtils.randomName("city");
     @XmlElement
-    private String zipCode = "2000";
+    private String zipCode;
 
     @XmlElement
     private String email;

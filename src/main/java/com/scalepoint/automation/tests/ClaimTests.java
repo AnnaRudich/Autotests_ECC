@@ -149,7 +149,7 @@ public class ClaimTests extends BaseTest {
     Product should not be Iphone to have APPROVED line
      */
 
-    @RunOn(value = DriverType.IE)
+    @RunOn(value = DriverType.IE_REMOTE)
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approves claim")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
@@ -180,7 +180,7 @@ public class ClaimTests extends BaseTest {
                 .openActiveRecentClaim()
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
                 new SettlementSummary().ensureAuditInfoPanelVisible()
-                .checkStatusFromAudit("Manuelt");//"APPROVED" does not work. Change later.
+                .checkStatusFromAudit("Approved");//"APPROVED" does not work. Change later.
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
@@ -283,9 +283,9 @@ public class ClaimTests extends BaseTest {
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
     }
-//TODO
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -297,7 +297,6 @@ public class ClaimTests extends BaseTest {
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
-                //.enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)

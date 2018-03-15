@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.modules.oldshop.AccountBox;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.data.entity.payments.Dankort;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public abstract class ShopFlow extends Page {
@@ -36,7 +37,7 @@ public abstract class ShopFlow extends Page {
                 selectPlaceMyOrderOption();
     }
 
-    public CustomerDetailsPage checkoutWithCreditCard(String number, String month, String year, String cvc) {
+    public CustomerDetailsPage checkoutWithCreditCard(Dankort dankort) {
         return getAccountBox().
                 toShoppingCart().
                 toDepositPage().
@@ -44,7 +45,7 @@ public abstract class ShopFlow extends Page {
                 selectAgreeOption().
                 toDIBSPage().
                 selectDankortOption().
-                submitCardData(number, month, year, cvc).
+                submitCardData(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc()).
                 acceptAndBackToEcc();
     }
 

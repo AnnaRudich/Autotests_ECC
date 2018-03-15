@@ -21,6 +21,7 @@ public class ExtCheckbox extends ExtElement implements Actions{
     }
 
     public boolean isSelected() {
-        return getWrappedElement().getAttribute("class").contains("x-form-cb-checked");
+        return getWrappedElement().getAttribute("class").contains("x-form-cb-checked")
+                || (getWrappedElement().findElement(By.tagName("input")).getAttribute("aria-checked") != null && getWrappedElement().findElement(By.tagName("input")).getAttribute("aria-checked").contains("true"));
     }
 }

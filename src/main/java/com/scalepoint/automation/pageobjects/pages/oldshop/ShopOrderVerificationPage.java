@@ -46,7 +46,7 @@ public class ShopOrderVerificationPage extends Page {
 
     public DibsPayType toDIBSPage() {
         placeMyOrderButton.click();
-        return new DibsPayType();
+        return at(DibsPayType.class);
     }
 
     public void selectPlaceMyOrderOptionExtraPayment() {

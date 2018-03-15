@@ -206,10 +206,9 @@ public class OrderDetailsTests extends BaseTest {
                 .toProductSearchPage();
 
         Double productPrice = shopProductSearchPage.getProductPrice(0);
-        Dankort dankort = payments.getDankort();
         OrderDetailsPage ordersPage = shopProductSearchPage
                 .addProductToCart(0)
-                .checkoutWithCreditCard(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc())
+                .checkoutWithCreditCard(payments.getDankort())
                 .toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
@@ -373,11 +372,10 @@ public class OrderDetailsTests extends BaseTest {
                 .addFirstRecommendedItemToCart()
                 .toProductSearchPage();
 
-        Dankort dankort = payments.getDankort();
         Double productPrice = searchPage.getProductPrice(0);
         OrderDetailsPage ordersPage = searchPage
                 .addProductToCart(0)
-                .checkoutWithCreditCard(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc())
+                .checkoutWithCreditCard(payments.getDankort())
                 .toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
