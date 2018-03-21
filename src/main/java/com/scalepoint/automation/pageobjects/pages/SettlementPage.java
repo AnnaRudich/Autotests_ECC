@@ -27,7 +27,6 @@ import org.openqa.selenium.ScriptTimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
@@ -68,10 +67,6 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
-    @FindBy(id = "draft-status-inputEl")
-    private WebElement auditStatus;
-    @FindBy(id = "auditInfoPanel")
-    private WebElement auditInfoPanel;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
@@ -165,16 +160,6 @@ public class SettlementPage extends BaseClaimPage {
         return claimOperationsMenu.openImportDialog();
     }
 
-    public SettlementPage ensureAuditInfoPanelVisible() {
-        waitForVisible(auditInfoPanel);
-        return this;
-    }
-
-    public SettlementPage checkStatusFromAudit(String status){
-        ExpectedConditions.textToBePresentInElement(auditStatus, status);
-        return this;
-    }
-
     public ClaimOperationsMenu getClaimOperationsMenu() {
         return claimOperationsMenu;
     }
@@ -228,12 +213,7 @@ public class SettlementPage extends BaseClaimPage {
         settlementSummary.cancel();
     }
 
-    public SettlementPage enableAuditForIc(String icName) {
-        to(InsCompaniesPage.class)
-        .editCompany(icName)
-        .enableAuditOptionAndSave();
-        return to(SettlementPage.class);
-    }
+
 
     public MyPage saveClaim() {
         settlementSummary.saveClaim();

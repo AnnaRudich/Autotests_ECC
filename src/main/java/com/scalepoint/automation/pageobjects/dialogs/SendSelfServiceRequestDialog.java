@@ -73,9 +73,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     public SendSelfServiceRequestDialog enableAutoClose() {
-        if (!closeAutomatically.isSelected()) {
-            closeAutomatically.set(true);
-        }
+        closeAutomatically.set(true);
         return this;
     }
 

@@ -33,6 +33,7 @@ public class Claim {
     private String city = RandomUtils.randomName("city");
     @XmlElement
     private String zipCode;
+
     @XmlElement
     private String email;
     //private String fullNameWithTitle = getTitle()+" " +getFirstName() + " " +getLastName();

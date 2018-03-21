@@ -4,6 +4,7 @@ import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
@@ -11,6 +12,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementSummary extends Module {
 
@@ -37,6 +39,12 @@ public class SettlementSummary extends Module {
 
     @FindBy(id = "subtotal_cash_payout-inputEl")
     private WebElement subtotalValue;
+
+    @FindBy(id = "draft-status-inputEl")
+    private WebElement auditStatus;
+
+    @FindBy(id = "auditInfoPanel")
+    private WebElement auditInfoPanel;
 
     public void cancel() {
         clickUsingJsIfSeleniumClickReturnError(cancel);
@@ -87,6 +95,17 @@ public class SettlementSummary extends Module {
             expand();
         }
         return completeClaim.isEnabled();
+    }
+
+    public SettlementSummary ensureAuditInfoPanelVisible() {
+        expand();
+        waitForVisible(auditInfoPanel);
+        return this;
+    }
+
+    public SettlementSummary checkStatusFromAudit(String status){
+        ExpectedConditions.textToBePresentInElement(auditStatus, status);
+        return this;
     }
 
     public SettlementSummary doAssert(Consumer<Asserts> assertFunc) {

@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" >
+<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods">
     <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true" thread-count="7">
         <classes>
             <class name="com.scalepoint.automation.tests.ClaimTests">
@@ -15,15 +15,15 @@
 
             <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
                 <methods>
-                    <include name="charlie515_completeClaimExternallyFromSettlementPage" />
+                    <include name="charlie515_completeClaimExternallyFromSettlementPage"/>
                 </methods>
             </class>
 
             <class name="com.scalepoint.automation.tests.sid.SidTests">
                 <methods>
-                    <include name="ecc3025_selectVoucherExistingCatAddDialog" />
-                    <include name="ecc3025_cashCompensationWithAddedDepVoucher" />
-                    <include name="ecc3025_cashCompensationWithoutDepNoVoucher" />
+                    <include name="ecc3025_selectVoucherExistingCatAddDialog"/>
+                    <include name="ecc3025_cashCompensationWithAddedDepVoucher"/>
+                    <include name="ecc3025_cashCompensationWithoutDepNoVoucher"/>
                 </methods>
             </class>
 
@@ -55,18 +55,21 @@
                     <include name="ecc3144_22_enableAgeOption"/>
                     <include name="ecc3144_23_addYearsAndMonthAndSave"/>
                     <include name="ecc3144_24_disableAgeAndSave"/>
-
                 </methods>
             </class>
 
-            <class name="com.scalepoint.automation.tests.OrderDetailsTests"/>
+            <class name="com.scalepoint.automation.tests.OrderDetailsTests">
+                <methods>
+                    <include name="shopSmokeE2E"/>
+                </methods>
+            </class>
 
         </classes>
     </test>
     <test verbose="1" name="api" enabled="true" preserve-order="true" thread-count="1">
         <classes>
-            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests" />
-            <class name="com.scalepoint.automation.tests.api.CaseSettlementDataApiTests" />
+            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>
+            <class name="com.scalepoint.automation.tests.api.CaseSettlementDataApiTests"/>
         </classes>
     </test>
 
