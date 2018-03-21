@@ -29,8 +29,8 @@
     <existingVoucher1>Autotest-SpVoucher</existingVoucher1>
     <existingVoucher2>BabySam A/S</existingVoucher2>
     <existingVoucher3>Autotest-SpVoucher</existingVoucher3>
-    <existingVoucher4>Dreams for kids</existingVoucher4>
-    <brandLinkVoucher4>Dreams for kids</brandLinkVoucher4>
+    <existingVoucher4>Bilka</existingVoucher4>
+    <brandLinkVoucher4>Bilka</brandLinkVoucher4>
     <excelPath1>C:\ExcelImport\ClaimSheetDK2003.xls</excelPath1>
     <excelWithGroupingPath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</excelWithGroupingPath>
     <xlsDescr1>samsung</xlsDescr1>
