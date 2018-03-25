@@ -32,10 +32,6 @@ public class BaseService {
         if(getEccAdminUrl().contains("localhost")) {
             RestAssured.port = 80;
         }
-        RestAssured.config.set().httpClient(HttpClientConfig.httpClientConfig()
-                .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, 3000L)
-                .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000)
-                .setParam(CoreConnectionPNames.SO_TIMEOUT, 3000));
     }
 
     public String getClaimTokenWithoutPrefix(){
