@@ -7,9 +7,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import io.restassured.RestAssured;
-import io.restassured.config.HttpClientConfig;
-import org.apache.http.client.params.ClientPNames;
-import org.apache.http.params.CoreConnectionPNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
