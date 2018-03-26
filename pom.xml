@@ -108,7 +108,6 @@
                     <argLine>
                         -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar
                         -Djava.library.path=${basedir}/src/main/resources/dll
-                        -Xmx1024m
                         -XX:MaxPermSize=512M
                         -XX:-UseGCOverheadLimit
                     </argLine>
