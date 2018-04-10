@@ -13,8 +13,6 @@ public class Configuration {
     public static final String KEY_ECC_SOLR_PRODUCTS_URL = "url.solr.products";
     public static final String KEY_ECC_DB_URL = "url";
     public static final String KEY_EVENT_API_DB_URL = "eventApiDbUrl";
-    public static final String KEY_ECC_DB_USERNAME = "username";
-    public static final String KEY_ECC_DB_PASSWORD = "password";
 
     private static final String SLASH = "/";
     private static final String HTTP = "http://";
