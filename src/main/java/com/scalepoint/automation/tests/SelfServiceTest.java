@@ -37,8 +37,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -74,8 +73,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescriptionSelectFirstSuggestion("Iphone 6")
                 .addRandomPurchaseDate(1)
@@ -113,8 +111,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -129,7 +126,7 @@ public class SelfServiceTest extends BaseTest {
                 .doAssert(SelfServicePage.Asserts::assertLineIsDeleted);
     }
 
-    @RunOn(DriverType.IE_REMOTE)
+    @RunOn(DriverType.IE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Submit SS. " +
@@ -145,8 +142,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -186,8 +182,8 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+
+                .login(Constants.PASSWORD)
 
                 .addDescriptionSelectFirstSuggestion("Iphone 6")
                 .addRandomPurchaseDate(1)
@@ -227,8 +223,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescription("test", 1)
                 .selectSubmitOption();
@@ -256,8 +251,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -292,8 +286,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescription("test",1)
                 .addRandomCategory()
@@ -330,8 +323,7 @@ public class SelfServiceTest extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
 
                 .addDescriptionSelectFirstSuggestion("iphone6")
                 .addRandomPurchaseDate(1)

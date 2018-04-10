@@ -123,8 +123,8 @@ public class ClaimTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login();
+
+                .login(Constants.PASSWORD);
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -138,8 +138,7 @@ public class ClaimTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login();
+                .login(Constants.PASSWORD);
     }
 
 
@@ -170,8 +169,7 @@ public class ClaimTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
                 .addDescription("Sony")
                 .saveItem()
                 .sendResponseToEcc();
@@ -301,8 +299,7 @@ public class ClaimTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)

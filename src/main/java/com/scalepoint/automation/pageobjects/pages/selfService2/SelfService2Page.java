@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 
 import org.openqa.selenium.By;
@@ -9,6 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -32,22 +35,11 @@ public class SelfService2Page extends Page {
     @FindBy(xpath = "//div[@data-for='purchase-date-select-month-tooltip']")
     private WebElement monthCombo;
 
-
-
-    @FindBy(id = "new-price-text")
-    private WebElement newPriceField;
-
-    @FindBy(id = "customer-demand-text")
-    private WebElement customerDemandField;
-
-    @FindBy(id = "save-item-button")
-    private WebElement saveItem;
+    @FindBy(xpath = "//div[@data-for='age-select-tooltip']")
+    private WebElement ageComb;
 
     @FindBy(id = "save-button")
     private WebElement save;
-
-    @FindBy(id = "send-button")
-    private WebElement send;
 
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
@@ -82,11 +74,27 @@ public class SelfService2Page extends Page {
         return this;
     }
 
-    public SelfService2Page addNewPrice(String text) {
-        $("#new-price-text").click();
-        $("#new-price-text").pressEnter();
-        $("#new-price-text").setValue(text);
+    public SelfService2Page addNewPrice(Double newPrice) {
+        SelenideElement newPriceField = $("#new-price-text");
+
+        newPriceField.setValue(newPrice.toString());
         waitForValidationMark(newPriceField);
+        return this;
+    }
+
+    public SelfService2Page addCustomerDemandPrice(Double customerDemandPrice) {
+        SelenideElement customerDemandField = $("#customer-demand-text");
+
+        customerDemandField.setValue(customerDemandPrice.toString());
+        waitForValidationMark(customerDemandField);
+        return this;
+    }
+
+    public SelfService2Page addPurchasePrice(Double purchasePrice) {
+        SelenideElement purchasePriceField = $("#purchase-price-text");
+
+        purchasePriceField.setValue(purchasePrice.toString());
+        waitForValidationMark(purchasePriceField);
         return this;
     }
 
@@ -137,14 +145,29 @@ public class SelfService2Page extends Page {
         selectItem(monthCombo, month);
         return this;
     }
+    /*
+     * FT Self Service 2.0 Defined age by year and month OFF
+     */
+
+    public SelfService2Page selectAge(String age){
+        selectItem(ageComb, age);
+        return this;
+    }
 
     public SelfService2Page saveItem(){
-        this.saveItem.click();
+        $("#save-item-button").click();
         return at(SelfService2Page.class);
     }
 
     public void sendResponseToEcc(){
-        this.send.click();
+        $("#send-button").click();
         waitForUrl("self-service/dk/send-confirmation");
+    }
+
+    public String getProductMatchDescription(){
+        String s = $$(By.xpath("//div[contains(@class,'product-match-description')]")).get(1).getAttribute("title");
+        System.out.println(s);
+        return s;
+
     }
 }
