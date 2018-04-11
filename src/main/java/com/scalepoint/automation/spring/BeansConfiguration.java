@@ -35,10 +35,6 @@ public class BeansConfiguration {
     private String dbUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL+ "}")
     private String eventApiDbUrl;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_USERNAME+ "}")
-    private String dbUsername;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_PASSWORD+ "}")
-    private String dbPassword;
 
 
     @SuppressWarnings("Convert2Lambda")
@@ -64,8 +60,6 @@ public class BeansConfiguration {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         dataSource.setUrl(dbUrl);
-        dataSource.setUsername(dbUsername);
-        dataSource.setPassword(dbPassword);
         return dataSource;
     }
 
