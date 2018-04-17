@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public interface Actions {
@@ -99,10 +100,16 @@ public interface Actions {
         return cookieString.toString();
     }
 
-    default void enterToHiddenUploadFileField(WebElement element, String text) {
+    default void enterToHiddenUploadFileField(WebElement element, String filePath) {
         JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
         js.executeScript("arguments[0].setAttribute('class', ' ');", element);
-        element.sendKeys(text);
+        element.sendKeys(filePath);
+    }
+
+    default void enterToHiddenUploadFileFieldSS(WebElement element, String filePath) {
+        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
+        js.executeScript("arguments[0].setAttribute('style', '');", element);
+        element.sendKeys(filePath);
     }
 
     default void dragAndDrop(WebElement element, WebElement elementWhereToMove) {

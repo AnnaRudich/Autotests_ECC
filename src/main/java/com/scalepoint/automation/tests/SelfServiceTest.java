@@ -16,13 +16,12 @@ import org.testng.annotations.Test;
 /**
  * Created by aru on 2017-07-10.
  */
-
+@RunOn(DriverType.IE_REMOTE)
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
 @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
 public class SelfServiceTest extends BaseTest {
 
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -58,7 +57,6 @@ public class SelfServiceTest extends BaseTest {
                 });
     }
 
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -97,7 +95,6 @@ public class SelfServiceTest extends BaseTest {
 
 
 
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Delete line")
@@ -126,7 +123,6 @@ public class SelfServiceTest extends BaseTest {
                 .doAssert(SelfServicePage.Asserts::assertLineIsDeleted);
     }
 
-    @RunOn(DriverType.IE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Submit SS. " +
@@ -167,7 +163,6 @@ public class SelfServiceTest extends BaseTest {
     }
 
     //TODO
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Save SelfService")
@@ -208,7 +203,6 @@ public class SelfServiceTest extends BaseTest {
         });
     }
 
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Required fields validation")
@@ -236,7 +230,6 @@ public class SelfServiceTest extends BaseTest {
         });
     }
 
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with Documentation attached")
@@ -259,9 +252,7 @@ public class SelfServiceTest extends BaseTest {
                 .addRandomAcquired(1)
 
                 .uploadDocumentation(1, true)
-                .doAssert(SelfServicePage -> {
-                    SelfServicePage.assertAttachIconIsPresent();
-                });
+                .doAssert(SelfServicePage.Asserts::assertAttachIconIsPresent);
 
         new SelfServicePage().selectSubmitOption();
 
@@ -271,7 +262,6 @@ public class SelfServiceTest extends BaseTest {
         .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
    }
 
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with customer comment")
@@ -308,7 +298,6 @@ public class SelfServiceTest extends BaseTest {
     }
 
     //TODO
-    @RunOn(DriverType.IE_REMOTE)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with customer note")

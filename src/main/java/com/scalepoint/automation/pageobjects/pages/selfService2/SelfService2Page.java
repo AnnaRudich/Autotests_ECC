@@ -1,10 +1,15 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 
+import com.scalepoint.automation.utils.data.TestData;
+import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +17,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SelfService2Page extends Page {
@@ -146,11 +153,31 @@ public class SelfService2Page extends Page {
         return this;
     }
     /*
-     * FT Self Service 2.0 Defined age by year and month OFF
+     * only for the case when FT Self Service 2.0 Defined age by year and month is OFF
      */
-
     public SelfService2Page selectAge(String age){
         selectItem(ageComb, age);
+        return this;
+    }
+
+    public SelfService2Page addItemCustomerNote(String text){
+        SelenideElement itemCustomerNoteField = $(By.xpath("//textarea[contains(@id, 'item-customer-note')]"));
+
+        itemCustomerNoteField.click();
+        itemCustomerNoteField.setValue(text);
+        return this;
+    }
+
+    public SelfService2Page addClaimNote(String text){
+        SelenideElement itemCustomerNoteField = $(By.xpath("//textarea[contains(@data-for,'list-panel-customer-note')]"));
+        itemCustomerNoteField.click();
+        itemCustomerNoteField.setValue(text);
+        return this;
+    }
+
+    public SelfService2Page addDocumentation(){
+        SelenideElement uploadDocBtn = $(By.xpath("//label[contains(@data-for, 'attachment')]/following-sibling::input"));
+        enterToHiddenUploadFileFieldSS(uploadDocBtn, new AttachmentFiles().getJpgFile2Loc());
         return this;
     }
 
