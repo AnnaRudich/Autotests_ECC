@@ -34,6 +34,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITE
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ORDER_CONFIRMATION_BY_IC;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
+import static com.scalepoint.automation.services.externalapi.SolrApi.findProductInvoiceLowerMarket;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
@@ -407,7 +408,7 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
-        ProductInfo productInfo = findProductWithPriceLowerThan(claimItem.getCustomerDemand().toString());
+        ProductInfo productInfo = findProductInvoiceLowerMarket();
 
         loginAndCreateClaim(user, claim)
                 .openSid()
