@@ -20,6 +20,7 @@ import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.services.externalapi.SolrApi.findProductInvoiceLowerMarket;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
@@ -149,7 +150,7 @@ public class OrderDetailsTests extends BaseTest {
                 .goToShop()
                 .toProductSearchPage();
 
-        ProductInfo productInfo = findProductWithPriceLowerThan(claimItem.getCustomerDemand().toString());
+        ProductInfo productInfo = findProductInvoiceLowerMarket();
 
         int productIndex = 0;
         ShopProductSearchPage searchForProductPage = searchPage
