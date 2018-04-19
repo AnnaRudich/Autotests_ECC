@@ -40,7 +40,8 @@ public class LoginSelfServicePage extends Page {
         return this;
     }
 
-    public SelfServicePage login() {
+    public SelfServicePage login(String password) {
+        this.passwordField.setValue(password);
         login.click();
         Wait.waitForLoaded();
         return at(SelfServicePage.class);
