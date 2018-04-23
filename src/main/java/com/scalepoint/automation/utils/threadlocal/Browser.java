@@ -42,6 +42,11 @@ public class Browser {
         }
     }
 
+    public static void clear() {
+        DriverData data = holder.get();
+        data.getDriver().manage().deleteAllCookies();
+    }
+
     public static void open(String url) {
         DriverData data = holder.get();
         data.getDriver().get(url);
