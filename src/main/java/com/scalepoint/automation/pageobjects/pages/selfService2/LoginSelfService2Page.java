@@ -28,15 +28,10 @@ public class LoginSelfService2Page extends Page {
         return this;
     }
 
-    public LoginSelfService2Page enterPassword(String password) {
+    public SelfService2Page login(String password){
         sendKeys(this.passwordField, password);
-        return this;
-    }
-
-    public SelfService2Page login(){
         this.login.click();
         Wait.waitForLoaded();
         return at(SelfService2Page.class);
     }
-
 }

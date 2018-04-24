@@ -174,14 +174,13 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
-                .login()
+                .login(Constants.PASSWORD)
                 .addDescriptionWithOutSuggestions("test_product")
                 .selectCategory("Foto & Video")
                 .selectSubCategory("Videokamera")
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth("Apr")
-                .addNewPrice("500")
+                .addNewPrice(Constants.PRICE_500)
                 .saveItem()
                 .sendResponseToEcc();
 
