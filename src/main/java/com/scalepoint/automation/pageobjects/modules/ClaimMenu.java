@@ -44,13 +44,17 @@ public class ClaimMenu extends Module {
     }
 
     private void acceptLogoutAlert() {
-        try {
-            Window.get().acceptAlert();
-        } catch (Exception e) {
-            SelenideElement gemaktive = $(By.id("gemaktive"));
-            if (gemaktive.isDisplayed()) {
-                gemaktive.click();
+        if(Window.get().isAlertPresent()) {
+            try {
+                Window.get().acceptAlert();
+            } catch (Exception e) {
+                SelenideElement gemaktive = $(By.id("gemaktive"));
+                if (gemaktive.isDisplayed()) {
+                    gemaktive.click();
+                }
             }
+        } else {
+            clickElementUsingJS($(By.xpath("//div[contains(@id, 'messagebox')]//a//span[text()='Yes']")));
         }
     }
 
