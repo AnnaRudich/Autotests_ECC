@@ -2,6 +2,7 @@ package com.scalepoint.automation.utils.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.entity.Acquired;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.Category;
@@ -177,8 +178,17 @@ public class TestData {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
     }
 
+    public static Acquired getAcquired(){
+        return (Acquired) getData(Data.ACQUIRED);
+    }
+
     public static EccIntegration getEccIntegration(){
         return  (EccIntegration) getData(Data.ECC_INTEGRATION);
+    }
+
+
+    public static PasswordsVerification getPasswordRules() {
+        return (PasswordsVerification) getData(Data.PASSWORDVERIFICATION);
     }
 
     private static <T> T getData(Data data) {
@@ -247,10 +257,6 @@ public class TestData {
         return "data" + File.separator + locale + File.separator + fileName;
     }
 
-    public static PasswordsVerification getPasswordRules() {
-        return (PasswordsVerification) getData(Data.PASSWORDVERIFICATION);
-    }
-
     public enum Data {
         EXISTING_SUPPLIER("ExistingSuppliers.xml", ExistingSuppliers.class),
         SUPPLIER("Supplier.xml", Supplier.class),
@@ -284,7 +290,8 @@ public class TestData {
         CWA_CLAIM("Claim\\ClaimRequest.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class),
-        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class);
+        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class),
+        ACQUIRED("Acquired.xml", Acquired.class);
 
         private String fileName;
         private JAXBContext context;

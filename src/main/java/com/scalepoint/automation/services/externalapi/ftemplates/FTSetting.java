@@ -39,6 +39,8 @@ public enum FTSetting {
     INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='64']", CHECKBOX),
     INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='512']", CHECKBOX),
     VALIDATE_AGE("input[name=ftSelfServiceFlag][value='2']", CHECKBOX),
+    SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH("input[name=ftSelfServiceFlag][value='131072']", CHECKBOX),
+    //Self Service 2.0 Defined age by year and month
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value='1']", CHECKBOX),
