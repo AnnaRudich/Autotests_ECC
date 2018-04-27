@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.pages.ClaimSearchPage;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
@@ -51,8 +53,9 @@ public class MainMenu extends Module {
         acceptAlert();
     }
 
-    public void myPage() {
+    public MyPage myPage() {
         $(myPage).click();
+        return at(MyPage.class);
     }
 
     public NewCustomerPage newCustomer() {
@@ -60,8 +63,9 @@ public class MainMenu extends Module {
         return at(NewCustomerPage.class);
     }
 
-    public void search() {
+    public ClaimSearchPage search() {
         $(search).click();
+        return at(ClaimSearchPage.class);
     }
 
     public boolean isClaimInfoBlockPresent() {
