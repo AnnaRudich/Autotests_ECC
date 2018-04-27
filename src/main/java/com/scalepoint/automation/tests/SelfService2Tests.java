@@ -29,7 +29,7 @@ public class SelfService2Tests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
     public void Charlie735_addLine_categoryAutoMatch_autoImport(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -37,9 +37,9 @@ public class SelfService2Tests extends BaseTest {
                 .login(Constants.PASSWORD)
 
                 .addDescription("iPhone");
-        String description = new SelfService2Page().getProductMatchDescription();
+        String description = ssPage.getProductMatchDescription();
 
-        new SelfService2Page().selectPurchaseYear("2017")
+        ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -68,7 +68,7 @@ public class SelfService2Tests extends BaseTest {
     public void Charlie735_addLine_ageAsSingleValue_notes(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
         String claimNote = "Claim Note";
 
-        loginAndCreateClaim(user, claim)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -76,10 +76,10 @@ public class SelfService2Tests extends BaseTest {
                 .login(Constants.PASSWORD)
 
                 .addDescription("sony");
-        String description = new SelfService2Page().getProductMatchDescription();
+        String description = ssPage.getProductMatchDescription();
 
 
-        new SelfService2Page().selectAge("2")
+        ssPage.selectAge("2")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
                 .addItemCustomerNote("Item Customer Note")
@@ -110,7 +110,7 @@ public class SelfService2Tests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: Add line with documentation")
     public void Charlie735_addLineWithDocumentation(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -118,10 +118,10 @@ public class SelfService2Tests extends BaseTest {
                 .login(Constants.PASSWORD)
 
                 .addDescription("iPhone");
-        String description = new SelfService2Page().getProductMatchDescription();
+        String description = ssPage.getProductMatchDescription();
 
 
-        new SelfService2Page().selectPurchaseYear("2017")
+        ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -148,18 +148,16 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Edit line. Add acquired")
     public void Charlie735_editLine_addAcquired(User user, Claim claim, Acquired acquired) {
 
-        loginAndCreateClaim(user, claim)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.PASSWORD)
-
                 .addDescription("iPhone");
-        String description = new SelfService2Page().getProductMatchDescription();
+        String description = ssPage.getProductMatchDescription();
 
-
-        new SelfService2Page().selectPurchaseYear("2017")
+        ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -190,7 +188,7 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Delete line")
     public void Charlie735_deleteLine(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+       SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -198,10 +196,9 @@ public class SelfService2Tests extends BaseTest {
                 .login(Constants.PASSWORD)
 
                 .addDescription("iPhone");
-        String description = new SelfService2Page().getProductMatchDescription();
+        String description = ssPage.getProductMatchDescription();
 
-
-        new SelfService2Page().selectPurchaseYear("2017")
+       ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -221,7 +218,7 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Undo delete line")
     public void Charlie735_undoDeleteLine(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+       SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -229,10 +226,10 @@ public class SelfService2Tests extends BaseTest {
                 .login(Constants.PASSWORD)
 
                 .addDescription("iPhone");
-        String description = new SelfService2Page().getProductMatchDescription();
+        String description = ssPage.getProductMatchDescription();
 
 
-        new SelfService2Page().selectPurchaseYear("2017")
+       ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -242,9 +239,9 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertLineIsPresent(description));
 
 
-        new SelfService2Page().sendResponseToEcc();
+       ssPage.sendResponseToEcc();
 
-        login(user)
+       login(user)
                 .openActiveRecentClaim()
                 .parseFirstClaimLine();
 

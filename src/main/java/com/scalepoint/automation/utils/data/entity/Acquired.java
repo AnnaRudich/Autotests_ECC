@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Acquired {
 
-    @XmlElement(name = "New")
+    @XmlElement(name = "new")
     private String acquiredNew;
 
     @XmlElement

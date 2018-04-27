@@ -1,18 +1,12 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -256,27 +250,35 @@ public class SelfService2Page extends Page {
     }
 
     public class Asserts {
+
+        private Boolean assertSsLineIsVisible(String description){
+           SelenideElement line = $(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description +"']"));
+           return line.is(Condition.visible);
+        }
+
         public Asserts assertLineIsPresent(String description) {
-            SelenideElement line = $(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description +"']"));
-            assertTrue(line.is(Condition.visible));
+            assertTrue(assertSsLineIsVisible(description));
             return this;
         }
 
         public Asserts assertLineIsNotPresent(String description) {
-            SelenideElement line = $(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description +"']"));
-            assertFalse(line.is(Condition.visible));
+            assertFalse(assertSsLineIsVisible(description));
             return this;
         }
 
-        public Asserts assertThereIsNoItems(){
+
+        private int getSsItemsListSize(){
             ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')/div[contains(@class, 'list-item')]"));
-            assertTrue(itemsList.size()==0);
+            return itemsList.size();
+        }
+
+        public Asserts assertThereIsNoItems(){
+            assertTrue(getSsItemsListSize()==0);
             return this;
         }
 
         public Asserts assertItemsListSizeIs(int expectedSize){
-            ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')]/div[contains(@class, 'list-item')]"));
-            assertTrue(itemsList.size()==expectedSize);
+            assertTrue(getSsItemsListSize()==expectedSize);
             return this;
         }
     }

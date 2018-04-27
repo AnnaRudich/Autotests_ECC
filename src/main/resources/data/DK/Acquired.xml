@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <acquiredType>
-    <New>New</New>
+    <new>New</new>
     <used>Used</used>
     <heritage>Heritage</heritage>
     <gift>Gift</gift>
