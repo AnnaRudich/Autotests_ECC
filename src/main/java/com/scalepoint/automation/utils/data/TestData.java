@@ -194,7 +194,6 @@ public class TestData {
         return states;
     }
 
-
     public static PasswordsVerification getPasswordRules() {
         return (PasswordsVerification) getData(Data.PASSWORDVERIFICATION);
     }
@@ -299,8 +298,7 @@ public class TestData {
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class),
         ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class),
-        CLAIM_STATE("ClaimState.json", ClaimStates.class);
-        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class),
+        CLAIM_STATE("ClaimState.json", ClaimStates.class),
         ACQUIRED("Acquired.xml", Acquired.class);
 
         private String fileName;
