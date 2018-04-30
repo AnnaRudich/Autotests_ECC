@@ -16,12 +16,13 @@ public class ClaimSearchTest extends BaseTest {
     public void searchClaim(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
-                .search()
+                .openClaimSearch()
                 .fillClaimNumber(claim.getClaimNumber())
                 .search()
                 .doAssert(claim, asserts -> {
                     asserts.isOnlyOnList();
                     asserts.isClaimState(IN_USE);
+                    asserts.isClaimCompany(user.getCompanyName());
                 });
     }
 }

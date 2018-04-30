@@ -139,19 +139,27 @@ public class ClaimSearchPage extends Page {
   public class Asserts {
 
     private Claim claim;
+    private List<ClaimRow> claimRows;
 
     public Asserts(Claim claim){
       this.claim = claim;
+      this.claimRows = getClaimRows();
     }
 
     public Asserts isOnlyOnList(){
-      assertThat(getClaimRows().stream().allMatch(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber()))).isTrue();
+      assertThat(claimRows.stream().allMatch(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber()))).isTrue();
       return this;
     }
 
     public Asserts isClaimState(ClaimState state){
-      assertThat(getClaimRows().stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().get())
-              .hasFieldOrPropertyWithValue("claimState", state.getStateFullText());
+      assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().get().getClaimState())
+              .isEqualToIgnoringCase(state.getStateFullText());
+      return this;
+    }
+
+    public Asserts isClaimCompany(String companyName){
+      assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().get().getCompany())
+              .isEqualToIgnoringCase(companyName);
       return this;
     }
   }

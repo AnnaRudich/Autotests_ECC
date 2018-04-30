@@ -63,7 +63,7 @@ public class MainMenu extends Module {
         return at(NewCustomerPage.class);
     }
 
-    public ClaimSearchPage search() {
+    public ClaimSearchPage openClaimSearch() {
         $(search).click();
         return at(ClaimSearchPage.class);
     }
