@@ -1,26 +1,30 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.function.Consumer;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.sleep;
+
 import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+
+import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
+
+
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class SelfService2Page extends Page {
 
@@ -181,13 +185,50 @@ public class SelfService2Page extends Page {
         return this;
     }
 
+    public SelfService2Page selectAcquired(String acquired){
+        SelenideElement acquiredOption = $$(By.xpath("//input[@name='acquiredRadioGroup']"))
+                .findBy(Condition.attribute("value", acquired));
+        acquiredOption.click();
+        return this;
+    }
+
     public SelfService2Page saveItem(){
         $("#save-item-button").click();
+        waitForSpinnerToDisappear();
         return at(SelfService2Page.class);
     }
 
+    public SelfService2Page startEditItem(){
+        SelenideElement editItemButton = $(By.xpath("//span[@title='Rediger']"));
+        editItemButton.click();
+        waitForSpinnerToDisappear();
+        return this;
+    }
+
+    public SelfService2Page finishEditItem(){
+        SelenideElement updateButton = $("#save-item-button");
+        updateButton.shouldHave(Condition.text("Opdater genstand"));//could be also moved to xml. What should be the name of the object?
+        updateButton.click();
+        waitForSpinnerToDisappear();
+        return this;
+    }
+
+    public SelfService2Page deleteItem(){
+        SelenideElement deleteItem = $(By.xpath("//span[@title='Slet']"));
+        deleteItem.shouldBe(Condition.visible).click();
+        waitForSpinnerToDisappear();
+        return this;
+    }
+
+    public SelfService2Page undoDelete(){
+        SelenideElement undoDeleteButton = $(By.xpath("//span[contains(@class, 'undo-remove-button')]"));
+        undoDeleteButton.click();
+        waitForSpinnerToDisappear();
+        return this;
+    }
+
     public void sendResponseToEcc(){
-        $("#send-button").click();
+        $("#send-button").shouldBe(Condition.enabled).click();
         waitForUrl("self-service/dk/send-confirmation");
     }
 
@@ -195,6 +236,50 @@ public class SelfService2Page extends Page {
         String s = $$(By.xpath("//div[contains(@class,'product-match-description')]")).get(1).getAttribute("title");
         System.out.println(s);
         return s;
+    }
 
+    public SelfService2Page waitForSpinnerToDisappear(){
+        waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
+        return this;
+    }
+
+
+    public SelfService2Page doAssert(Consumer<SelfService2Page.Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return this;
+    }
+
+    public class Asserts {
+
+        private Boolean assertSsLineIsVisible(String description){
+           SelenideElement line = $(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description +"']"));
+           return line.is(Condition.visible);
+        }
+
+        public Asserts assertLineIsPresent(String description) {
+            assertTrue(assertSsLineIsVisible(description));
+            return this;
+        }
+
+        public Asserts assertLineIsNotPresent(String description) {
+            assertFalse(assertSsLineIsVisible(description));
+            return this;
+        }
+
+
+        private int getSsItemsListSize(){
+            ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')/div[contains(@class, 'list-item')]"));
+            return itemsList.size();
+        }
+
+        public Asserts assertThereIsNoItems(){
+            assertTrue(getSsItemsListSize()==0);
+            return this;
+        }
+
+        public Asserts assertItemsListSizeIs(int expectedSize){
+            assertTrue(getSsItemsListSize()==expectedSize);
+            return this;
+        }
     }
 }
