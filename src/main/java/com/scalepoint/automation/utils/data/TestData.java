@@ -8,6 +8,7 @@ import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
+import com.scalepoint.automation.utils.data.entity.ClaimStates;
 import com.scalepoint.automation.utils.data.entity.DepreciationType;
 import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
 import com.scalepoint.automation.utils.data.entity.Errors;
@@ -48,6 +49,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 @SuppressWarnings("unchecked")
@@ -181,6 +183,12 @@ public class TestData {
         return  (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
+    public static Map<Character, String> getClaimStates() {
+        Map<Character, String> states = new HashMap<>();
+        ((ClaimStates)Objects.requireNonNull(getData(Data.CLAIM_STATE))).getClaimStates().forEach(state -> states.put(state.getState(), state.getName()));
+        return states;
+    }
+
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
         String filePath = buildDataFilePath(locale, data.fileName);
@@ -284,7 +292,8 @@ public class TestData {
         CWA_CLAIM("Claim\\ClaimRequest.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class),
-        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class);
+        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class),
+        CLAIM_STATE("ClaimState.json", ClaimStates.class);
 
         private String fileName;
         private JAXBContext context;
