@@ -9,7 +9,7 @@ public class ClaimState {
     @JsonProperty("name")
     private String name;
 
-    public char getState() {
+    public Character getState() {
         return state;
     }
 
