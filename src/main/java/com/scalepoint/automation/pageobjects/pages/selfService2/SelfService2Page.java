@@ -4,8 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
-
-import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
+import com.scalepoint.automation.utils.data.TestData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -16,12 +15,8 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-
 import static com.scalepoint.automation.utils.Wait.forCondition;
-
 import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
-
-
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -181,7 +176,7 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page addDocumentation(){
         SelenideElement uploadDocBtn = $(By.xpath("//label[contains(@data-for, 'attachment')]/following-sibling::input"));
-        enterToHiddenUploadFileFieldSS(uploadDocBtn, new AttachmentFiles().getJpgFile2Loc());
+        enterToHiddenUploadFileFieldSS(uploadDocBtn, TestData.getAttachmentFiles().getJpgFile2Loc());
         return this;
     }
 
@@ -268,7 +263,7 @@ public class SelfService2Page extends Page {
 
 
         private int getSsItemsListSize(){
-            ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')/div[contains(@class, 'list-item')]"));
+            ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')]/div[contains(@class, 'list-item')]"));
             return itemsList.size();
         }
 
