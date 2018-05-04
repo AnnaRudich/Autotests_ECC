@@ -85,7 +85,7 @@ public class RejectReasonTests extends BaseTest {
 
     @RunOn(DriverType.CHROME_REMOTE)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
-    @Test(dataProvider = "testDataProvider", description = "Check what happens with reasone after disabling it")
+    @Test(dataProvider = "testDataProvider", description = "Check what happens with reasone after disabling it", enabled = false)
     public void charlie_549_disableReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                           ClaimItem claimItem, InsuranceCompany insuranceCompany, Claim claim) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
