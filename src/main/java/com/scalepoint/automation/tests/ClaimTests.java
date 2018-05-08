@@ -20,7 +20,6 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.SystemUser;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -35,7 +34,6 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ORD
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductInvoiceLowerMarket;
-import static com.scalepoint.automation.services.externalapi.SolrApi.findProductWithPriceLowerThan;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -406,6 +404,8 @@ public class ClaimTests extends BaseTest {
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
         ProductInfo productInfo = findProductInvoiceLowerMarket();
+        claimItem.setCustomerDemand(10000.00);
+        claimItem.setNewPriceSP(12000.00);
 
         loginAndCreateClaim(user, claim)
                 .openSid()

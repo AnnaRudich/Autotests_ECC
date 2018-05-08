@@ -423,6 +423,14 @@ public class ClaimItem {
         return newPriceSP;
     }
 
+    public void setNewPriceSP(Double newPriceSP) {
+        this.newPriceSP = newPriceSP;
+    }
+
+    public void setCustomerDemand(Double customerDemand) {
+        this.customerDemand = customerDemand;
+    }
+
     @Override
     public String toString() {
         return "ClaimItem{" +
