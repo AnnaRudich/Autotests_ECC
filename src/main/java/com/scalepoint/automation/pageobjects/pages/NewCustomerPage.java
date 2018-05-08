@@ -117,7 +117,7 @@ public class NewCustomerPage extends Page {
         waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
         waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH).substring(0,3).toLowerCase()+"']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0,3).toLowerCase()+"']")).click();
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='"+date.getYear()+"']")).click();
         clickElementUsingJS($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']")));
         waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
