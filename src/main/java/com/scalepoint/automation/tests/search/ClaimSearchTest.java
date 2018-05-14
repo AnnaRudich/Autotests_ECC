@@ -19,6 +19,23 @@ import static com.scalepoint.automation.pageobjects.pages.ClaimSearchPage.ClaimS
 public class ClaimSearchTest extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Search for claim")
+    public void searchClaim_byMultipleConditions(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .getMainMenu()
+                .openClaimSearch()
+                .fillCustomerName(claim.getFirstName())
+                .fillCompany(user.getCompanyName())
+                .fillClaimNumber(claim.getClaimNumber())
+                .search()
+                .doAssert(claim, asserts -> {
+                    asserts.areClaimsMatchingName();
+                    asserts.areClaimsMatchingCompany(user.getCompanyName());
+                    asserts.isOnlyOnList();
+                    asserts.isClaimState(IN_USE);
+                });
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Search for claim")
     public void searchClaim_claimHandler(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
