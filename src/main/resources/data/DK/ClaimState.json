@@ -1,0 +1,32 @@
+{
+  "claimStates": [
+    {
+      "state": "W",
+      "name": "I brug"
+    },
+    {
+      "state": "D",
+      "name": "Slettet"
+    },
+    {
+      "state": "P",
+      "name": "Åben"
+    },
+    {
+      "state": "S",
+      "name": "Afsluttet"
+    },
+    {
+      "state": "L",
+      "name": "Låst af ordre"
+    },
+    {
+      "state": "X",
+      "name": "Annulleret"
+    },
+    {
+      "state": "E",
+      "name": "Lukket eksternt"
+    }
+  ]
+}
