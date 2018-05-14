@@ -19,12 +19,13 @@ public class ClaimSearchPage extends Page {
 
     @Override
     protected Page ensureWeAreOnPage() {
-        return null;
+        Wait.waitForVisible(soegButton);
+        return this;
     }
 
     @Override
     protected String getRelativeUrl() {
-        return null;
+        return "webshop/jsp/matching_engine/claim_search.jsp";
     }
 
     @FindBy(id = "namefield")

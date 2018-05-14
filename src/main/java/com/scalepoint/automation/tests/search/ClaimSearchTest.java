@@ -15,7 +15,7 @@ import static com.scalepoint.automation.pageobjects.pages.ClaimSearchPage.ClaimS
 import static com.scalepoint.automation.pageobjects.pages.ClaimSearchPage.ClaimState.IN_USE;
 import static com.scalepoint.automation.pageobjects.pages.ClaimSearchPage.ClaimState.OPEN;
 
-@RunOn(DriverType.CHROME)
+@RunOn(DriverType.CHROME_REMOTE)
 public class ClaimSearchTest extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Search for claim by multiple fields")
