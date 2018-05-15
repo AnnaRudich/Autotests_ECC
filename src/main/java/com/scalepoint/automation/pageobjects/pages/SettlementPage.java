@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -33,6 +34,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -461,6 +463,7 @@ public class SettlementPage extends BaseClaimPage {
                     "targLink.dispatchEvent (clickEvent);";
 
             try {
+                descriptionElement.click();
                 doubleClick(descriptionElement);
                 waitForAjaxCompleted();
                 String js =
