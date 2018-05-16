@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -91,7 +92,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
         waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0,3).toLowerCase()+"']")).click();
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='"+date.getYear()+"']")).click();
-        clickElementUsingJS($(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]")));
+        clickUsingJsIfSeleniumClickReturnError($(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]")).shouldBe(Condition.visible));
         waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='"+date.getDayOfMonth()+"']")).click();
         waitForInvisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));

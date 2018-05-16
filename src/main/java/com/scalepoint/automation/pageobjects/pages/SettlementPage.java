@@ -463,7 +463,7 @@ public class SettlementPage extends BaseClaimPage {
                     "targLink.dispatchEvent (clickEvent);";
 
             try {
-                descriptionElement.click();
+                clickUsingJsIfSeleniumClickReturnError(descriptionElement);
                 doubleClick(descriptionElement);
                 waitForAjaxCompleted();
                 String js =
