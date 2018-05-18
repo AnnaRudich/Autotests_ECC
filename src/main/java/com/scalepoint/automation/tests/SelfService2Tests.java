@@ -173,9 +173,9 @@ public class SelfService2Tests extends BaseTest {
 
         new SettlementPage().doAssert(asserts -> {
             asserts.assertItemIsPresent(description);
-        /*
-        *assert Acquired in not implemented on Settlement page
-        */
+            /*
+             *assert Acquired in not implemented on Settlement page
+             */
         });
     }
 
@@ -188,7 +188,7 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Delete line")
     public void Charlie735_deleteLine(User user, Claim claim) {
 
-       SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -198,7 +198,7 @@ public class SelfService2Tests extends BaseTest {
                 .addDescription("iPhone");
         String description = ssPage.getProductMatchDescription();
 
-       ssPage.selectPurchaseYear("2017")
+        ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -207,7 +207,6 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts ->
                         asserts.assertLineIsNotPresent(description));
     }
-
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
@@ -218,7 +217,7 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Undo delete line")
     public void Charlie735_undoDeleteLine(User user, Claim claim) {
 
-       SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -228,8 +227,7 @@ public class SelfService2Tests extends BaseTest {
                 .addDescription("iPhone");
         String description = ssPage.getProductMatchDescription();
 
-
-       ssPage.selectPurchaseYear("2017")
+        ssPage.selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -238,10 +236,9 @@ public class SelfService2Tests extends BaseTest {
                 .undoDelete()
                 .doAssert(asserts -> asserts.assertLineIsPresent(description));
 
+        ssPage.sendResponseToEcc();
 
-       ssPage.sendResponseToEcc();
-
-       login(user)
+        login(user)
                 .openActiveRecentClaim()
                 .parseFirstClaimLine();
 
