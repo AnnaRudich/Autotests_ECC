@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods">
+
+    <test verbose="1" name="notStable" enabled="true" preserve-order="true" thread-count="7">
+        <classes>
+            <class name="com.scalepoint.automation.tests.RecommendedItemsTests">
+                <methods>
+                    <include name="ecc3278_productPricesInShopCatalog"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.admin.GenericItemsTests">
+                <methods>
+                    <include name="charlie535_testWeCanManageGenericItems"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.ShowScalepointSupplierTests">
+                <methods>
+                    <include name="charlie_589_2_showScalepointSupplierNameEnabled"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+
+</suite>

@@ -1,13 +1,33 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods">
 
-    <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true" thread-count="7">
+    <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
         <packages>
+            <package name="com.scalepoint.automation.tests.suppliermanager"/>
             <package name=".*">
                 <exclude name="com.scalepoint.automation.tests.rnv1"/>
                 <exclude name="com.scalepoint.automation.tests.api"/>
+                <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
+                <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
             </package>
         </packages>
+        <classes>
+            <class name="com.scalepoint.automation.tests.RecommendedItemsTests">
+                <methods>
+                    <exclude name="ecc3278_productPricesInShopCatalog"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.admin.GenericItemsTests">
+                <methods>
+                    <exclude name="charlie535_testWeCanManageGenericItems"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.ShowScalepointSupplierTests">
+                <methods>
+                    <exclude name="charlie_589_2_showScalepointSupplierNameEnabled"/>
+                </methods>
+            </class>
+        </classes>
     </test>
 
     <test verbose="1" name="api" enabled="true" preserve-order="true" thread-count="1">
