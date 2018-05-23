@@ -47,7 +47,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
 
     public <T extends Page> T updateTemplate(Integer functionalTemplateId, Class<T> returnPageClass, FtOperation... operations) {
         try {
-            if (lock.tryLock(90, TimeUnit.SECONDS)) {
+            if (lock.tryLock(240, TimeUnit.SECONDS)) {
                 try {
                     log.info("Lock acquired for FT update");
 
