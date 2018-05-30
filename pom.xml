@@ -31,15 +31,21 @@
             </properties>
         </profile>
         <profile>
+            <id>QA08</id>
+            <properties>
+                <activatedProperties>qa08</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>QA09</id>
             <properties>
                 <activatedProperties>qa09</activatedProperties>
             </properties>
         </profile>
         <profile>
-            <id>QA08</id>
+            <id>QA13</id>
             <properties>
-                <activatedProperties>qa08</activatedProperties>
+                <activatedProperties>qa13</activatedProperties>
             </properties>
         </profile>
         <profile>

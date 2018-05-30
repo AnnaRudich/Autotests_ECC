@@ -14,7 +14,6 @@ import ru.yandex.qatools.htmlelements.element.Radio;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class ReplacementDialog extends BaseDialog {
 
@@ -30,7 +29,7 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(id = "replace_money_radio")
     private Radio payCompleteAmountRadio;
 
-    @FindBy(id = "btn_next")
+    @FindBy(id = "//div[contains(@class, 'x-docked-bottom')]//div[contains(@id, 'toolbar')]/div[contains(@id, 'toolbar')]//a[4]")
     private Button nextButton;
 
     @FindBy(id = "replacementType3")
@@ -45,17 +44,19 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(id = "btn_close")
     private WebElement closeButton;
 
-    @FindBy(xpath = "//button[@id='btn_replace_through_shop']")
+//    @FindBy(xpath = "//button[@id='btn_replace_through_shop']")
+    @FindBy(xpath = "//div[contains(@class, 'x-docked-bottom')]//div[contains(@id, 'toolbar')]/div[contains(@id, 'toolbar')]//a[1]")
     private WebElement goToShopButton;
 
-    @FindBy(name = "select_all")
+//    @FindBy(name = "select_all")
+    @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
     private WebElement selectAllItemsCheckbox;
 
     @Override
     public ReplacementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
         switchToLast();
-        waitForVisible(cancelButton);
+//        waitForVisible(cancelButton);
         return this;
     }
 
@@ -83,7 +84,8 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     public ShopWelcomePage goToShop() {
-        closeDialog(goToShopButton);
+//        closeDialog(goToShopButton);
+        goToShopButton.click();
         return Page.at(ShopWelcomePage.class);
     }
 
