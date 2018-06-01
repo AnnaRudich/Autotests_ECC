@@ -6,14 +6,12 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 /**
@@ -50,7 +48,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
             Constants.DEPRECIATION_10
     );
 
-    @RunOn(value = DriverType.IE_REMOTE)
     @Bug(bug = "CHARLIE-417,CHARLIE-772")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
@@ -60,7 +57,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, false);
     }
 
-    @RunOn(value = DriverType.IE_REMOTE)
     @Bug(bug = "CHARLIE-417")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
