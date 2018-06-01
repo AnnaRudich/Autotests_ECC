@@ -13,6 +13,7 @@ import ru.yandex.qatools.htmlelements.element.Radio;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 
 public class ReplacementDialog extends BaseDialog {
@@ -26,7 +27,8 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//table[@class='valuationTable']//tr[2]/td[4]")
     private WebElement itemPrice;
 
-    @FindBy(id = "replace_money_radio")
+//    @FindBy(id = "replace_money_radio")
+    @FindBy(xpath = "//table//td//input[contains(@id, 'radiofield')]")
     private Radio payCompleteAmountRadio;
 
     @FindBy(id = "//div[contains(@class, 'x-docked-bottom')]//div[contains(@id, 'toolbar')]/div[contains(@id, 'toolbar')]//a[4]")
@@ -35,7 +37,7 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(id = "replacementType3")
     private Button sendChequeButton;
 
-    @FindBy(id = "btn_finish")
+    @FindBy(id = "//div[contains(@class, 'x-docked-bottom')]//div[contains(@id, 'toolbar')]/div[contains(@id, 'toolbar')]//a[5]")
     private WebElement finishButton;
 
     @FindBy(id = "btn_cancel")
@@ -60,6 +62,11 @@ public class ReplacementDialog extends BaseDialog {
         return this;
     }
 
+    String buttonLocator = "//div[contains(@class, 'x-docked-bottom')]//div[contains(@id, 'toolbar')]/div[contains(@id, 'toolbar')]//a[%s]";
+    By nextButtonByXpath = By.xpath(String.format(buttonLocator,"4"));
+    By finishButtonByXpath = By.xpath(String.format(buttonLocator,"5"));
+
+
     public void closeReplacementDialog() {
         closeDialog(cancelButton);
     }
@@ -76,10 +83,11 @@ public class ReplacementDialog extends BaseDialog {
         payCompleteAmountRadio.click();
         //only sequential double click activates Next button
         payCompleteAmountRadio.click();
-        nextButton.click();
+        $(nextButtonByXpath).click();
         sendChequeButton.click();
-        finishButton.click();
-        closeDialog(closeButton);
+        $(finishButtonByXpath).click();
+//        closeDialog(closeButton);
+        closeButton.click();
         return Page.at(CustomerDetailsPage.class);
     }
 
@@ -91,10 +99,12 @@ public class ReplacementDialog extends BaseDialog {
 
     public CustomerDetailsPage replaceAllItems() {
         selectAllItemsCheckbox.click();
-        selectAllItemsCheckbox.click();
-        nextButton.click();
-        clickAndWaitForDisplaying(finishButton, By.id("btn_close"));
-        closeDialog(closeButton);
+//        selectAllItemsCheckbox.click();
+        $(nextButtonByXpath).click();
+        $(finishButtonByXpath).click();
+//        clickAndWaitForDisplaying(nextButton, By.id("btn_close"));
+//        closeDialog(closeButton);
+        closeButton.click();
         return Page.at(CustomerDetailsPage.class);
     }
 
