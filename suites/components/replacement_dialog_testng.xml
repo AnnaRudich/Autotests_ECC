@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ReplacementDialog" configfailurepolicy="continue" parallel="methods" thread-count="1">
+<suite name="ReplacementDialog" configfailurepolicy="continue" parallel="methods" thread-count="3">
 <test verbose="1" name="ReplacementDialog" group-by-instances="false" enabled="true" preserve-order="true">
     <classes>
         <class name="com.scalepoint.automation.tests.ClaimTests">
