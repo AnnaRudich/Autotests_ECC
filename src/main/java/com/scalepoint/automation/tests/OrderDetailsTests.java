@@ -21,7 +21,6 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.SolrApi.findProductInvoiceLowerMarket;
 
-@RunOn(DriverType.CHROME)
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class OrderDetailsTests extends BaseTest {
