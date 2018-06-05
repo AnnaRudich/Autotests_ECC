@@ -398,7 +398,6 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with shop
      * THEN: C1 status is "Completed"
      */
-    @RunOn(value = DriverType.IE_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")

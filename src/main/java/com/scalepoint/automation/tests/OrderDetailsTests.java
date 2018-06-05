@@ -134,7 +134,7 @@ public class OrderDetailsTests extends BaseTest {
                 .openSid()
                 .setCategory(claimItem.getCategoryGroupBorn())
                 .setSubCategory(claimItem.getCategoryBornBabyudstyr())
-                .setNewPrice(5000.00)
+                .setNewPrice(10000.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
