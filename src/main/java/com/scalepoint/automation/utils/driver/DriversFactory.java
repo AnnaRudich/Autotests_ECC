@@ -130,7 +130,7 @@ public enum DriversFactory {
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance() {
             if (System.getProperty("webdriver.chrome.driver") == null) {
-                File chromeDriver = new File("src/main/resources/drivers/chromedriver.exe");
+                File chromeDriver = new File("src/main/resources/drivers/chromedrivermac");
                 System.setProperty("webdriver.chrome.driver", chromeDriver.getAbsolutePath());
             }
             return new ChromeDriver(getDesiredCapabilitiesForChrome());
