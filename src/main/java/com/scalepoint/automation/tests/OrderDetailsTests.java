@@ -272,6 +272,9 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0.00
      * Tilbageværende erstatning :  949.00
      */
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
@@ -302,7 +305,10 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue() - price, 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is equal to " + price);
     }
 
-
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
+    @RunOn(DriverType.CHROME_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
