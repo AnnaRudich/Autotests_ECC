@@ -49,6 +49,18 @@
             </properties>
         </profile>
         <profile>
+            <id>QA13</id>
+            <properties>
+                <activatedProperties>qa13</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA14</id>
+            <properties>
+                <activatedProperties>qa14</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>STAGE</id>
             <properties>
                 <activatedProperties>stage</activatedProperties>
