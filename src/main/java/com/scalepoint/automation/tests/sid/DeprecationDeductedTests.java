@@ -77,6 +77,7 @@ public class DeprecationDeductedTests extends BaseTest {
      * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
      */
     @Bug(bug = "CHARLIE-416")
+    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (on)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     public void ecc3288_2_displayVoucherValueWithDeprecationDeductedON(User user, Claim claim, ClaimItem claimItem) {
