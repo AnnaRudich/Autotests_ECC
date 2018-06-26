@@ -13,58 +13,54 @@ import ru.yandex.qatools.htmlelements.element.Radio;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class ReplacementDialog extends BaseDialog {
 
-    @FindBy(id = "btn_cancel")
+    @FindBy(xpath = "//div[@id='replacementWindow_header-targetEl']//img[contains(@class,'x-tool-close')]")
     private Button cancelButton;
 
-    @FindBy(xpath = "//table[@class='valuationTable']//tr[2]/td[3]")
+    @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-faceValue')]")
     private WebElement voucherFaceValue;
 
-    @FindBy(xpath = "//table[@class='valuationTable']//tr[2]/td[4]")
+    @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-cashValue')]")
     private WebElement itemPrice;
 
-    @FindBy(id = "replace_money_radio")
+    @FindBy(xpath = "//table//td//input[contains(@id, 'radiofield')]")
     private Radio payCompleteAmountRadio;
-
-    @FindBy(id = "btn_next")
-    private Button nextButton;
 
     @FindBy(id = "replacementType3")
     private Button sendChequeButton;
 
-    @FindBy(id = "btn_finish")
-    private WebElement finishButton;
-
-    @FindBy(id = "btn_cancel")
-    private WebElement okButton;
-
-    @FindBy(id = "btn_close")
+    @FindBy(xpath = "//div[contains(@class,'x-message-box')]//div[contains(@id,'messagebox')]//span[contains(@id,'button')][1]")
     private WebElement closeButton;
 
-    @FindBy(xpath = "//button[@id='btn_replace_through_shop']")
+    @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
     private WebElement goToShopButton;
 
-    @FindBy(name = "select_all")
+    @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
     private WebElement selectAllItemsCheckbox;
 
     @Override
     public ReplacementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
         switchToLast();
-        waitForVisible(cancelButton);
+        Wait.waitForVisible(goToShopButton);
         return this;
     }
 
+    private By nextButtonByXpath = By.xpath("//span[@id='replacement-button-next-btnIconEl']");
+    private By finishButtonByXpath = By.xpath("//span[@id='replacement-button-finish-btnIconEl']");
+
+
     public void closeReplacementDialog() {
-        closeDialog(cancelButton);
+        Wait.waitForVisible(cancelButton);
+        cancelButton.click();
     }
 
     private Double getVoucherFaceValue() {
-        return OperationalUtils.toNumber(voucherFaceValue.getText().split("rdi")[1].replaceAll("[^\\.,0123456789]", ""));
+        return OperationalUtils.toNumber(voucherFaceValue.getText());
     }
 
     private Double getItemPriceValue() {
@@ -75,24 +71,24 @@ public class ReplacementDialog extends BaseDialog {
         payCompleteAmountRadio.click();
         //only sequential double click activates Next button
         payCompleteAmountRadio.click();
-        nextButton.click();
+        $(nextButtonByXpath).click();
         sendChequeButton.click();
-        finishButton.click();
-        closeDialog(closeButton);
+        $(finishButtonByXpath).click();
+        closeButton.click();
         return Page.at(CustomerDetailsPage.class);
     }
 
     public ShopWelcomePage goToShop() {
-        closeDialog(goToShopButton);
+        goToShopButton.click();
         return Page.at(ShopWelcomePage.class);
     }
 
     public CustomerDetailsPage replaceAllItems() {
         selectAllItemsCheckbox.click();
-        selectAllItemsCheckbox.click();
-        nextButton.click();
-        clickAndWaitForDisplaying(finishButton, By.id("btn_close"));
-        closeDialog(closeButton);
+        $(nextButtonByXpath).click();
+        $(finishButtonByXpath).click();
+        Wait.waitForVisible(closeButton);
+        closeButton.click();
         return Page.at(CustomerDetailsPage.class);
     }
 

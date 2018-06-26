@@ -60,8 +60,14 @@ public enum FTSetting {
 
     PAYOUT_TO_CHEQUE_CLAIMSHANDLER("input[name=ftpaymentflag][value='1']", CHECKBOX),
 
-    USER_PASSWORD_VALIDATION_STRATEGY("select[name='ftUserPasswordValidationStrategy']", SELECT);
+    USER_PASSWORD_VALIDATION_STRATEGY("select[name='ftUserPasswordValidationStrategy']", SELECT),
 
+    DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER("input[name='ftpaymentflag'][value='16384']", CHECKBOX),
+    DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER("input[name='ftpaymentflag'][value='32768']", CHECKBOX),
+
+    CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX),
+
+    USE_NEW_REPLACEMENT_DIALOG("input[name='ftNewReplacementDialog'][value='1']", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;
