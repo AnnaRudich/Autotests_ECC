@@ -315,7 +315,6 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
-    @RunOn(DriverType.CHROME_REMOTE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {

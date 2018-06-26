@@ -20,6 +20,7 @@
         <class name="com.scalepoint.automation.tests.sid.DepreciationDeductedCombinedTests">
             <methods>
                 <include name="ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON" />
+                <include name="ecc3288_1_verifyDndD2AndFTRelationCombineDnDOFF" />
             </methods>
         </class>
     </classes>
