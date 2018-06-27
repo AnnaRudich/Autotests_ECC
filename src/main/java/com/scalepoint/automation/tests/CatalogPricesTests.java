@@ -47,6 +47,7 @@ public class CatalogPricesTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceEqualsMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProductAsVoucherWithProductInvoiceEqualsMarketPrice();
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProductInvoiceEqualMarket());
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
