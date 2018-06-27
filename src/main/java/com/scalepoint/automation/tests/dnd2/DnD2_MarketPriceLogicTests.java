@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.dnd2;
 
-import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -13,8 +12,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_HIGHER_INVOICE_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-526")
 public class DnD2_MarketPriceLogicTests extends BaseTest {
@@ -23,7 +21,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if product and market price are visible")
     public void charlie526_checkIsProductPriceVisibleForCatalogPriceLowerMarketPrice(User user, Claim claim){
 
-        ProductInfo productInfo = SolrApi.findProductInvoiceLowerMarket();
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_LOWER_THAN_MARKET_PRICE, ORDERALBLE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -41,7 +39,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
             "then valuation should be them same in both")
     public void charlie526_checkIsProductPriceVisibleForCatalogPriceHigherMarketPrice(User user, Claim claim){
 
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_HIGHER_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -58,7 +56,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice < Market price")
     public void charlie526_addProductWhenProductPriceLowerThanMarketPrice(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProductInvoiceLowerMarket();
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_LOWER_THAN_MARKET_PRICE, ORDERALBLE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -95,7 +93,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice > Market price")
     public void charlie526_addProductWhenProductPriceHigherThanMarketPrice(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_HIGHER_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
