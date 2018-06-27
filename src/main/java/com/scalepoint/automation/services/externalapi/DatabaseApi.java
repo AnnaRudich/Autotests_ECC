@@ -176,7 +176,8 @@ public class DatabaseApi {
         ORDERALBLE("xp.orderable=1"),
         INVOICE_PRICE_LOWER_THAN_10("xp.invoicePrice < 10"),
         MARKET_PRICE_EQUAL_INVOICE_PRICE("pr.marketPrice=xp.invoicePrice"),
-        MARKET_PRICE_HIGHER_INVOICE_PRICE("pr.marketPrice>xp.invoicePrice");
+        MARKET_PRICE_HIGHER_INVOICE_PRICE("pr.marketPrice>xp.invoicePrice"),
+        PRODUCT_AS_VOUCHER_ONLY("xp.voucherOnlyInShop=1");
 
         private String condition;
         PriceConditions(String condition){
