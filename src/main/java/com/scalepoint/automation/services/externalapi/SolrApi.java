@@ -54,13 +54,6 @@ public class SolrApi {
         return product;
     }
 
-    public static ProductInfo findProductWithPriceLowerThan(String price){
-        String filterQuery = "{!frange l=1 incl=false}sub("+price+", price_invoice_1)";
-        ProductInfo product = findOrderableProduct(filterQuery, "ProductPriceLoweThan");
-        assert product.getPrice() <= Double.valueOf(price);
-        return product;
-    }
-
     private static ProductInfo findOrderableProduct(String filterQuery, String message) {
         try {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
