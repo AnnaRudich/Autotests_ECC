@@ -41,7 +41,6 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     private int deprecationValue = 10;
 
-@RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")

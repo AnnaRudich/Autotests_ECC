@@ -21,6 +21,8 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("SqlDialectInspection")
 public class DatabaseApi {
@@ -35,11 +37,11 @@ public class DatabaseApi {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public XpriceInfo findProduct(PriceConditions priceConditions){
+    public XpriceInfo findProduct(PriceConditions... priceConditions){
        return jdbcTemplate.queryForObject(
                 "SELECT top(1) pr.ProductKey, xp.productId,pr.marketPrice,pr.invoicePrice,xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
-                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID " +
-                         priceConditions.getCondition(),new XpriceInfoMapper());
+                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
+                         Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")),new XpriceInfoMapper());
     }
 
     public void createDefaultServiceAgreementIfNotExists(Integer icId) {
@@ -167,9 +169,14 @@ public class DatabaseApi {
     }
 
     public enum PriceConditions {
-        INVOICE_PRICE_LOWER_THAN_10("were xp.invoicePrice < 10 and xp.orderable=1"),
-        MARKET_PRICE_EQUAL_INVOICE_PRICE("where pr.marketPrice=xp.invoicePrice and xp.orderable=1"),
-        MARKET_PRICE_HIGHER_INVOICE_PRICE("where pr.marketPrice>xp.invoicePrice and xp.orderable=1");
+        /**
+         * xp is xprice table
+         * pr is product table
+         */
+        ORDERALBLE("xp.orderable=1"),
+        INVOICE_PRICE_LOWER_THAN_10("xp.invoicePrice < 10"),
+        MARKET_PRICE_EQUAL_INVOICE_PRICE("pr.marketPrice=xp.invoicePrice"),
+        MARKET_PRICE_HIGHER_INVOICE_PRICE("pr.marketPrice>xp.invoicePrice");
 
         private String condition;
         PriceConditions(String condition){

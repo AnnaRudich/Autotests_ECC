@@ -5,10 +5,12 @@ import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -16,12 +18,14 @@ import java.util.List;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
 
 public class TextSearchTests extends BaseTest {
 
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE, ORDERALBLE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
