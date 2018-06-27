@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 
 import java.util.function.Supplier;
 
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_HIGHER_INVOICE_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-587")
@@ -44,8 +45,9 @@ public class RecommendedItemsTests extends BaseTest {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceHigherMarket, textSearchPage, null);
+        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(()->SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_HIGHER_INVOICE_PRICE)), textSearchPage, null);
         ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE)), textSearchPage, null);
+
         ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(SolrApi::findProductInvoiceLowerMarket, textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
 
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
@@ -83,7 +85,7 @@ public class RecommendedItemsTests extends BaseTest {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
 
-        ProductInfo productInvoiceHigherMarket = SolrApi.findProductInvoiceHigherMarket();
+        ProductInfo productInvoiceHigherMarket = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_HIGHER_INVOICE_PRICE));
         ProductInfo productInvoiceEqualMarket = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE));
         ProductInfo productInvoiceLowerMarket = SolrApi.findProductInvoiceLowerMarket();
 

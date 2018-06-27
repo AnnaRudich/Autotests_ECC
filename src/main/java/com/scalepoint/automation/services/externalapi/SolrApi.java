@@ -39,14 +39,6 @@ public class SolrApi {
         }
     }
 
-    public static ProductInfo findProductInvoiceHigherMarket() {
-        String filterQuery = "{!frange l=0 incl=false}sub(price_invoice_1,market_price)";
-//        ProductInfo product = findProduct(xpriceInfo);
-        ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceHigherMarket");
-        assert product.getInvoicePrice() > product.getMarketPrice();
-        return product;
-    }
-
     public static ProductInfo findProductInvoiceLowerMarket() {
         String filterQuery = "{!frange l=1 incl=false}sub(market_price, price_invoice_1)";
         ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceLowerMarket");
