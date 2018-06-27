@@ -85,13 +85,8 @@ public class RecommendedItemsTests extends BaseTest {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
 
-<<<<<<< HEAD
         ProductInfo productInvoiceHigherMarket = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_HIGHER_INVOICE_PRICE));
-        ProductInfo productInvoiceEqualMarket = SolrApi.findProductInvoiceEqualMarket();
-=======
-        ProductInfo productInvoiceHigherMarket = SolrApi.findProductInvoiceHigherMarket();
         ProductInfo productInvoiceEqualMarket = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE));
->>>>>>> 1927bf987ec642e3bd07480fbbcd38853163f0ba
         ProductInfo productInvoiceLowerMarket = SolrApi.findProductInvoiceLowerMarket();
 
         ShopWelcomePage shopWelcomePage = settlementPage
