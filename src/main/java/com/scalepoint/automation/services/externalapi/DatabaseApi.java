@@ -167,9 +167,9 @@ public class DatabaseApi {
     }
 
     public enum PriceConditions {
+        INVOICE_PRICE_LOWER_THAN_10("were xp.invoicePrice < 10 and xp.orderable=1"),
         MARKET_PRICE_EQUAL_INVOICE_PRICE("where pr.marketPrice=xp.invoicePrice and xp.orderable=1"),
         MARKET_PRICE_HIGHER_INVOICE_PRICE("where pr.marketPrice>xp.invoicePrice and xp.orderable=1");
-
 
         private String condition;
         PriceConditions(String condition){
