@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.dnd2;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -25,6 +26,8 @@ import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Val
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.USED_PRICE;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_HIGHER_INVOICE_PRICE;
 
 
 /**
@@ -38,12 +41,12 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     private int deprecationValue = 10;
 
-
+@RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
     public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProductInvoiceHigherMarket();
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_HIGHER_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

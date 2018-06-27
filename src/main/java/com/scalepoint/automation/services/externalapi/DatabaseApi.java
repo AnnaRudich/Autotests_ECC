@@ -1,5 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
@@ -32,6 +33,13 @@ public class DatabaseApi {
 
     public DatabaseApi(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public XpriceInfo findProduct(PriceConditions priceConditions){
+       return jdbcTemplate.queryForObject(
+                "SELECT top(1) pr.ProductKey, xp.productId,pr.marketPrice,pr.invoicePrice,xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
+                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID " +
+                         priceConditions.getCondition(),new XpriceInfoMapper());
     }
 
     public void createDefaultServiceAgreementIfNotExists(Integer icId) {
@@ -140,7 +148,36 @@ public class DatabaseApi {
         }
     }
 
+    private static final class XpriceInfoMapper implements RowMapper<XpriceInfo> {
+
+        public XpriceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            XpriceInfo xpriceInfo = new XpriceInfo();
+            xpriceInfo.setProductId(rs.getInt("ProductId"));
+            xpriceInfo.setProductKey(rs.getString("ProductKey"));
+            xpriceInfo.setInvoicePrice(rs.getDouble("invoicePrice"));
+            xpriceInfo.setMarketPrice(rs.getDouble("marketPrice"));
+            xpriceInfo.setSupplierName(rs.getString("supplierName"));
+            xpriceInfo.setSupplierShopPrice(rs.getDouble("supplierShopPrice"));
+            return xpriceInfo;
+        }
+    }
+
     private void assignTemplateToServiceAgreements(Integer rvTemplateId) {
         jdbcTemplate.update("update ServiceAgreement set defaultTemplateId = ? where name like 'AutoTest%'", rvTemplateId);
+    }
+
+    public enum PriceConditions {
+        MARKET_PRICE_EQUAL_INVOICE_PRICE("where pr.marketPrice=xp.invoicePrice and xp.orderable=1"),
+        MARKET_PRICE_HIGHER_INVOICE_PRICE("where pr.marketPrice>xp.invoicePrice and xp.orderable=1");
+
+
+        private String condition;
+        PriceConditions(String condition){
+            this.condition = condition;
+        }
+
+        public String getCondition(){
+            return condition;
+        }
     }
 }

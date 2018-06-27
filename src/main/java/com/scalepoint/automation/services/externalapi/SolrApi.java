@@ -1,6 +1,7 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Constants;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,12 @@ public class SolrApi {
 
     private static Logger logger = LogManager.getLogger(SolrApi.class);
 
+    public static ProductInfo findProduct(XpriceInfo xpriceInfo){
+        ProductInfo productInfo = findProduct(String.valueOf(xpriceInfo.getProductId()));
+        productInfo.setXprices(xpriceInfo);
+        return productInfo;
+    }
+
     public static ProductInfo findProduct(String productId) {
         try {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
@@ -34,6 +41,7 @@ public class SolrApi {
 
     public static ProductInfo findProductInvoiceHigherMarket() {
         String filterQuery = "{!frange l=0 incl=false}sub(price_invoice_1,market_price)";
+//        ProductInfo product = findProduct(xpriceInfo);
         ProductInfo product = findOrderableProduct(filterQuery, "ProductInvoiceHigherMarket");
         assert product.getInvoicePrice() > product.getMarketPrice();
         return product;
