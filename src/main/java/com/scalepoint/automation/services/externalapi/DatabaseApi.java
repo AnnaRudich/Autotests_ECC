@@ -174,12 +174,16 @@ public class DatabaseApi {
          * pr is product table
          */
         ORDERALBLE("xp.orderable=1"),
+
         INVOICE_PRICE_LOWER_THAN_10("xp.invoicePrice < 10"),
         INVOICE_PRICE_LOWER_THAN_MARKET_PRICE("pr.marketPrice>xp.invoicePrice"),
+        INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE("pr.marketPrice<xp.invoicePrice"),
+
         MARKET_PRICE_EQUAL_INVOICE_PRICE("pr.marketPrice=xp.invoicePrice"),
         MARKET_PRICE_HIGHER_INVOICE_PRICE("pr.marketPrice>xp.invoicePrice"),
+
         PRODUCT_AS_VOUCHER_ONLY("xp.voucherOnlyInShop=1"),
-        INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE("pr.marketPrice<xp.invoicePrice");
+        PRODUCT_AS_VOUCHER_ONLY_FALSE("xp.voucherOnlyInShop=0");
 
 
         private String condition;

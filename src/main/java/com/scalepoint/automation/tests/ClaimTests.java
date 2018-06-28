@@ -37,6 +37,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SET
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -404,7 +405,7 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_LOWER_THAN_MARKET_PRICE, ORDERALBLE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
         claimItem.setCustomerDemand(10000.00);
         claimItem.setNewPriceSP(12000.00);
 

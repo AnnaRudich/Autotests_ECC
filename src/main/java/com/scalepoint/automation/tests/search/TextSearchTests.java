@@ -19,13 +19,13 @@ import static com.scalepoint.automation.pageobjects.modules.textSearch.Attribute
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 
 public class TextSearchTests extends BaseTest {
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE, ORDERALBLE));
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -152,7 +152,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
     public void charlie510_checkSearchBySku(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

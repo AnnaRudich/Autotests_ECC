@@ -16,6 +16,8 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
@@ -67,7 +69,7 @@ public class SettlementSummaryTests extends BaseTest {
     public void ecc3034_setSummaryCheckMultipleItems(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         double invoicePrice = productInfo.getInvoicePrice();
 

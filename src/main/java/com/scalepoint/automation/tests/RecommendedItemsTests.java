@@ -43,10 +43,10 @@ public class RecommendedItemsTests extends BaseTest {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(()->SolrApi.findProduct(databaseApi.findProduct(INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE)), textSearchPage, null);
-        ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(databaseApi.findProduct(MARKET_PRICE_EQUAL_INVOICE_PRICE)), textSearchPage, null);
+        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(()->SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE)), textSearchPage, null);
+        ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE)), textSearchPage, null);
 
-        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_LOWER_THAN_MARKET_PRICE, ORDERALBLE)), textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
+        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERALBLE,PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_MARKET_PRICE)), textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
 
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
                 .toCompleteClaimPage()
@@ -83,9 +83,9 @@ public class RecommendedItemsTests extends BaseTest {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
 
-        ProductInfo productInvoiceHigherMarket = SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE, ORDERALBLE));
-        ProductInfo productInvoiceEqualMarket = SolrApi.findProduct(getXpricesForConditions(MARKET_PRICE_EQUAL_INVOICE_PRICE, ORDERALBLE));
-        ProductInfo productInvoiceLowerMarket = SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_LOWER_THAN_MARKET_PRICE, ORDERALBLE));
+        ProductInfo productInvoiceHigherMarket = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
+        ProductInfo productInvoiceEqualMarket = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInvoiceLowerMarket = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         ShopWelcomePage shopWelcomePage = settlementPage
                 .toCompleteClaimPage()

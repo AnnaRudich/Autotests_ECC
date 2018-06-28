@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_10;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
@@ -41,7 +43,7 @@ public class ReplacementService extends BaseService{
 
     public ReplacementService makeReplacement(Object claimRequest){
 
-        String itemId = String.valueOf(SolrApi.findProduct(getData().getDatabaseApi().findProduct(INVOICE_PRICE_LOWER_THAN_10)).getId());
+        String itemId = String.valueOf(SolrApi.findProduct(getData().getDatabaseApi().findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_10)).getId());
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())

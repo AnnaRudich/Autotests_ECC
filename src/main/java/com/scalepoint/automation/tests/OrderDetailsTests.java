@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -149,7 +150,7 @@ public class OrderDetailsTests extends BaseTest {
                 .goToShop()
                 .toProductSearchPage();
 
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(INVOICE_PRICE_LOWER_THAN_MARKET_PRICE, ORDERALBLE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE,PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         int productIndex = 0;
         ShopProductSearchPage searchForProductPage = searchPage
