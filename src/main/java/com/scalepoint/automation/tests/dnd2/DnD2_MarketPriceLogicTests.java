@@ -40,7 +40,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
             "then valuation should be them same in both")
     public void charlie526_checkIfProductPriceVisibleForCatalogPriceHigherMarketPrice(User user, Claim claim){
 
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -75,7 +75,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice = Market price")
     public void charlie526_addProductWhenProductPriceEqualsMarketPrice(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -94,7 +94,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice > Market price")
     public void charlie526_addProductWhenProductPriceHigherThanMarketPrice(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

@@ -124,7 +124,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
     public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
 
-        ProductInfo product = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY));
+        ProductInfo product = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY));
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(product.getModelAndCategory())

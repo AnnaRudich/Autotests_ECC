@@ -26,7 +26,7 @@ public class CatalogPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductInvoicePrice < Market price")
     public void charlie543_addOrderableProductsWithBnoWhenProductPriceLowerThanMarketPrice(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_HIGHER_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_HIGHER_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -47,7 +47,7 @@ public class CatalogPricesTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceEqualsMarketPrice(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

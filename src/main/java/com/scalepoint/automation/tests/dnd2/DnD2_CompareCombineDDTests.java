@@ -42,7 +42,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
     public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -63,7 +63,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
     public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
