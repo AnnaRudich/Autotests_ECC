@@ -26,6 +26,9 @@ import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Val
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.USED_PRICE;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.MARKET_PRICE_EQUAL_INVOICE_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERALBLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
 
 
 /**
@@ -64,7 +67,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
     public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim){
-        ProductInfo productInfo = SolrApi.findProductAsVoucher();
+        ProductInfo productInfo = SolrApi.findProduct(databaseApi.findProduct(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY, MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
