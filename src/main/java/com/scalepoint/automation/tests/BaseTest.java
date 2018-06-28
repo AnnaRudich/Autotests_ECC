@@ -22,6 +22,7 @@ import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.annotations.RunOn;
@@ -341,6 +342,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     public static EccIntegrationService createClaimAndLineUsingEccIntegration(User user, EccIntegration eccIntegration) {
         new LoginProcessService().login(user);
         return new EccIntegrationService().createClaim(eccIntegration);
+    }
+
+    public XpriceInfo getXpricesForConditions(DatabaseApi.PriceConditions... priceConditions){
+        return getXpricesForConditions(priceConditions);
     }
 }
 

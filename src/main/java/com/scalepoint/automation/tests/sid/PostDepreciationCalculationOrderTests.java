@@ -18,6 +18,8 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-539")
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
@@ -122,7 +124,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
     public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
 
-        ProductInfo product = SolrApi.findProductAsVoucher();
+        ProductInfo product = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY));
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage(product.getModelAndCategory())

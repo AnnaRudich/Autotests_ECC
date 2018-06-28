@@ -15,12 +15,13 @@ import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProductInvoiceEqualMarket();
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -147,7 +148,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
     public void charlie510_checkSearchBySku(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProductInvoiceEqualMarket();
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

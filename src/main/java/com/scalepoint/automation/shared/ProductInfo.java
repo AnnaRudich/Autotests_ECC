@@ -46,6 +46,24 @@ public class ProductInfo {
     @Field("price_voucher_only_in_shop_1")
     private boolean voucherOnlyInShop;
 
+    public void setXprices(XpriceInfo xpriceInfo){
+        setSupplierName(xpriceInfo.getSupplierName());
+        setInvoicePrice(xpriceInfo.getInvoicePrice());
+        setSupplierShopPrice(xpriceInfo.getSupplierShopPrice());
+    }
+
+    public void setSupplierShopPrice(Double supplierShopPrice) {
+        this.supplierShopPrice = supplierShopPrice;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public void setInvoicePrice(double invoicePrice) {
+        this.invoicePrice = invoicePrice;
+    }
+
     public long getId() {
         return id;
     }

@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
+import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -15,11 +16,10 @@ import com.scalepoint.automation.utils.data.entity.OrderDetails;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.externalapi.SolrApi.findProductInvoiceLowerMarket;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -148,7 +148,7 @@ public class OrderDetailsTests extends BaseTest {
                 .goToShop()
                 .toProductSearchPage();
 
-        ProductInfo productInfo = findProductInvoiceLowerMarket();
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE,PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         int productIndex = 0;
         ShopProductSearchPage searchForProductPage = searchPage
