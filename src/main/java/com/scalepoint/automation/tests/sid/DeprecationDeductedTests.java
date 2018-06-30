@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
-@RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
 public class DeprecationDeductedTests extends BaseTest {
     /**
      * GIVEN: FT "Display voucher value with depreciation deducted" OFF
@@ -78,6 +77,7 @@ public class DeprecationDeductedTests extends BaseTest {
      * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
      */
     @Bug(bug = "CHARLIE-416")
+    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (on)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     public void ecc3288_2_displayVoucherValueWithDeprecationDeductedON(User user, Claim claim, ClaimItem claimItem) {
