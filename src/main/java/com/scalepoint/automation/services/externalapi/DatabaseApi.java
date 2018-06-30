@@ -39,7 +39,7 @@ public class DatabaseApi {
 
     public XpriceInfo findProduct(PriceConditions... priceConditions){
        return jdbcTemplate.queryForObject(
-                "SELECT top(1) pr.ProductKey, xp.productId,pr.marketPrice,pr.invoicePrice,xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
+                "SELECT top(1) pr.ProductKey, xp.productId,pr.marketPrice, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
                          Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")),new XpriceInfoMapper());
     }

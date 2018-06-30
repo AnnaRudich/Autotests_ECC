@@ -34,17 +34,12 @@ public class ProductInfo {
     @Field("price_lowest_1")
     private double lowestPrice;
 
-    @Field("price_invoice_1")
-    private double invoicePrice;
-
-    @Field("price_supplier_shop_1")
-    private Double supplierShopPrice;
-
-    @Field("price_supplier_name_1")
-    private String supplierName;
-
     @Field("price_voucher_only_in_shop_1")
     private boolean voucherOnlyInShop;
+
+    private double invoicePrice;
+    private Double supplierShopPrice;
+    private String supplierName;
 
     public void setXprices(XpriceInfo xpriceInfo){
         setSupplierName(xpriceInfo.getSupplierName());
