@@ -19,11 +19,10 @@ SET NOCOUNT ON
   declare @Address1 varchar(100) = 'Test address 1'
   declare @Address2 varchar(100) = 'Test address 2'
   declare @Phone varchar(100) = '0800 0833113'
-  declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
   declare @City varchar(100) = 'Test city'
 
-  insert into PICKUP (PUSUNBR,PUNAME,PUZIPC,PUADDR1,PUADDR2,PUCITY,PUPHONE,puSearchZip,puRetailShop,puRepairValuationLocation, updatedDate)
-  select @SupplierID, @ShopName, @PostalCode, @Address1, @Address2, @City, @Phone, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, GETDATE()
+  insert into Shop (SupplierId,name,zipCode,address1,address2,city,phone,searchZipCode,typeRetail,typeRepairValuation,typeOnline, updatedDate)
+  select @SupplierID, @ShopName, @PostalCode, @Address1, @Address2, @City, @Phone, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, 0, GETDATE()
 
   select @PickupId = @@IDENTITY
 

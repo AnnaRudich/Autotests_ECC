@@ -77,7 +77,10 @@ public class ClaimApi extends AuthenticationApi {
             String claimId = headerLocation.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
             CurrentUser.setClaimId(claimId);
 
-            Browser.driver().get(headerLocation.getValue() + "settlement.jsp");
+            String redirectTo = headerLocation.getValue() + "settlement.jsp";
+
+            log.info("Go to " + redirectTo);
+            Browser.driver().get(redirectTo);
         } catch (Exception e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {

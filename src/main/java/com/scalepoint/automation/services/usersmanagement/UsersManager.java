@@ -41,12 +41,8 @@ public class UsersManager {
 
     public static Map<CompanyMethodArgument, User> fetchUsersWhenAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
         boolean fetched = false;
-        logger.info("Before while");
         while (!fetched) {
-            logger.info("Before fetch");
             fetched = fetchUsersIfAvailable(companyMethodArguments);
-            logger.info("Users fetched = {}", fetched);
-            logger.info("Before timer");
             if (!fetched) {
                 Wait.wait(15);
             }
@@ -57,12 +53,10 @@ public class UsersManager {
     private synchronized static boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
         logger.info("Requested: {}", companyMethodArguments.size());
 
-        logger.info("Before count basic users");
         int requestedBasicUsersCount = (int)companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
         boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
 
         int requestedExceptionalUsersCount = (int)companyMethodArguments.keySet().stream().filter(companyCode -> !usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
-        logger.info("Before count exceptional users");
         long count = companyMethodArguments.keySet()
                 .stream()
                 .filter(companyMethodArgument -> {
@@ -80,7 +74,6 @@ public class UsersManager {
         logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
 
         if (basicUsersAvailable && exceptionalUsersAvailable) {
-            logger.info("Before take users");
             companyMethodArguments.replaceAll((companyMethodArgument, user) -> takeUser(companyMethodArgument.companyCode));
             return true;
         } else {
@@ -151,10 +144,9 @@ public class UsersManager {
 
 
     private static User takeUser(CompanyCode companyCode) {
-        logger.info("Requested: {}", companyCode.name());
         try {
             User taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
-            logger.info("Taken: {}", taken.getLogin());
+            logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
             return taken;
         } catch (Exception e) {
             logger.error("Can't take user for {} cause {}", companyCode.name(), e.toString());

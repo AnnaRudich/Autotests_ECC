@@ -46,6 +46,7 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -99,7 +100,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
         Thread.currentThread().setName("Thread "+method.getName());
-        MDC.put("sessionid", method.getName());
+        ThreadContext.put("sessionid", method.getName());
         logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
         driverType = getDriverType(method);
@@ -145,7 +146,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Window.cleanUp();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
-        MDC.clear();
+        ThreadContext.clearMap();
     }
 
     /*doesn't work with IE, but can be used with FF_REMOTE/Chrome*/

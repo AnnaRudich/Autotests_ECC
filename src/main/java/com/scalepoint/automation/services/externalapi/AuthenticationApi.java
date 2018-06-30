@@ -77,9 +77,9 @@ public class AuthenticationApi {
             HttpResponse loginResponse = post(loginUrl + "loginProcess", params, executor).returnResponse();
 
             String successUrl = loginResponse.getHeaders("Location")[0].getValue();
-            log.info("SuccessUrl: " + successUrl);
+            log.info("Redirected to {} Auth: {} - {}", successUrl, user.getLogin(), user.getPassword());
             if (!successUrl.contains("?successurl=")) {
-                throw new IllegalStateException("Bad URL: " + loginUrl);
+                throw new IllegalStateException("Bad URL: " + successUrl);
             }
 
             HttpResponse httpResponse = get(successUrl, executor).returnResponse();
