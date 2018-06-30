@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -54,7 +55,7 @@ public class ProductDetailsPage extends Page {
         }
 
         public Asserts assetMarketPriceSupplierInvisible(){
-            assertTrue(Wait.invisible($(marketPriceSupplier)), "Market price supplier must be hidden");
+            assertTrue(driver.findElements(By.id("market_price_supplier")).isEmpty(), "Market price supplier must be hidden");
             return this;
         }
 
@@ -64,7 +65,7 @@ public class ProductDetailsPage extends Page {
         }
 
         public Asserts assertMarketPriceInvisible(){
-            assertTrue(Wait.invisible($(marketPriceValue)), "Market price must be hidden");
+            assertTrue(driver.findElements(By.id("market_price")).isEmpty(), "Market price must be hidden");
             return this;
         }
     }

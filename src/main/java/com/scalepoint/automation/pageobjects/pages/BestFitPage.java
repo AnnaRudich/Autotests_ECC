@@ -14,8 +14,7 @@ import static org.testng.Assert.assertTrue;
 @EccPage
 public class BestFitPage extends Page {
 
-    @FindBy(xpath = "//td[contains(@class,'bestfitleftheader_bottom') and contains(text(),'Markedspris')]")
-    private TextBlock marketPrice;
+    private static final String MARKET_PRICE_XPATH = "//td[contains(@class,'bestfitleftheader_bottom') and contains(text(),'Markedspris')]";
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -36,7 +35,7 @@ public class BestFitPage extends Page {
 
     public class Asserts {
         public Asserts assertMarketPriceInvisible() {
-            assertTrue(Wait.invisible($(marketPrice)), "Market Price must be hidden");
+            assertTrue(driver.findElements(By.id(MARKET_PRICE_XPATH)).isEmpty(), "Market Price must be hidden");
             return this;
         }
     }
