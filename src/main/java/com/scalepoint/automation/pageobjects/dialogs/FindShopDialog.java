@@ -27,7 +27,7 @@ public class FindShopDialog extends BaseDialog {
     @FindBy(id = "search-voucher-close-button")
     private WebElement closeButton;
 
-    @FindBy(id = "search-voucher-postal-code-input-inputEl")
+    @FindBy(id = "search-voucher-address-input-inputEl")
     private WebElement postalCodeInput;
 
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
