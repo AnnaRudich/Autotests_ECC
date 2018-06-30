@@ -5,6 +5,8 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -20,11 +22,14 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.getWebDriverLogs;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public interface Actions {
+
+    Logger logger = LogManager.getLogger(Actions.class);
 
     default boolean openDialog(WebElement openButton) {
         return Window.get().openDialog($(openButton));
@@ -260,6 +265,7 @@ public interface Actions {
 
     default void setValue(WebElement element, String value) {
         waitForVisible(element);
+        logger.info("SetValue {} --> {}", getElementIdentifier(element), value);
         JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
         for(int i=0; i<3; i++){
             if(element.getText().contains(value)){
@@ -268,6 +274,19 @@ public interface Actions {
                 executor.executeScript("arguments[0].value=arguments[1];", element, value);
             }
         }
+    }
+
+    default String getElementIdentifier(WebElement element) {
+        String value = null;
+        try {
+            value = element.getAttribute("name");
+            if (StringUtils.isBlank(value)) {
+                value = element.getAttribute("id");
+            }
+        } catch (Exception ignored) {
+        }
+
+        return StringUtils.isBlank(value) ? "unknown" : value;
     }
 
     default void clickElementUsingJS(WebElement element){

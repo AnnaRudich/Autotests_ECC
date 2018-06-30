@@ -215,6 +215,7 @@ public class RejectReasonTests extends BaseTest {
     }
 
 
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if reject reasons will be not filled claim will be created")
