@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
-@RunOn(DriverType.IE_REMOTE)
+@RunOn(DriverType.CHROME)
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
 public class GenericItemsTests extends BaseTest {
