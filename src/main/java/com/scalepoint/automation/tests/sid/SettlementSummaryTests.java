@@ -69,9 +69,9 @@ public class SettlementSummaryTests extends BaseTest {
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
 
-        double invoicePrice = productInfo.getInvoicePrice();
+        double lowestPrice = productInfo.getLowestPrice();
 
-        double totalPrice = BigDecimal.valueOf(voucherValuation.getCashCompensationWithDepreciation() + invoicePrice).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double totalPrice = BigDecimal.valueOf(voucherValuation.getCashCompensationWithDepreciation() + lowestPrice).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
