@@ -245,7 +245,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * AND: Switch the depreciation manually from  discretionary to policy.
      * THEN: Drop-down is greyed out
      */
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
             " with discretionary deducted by rule")
