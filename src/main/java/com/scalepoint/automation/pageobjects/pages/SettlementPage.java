@@ -74,8 +74,8 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement selectAllClaims;
 
 
-    private By groupButton = By.xpath("//span[text()='Opret gruppe']");
-    private By deleteGroupButton = By.xpath("//span[text()='Opløs gruppe']");
+    private By groupButton = By.xpath("//a[@data-qtip = 'Opret gruppe']");
+    private By deleteGroupButton = By.xpath("a[@data-qtip = 'Opløs gruppe']");
     private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
 
 
