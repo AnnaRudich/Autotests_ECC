@@ -18,7 +18,6 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.utils.Constants.*;
 
 
-@RunOn(DriverType.CHROME_REMOTE)
 public class LessIsMoreTests extends BaseTest {
 
     private String groupDescription = "GroupName" + System.currentTimeMillis();
