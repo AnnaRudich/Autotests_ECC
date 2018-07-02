@@ -67,7 +67,7 @@ public class SettlementSummaryTests extends BaseTest {
     public void ecc3034_setSummaryCheckMultipleItems(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
         double lowestPrice = productInfo.getLowestPrice();
 
