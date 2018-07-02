@@ -4,7 +4,9 @@ import com.scalepoint.automation.pageobjects.dialogs.AddGenericItemDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SendSelfServiceRequestDialog;
+import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 public class ClaimOperationsMenu extends Module {
@@ -24,7 +26,7 @@ public class ClaimOperationsMenu extends Module {
     }
 
     public AddGenericItemDialog addGenericItem() {
-        addGenericItemBtn.click();
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(addGenericItemBtn)).click();
         return BaseDialog.at(AddGenericItemDialog.class);
     }
 

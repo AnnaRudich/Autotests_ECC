@@ -143,6 +143,10 @@ public class Wait {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).ignoring(StaleElementReferenceException.class).until(condition);
     }
 
+    public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
+        return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
+    }
+
     private static <T> T wrap(Function<WebDriver, T> condition) {
         return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
     }
