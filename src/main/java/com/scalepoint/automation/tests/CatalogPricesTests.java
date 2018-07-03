@@ -63,13 +63,13 @@ public class CatalogPricesTests extends BaseTest {
                     asserts.assertVoucherFaceValueIs(productInfo.getSupplierShopPrice());//voucher is based on SupplierShopPrice for BnO products
                 });
     }
-@RunOn(DriverType.CHROME)
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add BnO product with Product Invoice Price > than Market price")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add BnO product with Product Invoice Price > Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceHigherThanMarketPrice(User user, Claim claim) {
 
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

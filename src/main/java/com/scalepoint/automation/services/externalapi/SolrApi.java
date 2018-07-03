@@ -17,6 +17,11 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.io.IOException;
 
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_EQUALS_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
+
 public class SolrApi {
 
     private static Logger logger = LogManager.getLogger(SolrApi.class);
@@ -36,45 +41,6 @@ public class SolrApi {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new IllegalArgumentException("no products found", e);
-        }
-    }
-
-    /**
-     * this method updates product prices directly in Solr Index, to create test data which is missing in DB
-     */
-    private static void updatePricesInIndex(SolrClient solrClient, QueryResponse response, String priceValue, String... fieldNames) throws SolrServerException, IOException {
-        for (String fieldName : fieldNames) {
-            response.getResults().get(0).setField(fieldName, priceValue);
-        }
-
-        SolrDocument solrDoc = response.getResults().get(0);
-        SolrInputDocument solrInputDoc = new SolrInputDocument();
-        for (String name : solrDoc.getFieldNames()) {
-            solrInputDoc.addField(name, solrDoc.getFieldValue(name));
-        }
-        solrClient.add(solrInputDoc);
-        solrClient.commit();
-    }
-
-    public static ProductInfo findProductAsVoucherWithProductInvoiceHigherThanMarketPrice(){
-        try{
-            SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrProductsUrl()).build();
-            SolrQuery query = new SolrQuery();
-            query.setQuery("orderable:true AND price_voucher_only_in_shop_1:true")
-                    .setFilterQueries("{!frange l=0 incl=false}sub(price_invoice_2,market_price)");
-            QueryResponse response = solr.query(query);
-            if(response.getResults().size() == 0){
-
-                updatePricesInIndex(solr, solr.query(new SolrQuery().setQuery("orderable:true AND price_voucher_only_in_shop_1:true")), Constants.PRICE_10.toString(),
-                        "market_price", "price_invoice_1","price_supplier_shop_1", "price_lowest_1");
-                response = solr.query(query);
-            }
-            ProductInfo productInfo = response.getBeans(ProductInfo.class).get(0);
-            logger.info("FindBaOProduct: {}", productInfo);
-            return productInfo;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new IllegalStateException("no products found", e);
         }
     }
 }
