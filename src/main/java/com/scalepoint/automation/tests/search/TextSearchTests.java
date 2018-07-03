@@ -21,7 +21,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -148,7 +148,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
     public void charlie510_checkSearchBySku(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERALBLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, MARKET_PRICE_EQUAL_INVOICE_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

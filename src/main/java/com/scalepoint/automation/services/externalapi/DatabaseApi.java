@@ -39,7 +39,7 @@ public class DatabaseApi {
 
     public XpriceInfo findProduct(PriceConditions... priceConditions){
        return jdbcTemplate.queryForObject(
-                "SELECT top(1) pr.ProductKey, xp.productId,pr.marketPrice, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
+                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
                          Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")),new XpriceInfoMapper());
     }
@@ -157,7 +157,6 @@ public class DatabaseApi {
             xpriceInfo.setProductId(rs.getInt("ProductId"));
             xpriceInfo.setProductKey(rs.getString("ProductKey"));
             xpriceInfo.setInvoicePrice(rs.getDouble("invoicePrice"));
-            xpriceInfo.setMarketPrice(rs.getDouble("marketPrice"));
             xpriceInfo.setSupplierName(rs.getString("supplierName"));
             xpriceInfo.setSupplierShopPrice(rs.getDouble("supplierShopPrice"));
             return xpriceInfo;
@@ -173,14 +172,12 @@ public class DatabaseApi {
          * xp is xprice table
          * pr is product table
          */
-        ORDERALBLE("xp.orderable=1"),
+        ORDERABLE("xp.orderable=1"),
 
         INVOICE_PRICE_LOWER_THAN_10("xp.invoicePrice < 10"),
         INVOICE_PRICE_LOWER_THAN_MARKET_PRICE("pr.marketPrice>xp.invoicePrice"),
         INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE("pr.marketPrice<xp.invoicePrice"),
-
-        MARKET_PRICE_EQUAL_INVOICE_PRICE("pr.marketPrice=xp.invoicePrice"),
-        MARKET_PRICE_HIGHER_INVOICE_PRICE("pr.marketPrice>xp.invoicePrice"),
+        INVOICE_PRICE_EQUALS_MARKET_PRICE("pr.marketPrice=xp.invoicePrice"),
 
         PRODUCT_AS_VOUCHER_ONLY("xp.voucherOnlyInShop=1"),
         PRODUCT_AS_VOUCHER_ONLY_FALSE("xp.voucherOnlyInShop=0");
