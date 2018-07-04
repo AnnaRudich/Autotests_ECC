@@ -21,12 +21,8 @@ SET NOCOUNT ON
   declare @Phone varchar(100) = '0800 0833113'
   declare @City varchar(100) = 'Test city'
 
-  insert into PICKUP (PUSUNBR,PUNAME,PUZIPC,PUADDR1,PUADDR2,PUCITY,PUPHONE,puSearchZip,puRetailShop,puRepairValuationLocation, updatedDate)
-  select @SupplierID, @ShopName, @PostalCode, @Address1, @Address2, @City, @Phone, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, GETDATE()
-
---  TODO use after distances release
---  insert into Shop (SupplierId,name,zipCode,address1,address2,city,phone,searchZipCode,typeRetail,typeRepairValuation,typeOnline, updatedDate)
---  select @SupplierID, @ShopName, @PostalCode, @Address1, @Address2, @City, @Phone, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, 0, GETDATE()
+  insert into Shop (SupplierId,name,zipCode,address1,address2,city,phone,searchZipCode,typeRetail,typeRepairValuation,typeOnline, updatedDate)
+  select @SupplierID, @ShopName, @PostalCode, @Address1, @Address2, @City, @Phone, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, 0, GETDATE()
 
   select @PickupId = @@IDENTITY
 
