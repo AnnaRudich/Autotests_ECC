@@ -39,6 +39,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
 import static com.scalepoint.automation.utils.Constants.AGE_YEAR;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -74,7 +75,7 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement selectAllClaims;
 
 
-    private By groupButton = By.xpath("//a[@data-qtip = 'Opret gruppe']");
+    private By groupButton = By.xpath("//span[contains(@style,'groupIcon.png')]");
     private By deleteGroupButton = By.xpath("//span[contains(@style,'ungroupIcon.png')]");
     private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
 
@@ -239,7 +240,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementGroupDialog openGroupCreationDialog(){
-        $(groupButton).click();
+        $$(groupButton).get(0).click();
         return BaseDialog.at(SettlementGroupDialog.class);
     }
 
