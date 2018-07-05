@@ -432,6 +432,14 @@
                 <checksumPolicy>warn</checksumPolicy>
             </releases>
         </repository>
+        <repository>
+            <id>public</id>
+            <url>http://ecc-build.spcph.local:8083/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
     </repositories>
 
 </project>
