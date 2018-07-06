@@ -22,7 +22,7 @@ class SidCalculator {
     static VoucherValuation calculateVoucherValuationWithDiscountDistribution(Double price, Integer voucherDiscount, Integer companyDiscount) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashValue = price - (discountedAmountByVoucher * companyDiscount/voucherDiscount);
-        double faceValue = new BigDecimal(cashValue/((100.0-voucherDiscount)/100.0)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double faceValue = BigDecimal.valueOf(cashValue/((100.0-voucherDiscount)/100.0)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         return new VoucherValuation(cashValue, faceValue);
     }
 

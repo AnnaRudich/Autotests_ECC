@@ -35,15 +35,30 @@ public class BeansConfiguration {
     private String dbUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL+ "}")
     private String eventApiDbUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE+ "}")
+    private String hubRemoteUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE_ZALENIUM+ "}")
+    private String hubRemoteZaleniumUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_LOCAL_ZALENIUM+ "}")
+    private String hubLocalZaleniumUrl;
 
 
     @SuppressWarnings("Convert2Lambda")
     @Bean
-    public ApplicationListener<ApplicationReadyEvent> listener() throws Exception {
+    public ApplicationListener<ApplicationReadyEvent> listener() {
         return new ApplicationListener<ApplicationReadyEvent>() {
             @Override
             public void onApplicationEvent(ApplicationReadyEvent event) {
-                com.scalepoint.automation.utils.Configuration.init(locale, serverUrl, eccContext, eccAdminContext, eccRnvContext, solrProductsUrl);
+                com.scalepoint.automation.utils.Configuration.getInstance()
+                        .setLocale(locale)
+                        .setServerUrl(serverUrl)
+                        .setEccContext(eccContext)
+                        .setEccAdminContext(eccAdminContext)
+                        .setEccRnvContext(eccRnvContext)
+                        .setSolrProductsUrl(solrProductsUrl)
+                        .setHubRemote(hubRemoteUrl)
+                        .setHubLocalZalenium(hubLocalZaleniumUrl)
+                        .setHubRemoteZalenium(hubRemoteZaleniumUrl);
                 UsersManager.initManager(TestData.getSystemUsers());
             }
         };
@@ -60,6 +75,8 @@ public class BeansConfiguration {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         dataSource.setUrl(dbUrl);
+        dataSource.setUsername("QA08_ECC_DK");
+        dataSource.setPassword("ByE2WafK6epbHSRJ");
         return dataSource;
     }
 

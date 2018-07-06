@@ -113,7 +113,7 @@ public class ReductionRule implements Cloneable {
     }
 
     public void setClaimReduction2(String claimReduction2) {
-        this.claimReduction1 = claimReduction2;
+        this.claimReduction2 = claimReduction2;
     }
 
     public String getPriceRangeFrom0() {

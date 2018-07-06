@@ -23,6 +23,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -275,7 +276,7 @@ public class TextSearchPage extends Page {
     public TextSearchPage chooseCategory(String _category) {
         waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
         List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
-        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get())).click();
+        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + _category)))).click();
         waitForResultsLoad();
         return this;
     }

@@ -126,8 +126,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .enableAge()
                 .setDiscountAndDepreciation(true)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonScalepoint());
-                double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
-                double depreciationPercentage = Double.valueOf(settlementDialog.getDepreciationPercentage());
+                double voucherPercentage = settlementDialog.getVoucherPercentage();
+                double depreciationPercentage = settlementDialog.getDepreciationPercentage();
                 SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
@@ -171,7 +171,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()));
-        double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
+        double voucherPercentage = settlementDialog.getVoucherPercentage();
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
@@ -219,8 +219,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setDepreciation(depreciationValue)
                 .setDiscountAndDepreciation(true);
-        double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
-        double depreciationPercentage = Double.valueOf(settlementDialog.getDepreciationPercentage());
+        double voucherPercentage = settlementDialog.getVoucherPercentage();
+        double depreciationPercentage = settlementDialog.getDepreciationPercentage();
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {

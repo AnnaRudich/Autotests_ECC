@@ -294,10 +294,10 @@ public class TestData {
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
         DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
-        CWA_CLAIM("Claim\\ClaimRequest.json", ClaimRequest.class),
+        CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
-        CLAIM_ITEM("Claim\\ClaimItem.xml",InsertSettlementItem.class),
-        ECC_INTEGRATION("Claim\\EccIntegration.xml",EccIntegration.class),
+        CLAIM_ITEM("Claim/ClaimItem.xml",InsertSettlementItem.class),
+        ECC_INTEGRATION("Claim/EccIntegration.xml",EccIntegration.class),
         CLAIM_STATE("ClaimState.json", ClaimStates.class),
         ACQUIRED("Acquired.xml", Acquired.class);
 

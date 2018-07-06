@@ -69,11 +69,7 @@ import org.testng.annotations.Listeners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -300,13 +296,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                         .collect(Collectors.toList());
 
                 if(supplierCompany.areWithVouchers()) {
-                    return simpleSuppliers.stream().filter(sup -> sup.isWithVouchers()).findAny().get();
+                    return simpleSuppliers.stream().filter(SimpleSupplier::isWithVouchers).findAny().orElseThrow(NoSuchElementException::new);
                 }else{
-                    return simpleSuppliers.stream().filter(sup -> !sup.isWithVouchers()).findAny().get();
+                    return simpleSuppliers.stream().filter(sup -> !sup.isWithVouchers()).findAny().orElseThrow(NoSuchElementException::new);
                 }
             }
         }
-        return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().get();
+        return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().orElseThrow(NoSuchElementException::new);
     }
 
     private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {

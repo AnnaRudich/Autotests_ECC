@@ -22,6 +22,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
+import java.util.Objects;
+
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.EMAIL_REQUIRED;
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PERSONAL_CODE_REQUIRED;
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PHONE_REQUIRED;
@@ -382,7 +384,8 @@ public class VoucherAgreementTests extends BaseTest {
 
         String vname = voucher.getVoucherGeneratedName();
 
-        testVoucherVisibilityAcrossCompanies(data)
+        SupplierDialog.AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
+        Objects.requireNonNull(agreementsTab)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, true))
                 .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
                 .closeSupplier()
@@ -425,7 +428,8 @@ public class VoucherAgreementTests extends BaseTest {
                 .build();
 
         String vname = voucher.getVoucherGeneratedName();
-        testVoucherVisibilityAcrossCompanies(data)
+        SupplierDialog.AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
+        Objects.requireNonNull(agreementsTab)
                 .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, false))
                 .closeSupplier()
