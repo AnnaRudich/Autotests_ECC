@@ -60,7 +60,6 @@ public class ClaimTests extends BaseTest {
      * WHEN: User cancels C1
      * THEN: "Cancelled" is the status of C1
      */
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
