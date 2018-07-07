@@ -75,8 +75,6 @@ public class BeansConfiguration {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         dataSource.setUrl(dbUrl);
-        dataSource.setUsername("QA08_ECC_DK");
-        dataSource.setPassword("ByE2WafK6epbHSRJ");
         return dataSource;
     }
 
