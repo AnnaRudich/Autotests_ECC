@@ -31,8 +31,8 @@
     <existingVoucher3>Autotest-SpVoucher</existingVoucher3>
     <existingVoucher4>Bilka</existingVoucher4>
     <brandLinkVoucher4>Bilka</brandLinkVoucher4>
-    <excelPath1>C:\ExcelImport\ClaimSheetDK2003.xls</excelPath1>
-    <excelWithGroupingPath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</excelWithGroupingPath>
+    <excelPath1>excelImport/ClaimSheetDK2003.xls</excelPath1>
+    <excelWithGroupingPath>xcelImport/ClaimSheetDK2003_withGrouping.xls</excelWithGroupingPath>
     <xlsDescr1>samsung</xlsDescr1>
     <depTypePolicy>Policy</depTypePolicy>
     <depTypeDisc>Discretionary</depTypeDisc>
@@ -40,8 +40,8 @@
     <depAmount2>15</depAmount2>
     <policyExcess1>200</policyExcess1>
     <policyExcess2>50</policyExcess2>
-    <fileLoc>C:\Pictures\bw.jpg</fileLoc>
-    <file2Loc>C:\Pictures\bw1.jpg</file2Loc>
+    <fileLoc>attachments/bw.jpg</fileLoc>
+    <file2Loc>attachments/bw1.jpg</file2Loc>
     <zeroDistance>0 km</zeroDistance>
     <validDistance1>3 km</validDistance1>
     <setDialogTextMatch>samsung</setDialogTextMatch>

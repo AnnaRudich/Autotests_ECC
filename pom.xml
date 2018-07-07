@@ -188,7 +188,7 @@
                                     <artifactId>sqljdbc_auth</artifactId>
                                     <version>6.0.7507.100</version>
                                     <type>dll</type>
-                                    <classifier>amd64</classifier>
+                                    <classifier>${os.arch}</classifier>
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/dll</outputDirectory>
                                     <destFileName>sqljdbc_auth.dll</destFileName>

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -252,11 +253,11 @@ public class TextSearchPage extends Page {
     private void clickOnFirstMatchingAndWaitForSID() {
         int i = 1;
         logger.info("Trying open SID attempt: " + i);
-        waitForDisplayed(By.xpath("//button[@class='matchbutton']/img[1]")).click();
+        $(By.xpath("//button[@class='matchbutton']/img[1]")).shouldBe(Condition.visible).click();
         while (!BaseDialog.isOn(SettlementDialog.class) && i < 4) {
             i++;
             logger.info("Trying open SID attempt: " + i);
-            driver.findElement(By.xpath("//button[@class='matchbutton']/img[1]")).click();
+            $(By.xpath("//button[@class='matchbutton']/img[1]")).shouldBe(Condition.visible).click();
         }
     }
 

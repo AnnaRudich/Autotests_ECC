@@ -1,0 +1,12 @@
+1 line
+
+
+//tr[@class= 'ListItemOddNotActive']/td[@id='description']/a[contains(text(), "Fitness Kort")]/ancestor::tr[1]/td[last()]//img[end-with(@img, wrench.png)]
+
+//tr[@class= 'ListItemOddNotActive']/td[@id='description']/a[contains(text(), "Fitness Kort")]/ancestor::tr[1]/td[last()]//img[contains(@src, "wrench.png")]
+
+
+
+overview tab  div[id*='tabbar'] a:first-of-type span span span:first-of-type
+communication tab div[id*='tabbar'] a:nth-of-type(2) span span span:first-of-type
+invoice tab div[id*='tabbar'] a:last-of-type span span span:first-of-type
