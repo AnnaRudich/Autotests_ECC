@@ -25,15 +25,39 @@
             </properties>
         </profile>
         <profile>
+            <id>QA02</id>
+            <properties>
+                <activatedProperties>qa02</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>QA03</id>
             <properties>
                 <activatedProperties>qa03</activatedProperties>
             </properties>
         </profile>
         <profile>
+            <id>QA04</id>
+            <properties>
+                <activatedProperties>qa04</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA05</id>
+            <properties>
+                <activatedProperties>qa05</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>QA06</id>
             <properties>
                 <activatedProperties>qa06</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA07</id>
+            <properties>
+                <activatedProperties>qa07</activatedProperties>
             </properties>
         </profile>
         <profile>
@@ -46,6 +70,24 @@
             <id>QA09</id>
             <properties>
                 <activatedProperties>qa09</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA10</id>
+            <properties>
+                <activatedProperties>qa10</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA11</id>
+            <properties>
+                <activatedProperties>qa11</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA12</id>
+            <properties>
+                <activatedProperties>qa12</activatedProperties>
             </properties>
         </profile>
         <profile>
@@ -189,7 +231,7 @@
                                     <version>6.0.7507.100</version>
                                     <type>dll</type>
                                     <classifier>${os.arch}</classifier>
-                                    <overWrite>false</overWrite>
+                                    <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/dll</outputDirectory>
                                     <destFileName>sqljdbc_auth.dll</destFileName>
                                 </artifactItem>
