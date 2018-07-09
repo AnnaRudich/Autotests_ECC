@@ -101,7 +101,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         driverType = getDriverType(method);
 
-        WebDriver driver = DriversFactory.getDriver(driverType);
+        WebDriver driver = DriversFactory.getDriver(driverType, method);
 
         Browser.init(driver, driverType);
         Window.init(driver);
