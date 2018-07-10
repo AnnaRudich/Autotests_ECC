@@ -47,6 +47,7 @@ import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -138,6 +139,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @AfterMethod
     public void cleanup(Method method, ITestResult iTestResult) {
         logger.info("Clean up after: {}", method.toString());
+        Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
+        Browser.driver().manage().addCookie(cookie);
         Browser.quit();
         Window.cleanUp();
         CurrentUser.cleanUp();
