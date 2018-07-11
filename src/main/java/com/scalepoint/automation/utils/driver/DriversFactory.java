@@ -219,7 +219,9 @@ public enum DriversFactory {
     }
 
     private static String getBuildName() {
-        return System.getProperty("usedTestSuite") == null ? "custom build" : System.getProperty("usedTestSuite");
+        String suiteName = System.getProperty("usedTestSuite") == null ? "custom suite" : System.getProperty("usedTestSuite");
+        String buildInfo = System.getProperty("buildInfo") == null ? "" : System.getProperty("buildInfo");
+        return suiteName + " " + buildInfo;
     }
 
     protected abstract WebDriver getDriverInstance(DesiredCapabilities capabilities) throws MalformedURLException;
