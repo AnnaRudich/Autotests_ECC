@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -16,18 +17,16 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-@RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG, enabled = true)
+@RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
+@RequiredSetting(type = FTSetting.ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD)
 public class ReplacementDialogTests extends BaseTest{
     @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-3281 Enable Changing of Voucher Price in Replacement Wizard")
     public void contents3281_changeVoucherPriceInReplacementWizard(User user, Claim claim, ClaimItem item) {
-        SidCalculator.VoucherValuationWithDepreciation voucherValuation = SidCalculator.calculateVoucherValuation(
-                Constants.PRICE_2400,
-                Constants.VOUCHER_DISCOUNT_10,
-                0
-        );
+        Double newVoucherFaceValue = Constants.PRICE_500;
+        Integer voucherDiscount = Constants.VOUCHER_DISCOUNT_10;
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
@@ -38,8 +37,30 @@ public class ReplacementDialogTests extends BaseTest{
                             .withVoucher(item.getExistingVoucher_10());
                 });
         new SettlementDialog().closeSidWithOk().toCompleteClaimPage().fillClaimForm(claim)
-                .openReplacementWizard();
+                .openReplacementWizard()
+                .editVoucherFaceValue(newVoucherFaceValue)
 
+        .doAssert(replacementDialog -> {
+            replacementDialog.assertVoucherFaceValueIs(newVoucherFaceValue);
+            replacementDialog.assertItemPriceValueIs(newVoucherFaceValue*(100-voucherDiscount)/100);
+        });
+    }
+
+    @RunOn(DriverType.CHROME)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
+    @Test(dataProvider = "testDataProvider",
+            description = "CONTENTS-3281 manual line is not shown in replacement dialog")
+    public void contents3281_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
+        Double newPrice = Constants.PRICE_500;
+
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(formFiller -> formFiller
+                        .withNewPrice(newPrice)
+                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+                .closeSidWithOk();
+        new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
+                .openReplacementWizard()
+                .closeReplacementDialog();
 
     }
 }

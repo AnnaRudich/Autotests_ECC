@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
+import static org.testng.AssertJUnit.assertTrue;
 
 public class ReplacementDialog extends BaseDialog {
 
@@ -23,6 +24,8 @@ public class ReplacementDialog extends BaseDialog {
 
     @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-faceValue')]")
     private WebElement voucherFaceValue;
+    ////input[@name='faceValue']
+    ////div[@class='x-grid-with-row-lines']
 
     @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-cashValue')]")
     private WebElement itemPrice;
@@ -41,6 +44,8 @@ public class ReplacementDialog extends BaseDialog {
 
     @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
     private WebElement selectAllItemsCheckbox;
+
+    //$x("//*[@name='faceValue'][contains(@class, 'focus')]") ifInputIsEditable
 
     @Override
     public ReplacementDialog ensureWeAreAt() {
@@ -65,6 +70,13 @@ public class ReplacementDialog extends BaseDialog {
 
     private Double getItemPriceValue() {
         return OperationalUtils.toNumber(itemPrice.getText().replaceAll("[^\\.,0123456789]", ""));
+    }
+
+    public ReplacementDialog editVoucherFaceValue(Double newPrice){
+        voucherFaceValue.click();
+        $(By.xpath("//input[@name='faceValue']")).setValue(newPrice.toString()).pressEnter();
+
+        return this;
     }
 
     public CustomerDetailsPage completeClaimUsingCompPayment() {
@@ -107,6 +119,12 @@ public class ReplacementDialog extends BaseDialog {
             assertEqualsDouble(getVoucherFaceValue(), expectedPrice, "Voucher face value %s should be equal to not depreciated new price %s");
             return this;
         }
+
+//        public Asserts assertValueIsNotEditable(WebElement element) {
+//            assertTrue(element.getCssValue("input").contains() "Voucher face value %s should be equal to not depreciated new price %s");
+//            return this;
+//        }
+
 
         public ReplacementDialog back() {
             return ReplacementDialog.this;
