@@ -71,6 +71,7 @@ import org.testng.annotations.Listeners;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -140,7 +141,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     public void cleanup(Method method, ITestResult iTestResult) {
         logger.info("Clean up after: {}", method.toString());
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
-        Browser.driver().manage().addCookie(cookie);
+        try {
+            Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
+            TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e) {
+            logger.info(e.getMessage());
+        }
         Browser.quit();
         Window.cleanUp();
         CurrentUser.cleanUp();
