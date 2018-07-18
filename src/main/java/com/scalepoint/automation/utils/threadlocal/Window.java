@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Set;
 
 import static com.codeborne.selenide.Selenide.$;
-import static org.openqa.selenium.support.ui.WebDriverWait.DEFAULT_SLEEP_TIMEOUT;
 
 @SuppressWarnings("ConstantConditions")
 public class Window {
@@ -122,6 +121,6 @@ public class Window {
     }
 
     private static <T> T wrap(Function<WebDriver, T> condition) {
-        return new WebDriverWait(Browser.driver(), DEFAULT_SLEEP_TIMEOUT).until(condition);
+        return new WebDriverWait(Browser.driver(), 500L).until(condition);
     }
 }

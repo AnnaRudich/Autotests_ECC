@@ -456,7 +456,8 @@ public class SettlementDialog extends BaseDialog {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
+            Thread.currentThread().interrupt();
         }
         return this;
     }
@@ -1334,10 +1335,8 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertIsLowestPriceValuationSelected(Valuation... valuations) {
             List<ValuationRow> valuationRows = new ArrayList<>();
             Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
-            assertTrue(valuationRows.stream()
-                    .sorted(Comparator.comparing(valuationRow -> valuationRow.getCashCompensation()))
-                    .findFirst().get()
-                    .isChecked());
+            assertTrue(valuationRows.stream().min(Comparator.comparing(ValuationRow::getCashCompensation))
+                    .map(ValuationRow::isChecked).orElse(false));
             return this;
         }
 

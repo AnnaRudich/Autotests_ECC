@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -176,13 +177,14 @@ public class ClaimSearchPage extends Page {
         }
 
         public Asserts isClaimState(ClaimState state) {
-            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().get().getClaimState())
+            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(()-> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber()))
+                    .getClaimState())
                     .isEqualToIgnoringCase(state.getStateFullText());
             return this;
         }
 
         public Asserts isClaimCompany(String companyName) {
-            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().get().getCompany())
+            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(()-> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber())).getCompany())
                     .isEqualToIgnoringCase(companyName);
             return this;
         }
@@ -194,11 +196,6 @@ public class ClaimSearchPage extends Page {
 
         public Asserts areClaimsMatchingName() {
             assertThat(claimRows.stream().map(ClaimRow::getName)).allMatch(row -> row.contains(claim.getFirstName()));
-            return this;
-        }
-
-        public Asserts areClaimsMatchingLastName() {
-            assertThat(claimRows.stream().map(ClaimRow::getName)).allMatch(row -> row.contains(claim.getLastName()));
             return this;
         }
 

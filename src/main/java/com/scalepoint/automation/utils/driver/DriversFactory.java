@@ -1,7 +1,9 @@
 package com.scalepoint.automation.utils.driver;
 
-import com.scalepoint.automation.utils.data.TestData;
-import org.openqa.selenium.MutableCapabilities;
+import com.scalepoint.automation.utils.Configuration;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
@@ -15,51 +17,40 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.remote.Augmenter;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.*;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultImplicitWait;
-import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.defaultScriptTimeout;
+import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT;
+import static com.scalepoint.automation.utils.driver.DriversFactory.Timeout.DEFAULT_SCRIPT_TIMEOUT;
 import static org.openqa.selenium.ie.InternetExplorerDriver.NATIVE_EVENTS;
 
 public enum DriversFactory {
 
     IE(DriverType.IE) {
         @Override
-        protected WebDriver getDriverInstance() {
-
-            defaultImplicitWait = 10;
-            defaultScriptTimeout = 30;
-
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
             if (System.getProperty("webdriver.ie.driver") == null) {
                 File ieDriver = new File("src/main/resources/drivers/IEDriverServer.exe");
                 System.setProperty("webdriver.ie.driver", ieDriver.getAbsolutePath());
             }
             InternetExplorerDriver driver = new InternetExplorerDriver(getOptionsForIE());
-            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+            setTimeouts(driver);
             return driver;
         }
     },
 
     IE_REMOTE(DriverType.IE_REMOTE) {
         @Override
-        protected WebDriver getDriverInstance() throws MalformedURLException {
-
-            defaultImplicitWait = 15;
-            defaultScriptTimeout = 60;
-
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), getOptionsForIE());
-            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) throws MalformedURLException {
+            WebDriver driver = new RemoteWebDriver(new URL(Configuration.getHubRemote()), getOptionsForIE().merge(capabilities));
+            setTimeouts(driver);
+            ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
             return driver;
         }
 
@@ -68,76 +59,84 @@ public enum DriversFactory {
 
     EDGE(DriverType.EDGE) {
         @Override
-        protected WebDriver getDriverInstance() throws MalformedURLException {
-            defaultImplicitWait = 15;
-            defaultScriptTimeout = 60;
-
-            if (System.getProperty("webdriver.edge.driver") == null) {
-                File edgeDriver = new File("src/main/resources/drivers/MicrosoftWebDriver.exe");
-                System.setProperty("webdriver.edge.driver", edgeDriver.getAbsolutePath());
-            }
-
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
+            WebDriverManager.edgedriver().setup();
             EdgeDriver driver = new EdgeDriver();
-            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+            setTimeouts(driver);
             return driver;
         }
     },
 
     FF(DriverType.FF) {
         @Override
-        protected WebDriver getDriverInstance() {
-
-            defaultImplicitWait = 10;
-            defaultScriptTimeout = 30;
-
-            if (System.getProperty("webdriver.gecko.driver") == null) {
-                File ffDriver = new File("src/main/resources/drivers/geckodriver.exe");
-                System.setProperty("webdriver.gecko.driver", ffDriver.getAbsolutePath());
-            }
-            FirefoxDriver driver = new FirefoxDriver(getFireFoxCapabilities());
-            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
+            WebDriverManager.firefoxdriver().setup();
+            FirefoxDriver driver = new FirefoxDriver(getFireFoxCapabilities().merge(capabilities));
+            setTimeouts(driver);
             return driver;
         }
     },
 
     FF_REMOTE(DriverType.FF_REMOTE) {
-        protected WebDriver getDriverInstance() throws MalformedURLException {
-            DesiredCapabilities capabilities = getFireFoxCapabilities();
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) throws MalformedURLException {
+            WebDriver driver = new RemoteWebDriver(new URL(Configuration.getHubRemote()), getFireFoxCapabilities().merge(capabilities));
             driver = new Augmenter().augment(driver);
+            ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
             return driver;
         }
     },
 
     CHROME_REMOTE(DriverType.CHROME_REMOTE) {
         @Override
-        protected WebDriver getDriverInstance() throws MalformedURLException {
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
+            return getChromeRemote(Configuration.getHubRemote(), capabilities);
+        }
 
-            defaultImplicitWait = 15;
-            defaultScriptTimeout = 60;
+    },
 
-            DesiredCapabilities capabilities = getDesiredCapabilitiesForChrome();
-            WebDriver driver = new RemoteWebDriver(new URL(TestData.getLinks().getHubLink() + "/wd/hub"), capabilities);
-            driver.manage().timeouts().implicitlyWait(defaultImplicitWait, TimeUnit.SECONDS);
-            driver.manage().timeouts().setScriptTimeout(defaultScriptTimeout, TimeUnit.SECONDS);
-            return driver;
+    CHROME_ZALENIUM_REMOTE(DriverType.CHROME_ZALENIUM_REMOTE) {
+        @Override
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
+            return getChromeRemote(Configuration.getHubRemoteZalenium(), capabilities);
+        }
+
+    },
+
+    CHROME_ZALENIUM_LOCAL(DriverType.CHROME_ZALENIUM_LOCAL) {
+        @Override
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
+            return getChromeRemote(Configuration.getHubLocalZalenium(), capabilities);
         }
 
     },
 
     CHROME(DriverType.CHROME) {
-        protected WebDriver getDriverInstance() {
-            if (System.getProperty("webdriver.chrome.driver") == null) {
-                File chromeDriver = new File("src/main/resources/drivers/chromedriver.exe");
-                System.setProperty("webdriver.chrome.driver", chromeDriver.getAbsolutePath());
-            }
-            return new ChromeDriver(getDesiredCapabilitiesForChrome());
+        protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
+            WebDriverManager.chromedriver().setup();
+            return new ChromeDriver(getDesiredCapabilitiesForChrome().merge(capabilities));
         }
     };
 
-    private static DesiredCapabilities getDesiredCapabilitiesForChrome() {
+    private static Logger log = LogManager.getLogger(DriversFactory.class);
+
+    private static WebDriver getChromeRemote(String hubUrl, DesiredCapabilities capabilities){
+        WebDriver driver = null;
+        try {
+            driver = new RemoteWebDriver(new URL(hubUrl), getDesiredCapabilitiesForChrome().merge(capabilities));
+            ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
+            setTimeouts(driver);
+        } catch (MalformedURLException e) {
+            log.error(e.getMessage());
+        }
+        return driver;
+    }
+
+    private static void setTimeouts(WebDriver driver) {
+        driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(DEFAULT_SCRIPT_TIMEOUT, TimeUnit.SECONDS);
+    }
+
+    private static ChromeOptions getDesiredCapabilitiesForChrome() {
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("operations-type");
@@ -148,14 +147,12 @@ public enum DriversFactory {
         options.addArguments("allow-http-screen-capture");
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
         capabilities.setCapability("nativeEvents", false);
-        capabilities.setPlatform(Platform.WINDOWS);
         capabilities.setJavascriptEnabled(true);
-        return capabilities;
+        return options.merge(capabilities);
     }
 
-    private static MutableCapabilities getOptionsForIE() {
+    private static InternetExplorerOptions getOptionsForIE() {
         DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
         InternetExplorerOptions options = new InternetExplorerOptions();
         options.introduceFlakinessByIgnoringSecurityDomains();
@@ -175,7 +172,7 @@ public enum DriversFactory {
         return options.merge(capabilities);
     }
 
-    private static DesiredCapabilities getFireFoxCapabilities(){
+    private static FirefoxOptions getFireFoxCapabilities(){
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.acceptInsecureCerts();
         desiredCapabilities.setJavascriptEnabled(true);
@@ -187,9 +184,7 @@ public enum DriversFactory {
         FirefoxOptions ffOptions = new FirefoxOptions();
         ffOptions.setProfile(profile);
 
-        desiredCapabilities.merge(ffOptions.toCapabilities());
-
-        return desiredCapabilities;
+        return ffOptions.merge(desiredCapabilities);
     }
 
     /*doesn't work with IE, but can be used with FF_REMOTE/Chrome*/
@@ -210,21 +205,30 @@ public enum DriversFactory {
         this.driverType = driverType;
     }
 
-    public static WebDriver getDriver(DriverType driverType) throws Exception {
+    public static WebDriver getDriver(DriverType driverType, Method method) throws Exception {
         DriversFactory[] values = DriversFactory.values();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("name", method.getName());
+        capabilities.setCapability("build", getBuildName());
         for (DriversFactory value : values) {
             if (value.driverType.equals(driverType)) {
-                return value.getDriverInstance();
+                return value.getDriverInstance(capabilities);
             }
         }
-        return IE.getDriverInstance();
+        return CHROME.getDriverInstance(capabilities);
     }
 
-    protected abstract WebDriver getDriverInstance() throws MalformedURLException;
+    private static String getBuildName() {
+        String suiteName = System.getProperty("usedTestSuite") == null ? "custom suite" : System.getProperty("usedTestSuite");
+        String buildInfo = System.getProperty("buildInfo") == null ? "" : System.getProperty("buildInfo");
+        return suiteName + " " + buildInfo;
+    }
+
+    protected abstract WebDriver getDriverInstance(DesiredCapabilities capabilities) throws MalformedURLException;
 
     public static class Timeout {
 
-        public static int defaultImplicitWait;
-        public static int defaultScriptTimeout;
+        public static final int DEFAULT_IMPLICIT_WAIT = 15;
+        public static final int DEFAULT_SCRIPT_TIMEOUT = 60;
     }
 }

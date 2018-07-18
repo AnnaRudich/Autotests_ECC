@@ -40,10 +40,10 @@ public class EventDatabaseApi {
                 i++;
                 eventClaimSettled = getEventsForClaimSettled(claimRequest.getCompany()).stream()
                         .filter(eventClaimUpdated -> eventClaimUpdated.getCase().getNumber().equals(claimRequest.getCaseNumber()))
-                        .findFirst().get();
+                        .findFirst().orElseThrow(NoSuchElementException::new);
                 notFound = false;
             } catch (NoSuchElementException ex){
-                logger.info("Not found element in events database");
+                logger.info("No found element in events database");
             }
         }
         return eventClaimSettled;

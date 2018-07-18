@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -332,7 +333,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             private void clearField(WebElement element) {
                 element.sendKeys(Keys.chord(Keys.CONTROL, "a"), "");
-                if(!element.equals("")){
+                if(!element.getText().equals("")){
                     element.clear();
                 }
             }
@@ -389,8 +390,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         private WebElement findVoucher(String voucherName){
             return voucherNameGridCell.stream()
                     .filter(element -> element.getText().equals(voucherName))
-                    .findAny()
-                    .get();
+                    .findAny().orElseThrow(() -> new NoSuchElementException("Can't find voucher with name " + voucherName));
         }
 
         public boolean isExclusiveTickForVoucherAvailable(String voucherName){
@@ -444,11 +444,6 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             public Asserts assertIsExclusiveTickForVoucherNotVisible(String voucherName){
                 Assert.assertFalse(isExclusiveTickForVoucherAvailable(voucherName));
-                return this;
-            }
-
-            public Asserts assertIsExclusiveTickForVoucherNotVisible(){
-                Assert.assertFalse(isExclusiveTickForFirstVoucherAvailable());
                 return this;
             }
         }
