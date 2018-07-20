@@ -11,6 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -22,10 +23,11 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//div[@id='replacementWindow_header-targetEl']//img[contains(@class,'x-tool-close')]")
     private Button cancelButton;
 
+    @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-description')]")
+    private List<WebElement> itemsList;
+
     @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-faceValue')]")
     private WebElement voucherFaceValue;
-    ////input[@name='faceValue']
-    ////div[@class='x-grid-with-row-lines']
 
     @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-cashValue')]")
     private WebElement itemPrice;
@@ -120,10 +122,10 @@ public class ReplacementDialog extends BaseDialog {
             return this;
         }
 
-//        public Asserts assertValueIsNotEditable(WebElement element) {
-//            assertTrue(element.getCssValue("input").contains() "Voucher face value %s should be equal to not depreciated new price %s");
-//            return this;
-//        }
+        public Asserts assertItemsListIsEmpty() {
+            assertTrue("items list should be empty", itemsList.isEmpty());
+            return this;
+        }
 
 
         public ReplacementDialog back() {

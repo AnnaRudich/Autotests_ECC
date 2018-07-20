@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.CompleteClaimPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.sid.SidCalculator;
@@ -14,6 +15,9 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -49,7 +53,7 @@ public class ReplacementDialogTests extends BaseTest{
     @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(dataProvider = "testDataProvider",
-            description = "CONTENTS-3281 manual line is not shown in replacement dialog")
+            description = "CONTENTS-592 manual line is not shown in replacement dialog")
     public void contents3281_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_500;
 
@@ -60,7 +64,42 @@ public class ReplacementDialogTests extends BaseTest{
                 .closeSidWithOk();
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()
-                .closeReplacementDialog();
+
+        .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
+    }
+
+    @RunOn(DriverType.CHROME)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
+    @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME, enabled = false)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "CONTENTS-592 Replacement can be disabled")
+    public void contents592_turnOffReplacement(User user, Claim claim) {
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .doAssert(CompleteClaimPage.Asserts::assertReplacementIsDisabled);
 
     }
+
+    @RunOn(DriverType.CHROME)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
+    @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "CONTENTS-592 Replacement through the shop")
+    public void contents592_turnOffReplacement2(User user, Claim claim) {
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim);
+        new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
+                .openReplacementWizard();
+
+
+
+    }
+
+
+
 }

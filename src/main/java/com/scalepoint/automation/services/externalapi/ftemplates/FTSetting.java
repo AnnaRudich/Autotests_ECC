@@ -12,6 +12,8 @@ public enum FTSetting {
     USE_INTERNAL_NOTES("input[name=ftfunctionflag][value='2048']", CHECKBOX),
     SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON("input[name=ftfunctionflag][value='4096']", CHECKBOX),
     SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON("input[name=ftfunctionflag][value='8192']", CHECKBOX),
+    USE_REPLACEMENT_FROM_ME("input[name=ftfunctionflag][value='8388608']", CHECKBOX),
+    USE_REPLACEMENT_THROUGH_THE_SHOP("input[name=ftfunctionflag2][value='4096']", CHECKBOX),
     DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION("input[name=ftfunctionflag5][value='512']", CHECKBOX),
     ENABLE_DEPRECIATION_COLUMN("input[name=ftfunctionflag5][value='131072']", CHECKBOX),
     SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED("input[name=ftfunctionflag5][value='32768']", CHECKBOX),
