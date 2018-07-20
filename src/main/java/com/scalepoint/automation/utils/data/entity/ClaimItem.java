@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -184,18 +185,6 @@ public class ClaimItem {
         return textFieldSP;
     }
 
-    public Integer getPurchasePriceSP() {
-        return purchasePriceSP;
-    }
-
-    public String getSSDescriptionSP() {
-        return ssDescriptionSP;
-    }
-
-    public String getSsDescriptionSP() {
-        return ssDescriptionSP;
-    }
-
     public String getCategoryGroupBorn() {
         return existingCat1;
     }
@@ -225,10 +214,6 @@ public class ClaimItem {
         return existingGroupFotoAndVideo;
     }
 
-    public String getExistingCat2() {
-        return existingCat2;
-    }
-
     public String getCategoryBornBabyudstyr() {
         return existingSubCat1;
     }
@@ -242,69 +227,23 @@ public class ClaimItem {
     }
 
     public String getExcelPath1() {
-        return excelPath1;
-    }
-
-    public String getExcelWithGroupingPath(){
-        return excelWithGroupingPath;
+        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(excelPath1)).getPath();
     }
 
     public String getXlsDescr1() {
         return xlsDescr1;
     }
 
-    public String getDepTypePolicy() {
-        return depTypePolicy;
-    }
-
-    public String getDepTypeDisc() {
-        return depTypeDisc;
-    }
-
-    public String getDepAmount2() {
-        return depAmount2;
-    }
-
-    public String getPolicyExcess1() {
-        return policyExcess1;
-    }
-
-    public String getPolicyExcess2() {
-        return policyExcess2;
-    }
-
     public String getFileLoc() {
-        return fileLoc;
-    }
-
-    public String getFile2Loc() {
-        return file2Loc;
-    }
-
-    public String getFileName(String fileLocation) {
-        String[] splitedString = fileLocation.split("\\\\");
-        return splitedString[splitedString.length - 1];
+        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(fileLoc)).getPath();
     }
 
     public String getExistingVoucher2() {
         return existingVoucher2;
     }
 
-    public String getZeroDistance() {
-        return zeroDistance;
-    }
-
-    public String getValidDistance1() {
-        return validDistance1;
-    }
-
     public String getSetDialogTextMatch() {
         return setDialogTextMatch;
-    }
-
-    public String getProcuraLimitPrice() {
-        return procuraLimitPrice;
-
     }
 
     public Double getCustomerDemand() {
@@ -313,22 +252,6 @@ public class ClaimItem {
 
     public Double getUsedPrice() {
         return usedPrice;
-    }
-
-    public String getMonths() {
-        return month;
-    }
-
-    public String getIntegrationCategory() {
-        return integrationCategory;
-    }
-
-    public String getYesOption() {
-        return yes;
-    }
-
-    public String getNoOption() {
-        return no;
     }
 
     public String getBlueColor() {
@@ -347,10 +270,6 @@ public class ClaimItem {
         return valuationTypeNewPrice;
     }
 
-    public String getValuationTypeCustomerDemand() {
-        return valuationTypeCustomerDemand;
-    }
-
     public String getValuationTypeUsedPrice() {
         return valuationTypeUsedPrice;
     }
@@ -361,10 +280,6 @@ public class ClaimItem {
 
     public String getValuationTypeRepair() {
         return valuationTypeRepair;
-    }
-
-    public String getAgeStatus() {
-        return ageStatus;
     }
 
     public String getExistingCat3_Telefoni() {
@@ -401,10 +316,6 @@ public class ClaimItem {
 
     public Integer getAlkaUserReductionRule40() {
         return alkaUserReductionRule40;
-    }
-
-    public String getExistingVoucher3() {
-        return existingVoucher3;
     }
 
     public String getExistingVoucher4() {

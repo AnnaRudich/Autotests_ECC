@@ -51,7 +51,7 @@ public class Wait {
 
     public static void wait(int seconds) {
         try {
-            Thread.sleep(seconds * 1000);
+            Thread.sleep(seconds * 1000L);
         } catch (InterruptedException ignored) {
         }
     }
@@ -132,7 +132,7 @@ public class Wait {
                 return true;
             }
         });
-        Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.defaultImplicitWait, TimeUnit.SECONDS);
+        Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {

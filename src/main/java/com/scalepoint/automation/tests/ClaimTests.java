@@ -207,7 +207,6 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
-    @Bug(bug = "CHARLIE-479")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible add note on Settlement page")
     @RequiredSetting(type = FTSetting.USE_INTERNAL_NOTES)

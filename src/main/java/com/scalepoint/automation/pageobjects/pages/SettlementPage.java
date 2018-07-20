@@ -79,6 +79,8 @@ public class SettlementPage extends BaseClaimPage {
     private By deleteGroupButton = By.xpath("//span[contains(@style,'ungroupIcon.png')]");
     private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
 
+    private String cancelPolicy = "#edit-policy-cancel-button-btnInnerEl";
+
 
     private String sendNotToRepairLineIconByDescriptionXpath =
             "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
@@ -185,6 +187,9 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementDialog openSid() {
+        if($(cancelPolicy).isDisplayed()){
+            $(cancelPolicy).click();
+        }
         return functionalMenu.addManually();
     }
 

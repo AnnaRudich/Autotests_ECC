@@ -47,6 +47,7 @@ import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -69,11 +70,8 @@ import org.testng.annotations.Listeners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -105,7 +103,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
         driverType = getDriverType(method);
 
-        WebDriver driver = DriversFactory.getDriver(driverType);
+        WebDriver driver = DriversFactory.getDriver(driverType, method);
 
         Browser.init(driver, driverType);
         Window.init(driver);
@@ -142,6 +140,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @AfterMethod
     public void cleanup(Method method, ITestResult iTestResult) {
         logger.info("Clean up after: {}", method.toString());
+        Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
+        try {
+            Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
+            TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e) {
+            logger.info(e.getMessage());
+        }
         Browser.quit();
         Window.cleanUp();
         CurrentUser.cleanUp();
@@ -300,13 +305,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                         .collect(Collectors.toList());
 
                 if(supplierCompany.areWithVouchers()) {
-                    return simpleSuppliers.stream().filter(sup -> sup.isWithVouchers()).findAny().get();
+                    return simpleSuppliers.stream().filter(SimpleSupplier::isWithVouchers).findAny().orElseThrow(NoSuchElementException::new);
                 }else{
-                    return simpleSuppliers.stream().filter(sup -> !sup.isWithVouchers()).findAny().get();
+                    return simpleSuppliers.stream().filter(sup -> !sup.isWithVouchers()).findAny().orElseThrow(NoSuchElementException::new);
                 }
             }
         }
-        return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().get();
+        return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().orElseThrow(NoSuchElementException::new);
     }
 
     private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -23,6 +24,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -251,11 +253,11 @@ public class TextSearchPage extends Page {
     private void clickOnFirstMatchingAndWaitForSID() {
         int i = 1;
         logger.info("Trying open SID attempt: " + i);
-        waitForDisplayed(By.xpath("//button[@class='matchbutton']/img[1]")).click();
+        $(By.xpath("//button[@class='matchbutton']/img[1]")).shouldBe(Condition.visible).click();
         while (!BaseDialog.isOn(SettlementDialog.class) && i < 4) {
             i++;
             logger.info("Trying open SID attempt: " + i);
-            driver.findElement(By.xpath("//button[@class='matchbutton']/img[1]")).click();
+            $(By.xpath("//button[@class='matchbutton']/img[1]")).shouldBe(Condition.visible).click();
         }
     }
 
@@ -275,7 +277,7 @@ public class TextSearchPage extends Page {
     public TextSearchPage chooseCategory(String _category) {
         waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
         List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
-        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().get())).click();
+        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + _category)))).click();
         waitForResultsLoad();
         return this;
     }

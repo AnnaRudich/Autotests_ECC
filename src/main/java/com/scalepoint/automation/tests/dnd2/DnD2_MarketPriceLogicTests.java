@@ -76,18 +76,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     public void charlie526_addProductWhenProductPriceEqualsMarketPrice(User user, Claim claim){
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
-                .toTextSearchPage()
-                .searchBySku(productInfo.getSku())
-                .sortOrderableFirst()
-                .openSidForFirstProduct()
-
-                .doAssert(asserts -> {
-                    asserts.assertMarketPriceVisible();
-                    asserts.assertCatalogPriceVisible();
-                    asserts.assertTotalPriceIsSameInRows(CATALOG_PRICE, MARKET_PRICE);
-                    asserts.assertIsLowestPriceValuationSelected(CATALOG_PRICE);
-                });
+      addProductToClaimAndCheckPrices(user, claim, productInfo);
     }
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
@@ -95,19 +84,23 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     public void charlie526_addProductWhenProductPriceHigherThanMarketPrice(User user, Claim claim){
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
-                .toTextSearchPage()
-                .searchBySku(productInfo.getSku())
-                .sortOrderableFirst()
-                .openSidForFirstProduct()
-
-                .doAssert(asserts -> {
-                    asserts.assertMarketPriceVisible();
-                    asserts.assertCatalogPriceVisible();
-                    asserts.assertTotalPriceIsSameInRows(CATALOG_PRICE, MARKET_PRICE);
-                    asserts.assertIsLowestPriceValuationSelected(CATALOG_PRICE);
-                });
+      addProductToClaimAndCheckPrices(user, claim, productInfo);
     }
+
+  private void addProductToClaimAndCheckPrices(User user, Claim claim, ProductInfo productInfo) {
+    loginAndCreateClaim(user, claim)
+            .toTextSearchPage()
+            .searchBySku(productInfo.getSku())
+            .sortOrderableFirst()
+            .openSidForFirstProduct()
+
+            .doAssert(asserts -> {
+                asserts.assertMarketPriceVisible();
+                asserts.assertCatalogPriceVisible();
+                asserts.assertTotalPriceIsSameInRows(CATALOG_PRICE, MARKET_PRICE);
+                asserts.assertIsLowestPriceValuationSelected(CATALOG_PRICE);
+            });
+  }
 }
 
 

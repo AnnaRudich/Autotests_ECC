@@ -1,5 +1,9 @@
 package com.scalepoint.automation.utils.testng;
 
+import com.scalepoint.automation.tests.BaseTest;
+import com.sun.org.apache.regexp.internal.RE;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
@@ -7,8 +11,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Retrier implements IRetryAnalyzer {
 
+    protected Logger logger = LogManager.getLogger(Retrier.class);
+    private final static int retryTimes = 3;
+
     // Default retry once.
-    private AtomicInteger count = new AtomicInteger(3);
+    private AtomicInteger count = new AtomicInteger(retryTimes);
 
     /**
      * Set the max number of time the method needs to be retried.
@@ -31,7 +38,9 @@ public class Retrier implements IRetryAnalyzer {
      */
     @Override
     public boolean retry(ITestResult result) {
-        return count.getAndDecrement() > 0;
+        Boolean shouldRerun = count.getAndDecrement() > 0;
+        logger.warn("Failed times " + (retryTimes - count.intValue()));
+        return shouldRerun;
     }
 
     /**

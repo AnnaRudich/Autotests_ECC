@@ -6,6 +6,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -13,6 +14,7 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-514")
@@ -115,6 +117,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLineAndRedRuleIsDiscretionaryType(
             @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, DiscretionaryReason discretionaryReason){
@@ -126,8 +129,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .enableAge()
                 .setDiscountAndDepreciation(true)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonScalepoint());
-                double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
-                double depreciationPercentage = Double.valueOf(settlementDialog.getDepreciationPercentage());
+                double voucherPercentage = settlementDialog.getVoucherPercentage();
+                double depreciationPercentage = settlementDialog.getDepreciationPercentage();
                 SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
@@ -171,7 +174,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()));
-        double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
+        double voucherPercentage = settlementDialog.getVoucherPercentage();
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
@@ -219,8 +222,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setDepreciation(depreciationValue)
                 .setDiscountAndDepreciation(true);
-        double voucherPercentage = Double.valueOf(settlementDialog.getVoucherPercentage());
-        double depreciationPercentage = Double.valueOf(settlementDialog.getDepreciationPercentage());
+        double voucherPercentage = settlementDialog.getVoucherPercentage();
+        double depreciationPercentage = settlementDialog.getDepreciationPercentage();
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
