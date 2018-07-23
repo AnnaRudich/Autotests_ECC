@@ -216,6 +216,18 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
+    public SettlementPage addLinesForChosenCategories(String... categories) {
+        for (String category : categories) {
+            openSidAndFill(sid -> sid
+                    .withNewPrice(PRICE_2400)
+                    .withCategory(category)
+                    .withSubCategoryFromTheListByIndex(1)
+                    .withAge(AGE_YEAR, AGE_MONTH))
+                    .closeSidWithOk();
+        }
+        return this;
+    }
+
 
     public void cancelClaim() {
         settlementSummary.cancel();

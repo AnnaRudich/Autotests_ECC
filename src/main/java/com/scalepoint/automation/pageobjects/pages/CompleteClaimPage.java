@@ -1,24 +1,26 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
+
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
+
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static junit.framework.TestCase.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
 
 @EccPage
 public class CompleteClaimPage extends Page {
@@ -68,7 +70,11 @@ public class CompleteClaimPage extends Page {
     @FindBy(id = "gem")
     private Button saveClaim;
 
-    private SelenideElement replace = $("#genlever");
+    @FindBy(id = "genlever")
+    private Button replace;
+
+    @FindBy(xpath = "//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")
+    private Button goToShop;
 
     @Override
     protected String getRelativeUrl() {
@@ -174,15 +180,16 @@ public class CompleteClaimPage extends Page {
         return BaseDialog.at(ReplacementDialog.class);
     }
 
-    public CompleteClaimPage doAssert(Consumer<CompleteClaimPage.Asserts> assertFunc) {
+    public CompleteClaimPage doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
         return CompleteClaimPage.this;
     }
 
     public class Asserts {
         public CompleteClaimPage.Asserts assertReplacementIsDisabled() {
-            replace.shouldNotBe(Condition.visible);
+            assertTrue("replacement should not be visible", Wait.invisibilityOfElement(replace));
             return this;
         }
+
     }
 }

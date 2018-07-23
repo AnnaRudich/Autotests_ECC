@@ -65,7 +65,7 @@ public class Wait {
         return wrapShort(ExpectedConditions.invisibilityOfAllElements(Lists.newArrayList(element)));
     }
 
-    public static Boolean invisibleOfElement(WebElement element){
+    public static Boolean invisibilityOfElement(WebElement element){
         return wrapShort(ExpectedConditions.invisibilityOf(element));
     }
 

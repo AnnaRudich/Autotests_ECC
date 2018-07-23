@@ -32,6 +32,7 @@ public enum FTSetting {
     SHOW_NOT_CHEAPEST_CHOICE_POPUP("input[name=ftfunctionflag5][value='16384']", CHECKBOX),
     MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG("input[name=ftfunctionflag3][value='262144']", CHECKBOX),
     SUFFICIENT_DOCUMENTATION_CHECKBOX("input[name=ftfunctionflag5][value='8192']", CHECKBOX),
+    ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT("input[name=ftfunctionflag3][value='1048576']", CHECKBOX),
     ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD("input[name=ftfunctionflag3][value='8388608']", CHECKBOX),
 
     //Settings for Self Service
@@ -49,6 +50,9 @@ public enum FTSetting {
     ALLOW_NONORDERABLE_PRODUCTS("select[name=ftnoselflags]", SELECT),
     NUMBER_BEST_FIT_RESULTS("input[name=ftnumberbestfitresults]", INPUT),
     USE_BRAND_LOYALTY_BY_DEFAULT("input[name=ftfunctionflag3][value='2048']", CHECKBOX),
+
+    //mail setting
+    ENABLE_ORDER_CONFIRMATION_EMAIL_TO_CUSTOMER_WHEN_SETTLEMENT_METHOD_IS_REPLACEMENT("input[name=ftfunctionflag3][value='524288']", CHECKBOX),
 
     //FTSetting for Comparison of Depreciation and Discount
     COMPARISON_OF_DISCOUNT_DEPRECATION("input[name=ftDnD2Related][value='1']", CHECKBOX),

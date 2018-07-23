@@ -23,7 +23,7 @@ import java.util.Arrays;
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
 @RequiredSetting(type = FTSetting.ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD)
-public class ReplacementDialogTests extends BaseTest{
+    public class ReplacementDialogTests extends BaseTest{
     @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(dataProvider = "testDataProvider",
@@ -51,7 +51,8 @@ public class ReplacementDialogTests extends BaseTest{
     }
 
     @RunOn(DriverType.CHROME)
-    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-592")
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-592 manual line is not shown in replacement dialog")
     public void contents3281_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
@@ -66,6 +67,30 @@ public class ReplacementDialogTests extends BaseTest{
                 .openReplacementWizard()
 
         .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
+    }
+
+    @RunOn(DriverType.CHROME)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-601")
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
+    @RequiredSetting(type = FTSetting.ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT)
+    @Test(dataProvider = "testDataProvider",
+            description = "CONTENTS-601 allow shop access to remaining amount")
+    public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
+
+        loginAndCreateClaim(user, claim)
+                .addLinesForChosenCategories(claimItem.getCategoryGroupBorn(), claimItem.getExistingCat3_Telefoni());
+
+
+        new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
+                .openReplacementWizard()
+                .replaceItemByIndex(0);
+
+
+
+                //assert there is an extra option Giv kunden adgang og overfør resterende  til shoppen
+
+
+               //assert there is replacement mail
     }
 
     @RunOn(DriverType.CHROME)
@@ -87,19 +112,18 @@ public class ReplacementDialogTests extends BaseTest{
     @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
     @Test(dataProvider = "testDataProvider",
-            description = "CONTENTS-592 Replacement through the shop")
-    public void contents592_turnOffReplacement2(User user, Claim claim) {
+            description = "CONTENTS-592 Replacement through the shop is disabled")
+    public void contents592_turnOffReplacementThroughTheShop(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
-                .fillClaimForm(claim);
-        new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
-                .openReplacementWizard();
+                .fillClaimForm(claim)
+                .openReplacementWizard()
 
-
-
+                .doAssert(ReplacementDialog.Asserts::assertGoToShopIsNotDisplayed);
     }
-
-
-
 }
+
+
+
+

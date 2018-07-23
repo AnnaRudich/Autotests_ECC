@@ -23,8 +23,11 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//div[@id='replacementWindow_header-targetEl']//img[contains(@class,'x-tool-close')]")
     private Button cancelButton;
 
-    @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-description')]")
+    @FindBy(xpath = "//div[contains(@id, 'replaceProductsGrid')]//table/tbody/tr")
     private List<WebElement> itemsList;
+
+    @FindBy(xpath = "//td[contains(@class,'grid-cell-row-checker')]")
+    private Radio selectItemCheckbox;
 
     @FindBy(xpath = "//tr/td[contains(@class,'x-grid-cell-faceValue')]")
     private WebElement voucherFaceValue;
@@ -53,7 +56,7 @@ public class ReplacementDialog extends BaseDialog {
     public ReplacementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
         switchToLast();
-        Wait.waitForVisible(goToShopButton);
+        Wait.waitForVisible(cancelButton);
         return this;
     }
 
@@ -101,9 +104,18 @@ public class ReplacementDialog extends BaseDialog {
         selectAllItemsCheckbox.click();
         $(nextButtonByXpath).click();
         $(finishButtonByXpath).click();
-        Wait.waitForVisible(closeButton);
+        Wait.waitForVisible(cancelButton);
         closeButton.click();
         return Page.at(CustomerDetailsPage.class);
+    }
+
+
+    public ReplacementDialog replaceItemByIndex(int index) {
+        itemsList.get(index);
+        selectItemCheckbox.click();
+        $(nextButtonByXpath).click();
+        $(finishButtonByXpath).click();
+        return ReplacementDialog.this;
     }
 
     public ReplacementDialog doAssert(Consumer<Asserts> assertFunc) {
@@ -124,6 +136,11 @@ public class ReplacementDialog extends BaseDialog {
 
         public Asserts assertItemsListIsEmpty() {
             assertTrue("items list should be empty", itemsList.isEmpty());
+            return this;
+        }
+
+        public Asserts assertGoToShopIsNotDisplayed() {
+            assertTrue("goToShop should not ve visible", Wait.invisibilityOfElement(goToShopButton));
             return this;
         }
 
