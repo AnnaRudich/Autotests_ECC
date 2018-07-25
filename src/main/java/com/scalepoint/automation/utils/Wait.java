@@ -44,6 +44,10 @@ public class Wait {
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }
 
+    public static void waitForSpinnerToDisappear(){
+        waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
+    }
+
     public static void waitForPageLoaded() {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
@@ -66,7 +70,11 @@ public class Wait {
     }
 
     public static Boolean invisibilityOfElement(WebElement element){
-        return wrapShort(ExpectedConditions.invisibilityOf(element));
+        try {
+            return wrapShort(ExpectedConditions.invisibilityOf(element));
+        }catch (NoSuchElementException e){
+            return true;
+        }
     }
 
     public static Boolean invisibleOfElement(By locator) {
@@ -141,7 +149,7 @@ public class Wait {
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).ignoring(StaleElementReferenceException.class).until(condition);
-    }
+}
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);

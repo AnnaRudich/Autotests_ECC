@@ -19,7 +19,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
-import static org.openqa.selenium.By.xpath;
+import static com.scalepoint.automation.utils.Wait.waitForSpinnerToDisappear;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class ReplacementDialog extends BaseDialog {
@@ -65,9 +65,10 @@ public class ReplacementDialog extends BaseDialog {
         return this;
     }
 
-    private By nextButtonByXpath = xpath("//span[@id='replacement-button-next-btnIconEl']");
-    private By finishButtonByXpath = xpath("//span[@id='replacement-button-finish-btnIconEl']");
-    private By itemsList= xpath("//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]");
+    private By nextButtonByXpath = By.xpath("//span[@id='replacement-button-next-btnIconEl']");
+    private By finishButtonByXpath = By.xpath("//span[@id='replacement-button-finish-btnIconEl']");
+    private By itemsListByXpath = By.xpath("//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]");
+    private By voucherFaceValueInputByXpath = By.xpath("//input[@name='faceValue']");
 
 
     public void closeReplacementDialog() {
@@ -79,13 +80,14 @@ public class ReplacementDialog extends BaseDialog {
         return OperationalUtils.toNumber(voucherFaceValue.getText());
     }
 
+
     private Double getItemPriceValue() {
         return OperationalUtils.toNumber(itemPrice.getText().replaceAll("[^\\.,0123456789]", ""));
     }
 
     public ReplacementDialog editVoucherFaceValue(Double newPrice) {
         voucherFaceValue.click();
-        $(xpath("//input[@name='faceValue']")).setValue(newPrice.toString()).pressEnter();
+        $(voucherFaceValueInputByXpath).setValue(newPrice.toString()).pressEnter();
         return this;
     }
 
@@ -116,14 +118,14 @@ public class ReplacementDialog extends BaseDialog {
 
 
     public ReplacementDialog replaceItemByIndex(int index) {
-        $$(itemsList).get(index);
+        $$(itemsListByXpath).get(index);
         selectItemCheckbox.click();
         $(nextButtonByXpath).click();
         return ReplacementDialog.this;
     }
 
     private WebElement findReplacementOptionByText(String replacementTypeLabel) {
-        return $$(itemsList).find(Condition.text(replacementTypeLabel))
+        return $$(itemsListByXpath).find(Condition.text(replacementTypeLabel))
                 .find(By.xpath(".//tr/td/input[contains(@class, 'x-form-radio')]"));
     }
 
@@ -135,9 +137,6 @@ public class ReplacementDialog extends BaseDialog {
         return Page.at(CustomerDetailsPage.class);
     }
 
-    private void waitForSpinnerToDisappear(){
-        waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
-    }
 
     public ReplacementDialog doAssert(Consumer<Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
@@ -156,12 +155,12 @@ public class ReplacementDialog extends BaseDialog {
         }
 
         public Asserts assertItemsListIsEmpty() {
-            assertTrue("items list should be empty", $$(itemsList).isEmpty());
+            assertTrue("items list should be empty", $$(itemsListByXpath).isEmpty());
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
-            assertTrue("goToShop should not ve visible", Wait.invisibilityOfElement(goToShopButton));
+            assertTrue("goToShop should not be visible", Wait.invisibilityOfElement(goToShopButton));
             return this;
         }
 

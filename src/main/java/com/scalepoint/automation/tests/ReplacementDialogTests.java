@@ -17,7 +17,7 @@ import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
-
+@RunOn(DriverType.CHROME)
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     public class ReplacementDialogTests extends BaseTest{
@@ -49,7 +49,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-592")
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-592 manual line is not shown in replacement dialog")
-    public void contents3281_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
+    public void contents592_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_500;
 
         loginAndCreateClaim(user, claim)
@@ -87,7 +87,6 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
                         mail.isMailExist(REPLACEMENT_WITH_MAIL));
     }
 
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME, enabled = false)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
@@ -97,7 +96,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
-                .doAssert(CompleteClaimPage.Asserts::assertReplacementIsDisabled);
+                .doAssert(CompleteClaimPage.Asserts::assertReplacementButtonIsNotVisible);
 
     }
 

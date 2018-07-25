@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.sid;
 
 import java.math.BigDecimal;
 
-public class SidCalculator {
+class SidCalculator {
 
     static PriceValuation calculatePriceValuation(Double price, Integer depreciationPercentage) {
         double depreciation = price * (double)depreciationPercentage / 100;
@@ -10,7 +10,7 @@ public class SidCalculator {
         return new PriceValuation(cashCompensation, depreciation);
     }
 
-    public static VoucherValuationWithDepreciation calculateVoucherValuation(Double price, Integer voucherDiscount, Integer depreciationPercentage) {
+    static VoucherValuationWithDepreciation calculateVoucherValuation(Double price, Integer voucherDiscount, Integer depreciationPercentage) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashCompensationOfVoucher = price - discountedAmountByVoucher;
         double depreciatedAmount = (cashCompensationOfVoucher*depreciationPercentage)/100;
@@ -83,7 +83,7 @@ public class SidCalculator {
         }
     }
 
-    public static class VoucherValuationWithDepreciation {
+    static class VoucherValuationWithDepreciation {
         private double cashCompensationOfVoucher;
         private double discountedAmountByVoucher;
         private double cashCompensationWithDepreciation;
@@ -100,7 +100,7 @@ public class SidCalculator {
             return discountedAmountByVoucher;
         }
 
-        public double getCashCompensationOfVoucher() {
+        double getCashCompensationOfVoucher() {
             return cashCompensationOfVoucher;
         }
 

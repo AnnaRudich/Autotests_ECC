@@ -1,7 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
-
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
@@ -13,13 +11,13 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static junit.framework.TestCase.assertFalse;
+
 import static org.testng.AssertJUnit.assertTrue;
 
 @EccPage
@@ -186,8 +184,8 @@ public class CompleteClaimPage extends Page {
     }
 
     public class Asserts {
-        public CompleteClaimPage.Asserts assertReplacementIsDisabled() {
-            assertTrue("replacement should not be visible", Wait.invisibilityOfElement(replace));
+        public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
+            assertTrue("replacement button should not be visible", Wait.invisibilityOfElement(replace));
             return this;
         }
 

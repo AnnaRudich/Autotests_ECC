@@ -24,8 +24,6 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
-
 @SuppressWarnings("unchecked")
 public abstract class Page implements Actions {
 
