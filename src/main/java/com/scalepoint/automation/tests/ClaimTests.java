@@ -28,11 +28,7 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ORDER_CONFIRMATION_BY_IC;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
@@ -429,7 +425,7 @@ public class ClaimTests extends BaseTest {
                 .toMailsPage()
                 .doAssert(mail -> {
                     mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);
-                    mail.isMailExist(ORDER_CONFIRMATION_BY_IC);
+                    mail.isMailExist(REPLACEMENT_WITH_MAIL);
                 });
     }
 }

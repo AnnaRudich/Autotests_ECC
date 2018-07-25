@@ -47,6 +47,7 @@ import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
@@ -76,6 +77,7 @@ import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
+import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
 
 @SpringApplicationConfiguration(classes = Application.class)
 @TestExecutionListeners(inheritListeners = false, listeners = {
@@ -353,6 +355,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     public XpriceInfo getXpricesForConditions(DatabaseApi.PriceConditions... priceConditions){
         return databaseApi.findProduct(priceConditions);
     }
+
 }
 
 

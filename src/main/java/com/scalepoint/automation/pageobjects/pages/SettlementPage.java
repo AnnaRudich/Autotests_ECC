@@ -221,7 +221,7 @@ public class SettlementPage extends BaseClaimPage {
             openSidAndFill(sid -> sid
                     .withNewPrice(PRICE_2400)
                     .withCategory(category)
-                    .withSubCategoryFromTheListByIndex(1)
+                    .withSubCategoryFromTheListByIndex(0)
                     .withAge(AGE_YEAR, AGE_MONTH))
                     .closeSidWithOk();
         }

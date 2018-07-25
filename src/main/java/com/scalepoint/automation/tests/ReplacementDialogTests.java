@@ -3,9 +3,9 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.CompleteClaimPage;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.tests.sid.SidCalculator;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
@@ -16,18 +16,14 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
 
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
-@RequiredSetting(type = FTSetting.ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD)
     public class ReplacementDialogTests extends BaseTest{
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(dataProvider = "testDataProvider",
-            description = "CONTENTS-3281 Enable Changing of Voucher Price in Replacement Wizard")
+            description = "CONTENTS-3281 changing of VoucherPrice in ReplacementWizard")
     public void contents3281_changeVoucherPriceInReplacementWizard(User user, Claim claim, ClaimItem item) {
         Double newVoucherFaceValue = Constants.PRICE_500;
         Integer voucherDiscount = Constants.VOUCHER_DISCOUNT_10;
@@ -50,9 +46,7 @@ import java.util.Arrays;
         });
     }
 
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-592")
-    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-592 manual line is not shown in replacement dialog")
     public void contents3281_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
@@ -69,28 +63,28 @@ import java.util.Arrays;
         .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
     }
 
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-601")
-    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @RequiredSetting(type = FTSetting.ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT)
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-601 allow shop access to remaining amount")
     public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
-                .addLinesForChosenCategories(claimItem.getCategoryGroupBorn(), claimItem.getExistingCat3_Telefoni());
+                .addLinesForChosenCategories
+                        (claimItem.getCategoryGroup2WithNotElectronicVoucher(), claimItem.getCategoryGroup1WithNotElectronicVoucher());
 
 
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()
-                .replaceItemByIndex(0);
+                .replaceItemByIndex(0)
+                .getAccessToShopForRemainingAmount()
+                .to(MyPage.class)
 
-
-
-                //assert there is an extra option Giv kunden adgang og overfør resterende  til shoppen
-
-
-               //assert there is replacement mail
+                .doAssert(MyPage.Asserts::assertClaimCompleted)
+                .openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail ->
+                        mail.isMailExist(REPLACEMENT_WITH_MAIL));
     }
 
     @RunOn(DriverType.CHROME)
@@ -98,8 +92,8 @@ import java.util.Arrays;
     @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME, enabled = false)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
     @Test(dataProvider = "testDataProvider",
-            description = "CONTENTS-592 Replacement can be disabled")
-    public void contents592_turnOffReplacement(User user, Claim claim) {
+            description = "CONTENTS-592 ReplacementButton can be invisible")
+    public void contents592_turnOffReplacementOption(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
@@ -107,7 +101,6 @@ import java.util.Arrays;
 
     }
 
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)

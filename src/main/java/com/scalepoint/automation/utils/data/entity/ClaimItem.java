@@ -148,6 +148,18 @@ public class ClaimItem {
     @XmlElement
     private String matchedText;
 
+    public String getCategoryGroup1WithNotElectronicVoucher() {
+        return categoryGroup1WithNotElectronicVoucher;
+    }
+
+    public String getCategoryGroup2WithNotElectronicVoucher() {
+        return categoryGroup2WithNotElectronicVoucher;
+    }
+
+    @XmlElement
+    private String categoryGroup1WithNotElectronicVoucher;
+    @XmlElement
+    private String categoryGroup2WithNotElectronicVoucher;
 
     public String getExistingCat4(){
         return existingCat4;

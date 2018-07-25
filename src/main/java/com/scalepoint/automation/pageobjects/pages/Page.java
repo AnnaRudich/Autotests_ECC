@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +23,8 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
 
 @SuppressWarnings("unchecked")
 public abstract class Page implements Actions {
