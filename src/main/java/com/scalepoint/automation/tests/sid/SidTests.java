@@ -84,7 +84,6 @@ public class SidTests extends BaseTest {
      * WHEN user selects Voucher2
      * THAN the distance is equal to predefined value
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
