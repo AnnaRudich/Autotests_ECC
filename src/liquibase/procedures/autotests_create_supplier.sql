@@ -23,7 +23,7 @@ DECLARE @City NVARCHAR(30) = 'Copenhagen'
 
 IF EXISTS(SELECT * FROM dbo.SUPPLIER s WHERE s.SUNAME = @SUNAME)
 BEGIN
-	RAISERROR ('Supplier name "%s" is already exists', 18, - 1, @SUNAME)
+	PRINT FORMATMESSAGE('Supplier name "%s" is already exists', @SUNAME)
     RETURN
 END
 
