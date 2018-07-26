@@ -10,6 +10,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -185,7 +186,7 @@ public class CompleteClaimPage extends Page {
 
     public class Asserts {
         public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
-            assertTrue("replacement button should not be visible", Wait.invisibilityOfElement(replace));
+            assertTrue("replacement button should not be visible", Wait.invisibleOfElement(By.id("genlever")));
             return this;
         }
 
