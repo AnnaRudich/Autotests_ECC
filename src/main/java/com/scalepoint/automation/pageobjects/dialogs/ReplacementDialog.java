@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
 import static com.scalepoint.automation.utils.Wait.waitForSpinnerToDisappear;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class ReplacementDialog extends BaseDialog {
@@ -54,8 +54,8 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
     private WebElement selectAllItemsCheckbox;
 
-    @FindBy(xpath="//span[contains(text(), 'OK')]/ancestor::a")
-    private  Button alertOk;
+    @FindBy(xpath = "//span[contains(text(), 'OK')]/ancestor::a")
+    private Button alertOk;
 
     @Override
     public ReplacementDialog ensureWeAreAt() {
@@ -129,7 +129,7 @@ public class ReplacementDialog extends BaseDialog {
                 .find(By.xpath(".//tr/td/input[contains(@class, 'x-form-radio')]"));
     }
 
-    public CustomerDetailsPage getAccessToShopForRemainingAmount(){
+    public CustomerDetailsPage getAccessToShopForRemainingAmount() {
         findReplacementOptionByText("Giv kunden adgang").click();
         $(finishButtonByXpath).click();
         waitForSpinnerToDisappear();
@@ -156,11 +156,13 @@ public class ReplacementDialog extends BaseDialog {
 
         public Asserts assertItemsListIsEmpty() {
             assertTrue("items list should be empty", $$(itemsListByXpath).isEmpty());
+            //assertThat($$(itemsListByXpath)).isEmpty();//it's pass when it should not
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
-            assertTrue("goToShop should not be visible", Wait.invisibilityOfElement(goToShopButton));
+            assertThat(Wait.invisibilityOfElement(goToShopButton));//timeout exception if fails
+            //assertTrue("goToShop should not be visible", Wait.invisibilityOfElement(goToShopButton));
             return this;
         }
 

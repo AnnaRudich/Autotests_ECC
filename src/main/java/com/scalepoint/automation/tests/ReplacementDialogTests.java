@@ -21,6 +21,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     public class ReplacementDialogTests extends BaseTest{
+
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-3281 changing of VoucherPrice in ReplacementWizard")

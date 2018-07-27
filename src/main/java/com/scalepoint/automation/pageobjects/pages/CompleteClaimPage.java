@@ -88,6 +88,8 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
+    By replacementButtonByXpath = By.id("genlever");
+
     public CompleteClaimPage fillClaimForm(Claim claim) {
         enterPhone(claim.getPhoneNumber()).
                 enterCellPhone(claim.getCellNumber()).
@@ -186,7 +188,7 @@ public class CompleteClaimPage extends Page {
 
     public class Asserts {
         public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
-            assertTrue("replacement button should not be visible", Wait.invisibleOfElement(By.id("genlever")));
+            assertTrue("replacement button should not be visible", Wait.invisibleOfElement(replacementButtonByXpath));
             return this;
         }
 
