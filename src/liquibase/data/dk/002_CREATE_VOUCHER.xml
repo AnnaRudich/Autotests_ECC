@@ -20,9 +20,9 @@
             EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher', 17, '22', 10, 7
 
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
-            declare @SupplierId int
-            EXEC autotests_create_supplier 'Autotest-Supplier-Distance-Tests', @scalepointCompany, '5000', @SupplierId OUTPUT
-            EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierId, '22', 10, 7
+            declare @SupplierVAId int
+            EXEC autotests_create_supplier 'Autotest-Supplier-Distance-Tests', @scalepointCompany, '5000', @SupplierVAId OUTPUT
+            EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierVAId, '22', 10, 7
 
             /* ComputerCity */
             EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher1', 1663, '22', 10, 7
