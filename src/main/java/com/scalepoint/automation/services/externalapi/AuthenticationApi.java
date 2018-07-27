@@ -62,7 +62,7 @@ public class AuthenticationApi {
                 add("successurl", "").get();
 
         try {
-            SSLContext sslContext = SSLContext.getInstance("TLSv1");
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, null, null);
             CookieStore cookieStore = new BasicCookieStore();
 

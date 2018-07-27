@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -155,14 +156,12 @@ public class ReplacementDialog extends BaseDialog {
         }
 
         public Asserts assertItemsListIsEmpty() {
-            assertTrue("items list should be empty", $$(itemsListByXpath).isEmpty());
-            //assertThat($$(itemsListByXpath)).isEmpty();//it's pass when it should not
+            assertThat(Wait.invisibilityOfElement(selectAllItemsCheckbox));
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
             assertThat(Wait.invisibilityOfElement(goToShopButton));//timeout exception if fails
-            //assertTrue("goToShop should not be visible", Wait.invisibilityOfElement(goToShopButton));
             return this;
         }
 

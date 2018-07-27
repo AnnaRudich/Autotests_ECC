@@ -17,7 +17,7 @@ import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
-@RunOn(DriverType.CHROME)
+@RunOn(DriverType.CHROME_REMOTE)
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     public class ReplacementDialogTests extends BaseTest{
@@ -77,15 +77,17 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
 
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()
-                .replaceItemByIndex(0)
-                .getAccessToShopForRemainingAmount()
-                .to(MyPage.class)
+                .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
 
-                .doAssert(MyPage.Asserts::assertClaimCompleted)
-                .openRecentClaim()
-                .toMailsPage()
-                .doAssert(mail ->
-                        mail.isMailExist(REPLACEMENT_WITH_MAIL));
+//                .replaceItemByIndex(0)
+//                .getAccessToShopForRemainingAmount()
+//                .to(MyPage.class)
+//
+//                .doAssert(MyPage.Asserts::assertClaimCompleted)
+//                .openRecentClaim()
+//                .toMailsPage()
+//                .doAssert(mail ->
+//                        mail.isMailExist(REPLACEMENT_WITH_MAIL));
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
@@ -100,7 +102,6 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
                 .doAssert(CompleteClaimPage.Asserts::assertReplacementButtonIsNotVisible);
 
     }
-
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
