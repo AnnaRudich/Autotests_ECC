@@ -111,6 +111,8 @@ public class Voucher {
     @XmlElement
     private String existingVoucher;
     @XmlElement
+    private String existingVoucherForDistances;
+    @XmlElement
     private String trygVoucher;
     @XmlElement
     private String voucherTerm;
@@ -329,6 +331,10 @@ public class Voucher {
 
     public String getExistingVoucher_10() {
         return existingVoucher;
+    }
+
+    public String getExistingVoucherForDistances() {
+        return existingVoucherForDistances;
     }
 
     @Override
