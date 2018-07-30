@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -22,6 +23,7 @@ import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Selenide.$$;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
@@ -69,12 +71,8 @@ public class Wait {
         return wrapShort(ExpectedConditions.invisibilityOfAllElements(Lists.newArrayList(element)));
     }
 
-    public static Boolean invisibilityOfElement(WebElement element){
-        try {
-            return wrapShort(ExpectedConditions.invisibilityOf(element));
-        }catch (NoSuchElementException e){
-            return true;
-        }
+    public static Boolean isElementNotPresent(By locator){
+        return $$(locator).size()==0;
     }
 
     public static Boolean invisibleOfElement(By locator) {

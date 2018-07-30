@@ -19,7 +19,8 @@ import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @EccPage
 public class CompleteClaimPage extends Page {
@@ -188,7 +189,7 @@ public class CompleteClaimPage extends Page {
 
     public class Asserts {
         public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
-            assertTrue("replacement button should not be visible", Wait.invisibleOfElement(replacementButtonByXpath));
+            assertThat(Wait.isElementNotPresent(replacementButtonByXpath)).as("replacement button should should not be present").isTrue();
             return this;
         }
 

@@ -70,6 +70,8 @@ public class ReplacementDialog extends BaseDialog {
     private By finishButtonByXpath = By.xpath("//span[@id='replacement-button-finish-btnIconEl']");
     private By itemsListByXpath = By.xpath("//span/div[contains(@id, 'replacementOptionsSection')]/div[.//b]");
     private By voucherFaceValueInputByXpath = By.xpath("//input[@name='faceValue']");
+    private By selectItemCheckboxByXpath = By.xpath("//td[contains(@class,'grid-cell-row-checker')]");
+    private By goToShopButtonByXpath = By.xpath("//span[@id='replacement-button-shop-btnEl']");
 
 
     public void closeReplacementDialog() {
@@ -156,12 +158,12 @@ public class ReplacementDialog extends BaseDialog {
         }
 
         public Asserts assertItemsListIsEmpty() {
-            assertThat(Wait.invisibilityOfElement(selectAllItemsCheckbox));
+            assertThat(Wait.isElementNotPresent(selectItemCheckboxByXpath)).as("there should not be items in the list").isTrue();
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
-            assertThat(Wait.invisibilityOfElement(goToShopButton));//timeout exception if fails
+            assertThat(Wait.isElementNotPresent(goToShopButtonByXpath)).as("goToShopButton should not be present").isTrue();
             return this;
         }
 
