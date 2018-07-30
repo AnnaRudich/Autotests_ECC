@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -21,7 +20,6 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForSpinnerToDisappear;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.AssertJUnit.assertTrue;
 
 public class ReplacementDialog extends BaseDialog {
 
