@@ -12,6 +12,8 @@ public enum FTSetting {
     USE_INTERNAL_NOTES("input[name=ftfunctionflag][value='2048']", CHECKBOX),
     SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON("input[name=ftfunctionflag][value='4096']", CHECKBOX),
     SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON("input[name=ftfunctionflag][value='8192']", CHECKBOX),
+    USE_REPLACEMENT_FROM_ME("input[name=ftfunctionflag][value='8388608']", CHECKBOX),
+    USE_REPLACEMENT_THROUGH_THE_SHOP("input[name=ftfunctionflag2][value='4096']", CHECKBOX),
     DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION("input[name=ftfunctionflag5][value='512']", CHECKBOX),
     ENABLE_DEPRECIATION_COLUMN("input[name=ftfunctionflag5][value='131072']", CHECKBOX),
     SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED("input[name=ftfunctionflag5][value='32768']", CHECKBOX),
@@ -30,6 +32,8 @@ public enum FTSetting {
     SHOW_NOT_CHEAPEST_CHOICE_POPUP("input[name=ftfunctionflag5][value='16384']", CHECKBOX),
     MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG("input[name=ftfunctionflag3][value='262144']", CHECKBOX),
     SUFFICIENT_DOCUMENTATION_CHECKBOX("input[name=ftfunctionflag5][value='8192']", CHECKBOX),
+    ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT("input[name=ftfunctionflag3][value='1048576']", CHECKBOX),
+    ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD("input[name=ftfunctionflag3][value='8388608']", CHECKBOX),
 
     //Settings for Self Service
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='1']", CHECKBOX),
@@ -46,6 +50,9 @@ public enum FTSetting {
     ALLOW_NONORDERABLE_PRODUCTS("select[name=ftnoselflags]", SELECT),
     NUMBER_BEST_FIT_RESULTS("input[name=ftnumberbestfitresults]", INPUT),
     USE_BRAND_LOYALTY_BY_DEFAULT("input[name=ftfunctionflag3][value='2048']", CHECKBOX),
+
+    //mail setting
+    ENABLE_ORDER_CONFIRMATION_EMAIL_TO_CUSTOMER_WHEN_SETTLEMENT_METHOD_IS_REPLACEMENT("input[name=ftfunctionflag3][value='524288']", CHECKBOX),
 
     //FTSetting for Comparison of Depreciation and Discount
     COMPARISON_OF_DISCOUNT_DEPRECATION("input[name=ftDnD2Related][value='1']", CHECKBOX),
@@ -65,7 +72,7 @@ public enum FTSetting {
     DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER("input[name='ftpaymentflag'][value='16384']", CHECKBOX),
     DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER("input[name='ftpaymentflag'][value='32768']", CHECKBOX),
 
-    CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX),
+    CPR_NUMBER_ON_REPLACEMENT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX),
 
     USE_NEW_REPLACEMENT_DIALOG("input[name='ftNewReplacementDialog'][value='1']", CHECKBOX);
 

@@ -147,7 +147,10 @@ public class ClaimItem {
     private String existingSubCat4;
     @XmlElement
     private String matchedText;
-
+    @XmlElement
+    private String categoryGroup1WithNotElectronicVoucher;
+    @XmlElement
+    private String categoryGroup2WithNotElectronicVoucher;
 
     public String getExistingCat4(){
         return existingCat4;
@@ -332,6 +335,14 @@ public class ClaimItem {
 
     public Double getNewPriceSP() {
         return newPriceSP;
+    }
+
+    public String getCategoryGroup1WithNotElectronicVoucher() {
+        return categoryGroup1WithNotElectronicVoucher;
+    }
+
+    public String getCategoryGroup2WithNotElectronicVoucher() {
+        return categoryGroup2WithNotElectronicVoucher;
     }
 
     public void setNewPriceSP(Double newPriceSP) {

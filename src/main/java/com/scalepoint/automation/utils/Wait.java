@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -22,6 +23,7 @@ import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Selenide.$$;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
@@ -42,6 +44,10 @@ public class Wait {
     public static void waitForAjaxCompleted() {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
+    }
+
+    public static void waitForSpinnerToDisappear(){
+        waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
     }
 
     public static void waitForPageLoaded() {
@@ -65,8 +71,8 @@ public class Wait {
         return wrapShort(ExpectedConditions.invisibilityOfAllElements(Lists.newArrayList(element)));
     }
 
-    public static Boolean invisibleOfElement(WebElement element){
-        return wrapShort(ExpectedConditions.invisibilityOf(element));
+    public static Boolean isElementNotPresent(By locator){
+        return $$(locator).size()==0;
     }
 
     public static Boolean invisibleOfElement(By locator) {
@@ -141,7 +147,7 @@ public class Wait {
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).ignoring(StaleElementReferenceException.class).until(condition);
-    }
+}
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);

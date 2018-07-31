@@ -135,7 +135,6 @@ public class SelfService2Tests extends BaseTest {
     new SettlementPage().findClaimLine(description)
             .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
   }
-
   @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
   @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
   @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)

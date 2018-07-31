@@ -8,7 +8,6 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -16,7 +15,6 @@ import com.scalepoint.automation.utils.data.entity.OrderDetails;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -279,7 +277,7 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  949.00
      */
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
-    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",
@@ -313,7 +311,7 @@ public class OrderDetailsTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
-    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_NOT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",

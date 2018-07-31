@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -189,14 +190,14 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page saveItem(){
         $("#save-item-button").click();
-        waitForSpinnerToDisappear();
+        Wait.waitForSpinnerToDisappear();
         return at(SelfService2Page.class);
     }
 
     public SelfService2Page startEditItem(){
         SelenideElement editItemButton = $(By.xpath("//span[@title='Rediger']"));
         editItemButton.click();
-        waitForSpinnerToDisappear();
+        Wait.waitForSpinnerToDisappear();
         return this;
     }
 
@@ -204,21 +205,21 @@ public class SelfService2Page extends Page {
         SelenideElement updateButton = $("#save-item-button");
         updateButton.shouldHave(Condition.text("Opdater genstand"));//could be also moved to xml. What should be the name of the object?
         updateButton.click();
-        waitForSpinnerToDisappear();
+        Wait.waitForSpinnerToDisappear();
         return this;
     }
 
     public SelfService2Page deleteItem(){
         SelenideElement deleteItem = $(By.xpath("//span[@title='Slet']"));
         deleteItem.shouldBe(Condition.visible).click();
-        waitForSpinnerToDisappear();
+        Wait.waitForSpinnerToDisappear();
         return this;
     }
 
     public SelfService2Page undoDelete(){
         SelenideElement undoDeleteButton = $(By.xpath("//span[contains(@class, 'undo-remove-button')]"));
         undoDeleteButton.click();
-        waitForSpinnerToDisappear();
+        Wait.waitForSpinnerToDisappear();
         return this;
     }
 
@@ -232,12 +233,6 @@ public class SelfService2Page extends Page {
         System.out.println(s);
         return s;
     }
-
-    public SelfService2Page waitForSpinnerToDisappear(){
-        waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
-        return this;
-    }
-
 
     public SelfService2Page doAssert(Consumer<SelfService2Page.Asserts> assertFunc) {
         assertFunc.accept(new Asserts());

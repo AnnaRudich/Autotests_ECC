@@ -277,6 +277,11 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public FormFiller withSubCategoryFromTheListByIndex(int index) {
+            sid.subCategory.select(index);
+            return this;
+        }
+
         public FormFiller withNewPrice(Double newPrice) {
             sid.setNewPrice(newPrice);
             return this;

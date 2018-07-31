@@ -6,12 +6,21 @@ import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import java.util.function.Consumer;
+
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @EccPage
 public class CompleteClaimPage extends Page {
@@ -64,6 +73,9 @@ public class CompleteClaimPage extends Page {
     @FindBy(id = "genlever")
     private Button replace;
 
+    @FindBy(xpath = "//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")
+    private Button goToShop;
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/matching_engine/enter_base_info.jsp";
@@ -76,6 +88,8 @@ public class CompleteClaimPage extends Page {
         waitForVisible(saveClaim);
         return this;
     }
+
+    By replacementButtonByXpath = By.id("genlever");
 
     public CompleteClaimPage fillClaimForm(Claim claim) {
         enterPhone(claim.getPhoneNumber()).
@@ -166,5 +180,18 @@ public class CompleteClaimPage extends Page {
     public ReplacementDialog openReplacementWizard() {
         replace.click();
         return BaseDialog.at(ReplacementDialog.class);
+    }
+
+    public CompleteClaimPage doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new Asserts());
+        return CompleteClaimPage.this;
+    }
+
+    public class Asserts {
+        public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
+            assertThat(Wait.isElementNotPresent(replacementButtonByXpath)).as("replacement button should should not be present").isTrue();
+            return this;
+        }
+
     }
 }

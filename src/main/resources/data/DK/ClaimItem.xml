@@ -13,6 +13,8 @@
     <existingCat2>Smykker</existingCat2>
     <existingCat3>Telefoni</existingCat3>
     <existingCat4>Tøj &amp; Sko</existingCat4>
+    <categoryGroup1WithNotElectronicVoucher>Personlig Pleje</categoryGroup1WithNotElectronicVoucher>
+    <categoryGroup2WithNotElectronicVoucher>Punge, Tasker &amp; Kufferter</categoryGroup2WithNotElectronicVoucher>
     <alkaCategory>Smykker, Ure &amp; Tilbehør</alkaCategory>
     <alkaSubCategory>Luksusure</alkaSubCategory>
     <alkaCategoryUnpublishedPolicy>Briller, Linser &amp; Hørelse</alkaCategoryUnpublishedPolicy>
