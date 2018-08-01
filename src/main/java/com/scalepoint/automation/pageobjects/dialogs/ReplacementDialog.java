@@ -44,9 +44,6 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(id = "replacementType3")
     private Button sendChequeButton;
 
-    @FindBy(xpath = "//div[contains(@class,'x-message-box')]//div[contains(@id,'messagebox')]//span[contains(@id,'button')][1]")
-    private WebElement closeButton;
-
     @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
     private WebElement goToShopButton;
 
@@ -70,6 +67,7 @@ public class ReplacementDialog extends BaseDialog {
     private By voucherFaceValueInputByXpath = By.xpath("//input[@name='faceValue']");
     private By selectItemCheckboxByXpath = By.xpath("//td[contains(@class,'grid-cell-row-checker')]");
     private By goToShopButtonByXpath = By.xpath("//span[@id='replacement-button-shop-btnEl']");
+    private By closeButtonByXpath = By.xpath("//div[contains(@class,'x-message-box')]//div[contains(@id,'messagebox')]//span[contains(@id,'button')][1]");
 
 
     public void closeReplacementDialog() {
@@ -99,7 +97,7 @@ public class ReplacementDialog extends BaseDialog {
         $(nextButtonByXpath).click();
         sendChequeButton.click();
         $(finishButtonByXpath).click();
-        closeButton.click();
+        $(closeButtonByXpath).click();
         return Page.at(CustomerDetailsPage.class);
     }
 
@@ -113,7 +111,7 @@ public class ReplacementDialog extends BaseDialog {
         $(nextButtonByXpath).click();
         $(finishButtonByXpath).click();
         Wait.waitForVisible(cancelButton);
-        closeButton.click();
+        $(closeButtonByXpath).click();
         return Page.at(CustomerDetailsPage.class);
     }
 
