@@ -1337,6 +1337,12 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertCashCompensationIsNotDepreciated(Valuation valuation, Double expectedNotDepreciatedValue) {
+            ValuationRow valuationRow = parseValuationRow(valuation);
+            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), expectedNotDepreciatedValue);
+            return this;
+        }
+
         public Asserts assertIsLowestPriceValuationSelected(Valuation... valuations) {
             List<ValuationRow> valuationRows = new ArrayList<>();
             Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
