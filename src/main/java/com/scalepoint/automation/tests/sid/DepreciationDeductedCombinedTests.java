@@ -48,7 +48,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
             Constants.DEPRECIATION_10
     );
 
-    @Bug(bug = "CHARLIE-417,CHARLIE-772")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
@@ -58,7 +57,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, false);
     }
 
-    @Bug(bug = "CHARLIE-417")
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)

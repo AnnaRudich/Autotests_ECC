@@ -8,6 +8,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.FtSettingsByDefault;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -79,9 +80,9 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER);
                 });
     }
-
+    @FtSettingsByDefault(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if new price is discounted")
+    @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if new price, customer demand are discounted")
     public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
@@ -101,6 +102,27 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                     asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE,
                             USED_PRICE, CUSTOMER_DEMAND);
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
+    @RequiredSetting(type=FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND)
+    @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if customer demand is not discounted. FT Do not depreciate CD is on")
+    public void charlie586_addManually_DoNotDepreciateCustomerDemandIsOn(User user, Claim claim, ClaimItem claimItem) {
+
+        Double initialCustomerDemand = claimItem.getCustomerDemand();
+
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .setNewPrice(claimItem.getTrygNewPrice())
+                .setCustomerDemand(initialCustomerDemand)
+                .setDescription(claimItem.getTextFieldSP())
+                .setDepreciation(deprecationValue)
+                .doAssert(asserts -> {
+                    asserts.assertCashCompensationIsDepreciated(deprecationValue, NEW_PRICE);
+                    asserts.assertCashCompensationIsNotDepreciated(CUSTOMER_DEMAND, initialCustomerDemand);
+                    asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
+                    asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE, CUSTOMER_DEMAND);
                 });
     }
 
