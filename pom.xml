@@ -167,6 +167,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
                     <systemPropertyVariables>
                         <buildInfo>${buildInfo}</buildInfo>
                         <usedTestSuite>${suiteXmlFile}</usedTestSuite>
@@ -182,6 +183,13 @@
                         -Xmx2048m
                         -XX:-UseGCOverheadLimit
                     </argLine>
+
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>ru.yandex.qatools.allure.testng.AllureTestListener</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
 
