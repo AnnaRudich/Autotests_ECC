@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.types.SortType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Configuration.browser;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -59,7 +62,11 @@ public class MailsPage extends BaseClaimPage {
     @Override
     public MailsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompleted();
+        String currentUrl = Browser.driver().getCurrentUrl();
+        if(currentUrl.contains("&amp;")){
+            Browser.driver().get(currentUrl.replace("&amp;","&"));
+        }
+        waitForVisible(latestMailSubject);
         return this;
     }
 
