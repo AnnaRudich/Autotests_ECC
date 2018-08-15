@@ -295,7 +295,7 @@ public interface Actions {
 
     default void clickUsingJsIfSeleniumClickReturnError(WebElement element) {
         try {
-            $(element).click();
+            element.click();
         }catch (Exception e){
             clickElementUsingJS(element);
         }
