@@ -61,6 +61,7 @@ public class OrderDetailsPage extends Page {
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
+        replaceAmpInUrl();
         return this;
     }
 

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
@@ -48,6 +49,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
 import static com.scalepoint.automation.utils.Wait.forCondition;
@@ -861,7 +863,7 @@ public class SettlementDialog extends BaseDialog {
         By xpath = By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td");
         Wait.waitForStaleElement(xpath);
         waitForAjaxCompleted();
-        List<WebElement> elements = waitForStaleElements(xpath);
+        ElementsCollection elements = $$(xpath);
         for (WebElement td : elements) {
             String attribute = td.getAttribute("data-columnid");
             switch (ValuationGridColumn.getColumn(attribute)) {
@@ -957,7 +959,7 @@ public class SettlementDialog extends BaseDialog {
         public ValuationRow makeActive() {
             if (!isChecked()) {
                 //one click doesn't work, each click renew dom so we should wait for stale element each time
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 2; i++) {
                     Wait.waitForStaleElement(xpath);
                     webElement = driver.findElement(xpath);
                     clickUsingJsIfSeleniumClickReturnError(webElement);
