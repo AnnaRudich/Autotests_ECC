@@ -62,10 +62,7 @@ public class MailsPage extends BaseClaimPage {
     @Override
     public MailsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        String currentUrl = Browser.driver().getCurrentUrl();
-        if(currentUrl.contains("&amp;")){
-            Browser.driver().get(currentUrl.replace("&amp;","&"));
-        }
+        replaceAmpInUrl();
         waitForVisible(latestMailSubject);
         return this;
     }

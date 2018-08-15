@@ -312,5 +312,12 @@ public interface Actions {
             doubleClickElementUsingJS(element);
         }
     }
+
+    default void replaceAmpInUrl(){
+        String currentUrl = Browser.driver().getCurrentUrl();
+        if(currentUrl.contains("&amp;")){
+            Browser.driver().get(currentUrl.replace("&amp;","&"));
+        }
+    }
 }
 

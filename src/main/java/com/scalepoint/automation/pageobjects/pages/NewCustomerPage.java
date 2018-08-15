@@ -97,6 +97,7 @@ public class NewCustomerPage extends Page {
     }
 
     public NewCustomerPage selectPolicyType(int index) {
+        waitForVisible(policyType);
         policyType.selectByIndex(index);
         return this;
     }
