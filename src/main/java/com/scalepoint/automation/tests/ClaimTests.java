@@ -14,15 +14,12 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -143,8 +140,6 @@ public class ClaimTests extends BaseTest {
     IC Validation code should be = topdanmark always
     Product should not be Iphone to have APPROVED line
      */
-
-    @RunOn(value = DriverType.IE_REMOTE)
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approves claim")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)

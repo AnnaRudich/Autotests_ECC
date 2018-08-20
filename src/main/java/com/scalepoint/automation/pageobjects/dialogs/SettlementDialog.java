@@ -579,7 +579,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private void clickAndWait(By buttonBy, WebElement button) {
-        button.click();
+        clickUsingJsIfSeleniumClickReturnError(button);
         Wait.waitElementDisappeared(buttonBy);
     }
 
