@@ -19,6 +19,18 @@
             </activation>
         </profile>
         <profile>
+            <id>QA-HA01</id>
+            <properties>
+                <activatedProperties>qa-ha</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
+            <id>QA-HA02</id>
+            <properties>
+                <activatedProperties>qa-ha</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>QA01</id>
             <properties>
                 <activatedProperties>qa01</activatedProperties>
