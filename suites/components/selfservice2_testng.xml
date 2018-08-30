@@ -1,11 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="SelfService 2.0" configfailurepolicy="continue" parallel="methods" thread-count="9">
     <test verbose="1" name="SelfService 2.0" group-by-instances="false" enabled="true" preserve-order="true">
-        <!--more SS related mails should be covered by autotests
-        CHARLIE-503 SS2.0 auto-import
-        CHARLIE-735 SS 2.0 GUI check list
-        CHARLIE-732 SS 2.0 search-->
         <classes>
+            <class name="com.scalepoint.automation.tests.SelfService2Tests"/>
             <class name="com.scalepoint.automation.tests.eccCwaIntegration.EccIntegrationsWithCwaClaimSSTests"/>
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
