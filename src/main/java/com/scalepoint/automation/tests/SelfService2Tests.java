@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.selfService2.LogOutSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -242,4 +243,23 @@ public class SelfService2Tests extends BaseTest {
       asserts.assertItemIsPresent(description);
     });
   }
-}
+
+  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+  @Test(dataProvider = "testDataProvider",
+          description = "CHARLIE-735 SelfService_2.0: Add line with documentation")
+  public void selfService2LogOutAndLogInBack(User user, Claim claim) {
+    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+            .requestSelfService(claim, Constants.PASSWORD)
+            .toMailsPage()
+            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+            .findSelfServiceNewLinkAndOpenIt()
+            .login(Constants.PASSWORD);
+    new LogOutSelfService2Page().logOut().
+            login(Constants.PASSWORD);
+  }
+
+
+  }
