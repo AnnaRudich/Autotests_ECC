@@ -126,7 +126,6 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 });
     }
 
-    @RunOn(DriverType.IE_REMOTE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is lower than voucher discount correct item is selected")
