@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -51,6 +50,8 @@ public class SelfService2Page extends Page {
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
 
+    By logOutButtonXpath = By.xpath(".//div[@class='log-out']//input[@value='Log ud']");
+
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
@@ -60,6 +61,12 @@ public class SelfService2Page extends Page {
     @Override
     protected String getRelativeUrl() {
         return "self-service/dk";
+    }
+
+    public LoginSelfService2Page logOut() {
+        $(logOutButtonXpath).click();
+        Wait.waitForLoaded();
+        return at(LoginSelfService2Page.class);
     }
 
     private void waitForValidationMark(WebElement element){

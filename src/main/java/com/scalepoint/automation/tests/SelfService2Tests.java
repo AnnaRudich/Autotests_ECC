@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -241,5 +242,20 @@ public class SelfService2Tests extends BaseTest {
     new SettlementPage().doAssert(asserts -> {
       asserts.assertItemIsPresent(description);
     });
+  }
+
+
+  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+  @Test(dataProvider = "testDataProvider",
+          description = "SelfService2 logOut")
+  public void selfService2LogOut(User user, Claim claim) {
+    loginAndCreateClaim(user, claim)
+            .requestSelfService(claim, Constants.PASSWORD)
+            .toMailsPage()
+            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+            .findSelfServiceNewLinkAndOpenIt()
+            .login(Constants.PASSWORD)
+            .logOut()
+            .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
   }
 }
