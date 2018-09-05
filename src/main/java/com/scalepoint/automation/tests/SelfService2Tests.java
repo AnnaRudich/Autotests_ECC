@@ -255,9 +255,7 @@ public class SelfService2Tests extends BaseTest {
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
             .login(Constants.PASSWORD)
-            .logOut();
-
-    new LoginSelfService2Page()
+            .logOut()
             .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
   }
 }
