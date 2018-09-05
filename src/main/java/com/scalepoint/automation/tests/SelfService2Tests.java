@@ -2,17 +2,19 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.pageobjects.pages.selfService2.LogOutSelfService2Page;
+import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Acquired;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -244,22 +246,20 @@ public class SelfService2Tests extends BaseTest {
     });
   }
 
+
   @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
   @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Add line with documentation")
-  public void selfService2LogOutAndLogInBack(User user, Claim claim) {
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+          description = "SelfService2 logOut")
+  public void selfService2LogOut(User user, Claim claim) {
+    loginAndCreateClaim(user, claim)
             .requestSelfService(claim, Constants.PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD);
-    new LogOutSelfService2Page().logOut().
-            login(Constants.PASSWORD);
-  }
+            .login(Constants.PASSWORD)
+            .logOut();
 
-
+    new LoginSelfService2Page()
+            .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
   }
+}

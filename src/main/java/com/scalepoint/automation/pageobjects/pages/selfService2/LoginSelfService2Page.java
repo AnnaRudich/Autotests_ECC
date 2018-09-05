@@ -5,7 +5,12 @@ import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginSelfService2Page extends Page {
 
@@ -28,10 +33,23 @@ public class LoginSelfService2Page extends Page {
         return this;
     }
 
-    public SelfService2Page login(String password){
+    public SelfService2Page login(String password) {
         sendKeys(this.passwordField, password);
         this.login.click();
         Wait.waitForLoaded();
         return at(SelfService2Page.class);
+    }
+
+
+    public LoginSelfService2Page doAssert(Consumer<LoginSelfService2Page.Asserts> assertFunc) {
+        assertFunc.accept(new LoginSelfService2Page.Asserts());
+        return this;
+    }
+
+    public class Asserts {
+        public Asserts assertLogOutIsSuccessful() {
+            assertThat(isDisplayed(login)).as("login form should be displayed").isTrue();
+            return this;
+        }
     }
 }
