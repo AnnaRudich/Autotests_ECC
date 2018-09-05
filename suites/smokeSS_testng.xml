@@ -9,7 +9,7 @@
                 </methods>
             </class>
 
-            <class name="com.scalepoint.automation.tests.SelfServiceTest">
+            <class name="com.scalepoint.automation.tests.selfservice.SelfServiceTest">
                 <methods>
                     <include name="charlie504_submitLine_autoImport"/>
 

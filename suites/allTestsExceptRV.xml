@@ -10,9 +10,7 @@
                 <exclude name="com.scalepoint.automation.tests.api"/>
                 <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
                 <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
-                <exclude name="com.scalepoint.automation.tests">
-                    <class name="SelfServiceTest"/>
-                </exclude>
+                <exclude name="com.scalepoint.automation.tests.selfservice"/>
             </package>
         </packages>
         <classes>
