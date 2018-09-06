@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<integration>
-    <simpleIntegrationFile>http://ECC-BUILD.spcph.local:8080/integration/get_integration.htm</simpleIntegrationFile>
-    <productIntegrationFile>http://ECC-BUILD.spcph.local:8080/integration/generic_xml_integration.htm</productIntegrationFile>
-    <scalepointDomainServer>scalepoint.com</scalepointDomainServer>
-    <companyNameIntegration>Integration</companyNameIntegration>
-</integration>

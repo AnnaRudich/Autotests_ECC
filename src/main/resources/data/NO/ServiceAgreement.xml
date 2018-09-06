@@ -44,7 +44,7 @@
 
     <!-->Templates<-->
     <defaultTemplateLoc>C:\Pictures\bw.jpg</defaultTemplateLoc>
-    <saveTemplateTo>\\ecc-build\Xlsm</saveTemplateTo>
+    <saveTemplateTo>rnvTemplates</saveTemplateTo>
     <templateSpecialName>!@#$%^&amp;*()_+[]{}'|\./,&gt;&lt; Name</templateSpecialName>
 
     <!-->Mails section<-->
