@@ -1,16 +1,4 @@
 <?xml version="1.0"?>
 <attachmentFiles>
-    <jpgFile>attachments/bw.jpg</jpgFile>
     <jpgFile2>attachments/bw1.jpg</jpgFile2>
-    <pdfFile>attachments/TEMPLATE.pdf</pdfFile>
-    <txtFile>attachments/oneLineFile.txt</txtFile>
-    <pngFile>attachments/a.png</pngFile>
-    <jpegFile>attachments/lion.jpeg</jpegFile>
-    <bmpFile>attachments/disney.bmp</bmpFile>
-    <gifFile>attachments/batman.gif</gifFile>
-    <xlsFile>attachments/excel.xls</xlsFile>
-    <bigFile>attachments/full.pdf</bigFile>
-    <filesFolder>\\ecc-build\AutotestsFiles\Attachments\</filesFolder>
-    <downloadAttachmentsFolder>\\ecc-build\AutotestsFiles\Downloads\Files</downloadAttachmentsFolder>
-    <downloadRnVFilesFolder>\\ecc-build\AutotestsFiles\Downloads\RnV</downloadRnVFilesFolder>
 </attachmentFiles>

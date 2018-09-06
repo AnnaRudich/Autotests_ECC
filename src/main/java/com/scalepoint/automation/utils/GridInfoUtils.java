@@ -13,7 +13,7 @@ public class GridInfoUtils {
     public static String getGridNodeName(SessionId sessionId) {
         String nodeAddress;
         try {
-            nodeAddress = given().baseUri(TestData.getLinks().getHubLink())
+            nodeAddress = given().baseUri(Configuration.getHubRemote().replace("/wd/hub",""))
                     .basePath("/grid/api/testsession")
                     .queryParam("session", sessionId.toString())
                     .when().get()

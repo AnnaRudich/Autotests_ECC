@@ -16,8 +16,6 @@ import com.scalepoint.automation.utils.data.entity.Errors;
 import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
-import com.scalepoint.automation.utils.data.entity.Integration;
-import com.scalepoint.automation.utils.data.entity.Links;
 import com.scalepoint.automation.utils.data.entity.Mail;
 import com.scalepoint.automation.utils.data.entity.Notifications;
 import com.scalepoint.automation.utils.data.entity.OrderDetails;
@@ -64,10 +62,6 @@ public class TestData {
 
     public static Supplier getSupplier() {
         return (Supplier) getData(Data.SUPPLIER);
-    }
-
-    public static Links getLinks() {
-        return (Links) getData(Data.LINKS);
     }
 
     public static Shop getShop() {
@@ -128,10 +122,6 @@ public class TestData {
 
     public static GenericItem getGenericItem() {
         return (GenericItem) getData(Data.GENERICITEM);
-    }
-
-    public static Integration getIntegration() {
-        return (Integration) getData(Data.INTEGRATION);
     }
 
     public static DepreciationType getDepreciationType() {
@@ -267,7 +257,6 @@ public class TestData {
     public enum Data {
         EXISTING_SUPPLIER("ExistingSuppliers.xml", ExistingSuppliers.class),
         SUPPLIER("Supplier.xml", Supplier.class),
-        LINKS("Links.xml", Links.class),
         SHOP("Shop.xml", Shop.class),
         VOUCHER("Voucher.xml", Voucher.class),
         SYSTEMCREDENTIALS("ExistingUsers.xml", ExistingUsers.class),
@@ -283,7 +272,6 @@ public class TestData {
         ERRORS("Errors.xml", Errors.class),
         NOTIFICATIONS("Notifications.xml", Notifications.class),
         GENERICITEM("GenericItem.xml", GenericItem.class),
-        INTEGRATION("Integration.xml", Integration.class),
         PASSWORDVERIFICATION("PasswordsVerification.xml", PasswordsVerification.class),
         DEPRECIATIONTYPE("DepreciationType.xml", DepreciationType.class),
         RRLINEFIELDS("RRLinesFields.xml", RRLinesFields.class),
