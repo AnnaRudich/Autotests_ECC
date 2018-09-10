@@ -34,7 +34,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
         super(executor);
     }
 
-    private FTSettings.ComparingResult findDifferences(Integer functionalTemplateId, FtOperation... operations) {
+    public FTSettings.ComparingResult findDifferences(Integer functionalTemplateId, FtOperation... operations) {
         try {
             Content content = post(Page.getUrl(EditFunctionTemplatePage.class, functionalTemplateId), executor).returnContent();
             Document doc = Jsoup.parse(content.asString());

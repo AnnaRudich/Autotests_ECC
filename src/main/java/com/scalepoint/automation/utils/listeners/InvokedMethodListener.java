@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.listeners;
 
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.ex.InvalidStateException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
@@ -10,6 +11,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
+import com.scalepoint.automation.utils.annotations.FtSettingsByDefault;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -45,6 +47,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 logger.info("Start from: " + SystemUtils.getHostname());
                 gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
                 logger.info("Running on grid node: " + gridNode);
+                checkSettingsByDefault(invokedMethod, iTestResult,findMethodParameter(iTestResult, User.class).get());
                 retryUpdateFtTemplate(invokedMethod, iTestResult);
             }
         }
@@ -122,6 +125,38 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 + "_" + method.getName();
     }
 
+    private void checkSettingsByDefault(IInvokedMethod invokedMethod, ITestResult iTestResult, User user){
+        List<FtOperation> ftOperations = new ArrayList<>();
+
+        List<FtSettingsByDefault> allSettings = getAllDefaultSettings(invokedMethod.getTestMethod());
+
+        if (allSettings.isEmpty()) {
+            return;
+        }
+
+        for (FtSettingsByDefault setting : allSettings) {
+            FTSetting settingType = setting.type();
+            switch (settingType.getOperationType()) {
+                case CHECKBOX:
+                    ftOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                    break;
+                case INPUT:
+                    ftOperations.add(FTSettings.setValue(settingType, setting.value()));
+                    break;
+                case SELECT:
+                    ftOperations.add(FTSettings.select(settingType, setting.value()));
+            }
+        }
+
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
+        FTSettings.ComparingResult comparingResult = functionalTemplatesApi.findDifferences(user.getFtId(), ftOperations.toArray(new FtOperation[0]));
+
+        if(!comparingResult.hasSameStateAsRequested()){
+            comparingResult.getDifferedOperations().forEach(operation -> logger.error("Ft is in different state: " + operation));
+            throw new InvalidStateException("Default Settings are not set correctly");
+        }
+    }
+
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
         List<FtOperation> ftOperations = new ArrayList<>();
 
@@ -161,6 +196,33 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         if (e != null) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    private List<FtSettingsByDefault> getAllDefaultSettings(ITestNGMethod testMethod) {
+        List<FtSettingsByDefault> requiredSettings = new ArrayList<>();
+        Set<FTSetting> methodSettings = new HashSet<>();
+
+        Class realClass = testMethod.getRealClass();
+        Method method = testMethod.getConstructorOrMethod().getMethod();
+
+        FtSettingsByDefault[] methodAnnotations = method.getDeclaredAnnotationsByType(FtSettingsByDefault.class);
+        if (methodAnnotations != null) {
+            Arrays.stream(methodAnnotations).
+                    forEach(annotation -> {
+                        methodSettings.add(annotation.type());
+                        requiredSettings.add(annotation);
+                    });
+        }
+
+        FtSettingsByDefault[] classAnnotations = (FtSettingsByDefault[]) realClass.getDeclaredAnnotationsByType(FtSettingsByDefault.class);
+        if (classAnnotations != null) {
+            Arrays.stream(classAnnotations).
+                    filter(classAnnotation -> !methodSettings.contains(classAnnotation.type())).
+                    forEach(requiredSettings::add);
+        }
+
+
+        return requiredSettings;
     }
 
     private List<RequiredSetting> getAllSettings(ITestNGMethod testMethod) {
