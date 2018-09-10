@@ -2,34 +2,7 @@ package com.scalepoint.automation.utils.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.Acquired;
-import com.scalepoint.automation.utils.data.entity.Assignment;
-import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
-import com.scalepoint.automation.utils.data.entity.Category;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
-import com.scalepoint.automation.utils.data.entity.ClaimStates;
-import com.scalepoint.automation.utils.data.entity.DepreciationType;
-import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
-import com.scalepoint.automation.utils.data.entity.Errors;
-import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
-import com.scalepoint.automation.utils.data.entity.GenericItem;
-import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
-import com.scalepoint.automation.utils.data.entity.Mail;
-import com.scalepoint.automation.utils.data.entity.Notifications;
-import com.scalepoint.automation.utils.data.entity.OrderDetails;
-import com.scalepoint.automation.utils.data.entity.PasswordsVerification;
-import com.scalepoint.automation.utils.data.entity.PriceRule;
-import com.scalepoint.automation.utils.data.entity.RRLinesFields;
-import com.scalepoint.automation.utils.data.entity.ReductionRule;
-import com.scalepoint.automation.utils.data.entity.Roles;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
-import com.scalepoint.automation.utils.data.entity.Shop;
-import com.scalepoint.automation.utils.data.entity.Supplier;
-import com.scalepoint.automation.utils.data.entity.SystemUser;
-import com.scalepoint.automation.utils.data.entity.TextSearch;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
@@ -160,27 +133,29 @@ public class TestData {
         return (DiscretionaryReason) getData(Data.DISCRETIONARYREASON);
     }
 
-    public static ClaimRequest getClaimRequest(){
+    public static ClaimRequest getClaimRequest() {
         return (ClaimRequest) getData(Data.CWA_CLAIM);
     }
 
-    public static Assignment getAssignment(){ return (Assignment) getData(Data.ASSIGNMENT); }
+    public static Assignment getAssignment() {
+        return (Assignment) getData(Data.ASSIGNMENT);
+    }
 
     public static InsertSettlementItem getInsertSettlementItem() {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
     }
 
-    public static Acquired getAcquired(){
+    public static Acquired getAcquired() {
         return (Acquired) getData(Data.ACQUIRED);
     }
 
-    public static EccIntegration getEccIntegration(){
-        return  (EccIntegration) getData(Data.ECC_INTEGRATION);
+    public static EccIntegration getEccIntegration() {
+        return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
     public static Map<Character, String> getClaimStates() {
         Map<Character, String> states = new HashMap<>();
-        ((ClaimStates)Objects.requireNonNull(getData(Data.CLAIM_STATE))).getClaimStates().forEach(state -> states.put(state.getState(), state.getName()));
+        ((ClaimStates) Objects.requireNonNull(getData(Data.CLAIM_STATE))).getClaimStates().forEach(state -> states.put(state.getState(), state.getName()));
         return states;
     }
 
@@ -194,12 +169,11 @@ public class TestData {
         Object resultObject;
         InputStream inputStream = TestData.class.getClassLoader().getResourceAsStream(filePath);
         try {
-            if(data.fileName.endsWith(".xml")) {
+            if (data.fileName.endsWith(".xml")) {
                 resultObject = data.context.createUnmarshaller().unmarshal(inputStream);
-            }
-            else if(data.fileName.endsWith(".json")){
+            } else if (data.fileName.endsWith(".json")) {
                 resultObject = new ObjectMapper().readValue(inputStream, data.dataClass);
-            }else{
+            } else {
                 throw new IOException("File should be xml or json, file is not valid " + filePath);
             }
             preprocess(resultObject, buildParams());
@@ -217,8 +191,8 @@ public class TestData {
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
             marshaller.marshal(object, sw);
-        }catch (JAXBException exception){
-           log.error(exception.getMessage());
+        } catch (JAXBException exception) {
+            log.error(exception.getMessage());
         }
         return sw.toString();
     }
@@ -284,8 +258,8 @@ public class TestData {
         DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
         CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
-        CLAIM_ITEM("Claim/ClaimItem.xml",InsertSettlementItem.class),
-        ECC_INTEGRATION("Claim/EccIntegration.xml",EccIntegration.class),
+        CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
+        ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATE("ClaimState.json", ClaimStates.class),
         ACQUIRED("Acquired.xml", Acquired.class);
 
@@ -296,7 +270,7 @@ public class TestData {
         Data(String filePath, Class dataClass) {
             this.fileName = filePath;
             try {
-                if(fileName.endsWith(".xml")) {
+                if (fileName.endsWith(".xml")) {
                     this.context = JAXBContext.newInstance(dataClass);
                 }
                 this.dataClass = dataClass;

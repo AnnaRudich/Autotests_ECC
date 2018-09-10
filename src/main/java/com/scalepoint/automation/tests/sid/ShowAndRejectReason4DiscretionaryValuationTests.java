@@ -7,7 +7,6 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.FtSettingsByDefault;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -176,7 +175,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Verify the reason's representation for different valuations.
      * THEN: Selected reason is displayed for all valuation types with enable state except of the voucher valuation
      */
-    @FtSettingsByDefault(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false)
+    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false, isDefault = true)
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")

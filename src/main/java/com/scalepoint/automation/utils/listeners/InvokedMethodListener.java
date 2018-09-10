@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.listeners;
 
 import com.codeborne.selenide.Selenide;
+import com.scalepoint.automation.exceptions.InvalidFtOperationException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
@@ -58,6 +59,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             try {
                 updateTemplate(invokedMethod, iTestResult);
                 break;
+            } catch (InvalidFtOperationException e){
+                throw e;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 logger.error("Next attempt");
@@ -124,6 +127,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
         List<FtOperation> ftOperations = new ArrayList<>();
+        List<FtOperation> defaultFtOperations = new ArrayList<>();
 
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
@@ -135,16 +139,42 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             FTSetting settingType = setting.type();
             switch (settingType.getOperationType()) {
                 case CHECKBOX:
-                    ftOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                    if (setting.isDefault()) {
+                        defaultFtOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                    } else {
+                        ftOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                    }
                     break;
                 case INPUT:
-                    ftOperations.add(FTSettings.setValue(settingType, setting.value()));
+                    if (setting.isDefault()) {
+                        defaultFtOperations.add(FTSettings.setValue(settingType, setting.value()));
+                    } else {
+                        ftOperations.add(FTSettings.setValue(settingType, setting.value()));
+                    }
                     break;
                 case SELECT:
-                    ftOperations.add(FTSettings.select(settingType, setting.value()));
+                    if (setting.isDefault()) {
+                        defaultFtOperations.add(FTSettings.select(settingType, setting.value()));
+                    } else {
+                        ftOperations.add(FTSettings.select(settingType, setting.value()));
+                    }
             }
         }
 
+        checkDefaultSettings(user, defaultFtOperations);
+        updateFtTemplateWithRequiredSettings(user, ftOperations, iTestResult);
+    }
+
+    private void checkDefaultSettings(User user, List<FtOperation> ftOperations){
+        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
+        FTSettings.ComparingResult comparingResult = functionalTemplatesApi.findDifferences(user.getFtId(), ftOperations.toArray(new FtOperation[0]));
+
+        if(!comparingResult.hasSameStateAsRequested()){
+            throw new InvalidFtOperationException(comparingResult.getDifferedOperations());
+        }
+    }
+
+    private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations, ITestResult iTestResult){
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
 
