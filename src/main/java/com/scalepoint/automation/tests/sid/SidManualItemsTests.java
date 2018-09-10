@@ -12,15 +12,12 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
-import com.scalepoint.automation.utils.annotations.FtSettingsByDefault;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -111,10 +108,9 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: Amount of depreciation is shown at the bottom of SID
      * THEN: Depreciation percent is shown on the settlement page after saving SID
      */
-    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify a manual depreciation can be entered into the field Depreciation")
-    @FtSettingsByDefault(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false)
+    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false, isDefault = true)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)

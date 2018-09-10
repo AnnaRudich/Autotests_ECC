@@ -14,6 +14,11 @@ public @interface RequiredSetting {
     FTSetting type();
     String value() default UNDEFINED;
     boolean enabled() default true;
+
+    /**
+     * this filed is used to mark FT settings which are expected to be set by default and not to be set by test
+     */
+    boolean isDefault() default false;
 }
 
 
