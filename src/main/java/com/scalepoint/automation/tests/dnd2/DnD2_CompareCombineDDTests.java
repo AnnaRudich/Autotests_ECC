@@ -44,7 +44,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(productInfo.getModel())
+                .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
