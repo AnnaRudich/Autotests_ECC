@@ -177,6 +177,10 @@ public class Wait {
         return element;
     }
 
+    public static  WebElement waitForVisible(By by){
+        return waitForVisible(Browser.driver().findElement(by));
+    }
+
     public static WebElement waitForVisible(WebElement element) {
         wrap(visibilityOf(element));
         return element;
