@@ -26,7 +26,8 @@ public class ClaimOperationsMenu extends Module {
     }
 
     public AddGenericItemDialog addGenericItem() {
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(addGenericItemBtn)).click();
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(addGenericItemBtn));
+        clickUsingJsIfSeleniumClickReturnError(addGenericItemBtn);
         return BaseDialog.at(AddGenericItemDialog.class);
     }
 

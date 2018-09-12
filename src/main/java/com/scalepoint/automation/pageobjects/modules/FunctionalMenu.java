@@ -23,7 +23,7 @@ public class FunctionalMenu extends Module {
     private Button importExcel;
 
     public void findInCatalogue() {
-        findInCatalogue.click();
+        clickUsingJsIfSeleniumClickReturnError(findInCatalogue);
     }
 
     public SettlementDialog addManually() {
