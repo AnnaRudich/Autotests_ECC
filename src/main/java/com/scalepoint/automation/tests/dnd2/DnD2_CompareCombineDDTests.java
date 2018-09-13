@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.dnd2;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -13,6 +14,7 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -131,9 +133,13 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()));
-        settlementDialog.setNewPrice(claimItem.getTrygNewPrice())
+        SettlementPage settlementPage = settlementDialog.setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(settlementDialog.getVoucherPercentage()/2)
+                .closeSidWithOk();
+                Browser.driver().navigate().refresh();
+                settlementPage.parseFirstClaimLine()
+                        .editLine()
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage()/2, NEW_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
