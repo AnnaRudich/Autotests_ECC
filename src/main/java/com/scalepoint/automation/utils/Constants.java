@@ -34,5 +34,5 @@ public class Constants {
         return SUPPLIER_FOR_VOUCHERAGREEMENTS.replace("$CompanyId", user.getCompanyId().toString());
     }
 
-    protected static final UserAddEditPage.UserType[] ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
+    public static final UserAddEditPage.UserType[] ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
 }
