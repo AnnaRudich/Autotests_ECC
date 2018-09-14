@@ -19,9 +19,9 @@ public class AddShopDialog extends BaseDialog {
         RNV
     }
 
-    private static final String createShopButtonXpath = "//a[contains(@class,'supplier-create-shop-btn')]";
-    private static final String updateShopButtonXpath = "//a[contains(@class,'supplier-save-shop-btn')]";
-    private static final String cancelButtonXpath = "//a[contains(@class,'supplier-cancel-edit-shop-btn')]";
+    private static final String SUPPLIER_CREATE_SHOP_BTN = "//a[contains(@class,'supplier-create-shop-btn')]";
+    private static final String SUPPLIER_SAVE_SHOP_BTN = "//a[contains(@class,'supplier-save-shop-btn')]";
+    private static final String SUPPLIER_CANCEL_EDIT_SHOP_BTN = "//a[contains(@class,'supplier-cancel-edit-shop-btn')]";
 
     @FindBy(xpath = "//label[contains(text(),'Name:')]")
     private WebElement nameLabel;
@@ -60,7 +60,7 @@ public class AddShopDialog extends BaseDialog {
     public SupplierDialog.ShopsTab createShop(Shop shop, ShopType shopType) {
         fillShopForm(shop);
         chooseShopType(shopType);
-        find(By.xpath(createShopButtonXpath)).click();
+        find(By.xpath(SUPPLIER_CREATE_SHOP_BTN)).click();
         return at(SupplierDialog.ShopsTab.class);
     }
 
@@ -82,12 +82,12 @@ public class AddShopDialog extends BaseDialog {
     public SupplierDialog.ShopsTab updateShop(Shop shop) {
         clearShopForm();
         fillShopForm(shop);
-        find(By.xpath(updateShopButtonXpath)).click();
+        find(By.xpath(SUPPLIER_SAVE_SHOP_BTN)).click();
         return at(SupplierDialog.ShopsTab.class);
     }
 
     public SupplierDialog.ShopsTab cancel() {
-        find(By.xpath(cancelButtonXpath)).click();
+        find(By.xpath(SUPPLIER_CANCEL_EDIT_SHOP_BTN)).click();
         return at(SupplierDialog.ShopsTab.class);
     }
 

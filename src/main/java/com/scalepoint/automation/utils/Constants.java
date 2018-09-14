@@ -10,7 +10,7 @@ import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.
 public class Constants {
 
     public static final String TEXT_LINE = "AutomatedTest-ClaimLine";
-    public static final String PASSWORD = "12341234";
+    public static final String DEFAULT_PASSWORD = "12341234";
 
     public static final String APRIL = "Apr";
     public static final String JANUARY = "Jan";
@@ -34,5 +34,5 @@ public class Constants {
         return SUPPLIER_FOR_VOUCHERAGREEMENTS.replace("$CompanyId", user.getCompanyId().toString());
     }
 
-    public static final UserAddEditPage.UserType[] ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
+    protected static final UserAddEditPage.UserType[] ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
 }

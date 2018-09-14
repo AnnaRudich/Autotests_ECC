@@ -12,7 +12,7 @@ public class EccSettlementSummaryService extends BaseService{
 
     private final String SUBTOTAL_CASH_PAYOUT_VALUE = "subtotalCashPayoutValue";
 
-    public ValidatableResponse response;
+    private ValidatableResponse response;
 
     public EccSettlementSummaryService getSummaryTotals(){
         response = given().baseUri(getEccUrl()).log().all()

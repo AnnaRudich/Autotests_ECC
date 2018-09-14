@@ -244,34 +244,37 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public class Asserts {
+
+            public static final String VALUE = "value";
+
             public GeneralTab.Asserts assertLogoPresent() {
                 assertTrue(JavascriptHelper.isImagePresent(driver.findElement(By.className("imageUploadImg"))));
                 return this;
             }
 
             public Asserts assertCvr(String cvrValue) {
-                Assert.assertEquals(cvr.getAttribute("value"), cvrValue);
+                Assert.assertEquals(cvr.getAttribute(VALUE), cvrValue);
                 return this;
             }
 
             public Asserts assertAddress(String address1Value, String address2Value) {
-                Assert.assertEquals(address1.getAttribute("value"), address1Value);
-                Assert.assertEquals(address2.getAttribute("value"), address2Value);
+                Assert.assertEquals(address1.getAttribute(VALUE), address1Value);
+                Assert.assertEquals(address2.getAttribute(VALUE), address2Value);
                 return this;
             }
 
             public Asserts assertCity(String cityValue) {
-                Assert.assertEquals(waitForVisible(city).getAttribute("value"), cityValue);
+                Assert.assertEquals(waitForVisible(city).getAttribute(VALUE), cityValue);
                 return this;
             }
 
             public Asserts assertPostalCode(String postalCodeValue) {
-                Assert.assertEquals(postalCode.getAttribute("value"), postalCodeValue);
+                Assert.assertEquals(postalCode.getAttribute(VALUE), postalCodeValue);
                 return this;
             }
 
             public Asserts assertWebsite(String websiteValue) {
-                Assert.assertEquals(website.getAttribute("value"), websiteValue);
+                Assert.assertEquals(website.getAttribute(VALUE), websiteValue);
                 return this;
             }
 
@@ -348,6 +351,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
     public static class AgreementsTab extends BaseDialog implements SupplierTabs {
 
+        public static final String DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT = "//div[@id='supplierVouchersGridId']//div[text()='";
         @FindBy(xpath = "//td[contains(@class, 'agreementsPanelExclusiveId')]")
         private WebElement exclusiveGridCell;
 
@@ -399,7 +403,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public AgreementsTab doWithAgreement(String voucherAgreementName, ActionType actionType) {
-            By voucherRow = By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherAgreementName + "']/ancestor::tr");
+            By voucherRow = By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherAgreementName + "']/ancestor::tr");
             $(voucherRow).click();
 
             By actionButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
@@ -427,13 +431,13 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public class Asserts {
             public Asserts assertVoucherStatus(String voucherName, boolean active) {
-                By voucherRowActive = By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherName + "']/ancestor::tr//td[4]");
+                By voucherRowActive = By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherName + "']/ancestor::tr//td[4]");
                 assertEquals($(voucherRowActive).getText(), active ? "Yes" : "No");
                 return this;
             }
 
             public Asserts assertVoucherAbsent(String voucherName) {
-                Assert.assertFalse($(By.xpath("//div[@id='supplierVouchersGridId']//div[text()='" + voucherName + "']")).exists());
+                Assert.assertFalse($(By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherName + "']")).exists());
                 return this;
             }
 

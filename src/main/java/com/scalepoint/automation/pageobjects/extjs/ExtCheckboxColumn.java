@@ -1,10 +1,14 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class ExtCheckboxColumn extends ExtElement {
+
+    protected Logger log = LogManager.getLogger(ExtCheckboxColumn.class);
 
     private String checkboxFieldName;
     private String textFieldName;
@@ -40,7 +44,7 @@ public class ExtCheckboxColumn extends ExtElement {
         try {
             ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
             throw e;
         }
     }

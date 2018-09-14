@@ -6,7 +6,6 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -96,7 +95,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
                 .findLoginToShopLinkAndOpenIt()
-                .enterPassword(Constants.PASSWORD)
+                .enterPassword(Constants.DEFAULT_PASSWORD)
                 .login()
                 .doAssert(shopWelcomePage -> {
                     shopWelcomePage.assertProductCashValueIs(expectedCashValue);

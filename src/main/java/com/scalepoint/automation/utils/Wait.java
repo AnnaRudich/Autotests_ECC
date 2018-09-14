@@ -60,6 +60,7 @@ public class Wait {
         try {
             Thread.sleep(seconds * 1000L);
         } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
         }
     }
 

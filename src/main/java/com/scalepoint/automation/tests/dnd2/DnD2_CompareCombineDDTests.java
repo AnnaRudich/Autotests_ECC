@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
+import java.util.Objects;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
@@ -137,7 +138,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(settlementDialog.getVoucherPercentage()/2)
                 .closeSidWithOk();
-                Browser.driver().navigate().refresh();
+                Objects.requireNonNull(Browser.driver()).navigate().refresh();
                 settlementPage.parseFirstClaimLine()
                         .editLine()
                 .doAssert(asserts -> {
@@ -194,11 +195,11 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 //.enableAuditForIc(user.getCompanyName())
-                .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
+                .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
                 .addDescriptionWithOutSuggestions("test_product")
                 .selectCategory("Foto & Video")
                 .selectSubCategory("Videokamera")

@@ -12,7 +12,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
@@ -101,7 +100,7 @@ public class CompleteClaimPage extends Page {
     }
 
     public CompleteClaimPage fillClaimFormWithPassword(Claim claim) {
-        return fillClaimForm(claim).enterPassword(Constants.PASSWORD);
+        return fillClaimForm(claim).enterPassword(Constants.DEFAULT_PASSWORD);
     }
 
     public CompleteClaimPage enterPhone(String phone) {
@@ -168,7 +167,7 @@ public class CompleteClaimPage extends Page {
                 toMailsPage().
                 viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
                 findLoginToShopLinkAndOpenIt().
-                enterPassword(Constants.PASSWORD).
+                enterPassword(Constants.DEFAULT_PASSWORD).
                 login();
     }
 

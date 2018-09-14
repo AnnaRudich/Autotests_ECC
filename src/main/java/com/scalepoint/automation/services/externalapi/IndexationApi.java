@@ -12,7 +12,7 @@ import static com.scalepoint.automation.utils.Http.post;
 
 public class IndexationApi extends AuthenticationApi {
 
-    public static String URL_REINDEX_CLAIMS = getEccUrl() + "ClaimReindex";
+    private static final String URL_REINDEX_CLAIMS = getEccUrl() + "ClaimReindex";
 
     public IndexationApi(User user) {
         super(user);

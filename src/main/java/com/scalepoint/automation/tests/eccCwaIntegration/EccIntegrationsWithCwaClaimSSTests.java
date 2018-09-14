@@ -40,7 +40,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
     @Test(dataProvider = "testDataProvider")
     public void selfServiceImport(User user, ClaimItem claimItem){
         SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken)
-                .requestSelfService(Constants.PASSWORD);
+                .requestSelfService(Constants.DEFAULT_PASSWORD);
 
         assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
             cwa.getTaskType().equals(TaskType.SELF_SERVICE_OTHER) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
@@ -50,7 +50,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
                 .addDescription(claimItem.getSetDialogTextMatch())
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)
