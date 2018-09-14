@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceAgreement {
 
-    public String randomSavedTemplateName = RandomUtils.randomName("rnv_tempalate") + ".xlsm";
+    private String randomSavedTemplateName = RandomUtils.randomName("rnv_tempalate") + ".xlsm";
     private String agreementRandomName = RandomUtils.randomName("AgreementName");
     @XmlElement
     private String testAgrName;

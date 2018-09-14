@@ -96,7 +96,7 @@ public class ExcelDocUtil {
         try {
             Files.delete(path);
         } catch (Exception x) {
-            x.printStackTrace();
+            logger.error(x.getMessage());
         }
         logger.info("File was deleted - " + fileLocation);
     }
@@ -197,6 +197,7 @@ public class ExcelDocUtil {
                 break;
             case DELETE_CLAIM_LINE_ID_ADD_REPAIR_PRICE:
                 addRepairPriceForFirstLine("100");
+                break;
             case DELETE_CLAIM_LINE_ID:
                 deleteCLIdForFirstLine();
                 updateDescriptionForFirstLine(serviceAgreement);

@@ -47,7 +47,7 @@ public class PrepareSaveCustomerParams {
         saveCustomerParams.put("shopper_id", "");
         saveCustomerParams.put("email", "ecc_auto@scalepoint.com");
         saveCustomerParams.put("changepassword", "1");
-        saveCustomerParams.put("password", Constants.PASSWORD);
+        saveCustomerParams.put("password", Constants.DEFAULT_PASSWORD);
         saveCustomerParams.put("customer_note", "");
         saveCustomerParams.put("caseid", data.getUserId().toString());
 

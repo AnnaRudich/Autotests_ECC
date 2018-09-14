@@ -22,8 +22,6 @@ import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.annotations.RunOn;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -43,10 +41,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.Logs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -62,7 +56,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -78,7 +71,7 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 @Listeners({InvokedMethodListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
-    protected Logger logger = LogManager.getLogger(BaseTest.class);
+    protected Logger log = LogManager.getLogger(BaseTest.class);
 
     @Autowired
     protected DatabaseApi databaseApi;
@@ -92,7 +85,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     public void baseInit(Method method, ITestContext context) throws Exception {
         Thread.currentThread().setName("Thread "+method.getName());
         ThreadContext.put("sessionid", method.getName());
-        logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
+        log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
         driverType = new DriverHelper().getDriverType(method, browserMode);
 
@@ -111,13 +104,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @AfterMethod
     public void cleanup(Method method, ITestResult iTestResult) {
-        logger.info("Clean up after: {}", method.toString());
+        log.info("Clean up after: {}", method.toString());
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
             Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
             TimeUnit.SECONDS.sleep(1);
         }catch (Exception e) {
-            logger.info(e.getMessage());
+            log.info(e.getMessage());
         }
         Browser.quit();
         Window.cleanUp();
@@ -157,7 +150,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         try {
             claimApi.createClaim(claim, null);
         }catch (Exception ex){
-            logger.error(ex.getMessage());
+            log.error(ex.getMessage());
         }
         return claimApi;
     }

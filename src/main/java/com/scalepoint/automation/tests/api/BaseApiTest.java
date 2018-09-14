@@ -33,7 +33,7 @@ import static com.scalepoint.automation.services.externalapi.TestAccountsApi.Sco
 @IntegrationTest
 public class BaseApiTest extends AbstractTestNGSpringContextTests {
 
-    protected Logger logger = LogManager.getLogger(BaseApiTest.class);
+    protected Logger log = LogManager.getLogger(BaseApiTest.class);
 
     @Autowired
     protected DatabaseApi databaseApi;
@@ -48,13 +48,13 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     public void setUpData(Method method){
         Thread.currentThread().setName("Thread "+method.getName());
         MDC.put("sessionid", method.getName());
-        logger.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
+        log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
         ServiceData.init(databaseApi);
     }
 
     @AfterMethod
     public void cleanup(Method method) {
-        logger.info("Clean up after: {}", method.toString());
+        log.info("Clean up after: {}", method.toString());
         CurrentUser.cleanUp();
         MDC.clear();
     }

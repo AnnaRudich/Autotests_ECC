@@ -19,8 +19,8 @@ public class Http {
 
     private static Logger logger = Logger.getLogger(Http.class);
 
-    public static int CONNECTION_TIMEOUT = 90000;
-    public static int SOCKET_TIMEOUT = 90000;
+    private final static int CONNECTION_TIMEOUT = 90000;
+    private final static int SOCKET_TIMEOUT = 90000;
 
     public static Response get(String url) throws IOException {
         HttpClient httpClient = HttpClientBuilder.create().build();

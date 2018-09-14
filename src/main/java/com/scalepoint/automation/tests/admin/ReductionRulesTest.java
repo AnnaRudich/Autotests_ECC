@@ -18,9 +18,6 @@ import static org.testng.Assert.assertEquals;
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-546")
 public class ReductionRulesTest extends BaseTest {
 
-    @Autowired
-    DatabaseApi databaseApi;
-
     private static String sufficientDocumentation = "Sufficient documentation";
     private static String undefined = "Undefined";
     private static String insufficient = "Insufficient documentation";

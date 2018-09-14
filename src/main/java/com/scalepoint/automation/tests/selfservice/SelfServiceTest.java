@@ -33,11 +33,11 @@ public class SelfServiceTest extends BaseTest {
             description = "CHARLIE-504 Self Service sending. Add line. Required fields only. Category auto match")
     public void charlie504_addSSLineWithoutDocsAndNotes(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -68,11 +68,11 @@ public class SelfServiceTest extends BaseTest {
             description = "CHARLIE-504 Self Service sending. Reloaded data saved")
     public void charlie504_reloadedDataSaved(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescriptionSelectFirstSuggestion("Iphone 6")
                 .addRandomPurchaseDate(1)
@@ -105,11 +105,11 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_deleteLine(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -135,11 +135,11 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_submitLine_autoImport(User user, Claim claim){
 
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -174,12 +174,12 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_saveSelfService(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
 
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescriptionSelectFirstSuggestion("Iphone 6")
                 .addRandomPurchaseDate(1)
@@ -214,11 +214,11 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_requiredFieldsValidation(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescription("test", 1)
                 .selectSubmitOption();
@@ -241,11 +241,11 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_addLineWithDocumentsUploaded(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescription("test", 1)
                 .addRandomCategory()
@@ -273,11 +273,11 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_addLineWithCustomerComment(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescription("test",1)
                 .addRandomCategory()
@@ -309,11 +309,11 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_addLineWithCustomerLineNote(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
 
                 .addDescriptionSelectFirstSuggestion("iphone6")
                 .addRandomPurchaseDate(1)

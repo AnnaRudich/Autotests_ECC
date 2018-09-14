@@ -8,13 +8,11 @@ import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDep
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
@@ -115,7 +113,7 @@ public class DeprecationDeductedTests extends BaseTest {
             .toMailsPage()
             .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
             .findLoginToShopLinkAndOpenIt()
-            .enterPassword(Constants.PASSWORD)
+            .enterPassword(Constants.DEFAULT_PASSWORD)
             .login()
             .doAssert(shopWelcomePage -> {
               shopWelcomePage.assertProductCashValueIs(expectedVoucherCashValue);

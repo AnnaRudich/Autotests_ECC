@@ -112,12 +112,12 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
 
-                .login(Constants.PASSWORD);
+                .login(Constants.DEFAULT_PASSWORD);
     }
 
     @Test(dataProvider = "testDataProvider",
@@ -127,11 +127,11 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void loginToSelfService2_0(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.PASSWORD)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.PASSWORD);
+                .login(Constants.DEFAULT_PASSWORD);
     }
 
 
@@ -156,11 +156,11 @@ public class ClaimTests extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
 
-                .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
+                .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
                 .addDescription("Sony")
                 .saveItem()
                 .sendResponseToEcc();
@@ -193,7 +193,7 @@ public class ClaimTests extends BaseTest {
         Browser.driver().get(loginToShopLink);
 
         Page.at(LoginShopPage.class)
-                .enterPassword(Constants.PASSWORD)
+                .enterPassword(Constants.DEFAULT_PASSWORD)
                 .loginWithFail();
     }
 
@@ -285,11 +285,11 @@ public class ClaimTests extends BaseTest {
     public void ecc2631_quickMatchFromSS(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
-                .requestSelfServiceWithEnabledAutoClose(claim, Constants.PASSWORD)
+                .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.PASSWORD)
+                .login(Constants.DEFAULT_PASSWORD)
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)

@@ -28,11 +28,11 @@ public class SelfService2Tests extends BaseTest {
           description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
   public void Charlie735_addLine_categoryAutoMatch_autoImport(User user, Claim claim) {
     SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
 
             .addDescription("iPhone");
     String description = ssPage.getProductMatchDescription();
@@ -67,11 +67,11 @@ public class SelfService2Tests extends BaseTest {
     String claimNote = "Claim Note";
 
     SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
 
             .addDescription("sony");
     String description = ssPage.getProductMatchDescription();
@@ -109,11 +109,11 @@ public class SelfService2Tests extends BaseTest {
           description = "CHARLIE-735 SelfService_2.0: Add line with documentation")
   public void Charlie735_addLineWithDocumentation(User user, Claim claim) {
     SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
 
             .addDescription("iPhone");
     String description = ssPage.getProductMatchDescription();
@@ -146,11 +146,11 @@ public class SelfService2Tests extends BaseTest {
   public void Charlie735_editLine_addAcquired(User user, Claim claim, Acquired acquired) {
 
     SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
             .addDescription("iPhone");
     String description = ssPage.getProductMatchDescription();
 
@@ -186,11 +186,11 @@ public class SelfService2Tests extends BaseTest {
   public void Charlie735_deleteLine(User user, Claim claim) {
 
     SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
 
             .addDescription("iPhone");
     String description = ssPage.getProductMatchDescription();
@@ -215,11 +215,11 @@ public class SelfService2Tests extends BaseTest {
   public void Charlie735_undoDeleteLine(User user, Claim claim) {
 
     SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
 
             .addDescription("iPhone");
     String description = ssPage.getProductMatchDescription();
@@ -250,11 +250,11 @@ public class SelfService2Tests extends BaseTest {
           description = "SelfService2 logOut")
   public void selfService2LogOut(User user, Claim claim) {
     loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.PASSWORD)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
             .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.PASSWORD)
+            .login(Constants.DEFAULT_PASSWORD)
             .logOut()
             .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
   }

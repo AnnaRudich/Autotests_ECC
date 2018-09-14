@@ -10,12 +10,6 @@ import static io.restassured.RestAssured.given;
 
 public class ReopenClaimService extends BaseService {
 
-    private Data data;
-
-    public ReopenClaimService(){
-        this.data = getData();
-    }
-
     public ReopenClaimService reopenClaim(){
 
         given().baseUri(getEccUrl()).log().all()

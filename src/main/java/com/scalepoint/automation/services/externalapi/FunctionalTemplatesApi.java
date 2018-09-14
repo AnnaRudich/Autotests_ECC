@@ -87,6 +87,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
                 throw new IllegalStateException("Can't get lock on FT update");
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
     }

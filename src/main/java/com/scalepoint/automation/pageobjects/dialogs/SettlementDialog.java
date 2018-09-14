@@ -68,6 +68,14 @@ public class SettlementDialog extends BaseDialog {
     private static final By OK_BUTTON = By.id("ok-button");
     private static final By ADD_BUTTON = By.id("add-button");
     private static final By CANCEL_BUTTON = By.id("cancel-button");
+    public static final String ARIA_CHECKED = "aria-checked";
+    public static final String TR_CONTAINS_CLASS = ".//tr[contains(@class, '";
+    public static final String REJECT_REASON_COMBOBOX_INPUT_EL = "reject-reason-combobox-inputEl";
+    public static final String DISCRETIONARY_REASON_COMBOBOX_INPUT_WRAP = "discretionary-reason-combobox-inputWrap";
+    public static final String BORDER_COLOR = "border-color";
+    public static final String CLASS = "class";
+    public static final String X_FORM_TEXT_WRAP_INVALID = "x-form-text-wrap-invalid";
+    public static final String REJECT_REASON_COMBOBOX_INPUT_WRAP = "reject-reason-combobox-inputWrap";
 
     @FindBy(id = "description-textfield-inputEl")
     private ExtInput description;
@@ -400,7 +408,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog uncheckedDocumentation() {
-        if (sufficientDocumentation.getAttribute("aria-checked").equals("true")) {
+        if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
             forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
             clickUsingJsIfSeleniumClickReturnError(sufficientDocumentation);
         }
@@ -686,7 +694,7 @@ public class SettlementDialog extends BaseDialog {
         }
         Wait.forCondition(webDriver -> {
             try {
-                String valuationDepreciation = Browser.driver().findElement(By.xpath(".//tr[contains(@class, '" + Valuation.NEW_PRICE + "')]//td[4]//div")).getText();
+                String valuationDepreciation = Browser.driver().findElement(By.xpath(TR_CONTAINS_CLASS + Valuation.NEW_PRICE + "')]//td[4]//div")).getText();
                 return reductionRuleValue.toString().equals(valuationDepreciation);
             } catch (Exception e) {
                 logger.error("Can't compare reduction and depreciationPercentage! " + e.getMessage(), e);
@@ -726,7 +734,7 @@ public class SettlementDialog extends BaseDialog {
 
     private boolean isRejectReasonDisabled(String visibleText) {
         new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
-        $(By.id("reject-reason-combobox-inputEl")).setValue(visibleText);
+        $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
         return driver.findElement(By.xpath("//span[text()='" + visibleText + "']")).getAttribute("style").equalsIgnoreCase("color: silver;");
     }
 
@@ -748,9 +756,9 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog selectRejectReason(String visibleText) {
         waitForVisible(rejectReason);
         new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
-        $(By.id("reject-reason-combobox-inputEl")).setValue(visibleText);
+        $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
         new Actions(driver).click(driver.findElement(By.xpath("//span[text()='" + visibleText + "']"))).build().perform();
-        new Events().fireEvent($(By.id("reject-reason-combobox-inputEl")), "focus", "keydown", "keypress", "input", "keyup", "change");
+        new Events().fireEvent($(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)), "focus", "keydown", "keypress", "input", "keyup", "change");
         return this;
     }
 
@@ -795,9 +803,9 @@ public class SettlementDialog extends BaseDialog {
         if (waitForReasonInvalidAttribute("//*[@id='discretionary-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]")) {
             return false;
         }
-        return driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
-                && (driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
-                (driver.findElement(By.id("discretionary-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
+        return driver.findElement(By.id(DISCRETIONARY_REASON_COMBOBOX_INPUT_WRAP)).getAttribute(CLASS).contains(X_FORM_TEXT_WRAP_INVALID)
+                && (driver.findElement(By.id(DISCRETIONARY_REASON_COMBOBOX_INPUT_WRAP)).getCssValue(BORDER_COLOR).contains(redBorder) ||
+                (driver.findElement(By.id(DISCRETIONARY_REASON_COMBOBOX_INPUT_WRAP)).getCssValue(BORDER_COLOR).contains(redBorderRGB)));
     }
 
     private boolean waitForReasonInvalidAttribute(String xpath) {
@@ -816,9 +824,9 @@ public class SettlementDialog extends BaseDialog {
         if (waitForReasonInvalidAttribute("//*[@id='reject-reason-combobox-inputWrap' and contains(@class, 'x-form-text-wrap-invalid')]")) {
             return false;
         }
-        return driver.findElement(By.id("reject-reason-combobox-inputWrap")).getAttribute("class").contains("x-form-text-wrap-invalid")
-                && (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorder) ||
-                (driver.findElement(By.id("reject-reason-combobox-inputWrap")).getCssValue("border-color").contains(redBorderRGB)));
+        return driver.findElement(By.id(REJECT_REASON_COMBOBOX_INPUT_WRAP)).getAttribute(CLASS).contains(X_FORM_TEXT_WRAP_INVALID)
+                && (driver.findElement(By.id(REJECT_REASON_COMBOBOX_INPUT_WRAP)).getCssValue(BORDER_COLOR).contains(redBorder) ||
+                (driver.findElement(By.id(REJECT_REASON_COMBOBOX_INPUT_WRAP)).getCssValue(BORDER_COLOR).contains(redBorderRGB)));
     }
 
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
@@ -860,7 +868,7 @@ public class SettlementDialog extends BaseDialog {
     public ValuationRow parseValuationRow(Valuation valuation) {
         ValuationRow valuationRow = new ValuationRow(valuation);
 
-        By xpath = By.xpath(".//tr[contains(@class, '" + valuation.className + "')]//td");
+        By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
         Wait.waitForStaleElement(xpath);
         waitForAjaxCompleted();
         ElementsCollection elements = $$(xpath);
@@ -879,14 +887,17 @@ public class SettlementDialog extends BaseDialog {
                 case TYPE:
                     valuationRow.description = td.getText();
                     break;
+                default:
+                    logger.warn("Valuation not supported: " + ValuationGridColumn.getColumn(attribute));
+                    break;
             }
         }
         return valuationRow;
 
     }
 
-    public boolean isValuationDisabled(Valuation valuation) {
-        SelenideElement unselectable = $(By.xpath(".//tr[contains(@class, '" + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]")).shouldHave(Condition.attribute("unselectable"));
+    private boolean isValuationDisabled(Valuation valuation) {
+        SelenideElement unselectable = $(By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]")).shouldHave(Condition.attribute("unselectable"));
         if (unselectable == null)
             return false;
         return true;
@@ -900,7 +911,7 @@ public class SettlementDialog extends BaseDialog {
 
         static final Pattern PATTERN = Pattern.compile("(?<voucherName>.*)\\((?<distance>[a-z0-9]*)\\s*km-(?<percentage>\\d*)%\\)");
 
-        public VoucherDropdownElement(String text) {
+        VoucherDropdownElement(String text) {
             Matcher m = PATTERN.matcher(text);
             while (m.find()) {
                 voucherName = m.group("voucherName").trim();
@@ -951,9 +962,9 @@ public class SettlementDialog extends BaseDialog {
             webElement = driver.findElement(xpath);
         }
 
-        public Boolean isChecked() {
+        Boolean isChecked() {
             setUp();
-            return webElement.getAttribute("class").contains("x-grid-checkcolumn-checked");
+            return webElement.getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
         }
 
         public ValuationRow makeActive() {
@@ -1021,7 +1032,7 @@ public class SettlementDialog extends BaseDialog {
         return parseValuationRow(valuation).makeActive().back();
     }
 
-    public VoucherDropdownElement parseVoucherDropdownElement(String voucherName) {
+    private VoucherDropdownElement parseVoucherDropdownElement(String voucherName) {
         try {
             List<VoucherDropdownElement> voucherDropdownElements = parseVoucherDropdown();
             return voucherDropdownElements.stream()
@@ -1393,12 +1404,12 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked() {
-            assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("true"));
+            assertTrue(sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true"));
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsUnchecked() {
-            assertTrue(sufficientDocumentation.getAttribute("aria-checked").equals("false"));
+            assertTrue(sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("false"));
             return this;
         }
 

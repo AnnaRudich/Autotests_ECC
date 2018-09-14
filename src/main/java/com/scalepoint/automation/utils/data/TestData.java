@@ -220,7 +220,7 @@ public class TestData {
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
         }
     }
 
