@@ -495,6 +495,11 @@
             <version>2.2.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -506,6 +511,22 @@
         <repository>
             <id>ecc-tools</id>
             <url>https://ecc-tools.spcph.local/nexus/repository/public/</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>internal</id>
+            <url>http://ecc-build.spcph.local:8083/nexus/content/repositories/internal</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>public</id>
+            <url>http://ecc-build.spcph.local:8083/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>warn</checksumPolicy>
