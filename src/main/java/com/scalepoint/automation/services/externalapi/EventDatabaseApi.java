@@ -15,12 +15,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_SETTLED;
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_UPDATED;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.*;
+
 
 @SuppressWarnings("unchecked")
 public class EventDatabaseApi {
@@ -67,21 +69,6 @@ public class EventDatabaseApi {
             }
         }
         return eventClaimUpdated;
-    }
-
-    public List<EventClaimUpdated> tryGetEventsForClaimUpdate(ClaimRequest claimRequest, int eventsNumber){
-        int tryTimes = 5;
-        List<EventClaimUpdated> events = getEventsForClaimUpdate(claimRequest.getCompany()).stream().filter(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())).collect(Collectors.toList());
-        while(events.size() < eventsNumber && tryTimes > 1){
-            tryTimes--;
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage());
-            }
-            events = getEventsForClaimUpdate(claimRequest.getCompany()).stream().filter(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())).collect(Collectors.toList());
-    }
-        return events;
     }
 
     private List<EventClaimUpdated> getEventsForClaimUpdate(String company){
@@ -154,10 +141,19 @@ public class EventDatabaseApi {
                 .isFalse();
     }
 
-    public void assertNumberOfCloseCaseEventsThatWasCreatedForClaim(ClaimRequest claimRequest, int numberOfRequests) {
-        assertThat(tryGetEventsForClaimUpdate(claimRequest, numberOfRequests)
-                .stream().filter(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())).count())
-                .as("Check if number of events (" + numberOfRequests + ") with case number: " + claimRequest.getCaseNumber() + " was created in event-api")
-                .isEqualTo(numberOfRequests);
+    public void assertNumberOfCloseCaseEventsThatWasCreatedForClaim(ClaimRequest claimRequest, int eventsNumber) {
+        with().pollInterval(1, SECONDS).await().atMost(10, SECONDS).untilAsserted(() ->
+                assertThat(getSizeOfEventUpdatedList(claimRequest))
+                        .as("There are expected to be " + eventsNumber + " CloseCase events created in event-api for case with number: " + claimRequest.getCaseNumber() + " but actual was " + getSizeOfEventUpdatedList(claimRequest))
+                        .isEqualTo(eventsNumber));
+    }
+
+    private int getSizeOfEventUpdatedList(ClaimRequest claimRequest) {
+        return getEventsUpdatedList(claimRequest).size();
+    }
+
+    private List<EventClaimUpdated> getEventsUpdatedList(ClaimRequest claimRequest) {
+        return getEventsForClaimUpdate(claimRequest.getCompany()).stream().filter(event ->
+                event.getCase().getNumber().equals(claimRequest.getCaseNumber())).collect(Collectors.toList());
     }
 }
