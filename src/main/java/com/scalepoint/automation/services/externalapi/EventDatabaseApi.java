@@ -142,7 +142,7 @@ public class EventDatabaseApi {
     }
 
     public void assertNumberOfCloseCaseEventsThatWasCreatedForClaim(ClaimRequest claimRequest, int eventsNumber) {
-        with().pollDelay(2, SECONDS).and().pollInterval(1, SECONDS).await().atMost(10, SECONDS).untilAsserted(() ->
+        with().pollInterval(1, SECONDS).await().atMost(10, SECONDS).untilAsserted(() ->
                 assertThat(getSizeOfEventUpdatedList(claimRequest))
                         .as("There are expected to be " + eventsNumber + " CloseCase events created in event-api for case with number: " + claimRequest.getCaseNumber() + " but actual was " + getSizeOfEventUpdatedList(claimRequest))
                         .isEqualTo(eventsNumber));
