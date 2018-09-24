@@ -6,9 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.rnv1.RnvCommunicationPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonPresence;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.ButtonType;
-import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.ExcelDocUtil.FeedbackActionType;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -16,9 +14,7 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -31,15 +27,10 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 
-    @BeforeMethod
-    public void createDefaultServiceAgreement() {
-        User scalepointUser = UsersManager.getSystemUser();
-        try {
-            databaseApi.createDefaultServiceAgreementIfNotExists(scalepointUser.getCompanyId());
-        } finally {
-            UsersManager.releaseUser(scalepointUser);
-        }
-    }
+//    @BeforeMethod
+//    public void createDefaultServiceAgreement() {
+//        databaseApi.createDefaultServiceAgreementIfNotExists();
+//    }
 
     interface StartTaskAssert {
         void doAssert(SettlementPage page, String description);
