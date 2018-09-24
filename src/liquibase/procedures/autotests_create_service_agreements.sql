@@ -7,7 +7,7 @@ GO
 
 
 CREATE PROCEDURE [dbo].[autotests_create_service_agreements]
-		@ExpectedInsCompanyId int,
+		@insCompanyId int,
 		@serviceAgreementName VARCHAR(50),
 		@serviceAgreementNameForWizard VARCHAR(50)
 AS
@@ -17,7 +17,7 @@ AS
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
-	declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
+	declare @targetInsCompanyId int = (SELECT [ICRFNBR] FROM [INSCOMP] where [ICRFNBR] = @insCompanyId)
 
 	/* SUPPLIER DATA */
 	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
@@ -33,28 +33,34 @@ AS
 
 	/*---------------------------------------------------------*/
 	/* REMOVE SUPPLIER, SERVICE AGREEMENT, LOCATION, MAPPINGS */
-	declare @DeleteSupplierID int = (select top 1 SURFNBR from [SUPPLIER] where [SUNAME] = @SupplierName)
-	IF (@DeleteSupplierID IS NOT NULL)
-		RETURN
+	declare @ExistingSupplierID int = (select top 1 SURFNBR from [SUPPLIER] where [SUNAME] = @SupplierName)
+	declare @SupplierId int
 
-  declare @SupplierId int;
-  execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SupplierId OUTPUT;
-  EXEC autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode,@SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT
+	IF(@ExistingSupplierID IS NOT NULL)
+	BEGIN
+		SET @SupplierId = @ExistingSupplierID
+	END
+
+	IF (@ExistingSupplierID IS NULL)
+	BEGIN
+		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode,@SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
+	END
 
 	declare @AgreementTags varchar(100) = ''
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive
 	declare @AgreementEmailType varchar (1) = 'S' -- S = Supplier, A = Agreement, L = Location
+
 
 	/* SERVICE AGREEMENT */
 	insert into [ServiceAgreement] (
 	[name],[email],[tags],[status],[emailType],[supplierId],
 	[insuranceCompanyId],[defaultTemplateId],[notes],[workflow],[reminder],[timeout])
 		select @serviceAgreementName,@Email,@AgreementTags,@AgreementStatus,
-		@AgreementEmailType,@SupplierID,@insCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
+		@AgreementEmailType,@SupplierID,@targetInsCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
 	declare @AgreementId int = @@IDENTITY
 
 	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
-		SELECT [PseudoCategoryID], @AgreementId, @insCompanyId, '' FROM [PsuedoCategory] where Published = 1
+		SELECT [PseudoCategoryID], @AgreementId, @targetInsCompanyId, '' FROM [PsuedoCategory] where Published = 1
 
 	insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
 		select @AgreementId, 1

@@ -10,7 +10,9 @@
         <comment>Create_Service_agreement</comment>
 
         <sql>
-            EXEC autotest_create_service_agreements @insuranceCompany, @supplierId, 'baseTemplate', 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard'
+            declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
+
+            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard'
         </sql>
     </changeSet>
 </databaseChangeLog>
