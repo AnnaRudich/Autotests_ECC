@@ -12,7 +12,7 @@ CREATE PROCEDURE [dbo].[autotests_create_supplier]
 	  @SecurityToken varchar(100) = null,
       @RV_TaskWebServiceUrl varchar(100) = null,
       @SecurityTokenIssued varchar(100) = null,
-	  @SupplierId int OUTPUT
+ 	  @SupplierId int OUTPUT
      AS
 
 SET NOCOUNT ON
@@ -52,7 +52,7 @@ insert into [SUPPLIER] (
 			'M',     1,           1,     '\jessops_logo.gif', '\jessops_logo.gif',
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
-			0, @RV_TaskWebServiceUrl, @securityToken, @securityTokenIssued, 1
+			0, @RV_TaskWebServiceUrl, @securityToken, @securityTokenIssued, 3
 
 	select @SupplierID = @@IDENTITY
 
