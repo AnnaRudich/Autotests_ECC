@@ -27,11 +27,6 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVBaseTests extends BaseTest {
 
-//    @BeforeMethod
-//    public void createDefaultServiceAgreement() {
-//        databaseApi.createDefaultServiceAgreementIfNotExists();
-//    }
-
     interface StartTaskAssert {
         void doAssert(SettlementPage page, String description);
     }
