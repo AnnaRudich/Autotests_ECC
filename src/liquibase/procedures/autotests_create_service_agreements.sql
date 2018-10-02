@@ -17,7 +17,7 @@ AS
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
-	declare @targetInsCompanyId int = (SELECT [ICRFNBR] FROM [INSCOMP] where [ICRFNBR] = @insCompanyId)
+	declare @targetInsCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'TOPDANMARK') --SCALEPOINT is default, won't work
 
 	/* SUPPLIER DATA */
 	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
@@ -32,7 +32,8 @@ AS
     declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
 
 	/*---------------------------------------------------------*/
-	/* REMOVE SUPPLIER, SERVICE AGREEMENT, LOCATION, MAPPINGS */
+	/* SUPPLIER RnV*/
+	--If supplier is already exists use it
 	declare @ExistingSupplierID int = (select top 1 SURFNBR from [SUPPLIER] where [SUNAME] = @SupplierName)
 	declare @SupplierId int
 
@@ -40,18 +41,26 @@ AS
 	BEGIN
 		SET @SupplierId = @ExistingSupplierID
 	END
-
+    --add supplier if there is no
 	IF (@ExistingSupplierID IS NULL)
 	BEGIN
 		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode,@SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
 	END
 
+    /* SERVICE AGREEMENT */
 	declare @AgreementTags varchar(100) = ''
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive
 	declare @AgreementEmailType varchar (1) = 'S' -- S = Supplier, A = Agreement, L = Location
 
+    --use but not add if already exists
+    IF EXISTS(SELECT * FROM [ServiceAgreement] WHERE [name]=@serviceAgreementName)
+    BEGIN
+        PRINT FORMATMESSAGE('ServiceAgreement name "%s" is already exists', @serviceAgreementName)
+        SELECT @AgreementId = (SELECT id FROM [ServiceAgreement] WHERE [name]=@serviceAgreementName)
+        RETURN
+    END
 
-	/* SERVICE AGREEMENT */
+    --add service agreement
 	insert into [ServiceAgreement] (
 	[name],[email],[tags],[status],[emailType],[supplierId],
 	[insuranceCompanyId],[defaultTemplateId],[notes],[workflow],[reminder],[timeout])

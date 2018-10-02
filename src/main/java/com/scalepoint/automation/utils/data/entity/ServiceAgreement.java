@@ -7,12 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created with IntelliJ IDEA.
- * NewSystemUser: jts
- * Date: 5/30/14
- * Time: 4:23 PM
- */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceAgreement {

@@ -88,8 +88,8 @@ public class RnvTaskWizardPage1 extends Page {
         return "/?orderToken";
     }
 
-    public RnvTaskWizardPage1 changeTask(String claimLine, String taskType) {
-        String xpathTask = taskTypeFieldByCLNameXpath.replace("$1", claimLine);
+    public RnvTaskWizardPage1 changeTask(String claimLineDescription, String taskType) {
+        String xpathTask = taskTypeFieldByCLNameXpath.replace("$1", claimLineDescription);
         clickAndWaitForDisplaying(By.xpath(xpathTask), By.cssSelector("ul.x-list-plain"));
         String xpathTaskType = tasksXpath.replace("$1", taskType);
         driver.findElement(By.xpath(xpathTaskType)).click();

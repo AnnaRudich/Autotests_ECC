@@ -3,8 +3,8 @@
     <!-->Test data <-->
     <testRnVShop>Barbara Maria - Kongevejen 11</testRnVShop>
     <testSePa>Barbara Maria</testSePa>
-    <testAgrName>AutoTest Agreement</testAgrName>
-    <testAgrNameForRnV>AutoTest Agreement For Wizard</testAgrNameForRnV>
+    <testAgrName>serviceAgreement_autotests</testAgrName>
+    <testAgrNameForRnV>serviceAgreement_NameWizzard</testAgrNameForRnV>
     <templateName>Jacobsen Plus</templateName>
 
     <!-->Service Agreement Details<-->

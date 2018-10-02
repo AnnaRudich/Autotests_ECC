@@ -100,7 +100,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
                 .doAssert(CompleteClaimPage.Asserts::assertReplacementButtonIsNotVisible);
 
     }
-
+    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
