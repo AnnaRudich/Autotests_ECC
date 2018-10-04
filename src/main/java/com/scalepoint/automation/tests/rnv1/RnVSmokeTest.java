@@ -26,9 +26,8 @@ public class RnVSmokeTest extends BaseTest{
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, "repair")
+                .changeTask(lineDescription, "Vurdering")//add TaskType data type
                 .changeAgrForAllLines(agreement.getTestAgreementName());
-
     }
 }
 

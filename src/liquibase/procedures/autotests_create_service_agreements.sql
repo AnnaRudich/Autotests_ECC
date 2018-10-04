@@ -9,7 +9,8 @@ GO
 CREATE PROCEDURE [dbo].[autotests_create_service_agreements]
 		@insCompanyId int,
 		@serviceAgreementName VARCHAR(50),
-		@serviceAgreementNameForWizard VARCHAR(50)
+		@serviceAgreementNameForWizard VARCHAR(50),
+		@targetInsCompanyCode VARCHAR(50)
 AS
 
 	SET NOCOUNT ON
@@ -17,7 +18,7 @@ AS
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
-	declare @targetInsCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'TOPDANMARK') --SCALEPOINT is default, won't work
+	declare @targetInsCompanyId int = (select ICRFNBR from InsComp where CompanyCode = @targetInsCompanyCode) --SCALEPOINT is default, won't work
 
 	/* SUPPLIER DATA */
 	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
@@ -52,22 +53,25 @@ AS
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive
 	declare @AgreementEmailType varchar (1) = 'S' -- S = Supplier, A = Agreement, L = Location
 
-    --use but not add if already exists
-    IF EXISTS(SELECT * FROM [ServiceAgreement] WHERE [name]=@serviceAgreementName)
+    --use service agreement but not add if it already exists
+    declare @AgreementId AS int
+    IF EXISTS (SELECT * from [ServiceAgreement] WHERE [name]=@serviceAgreementName)
     BEGIN
         PRINT FORMATMESSAGE('ServiceAgreement name "%s" is already exists', @serviceAgreementName)
-        SELECT @AgreementId = (SELECT id FROM [ServiceAgreement] WHERE [name]=@serviceAgreementName)
-        RETURN
+        SET @AgreementId = (SELECT top 1 id from [ServiceAgreement] WHERE [name]=@serviceAgreementName)
     END
-
-    --add service agreement
-	insert into [ServiceAgreement] (
-	[name],[email],[tags],[status],[emailType],[supplierId],
-	[insuranceCompanyId],[defaultTemplateId],[notes],[workflow],[reminder],[timeout])
-		select @serviceAgreementName,@Email,@AgreementTags,@AgreementStatus,
-		@AgreementEmailType,@SupplierID,@targetInsCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
-	declare @AgreementId int = @@IDENTITY
-
+    ELSE
+    BEGIN
+        insert into [ServiceAgreement] ([name],[email],[tags],[status],[emailType],[supplierId],
+	        [insuranceCompanyId],[defaultTemplateId],[notes],[workflow],[reminder],[timeout])
+	    SELECT @serviceAgreementName,@Email,@AgreementTags,@AgreementStatus,
+		@AgreementEmailType,@SupplierID,@ScalepointCompanyID,@ServiceAgreementTemplateID,'','',NULL,NULL
+	SET @AgreementId = @@IDENTITY
+	END
+	--make agreement shared
+	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
+		SELECT [PseudoCategoryID], @AgreementId, @ScalepointCompanyID, '' FROM [PsuedoCategory] where Published = 1
+	--map IC to the agreement so agreement is available in RnV wizzard
 	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
 		SELECT [PseudoCategoryID], @AgreementId, @targetInsCompanyId, '' FROM [PsuedoCategory] where Published = 1
 
