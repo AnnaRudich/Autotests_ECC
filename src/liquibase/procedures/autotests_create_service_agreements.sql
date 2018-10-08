@@ -48,6 +48,13 @@ AS
 		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode,@SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
 	END
 
+    --add RnV_testUrl
+	declare @existing_RV_TaskWebServiceUrl = SELECT * from [Testurls] where url = @RV_TaskWebServiceUrl
+	IF NOT EXISTS(SELECT * from [Testurls] where url = @RV_TaskWebServiceUrl)
+	BEGIN
+	insert into [Testurls] ([url]) SELECT @RV_TaskWebServiceUrl
+	END
+
     /* SERVICE AGREEMENT */
 	declare @AgreementTags varchar(100) = ''
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive

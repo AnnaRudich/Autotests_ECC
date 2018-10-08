@@ -153,6 +153,10 @@ public class TestData {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
+    public static RnvTaskType getRnvTaskType(){
+        return (RnvTaskType) getData(Data.RNVTASKTYPE);
+    }
+
     public static Map<Character, String> getClaimStates() {
         Map<Character, String> states = new HashMap<>();
         ((ClaimStates) Objects.requireNonNull(getData(Data.CLAIM_STATE))).getClaimStates().forEach(state -> states.put(state.getState(), state.getName()));
@@ -261,7 +265,8 @@ public class TestData {
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATE("ClaimState.json", ClaimStates.class),
-        ACQUIRED("Acquired.xml", Acquired.class);
+        ACQUIRED("Acquired.xml", Acquired.class),
+        RNVTASKTYPE("RnVTaskType.xml", RnvTaskType.class);
 
         private String fileName;
         private JAXBContext context;

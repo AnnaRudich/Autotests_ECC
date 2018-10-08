@@ -93,18 +93,18 @@ public class RnvTaskWizardPage1 extends Page {
         clickAndWaitForDisplaying(By.xpath(xpathTask), By.cssSelector("ul.x-list-plain"));
         String xpathTaskType = tasksXpath.replace("$1", taskType);
         driver.findElement(By.xpath(xpathTaskType)).click();
-        cityField.click();
+       // cityField.click();
         return this;
     }
 
-    public RnvTaskWizardPage1 changeAgreement(String claimLine, String agrName) {
-        String xpathAgreements = agrByCLNameXpath.replace("$1", claimLine);
-        clickAndWaitForStable(By.xpath(xpathAgreements), By.cssSelector("ul.x-list-plain li"));
+    public RnvTaskWizardPage1 changeAgreement(String claimLineDescription, String agrName) {
+      find(By.xpath(agrByCLNameXpath.replace("$1", claimLineDescription))).click();
+        // lickAndWaitForStable(By.xpath(xpathAgreements), By.cssSelector("ul.x-list-plain li"));
         String xpathAgrName = agrXpath.replace("$1", agrName);
         WebElement item = find(By.xpath(xpathAgrName));
         scrollTo(item);
         item.click();
-        cityField.click();
+        //cityField.click();
         return this;
     }
 

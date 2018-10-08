@@ -5,6 +5,7 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.RnvTaskType;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
@@ -16,7 +17,7 @@ public class RnVSmokeTest extends BaseTest{
 
     @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "verify repair tasks start")
-    public void startTaskTest(User user, Claim claim, ServiceAgreement agreement) {
+    public void startTaskTest(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = "Line_1";
 
         loginAndCreateClaim(user, claim)
@@ -26,8 +27,11 @@ public class RnVSmokeTest extends BaseTest{
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, "Vurdering")//add TaskType data type
-                .changeAgrForAllLines(agreement.getTestAgreementName());
+                //.changeTask(lineDescription, rnvTaskType.getRepair())//add TaskType data type
+                //.changeAgreement(lineDescription, agreement.getTestAgreementName());
+                //.changeAgreement(lineDescription, "serviceAgreement_autotests2");
+                .nextRnVstep()
+                .sendRnV(agreement);
     }
 }
 
