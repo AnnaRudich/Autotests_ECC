@@ -7,9 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginSelfService2Page extends Page {
@@ -19,6 +17,9 @@ public class LoginSelfService2Page extends Page {
 
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement login;
+
+    @FindBy(xpath = "//a[contains(@href, 'newPassword')]")
+    private WebElement changePasswordLink;
 
     @Override
     protected String getRelativeUrl() {
@@ -39,7 +40,6 @@ public class LoginSelfService2Page extends Page {
         Wait.waitForLoaded();
         return at(SelfService2Page.class);
     }
-
 
     public LoginSelfService2Page doAssert(Consumer<LoginSelfService2Page.Asserts> assertFunc) {
         assertFunc.accept(new LoginSelfService2Page.Asserts());

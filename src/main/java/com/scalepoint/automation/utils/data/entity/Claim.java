@@ -27,7 +27,7 @@ public class Claim {
     private String phoneNumber = Integer.toString(RandomUtils.randomInt());
     private String damageDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     @XmlElement
-    private String cellNumber;
+    private String cellNumber = "+4560126981";
     private String address = RandomUtils.randomName("addr");
     private String address2 = RandomUtils.randomName("addr2");
     private String city = RandomUtils.randomName("city");

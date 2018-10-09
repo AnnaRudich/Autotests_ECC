@@ -43,6 +43,9 @@ public class CustomerDetailsPage extends BaseClaimPage {
     @FindBy(xpath = "//a[@href='javascript:EditDamageDate()']")
     private WebElement damageDateEdit;
 
+    @FindBy(xpath = "//button[contains(@onclick, 'newPassword')]")
+    private WebElement newPasswordButton;
+
     private CustomerDetails customerDetails = new CustomerDetails();
 
     @Override
@@ -82,6 +85,10 @@ public class CustomerDetailsPage extends BaseClaimPage {
         $(By.id("genoptag")).click();
         $(By.id("reopen-claim-button")).click();
         return at(SettlementPage.class);
+    }
+
+    public void newSelfServicePassword(){
+        newPasswordButton.click();
     }
 
     public CustomerDetailsPage selectDamageDate(LocalDate date){

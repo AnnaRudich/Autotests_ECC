@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
@@ -8,11 +9,13 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Acquired;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -244,7 +247,7 @@ public class SelfService2Tests extends BaseTest {
     });
   }
 
-
+  @RunOn(DriverType.CHROME)
   @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
   @Test(dataProvider = "testDataProvider",
           description = "SelfService2 logOut")
@@ -257,5 +260,29 @@ public class SelfService2Tests extends BaseTest {
             .login(Constants.DEFAULT_PASSWORD)
             .logOut()
             .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
+
+  }
+
+  @RunOn(DriverType.CHROME)
+  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+  @Test(dataProvider = "testDataProvider",
+          description = "SelfService2 logOut")
+  public void selfService2LogInWithNewPassword(User user, Claim claim) {
+    loginAndCreateClaim(user, claim)
+            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+            .toCompleteClaimPage()
+            .fillClaimForm(claim)
+            .completeWithEmail()
+            .openRecentClaim()
+            .newSelfServicePassword();
+
+    String newPassword = new SelfServicePasswordDialog().getPasswordAndCloseDialog();
+
+    new SelfServicePasswordDialog().closeSelfServicePasswordDialog()
+            .toMailsPage()
+            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+            .findSelfServiceNewLinkAndOpenIt()
+            .login(newPassword)
+            .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed);
   }
 }
