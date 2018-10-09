@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.api;
 
-import com.scalepoint.automation.services.externalapi.TestAccountsApi;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
@@ -10,7 +10,7 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.externalapi.TestAccountsApi.Scope.PLATFORM_CASE_READ;
+import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItem;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
@@ -28,7 +28,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .closeCase()
                 .close(claimRequest, CLOSE_EXTERNAL);
 
-        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()))
                 .getResponse()
                 .statusCode(HttpStatus.SC_OK)
@@ -43,7 +43,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .closeCase()
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL);
 
-        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()))
                 .getResponse()
                 .statusCode(HttpStatus.SC_OK)
@@ -59,7 +59,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .closeCase()
                 .close(claimRequest, REPLACEMENT);
 
-        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()))
                 .getResponse()
                 .statusCode(HttpStatus.SC_OK)
@@ -71,7 +71,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionForInvalidRevisionShouldReturn400() {
 
-        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData("BBBBB594-DDD9-CCBB-B3A8-783BA9B7CAF6")
                 .getResponse()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
@@ -83,7 +83,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .closeCase()
                 .close(claimRequest, CLOSE_EXTERNAL);
 
-        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()), "BadScalepoint")
                 .getResponse()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
@@ -96,7 +96,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL)
                 .cancel(claimRequest);
 
-        new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(claimRequest.getCaseNumber()))
                 .getResponse()
                 .statusCode(HttpStatus.SC_OK)

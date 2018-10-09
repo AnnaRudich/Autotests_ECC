@@ -13,7 +13,7 @@ import com.scalepoint.automation.services.externalapi.AuthenticationApi;
 import com.scalepoint.automation.services.externalapi.ClaimApi;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
-import com.scalepoint.automation.services.externalapi.TestAccountsApi;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
@@ -160,12 +160,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest){
-        Token token = new TestAccountsApi().sendRequest().getToken();
+        Token token = new OauthTestAccountsApi().sendRequest().getToken();
         return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
     protected CreateClaimService createCwaClaim(ClaimRequest claimRequest){
-        Token token = new TestAccountsApi().sendRequest().getToken();
+        Token token = new OauthTestAccountsApi().sendRequest().getToken();
         return new CreateClaimService(token).addClaim(claimRequest);
     }
 
