@@ -104,6 +104,5 @@ public class FindShopDialog extends BaseDialog {
         private String getText(WebElement row, String dataColumnId) {
             return row.findElement(By.xpath(".//td[@data-columnid='"+dataColumnId+"']")).getText();
         }
-
     }
 }
