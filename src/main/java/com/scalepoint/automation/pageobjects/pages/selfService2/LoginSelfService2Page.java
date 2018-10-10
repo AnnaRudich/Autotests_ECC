@@ -18,9 +18,6 @@ public class LoginSelfService2Page extends Page {
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement login;
 
-    @FindBy(xpath = "//a[contains(@href, 'newPassword')]")
-    private WebElement changePasswordLink;
-
     @Override
     protected String getRelativeUrl() {
         return "self-service/dk/login";

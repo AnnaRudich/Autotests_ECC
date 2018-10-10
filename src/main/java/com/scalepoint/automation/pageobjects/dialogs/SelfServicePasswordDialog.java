@@ -22,7 +22,7 @@ public class SelfServicePasswordDialog extends BaseDialog {
         return this;
     }
 
-    public String getPasswordAndCloseDialog() {
+    public String getNewPasswordToSelfService() {
         return passwordInput.getAttribute("value");
     }
 
