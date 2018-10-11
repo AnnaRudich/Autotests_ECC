@@ -5,15 +5,15 @@ import org.apache.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
 
-public class TestAccountsApi {
+public class OauthTestAccountsApi {
 
     private Token token;
 
-    public TestAccountsApi sendRequest(){
+    public OauthTestAccountsApi sendRequest(){
         return sendRequest(Scope.CASE_INTEGRATION);
     }
 
-    public TestAccountsApi sendRequest(Scope scope){
+    public OauthTestAccountsApi sendRequest(Scope scope){
         this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
                 .formParam("grant_type", "client_credentials")
                 .formParam("client_id", "test_integration_all_tenants")
@@ -29,7 +29,7 @@ public class TestAccountsApi {
         return this.token;
     }
 
-    public TestAccountsApi setToken(Token token){
+    public OauthTestAccountsApi setToken(Token token){
         this.token = token;
         return this;
     }

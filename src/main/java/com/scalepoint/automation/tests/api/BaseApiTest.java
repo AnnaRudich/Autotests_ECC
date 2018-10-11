@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.api;
 
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.EventDatabaseApi;
-import com.scalepoint.automation.services.externalapi.TestAccountsApi;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.spring.Application;
@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeMethod;
 
 import java.lang.reflect.Method;
 
-import static com.scalepoint.automation.services.externalapi.TestAccountsApi.Scope.PLATFORM_CASE_READ;
+import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
 
 @SpringApplicationConfiguration(classes = Application.class)
 @TestExecutionListeners(inheritListeners = false, listeners = {
@@ -60,12 +60,12 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     }
 
     protected CaseSettlementDataService getSettlementData(ClaimRequest claimRequest){
-        return new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        return new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()), claimRequest.getTenant());
     }
 
     protected CaseSettlementDataService getSettlementDataForSettledClaims(ClaimRequest claimRequest){
-        return new CaseSettlementDataService(new TestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+        return new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(claimRequest.getCaseNumber()), claimRequest.getTenant());
     }
 }

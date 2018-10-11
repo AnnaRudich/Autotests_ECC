@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -43,6 +45,9 @@ public class CustomerDetailsPage extends BaseClaimPage {
     @FindBy(xpath = "//a[@href='javascript:EditDamageDate()']")
     private WebElement damageDateEdit;
 
+    @FindBy(xpath = "//button[contains(@onclick, 'newPassword')]")
+    private WebElement newPasswordButton;
+
     private CustomerDetails customerDetails = new CustomerDetails();
 
     @Override
@@ -82,6 +87,11 @@ public class CustomerDetailsPage extends BaseClaimPage {
         $(By.id("genoptag")).click();
         $(By.id("reopen-claim-button")).click();
         return at(SettlementPage.class);
+    }
+
+    public SelfServicePasswordDialog newSelfServicePassword(){
+        newPasswordButton.click();
+        return BaseDialog.at(SelfServicePasswordDialog.class);
     }
 
     public CustomerDetailsPage selectDamageDate(LocalDate date){
