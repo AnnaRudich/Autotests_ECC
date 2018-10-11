@@ -20,6 +20,7 @@ import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelfService2Page extends Page {
 
@@ -253,6 +254,11 @@ public class SelfService2Page extends Page {
            return line.is(Condition.visible);
         }
 
+        public Asserts assertLogOutIsDisplayed() {
+            assertThat(isDisplayed(logout)).as("logout button should be displayed").isTrue();
+            return this;
+        }
+
         public Asserts assertLineIsPresent(String description) {
             assertTrue(assertSsLineIsVisible(description));
             return this;
@@ -262,7 +268,6 @@ public class SelfService2Page extends Page {
             assertFalse(assertSsLineIsVisible(description));
             return this;
         }
-
 
         private int getSsItemsListSize(){
             ElementsCollection itemsList = $$(By.xpath("//div[contains(@class, 'list-panel-items')]/div[contains(@class, 'list-item')]"));

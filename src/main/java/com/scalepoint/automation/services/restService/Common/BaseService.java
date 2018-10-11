@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService.Common;
 
-import com.scalepoint.automation.services.externalapi.TestAccountsApi;
+import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.ClaimSettlementItemService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -42,7 +42,7 @@ public class BaseService {
     public static ClaimSettlementItemService loginAndOpenClaimWithItem(User user, ClaimRequest claimRequest, InsertSettlementItem item){
         return new LoginProcessService()
                 .login(user)
-                .createClaim(new TestAccountsApi().sendRequest().getToken())
+                .createClaim(new OauthTestAccountsApi().sendRequest().getToken())
                 .addClaim(claimRequest)
                 .openClaim()
                 .claimLines()
