@@ -98,7 +98,7 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
     public RnvTaskWizardPage1 changeAgreement(String claimLineDescription, String agrName) {
-      find(By.xpath(agrByCLNameXpath.replace("$1", claimLineDescription))).click();
+      Wait.waitForDisplayed(By.xpath(agrByCLNameXpath.replace("$1", claimLineDescription))).click();
         // lickAndWaitForStable(By.xpath(xpathAgreements), By.cssSelector("ul.x-list-plain li"));
         String xpathAgrName = agrXpath.replace("$1", agrName);
         WebElement item = find(By.xpath(xpathAgrName));

@@ -8,7 +8,6 @@ import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
-import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -18,7 +17,6 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -34,7 +32,6 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -609,14 +606,14 @@ public class SettlementPage extends BaseClaimPage {
             }
 
             public Asserts assertLineIsSentToRepair() {
-                boolean lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
-                Assert.assertTrue(lineSentToRepair);
+                assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0)
+                        .as("repair icon should be displayed").isTrue();
                 return this;
             }
 
             public Asserts assertLineSentToValuation() {
-                boolean lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
-                Assert.assertTrue(lineSentToValuation);
+                assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0)
+                        .as("valuation icon should be displayed").isTrue();
                 return this;
             }
 

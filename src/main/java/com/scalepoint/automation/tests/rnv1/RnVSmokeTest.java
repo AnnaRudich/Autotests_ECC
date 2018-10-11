@@ -28,10 +28,13 @@ public class RnVSmokeTest extends BaseTest{
                 .selectLine()
                 .sendToRnV()
                 .changeTask(lineDescription, rnvTaskType.getRepair())//add TaskType data type
-                //.changeAgreement(lineDescription, agreement.getTestAgreementName());
+                //.changeAgreement(lineDescription, agreement.getTestAgreementName())
                 //.changeAgreement(lineDescription, "serviceAgreement_autotests2");
                 .nextRnVstep()
-                .sendRnV(agreement);
+                .sendRnV(agreement)
+
+                .findClaimLine(lineDescription)
+              .doAssert(asserts -> asserts.assertLineIsSentToRepair());
     }
 }
 
