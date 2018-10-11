@@ -20,266 +20,264 @@ import org.testng.annotations.Test;
 @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
 @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = true)
 public class SelfService2Tests extends BaseTest {
-  @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-  @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
-  public void Charlie735_addLine_categoryAutoMatch_autoImport(User user, Claim claim) {
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
+    public void Charlie735_addLine_categoryAutoMatch_autoImport(User user, Claim claim) {
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
 
-            .addDescription("iPhone");
-    String description = ssPage.getProductMatchDescription();
+                .addDescription("iPhone");
+        String description = ssPage.getProductMatchDescription();
 
-    ssPage.selectPurchaseYear("2017")
-            .selectPurchaseMonth("Jan")
-            .addNewPrice(Constants.PRICE_500)
-            .addCustomerDemandPrice(Constants.PRICE_50)
-            .saveItem()
-            .doAssert(asserts -> asserts.assertItemsListSizeIs(1))
-            .sendResponseToEcc();
+        ssPage.selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .doAssert(asserts -> asserts.assertItemsListSizeIs(1))
+                .sendResponseToEcc();
 
-    login(user)
-            .openActiveRecentClaim()
-            .parseFirstClaimLine();
+        login(user)
+                .openActiveRecentClaim()
+                .parseFirstClaimLine();
 
-    new SettlementPage().doAssert(asserts -> {
-      asserts.assertItemIsPresent(description);
-    });
-  }
+        new SettlementPage().doAssert(asserts -> {
+            asserts.assertItemIsPresent(description);
+        });
+    }
 
-  @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
 
-  @Test(enabled = false, dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
-  public void Charlie735_addLine_ageAsSingleValue_notes(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
-    String claimNote = "Claim Note";
+    @Test(enabled = false, dataProvider = "testDataProvider",
+            description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
+    public void Charlie735_addLine_ageAsSingleValue_notes(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
+        String claimNote = "Claim Note";
 
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
 
-            .addDescription("sony");
-    String description = ssPage.getProductMatchDescription();
-
-
-    ssPage.selectAge("2")
-            .addNewPrice(Constants.PRICE_500)
-            .addCustomerDemandPrice(Constants.PRICE_50)
-            .addItemCustomerNote("Item Customer Note")
-            .saveItem()
-            .addClaimNote(claimNote)
-            .sendResponseToEcc();
-
-    login(user)
-            .openActiveRecentClaim()
-            .parseFirstClaimLine();
-
-    new SettlementPage().doAssert(asserts -> {
-      asserts.assertItemIsPresent(description);
-    });
-
-    new SettlementPage().toNotesPage()
-            .doAssert(asserts -> asserts.assertCustomerNotePresent(claimNote));//FAILS...strange
-  }
-  /*
-   * assertions for the LineNote will be added when corresponding Page Object will be implemented
-   */
-
-  @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-  @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Add line with documentation")
-  public void Charlie735_addLineWithDocumentation(User user, Claim claim) {
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
-
-            .addDescription("iPhone");
-    String description = ssPage.getProductMatchDescription();
+                .addDescription("sony");
+        String description = ssPage.getProductMatchDescription();
 
 
-    ssPage.selectPurchaseYear("2017")
-            .selectPurchaseMonth("Jan")
-            .addNewPrice(Constants.PRICE_500)
-            .addCustomerDemandPrice(Constants.PRICE_50)
-            .addDocumentation()
-            .saveItem()
-            .sendResponseToEcc();
+        ssPage.selectAge("2")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .addItemCustomerNote("Item Customer Note")
+                .saveItem()
+                .addClaimNote(claimNote)
+                .sendResponseToEcc();
 
-    login(user)
-            .openActiveRecentClaim()
-            .parseFirstClaimLine();
+        login(user)
+                .openActiveRecentClaim()
+                .parseFirstClaimLine();
 
-    new SettlementPage().doAssert(asserts -> asserts.assertItemIsPresent(description));
+        new SettlementPage().doAssert(asserts -> {
+            asserts.assertItemIsPresent(description);
+        });
 
-    new SettlementPage().findClaimLine(description)
-            .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
-  }
-  @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-  @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Edit line. Add acquired")
-  public void Charlie735_editLine_addAcquired(User user, Claim claim, Acquired acquired) {
+        new SettlementPage().toNotesPage()
+                .doAssert(asserts -> asserts.assertCustomerNotePresent(claimNote));//FAILS...strange
+    }
+    /*
+     * assertions for the LineNote will be added when corresponding Page Object will be implemented
+     */
 
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
-            .addDescription("iPhone");
-    String description = ssPage.getProductMatchDescription();
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-735 SelfService_2.0: Add line with documentation")
+    public void Charlie735_addLineWithDocumentation(User user, Claim claim) {
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
 
-    ssPage.selectPurchaseYear("2017")
-            .selectPurchaseMonth("Jan")
-            .addNewPrice(Constants.PRICE_500)
-            .addCustomerDemandPrice(Constants.PRICE_50)
-            .saveItem()
-            .startEditItem()
-            .selectAcquired(acquired.getAcquiredNew())
-            .finishEditItem()
-            .sendResponseToEcc();
+                .addDescription("iPhone");
+        String description = ssPage.getProductMatchDescription();
 
-    login(user)
-            .openActiveRecentClaim()
-            .parseFirstClaimLine();
 
-    new SettlementPage().doAssert(asserts -> {
-      asserts.assertItemIsPresent(description);
-      /*
-       *assert Acquired in not implemented on Settlement page
-       */
-    });
-  }
+        ssPage.selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .addDocumentation()
+                .saveItem()
+                .sendResponseToEcc();
 
-  @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-  @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Delete line")
-  public void Charlie735_deleteLine(User user, Claim claim) {
+        login(user)
+                .openActiveRecentClaim()
+                .parseFirstClaimLine();
 
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
+        new SettlementPage().doAssert(asserts -> asserts.assertItemIsPresent(description));
 
-            .addDescription("iPhone");
-    String description = ssPage.getProductMatchDescription();
+        new SettlementPage().findClaimLine(description)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
+    }
 
-    ssPage.selectPurchaseYear("2017")
-            .selectPurchaseMonth("Jan")
-            .addNewPrice(Constants.PRICE_500)
-            .addCustomerDemandPrice(Constants.PRICE_50)
-            .saveItem()
-            .deleteItem()
-            .doAssert(asserts ->
-                    asserts.assertLineIsNotPresent(description));
-  }
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-735 SelfService_2.0: Edit line. Add acquired")
+    public void Charlie735_editLine_addAcquired(User user, Claim claim, Acquired acquired) {
 
-  @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-  @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-  @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Undo delete line")
-  public void Charlie735_undoDeleteLine(User user, Claim claim) {
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription("iPhone");
+        String description = ssPage.getProductMatchDescription();
 
-    SelfService2Page ssPage = loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
+        ssPage.selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .startEditItem()
+                .selectAcquired(acquired.getAcquiredNew())
+                .finishEditItem()
+                .sendResponseToEcc();
 
-            .addDescription("iPhone");
-    String description = ssPage.getProductMatchDescription();
+        login(user)
+                .openActiveRecentClaim()
+                .parseFirstClaimLine();
 
-    ssPage.selectPurchaseYear("2017")
-            .selectPurchaseMonth("Jan")
-            .addNewPrice(Constants.PRICE_500)
-            .addCustomerDemandPrice(Constants.PRICE_50)
-            .saveItem()
-            .deleteItem()
-            .undoDelete()
-            .doAssert(asserts -> asserts.assertLineIsPresent(description));
+        new SettlementPage().doAssert(asserts -> {
+            asserts.assertItemIsPresent(description);
+            /*
+             *assert Acquired in not implemented on Settlement page
+             */
+        });
+    }
 
-    ssPage.sendResponseToEcc();
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-735 SelfService_2.0: Delete line")
+    public void Charlie735_deleteLine(User user, Claim claim) {
 
-    login(user)
-            .openActiveRecentClaim()
-            .parseFirstClaimLine();
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
 
-    new SettlementPage().doAssert(asserts -> {
-      asserts.assertItemIsPresent(description);
-    });
-  }
+                .addDescription("iPhone");
+        String description = ssPage.getProductMatchDescription();
 
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @Test(dataProvider = "testDataProvider",
-          description = "SelfService2 logOut")
-  public void selfService2LogOut(User user, Claim claim) {
-    loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(Constants.DEFAULT_PASSWORD)
-            .logOut()
-            .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
+        ssPage.selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .deleteItem()
+                .doAssert(asserts ->
+                        asserts.assertLineIsNotPresent(description));
+    }
 
-  }
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-735 SelfService_2.0: Undo delete line")
+    public void Charlie735_undoDeleteLine(User user, Claim claim) {
 
-  @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-  @Test(dataProvider = "testDataProvider",
-          description = "SelfService2 logOut")
-  public void selfService2LogInWithNewPassword(User user, Claim claim) {
-    loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toCompleteClaimPage()
-            .fillClaimForm(claim)
-            .completeWithEmail()
-            .openRecentClaim()
-            .newSelfServicePassword();
+        SelfService2Page ssPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
 
-    String newPasswordToSelfService =
-            new SelfServicePasswordDialog().getNewPasswordToSelfService();
+                .addDescription("iPhone");
+        String description = ssPage.getProductMatchDescription();
 
-    new SelfServicePasswordDialog().closeSelfServicePasswordDialog()
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
-            .login(newPasswordToSelfService)
-            .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed);
-  }
+        ssPage.selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .deleteItem()
+                .undoDelete()
+                .doAssert(asserts -> asserts.assertLineIsPresent(description));
+
+        ssPage.sendResponseToEcc();
+
+        login(user)
+                .openActiveRecentClaim()
+                .doAssert(asserts -> {
+                    asserts.assertItemIsPresent(description);
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @Test(dataProvider = "testDataProvider",
+            description = "SelfService2 logOut")
+    public void selfService2LogOut(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .logOut()
+                .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
+
+    }
+
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @Test(dataProvider = "testDataProvider",
+            description = "SelfService2 password reset")
+    public void selfService2LogInWithNewPassword(User user, Claim claim) {
+        SelfServicePasswordDialog passwordDialog = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail()
+                .openRecentClaim()
+                .newSelfServicePassword();
+
+        String newPasswordToSelfService = passwordDialog.getNewPasswordToSelfService();
+
+        passwordDialog.closeSelfServicePasswordDialog()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(newPasswordToSelfService)
+                .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed);
+    }
 }
