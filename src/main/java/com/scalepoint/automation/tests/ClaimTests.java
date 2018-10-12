@@ -104,6 +104,23 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
 
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
+    @Test(dataProvider = "testDataProvider")
+    public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
+        String noteText = new Long(System.currentTimeMillis()).toString();
+        
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem,"item1")
+                .getToolBarMenu()
+                .openClaimLineNotes()
+                .toClaimLineNotesPage()
+                .clickClaimLine()
+                .enterClaimLineNote(noteText)
+                .clickCopyNoteTextButton()
+                .pasteClipboardInNoteWindow()
+                .doAssert(notesPage -> notesPage.assertNoteIsSameAsInTextarea(noteText));
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email")
