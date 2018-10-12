@@ -57,14 +57,11 @@ public class CompleteClaimPage extends Page {
     @FindBy(id = "sendPasswordSMSspan")
     private ExtCheckbox spSMSCheckBOX;
 
-    @FindBy(xpath = "//button[@onclick='sendThroughScalePoint()']")
+    @FindBy(id = "send")
     private Button compWthMailButton;
 
     @FindBy(id = "nosend")
     private Button compWithoutMailButton;
-
-    @FindBy(xpath = "//button[@onclick='endThroughScalePoint()']")
-    private Button compWthMailButtonWithMistakeInLocator;
 
     @FindBy(id = "gem")
     private Button saveClaim;
