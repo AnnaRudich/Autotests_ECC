@@ -8,9 +8,12 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,6 +42,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private String gridNode;
 
+    private Map<String, String> enabledFeatureToggles;
+
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         if (invokedMethod.isTestMethod()) {
@@ -47,9 +53,9 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
                 logger.info("Running on grid node: " + gridNode);
                 retryUpdateFtTemplate(invokedMethod, iTestResult);
+
             }
         }
-
     }
 
     private void retryUpdateFtTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult) {
@@ -125,6 +131,21 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 + "_" + method.getName();
     }
 
+    private void updateFeatureToggle(IInvokedMethod invokedMethod, String toggleExpectedState){
+        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
+
+        FeatureToggleSetting toggleSetting = getToggleSetting(invokedMethod.getTestMethod());
+        if(toggleSetting.equals(null)){//there is no annotation on an invoked method, no actions with feature toggle
+            return;
+        }
+
+        FeatureIds toggleSettingType = toggleSetting.type();
+
+        featureToggleService.updateToggle(toggleExpectedState, toggleSettingType.name());
+        //check the setting is applied, where is the right place to check it
+    }
+
+
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
         List<FtOperation> ftOperations = new ArrayList<>();
         List<FtOperation> defaultFtOperations = new ArrayList<>();
@@ -173,6 +194,12 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             throw new InvalidFtOperationException(comparingResult.getDifferedOperations());
         }
     }
+    //Attention!
+    private void collectEnabledFeatureToggles(FeatureIds featureId){//think more!
+        if (new FeaturesToggleAdministrationService().isToggleEnabled(featureId.name()).equals(true)){
+            enabledFeatureToggles.put("enable", featureId.name());
+        }
+    }
 
     private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations, ITestResult iTestResult){
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
@@ -218,6 +245,13 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
 
         return requiredSettings;
+    }
+
+    private FeatureToggleSetting getToggleSetting(ITestNGMethod testMethod){
+
+        Method method = testMethod.getConstructorOrMethod().getMethod();
+
+        return method.getDeclaredAnnotation(FeatureToggleSetting.class);
     }
 
     @SuppressWarnings("unchecked")

@@ -1,45 +1,55 @@
 package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.Configuration;
+import io.restassured.response.ValidatableResponse;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.sessionId;
+import static javafx.scene.input.KeyCode.SLASH;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class FeaturesToggleAdministrationService extends BaseService {
 
-    private final static String URL = Configuration.getEccAdminUrl()+"/ff4j-console/features";
+    private final static String toggleUrl_1 = Configuration.getEccAdminUrl()+"/ff4j-console/features";
     //http://qa14.scalepoint.com/webapp/ScalePoint/dk/ff4j-console/features?op=enable&uid=NEW_SETTLE_WITHOUT_MAIL_BUTTON
 
-    public FeaturesToggleAdministrationService turnTheFeatureOn(String featureId){
-        given().param("op", "enable").
+    private final static String toggleUrl_2 = Configuration.getEccAdminUrl()+"/ff4j-console/api/features";
+    //http://qa09.scalepoint.com/webapp/ScalePoint/dk/ff4j-console/api/features/EVOUCHER_BACKEND_SYNCHRONOUS_CALLS
+
+    public FeaturesToggleAdministrationService updateToggle(String expectedState, String featureId){
+
+        String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
+
+        given().param("op", expectedState).
                 param("uid", featureId).
+                sessionId(sessionId).
                 when().
-                get(URL).
+                get(toggleUrl_1).
                 then().
                 statusCode(200).
                 log().all();
         return this;
     }
 
-    private enum FeatureIds{
-        DB_BLOCKING,
-        EVOUCHER_BACKEND_SYNCHRONOUS_CALLS,
-        NAVISION_MANDATORY_BANK_ACCOUNT_NUMBER,
-        NAVISION_MANDATORY_BANK_NAME,
-        NAVISION_MANDATORY_BANK_REG_NUMBER,
-        NEW_SETTLE_WITHOUT_MAIL_BUTTON,
-        SCALEPOINT_HANDLES_VOUCHER_AVAILABLE,
-        SHOW_VOUCHER_RIGHT_OF_CANCELLATION,
-        USE_ADDRESS2_IN_ORDER_XML_EMAIL,
-        USE_BING_MAPS_FOR_DISTANCES,
-        USE_CELL_PHONE_IN_ORDER_XML_EMAIL,
-        USE_EXTENDED_PRODUCT_VALIDATION,
-        USE_IP1_ENCODING_FIX,
-        USE_NEW_CATEGORY_MASTER_MESSAGE,
-        USE_REDEEM_INPUT_VALIDATION,
-        USE_USERS_CACHE,
-        XFEEDS_IMPORT_DISABLED
+    //{"uid":"EVOUCHER_BACKEND_SYNCHRONOUS_CALLS","enable":true,
+    // "description":"Setting to make evoucher issues/redeem sync or async","group":"CountrySettings","permissions":[],"flippingStrategy":null,"customProperties":{}}
+
+    public FeaturesToggleAdministrationService isToggleEnabled(String featureId) {
+        assertThat(getToggleStatus(featureId)).as("toggle with id" + featureId + "should be enabled").isTrue();
+        return this;
+    }
+
+    public FeaturesToggleAdministrationService isToggleDisabled(String featureId) {
+        assertThat(getToggleStatus(featureId)).as("toggle with id" + featureId + "should be disabled").isFalse();
+        return this;
+    }
+
+    private Boolean getToggleStatus(String featureId){
+        ValidatableResponse response = given().sessionId(sessionId).get(toggleUrl_2 + SLASH + featureId).then().statusCode(200).log().all();
+        return response.extract().jsonPath().getBoolean("enable");
     }
 
 }
