@@ -115,7 +115,7 @@
             </properties>
         </profile>
         <profile>
-            <id>EDU02</id>
+            <id>EDUCATION02</id>
             <properties>
                 <activatedProperties>edu02</activatedProperties>
             </properties>
