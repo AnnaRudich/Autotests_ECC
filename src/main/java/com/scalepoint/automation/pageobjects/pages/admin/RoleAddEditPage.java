@@ -60,9 +60,6 @@ public class RoleAddEditPage extends AdminBasePage {
     @FindBy(name = "VERSION_INFO_PAGE_ACCESS_ID_16")
     private WebElement versionInfoPageButton;
 
-    @FindBy(name = "SERVICE_PARTNER_REGISTER_PAGE_ACCESS_ID_17")
-    private WebElement serPartnerPageButton;
-
     @FindBy(name = "BBB_INITIALIZE_ORDERS_PAGE_ACCESS_ID_18")
     private WebElement bbbInitOrdersPageButton;
 
@@ -141,9 +138,6 @@ public class RoleAddEditPage extends AdminBasePage {
     @FindBy(name = "CAN_COMPLETE_CLAIMS_ACCESS_ID_45")
     private WebElement canCompleteClaimButton;
 
-    @FindBy(name = "APPLICATION_STATUS_PAGE_ACCESS_ID_27")
-    private WebElement appStatusPageButton;
-
     @FindBy(name = "TEXTSEARCH_POPULARITY_PAGE_ACCESS_ID_47")
     private WebElement tsPopularityButton;
 
@@ -180,7 +174,7 @@ public class RoleAddEditPage extends AdminBasePage {
         List<WebElement> elements = Arrays.asList(adminRoleButton, accessoryPageButton,
                 usersPageButton, icPageButton, ftPageButton, testMailPageButton, testMobilePageButton,
                 salesTaxesPageButton, flushAllPageButton, flushTextCashPageButton, importTasksPageButton, dbVersionPageButton,
-                dbInfoPageButton, applicationInfoPageButton, versionInfoPageButton, serPartnerPageButton, bbbInitOrdersPageButton,
+                dbInfoPageButton, applicationInfoPageButton, versionInfoPageButton, bbbInitOrdersPageButton,
                 bbbSentOrdersPageButton,
                 eVouchersPageButton,
                 departmentsPageButton,
@@ -204,8 +198,7 @@ public class RoleAddEditPage extends AdminBasePage {
                 pseudoCatGroupPageButton,
                 pseudoCatPageButton,
                 editCastOrderPageButton,
-                canCompleteClaimButton,
-                appStatusPageButton);
+                canCompleteClaimButton);
         for (WebElement item : elements) {
             scrollTo(item);
             item.click();

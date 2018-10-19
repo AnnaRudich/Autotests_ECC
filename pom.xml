@@ -115,6 +115,12 @@
             </properties>
         </profile>
         <profile>
+            <id>EDUCATION02</id>
+            <properties>
+                <activatedProperties>edu02</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>STAGE</id>
             <properties>
                 <activatedProperties>stage</activatedProperties>
