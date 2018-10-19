@@ -15,7 +15,7 @@ public @interface FeatureToggleSetting {
     FeatureIds type();
 
     String value() default UNDEFINED;
-    boolean enabled() default false;
+    boolean enabled() default true;
 
     boolean isDefault() default false;
 }

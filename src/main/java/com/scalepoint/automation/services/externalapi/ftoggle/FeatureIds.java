@@ -18,6 +18,4 @@ public enum FeatureIds {
     USE_REDEEM_INPUT_VALIDATION,
     USE_USERS_CACHE,
     XFEEDS_IMPORT_DISABLED
-
-    //FeatureIds.DB_BLOCKING.name()
 }

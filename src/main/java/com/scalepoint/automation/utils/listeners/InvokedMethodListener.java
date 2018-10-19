@@ -8,8 +8,8 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
+import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService.ActionsOnToggle;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
@@ -42,7 +42,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private String gridNode;
 
-    private Map<String, String> enabledFeatureToggles;
+    private Map<FTSettings, Boolean> toggleStateBeforeUpdate;
 
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
@@ -53,7 +53,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
                 logger.info("Running on grid node: " + gridNode);
                 retryUpdateFtTemplate(invokedMethod, iTestResult);
-
+                updateFeatureToggle(invokedMethod);
             }
         }
     }
@@ -110,6 +110,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
                     List<FtOperation> operations = rollbackContext.getOperations();
                     functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
+
                 } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
                     logger.error(e.getMessage(), e);
@@ -131,18 +132,26 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 + "_" + method.getName();
     }
 
-    private void updateFeatureToggle(IInvokedMethod invokedMethod, String toggleExpectedState){
+
+    private FeatureToggleSetting getToggleSetting(ITestNGMethod testMethod) {
+        Method method = testMethod.getConstructorOrMethod().getMethod();
+        return method.getDeclaredAnnotation(FeatureToggleSetting.class);
+    }
+
+
+    private void updateFeatureToggle(IInvokedMethod invokedMethod) {
         FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
 
         FeatureToggleSetting toggleSetting = getToggleSetting(invokedMethod.getTestMethod());
-        if(toggleSetting.equals(null)){//there is no annotation on an invoked method, no actions with feature toggle
+        if (toggleSetting == null) {
             return;
         }
 
-        FeatureIds toggleSettingType = toggleSetting.type();
-
-        featureToggleService.updateToggle(toggleExpectedState, toggleSettingType.name());
-        //check the setting is applied, where is the right place to check it
+        if (toggleSetting.enabled()) {
+            featureToggleService.updateToggle(ActionsOnToggle.enable, toggleSetting.type());
+        } else {
+            featureToggleService.updateToggle(ActionsOnToggle.disable, toggleSetting.type());
+        }
     }
 
 
@@ -194,12 +203,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             throw new InvalidFtOperationException(comparingResult.getDifferedOperations());
         }
     }
-    //Attention!
-    private void collectEnabledFeatureToggles(FeatureIds featureId){//think more!
-        if (new FeaturesToggleAdministrationService().isToggleEnabled(featureId.name()).equals(true)){
-            enabledFeatureToggles.put("enable", featureId.name());
-        }
-    }
 
     private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations, ITestResult iTestResult){
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
@@ -245,13 +248,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
 
         return requiredSettings;
-    }
-
-    private FeatureToggleSetting getToggleSetting(ITestNGMethod testMethod){
-
-        Method method = testMethod.getConstructorOrMethod().getMethod();
-
-        return method.getDeclaredAnnotation(FeatureToggleSetting.class);
     }
 
     @SuppressWarnings("unchecked")
