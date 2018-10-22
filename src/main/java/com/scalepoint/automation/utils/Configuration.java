@@ -18,8 +18,8 @@ public class Configuration {
   public static final String KEY_HUB_REMOTE_ZALENIUM = "hub.remote.zalenium";
   public static final String KEY_HUB_LOCAL_ZALENIUM = "hub.local.zalenium";
 
-  private static final String ff4jFeaturesApiUrl = "/ff4j-console/api/features/";
-  private static final String ff4jToggleAdminUrl = "/ff4j-console/features";
+  private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
+  private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
   private static final String SLASH = "/";
   private static final String HTTP = "http://";
@@ -89,7 +89,11 @@ public class Configuration {
   }
 
   public static String getFeatureToggleAdminUrl(){
-    return getEccAdminUrl()+getFf4jToggleAdminUrl();
+    return getEccUrl()+getFf4jToggleAdminUrl();
+  }
+
+  public static String getFeaturesApiUrl(){
+    return getEccUrl()+getFf4jFeaturesApiUrl();
   }
 
   public static boolean isDK() {
@@ -189,11 +193,11 @@ public class Configuration {
     return this;
   }
 
-  public static String getFf4jFeaturesApiUrl() {
+  private static String getFf4jFeaturesApiUrl() {
     return ff4jFeaturesApiUrl;
   }
 
-  public static String getFf4jToggleAdminUrl() {
+  private static String getFf4jToggleAdminUrl() {
     return ff4jToggleAdminUrl;
   }
 

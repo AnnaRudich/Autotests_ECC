@@ -7,17 +7,16 @@ import com.scalepoint.automation.utils.Configuration;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.sessionId;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class FeaturesToggleAdministrationService extends BaseService {
-
+    String sessionId;
     public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId){
 
-        String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
+        sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
 
-        given().param("op", expectedActionOnToggle.name()).
+        given().log().all().param("op", expectedActionOnToggle.name()).
                 param("uid", featureId.name()).
                 sessionId(sessionId).
                 when().
@@ -35,7 +34,10 @@ public class FeaturesToggleAdministrationService extends BaseService {
     }
 
     public Boolean getToggleStatus(String featureId){
-        ValidatableResponse response = given().sessionId(sessionId).get(Configuration.getFf4jFeaturesApiUrl()+ featureId).then().statusCode(200).log().all();
+        ValidatableResponse response =
+                given().log().all().
+                        sessionId(sessionId).
+                        get(Configuration.getFeaturesApiUrl()+ featureId).then().statusCode(200).log().all();
         return response.extract().jsonPath().getBoolean("enable");
     }
 
@@ -43,14 +45,14 @@ public class FeaturesToggleAdministrationService extends BaseService {
         enable(true),
         disable(false);
 
-        private Boolean enableParameterValue;
+    private Boolean enableParameterValue;
 
-        ActionsOnToggle(boolean toggleStatusInJson){
-            this.enableParameterValue =toggleStatusInJson;
-        }
-
-        public Boolean getEnableParameterValue(){
-            return enableParameterValue;
-        }
+    ActionsOnToggle(boolean toggleStatusInJson){
+        this.enableParameterValue =toggleStatusInJson;
     }
+
+    public Boolean getEnableParameterValue(){
+        return enableParameterValue;
+    }
+}
 }

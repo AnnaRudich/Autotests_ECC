@@ -85,13 +85,12 @@ public class ClaimLineNotesPage extends BaseClaimPage implements RequiresJavascr
         assertFunc.accept(new Asserts());
         return ClaimLineNotesPage.this;
     }
-
     public class Asserts {
         public Asserts assertNoteIsSameAsInTextarea(String originalNoteText) {
             String text = noteTextArea.getText();
             Assert.assertTrue(originalNoteText.equals(text), "Copy note is not working");
             return this;
+            //'\ue009'
         }
     }
-
 }
