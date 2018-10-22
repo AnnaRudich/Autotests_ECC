@@ -33,6 +33,11 @@ public class FeaturesToggleAdministrationService extends BaseService {
         return this;
     }
 
+    public void assertToggleStatus(FeatureIds featureId, ActionsOnToggle featureState){
+        if(featureState.equals(""))
+        assertThat(getToggleStatus(featureId.name())).as("toggle with id" + featureId + "should be " + expectedStatus).isTrue();
+    }
+
     public Boolean getToggleStatus(String featureId){
         ValidatableResponse response =
                 given().log().all().
