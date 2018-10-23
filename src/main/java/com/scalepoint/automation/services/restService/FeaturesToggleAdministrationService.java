@@ -11,10 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class FeaturesToggleAdministrationService extends BaseService {
-    String sessionId;
-    public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId){
+    String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();;
 
-        sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
+
+    public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId) {
 
         given().log().all().param("op", expectedActionOnToggle.name()).
                 param("uid", featureId.name()).
@@ -25,24 +25,21 @@ public class FeaturesToggleAdministrationService extends BaseService {
                 statusCode(200).
                 log().all();
 
-        if (expectedActionOnToggle.getEnableParameterValue()) {
-            assertThat(getToggleStatus(featureId.name())).as("toggle with id" + featureId + "should be enabled").isTrue();
-        } else {
-            assertThat(getToggleStatus(featureId.name())).as("toggle with id" + featureId + "should be disabled").isFalse();
-        }
+        assertToggleStatus(featureId, expectedActionOnToggle.getEnableParameterValue());
         return this;
     }
 
-    public void assertToggleStatus(FeatureIds featureId, ActionsOnToggle featureState){
-        if(featureState.equals(""))
-        assertThat(getToggleStatus(featureId.name())).as("toggle with id" + featureId + "should be " + expectedStatus).isTrue();
+    private void assertToggleStatus(FeatureIds featureId, Boolean expectedStatus) {
+        assertThat(getToggleStatus(featureId.name())).
+                as("toggle for featureId: " + featureId + "should be enable: " + expectedStatus.toString()).isEqualTo(expectedStatus);
     }
 
-    public Boolean getToggleStatus(String featureId){
+    public Boolean getToggleStatus(String featureId) {
+
         ValidatableResponse response =
                 given().log().all().
                         sessionId(sessionId).
-                        get(Configuration.getFeaturesApiUrl()+ featureId).then().statusCode(200).log().all();
+                        get(Configuration.getFeaturesApiUrl() + featureId).then().statusCode(200).log().all();
         return response.extract().jsonPath().getBoolean("enable");
     }
 
@@ -50,14 +47,14 @@ public class FeaturesToggleAdministrationService extends BaseService {
         enable(true),
         disable(false);
 
-    private Boolean enableParameterValue;
+        private Boolean enableParameterValue;
 
-    ActionsOnToggle(boolean toggleStatusInJson){
-        this.enableParameterValue =toggleStatusInJson;
-    }
+        ActionsOnToggle(boolean toggleStatusInJson) {
+            this.enableParameterValue = toggleStatusInJson;
+        }
 
-    public Boolean getEnableParameterValue(){
-        return enableParameterValue;
+        public Boolean getEnableParameterValue() {
+            return enableParameterValue;
+        }
     }
-}
 }

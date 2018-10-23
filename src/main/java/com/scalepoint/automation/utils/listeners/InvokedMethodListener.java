@@ -8,6 +8,7 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService.ActionsOnToggle;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -28,6 +29,7 @@ import org.testng.ITestResult;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private String gridNode;
 
-    private Map<FTSettings, Boolean> toggleStateBeforeUpdate;
+    private Map<FeatureIds, Boolean> featureTogglesDefaultState = new HashMap<>();
 
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
@@ -105,11 +107,26 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                         return;
                     }
 
+                    if(featureTogglesDefaultState.isEmpty()){
+                        logger.info("No feature toggle to rollback");
+                    }
+
                     Page.to(LoginPage.class);
 
                     FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
                     List<FtOperation> operations = rollbackContext.getOperations();
                     functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
+
+                    FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
+                    FeatureIds toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod()).type();
+                    ActionsOnToggle expectedActionOnToggle;
+
+                    if (!featureTogglesDefaultState.get((toggleSetting))) {
+                        expectedActionOnToggle = ActionsOnToggle.enable;
+                    } else expectedActionOnToggle = ActionsOnToggle.disable;
+
+                    featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSetting);
+
 
                 } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
@@ -146,6 +163,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         if (toggleSetting == null) {
             return;
         }
+
+        featureTogglesDefaultState.put(toggleSetting.type(), featureToggleService.getToggleStatus(toggleSetting.type().name()));
 
         if (toggleSetting.enabled()) {
             featureToggleService.updateToggle(ActionsOnToggle.enable, toggleSetting.type());

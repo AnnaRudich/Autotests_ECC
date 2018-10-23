@@ -8,10 +8,11 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 @ClaimSpecificPage
@@ -86,11 +87,11 @@ public class ClaimLineNotesPage extends BaseClaimPage implements RequiresJavascr
         return ClaimLineNotesPage.this;
     }
     public class Asserts {
-        public Asserts assertNoteIsSameAsInTextarea(String originalNoteText) {
-            String text = noteTextArea.getText();
-            Assert.assertTrue(originalNoteText.equals(text), "Copy note is not working");
+        public Asserts assertNoteIsCopied(String originalNoteText) {
+            String textFromClipboard = noteTextArea.getText();
+            assertThat(originalNoteText.equals(textFromClipboard)).
+                    as("Pasted text is: " + textFromClipboard + "but should be the same as original note text" + originalNoteText).isTrue();
             return this;
-            //'\ue009'
         }
     }
 }
