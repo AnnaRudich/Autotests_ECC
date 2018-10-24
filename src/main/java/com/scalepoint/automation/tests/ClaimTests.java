@@ -47,6 +47,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
 
+    @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
