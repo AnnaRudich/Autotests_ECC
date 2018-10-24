@@ -22,7 +22,7 @@ public class Configuration {
   private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
   private static final String SLASH = "/";
-  private static final String HTTP = "http://";
+  private static final String HTTPS = "https://";
 
   private static Locale locale;
   private static String serverUrl;
@@ -49,7 +49,7 @@ public class Configuration {
   }
 
   public static String getHttpServerUrl(String serverUrl) {
-    return HTTP + serverUrl;
+    return HTTPS + serverUrl;
   }
 
   private static String errorMessage(String parameter) {

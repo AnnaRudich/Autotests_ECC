@@ -52,7 +52,6 @@ public class SettlementClaimService extends BaseService {
 
         given().log().all().baseUri(response.getHeader("Location"))
                 .sessionId(data.getEccSessionId())
-                .port(80)
                 .get(response.getHeader("Location"))
                 .then();
 
