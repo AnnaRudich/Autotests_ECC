@@ -1,13 +1,11 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.scalepoint.automation.pageobjects.pages.ClaimLineNotesPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 public class ToolBarMenu extends Module {
 
@@ -63,7 +61,7 @@ public class ToolBarMenu extends Module {
 
     public ToolBarMenu removeSelected() {
         removeSelected.click();
-        if (isAlertPresent()) {
+        if(isAlertPresent()) {
             acceptAlert();
         }
         return this;
@@ -77,15 +75,5 @@ public class ToolBarMenu extends Module {
     public ToolBarMenu selectAll() {
         selectAll.click();
         return this;
-    }
-
-    public ToolBarMenu openClaimLineNotes() {
-        claimLineNote.click();
-        return this;
-    }
-
-    public ClaimLineNotesPage toClaimLineNotesPage() {
-        waitForAjaxCompleted();
-        return at(ClaimLineNotesPage.class);
     }
 }

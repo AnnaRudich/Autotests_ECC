@@ -22,7 +22,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.getWebDriverLogs;
 import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public interface Actions {
