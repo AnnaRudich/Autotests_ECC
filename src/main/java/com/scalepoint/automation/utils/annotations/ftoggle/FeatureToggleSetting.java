@@ -11,11 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface FeatureToggleSetting {
 
-    String UNDEFINED = "undefined";
     FeatureIds type();
 
-    String value() default UNDEFINED;
     boolean enabled() default true;
-
-    boolean isDefault() default false;
 }

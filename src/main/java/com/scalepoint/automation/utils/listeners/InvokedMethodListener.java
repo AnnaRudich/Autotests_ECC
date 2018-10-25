@@ -107,26 +107,11 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                         return;
                     }
 
-                    if(featureTogglesDefaultState.isEmpty()){
+                    if (featureTogglesDefaultState.isEmpty()) {
                         logger.info("No feature toggle to rollback");
-                    }
+                    } else rollbackToggleSetting(iInvokedMethod);
 
                     Page.to(LoginPage.class);
-
-                    FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-                    List<FtOperation> operations = rollbackContext.getOperations();
-                    functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
-
-                    FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
-                    FeatureIds toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod()).type();
-                    ActionsOnToggle expectedActionOnToggle;
-
-                    if (!featureTogglesDefaultState.get((toggleSetting))) {
-                        expectedActionOnToggle = ActionsOnToggle.enable;
-                    } else expectedActionOnToggle = ActionsOnToggle.disable;
-
-                    featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSetting);
-
 
                 } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
@@ -134,6 +119,19 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 }
             }
         }
+    }
+
+    private void rollbackToggleSetting(IInvokedMethod iInvokedMethod){
+
+        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
+        FeatureIds toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod()).type();
+        ActionsOnToggle expectedActionOnToggle;
+
+        if (!featureTogglesDefaultState.get((toggleSetting))) {
+            expectedActionOnToggle = ActionsOnToggle.enable;
+        } else expectedActionOnToggle = ActionsOnToggle.disable;
+
+        featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSetting);
     }
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
@@ -164,12 +162,17 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             return;
         }
 
-        featureTogglesDefaultState.put(toggleSetting.type(), featureToggleService.getToggleStatus(toggleSetting.type().name()));
+        Boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
+        Boolean toggleExpectedState = toggleSetting.enabled();
 
-        if (toggleSetting.enabled()) {
-            featureToggleService.updateToggle(ActionsOnToggle.enable, toggleSetting.type());
-        } else {
-            featureToggleService.updateToggle(ActionsOnToggle.disable, toggleSetting.type());
+        if (!toggleActualState.equals(toggleExpectedState)) {
+            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
+
+            if (toggleSetting.enabled()) {
+                featureToggleService.updateToggle(ActionsOnToggle.enable, toggleSetting.type());
+            } else {
+                featureToggleService.updateToggle(ActionsOnToggle.disable, toggleSetting.type());
+            }
         }
     }
 

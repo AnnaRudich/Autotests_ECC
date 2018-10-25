@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class FeaturesToggleAdministrationService extends BaseService {
-    String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();;
+    private String sessionId = loginUser(UsersManager.getSystemUser()).getResponse().getSessionId();
 
 
     public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId) {
