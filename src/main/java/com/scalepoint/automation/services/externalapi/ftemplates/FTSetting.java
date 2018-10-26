@@ -6,7 +6,8 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.operatio
 
 public enum FTSetting {
     //Various function around the system
-    SETTLE_WITHOUT_MAIL("input[name=ftfunctionflag][value='1']", CHECKBOX),
+    SETTLE_EXTERNALLY("input[name=ftfunctionflag][value='1']", CHECKBOX),
+    SETTLE_WITHOUT_MAIL("input[name=ftfunctionflag][value='512']", CHECKBOX),
     ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE("input[name=ftfunctionflag3][value='4194304']", CHECKBOX),
     ENABLE_REGISTRATION_LINE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='2048']", CHECKBOX),
     USE_INTERNAL_NOTES("input[name=ftfunctionflag][value='2048']", CHECKBOX),

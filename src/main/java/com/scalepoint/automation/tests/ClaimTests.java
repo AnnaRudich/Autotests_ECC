@@ -25,9 +25,15 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -79,16 +85,15 @@ public class ClaimTests extends BaseTest {
                 .toMailsPage()
                 .doAssert(mail ->  mail.isMailExist(CUSTOMER_WELCOME));
     }
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
+            description = "CHARLIE-544, ECC-2629 It's possible to complete claim externally. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
+    public void charlie544_2629_completeClaimExternally(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithoutEmail()
+                .completeExternally()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusClosedExternally()));
     }
 
@@ -103,6 +108,19 @@ public class ClaimTests extends BaseTest {
                 .saveClaim()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
+
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")//add assertion there is No mails
+    @Test(dataProvider = "testDataProvider",
+            description = "CONTENTS-3332 Be able to settle a claim without sending an e-mail to customer. " +
+                    "The new close method in history")
+    public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithoutEmail()
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+    }
+
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
     @Test(dataProvider = "testDataProvider",
