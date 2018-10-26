@@ -1,19 +1,19 @@
 package com.scalepoint.automation.tests.api;
 
-import com.scalepoint.automation.services.restService.EccSettlementSummaryService;
-import com.scalepoint.automation.services.restService.OwnRiskService;
-import com.scalepoint.automation.services.restService.ReopenClaimService;
-import com.scalepoint.automation.services.restService.SettlementClaimService;
+import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import io.restassured.response.ValidatableResponse;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItem;
+import static com.scalepoint.automation.services.restService.Common.BaseService.loginUser;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
@@ -89,10 +89,21 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,3);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void cancelClaimShouldBeNotSendToEventApi(User user, InsertSettlementItem item) {
+    @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    public void cancelClaimCreatedByUnifiedIntegrationShouldBeNotSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .cancel(claimRequest);
+
+        eventDatabaseApi.assertThatCloseCaseEventWasNotCreated(claimRequest);
+    }
+
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    public void cancelClaimShouldBeNotSendToEventApi(User user, EccIntegration eccIntegration) {
+        loginUser(user);
+        EccIntegrationService eccIntegrationService = new EccIntegrationService();
+        eccIntegrationService.createAndOpenClaim(eccIntegration);
+        eccIntegrationService.openCaseAndRedirect();
+        new SettlementClaimService().cancel(eccIntegration);
 
         eventDatabaseApi.assertThatCloseCaseEventWasNotCreated(claimRequest);
     }
