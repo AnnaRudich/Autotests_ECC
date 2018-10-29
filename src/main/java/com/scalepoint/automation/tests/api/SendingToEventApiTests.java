@@ -89,7 +89,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,3);
     }
 
-    @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void cancelClaimCreatedByUnifiedIntegrationShouldBeNotSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .cancel(claimRequest);
