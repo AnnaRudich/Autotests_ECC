@@ -11,11 +11,13 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -108,8 +110,10 @@ public class ClaimTests extends BaseTest {
                 .saveClaim()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
-
-    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")//add assertion there is No mails
+    @FeatureToggleSetting(type = FeatureIds.NEW_SETTLE_WITHOUT_MAIL_BUTTON)
+    @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")//add assertion there is No mails, ensureWeAreAt mailsPage rely on mailsSubject
+//but if there is no mails it's failing. Does it makes sense to assert empty mails list?
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-3332 Be able to settle a claim without sending an e-mail to customer. " +
                     "The new close method in history")
@@ -117,9 +121,13 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
+
                 .completeWithoutEmail()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
-    }
+
+//                .openRecentClaim().toMailsPage()
+//                .doAssert(MailsPage.Asserts::noMailsOnThePage);
+}
 
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
