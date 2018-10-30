@@ -207,7 +207,7 @@ public class MailsPage extends BaseClaimPage {
         }
 
         public void noMailsOnThePage(){
-            assertTrue(parseMails().getMails()==null);
+            assertTrue(parseMails().getMails().isEmpty());
         }
     }
 }

@@ -16,26 +16,22 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -110,11 +106,11 @@ public class ClaimTests extends BaseTest {
                 .saveClaim()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
+    @RunOn(DriverType.CHROME)
     @FeatureToggleSetting(type = FeatureIds.NEW_SETTLE_WITHOUT_MAIL_BUTTON)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
-    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")//add assertion there is No mails, ensureWeAreAt mailsPage rely on mailsSubject
-//but if there is no mails it's failing. Does it makes sense to assert empty mails list?
-    @Test(dataProvider = "testDataProvider",
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")
+            @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-3332 Be able to settle a claim without sending an e-mail to customer. " +
                     "The new close method in history")
     public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
@@ -123,10 +119,10 @@ public class ClaimTests extends BaseTest {
                 .fillClaimForm(claim)
 
                 .completeWithoutEmail()
-                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
-//                .openRecentClaim().toMailsPage()
-//                .doAssert(MailsPage.Asserts::noMailsOnThePage);
+              .openRecentClaim().toEmptyMailsPage()
+              .doAssert(MailsPage.Asserts::noMailsOnThePage);
 }
 
 
