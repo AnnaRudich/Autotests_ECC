@@ -448,4 +448,23 @@ public class ClaimTests extends BaseTest {
                     mail.isMailExist(REPLACEMENT_WITH_MAIL);
                 });
     }
+
+    @FeatureToggleSetting(type = FeatureIds.COPY_NOTE_BUTTON)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
+    @Test(dataProvider = "testDataProvider")
+    public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
+        String noteText = new Long(System.currentTimeMillis()).toString();
+
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem,"item1")
+                .getToolBarMenu()
+                .openClaimLineNotes()
+                .toClaimLineNotesPage()
+                .clickClaimLine()
+                .enterClaimLineNote(noteText)
+                .clickCopyNoteTextButton()
+                .pasteClipboardInNoteWindow()
+                .doAssert(notesPage -> notesPage.assertNoteIsCopied(noteText));
+    }
+
 }
