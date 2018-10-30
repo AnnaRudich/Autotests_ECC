@@ -11,11 +11,13 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -423,4 +425,23 @@ public class ClaimTests extends BaseTest {
                     mail.isMailExist(REPLACEMENT_WITH_MAIL);
                 });
     }
+
+    @FeatureToggleSetting(type = FeatureIds.COPY_NOTE_BUTTON)
+    @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
+    @Test(dataProvider = "testDataProvider")
+    public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
+        String noteText = new Long(System.currentTimeMillis()).toString();
+
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem,"item1")
+                .getToolBarMenu()
+                .openClaimLineNotes()
+                .toClaimLineNotesPage()
+                .clickClaimLine()
+                .enterClaimLineNote(noteText)
+                .clickCopyNoteTextButton()
+                .pasteClipboardInNoteWindow()
+                .doAssert(notesPage -> notesPage.assertNoteIsCopied(noteText));
+    }
+
 }
