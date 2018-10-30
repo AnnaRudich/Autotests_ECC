@@ -90,6 +90,7 @@ public class SettlementClaimService extends BaseService {
 
         CLOSE_EXTERNAL(BasePath.CLOSE_EXTERNAL),
         CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL),
+        CLOSE_WITHOUT_MAIL(BasePath.CLOSE_WITHOUT_MAIL),
         REPLACEMENT(BasePath.REPLACEMENT);
 
         private String path;

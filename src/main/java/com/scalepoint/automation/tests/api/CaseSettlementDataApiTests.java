@@ -52,6 +52,21 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .body(matchesJsonSchemaInClasspath("schema/CaseDataSchema.json"));
     }
 
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    public void getCaseRevisionByTokenForClosedWithoutMailClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
+        loginAndOpenClaimWithItem(user, claimRequest, item)
+                .closeCase()
+                .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL);
+
+        new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
+                .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()))
+                .getResponse()
+                .statusCode(HttpStatus.SC_OK)
+                .body(status, is("SETTLED"))
+                .body(settlementType, is("SETTLED_WITHOUT_EMAIL"))
+                .body(matchesJsonSchemaInClasspath("schema/CaseDataSchema.json"));
+    }
+
     //TODO: fix
     @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForReplacement(User user, ClaimRequest claimRequest, InsertSettlementItem item) {

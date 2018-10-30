@@ -184,6 +184,7 @@
           "enum": [
             "SETTLED_EXTERNALLY",
             "SETTLED_WITH_EMAIL",
+            "SETTLED_WITHOUT_EMAIL",
             "SETTLED_FOR_REPLACEMENT",
             "CANCELLED",
             "UNKNOWN"
@@ -239,5 +240,4 @@
     "settlementDetails",
     "case"
   ]
-
 }
