@@ -160,6 +160,8 @@ Nodes:
     - 10.99.14.51 (ecc-aqa03.spcph.local)
 
 have config for running tests on chrome and IE.
+<br>
+Login there using `ecc_auto /// 1q2w3e4r5tQAWSEDRFTG`
 
     C:\Webdriver -> there is NodeConfig.json and NodeStart.bat file
 
