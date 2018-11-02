@@ -134,43 +134,57 @@ also for single tests or test class you can specify driver type by annotation,
   }
 ```
 
+### Local drivers
+
 Local driver are for running tests locally, so it will try to open a browser on machine where
 maven command or IntelliJ configurations is running.
-
+<br>
 For that purpose we are using https://github.com/bonigarcia/webdrivermanager
 It downloads webdriver binaries automatically and setting up system properties for them.
+<br>
+
+### Remote drivers
 
 Remote driver are for running tests on selenium grid hub.
 Selenium hub is located on dev-ecc-tool's server and it is running inside docker container
-
+<br>
 Url to selenium grid console -> http://dev-ecc-tool02.spcph.local:4444/grid/console
-
+<br>
+<br>
 Nodes:
+
     - 10.99.14.49 (ecc-aqa01.spcph.local)
+    
     - 10.99.14.50 (ecc-aqa02.spcph.local)
+    
     - 10.99.14.51 (ecc-aqa03.spcph.local)
+
 have config for running tests on chrome and IE.
 
-C:\Webdriver -> there is NodeConfig.json and NodeStart.bat file
+    C:\Webdriver -> there is NodeConfig.json and NodeStart.bat file
 
-C:\Drivers -> WebDriver binaries for chrome and IE
+    C:\Drivers -> WebDriver binaries for chrome and IE
 
 Hub remote url is set in application.properties file:
 `hub.remote=http://dev-ecc-tool02.spcph.local:4444/wd/hub`
 
+### Zalenium
+
 Zalenium are for running tests using zalenium containers.
 https://github.com/zalando/zalenium
-
+<br>
 Zalenium supports maneging selenium grid hub and nodes in docker, it creates
 nodes dynamically, allows to record failed tests, connect to docker nodes using vnc,
 store tests and tests results in zalenium dashboard.
-
+<br>
 Connection urls to zalenium are stored in application.properties files
 `hub.remote.zalenium=http://dev-ecc-tool01:4444/wd/hub
  hub.local.zalenium=http://localhost:4444/wd/hub`
-
+<br>
 for now zalenium is disabled because it's not supports IE and need to be running in docker cluster
 like kubernetes.
+
+### Others
 
 FF and EDGE are added but not tests.
 
