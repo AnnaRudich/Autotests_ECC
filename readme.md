@@ -8,23 +8,22 @@ covers UI flows of ECC with some parts of Self Service.
 Clone repo from git:
     `` ssh://git@bitbucket.spcph.local:7999/ecc/automatedtest.git ``
 
-JDK 1.8 required
+JDK 1.8 required<br>
 https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
-Maven 3.x required
+Maven 3.x required<br>
 https://maven.apache.org/download.cgi
 
 Some tests are using windows authentication and integrated security to
-connect to database.
+connect to database. <br>
 You can find jdbc urls in ```scr/main/resources-filtered/*.properties```
 
 Pattern is ```application-<env_name>.properties``` -> env_name is taken from maven profiles
 properties ```<activatedProperties>``` tag
 
-example:
-[source,xml]
-.pom.xml
-----
+pom.xml:
+
+```xml
 ...
     <profiles>
         <profile>
@@ -50,10 +49,13 @@ example:
             </properties>
         </profile>
 ...
-----
+```
+
 
 application.properties files is common for all and if same properties will be in
 named application property file then it will be overridden.
+
+### DB config
 
 If you don't want to use integrated security look in code for dataSource Beans
 and add to it username and password
@@ -62,9 +64,9 @@ ecc -> ```@Bean(name = "eccDb")```
 
 events-api -> ```@Bean(name = "eventApiDb")```
 
-[source,java]
+
 .BeansConfiguration.java
-----
+```java
     @Bean(name = "eccDb")
     @Primary
     public DataSource dataSource() {
@@ -75,7 +77,7 @@ events-api -> ```@Bean(name = "eventApiDb")```
         dataSource.setPassword(password);
         return dataSource;
     }
-----
+```
 
 Before running tests tests data have to be injected to db.
 There is liquibase maven plugin that runs all SQL scripts located in:
@@ -107,9 +109,8 @@ in application*.properties files there is property called
 
 all possible driver types for now:
 
-[source]
 .DriverType
-----
+```
     IE("ie.local"),
     IE_REMOTE("ie.remote"),
     FF_REMOTE("ff.remote"),
@@ -119,20 +120,19 @@ all possible driver types for now:
     CHROME_ZALENIUM_REMOTE("chrome.zalenium.remote"),
     FF("ff.local"),
     EDGE("edge.local");
-----
+```
 
 also for single tests or test class you can specify driver type by annotation,
 `@RunOn(DriverType)`
 
-[source]
 .runOn
-----
+```java
   @RunOn(DriverType.CHROME_REMOTE)
   @Test(dataProvider = "testDataProvider", description = "Search for open claim")
   public void searchClaim_open(User user, Claim claim) {
     ...
   }
-----
+```
 
 Local driver are for running tests locally, so it will try to open a browser on machine where
 maven command or IntelliJ configurations is running.
@@ -180,9 +180,8 @@ FF and EDGE are added but not tests.
 
 Check URL script:
 
-[source]
 .checkUrls.ps
-----
+```
 function Get-UrlStatusCode([string] $Url){
     try
     {
@@ -224,5 +223,5 @@ $sw = [diagnostics.stopwatch]::StartNew()
 $timeout = new-timespan -Minutes 20
 
 checkUrl 'http://ecc-%SERVER_NAME%.spcph.local:81/eccAdmin/dk/login.action' 200
-----
+```
 
