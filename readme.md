@@ -14,6 +14,8 @@ https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.
 Maven 3.x required<br>
 https://maven.apache.org/download.cgi
 
+### DB config
+
 Some tests are using windows authentication and integrated security to
 connect to database. <br>
 You can find jdbc urls in ```scr/main/resources-filtered/*.properties```
@@ -54,8 +56,6 @@ pom.xml:
 
 application.properties files is common for all and if same properties will be in
 named application property file then it will be overridden.
-
-### DB config
 
 If you don't want to use integrated security look in code for dataSource Beans
 and add to it username and password
