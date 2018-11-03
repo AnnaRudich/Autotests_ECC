@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.services.externalapi.exception.ServerApiException;
+import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.http.client.fluent.Executor;
 

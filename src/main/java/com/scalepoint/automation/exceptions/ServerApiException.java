@@ -1,4 +1,4 @@
-package com.scalepoint.automation.services.externalapi.exception;
+package com.scalepoint.automation.exceptions;
 
 public class ServerApiException extends RuntimeException {
 

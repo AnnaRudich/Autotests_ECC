@@ -173,6 +173,7 @@ Hub remote url is set in application.properties file:
 ### Zalenium
 
 Zalenium are for running tests using zalenium containers.
+<br>
 https://github.com/zalando/zalenium
 <br>
 Zalenium supports maneging selenium grid hub and nodes in docker, it creates
@@ -186,13 +187,100 @@ Connection urls to zalenium are stored in application.properties files
 for now zalenium is disabled because it's not supports IE and need to be running in docker cluster
 like kubernetes.
 
-### Others
+### Others drivers
 
 FF and EDGE are added but not tests.
 
 ## Contributing
 
+1. Create branch
+2. Push changes
+3. Open Pull Request
+<br>
+
+Tests should be located in:
+`src/main/java/com/scalepoint/automation/tests`
+<br>
+Page Object should be in:
+`src/main/java/com/scalepoint/automation/pageObjects`
+<br>
+Tests using only http api(no selenium) are located in:
+`src/main/java/com/scalepoint/automation/tests/api`
+<br>
+Http api call are located in:
+`src/main/java/com/scalepoint/automation/services/restService`
+There are also some external api's like FtTemplates, SolrApi and more:
+`src/main/java/com/scalepoint/automation/services/externalapi`
+<br>
+All tests are using data provider not for DDT but for providing test objects
+```java
+    @Test(dataProvider = "testDataProvider")
+    public void charlie544_cancelSavedClaim(User user, Claim claim){
+      ...
+    }
+```
+In example you see User and Claim objects which fields will be populated by data provider
+All available objects and it's file mappings are located in TestData.class
+```java
+public enum Data {
+        EXISTING_SUPPLIER("ExistingSuppliers.xml", ExistingSuppliers.class),
+        SUPPLIER("Supplier.xml", Supplier.class),
+        SHOP("Shop.xml", Shop.class),
+        VOUCHER("Voucher.xml", Voucher.class),
+        SYSTEMCREDENTIALS("ExistingUsers.xml", ExistingUsers.class),
+        NEWSYSTEMUSER("SystemUser.xml", SystemUser.class),
+        CATEGORIES("Category.xml", Category.class),
+        INSURANCECOMPANY("InsuranceCompany.xml", InsuranceCompany.class),
+        REDUCTIONRULE("ReductionRule.xml", ReductionRule.class),
+        ROLES("Roles.xml", Roles.class),
+        CLAIM("Claim.xml", Claim.class),
+        CLAIMITEM("ClaimItem.xml", ClaimItem.class),
+        TEXTSEARCH("TextSearch.xml", TextSearch.class),
+        MAILS("Mail.xml", Mail.class),
+        ERRORS("Errors.xml", Errors.class),
+        NOTIFICATIONS("Notifications.xml", Notifications.class),
+        GENERICITEM("GenericItem.xml", GenericItem.class),
+        PASSWORDVERIFICATION("PasswordsVerification.xml", PasswordsVerification.class),
+        DEPRECIATIONTYPE("DepreciationType.xml", DepreciationType.class),
+        RRLINEFIELDS("RRLinesFields.xml", RRLinesFields.class),
+        SERVAGREEMENT("ServiceAgreement.xml", ServiceAgreement.class),
+        ORDERDETAILS("OrderDetails.xml", OrderDetails.class),
+        PRICERULE("PriceRule.xml", PriceRule.class),
+        CLGROUP("ClaimLineGroup.xml", ClaimLineGroup.class),
+        PAYMENTS("Payments.xml", Payments.class),
+        ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
+        DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
+        CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
+        ASSIGNMENT("Assignment.xml", Assignment.class),
+        CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
+        ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
+        CLAIM_STATE("ClaimState.json", ClaimStates.class),
+        ACQUIRED("Acquired.xml", Acquired.class);
+}
+```
+
 ## Teamcity Jobs
+
+There are 3 Teamcity Jobs for autotests.
+
+1. http://teamcity.spcph.local/viewType.html?buildTypeId=Ecc_EccAutoTests
+<br> It's for running full regression or some manual builds.
+<br> There is a trigger on this job that deploys latest 3.2 ECC, latest 2.1 SS to qa14
+and run full regression suite on that.
+
+2. http://teamcity.spcph.local/viewType.html?buildTypeId=Ecc_EccAutoTestsSmoke
+<br> This Job is triggered after ECC build job run and deploys artifact from that build
+to qa13 and run smokeECC test suite on that.
+<br> Build chains: http://teamcity.spcph.local/viewType.html?buildTypeId=Ecc_EccAutoTestsSmoke&tab=buildTypeChains&branch_Ecc=__all_branches__
+
+3. http://teamcity.spcph.local/viewType.html?buildTypeId=Ecc_AutotestsPrepareEnvironment
+<br> This Job is for preparing environment for tests and not only.
+<br> It allows you to restore DB's, run autotests liquibase scripts, restore solr indexes.
+<br> Those scripts are used in both autotests jobs 'all' and 'smoke'.
+
+Test run jobs are using small PowerShell script for checking if ecc is up.
+This is added to TeamCity build step.
+<br>
 
 Check URL script:
 
