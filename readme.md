@@ -209,6 +209,7 @@ Tests using only http api(no selenium) are located in:
 <br>
 Http api call are located in:
 `src/main/java/com/scalepoint/automation/services/restService`
+<br>
 There are also some external api's like FtTemplates, SolrApi and more:
 `src/main/java/com/scalepoint/automation/services/externalapi`
 <br>
