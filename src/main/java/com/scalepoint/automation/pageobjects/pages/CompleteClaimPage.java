@@ -63,6 +63,9 @@ public class CompleteClaimPage extends Page {
     @FindBy(id = "nosend")
     private Button compWithoutMailButton;
 
+    @FindBy(id = "externally")
+    private Button compExternallyButton;
+
     @FindBy(id = "gem")
     private Button saveClaim;
 
@@ -153,8 +156,13 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public MyPage completeWithoutEmail() {
+    public  MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
+        return at(MyPage.class);
+    }
+
+    public MyPage completeExternally() {
+        compExternallyButton.click();
         return at(MyPage.class);
     }
 

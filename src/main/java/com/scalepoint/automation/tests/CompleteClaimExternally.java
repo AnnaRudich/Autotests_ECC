@@ -11,13 +11,10 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL;
 
-/**
- * Created by aru on 2017-06-12.
- */
 
 public class CompleteClaimExternally extends BaseTest {
 
-    @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
+    @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
@@ -26,7 +23,7 @@ public class CompleteClaimExternally extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithoutEmail()
+                .completeExternally()
                 .doAssert(myPage ->
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
@@ -37,7 +34,7 @@ public class CompleteClaimExternally extends BaseTest {
     }
     @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)
-    @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
+    @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2152")
     @Test(dataProvider = "testDataProvider",

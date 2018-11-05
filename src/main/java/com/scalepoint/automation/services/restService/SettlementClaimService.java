@@ -52,7 +52,6 @@ public class SettlementClaimService extends BaseService {
 
         given().log().all().baseUri(response.getHeader("Location"))
                 .sessionId(data.getEccSessionId())
-                .port(80)
                 .get(response.getHeader("Location"))
                 .then();
 
@@ -91,6 +90,7 @@ public class SettlementClaimService extends BaseService {
 
         CLOSE_EXTERNAL(BasePath.CLOSE_EXTERNAL),
         CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL),
+        CLOSE_WITHOUT_MAIL(BasePath.CLOSE_WITHOUT_MAIL),
         REPLACEMENT(BasePath.REPLACEMENT);
 
         private String path;

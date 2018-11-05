@@ -115,6 +115,12 @@
             </properties>
         </profile>
         <profile>
+            <id>EDUCATION02</id>
+            <properties>
+                <activatedProperties>edu02</activatedProperties>
+            </properties>
+        </profile>
+        <profile>
             <id>STAGE</id>
             <properties>
                 <activatedProperties>stage</activatedProperties>
@@ -518,15 +524,19 @@
         </repository>
         <repository>
             <id>internal</id>
-            <url>http://ecc-build.spcph.local:8083/nexus/content/repositories/internal</url>
+            <url>http:/ecc-tools.spcph.local/nexus/content/repositories/internal</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>warn</checksumPolicy>
             </releases>
         </repository>
         <repository>
+            <id>internal-snapshot</id>
+            <url>https://ecc-tools.spcph.local/nexus/repository/internal-snapshot/</url>
+        </repository>
+        <repository>
             <id>public</id>
-            <url>http://ecc-build.spcph.local:8083/nexus/content/groups/public</url>
+            <url>http://ecc-tools.spcph.local/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>warn</checksumPolicy>

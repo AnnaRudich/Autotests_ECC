@@ -49,6 +49,11 @@ public class ClaimNavigationMenu extends Module {
         return at(MailsPage.class);
     }
 
+    public MailsPage toEmptyMailsPage() {
+        clickUsingJsIfSeleniumClickReturnError(mails);
+        return new MailsPage();
+    }
+
     public CustomerDetailsPage toCustomerDetailsPage() {
         clickUsingJsIfSeleniumClickReturnError(details);
         return at(CustomerDetailsPage.class);

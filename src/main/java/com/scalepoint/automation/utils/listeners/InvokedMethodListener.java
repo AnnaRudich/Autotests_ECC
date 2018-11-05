@@ -8,9 +8,13 @@ import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
+import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService.ActionsOnToggle;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -25,8 +29,10 @@ import org.testng.ITestResult;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,6 +44,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private String gridNode;
 
+    private Map<FeatureIds, Boolean> featureTogglesDefaultState = new HashMap<>();
+
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         if (invokedMethod.isTestMethod()) {
@@ -47,9 +55,9 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
                 logger.info("Running on grid node: " + gridNode);
                 retryUpdateFtTemplate(invokedMethod, iTestResult);
+                updateFeatureToggle(invokedMethod);
             }
         }
-
     }
 
     private void retryUpdateFtTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult) {
@@ -99,17 +107,31 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                         return;
                     }
 
+                    if (featureTogglesDefaultState.isEmpty()) {
+                        logger.info("No feature toggle to rollback");
+                    } else rollbackToggleSetting(iInvokedMethod);
+
                     Page.to(LoginPage.class);
 
-                    FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-                    List<FtOperation> operations = rollbackContext.getOperations();
-                    functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
                 } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
                     logger.error(e.getMessage(), e);
                 }
             }
         }
+    }
+
+    private void rollbackToggleSetting(IInvokedMethod iInvokedMethod){
+
+        FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
+        FeatureIds toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod()).type();
+        ActionsOnToggle expectedActionOnToggle;
+
+        if (!featureTogglesDefaultState.get((toggleSetting))) {
+            expectedActionOnToggle = ActionsOnToggle.enable;
+        } else expectedActionOnToggle = ActionsOnToggle.disable;
+
+        featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSetting);
     }
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
@@ -124,6 +146,36 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 + "_" + Browser.getDriverType()
                 + "_" + method.getName();
     }
+
+
+    private FeatureToggleSetting getToggleSetting(ITestNGMethod testMethod) {
+        Method method = testMethod.getConstructorOrMethod().getMethod();
+        return method.getDeclaredAnnotation(FeatureToggleSetting.class);
+    }
+
+
+    private void updateFeatureToggle(IInvokedMethod invokedMethod) {
+        FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
+
+        FeatureToggleSetting toggleSetting = getToggleSetting(invokedMethod.getTestMethod());
+        if (toggleSetting == null) {
+            return;
+        }
+
+        Boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
+        Boolean toggleExpectedState = toggleSetting.enabled();
+
+        if (!toggleActualState.equals(toggleExpectedState)) {
+            featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
+
+            if (toggleSetting.enabled()) {
+                featureToggleService.updateToggle(ActionsOnToggle.enable, toggleSetting.type());
+            } else {
+                featureToggleService.updateToggle(ActionsOnToggle.disable, toggleSetting.type());
+            }
+        }
+    }
+
 
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
         List<FtOperation> ftOperations = new ArrayList<>();

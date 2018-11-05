@@ -5,6 +5,7 @@ import org.springframework.util.Assert;
 
 public class Configuration {
 
+  public static final String KEY_PROTOCOL = "app.protocol";
   public static final String KEY_LOCALE = "app.locale";
   public static final String KEY_CONTEXT_ECC = "context.ecc";
   public static final String KEY_CONTEXT_ECC_ADMIN = "context.ecc.admin";
@@ -18,9 +19,12 @@ public class Configuration {
   public static final String KEY_HUB_REMOTE_ZALENIUM = "hub.remote.zalenium";
   public static final String KEY_HUB_LOCAL_ZALENIUM = "hub.local.zalenium";
 
-  private static final String SLASH = "/";
-  private static final String HTTP = "http://";
+  private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
+  private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
+  private static final String SLASH = "/";
+
+  private static String protocol;
   private static Locale locale;
   private static String serverUrl;
   private static String eccContext;
@@ -46,7 +50,7 @@ public class Configuration {
   }
 
   public static String getHttpServerUrl(String serverUrl) {
-    return HTTP + serverUrl;
+    return protocol + serverUrl;
   }
 
   private static String errorMessage(String parameter) {
@@ -85,12 +89,26 @@ public class Configuration {
     return getServerUrl() + SLASH + getEccRnvContext() + SLASH + getLocale().getValue() + SLASH;
   }
 
+  public static String getFeatureToggleAdminUrl(){
+    return getEccUrl()+getFf4jToggleAdminUrl();
+  }
+
+  public static String getFeaturesApiUrl(){
+    return getEccUrl()+getFf4jFeaturesApiUrl();
+  }
+
   public static boolean isDK() {
     return locale.equals(Locale.DK);
   }
 
   public static String getSolrProductsUrl() {
     return solrProductsUrl;
+  }
+
+  public Configuration setProtocol(String protocol) {
+    Assert.notNull(protocol, errorMessage(KEY_PROTOCOL));
+    Configuration.protocol = protocol;
+    return this;
   }
 
   public Configuration setLocale(String locale) {
@@ -181,5 +199,14 @@ public class Configuration {
     Configuration.hubLocalZalenium = hubLocalZalenium;
     return this;
   }
+
+  private static String getFf4jFeaturesApiUrl() {
+    return ff4jFeaturesApiUrl;
+  }
+
+  private static String getFf4jToggleAdminUrl() {
+    return ff4jToggleAdminUrl;
+  }
+
 }
 

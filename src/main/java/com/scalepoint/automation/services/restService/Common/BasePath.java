@@ -10,7 +10,8 @@ public interface BasePath {
     String INSERT_SETTLEMENT = "/{userId}/InsertSettlementItem";
     String SAVE_CLAIM = "/{userId}/SaveUserInfo";
     String CLOSE_EXTERNAL = "/{userId}/CloseCaseExternal";
-    String CLOSE_WITH_MAIL = "/{userId}/SettleCustomer";
+    String CLOSE_WITH_MAIL = "/{userId}/SettleCustomer?sendMailAndSms=true";
+    String CLOSE_WITHOUT_MAIL = "/{userId}/SettleCustomer?sendMailAndSms=false";
     String REPLACEMENT = "{userId}/PostReplacedFromME";
     String CASE_GET_REVISION = "case/{tenant}/revision/{revisionToken}";
     String CANCEL_CLAIM = "/CancelClaim";

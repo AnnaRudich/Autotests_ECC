@@ -20,6 +20,10 @@ public abstract class BaseClaimPage extends Page {
         return claimNavigationMenu.toMailsPage();
     }
 
+    public MailsPage toEmptyMailsPage() {
+        return claimNavigationMenu.toEmptyMailsPage();
+    }
+
     public OrderDetailsPage toOrdersDetailsPage() {
         return claimNavigationMenu.toOrderDetailsPage();
     }
