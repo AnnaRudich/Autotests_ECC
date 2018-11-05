@@ -5,6 +5,7 @@ import org.springframework.util.Assert;
 
 public class Configuration {
 
+  public static final String KEY_PROTOCOL = "app.protocol";
   public static final String KEY_LOCALE = "app.locale";
   public static final String KEY_CONTEXT_ECC = "context.ecc";
   public static final String KEY_CONTEXT_ECC_ADMIN = "context.ecc.admin";
@@ -22,8 +23,8 @@ public class Configuration {
   private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
   private static final String SLASH = "/";
-  private static final String HTTPS = "https://";
 
+  private static String protocol;
   private static Locale locale;
   private static String serverUrl;
   private static String eccContext;
@@ -49,7 +50,7 @@ public class Configuration {
   }
 
   public static String getHttpServerUrl(String serverUrl) {
-    return HTTPS + serverUrl;
+    return protocol + serverUrl;
   }
 
   private static String errorMessage(String parameter) {
@@ -102,6 +103,12 @@ public class Configuration {
 
   public static String getSolrProductsUrl() {
     return solrProductsUrl;
+  }
+
+  public Configuration setProtocol(String protocol) {
+    Assert.notNull(protocol, errorMessage(KEY_PROTOCOL));
+    Configuration.protocol = protocol;
+    return this;
   }
 
   public Configuration setLocale(String locale) {

@@ -19,6 +19,8 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration
 public class BeansConfiguration {
 
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_PROTOCOL+ "}")
+    private String protocol;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_LOCALE + "}")
     private String locale;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_SERVER_URL + "}")
@@ -50,6 +52,7 @@ public class BeansConfiguration {
             @Override
             public void onApplicationEvent(ApplicationReadyEvent event) {
                 com.scalepoint.automation.utils.Configuration.getInstance()
+                        .setProtocol(protocol)
                         .setLocale(locale)
                         .setServerUrl(serverUrl)
                         .setEccContext(eccContext)
