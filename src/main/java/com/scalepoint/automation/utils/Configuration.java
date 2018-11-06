@@ -22,6 +22,9 @@ public class Configuration {
   private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
   private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
+  private static final String rnvWebServiceTasksFeedbackUrl = "ws/task_feedback.action";
+   private static final String repairValuationUrl = "repairValuation";
+
   private static final String SLASH = "/";
 
   private static String protocol;
@@ -95,6 +98,12 @@ public class Configuration {
 
   public static String getFeaturesApiUrl(){
     return getEccUrl()+getFf4jFeaturesApiUrl();
+  }
+
+
+
+  public static String getRnvTaskFeedbackUrl(){
+    return getServerUrl()+SLASH + getRepairValuationUrl() + SLASH+ getLocale() + SLASH +getRnvWebServiceTasksFeedbackUrl();
   }
 
   public static boolean isDK() {
@@ -206,6 +215,14 @@ public class Configuration {
 
   private static String getFf4jToggleAdminUrl() {
     return ff4jToggleAdminUrl;
+  }
+
+  public static String getRnvWebServiceTasksFeedbackUrl() {
+    return rnvWebServiceTasksFeedbackUrl;
+  }
+
+  public static String getRepairValuationUrl() {
+    return repairValuationUrl;
   }
 
 }

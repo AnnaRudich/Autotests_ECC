@@ -42,14 +42,14 @@ AS
 	BEGIN
 		SET @SupplierId = @ExistingSupplierID
 	END
-    --add supplier if there is no
-	IF (@ExistingSupplierID IS NULL)
+     --add supplier if there is no
+	ELSE
 	BEGIN
 		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode,@SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
 	END
 
     --add RnV_testUrl
-	declare @existing_RV_TaskWebServiceUrl = SELECT * from [Testurls] where url = @RV_TaskWebServiceUrl
+	declare @existing_RV_TaskWebServiceUrl varchar(100)= (SELECT url from [Testurls] where url = @RV_TaskWebServiceUrl)
 	IF NOT EXISTS(SELECT * from [Testurls] where url = @RV_TaskWebServiceUrl)
 	BEGIN
 	insert into [Testurls] ([url]) SELECT @RV_TaskWebServiceUrl
