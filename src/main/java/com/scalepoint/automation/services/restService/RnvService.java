@@ -2,14 +2,17 @@ package com.scalepoint.automation.services.restService;
 
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
-import com.scalepoint.automation.utils.data.response.Token;
 
 public class RnvService extends BaseService {
 
-    private Token token;
+    private String supplierSecurityToken;
 
-   public RnvService(Token token){
-       this.token=token;
-   }
+    public RnvService(String supplierSecurityToken) {
+        this.supplierSecurityToken = supplierSecurityToken;
+    }
+
+    public void sendFeedback(){
+
+    }
 
 }

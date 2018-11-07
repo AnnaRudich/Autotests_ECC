@@ -28,7 +28,7 @@ AS
     declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
 	declare @PostalCode varchar(100) = '4321'
 	declare @City varchar(100) = 'Test city'
-	declare @SecurityToken varchar(100) = '589356A5-2E39-4438-B45F-8E05C545ABD2'
+	declare @SecurityToken varchar(100) = SELECT NEWID()
 	declare @RV_TaskWebServiceUrl varchar(100) = 'http://httpbin.org/post'
     declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
 

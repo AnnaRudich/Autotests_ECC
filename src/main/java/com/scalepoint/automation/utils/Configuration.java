@@ -23,7 +23,7 @@ public class Configuration {
   private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
   private static final String rnvWebServiceTasksFeedbackUrl = "ws/task_feedback.action";
-   private static final String repairValuationUrl = "repairValuation";
+  private static final String repairValuationUrl = "repairValuation";
 
   private static final String SLASH = "/";
 
