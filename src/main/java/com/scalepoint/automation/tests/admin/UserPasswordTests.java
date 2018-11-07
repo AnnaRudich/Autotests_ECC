@@ -4,11 +4,9 @@ import com.scalepoint.automation.pageobjects.pages.EditPreferencesPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
@@ -61,46 +59,16 @@ public class UserPasswordTests extends BaseTest {
     });
   }
 
-  @RequiredSetting(type = FTSetting.USER_PASSWORD_VALIDATION_STRATEGY, value = "Basic")
-  @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
-  public void charlie528_basicPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser) {
-    UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
-            .toUserCreatePage();
-
-    trySetPassword(systemUser, userAddEditPage, "qwertyuio");
-    trySetPassword(systemUser, userAddEditPage, systemUser.getLogin() + "333");
-
-    systemUser.setPassword("dupadupa312");
-    userAddEditPage.createUser(systemUser, ALL_ROLES)
-            .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
-            .logout()
-            .login(systemUser.getLogin(), systemUser.getPassword(), MyPage.class);
-  }
-
-  @RequiredSetting(type = FTSetting.USER_PASSWORD_VALIDATION_STRATEGY, value = "Default")
   @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
   public void charlie528_defaultPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser) {
     UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
             .toUserCreatePage();
 
-    trySetPassword(systemUser, userAddEditPage, "qwer");
+    trySetPassword(systemUser, userAddEditPage, "qwertyuio");
+    trySetPassword(systemUser, userAddEditPage, systemUser.getLogin() + "333");
+    trySetPassword(systemUser, userAddEditPage, "DuapDuap321");
 
-    systemUser.setPassword("qwertyuio");
-    userAddEditPage.createUser(systemUser, ALL_ROLES)
-            .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
-            .logout()
-            .login(systemUser.getLogin(), systemUser.getPassword(), MyPage.class);
-  }
-
-  @RequiredSetting(type = FTSetting.USER_PASSWORD_VALIDATION_STRATEGY, value = "Custom")
-  @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
-  public void charlie528_customPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser) {
-    UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
-            .toUserCreatePage();
-
-    trySetPassword(systemUser, userAddEditPage, "dupadupa312");
-
-    systemUser.setPassword("DupaDupa213");
+    systemUser.setPassword("dupaDupa(312");
     userAddEditPage.createUser(systemUser, ALL_ROLES)
             .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
             .logout()
