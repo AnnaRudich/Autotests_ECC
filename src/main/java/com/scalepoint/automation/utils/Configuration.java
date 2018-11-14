@@ -22,8 +22,9 @@ public class Configuration {
   private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
   private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
-  private static final String rnvWebServiceTasksFeedbackUrl = "ws/task_feedback.action";
-  private static final String repairValuationUrl = "repairValuation";
+  private static final String tasksFeedbackUrl = "task_feedback.action";
+  private static final String pullTaskDataUrl = "tasks.xml";
+  private static final String repairValuationUrl = "repairValuation/ws";
 
   private static final String SLASH = "/";
 
@@ -101,9 +102,20 @@ public class Configuration {
   }
 
 
+  public static String getPullTaskDataUrl() {
+    return pullTaskDataUrl;
+  }
+
+  private static String getRnvWebServiceUrl(){
+    return getServerUrl()+SLASH + getRepairValuationUrl() + SLASH+ getLocale() + SLASH;
+  }
 
   public static String getRnvTaskFeedbackUrl(){
-    return getServerUrl()+SLASH + getRepairValuationUrl() + SLASH+ getLocale() + SLASH +getRnvWebServiceTasksFeedbackUrl();
+    return getRnvWebServiceUrl() + getTasksFeedbackUrl();
+  }
+
+  public static String getRnvPullTaskDataUrl(){
+    return getRnvWebServiceUrl() + getPullTaskDataUrl();
   }
 
   public static boolean isDK() {
@@ -217,8 +229,8 @@ public class Configuration {
     return ff4jToggleAdminUrl;
   }
 
-  public static String getRnvWebServiceTasksFeedbackUrl() {
-    return rnvWebServiceTasksFeedbackUrl;
+  public static String getTasksFeedbackUrl() {
+    return tasksFeedbackUrl;
   }
 
   public static String getRepairValuationUrl() {
