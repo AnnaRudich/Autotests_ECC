@@ -8,7 +8,6 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -16,11 +15,12 @@ import com.scalepoint.automation.utils.data.entity.OrderDetails;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -75,6 +75,7 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  0,00
      */
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
@@ -357,6 +358,7 @@ public class OrderDetailsTests extends BaseTest {
      */
 
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
     public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem) {
