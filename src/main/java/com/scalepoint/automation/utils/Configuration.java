@@ -22,9 +22,9 @@ public class Configuration {
   private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
   private static final String ff4jToggleAdminUrl = "ff4j-console/features";
 
-  private static final String tasksFeedbackUrl = "task_feedback.action";
-  private static final String pullTaskDataUrl = "tasks.xml";
-  private static final String repairValuationUrl = "repairValuation/ws";
+  private static final String tasksFeedbackUrl = "ws/task_feedback.action";
+  private static final String pullTaskDataUrl = "ws/tasks.xml";
+  private static final String repairValuationUrl = "repairValuation";
 
   private static final String SLASH = "/";
 
@@ -107,7 +107,7 @@ public class Configuration {
   }
 
   private static String getRnvWebServiceUrl(){
-    return getServerUrl()+SLASH + getRepairValuationUrl() + SLASH+ getLocale() + SLASH;
+    return getServerUrl()+SLASH + getRepairValuationUrl() + SLASH+ getLocale().getValue() + SLASH;
   }
 
   public static String getRnvTaskFeedbackUrl(){

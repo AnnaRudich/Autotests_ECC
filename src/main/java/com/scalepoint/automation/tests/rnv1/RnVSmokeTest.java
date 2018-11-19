@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.rnv1;
 
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -29,13 +30,14 @@ public class RnVSmokeTest extends BaseTest{
                 .selectLine()
                 .sendToRnV()
                 .changeTask(lineDescription, rnvTaskType.getRepair())
-                //.changeAgreement(lineDescription, agreement.getTestAgreementName())
-                //.changeAgreement(lineDescription, "serviceAgreement_autotests2");
                 .nextRnVstep()
                 .sendRnV(agreement)
 
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+
+        RnvService rnvService = new RnvService();
+        rnvService.pullRnVTaskData();
 
     }
 }
