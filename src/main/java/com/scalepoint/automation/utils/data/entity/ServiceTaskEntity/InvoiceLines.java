@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.ServiceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 
 public class InvoiceLines

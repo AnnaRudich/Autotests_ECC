@@ -1,112 +1,125 @@
-package com.scalepoint.automation.utils.data.entity.ServiceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ServicePartner
-{
-    @XmlElement
+public class ServicePartner {
+    @XmlAttribute
     private String phone;
-    @XmlElement
+    @XmlAttribute
     private String postalCode;
-    @XmlElement
+    @XmlAttribute
+    private String serviceAgreementName;
+    @XmlAttribute
     private String cvrNumber;
-    @XmlElement
+    @XmlAttribute
     private String email;
     @XmlElement
+    private Location location;
+    @XmlAttribute
     private String name;
-    @XmlElement
+    @XmlAttribute
     private String address1;
-
-    private Bank bank;
+    @XmlAttribute
+    private String address2;
     @XmlElement
+    private Bank bank;
+    @XmlAttribute
     private String city;
 
-    public String getPhone ()
-    {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone (String phone)
-    {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getPostalCode ()
-    {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode (String postalCode)
-    {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public String getCvrNumber ()
-    {
+    public String getServiceAgreementName() {
+        return serviceAgreementName;
+    }
+
+    public void setServiceAgreementName(String serviceAgreementName) {
+        this.serviceAgreementName = serviceAgreementName;
+    }
+
+    public String getCvrNumber() {
         return cvrNumber;
     }
 
-    public void setCvrNumber (String cvrNumber)
-    {
+    public void setCvrNumber(String cvrNumber) {
         this.cvrNumber = cvrNumber;
     }
 
-    public String getEmail ()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail (String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getName ()
-    {
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getAddress1 ()
-    {
+    public String getAddress1() {
         return address1;
     }
 
-    public void setAddress1 (String address1)
-    {
+    public void setAddress1(String address1) {
         this.address1 = address1;
     }
 
-    public Bank getBank ()
-    {
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public Bank getBank() {
         return bank;
     }
 
-    public void setBank (Bank bank)
-    {
+    public void setBank(Bank bank) {
         this.bank = bank;
     }
 
-    public String getCity ()
-    {
+    public String getCity() {
         return city;
     }
 
-    public void setCity (String city)
-    {
+    public void setCity(String city) {
         this.city = city;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [phone = "+phone+", postalCode = "+postalCode+", cvrNumber = "+cvrNumber+", email = "+email+", name = "+name+", address1 = "+address1+", bank = "+bank+", city = "+city+"]";
+    public String toString() {
+        return "ClassPojo [phone = " + phone + ", postalCode = " + postalCode + ", serviceAgreementName = " + serviceAgreementName + ", cvrNumber = " + cvrNumber + ", email = " + email + ", location = " + location + ", name = " + name + ", address1 = " + address1 + ", address2 = " + address2 + ", bank = " + bank + ", city = " + city + "]";
     }
 }
