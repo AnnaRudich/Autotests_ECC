@@ -50,7 +50,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie510_selectBrandAndModel(User user, Claim claim, TextSearch textSearch) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("phone")
+                .searchByProductName("samsung s7")
                 .selectBrand(textSearch.getBrand1())
                 .selectModel(textSearch.getModel1())
                 .doAssert(
@@ -67,7 +67,7 @@ public class TextSearchTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("phone")
+                .searchByProductName("samsung s7")
                 .selectBrand(textSearch.getBrand1())
                 .openAttributesMenu()
                 .selectAttribute(attributes)
@@ -122,9 +122,7 @@ public class TextSearchTests extends BaseTest {
         tsp.sortPopularityAscending()
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> {
-                            asserts.assertActualModelListIsDifferentThan(modelsDesc);
-                        });
+                        asserts -> asserts.assertActualModelListIsDifferentThan(modelsDesc));
 
         List<String> modelsAsc = tsp.getModelListAsString();
 
