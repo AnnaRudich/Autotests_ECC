@@ -1,16 +1,23 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
-public class ServiceLines
-{
+@XmlRootElement(name = "serviceLines")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ServiceLines {
 
-    private ServiceLine[] serviceLine;
+    @XmlElement(name = "serviceLine")
+    private List<ServiceLine> serviceLine;
 
-    public ServiceLine[] getServiceLine() {
+    public List<ServiceLine> getServiceLine() {
         return serviceLine;
     }
 
-    public void setServiceLine(ServiceLine[] serviceLine) {
+    public void setServiceLine(List<ServiceLine> serviceLine) {
         this.serviceLine = serviceLine;
     }
 
