@@ -1,24 +1,26 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+import java.util.Arrays;
 
-@XmlRootElement()
+@XmlRootElement
 public class ServiceTasks {
 
-    private List<ServiceTask> serviceTasks;
 
+    private ServiceTask[] serviceTasks;
 
-    public List<ServiceTask> getServiceTasks() {
+    public ServiceTask[] getServiceTasks() {
         return serviceTasks;
     }
 
-    public void setServiceTasks(List<ServiceTask> serviceTasks) {
+    @XmlElement
+    public void setServiceTasks(ServiceTask[] serviceTasks) {
         this.serviceTasks = serviceTasks;
     }
 
     @Override
     public String toString(){
-        return "ClassPojo [serviceTasks = "+serviceTasks+"]";
+        return "ClassPojo [serviceTasks = "+ Arrays.toString(serviceTasks) +"]";
     }
 }

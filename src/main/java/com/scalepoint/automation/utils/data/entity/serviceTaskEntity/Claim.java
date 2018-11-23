@@ -8,27 +8,27 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Claim {
     @XmlAttribute
     private String claimDate;
-
+    @XmlAttribute
     private String claimHandlerName;
-
+    @XmlAttribute
     private String claimHandlerEmail;
-
+    @XmlAttribute
     private String insuranceCompanyId;
-
+    @XmlAttribute
     private String claimHandlerFullName;
-
+    @XmlAttribute
     private String insuranceCompanyName;
-
+    @XmlAttribute
     private String selfRisk;
-
+    @XmlAttribute
     private String policyNumber;
-
+    @XmlAttribute
     private String claimNumber;
-
+    @XmlAttribute
     private String policyType;
-
+    @XmlAttribute
     private String claimReferenceNumber;
-
+    @XmlAttribute
     private String customerNoteToClaim;
 
     public String getClaimDate ()

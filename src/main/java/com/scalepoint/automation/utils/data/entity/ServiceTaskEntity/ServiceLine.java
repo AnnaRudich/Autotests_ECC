@@ -3,22 +3,31 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceLine
 {
+    @XmlAttribute
+    private String uniqueId;
+
+    @XmlAttribute
+    private String claimLineId;
+
+    @XmlAttribute
+    private String taskType;
+
+    @XmlElement
     private Category category;
 
     @XmlElement
-    private String claimLineId;
-
     private Item item;
 
+    @XmlElement
     private Valuations valuations;
 
-    @XmlElement
-    private String uniqueId;
+
 
     public Category getCategory ()
     {
@@ -53,6 +62,15 @@ public class ServiceLine
     public Valuations getValuations ()
     {
         return valuations;
+    }
+
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 
     public void setValuations (Valuations valuations)

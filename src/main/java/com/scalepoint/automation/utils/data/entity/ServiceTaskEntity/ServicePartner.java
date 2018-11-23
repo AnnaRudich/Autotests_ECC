@@ -8,27 +8,39 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServicePartner {
     @XmlAttribute
-    private String phone;
-    @XmlAttribute
-    private String postalCode;
-    @XmlAttribute
     private String serviceAgreementName;
-    @XmlAttribute
-    private String cvrNumber;
-    @XmlAttribute
-    private String email;
-    @XmlElement
-    private Location location;
-    @XmlAttribute
-    private String name;
+
     @XmlAttribute
     private String address1;
+
     @XmlAttribute
     private String address2;
-    @XmlElement
-    private Bank bank;
+
     @XmlAttribute
     private String city;
+
+    @XmlAttribute
+    private String cvrNumber;
+
+    @XmlAttribute
+    private String email;
+
+    @XmlAttribute
+    private String name;
+
+    @XmlAttribute
+    private String phone;
+
+    @XmlAttribute
+    private String postalCode;
+
+    @XmlElement
+    private Bank bank;
+
+    @XmlElement
+    private Location location;
+
+
 
     public String getPhone() {
         return phone;

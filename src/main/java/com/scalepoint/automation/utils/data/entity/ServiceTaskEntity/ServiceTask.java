@@ -7,26 +7,37 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ServiceTask   {private String replyAddress;
+public class ServiceTask   {
+
+    @XmlAttribute
+    private String damageType;
+
+    @XmlAttribute
+    private String replyAddress;
+
+    @XmlAttribute
+    private String createdDate;
+
+    @XmlAttribute
+    private String uniqueId;
+
+    @XmlElement
+    private Claim claim;
+
+    @XmlElement
+    private Claimant claimant;
 
     @XmlElement
     private String invoicePaidBy;
-@XmlAttribute
-    private String damageType;
-@XmlElement
-    private Claim claim;
-@XmlAttribute
-    private String createdDate;
-@XmlElement
-    private ServiceLines serviceLines;
 
-    private Claimant claimant;
-
+    @XmlElement
     private String noteToServicePartner;
 
-    private ServicePartner servicePartner;
+    @XmlElement
+    private ServiceLines serviceLines;
 
-    private String uniqueId;
+    @XmlElement
+    private ServicePartner servicePartner;
 
     public String getReplyAddress ()
     {

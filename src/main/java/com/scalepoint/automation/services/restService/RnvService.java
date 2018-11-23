@@ -6,6 +6,8 @@ import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.ServiceTasks;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
+import io.restassured.response.Response;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,28 +21,30 @@ public class RnvService extends BaseService {
     private String supplierSecurityToken = "589356A5-2E39-4438-B45F-8E05C545ABD3";
 
 
-    public void pullRnVTaskData(){
-        given().log().all()
+    public Response pullRnVTaskData(){
+        return given().log().all()
                 .config(RestAssuredConfig.config()
                         .encoderConfig(encoderConfig()
                                 .encodeContentTypeAs("x-www-form-urlencoded, charset=UTF-8",
                                         ContentType.TEXT)))
                 .formParam("securityToken", supplierSecurityToken)
-                .when().post(Configuration.getRnvPullTaskDataUrl()).then().statusCode(201).log().all();
+                .when().post(Configuration.getRnvPullTaskDataUrl());
 
     }
 
     public void deserializeTaskData() {
 
-        ServiceTasks serviceTask =
-                given().log().all()
-                        .config(RestAssuredConfig.config()
-                                .encoderConfig(encoderConfig()
-                                        .encodeContentTypeAs("x-www-form-urlencoded, charset=UTF-8",
-                                                ContentType.TEXT)))
-                        .formParam("securityToken", supplierSecurityToken)
-                        .when().post(Configuration.getRnvPullTaskDataUrl()).then().statusCode(201).log().all()
-                        .extract().response().as(ServiceTasks.class);
+        ServiceTasks serviceTask =  given().log().all()
+                .config(RestAssuredConfig.config()
+                        .encoderConfig(encoderConfig()
+                                .encodeContentTypeAs("x-www-form-urlencoded, charset=UTF-8",
+                                        ContentType.TEXT)))
+                .formParam("securityToken", supplierSecurityToken)
+                .expect().parser("application/xml", Parser.XML).when().post(Configuration.getRnvPullTaskDataUrl()).as(ServiceTasks.class);
+
+        //expect().parser("application/something", Parser.XML).when().get("/message").as(Message.class);
+
+        System.out.println(serviceTask.toString());
     }
 
     public void sendFeedback(){

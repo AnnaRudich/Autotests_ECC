@@ -2,18 +2,18 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Bank
 {
-    @XmlElement
+    @XmlAttribute
     private String fikNumber;
 
-    @XmlElement
+    @XmlAttribute
     private String fikType;
 
-    @XmlElement
+    @XmlAttribute
     private String fikCreditorCode;
 
 

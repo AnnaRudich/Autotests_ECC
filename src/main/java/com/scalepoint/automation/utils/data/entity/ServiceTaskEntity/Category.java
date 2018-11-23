@@ -3,18 +3,18 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Category
 {
-    @XmlElement
+    @XmlAttribute
     private String parentCategory;
 
-    @XmlElement
+    @XmlAttribute
     private String name;
 
-    @XmlElement
+    @XmlAttribute
     private String uniqueId;
 
     public String getParentCategory ()

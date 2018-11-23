@@ -1,25 +1,24 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
-/**
- * Created by aru on 2018-11-20.
- */
-public class Claimant {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Claimant {
+    @XmlAttribute
     private String name;
 
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [name = "+name+"]";
+    public String toString() {
+        return "ClassPojo [name = " + name + "]";
     }
 }

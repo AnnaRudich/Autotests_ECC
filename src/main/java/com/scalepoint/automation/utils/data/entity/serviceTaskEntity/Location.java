@@ -1,22 +1,26 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Location {
-    @XmlAttribute
-    private String phone;
-    @XmlAttribute
-    private String postalCode;
-    @XmlAttribute
-    private String email;
-    @XmlAttribute
-    private String name;
+
     @XmlAttribute
     private String address1;
     @XmlAttribute
     private String address2;
     @XmlAttribute
     private String city;
+    @XmlAttribute
+    private String email;
+    @XmlAttribute
+    private String name;
+    @XmlAttribute
+    private String phone;
+    @XmlAttribute
+    private String postalCode;
 
     public String getPhone ()
     {

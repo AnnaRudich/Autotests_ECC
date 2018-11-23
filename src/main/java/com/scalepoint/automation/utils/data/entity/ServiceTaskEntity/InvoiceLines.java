@@ -3,21 +3,21 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 public class InvoiceLines
 {
-    private InvoiceLine[] invoiceLine;
+    private InvoiceLine[] invoiceLines;
 
-    public InvoiceLine[] getInvoiceLine ()
+    public InvoiceLine[] getInvoiceLines()
     {
-        return invoiceLine;
+        return invoiceLines;
     }
 
-    public void setInvoiceLine (InvoiceLine[] invoiceLine)
+    public void setInvoiceLines(InvoiceLine[] invoiceLines)
     {
-        this.invoiceLine = invoiceLine;
+        this.invoiceLines = invoiceLines;
     }
 
     @Override
     public String toString()
     {
-        return "ClassPojo [invoiceLine = "+invoiceLine+"]";
+        return "ClassPojo [invoiceLines = "+ invoiceLines +"]";
     }
 }
