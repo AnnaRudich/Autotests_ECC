@@ -12,6 +12,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ServiceTask   {
 
     @XmlAttribute
+    private String takenSelfRisk;
+
+    @XmlAttribute
     private String damageType;
 
     @XmlAttribute
@@ -22,6 +25,9 @@ public class ServiceTask   {
 
     @XmlAttribute
     private String uniqueId;
+
+    @XmlElement
+    private Invoice invoice;
 
     @XmlElement
     private Claim claim;
@@ -139,6 +145,22 @@ public class ServiceTask   {
     public void setUniqueId (String uniqueId)
     {
         this.uniqueId = uniqueId;
+    }
+
+    public String getTakenSelfRisk() {
+        return takenSelfRisk;
+    }
+
+    public void setTakenSelfRisk(String takenSelfRisk) {
+        this.takenSelfRisk = takenSelfRisk;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 
     @Override

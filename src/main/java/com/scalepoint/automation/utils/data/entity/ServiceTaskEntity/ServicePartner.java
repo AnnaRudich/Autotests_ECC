@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServicePartner {
+
     @XmlAttribute
     private String serviceAgreementName;
 

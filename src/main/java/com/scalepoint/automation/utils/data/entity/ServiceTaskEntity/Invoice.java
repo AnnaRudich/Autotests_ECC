@@ -2,32 +2,45 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name = "invoice")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Invoice
 {
     @XmlElement
-    private String invoiceDate;
-
-    @XmlElement
-    private String paymentDueDate;
-
-    @XmlElement
-    private String invoiceType;
-
-    @XmlElement
-    private String vat;
-
-    @XmlElement
-    private String totalAmount;
-
-    @XmlElement
-    private String invoiceNumber;
-
     private InvoiceLines invoiceLines;
 
-    @XmlElement
+    @XmlAttribute
+    private String dateOfValuation;
+
+    @XmlAttribute
+    private String nameOfValuationResponsible;
+
+    @XmlAttribute
+    private String creditNoteNumber;
+
+    @XmlAttribute
+    private String invoiceDate;
+
+    @XmlAttribute
+    private String paymentDueDate;
+
+    @XmlAttribute
+    private String invoiceType;
+
+    @XmlAttribute
+    private String vat;
+
+    @XmlAttribute
+    private String totalAmount;
+
+    @XmlAttribute
+    private String invoiceNumber;
+
+    @XmlAttribute
     private String netAmount;
 
     public String getInvoiceDate ()
@@ -109,6 +122,31 @@ public class Invoice
     {
         this.netAmount = netAmount;
     }
+
+    public String getDateOfValuation() {
+        return dateOfValuation;
+    }
+
+    public void setDateOfValuation(String dateOfValuation) {
+        this.dateOfValuation = dateOfValuation;
+    }
+
+    public String getNameOfValuationResponsible() {
+        return nameOfValuationResponsible;
+    }
+
+    public void setNameOfValuationResponsible(String nameOfValuationResponsible) {
+        this.nameOfValuationResponsible = nameOfValuationResponsible;
+    }
+
+    public String getCreditNoteNumber() {
+        return creditNoteNumber;
+    }
+
+    public void setCreditNoteNumber(String creditNoteNumber) {
+        this.creditNoteNumber = creditNoteNumber;
+    }
+
 
     @Override
     public String toString()

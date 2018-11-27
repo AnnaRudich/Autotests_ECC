@@ -8,6 +8,18 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Bank
 {
     @XmlAttribute
+    private String accountNumber;
+
+    @XmlAttribute
+    private String regNumber;
+
+    @XmlAttribute
+    private String bankName;
+
+    @XmlAttribute
+    private String IBAN;
+
+    @XmlAttribute
     private String fikNumber;
 
     @XmlAttribute
@@ -16,6 +28,38 @@ public class Bank
     @XmlAttribute
     private String fikCreditorCode;
 
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getRegNumber() {
+        return regNumber;
+    }
+
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
+    }
 
     public String getFikNumber ()
     {
