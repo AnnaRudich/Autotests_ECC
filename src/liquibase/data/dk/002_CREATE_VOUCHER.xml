@@ -10,6 +10,20 @@
         <comment>Create Vouchers</comment>
 
         <sql>
+            IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
+            BEGIN
+                UPDATE [dbo].[VoucherAgreement]
+                SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
+                WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
+            END
+
+            IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
+            BEGIN
+                UPDATE [dbo].[VoucherAgreement]
+                SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
+                WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
+            END
+
             /*
             ---Category:---
             22 - Babyudstyr

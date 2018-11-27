@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.services.externalapi.exception.ServerApiException;
+import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;

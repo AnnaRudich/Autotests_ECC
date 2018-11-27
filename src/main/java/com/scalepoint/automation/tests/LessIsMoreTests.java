@@ -5,12 +5,14 @@ import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
@@ -223,7 +225,7 @@ public class LessIsMoreTests extends BaseTest {
     settlementPage.selectLinesByDescriptions(groupDescription)
             .rejectLines()
             .getSettlementSummary()
-            .doAssert(asserts -> asserts.assertSubtotalSumValueIs(PRICE_2400 - PRICE_2400 * 0.2));//minus voucher depreciation, which is applied by default
+            .doAssert(asserts -> asserts.assertSubtotalSumValueIs(PRICE_2400 - PRICE_2400 * 0.1));//minus voucher depreciation, which is applied by default
 
     settlementPage.findClaimLine(groupDescription)
             .doAssert(asserts -> asserts.assertReplacementPriceIs(0.0));

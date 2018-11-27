@@ -75,6 +75,7 @@ public class OrderDetailsTests extends BaseTest {
      * Tilbageværende erstatning :  0,00
      */
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
@@ -357,6 +358,7 @@ public class OrderDetailsTests extends BaseTest {
      */
 
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
     public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem) {

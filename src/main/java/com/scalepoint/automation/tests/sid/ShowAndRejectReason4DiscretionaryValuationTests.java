@@ -10,11 +10,19 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.DepreciationType;
+import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
+import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NOT_SELECTED;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.PRICE_500;
@@ -356,14 +364,14 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                             .withDiscountAndDepreciation(false)
                             .withDepreciation(5, SettlementDialog.DepreciationType.DISCRETIONARY)
                             .withValuation(CUSTOMER_DEMAND)
-                            .withDiscretionaryReason(discretionaryReason.getDiscretionaryReason1());
+                            .withDiscretionaryReason(discretionaryReason.getDiscretionaryReason7());
                 })
-                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason1()))
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason7()))
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(sid -> {
                     sid.assertDiscretionaryPresent();
-                    sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason1());
+                    sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason7());
                 });
     }
 

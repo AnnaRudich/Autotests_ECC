@@ -61,7 +61,7 @@ public class EditPreferencesPage extends Page {
         }
 
         public Asserts assertsIsGeneratedPasswordCorrect(String generatedPassword) {
-            OperationalUtils.assertStringMatchingPattern("[a-hjkmnp-zA-HJKMNP-Z2-9]+", generatedPassword);
+            OperationalUtils.assertStringMatchingPattern("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?!.*[&%$]#).{6,}", generatedPassword);
             return this;
         }
     }
