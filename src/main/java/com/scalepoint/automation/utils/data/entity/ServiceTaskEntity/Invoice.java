@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "invoice")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Invoice
-{
+public class Invoice {
+
     @XmlElement
     private InvoiceLines invoiceLines;
 

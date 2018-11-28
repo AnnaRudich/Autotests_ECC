@@ -23,4 +23,8 @@ public class InvoiceLineBuilder {
         this.invoiceLine.setUnits(units);
         return this;
     }
+
+    public InvoiceLine build(){
+        return invoiceLine;
+    }
 }

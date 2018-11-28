@@ -6,22 +6,26 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement(name = "invoiceLines")
+@XmlRootElement(name = "invoiceLinesList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvoiceLines {
-    @XmlElement(name = "invoiceLines")
-    private List<InvoiceLine> invoiceLines=null;
-
-    public List<InvoiceLine> getInvoiceLines() {
-        return invoiceLines;
+    public InvoiceLines(List<InvoiceLine> invoiceLinesList) {
+        this.invoiceLinesList = invoiceLinesList;
     }
 
-    public void setInvoiceLines(List<InvoiceLine> invoiceLines) {
-        this.invoiceLines = invoiceLines;
+    @XmlElement(name = "invoiceLinesList")
+    private List<InvoiceLine> invoiceLinesList;
+
+    public List<InvoiceLine> getInvoiceLinesList() {
+        return invoiceLinesList;
+    }
+
+    public void setInvoiceLinesList(List<InvoiceLine> invoiceLinesList) {
+        this.invoiceLinesList = invoiceLinesList;
     }
 
     @Override
     public String toString() {
-        return "ClassPojo [invoiceLines = " + invoiceLines + "]";
+        return "ClassPojo [invoiceLinesList = " + invoiceLinesList + "]";
     }
 }

@@ -3,6 +3,7 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.InvoiceBuilder;
 import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.ServiceTask;
 import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.ServiceTasks;
 import io.restassured.config.RestAssuredConfig;
@@ -49,6 +50,9 @@ public class RnvService extends BaseService {
 
     public void sendFeedback(){
         ServiceTask serviceTask = deserializeTaskData().getServiceTasks().get(0);
+        serviceTask.setInvoice(new InvoiceBuilder().setDefault().build());
+        serviceTask.getInvoice().getInvoiceLines().getInvoiceLinesList().get(0);
+
             given().log().all().contentType("application/xml").formParam("securityToken", supplierSecurityToken)
                     .body(serviceTask).when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(200);
     }
