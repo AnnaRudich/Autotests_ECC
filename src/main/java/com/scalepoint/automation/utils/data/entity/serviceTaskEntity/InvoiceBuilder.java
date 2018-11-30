@@ -6,8 +6,6 @@ import com.scalepoint.automation.utils.DateUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class InvoiceBuilder {
     private Invoice invoice;
@@ -17,7 +15,7 @@ public class InvoiceBuilder {
     }
 
     public InvoiceBuilder setDefault() {
-        invoice.setInvoiceLines();
+        //invoice.setInvoiceLines();
         invoice.setInvoiceType("INVOICE");
         invoice.setInvoiceNumber(Integer.toString(RandomUtils.randomInt()));
         invoice.setInvoiceDate(DateUtils.localDateToString(LocalDate.now(), "yyyy-MM-dd"));

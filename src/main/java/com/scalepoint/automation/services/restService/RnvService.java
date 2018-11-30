@@ -49,12 +49,41 @@ public class RnvService extends BaseService {
 
 
     public void sendFeedback(){
+
+        String st  = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>\n" +
+                "<serviceTask createdDate=\"2018-11-30T14:15:09\" uniqueId=\"b5c0d1d9-5779-41a4-9cd8-eb1a5eec7b2a\"\n" +
+                "\ttakenSelfRisk=\"20.05\">\n" +
+                "    <invoice invoiceDate=\"2014-11-10\" invoiceNumber=\"XheDwVoZGc\" invoiceType=\"INVOICE\" netAmount=\"60\"\n" +
+                "             paymentDueDate=\"2014-11-10\" totalAmount=\"69\" vat=\"9\">\n" +
+                "        <invoiceLines>\n" +
+                "            <invoiceLine description=\"item1\" lineTotal=\"11.50\" quantity=\"1.00\" unitNetAmount=\"10.00\" unitPrice=\"10.00\"\n" +
+                "                         unitVatAmount=\"1.50\" units=\"piece\"/>\n" +
+                "            <invoiceLine description=\"item2\" lineTotal=\"57.50\" quantity=\"2.00\" unitNetAmount=\"50.00\" unitPrice=\"25.00\"\n" +
+                "                         unitVatAmount=\"7.50\" units=\"piece\"/>\n" +
+                "        </invoiceLines>\n" +
+                "    </invoice>\n" +
+                "    <serviceLines>\n" +
+                "      <serviceLine uniqueId=\"08488B87-1DAD-4E0C-B677-9EAB899C6145\" claimLineId=\"10422655\" taskType=\"REPAIR\">\n" +
+                "\t\t\t<category parentCategory=\"Personlig Pleje\" name=\"Medicin\" uniqueId=\"AEC8A3E2-CB0A-4972-9911-D405BDFDAF7C\"/>\n" +
+                "\t\t\t<item servicePartnerNote=\"\" productMatchDescription=\"Diners Club\" customerDescription=\"\" quantity=\"2\"/>\n" +
+                "            <valuations customerDemand=\"11.31\" newPrice=\"151.00\" usedPrice=\"11.30\"/>\n" +
+                "\t\t</serviceLine>\n" +
+                "    </serviceLines>   \n" +
+                "    <servicePartner address1=\"489-499 Avebury Boulevard\" city=\"Copenhagen\" cvrNumber=\"10209685\"\n" +
+                "                   email=\"ecc_auto@scalepoint.com\" name=\"Autotest-Supplier-RnV-Tests\" phone=\"+4588818001\" postalCode=\"4321\">\n" +
+                "        <bank accountNumber=\"12345678\" fikCreditorCode=\"fik123\" fikType=\"fik\" regNumber=\"1234\"/>\n" +
+                "\t\t\n" +
+                "    </servicePartner>\n" +
+                "</serviceTask>";
+
+
         ServiceTask serviceTask = deserializeTaskData().getServiceTasks().get(0);
         serviceTask.setInvoice(new InvoiceBuilder().setDefault().build());
-        serviceTask.getInvoice().getInvoiceLines().getInvoiceLinesList().get(0);
 
-            given().log().all().contentType("application/xml").formParam("securityToken", supplierSecurityToken)
-                    .body(serviceTask).when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(200);
+            given().log().all()
+                    .multiPart("securityToken", supplierSecurityToken)
+                    .multiPart("xmlString", st)
+                    .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(200);
     }
 
     public static void main(String[] args) throws JAXBException {

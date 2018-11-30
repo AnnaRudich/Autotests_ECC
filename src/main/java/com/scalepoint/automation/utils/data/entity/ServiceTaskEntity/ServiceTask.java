@@ -13,12 +13,12 @@ public class ServiceTask   {
 
     @XmlAttribute
     private String takenSelfRisk;
+//
+//    @XmlAttribute
+//    private String damageType;
 
-    @XmlAttribute
-    private String damageType;
-
-    @XmlAttribute
-    private String replyAddress;
+//    @XmlAttribute
+//    private String replyAddress;
 
     @XmlAttribute
     private String createdDate;
@@ -47,15 +47,15 @@ public class ServiceTask   {
     @XmlElement
     private ServicePartner servicePartner;
 
-    public String getReplyAddress ()
-    {
-        return replyAddress;
-    }
-
-    public void setReplyAddress (String replyAddress)
-    {
-        this.replyAddress = replyAddress;
-    }
+//    public String getReplyAddress ()
+//    {
+//        return replyAddress;
+//    }
+//
+//    public void setReplyAddress (String replyAddress)
+//    {
+//        this.replyAddress = replyAddress;
+//    }
 
     public String getInvoicePaidBy ()
     {
@@ -67,15 +67,15 @@ public class ServiceTask   {
         this.invoicePaidBy = invoicePaidBy;
     }
 
-    public String getDamageType ()
-    {
-        return damageType;
-    }
-
-    public void setDamageType (String damageType)
-    {
-        this.damageType = damageType;
-    }
+//    public String getDamageType ()
+//    {
+//        return damageType;
+//    }
+//
+//    public void setDamageType (String damageType)
+//    {
+//        this.damageType = damageType;
+//    }
 
     public Claim getClaim ()
     {
@@ -166,6 +166,6 @@ public class ServiceTask   {
     @Override
     public String toString()
     {
-        return "ClassPojo [replyAddress = "+replyAddress+", invoicePaidBy = "+invoicePaidBy+", damageType = "+damageType+", claim = "+claim+", createdDate = "+createdDate+", serviceLines = "+serviceLines+", claimant = "+claimant+", noteToServicePartner = "+noteToServicePartner+", servicePartner = "+servicePartner+", uniqueId = "+uniqueId+"]";
+        return "ClassPojo [invoicePaidBy = "+invoicePaidBy+", claim = "+claim+", createdDate = "+createdDate+", serviceLines = "+serviceLines+", claimant = "+claimant+", noteToServicePartner = "+noteToServicePartner+", servicePartner = "+servicePartner+", uniqueId = "+uniqueId+"]";
     }
 }

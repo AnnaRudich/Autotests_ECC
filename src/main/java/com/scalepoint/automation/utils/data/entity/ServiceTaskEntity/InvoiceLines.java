@@ -9,9 +9,6 @@ import java.util.List;
 @XmlRootElement(name = "invoiceLinesList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvoiceLines {
-    public InvoiceLines(List<InvoiceLine> invoiceLinesList) {
-        this.invoiceLinesList = invoiceLinesList;
-    }
 
     @XmlElement(name = "invoiceLinesList")
     private List<InvoiceLine> invoiceLinesList;
