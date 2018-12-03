@@ -66,11 +66,6 @@
 
         </classes>
     </test>
-    <test verbose="1" name="Qunit results check" enabled="true" preserve-order="true" thread-count="3">
-       <classes>
-           <class name="com.scalepoint.automation.tests.sidQUnit.SidQunitTests"/>
-       </classes>
-    </test>
     <test verbose="1" name="Api" enabled="true" preserve-order="true" thread-count="1">
         <classes>
             <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>
