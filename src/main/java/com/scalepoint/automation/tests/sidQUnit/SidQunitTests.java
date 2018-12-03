@@ -51,7 +51,7 @@ public class SidQunitTests extends BaseTest {
                 {"voucher-adapter-test.jsp"},
                 {"settlement-panel-adapter-test.jsp"},
                 {"settlement-item-adapter-test.jsp"},
-                {"settlement-item-adapter-test.jsp"},
+                {"customer-mail-adapter-test.jsp"},
                 {"customer-details-adapter-test.jsp"}
         };
     }
