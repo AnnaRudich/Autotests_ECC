@@ -21,8 +21,8 @@ public class SidQunitTests extends BaseTest {
     @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterTests(String test) {
         List<WebElement> results = openPage(test);
-        assertThat(results.stream().noneMatch(getWebElementPredicateClassFail()))
-                .as(getErrorDescription(results, test))
+        assertThat(results.stream().noneMatch(findFailed()))
+                .as(getErrorDescriptionForTest(results, test))
                 .isTrue();
     }
 
@@ -31,22 +31,18 @@ public class SidQunitTests extends BaseTest {
         return Wait.forCondition(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//li[contains(@id,'qunit-test-output')]")));
     }
 
-    private Predicate<WebElement> getWebElementPredicateClassFail() {
+    private Predicate<WebElement> findFailed() {
         return e -> e.getAttribute("class").contains("fail");
     }
 
-    private Boolean findFailed(WebElement element) {
-        return element.getAttribute("class").contains("fail");
+    private String getErrorDescriptionForTest(List<WebElement> results, String test) {
+        return "Failed for " + test + ": " + results.stream().filter(findFailed()).map(this::getErrorMessage).collect(Collectors.joining(" | "));
     }
 
     private String getErrorMessage(WebElement element){
         return element.findElement(By.className("module-name")).getText() + " -> " +
                 element.findElements(By.className("fail")).stream()
                         .map(e -> e.findElement(By.className("test-message")).getText()).collect(Collectors.joining(","));
-    }
-
-    private String getErrorDescription(List<WebElement> results, String test) {
-        return "Failed for " + test + ": " + results.stream().filter(this::findFailed).map(this::getErrorMessage).collect(Collectors.joining(" | "));
     }
 
     @DataProvider(name = "qunitTests")
