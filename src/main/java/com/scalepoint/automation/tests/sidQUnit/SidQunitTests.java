@@ -2,6 +2,8 @@ package com.scalepoint.automation.tests.sidQUnit;
 
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.RunOn;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -20,6 +22,15 @@ public class SidQunitTests extends BaseTest {
 
     @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterTests(String test) {
+        List<WebElement> results = openPage(test);
+        assertThat(results.stream().noneMatch(findFailed()))
+                .as(getErrorDescriptionForTest(results, test))
+                .isTrue();
+    }
+
+    @RunOn(DriverType.IE_REMOTE)
+    @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
+    public void qunitMatchingEngineAdapterOnIETests(String test) {
         List<WebElement> results = openPage(test);
         assertThat(results.stream().noneMatch(findFailed()))
                 .as(getErrorDescriptionForTest(results, test))
