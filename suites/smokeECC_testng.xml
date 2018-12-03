@@ -64,7 +64,7 @@
                 </methods>
             </class>
 
-            <class name="com.scalepoint.automation.tests.sidQUnit.SidQunitTests"/>
+            <!--<class name="com.scalepoint.automation.tests.sidQUnit.SidQunitTests"/>-->
 
         </classes>
     </test>
