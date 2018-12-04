@@ -240,8 +240,7 @@ public class TextSearchPage extends Page {
     public SettlementDialog match(String productDescription) {
         Wait.waitForAjaxCompleted();
         waitForStaleElement(By.cssSelector("#productsTable table td"));
-        List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//*[text()[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), " +
-                "'" + productDescription + "')]]/../..//button[@class='matchbutton']"));
+        List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//button[@class='matchbutton']"));
         if (matchButtons.isEmpty()) {
             throw new IllegalStateException("No text search results found!");
         }
