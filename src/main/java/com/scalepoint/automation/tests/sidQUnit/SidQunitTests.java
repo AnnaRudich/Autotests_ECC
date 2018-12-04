@@ -20,6 +20,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SidQunitTests extends BaseTest {
 
+    @RunOn(DriverType.CHROME_REMOTE)
     @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterTests(String test) {
         List<WebElement> results = openPage(test);
@@ -47,7 +48,7 @@ public class SidQunitTests extends BaseTest {
     }
 
     private String getErrorDescriptionForTest(List<WebElement> results, String test) {
-        return "Failed for " + test + ": " + results.stream().filter(findFailed()).map(this::getErrorMessage).collect(Collectors.joining(" | "));
+        return "\nFAILED for " + test + ": " + results.stream().filter(findFailed()).map(this::getErrorMessage).collect(Collectors.joining(" | "));
     }
 
     private String getErrorMessage(WebElement element){
