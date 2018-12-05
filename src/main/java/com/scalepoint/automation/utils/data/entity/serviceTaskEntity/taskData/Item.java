@@ -1,22 +1,21 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.taskData;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Item
-{
-    @XmlElement
+public class Item {
+    @XmlAttribute
     private String customerDescription;
 
-    @XmlElement
-    private String age;
+    @XmlAttribute
+    private String depreciation;
 
-    @XmlElement
+    @XmlAttribute
     private String quantity;
 
-    @XmlElement
+    @XmlAttribute
     private String productMatchDescription;
 
     public String getCustomerDescription ()
@@ -29,14 +28,14 @@ public class Item
         this.customerDescription = customerDescription;
     }
 
-    public String getAge ()
+    public String getDepreciation ()
     {
-        return age;
+        return depreciation;
     }
 
-    public void setAge (String age)
+    public void setDepreciation (String depreciation)
     {
-        this.age = age;
+        this.depreciation = depreciation;
     }
 
     public String getQuantity ()
@@ -62,7 +61,7 @@ public class Item
     @Override
     public String toString()
     {
-        return "ClassPojo [customerDescription = "+customerDescription+", age = "+age+", quantity = "+quantity+", productMatchDescription = "+productMatchDescription+"]";
+        return "ClassPojo [customerDescription = "+customerDescription+", depreciation = "+depreciation+", quantity = "+quantity+", productMatchDescription = "+productMatchDescription+"]";
     }
 }
 

@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.feedback;
 
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,6 +29,10 @@ public class InvoiceLine {
 
     @XmlElement
     private String units;
+
+    public InvoiceLine() {
+        InvoiceLine invoiceLine = new InvoiceLineBuilder().build();
+    }
 
     public String getLineTotal ()
     {

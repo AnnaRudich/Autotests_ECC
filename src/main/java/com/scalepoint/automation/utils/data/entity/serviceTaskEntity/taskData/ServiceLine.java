@@ -1,5 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
-
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.taskData;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,10 +8,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "serviceLine")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ServiceLine
-{
-    @XmlAttribute
-    private String uniqueId;
+public class ServiceLine {
+
+    @XmlElement
+    private Category category;
 
     @XmlAttribute
     private String claimLineId;
@@ -21,15 +20,13 @@ public class ServiceLine
     private String taskType;
 
     @XmlElement
-    private Category category;
-
-    @XmlElement
     private Item item;
 
-    @XmlElement
-    private Valuations valuations;
+    @XmlAttribute
+    private String valuations;
 
-
+    @XmlAttribute
+    private String uniqueId;
 
     public Category getCategory ()
     {
@@ -51,6 +48,16 @@ public class ServiceLine
         this.claimLineId = claimLineId;
     }
 
+    public String getTaskType ()
+    {
+        return taskType;
+    }
+
+    public void setTaskType (String taskType)
+    {
+        this.taskType = taskType;
+    }
+
     public Item getItem ()
     {
         return item;
@@ -61,21 +68,12 @@ public class ServiceLine
         this.item = item;
     }
 
-    public Valuations getValuations ()
+    public String getValuations ()
     {
         return valuations;
     }
 
-
-    public String getTaskType() {
-        return taskType;
-    }
-
-    public void setTaskType(String taskType) {
-        this.taskType = taskType;
-    }
-
-    public void setValuations (Valuations valuations)
+    public void setValuations (String valuations)
     {
         this.valuations = valuations;
     }
@@ -93,7 +91,8 @@ public class ServiceLine
     @Override
     public String toString()
     {
-        return "ClassPojo [category = "+category+", claimLineId = "+claimLineId+", item = "+item+", valuations = "+valuations+", uniqueId = "+uniqueId+"]";
+        return "ClassPojo [category = "+category+", claimLineId = "+claimLineId+", taskType = "+taskType+", item = "+item+", valuations = "+valuations+", uniqueId = "+uniqueId+"]";
     }
 }
+
 

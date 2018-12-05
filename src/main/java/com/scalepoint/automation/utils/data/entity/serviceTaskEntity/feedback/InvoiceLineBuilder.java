@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.feedback;
 
 
 import com.scalepoint.automation.utils.Constants;

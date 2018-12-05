@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.feedback;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

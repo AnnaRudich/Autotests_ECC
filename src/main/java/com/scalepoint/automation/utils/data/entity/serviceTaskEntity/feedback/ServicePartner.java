@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.feedback;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,13 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class ServicePartner {
 
     @XmlAttribute
-    private String serviceAgreementName;
-
-    @XmlAttribute
     private String address1;
-
-    @XmlAttribute
-    private String address2;
 
     @XmlAttribute
     private String city;
@@ -38,10 +32,18 @@ public class ServicePartner {
     @XmlElement
     private Bank bank;
 
-    @XmlElement
-    private Location location;
-
-
+    public ServicePartner(){
+        com.scalepoint.automation.utils.data.entity.serviceTaskEntity.taskData.ServicePartner servicePartner
+                = new com.scalepoint.automation.utils.data.entity.serviceTaskEntity.taskData.ServicePartner();
+        this.address1 = servicePartner.getAddress1();
+        this.city = servicePartner.getCity();
+        this.cvrNumber = servicePartner.getCvrNumber();
+        this.email = servicePartner.getEmail();
+        this.name = servicePartner.getName();
+        this.phone = servicePartner.getPhone();
+        this.postalCode = servicePartner.getPostalCode();
+        this.bank = new Bank();
+    }
 
     public String getPhone() {
         return phone;
@@ -57,14 +59,6 @@ public class ServicePartner {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public String getServiceAgreementName() {
-        return serviceAgreementName;
-    }
-
-    public void setServiceAgreementName(String serviceAgreementName) {
-        this.serviceAgreementName = serviceAgreementName;
     }
 
     public String getCvrNumber() {
@@ -83,14 +77,6 @@ public class ServicePartner {
         this.email = email;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public String getName() {
         return name;
     }
@@ -105,14 +91,6 @@ public class ServicePartner {
 
     public void setAddress1(String address1) {
         this.address1 = address1;
-    }
-
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress2(String address2) {
-        this.address2 = address2;
     }
 
     public Bank getBank() {
@@ -132,7 +110,8 @@ public class ServicePartner {
     }
 
     @Override
-    public String toString() {
-        return "ClassPojo [phone = " + phone + ", postalCode = " + postalCode + ", serviceAgreementName = " + serviceAgreementName + ", cvrNumber = " + cvrNumber + ", email = " + email + ", location = " + location + ", name = " + name + ", address1 = " + address1 + ", address2 = " + address2 + ", bank = " + bank + ", city = " + city + "]";
+    public String toString()
+    {
+        return "ClassPojo [phone = "+phone+", postalCode = "+postalCode+", cvrNumber = "+cvrNumber+", email = "+email+", name = "+name+", address1 = "+address1+", bank = "+bank+", city = "+city+"]";
     }
 }

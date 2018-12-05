@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.feedback;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -12,15 +12,6 @@ public class Invoice {
 
     @XmlElement
     private InvoiceLines invoiceLines;
-
-    @XmlAttribute
-    private String dateOfValuation;
-
-    @XmlAttribute
-    private String nameOfValuationResponsible;
-
-    @XmlAttribute
-    private String creditNoteNumber;
 
     @XmlAttribute
     private String invoiceDate;
@@ -113,45 +104,19 @@ public class Invoice {
         this.invoiceLines = invoiceLines;
     }
 
-    public String getNetAmount ()
-    {
+
+    public String getNetAmount() {
         return netAmount;
     }
 
-    public void setNetAmount (String netAmount)
-    {
+    public void setNetAmount(String netAmount) {
         this.netAmount = netAmount;
     }
-
-    public String getDateOfValuation() {
-        return dateOfValuation;
-    }
-
-    public void setDateOfValuation(String dateOfValuation) {
-        this.dateOfValuation = dateOfValuation;
-    }
-
-    public String getNameOfValuationResponsible() {
-        return nameOfValuationResponsible;
-    }
-
-    public void setNameOfValuationResponsible(String nameOfValuationResponsible) {
-        this.nameOfValuationResponsible = nameOfValuationResponsible;
-    }
-
-    public String getCreditNoteNumber() {
-        return creditNoteNumber;
-    }
-
-    public void setCreditNoteNumber(String creditNoteNumber) {
-        this.creditNoteNumber = creditNoteNumber;
-    }
-
 
     @Override
     public String toString()
     {
-        return "ClassPojo [invoiceDate = "+invoiceDate+", paymentDueDate = "+paymentDueDate+", invoiceType = "+invoiceType+", vat = "+vat+", totalAmount = "+totalAmount+", invoiceNumber = "+invoiceNumber+", invoiceLines = "+invoiceLines+", netAmount = "+netAmount+"]";
+        return "ClassPojo [invoiceDate = "+invoiceDate+", paymentDueDate = "+paymentDueDate+", invoiceType = "+invoiceType+", totalAmount = "+totalAmount+", vat = "+vat+", invoiceNumber = "+invoiceNumber+", invoiceLines = "+invoiceLines+", netAmount = "+netAmount+"]";
     }
 }
 

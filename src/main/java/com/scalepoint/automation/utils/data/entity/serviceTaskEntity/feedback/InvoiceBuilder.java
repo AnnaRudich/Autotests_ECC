@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
+package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.feedback;
 
 
 import com.scalepoint.automation.utils.Constants;
@@ -31,20 +31,6 @@ public class InvoiceBuilder {
         return this;
     }
 
-    public InvoiceBuilder withCreditNoteNumber(String creditNoteNumber){
-        this.invoice.setCreditNoteNumber(creditNoteNumber);
-        return this;
-    }
-
-    public InvoiceBuilder withNameOfValuationResponsible(String nameOfValuationResponsible){
-        this.invoice.setNameOfValuationResponsible(nameOfValuationResponsible);
-        return this;
-    }
-
-    public InvoiceBuilder withDateOfValuation(String dateOfValuation){
-        this.invoice.setDateOfValuation(dateOfValuation);
-        return this;
-    }
 
     public Invoice build(){
         return invoice;

@@ -1,171 +1,31 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity;
 
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement(name="serviceTask")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class ServiceTask   {
+@XmlType(name = "abstractServiceTask")
+public abstract class ServiceTask {
 
-    @XmlAttribute
-    private String takenSelfRisk;
-//
-//    @XmlAttribute
-//    private String damageType;
-
-//    @XmlAttribute
-//    private String replyAddress;
-
-    @XmlAttribute
+    private String uniqueId;
     private String createdDate;
 
-    @XmlAttribute
-    private String uniqueId;
 
-    @XmlElement
-    private Invoice invoice;
-
-    @XmlElement
-    private Claim claim;
-
-    @XmlElement
-    private Claimant claimant;
-
-    @XmlElement
-    private String invoicePaidBy;
-
-    @XmlElement
-    private String noteToServicePartner;
-
-    @XmlElement
-    private ServiceLines serviceLines;
-
-    @XmlElement
-    private ServicePartner servicePartner;
-
-//    public String getReplyAddress ()
-//    {
-//        return replyAddress;
-//    }
-//
-//    public void setReplyAddress (String replyAddress)
-//    {
-//        this.replyAddress = replyAddress;
-//    }
-
-    public String getInvoicePaidBy ()
-    {
-        return invoicePaidBy;
-    }
-
-    public void setInvoicePaidBy (String invoicePaidBy)
-    {
-        this.invoicePaidBy = invoicePaidBy;
-    }
-
-//    public String getDamageType ()
-//    {
-//        return damageType;
-//    }
-//
-//    public void setDamageType (String damageType)
-//    {
-//        this.damageType = damageType;
-//    }
-
-    public Claim getClaim ()
-    {
-        return claim;
-    }
-
-    public void setClaim (Claim claim)
-    {
-        this.claim = claim;
-    }
-
-    public String getCreatedDate ()
-    {
-        return createdDate;
-    }
-
-    public void setCreatedDate (String createdDate)
-    {
-        this.createdDate = createdDate;
-    }
-
-    public ServiceLines getServiceLines ()
-    {
-        return serviceLines;
-    }
-
-    public void setServiceLines (ServiceLines serviceLines)
-    {
-        this.serviceLines = serviceLines;
-    }
-
-    public Claimant getClaimant ()
-    {
-        return claimant;
-    }
-
-    public void setClaimant (Claimant claimant)
-    {
-        this.claimant = claimant;
-    }
-
-    public String getNoteToServicePartner ()
-    {
-        return noteToServicePartner;
-    }
-
-    public void setNoteToServicePartner (String noteToServicePartner)
-    {
-        this.noteToServicePartner = noteToServicePartner;
-    }
-
-    public ServicePartner getServicePartner ()
-    {
-        return servicePartner;
-    }
-
-    public void setServicePartner (ServicePartner servicePartner)
-    {
-        this.servicePartner = servicePartner;
-    }
-
-    public String getUniqueId ()
-    {
+    @XmlAttribute(name = "uniqueId", required = true)
+    public String getUniqueId() {
         return uniqueId;
     }
 
-    public void setUniqueId (String uniqueId)
-    {
+    public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
 
-    public String getTakenSelfRisk() {
-        return takenSelfRisk;
+    @XmlAttribute(required = true)
+    public String getCreatedDate() {
+        return createdDate;
     }
 
-    public void setTakenSelfRisk(String takenSelfRisk) {
-        this.takenSelfRisk = takenSelfRisk;
-    }
-
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [invoicePaidBy = "+invoicePaidBy+", claim = "+claim+", createdDate = "+createdDate+", serviceLines = "+serviceLines+", claimant = "+claimant+", noteToServicePartner = "+noteToServicePartner+", servicePartner = "+servicePartner+", uniqueId = "+uniqueId+"]";
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 }
+
