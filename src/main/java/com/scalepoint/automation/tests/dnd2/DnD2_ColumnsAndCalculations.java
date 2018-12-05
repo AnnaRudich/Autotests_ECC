@@ -65,8 +65,9 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withCategory(claimItem.getExistingGroupFotoAndVideo())
-                        .withSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(depreciationValue, SettlementDialog.Valuation.NEW_PRICE);
@@ -188,6 +189,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 });
     }
 
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "test for claim line with voucher and depreciation and no reduction rule")
