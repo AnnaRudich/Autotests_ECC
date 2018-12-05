@@ -142,15 +142,15 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                     asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
                 });
     }
-
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "test for claim line without voucher and depreciation and no reduction rule")
-    public void charlie514_claimLineWithoutVoucherAndDepreciationAmount0(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_claimLineWithoutVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+
                 .closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
