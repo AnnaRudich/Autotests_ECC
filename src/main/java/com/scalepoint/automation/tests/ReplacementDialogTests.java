@@ -54,6 +54,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(newPrice)
                         .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .closeSidWithOk();
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()
