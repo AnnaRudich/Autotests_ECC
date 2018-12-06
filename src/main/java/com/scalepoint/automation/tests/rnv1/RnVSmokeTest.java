@@ -37,6 +37,8 @@ public class RnVSmokeTest extends BaseTest{
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
         RnvService rnvService = new RnvService();
+        //rnvService.sendFeedback();
+        rnvService.pullRnVTaskData();
         rnvService.sendFeedback();
     }
 }
