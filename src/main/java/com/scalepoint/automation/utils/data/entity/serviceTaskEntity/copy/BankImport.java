@@ -7,6 +7,13 @@ public class BankImport {
     private String bankName;
     private String fikNumber;
 
+    public BankImport(){}
+
+    public BankImport(String bankName, String fikName){
+        this.bankName = bankName;
+        this.fikNumber = fikName;
+    }
+
     @XmlAttribute
     public String getBankName() {
         return bankName;

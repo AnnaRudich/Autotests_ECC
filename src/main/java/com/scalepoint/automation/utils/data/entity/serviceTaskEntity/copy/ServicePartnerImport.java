@@ -11,6 +11,12 @@ public class ServicePartnerImport extends ServicePartner{
         return bank;
     }
 
+    public ServicePartnerImport(){}
+
+    public ServicePartnerImport(BankImport bankImport){
+        this.bank = bankImport;
+    }
+
     public void setBank(BankImport bank) {
         this.bank = bank;
     }

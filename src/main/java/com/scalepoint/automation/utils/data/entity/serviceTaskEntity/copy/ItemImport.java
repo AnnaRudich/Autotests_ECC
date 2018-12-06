@@ -7,6 +7,17 @@ public class ItemImport extends Item{
     private String servicePartnerNote;
     private boolean totalDamage;
 
+    public ItemImport(){}
+
+    public ItemImport(String sePaNote, boolean totalDamage){
+        this.servicePartnerNote = sePaNote;
+        this.totalDamage = totalDamage;
+    }
+
+    public ItemImport(boolean totalDamage){
+        this.totalDamage = totalDamage;
+    }
+
     @XmlAttribute
     public String getServicePartnerNote() {
         return servicePartnerNote;

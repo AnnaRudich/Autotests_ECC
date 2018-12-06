@@ -1,8 +1,9 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
-
+@XmlRootElement(name = "invoice")
 public class Invoice {
     String invoiceType;
     String invoiceNumber;
@@ -17,6 +18,8 @@ public class Invoice {
     BigDecimal totalAmount;
 
     public Invoice(){}
+
+
 
 
 

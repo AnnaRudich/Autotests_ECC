@@ -18,6 +18,8 @@ public class ServiceTaskImport extends ServiceTask{
     private BigDecimal updateClaimSelfRisk;
     private String updateClaimSelfRiskReason;
 
+    public ServiceTaskImport(){}
+
     @XmlElement(nillable = true)
     public ServicePartnerImport getServicePartner() {
         return servicePartner;
