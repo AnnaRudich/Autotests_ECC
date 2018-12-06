@@ -11,6 +11,7 @@
                 <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
                 <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
                 <exclude name="com.scalepoint.automation.tests.selfservice"/>
+                <exclude name="com.scalepoint.automation.tests.sidQUnit"/>
             </package>
         </packages>
         <classes>

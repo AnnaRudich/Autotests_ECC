@@ -50,7 +50,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie510_selectBrandAndModel(User user, Claim claim, TextSearch textSearch) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("samsung s7")
+                .searchByProductName("samsung galaxy s7")
                 .selectBrand(textSearch.getBrand1())
                 .selectModel(textSearch.getModel1())
                 .doAssert(
@@ -67,7 +67,7 @@ public class TextSearchTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("samsung s7")
+                .searchByProductName("samsung galaxy s7")
                 .selectBrand(textSearch.getBrand1())
                 .openAttributesMenu()
                 .selectAttribute(attributes)

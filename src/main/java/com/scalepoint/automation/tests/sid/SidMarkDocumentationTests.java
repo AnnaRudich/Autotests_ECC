@@ -27,7 +27,7 @@ public class SidMarkDocumentationTests extends BaseTest {
                 )
                 .cancel()
                 .toTextSearchPage()
-                .searchByProductName("samsung")
+                .searchByProductName("samsung galaxy s7")
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .doAssert(

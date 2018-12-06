@@ -35,7 +35,7 @@
     <brandLinkVoucher4>Bilka</brandLinkVoucher4>
     <excelPath1>excelImport/ClaimSheetDK2003.xls</excelPath1>
     <excelWithGroupingPath>xcelImport/ClaimSheetDK2003_withGrouping.xls</excelWithGroupingPath>
-    <xlsDescr1>samsung</xlsDescr1>
+    <xlsDescr1>samsung galaxy s7</xlsDescr1>
     <depTypePolicy>Policy</depTypePolicy>
     <depTypeDisc>Discretionary</depTypeDisc>
     <depAmount1>10</depAmount1>
@@ -46,7 +46,7 @@
     <file2Loc>attachments/bw1.jpg</file2Loc>
     <zeroDistance>0 km</zeroDistance>
     <validDistance1>3 km</validDistance1>
-    <setDialogTextMatch>samsung</setDialogTextMatch>
+    <setDialogTextMatch>samsung galaxy s7</setDialogTextMatch>
     <matchedText>Matchet</matchedText>
     <procuraLimitPrice>2100</procuraLimitPrice>
     <customerDemand>1000</customerDemand>

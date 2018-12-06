@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="qunit" configfailurepolicy="continue" parallel="methods">
+    <test verbose="1" name="qunit" group-by-instances="false" enabled="true" preserve-order="true" thread-count="2">
+        <classes>
+            <class name="com.scalepoint.automation.tests.sidQUnit.SidQunitTests"/>
+        </classes>
+    </test>
+</suite>
