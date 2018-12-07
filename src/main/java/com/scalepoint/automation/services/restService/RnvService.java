@@ -30,9 +30,9 @@ public class RnvService extends BaseService {
     public void sendFeedback(){
 
         String str = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>\n" +
-                "<serviceTask createdDate=\"2018-11-30T14:15:09\" uniqueId=\"27bbf177-502c-43ae-ab13-608e5b53247b\"\n" +
+                "<serviceTask createdDate=\"2018-11-30T14:15:09\" uniqueId=\"2cca98a6-8344-4a6d-9f18-efbf7265a9d3\"\n" +
                 "\ttakenSelfRisk=\"20.05\">\n" +
-                "    <invoice invoiceDate=\"2014-11-10\" invoiceNumber=\"XheDwVoZGc\" invoiceType=\"INVOICE\" netAmount=\"60\"\n" +
+                "    <invoice invoiceDate=\"2014-11-10\" invoiceNumber=\"X23heDwVoZGc\" invoiceType=\"INVOICE\" netAmount=\"60\"\n" +
                 "             paymentDueDate=\"2014-11-10\" totalAmount=\"69\" vat=\"9\">\n" +
                 "        <invoiceLines>\n" +
                 "            <invoiceLine description=\"item1\" lineTotal=\"11.50\" quantity=\"1.00\" unitNetAmount=\"10.00\" unitPrice=\"10.00\"\n" +
@@ -58,7 +58,7 @@ public class RnvService extends BaseService {
         given().log().all()
                     .multiPart("securityToken", supplierSecurityToken)
                     //.multiPart("xmlString", new ServiceTaskImportBuilder().setDefault().build(), "application/xml")
-                .multiPart("xmlString", str)
+                    .multiPart("xmlString", str)
                     .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
     }
 
