@@ -134,6 +134,13 @@ public class EventDatabaseApi {
                 .isEqualTo(claimRequest.getCaseNumber());
     }
 
+
+    public void assertThatCaseSettledEventWasCreated(ClaimRequest claimRequest){
+        assertThat(getEventClaimSettled(claimRequest).getCase().getNumber())
+                .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was created in event-api")
+                .isEqualTo(claimRequest.getCaseNumber());
+    }
+
     public void assertThatCloseCaseEventWasNotCreated(ClaimRequest claimRequest) {
         assertThat(getEventsForClaimUpdate(claimRequest.getCompany())
                 .stream().anyMatch(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())))
