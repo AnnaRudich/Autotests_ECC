@@ -1,8 +1,12 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import java.math.BigDecimal;
 
+@XmlSeeAlso(ClaimExport.class)
+@XmlRootElement(name = "claim")
 public class Claim {
     private Integer insuranceCompanyId;
     private String insuranceCompanyName;

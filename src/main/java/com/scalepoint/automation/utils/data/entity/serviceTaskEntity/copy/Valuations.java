@@ -1,8 +1,12 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import java.math.BigDecimal;
 
+@XmlSeeAlso({ValuationsExport.class, ValuationsImport.class})
+@XmlRootElement(name = "valuations")
 public class Valuations {
     private BigDecimal purchasePrice;
     private BigDecimal newPrice;

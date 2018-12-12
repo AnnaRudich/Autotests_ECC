@@ -1,7 +1,9 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name = "category")
 public class Category {
     private String name;
     private String token;

@@ -9,13 +9,17 @@ public class ItemImport extends Item{
 
     public ItemImport(){}
 
-    public ItemImport(String sePaNote, boolean totalDamage){
-        this.servicePartnerNote = sePaNote;
-        this.totalDamage = totalDamage;
-    }
+    public ItemImport(ServiceLineExport serviceLineExport){
 
-    public ItemImport(boolean totalDamage){
-        this.totalDamage = totalDamage;
+        ItemImport itemImport = new ItemImport();
+        ItemExport itemExport = serviceLineExport.getItem();
+
+        itemImport.setAge(itemExport.getAge());
+        itemImport.setDescription(itemExport.getDescription());
+        itemImport.setOriginalDescription(itemExport.getOriginalDescription());
+        itemImport.setQuantity(itemExport.getQuantity());
+        this.servicePartnerNote = "sePaNote";
+        this.totalDamage = true;
     }
 
     @XmlAttribute

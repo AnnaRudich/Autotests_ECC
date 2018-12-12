@@ -44,6 +44,7 @@ public class RnVSmokeTest extends BaseTest{
         String lineDescription = "Line_1";
 
         RnvService rnvService = new RnvService();
+        //rnvService.pullRnVTaskData();
         rnvService.sendFeedback();
     }
 }

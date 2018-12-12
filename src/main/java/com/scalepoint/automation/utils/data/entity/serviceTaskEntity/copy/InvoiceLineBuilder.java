@@ -6,26 +6,26 @@ import com.scalepoint.automation.utils.RandomUtils;
 
 import java.math.BigDecimal;
 
-public class InvoiceLineImportBuilder {
+public class InvoiceLineBuilder {
 
-    private InvoiceLineImport invoiceLine;
+    private InvoiceLine invoiceLine;
 
-    public InvoiceLineImportBuilder() {
+    public InvoiceLineBuilder() {
+        invoiceLine = new InvoiceLine();
         invoiceLine.setDescription("InvoiceLine" + RandomUtils.randomInt());
         invoiceLine.setQuantity(BigDecimal.valueOf(1));
         invoiceLine.setUnitVatAmount(BigDecimal.valueOf(Constants.PRICE_10));
         invoiceLine.setUnitPrice(BigDecimal.valueOf(Constants.PRICE_50));
         invoiceLine.setUnitNetAmount(BigDecimal.valueOf(40));
         invoiceLine.setLineTotal(BigDecimal.valueOf(40*1));
-
     }
 
-    public InvoiceLineImportBuilder withUnits(String units){
+    public InvoiceLineBuilder withUnits(String units){
         this.invoiceLine.setUnits(units);
         return this;
     }
 
-    public InvoiceLineImport build(){
+    public InvoiceLine build(){
         return invoiceLine;
     }
 }

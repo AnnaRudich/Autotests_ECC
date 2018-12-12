@@ -6,14 +6,14 @@ import java.util.List;
 
 public class InvoiceImport extends Invoice{
 
-    List<InvoiceLineImport> invoiceLines;
+    List<InvoiceLine> invoiceLines;
     @XmlElementWrapper(name="invoiceLines")
     @XmlElement(name="invoiceLine")
-    public List<InvoiceLineImport> getInvoiceLines() {
+    public List<InvoiceLine> getInvoiceLines() {
         return invoiceLines;
     }
 
-    public void setInvoiceLines(List<InvoiceLineImport> invoiceLines) {
+    public void setInvoiceLines(List<InvoiceLine> invoiceLines) {
         this.invoiceLines = invoiceLines;
     }
 }

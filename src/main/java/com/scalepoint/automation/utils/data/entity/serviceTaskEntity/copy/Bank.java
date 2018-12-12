@@ -1,7 +1,11 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
+@XmlSeeAlso({BankExport.class, BankImport.class})
+@XmlRootElement(name = "bank")
 public class Bank {
 
     private String regNumber;

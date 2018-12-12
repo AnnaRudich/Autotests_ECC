@@ -13,8 +13,20 @@ public class ServicePartnerImport extends ServicePartner{
 
     public ServicePartnerImport(){}
 
-    public ServicePartnerImport(BankImport bankImport){
-        this.bank = bankImport;
+    public ServicePartnerImport(ServiceTaskExport serviceTaskExport){
+
+        ServicePartnerExport servicePartnerExport = serviceTaskExport.getServicePartner();
+
+       ServicePartnerImport servicePartnerImport = new ServicePartnerImport();
+       servicePartnerImport.setBank(new BankImport());
+        servicePartnerImport.setAddress1(servicePartnerExport.getAddress1());
+        servicePartnerImport.setAddress2(servicePartnerExport.getAddress2());
+        servicePartnerImport.setCity(servicePartnerExport.getCity());
+        servicePartnerImport.setCvrNumber(servicePartnerExport.getCvrNumber());
+        servicePartnerImport.setEmail(servicePartnerExport.getEmail());
+        servicePartnerImport.setName(servicePartnerExport.getName());
+        servicePartnerImport.setPhone(servicePartnerExport.getPhone());
+        servicePartnerImport.setPostalCode(servicePartnerExport.getPostalCode());
     }
 
     public void setBank(BankImport bank) {

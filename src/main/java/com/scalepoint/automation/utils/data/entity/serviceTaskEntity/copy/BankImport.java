@@ -2,16 +2,20 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class BankImport {
+public class BankImport extends Bank{
 
     private String bankName;
     private String fikNumber;
 
-    public BankImport(){}
-
-    public BankImport(String bankName, String fikName){
-        this.bankName = bankName;
-        this.fikNumber = fikName;
+    public BankImport(){
+        BankExport bankExport = new BankExport();
+        setRegNumber(bankExport.getRegNumber());
+        setAccountNumber(bankExport.getAccountNumber());
+        setFikCreditorCode(bankExport.getFikCreditorCode());
+        setFikType(bankExport.getFikType());
+        setIBAN(bankExport.getIBAN());
+        this.bankName = "bankName";
+        this.fikNumber = "fikName";
     }
 
     @XmlAttribute

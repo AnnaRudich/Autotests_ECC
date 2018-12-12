@@ -1,7 +1,11 @@
 package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
+@XmlSeeAlso({ItemExport.class, ItemImport.class})
+@XmlRootElement(name = "item")
 public class Item {
 
     private String originalDescription;

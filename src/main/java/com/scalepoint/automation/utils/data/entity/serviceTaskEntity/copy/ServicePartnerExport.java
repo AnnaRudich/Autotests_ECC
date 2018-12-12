@@ -7,7 +7,7 @@ public class ServicePartnerExport extends ServicePartner {
 
     private String serviceAgreementName;
     private BankExport bank;
-    private LocationExport location;
+    private Location location;
 
 
     @XmlAttribute
@@ -29,7 +29,7 @@ public class ServicePartnerExport extends ServicePartner {
     }
 
     @XmlElement(nillable = true)
-    public LocationExport getLocation() {
+    public Location getLocation() {
         return location;
     }
 

@@ -3,9 +3,11 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
+@XmlSeeAlso({ServiceLineImport.class, ServiceLineExport.class})
 @XmlRootElement(name = "serviceLine")
-public class ServiceLine {
+public class ServiceLine{
 
     private Integer lineIndex;
     private String lineGUID;

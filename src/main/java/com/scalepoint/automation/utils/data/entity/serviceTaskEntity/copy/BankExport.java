@@ -2,7 +2,7 @@ package com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class BankExport {
+public class BankExport extends Bank{
     private String GIRO;
 
     @XmlAttribute

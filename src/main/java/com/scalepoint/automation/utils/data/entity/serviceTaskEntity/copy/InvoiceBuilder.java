@@ -19,9 +19,9 @@ public class InvoiceBuilder {
 
     public InvoiceBuilder setDefault() {
 
-        List<InvoiceLineImport> invoiceLineImports = new ArrayList<>();
-        invoiceLineImports.add(new InvoiceLineImportBuilder().build());
-
+        List<InvoiceLine> invoiceLineImports = new ArrayList<>();
+        invoiceLineImports.add(new InvoiceLineBuilder().build());
+        invoice = new InvoiceImport();
         invoice.setInvoiceLines(invoiceLineImports);
         invoice.setInvoiceType("INVOICE");
         invoice.setInvoiceNumber(Integer.toString(RandomUtils.randomInt()));
