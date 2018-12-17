@@ -86,7 +86,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .openSidAndFill(formFiller -> formFiller
                         .withDepreciation(depreciationValue)
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+                        .withValuation(SettlementDialog.Valuation.NEW_PRICE))
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
@@ -149,7 +150,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+                        .withValuation(SettlementDialog.Valuation.NEW_PRICE))
                 .closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {

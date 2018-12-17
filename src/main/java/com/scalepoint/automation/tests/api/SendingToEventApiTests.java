@@ -1,6 +1,10 @@
 package com.scalepoint.automation.tests.api;
 
-import com.scalepoint.automation.services.restService.*;
+import com.scalepoint.automation.services.restService.EccIntegrationService;
+import com.scalepoint.automation.services.restService.EccSettlementSummaryService;
+import com.scalepoint.automation.services.restService.OwnRiskService;
+import com.scalepoint.automation.services.restService.ReopenClaimService;
+import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -8,7 +12,6 @@ import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
-import io.restassured.response.ValidatableResponse;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -90,11 +93,22 @@ public class SendingToEventApiTests extends BaseApiTest {
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void cancelClaimCreatedByUnifiedIntegrationShouldBeNotSendToEventApi(User user, InsertSettlementItem item) {
+    public void cancelNotSettledClaimShouldSendClaimUpdatedCaseClosedEvent(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .cancel(claimRequest);
 
-        eventDatabaseApi.assertThatCloseCaseEventWasNotCreated(claimRequest);
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+    }
+
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    public void cancelSettledClaimShouldSendClaimUpdatedCaseClosedAndCaseSettledEvens(User user, InsertSettlementItem item) {
+        createClaimWithItem(user, item)
+                .close(claimRequest, CLOSE_WITH_MAIL);
+        new ReopenClaimService().reopenClaim();
+        settlementClaimService.cancel(claimRequest);
+
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        eventDatabaseApi.assertThatCaseSettledEventWasCreated(claimRequest);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
