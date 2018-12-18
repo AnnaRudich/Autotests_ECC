@@ -4,12 +4,14 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -70,7 +72,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             .openActiveRecentClaim()
             .toCustomerDetails()
             .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(1L))
             );
   }
 
@@ -121,7 +123,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
             .openActiveRecentClaim()
             .toCustomerDetails()
             .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
+                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(1L))
             );
   }
 
