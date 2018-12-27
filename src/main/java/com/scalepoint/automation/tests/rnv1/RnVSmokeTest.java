@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.rnv1;
 
+import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
@@ -35,10 +36,19 @@ public class RnVSmokeTest extends BaseTest{
 
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+
+        RnvService rnvService = new RnvService();
+        rnvService.sendFeedback();
+
+        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement);
+
     }
 
 
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "verify repair tasks start")
     public void sendFeedback() {
         String lineDescription = "Line_1";

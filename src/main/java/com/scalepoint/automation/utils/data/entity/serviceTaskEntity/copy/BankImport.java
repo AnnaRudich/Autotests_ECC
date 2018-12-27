@@ -8,14 +8,6 @@ public class BankImport extends Bank{
     private String fikNumber;
 
     public BankImport(){
-        BankExport bankExport = new BankExport();
-        setRegNumber(bankExport.getRegNumber());
-        setAccountNumber(bankExport.getAccountNumber());
-        setFikCreditorCode(bankExport.getFikCreditorCode());
-        setFikType(bankExport.getFikType());
-        setIBAN(bankExport.getIBAN());
-        this.bankName = "bankName";
-        this.fikNumber = "fikName";
     }
 
     @XmlAttribute

@@ -3,10 +3,15 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy.ServiceTaskImport;
 import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy.ServiceTaskImportBuilder;
 import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy.ServiceTasksExport;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.StringWriter;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
@@ -28,11 +33,18 @@ public class RnvService extends BaseService {
     }
 
 
-    public void sendFeedback(){
-
+    public void sendFeedback() {
+        StringWriter writer = new StringWriter();
+        try {
+            JAXBContext.newInstance(ServiceTaskImport.class)
+                    .createMarshaller()
+                    .marshal(new ServiceTaskImportBuilder().setDefault(pullRnVTaskData()).build(), writer);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         given().log().all()
                     .multiPart("securityToken", supplierSecurityToken)
-                    .multiPart("xmlString", new ServiceTaskImportBuilder().setDefault(pullRnVTaskData()).build(), "application/xml")
+                    .multiPart("xmlString", writer.toString())
                     //.multiPart("xmlString", str)
                     .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
     }
