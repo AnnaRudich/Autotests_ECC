@@ -4,7 +4,7 @@
     <testRnVShop>Barbara Maria - Kongevejen 11</testRnVShop>
     <testSePa>Barbara Maria</testSePa>
     <testAgrName>serviceAgreement_autotests</testAgrName>
-    <testAgrNameForRnV>serviceAgreement_NameWizzard</testAgrNameForRnV>
+    <testAgrNameForRnV>serviceAgreement_autotests</testAgrNameForRnV>
     <templateName>Jacobsen Plus</templateName>
 
     <!-->Service Agreement Details<-->

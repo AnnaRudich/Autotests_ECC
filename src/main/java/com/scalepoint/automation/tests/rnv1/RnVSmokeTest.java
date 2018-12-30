@@ -41,7 +41,6 @@ public class RnVSmokeTest extends BaseTest{
         rnvService.sendFeedback();
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
-                .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
 
