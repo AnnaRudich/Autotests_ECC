@@ -328,5 +328,9 @@ $sw = [diagnostics.stopwatch]::StartNew()
 $timeout = new-timespan -Minutes 20
 
 checkUrl 'http://ecc-%SERVER_NAME%.spcph.local:81/eccAdmin/dk/login.action' 200
+
+if(%DB_RESTORE_ECC_DATABASE%){
+    Invoke-Expression "./Reindexation.ps1 -eccHost 'http://ecc-%SERVER_NAME%.spcph.local:81' -versions %LOCALES_DEPLOY%"
+}
 ```
 
