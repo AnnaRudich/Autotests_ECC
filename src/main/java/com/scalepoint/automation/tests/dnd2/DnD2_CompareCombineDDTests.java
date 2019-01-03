@@ -76,6 +76,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
+                .setDescription("test")
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
