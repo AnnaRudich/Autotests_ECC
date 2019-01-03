@@ -92,6 +92,9 @@ public class TextSearch {
     @XmlElement
     private String bnOProduct2;
 
+    @XmlElement
+    private String subgroup3;
+
     public String getSimpleQuery() {
         return simpleQuery;
     }
@@ -255,5 +258,9 @@ public class TextSearch {
 
     public String getBrokenQueryWithSpecialSymbols1() {
         return brokenQueryWithSpecialSymbols1;
+    }
+
+    public String getSubgroup3() {
+        return subgroup3;
     }
 }

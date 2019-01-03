@@ -5,16 +5,13 @@ import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
@@ -200,10 +197,10 @@ public class TextSearchTests extends BaseTest {
     public void charlie520_checkIfCorrectCategoryWasSelected(User user, Claim claim, TextSearch textSearch) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(textSearch.getSubgroup1())
+                .searchByProductName(textSearch.getSubgroup3())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup3())
                 ).searchByProductName(textSearch.getSubgroup2())
                 .waitForResultsLoad()
                 .doAssert(
