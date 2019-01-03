@@ -3,9 +3,10 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy.ServiceTaskImport;
-import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy.ServiceTaskImportBuilder;
-import com.scalepoint.automation.utils.data.entity.serviceTaskEntity.copy.ServiceTasksExport;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImportBuilder;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 
@@ -33,31 +34,23 @@ public class RnvService extends BaseService {
     }
 
 
-    public void sendFeedback() {
+    public void sendFeedback(Claim claimEnt) {
         StringWriter writer = new StringWriter();
         try {
             JAXBContext.newInstance(ServiceTaskImport.class)
                     .createMarshaller()
-                    .marshal(new ServiceTaskImportBuilder().setDefault(pullRnVTaskData()).build(), writer);
+                    .marshal(new ServiceTaskImportBuilder().setDefault(pullRnVTaskData(), claimEnt).build(), writer);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
         given().log().all()
                     .multiPart("securityToken", supplierSecurityToken)
                     .multiPart("xmlString", writer.toString())
-                    //.multiPart("xmlString", str)
                     .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
     }
 
     enum InvoiceType{
         INVOICE,
         CREDIT_NOTE
-    }
-
-    enum TaskType{
-        REPAIR,
-        REPAIR_ESTIMATE,
-        VALUATION,
-        MATCH_SERVICE
     }
 }

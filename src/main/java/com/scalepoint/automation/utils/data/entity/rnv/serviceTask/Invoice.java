@@ -1,0 +1,116 @@
+package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
+
+@XmlRootElement(name = "invoice")
+public class Invoice {
+    private String invoiceType;
+    private String invoiceNumber;
+    private String invoiceDate;
+    private String paymentDueDate;
+    private String creditNoteNumber;
+    private String nameOfValuationResponsible;
+    private String dateOfValuation;
+
+    private BigDecimal netAmount;
+    private BigDecimal vat;
+    private BigDecimal totalAmount;
+
+    public Invoice(){}
+
+
+
+
+
+    @XmlAttribute(required = true)
+    public String getInvoiceType() {
+        return invoiceType;
+    }
+
+    public void setInvoiceType(String invoiceType) {
+        this.invoiceType = invoiceType;
+    }
+
+    @XmlAttribute(required = true)
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    @XmlAttribute(required = true)
+    public String getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public void setInvoiceDate(String invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
+
+    @XmlAttribute(required = true)
+    public String getPaymentDueDate() {
+        return paymentDueDate;
+    }
+
+    void setPaymentDueDate(String paymentDueDate) {
+        this.paymentDueDate = paymentDueDate;
+    }
+
+    @XmlAttribute
+    public String getCreditNoteNumber() {
+        return creditNoteNumber;
+    }
+
+    public void setCreditNoteNumber(String creditNoteNumber) {
+        this.creditNoteNumber = creditNoteNumber;
+    }
+
+    @XmlAttribute
+    public String getNameOfValuationResponsible() {
+        return nameOfValuationResponsible;
+    }
+
+    public void setNameOfValuationResponsible(String nameOfValuationResponsible) {
+        this.nameOfValuationResponsible = nameOfValuationResponsible;
+    }
+
+    @XmlAttribute
+    public String getDateOfValuation() {
+        return dateOfValuation;
+    }
+
+    public void setDateOfValuation(String dateOfValuation) {
+        this.dateOfValuation = dateOfValuation;
+    }
+
+    @XmlAttribute(required = true)
+    public BigDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
+    }
+
+    @XmlAttribute(required = true)
+    public BigDecimal getVat() {
+        return vat;
+    }
+
+    void setVat(BigDecimal vat) {
+        this.vat = vat;
+    }
+
+    @XmlAttribute(required = true)
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+}

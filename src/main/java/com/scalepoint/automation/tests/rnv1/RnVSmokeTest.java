@@ -19,8 +19,8 @@ import org.testng.annotations.Test;
 public class RnVSmokeTest extends BaseTest{
 
     @RunOn(DriverType.CHROME)
-    @Test(dataProvider = "testDataProvider", description = "verify repair tasks start")
-    public void startTaskTest(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    @Test(dataProvider = "testDataProvider", description = "sendLine to RnV, send Service Partner feedback")
+    public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = "Line_1";
 
         loginAndCreateClaim(user, claim)
@@ -38,23 +38,11 @@ public class RnVSmokeTest extends BaseTest{
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
         RnvService rnvService = new RnvService();
-        rnvService.sendFeedback();
+        rnvService.sendFeedback(claim);
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
-
-    }
-
-
-@RunOn(DriverType.CHROME)
-    @Test(dataProvider = "testDataProvider", description = "verify repair tasks start")
-    public void sendFeedback() {
-        String lineDescription = "Line_1";
-
-        RnvService rnvService = new RnvService();
-        //rnvService.pullRnVTaskData();
-        rnvService.sendFeedback();
     }
 }
 
