@@ -23,6 +23,6 @@ public class SystemUtils {
     }
 
     public static String getResourcePath(String name) {
-        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(name)).getPath().replaceFirst("/","");
+        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(name)).getPath().replaceFirst("^/","");
     }
 }
