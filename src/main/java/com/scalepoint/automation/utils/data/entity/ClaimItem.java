@@ -6,7 +6,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Objects;
+
+import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -230,7 +231,7 @@ public class ClaimItem {
     }
 
     public String getExcelPath1() {
-        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(excelPath1)).getPath();
+        return getResourcePath(excelPath1);
     }
 
     public String getXlsDescr1() {
@@ -238,7 +239,7 @@ public class ClaimItem {
     }
 
     public String getFileLoc() {
-        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(fileLoc)).getPath();
+        return getResourcePath(fileLoc);
     }
 
     public String getExistingVoucher2() {

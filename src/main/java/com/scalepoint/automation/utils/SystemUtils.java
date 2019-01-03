@@ -2,6 +2,7 @@ package com.scalepoint.automation.utils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 public class SystemUtils {
 
@@ -19,5 +20,9 @@ public class SystemUtils {
                 System.out.println("Hostname can not be resolved");
             }
         return hostname;
+    }
+
+    public static String getResourcePath(String name) {
+        return Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource(name)).getPath().replaceFirst("/","");
     }
 }
