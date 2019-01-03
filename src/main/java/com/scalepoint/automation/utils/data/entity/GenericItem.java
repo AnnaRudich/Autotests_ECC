@@ -38,4 +38,9 @@ public class GenericItem {
     public void setName(String name) {
         this.name = name;
     }
+
+    public GenericItem setPrice(String price) {
+        this.price = price;
+        return this;
+    }
 }

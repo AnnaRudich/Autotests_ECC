@@ -9,11 +9,13 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
@@ -115,6 +117,7 @@ public class NotCheapestChoiceTests extends BaseTest {
     /*17*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Generic Item")
     public void charlie530MinimalValuationIsSuggestedInCaseOfGenericItem(User user, Claim claim, GenericItem genericItem) {
+        genericItem.setPrice("10");
         loginAndCreateClaim(user, claim)
                 .savePoint(SettlementPage.class)
                 .to(GenericItemsAdminPage.class)
@@ -124,7 +127,6 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .findClaimLine(genericItem.getName())
                 .editLine()
-                .setNewPrice(1.00)
                 .setCustomerDemand(48.00)
                 .setValuation(CUSTOMER_DEMAND)
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
