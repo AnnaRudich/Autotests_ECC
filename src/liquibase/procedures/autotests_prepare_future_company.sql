@@ -23,7 +23,7 @@ SET NOCOUNT ON
     EXEC autotests_create_ic @companyId, @companyName
     EXEC autotests_create_user @companyId, @userName, @userRights
     EXEC autotests_create_choice_reasons @companyId
-    EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
+    --EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
     declare @SupplierId int
     EXEC autotests_create_supplier @supplierName, @companyId, '4321', @SupplierId OUTPUT

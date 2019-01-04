@@ -52,7 +52,7 @@ insert into [SUPPLIER] (
 			'M',     1,           1,     '\jessops_logo.gif', '\jessops_logo.gif',
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
-			0, @RV_TaskWebServiceUrl, @securityToken, @securityTokenIssued, 3
+			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, 3
 
 	select @SupplierID = @@IDENTITY
 

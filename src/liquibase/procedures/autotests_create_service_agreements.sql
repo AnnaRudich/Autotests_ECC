@@ -28,7 +28,8 @@ AS
     declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
 	declare @PostalCode varchar(100) = '4321'
 	declare @City varchar(100) = 'Test city'
-	declare @SecurityToken varchar(100) = SELECT NEWID()
+	declare @SecurityToken varchar(100) = '7D1B2289-9365-4294-BD11-A7EB865B94E3'
+	--SET @SecurityToken = NEWID()
 	declare @RV_TaskWebServiceUrl varchar(100) = 'http://httpbin.org/post'
     declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
 
@@ -45,7 +46,7 @@ AS
      --add supplier if there is no
 	ELSE
 	BEGIN
-		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode,@SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
+		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
 	END
 
     --add RnV_testUrl

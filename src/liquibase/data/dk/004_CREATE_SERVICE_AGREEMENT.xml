@@ -12,7 +12,7 @@
         <sql>
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 
-            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard','FUTURE50'
+            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement123_autotests', 'serviceAgreement_NameWizzard','FUTURE50'
         </sql>
     </changeSet>
 </databaseChangeLog>
