@@ -46,7 +46,7 @@ AS
      --add supplier if there is no
 	ELSE
 	BEGIN
-		execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
+		EXEC autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
 	END
 
     --add RnV_testUrl

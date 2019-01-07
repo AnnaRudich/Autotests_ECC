@@ -26,7 +26,7 @@ SET NOCOUNT ON
     --EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
     declare @SupplierId int
-    EXEC autotests_create_supplier @supplierName, @companyId, '4321', @SupplierId OUTPUT
+    EXEC autotests_create_supplier @SUNAME = @supplierName, @insCompanyId = @companyId, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT
 
 SET NOCOUNT OFF
 
