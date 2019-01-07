@@ -15,7 +15,7 @@
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
 
             declare @SupplierId int
-            EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-VA-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '4321', SupplierId = @SupplierId OUTPUT
+            EXEC autotests_create_supplier @SUNAME='Autotest-Supplier-VA-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT
 
             update [User] set UserName = concat(UserName,'-old-',UserID) where Email = 'ecc_auto@scalepoint.com' and UserName like 'autotest-%'
 
