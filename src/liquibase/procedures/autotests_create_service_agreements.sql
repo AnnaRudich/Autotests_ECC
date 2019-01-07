@@ -29,11 +29,11 @@ AS
 	declare @PostalCode varchar(100) = '4321'
 	declare @City varchar(100) = 'Test city'
 	declare @SecurityToken varchar(100) = '7D1B2289-9365-4294-BD11-A7EB865B94E3'
-	--SET @SecurityToken = NEWID()
 	declare @RV_TaskWebServiceUrl varchar(100) = 'http://httpbin.org/post'
     declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
 
 	/*---------------------------------------------------------*/
+
 	/* SUPPLIER RnV*/
 	--If supplier is already exists use it
 	declare @ExistingSupplierID int = (select top 1 SURFNBR from [SUPPLIER] where [SUNAME] = @SupplierName)

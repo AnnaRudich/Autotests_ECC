@@ -169,6 +169,11 @@ public class ServiceAgreement {
     @XmlElement
     private String manuallyPaidByOwnSystem;
 
+    @XmlElement
+    private String rnvSupplier;
+    @XmlElement
+    private String supplierSecurityToken;
+
     public String getRandomAgreementName() {
         return agreementRandomName;
     }
@@ -463,5 +468,23 @@ public class ServiceAgreement {
 
     public String getManuallyPaidByOwnSystemText() {
         return manuallyPaidByOwnSystem;
+    }
+
+
+
+    public String getRnvSupplier() {
+        return rnvSupplier;
+    }
+
+    public void setRnvSupplier(String rnvSupplier) {
+        this.rnvSupplier = rnvSupplier;
+    }
+
+    public String getSupplierSecurityToken() {
+        return supplierSecurityToken;
+    }
+
+    public void setSupplierSecurityToken(String supplierSecurityToken) {
+        this.supplierSecurityToken = supplierSecurityToken;
     }
 }

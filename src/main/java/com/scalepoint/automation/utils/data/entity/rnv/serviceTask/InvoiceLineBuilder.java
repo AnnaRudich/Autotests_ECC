@@ -6,7 +6,7 @@ import com.scalepoint.automation.utils.RandomUtils;
 
 import java.math.BigDecimal;
 
-class InvoiceLineBuilder {
+public class InvoiceLineBuilder {
 
     private InvoiceLine invoiceLine;
 

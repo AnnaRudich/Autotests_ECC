@@ -19,7 +19,8 @@ import static io.restassured.config.EncoderConfig.encoderConfig;
 
 public class RnvService extends BaseService {
 
-    private String supplierSecurityToken = "589356A5-2E39-4438-B45F-8E05C545ABD3";
+    private String supplierSecurityToken = "7D1B2289-9365-4294-BD11-A7EB865B94E3";
+    //private String supplierSecurityToken = new ServiceAgreement().getSupplierSecurityToken();
 
     public ServiceTasksExport pullRnVTaskData() {
 

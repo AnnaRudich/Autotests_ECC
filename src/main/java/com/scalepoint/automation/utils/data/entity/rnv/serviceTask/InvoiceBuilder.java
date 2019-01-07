@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-class InvoiceBuilder {
+public class InvoiceBuilder {
     private InvoiceImport invoice;
 
     InvoiceBuilder(){

@@ -3,7 +3,7 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.math.BigDecimal;
 
-class InvoiceLine {
+public class InvoiceLine {
     private String description;
     private String units;
     private BigDecimal unitNetAmount;

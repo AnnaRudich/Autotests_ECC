@@ -3,7 +3,7 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.math.BigDecimal;
 
-class ItemExport extends Item{
+public class ItemExport extends Item{
     private String manufacturer;
     private String model;
     private String serialNumber;

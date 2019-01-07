@@ -1,6 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
-class ConvertItem {
+public class ConvertItem {
     static ItemImport convertItem(ItemExport itemExport){
         ItemImport itemImport = new ItemImport();
         itemImport.setAge(itemExport.getAge());
