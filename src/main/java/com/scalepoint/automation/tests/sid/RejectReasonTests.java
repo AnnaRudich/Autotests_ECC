@@ -27,9 +27,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
-import static com.scalepoint.automation.utils.Constants.PRICE_100_000;
-import static com.scalepoint.automation.utils.Constants.PRICE_2400;
+import static com.scalepoint.automation.utils.Constants.*;
 import static com.scalepoint.automation.utils.listeners.InvokedMethodListener.ROLLBACK_CONTEXT;
 
 public class RejectReasonTests extends BaseTest {

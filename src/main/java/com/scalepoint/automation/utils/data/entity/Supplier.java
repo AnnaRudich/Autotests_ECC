@@ -183,6 +183,7 @@ public class Supplier {
         return supplierNameHandling3;
     }
 
+
     public String getBankRegNumber() {
         return bankRegNumber;
     }
@@ -191,53 +192,20 @@ public class Supplier {
         return bankAccNumber;
     }
 
-    public String setSupplierCVR(String supplierCVR) {
-        return this.supplierCVR = supplierCVR;
-    }
-
-    public String setSupplierName(String supplierName) {
-        return this.supplierName = supplierName;
-    }
-
-
-
-    public void setBankRegNumber(String bankRegNumber) {
-        this.bankRegNumber = bankRegNumber;
-    }
-
-    public void setBankAccNumber(String bankAccNumber) {
-        this.bankAccNumber = bankAccNumber;
-    }
-
     public String getBankFikType() {
         return bankFikType;
-    }
-
-    public void setBankFikType(String bankFikType) {
-        this.bankFikType = bankFikType;
     }
 
     public String getBankFikCreditorCode() {
         return bankFikCreditorCode;
     }
 
-    public void setBankFikCreditorCode(String bankFikCreditorCode) {
-        this.bankFikCreditorCode = bankFikCreditorCode;
-    }
-
     public String getBankFikNumber() {
         return bankFikNumber;
-    }
-
-    public void setBankFikNumber(String bankFikNumber) {
-        this.bankFikNumber = bankFikNumber;
     }
 
     public String getBankName() {
         return bankName;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
 }

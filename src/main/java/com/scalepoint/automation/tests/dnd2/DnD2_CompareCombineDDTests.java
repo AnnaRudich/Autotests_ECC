@@ -10,12 +10,10 @@ import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -65,7 +63,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                     asserts.assertIsLowestPriceValuationSelected(MARKET_PRICE, CATALOG_PRICE);
                 });
     }
-    @RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")

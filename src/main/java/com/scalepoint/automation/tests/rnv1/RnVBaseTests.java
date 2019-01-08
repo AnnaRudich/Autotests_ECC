@@ -10,12 +10,10 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.ExcelDocUtil.FeedbackActionType;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -147,7 +145,6 @@ public class RnVBaseTests extends BaseTest {
                 .assertButtonPresence(ButtonType.CANCEL, ButtonPresence.SHOWN);
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "verify no changes feedback")
     public void eccs2605_2847_noChangesFeedbackReceived(User user, Claim claim, ServiceAgreement agreement) throws Exception {
