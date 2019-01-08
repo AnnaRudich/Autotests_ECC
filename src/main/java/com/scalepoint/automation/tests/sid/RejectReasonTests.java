@@ -11,7 +11,6 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -19,7 +18,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.listeners.RollbackContext;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.ITestResult;
@@ -29,7 +27,9 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Constants.*;
+import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
+import static com.scalepoint.automation.utils.Constants.PRICE_100_000;
+import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 import static com.scalepoint.automation.utils.listeners.InvokedMethodListener.ROLLBACK_CONTEXT;
 
 public class RejectReasonTests extends BaseTest {
@@ -416,7 +416,7 @@ public class RejectReasonTests extends BaseTest {
             .closeSidWithOk()
             .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
   }
-@RunOn(DriverType.CHROME)
+
   @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
   @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
   @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")

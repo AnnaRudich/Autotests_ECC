@@ -3,6 +3,7 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImportBuilder;
@@ -19,8 +20,7 @@ import static io.restassured.config.EncoderConfig.encoderConfig;
 
 public class RnvService extends BaseService {
 
-    private String supplierSecurityToken = "7D1B2289-9365-4294-BD11-A7EB865B94E3";
-    //private String supplierSecurityToken = new ServiceAgreement().getSupplierSecurityToken();
+    private String supplierSecurityToken = TestData.getServiceAgreement().getSupplierSecurityToken();
 
     public ServiceTasksExport pullRnVTaskData() {
 

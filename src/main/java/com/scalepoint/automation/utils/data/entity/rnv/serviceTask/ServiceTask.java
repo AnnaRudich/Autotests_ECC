@@ -2,9 +2,7 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
-@XmlSeeAlso({ServiceTaskExport.class, ServiceTaskImport.class})
 @XmlRootElement(name = "serviceTask")
 class ServiceTask {
 
