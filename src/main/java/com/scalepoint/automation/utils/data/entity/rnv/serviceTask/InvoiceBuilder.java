@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 
+import com.scalepoint.automation.services.restService.RnvInvoiceType;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.DateUtils;
 import com.scalepoint.automation.utils.RandomUtils;
@@ -10,20 +11,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InvoiceBuilder {
+class InvoiceBuilder {
     private InvoiceImport invoice;
 
-    InvoiceBuilder(){
+    InvoiceBuilder() {
         this.invoice = new InvoiceImport();
     }
 
     InvoiceBuilder setDefault() {
-
         List<InvoiceLine> invoiceLineImports = new ArrayList<>();
-        invoiceLineImports.add(new InvoiceLineBuilder().build());
+        invoiceLineImports.add(new InvoiceLineBuilder().setDefault().build());
+
         invoice = new InvoiceImport();
+
         invoice.setInvoiceLines(invoiceLineImports);
-        invoice.setInvoiceType("INVOICE");
+        invoice.setInvoiceType(String.valueOf(RnvInvoiceType.INVOICE));
         invoice.setInvoiceNumber(Integer.toString(RandomUtils.randomInt()));
         invoice.setInvoiceDate(DateUtils.localDateToString(LocalDate.now(), "yyyy-MM-dd"));
         invoice.setPaymentDueDate(DateUtils.localDateToString(LocalDate.now(), "yyyy-MM-dd"));
@@ -33,13 +35,12 @@ public class InvoiceBuilder {
         return this;
     }
 
-    public InvoiceBuilder withInvoiceType(String invoiceType){
+    public InvoiceBuilder withInvoiceType(String invoiceType) {
         this.invoice.setInvoiceType(invoiceType);
         return this;
     }
 
-
-    public InvoiceImport build(){
+    public InvoiceImport build() {
         return invoice;
     }
 }

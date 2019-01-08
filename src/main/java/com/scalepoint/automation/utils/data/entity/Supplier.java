@@ -61,6 +61,14 @@ public class Supplier {
     private String bankRegNumber;
     @XmlElement
     private String bankAccNumber;
+    @XmlElement
+    private String bankFikType;
+    @XmlElement
+    private String bankFikCreditorCode;
+    @XmlElement
+    private String bankFikNumber;
+    @XmlElement
+    private String bankName;
 
     public String getSupplierID() {
         return supplierID;
@@ -189,5 +197,47 @@ public class Supplier {
 
     public String setSupplierName(String supplierName) {
         return this.supplierName = supplierName;
+    }
+
+
+
+    public void setBankRegNumber(String bankRegNumber) {
+        this.bankRegNumber = bankRegNumber;
+    }
+
+    public void setBankAccNumber(String bankAccNumber) {
+        this.bankAccNumber = bankAccNumber;
+    }
+
+    public String getBankFikType() {
+        return bankFikType;
+    }
+
+    public void setBankFikType(String bankFikType) {
+        this.bankFikType = bankFikType;
+    }
+
+    public String getBankFikCreditorCode() {
+        return bankFikCreditorCode;
+    }
+
+    public void setBankFikCreditorCode(String bankFikCreditorCode) {
+        this.bankFikCreditorCode = bankFikCreditorCode;
+    }
+
+    public String getBankFikNumber() {
+        return bankFikNumber;
+    }
+
+    public void setBankFikNumber(String bankFikNumber) {
+        this.bankFikNumber = bankFikNumber;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 }

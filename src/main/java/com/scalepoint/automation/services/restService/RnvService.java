@@ -49,9 +49,4 @@ public class RnvService extends BaseService {
                     .multiPart("xmlString", writer.toString())
                     .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
     }
-
-    enum InvoiceType{
-        INVOICE,
-        CREDIT_NOTE
-    }
 }

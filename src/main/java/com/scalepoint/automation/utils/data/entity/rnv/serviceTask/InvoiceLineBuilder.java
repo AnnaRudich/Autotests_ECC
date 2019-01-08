@@ -10,7 +10,7 @@ public class InvoiceLineBuilder {
 
     private InvoiceLine invoiceLine;
 
-    InvoiceLineBuilder() {
+    InvoiceLineBuilder setDefault() {
         invoiceLine = new InvoiceLine();
         invoiceLine.setDescription("InvoiceLine" + RandomUtils.randomInt());
         invoiceLine.setQuantity(BigDecimal.valueOf(1));
@@ -18,6 +18,7 @@ public class InvoiceLineBuilder {
         invoiceLine.setUnitPrice(BigDecimal.valueOf(Constants.PRICE_50));
         invoiceLine.setUnitNetAmount(BigDecimal.valueOf(40));
         invoiceLine.setLineTotal(BigDecimal.valueOf(40));
+        return this;
     }
 
     public InvoiceLineBuilder withUnits(String units){
