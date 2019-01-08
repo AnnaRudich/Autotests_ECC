@@ -63,8 +63,9 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withCategory(claimItem.getExistingGroupFotoAndVideo())
-                        .withSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(depreciationValue, SettlementDialog.Valuation.NEW_PRICE);
@@ -146,7 +147,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "test for claim line without voucher and depreciation and no reduction rule")
-    public void charlie514_claimLineWithoutVoucherAndDepreciationAmount0(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_claimLineWithoutVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
@@ -195,7 +196,9 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+                        .withCategory(claimItem.getCategoryGroupBorn())
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
                         .closeSidWithOk();
         settlementPage.parseFirstClaimLine()
