@@ -127,7 +127,7 @@ public class TextSearchTests extends BaseTest {
         List<String> modelsAsc = tsp.getModelListAsString();
 
         tsp.selectBrand(textSearch.getBrand1())
-                .selectModel("Galaxy Note cover")
+                .selectModel("Galaxy Note 8 64GB Sort")
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
