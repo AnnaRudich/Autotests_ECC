@@ -86,6 +86,9 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     public void charlie508_3_ImportEcxelAddManuallyDiscrDepreciation(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                                      Claim claim, DiscretionaryReason discretionaryReason) {
         String claimLineDescription = "APPLE iphone 2";
+        String categoryTelefoni = "Telefoni & GPS";
+        String categoryMobile = "Mobiltelefoner";
+
         loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
@@ -99,6 +102,8 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .selectLine()
                 .getToolBarMenu()
                 .toProductMatchPage()
+                .chooseCategory(categoryTelefoni)
+                .chooseCategory(categoryMobile)
                 .openSidForFirstProduct()
                 .setValuation(NEW_PRICE)
                 .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
