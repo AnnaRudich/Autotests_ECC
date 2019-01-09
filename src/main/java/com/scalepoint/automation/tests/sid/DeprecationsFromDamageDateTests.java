@@ -1,17 +1,17 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -95,7 +95,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                     asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(1L))
             );
   }
-
+  @RequiredSetting(type = FTSetting.DISALLOW_DUPLICATE_CLAIMS_NUMBER, enabled = false)
   @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
   public void charlie_554_createClaimUsingIP1ReintegrateClaimWithLineExisting(User user, Claim claim, ClaimItem claimItem) {
     claim.setDamageDate(localDateToString(LocalDate.now()));
