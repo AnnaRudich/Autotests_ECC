@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.dialogs.EditCustomerNoteDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -104,7 +103,7 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public class Asserts {
         public Asserts assertCustomerNotePresent(String customerNote) {
-            Assert.assertTrue(isCustomerNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
+            Assert.assertTrue(isInternalNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
             return this;
         }
 

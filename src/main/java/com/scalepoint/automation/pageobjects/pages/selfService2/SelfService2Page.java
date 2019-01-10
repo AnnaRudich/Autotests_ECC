@@ -18,9 +18,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 public class SelfService2Page extends Page {
 
@@ -231,9 +230,10 @@ public class SelfService2Page extends Page {
         return this;
     }
 
-    public void sendResponseToEcc(){
+    public SelfService2Page sendResponseToEcc(){
         $("#send-button").shouldBe(Condition.enabled).click();
         waitForUrl("self-service/dk/send-confirmation");
+        return this;
     }
 
     public String getProductMatchDescription(){
@@ -244,6 +244,11 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page doAssert(Consumer<SelfService2Page.Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
+        return this;
+    }
+
+    public SelfService2Page apply(Consumer<SelfService2Page> func) {
+        func.accept(this);
         return this;
     }
 
@@ -265,7 +270,7 @@ public class SelfService2Page extends Page {
         }
 
         public Asserts assertLineIsNotPresent(String description) {
-            assertFalse(assertSsLineIsVisible(description));
+            assertTrue(driver.findElements(By.xpath("//div[contains(@class, 'list-item-info-description')]//span[text()='" + description +"']")).isEmpty());
             return this;
         }
 
@@ -281,6 +286,11 @@ public class SelfService2Page extends Page {
 
         public Asserts assertItemsListSizeIs(int expectedSize){
             assertTrue(getSsItemsListSize()==expectedSize);
+            return this;
+        }
+
+        public Asserts assertLogOutIsNotDisplayed() {
+            assertTrue(driver.findElements(By.xpath("//input[@type='submit']")).isEmpty(), "logout button should not be displayed");
             return this;
         }
     }
