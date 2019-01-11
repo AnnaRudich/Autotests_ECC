@@ -18,13 +18,8 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForEnabled;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static com.scalepoint.automation.utils.Wait.*;
+import static org.testng.Assert.*;
 
 public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
@@ -56,8 +51,17 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(name = "orderEmail")
         private ExtInput emailField;
 
+        @FindBy(id = "orderFlowOldFlow")
+        private WebElement radioOldOrderFlow;
+
+        @FindBy(id = "orderFlowOrderService")
+        private WebElement radioOrderService;
+
         @FindBy(xpath = "//table[contains(@class, 'supplier-order-mail-format')]")
         private ExtComboBox orderMailFormatSelect;
+
+        @FindBy(xpath = "//table[contains(@class, 'supplier-add-freight-price')]")
+        private ExtCheckbox addFreightPriceCheckbox;
 
         @FindBy(id = "deliverySupportedId")
         private ExtCheckbox deliverySupportedCheckbox;
@@ -65,15 +69,22 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(name = "deliveryTime")
         private ExtInput defaultDeliveryTimeField;
 
-        @FindBy(xpath = "//table[contains(@class, 'supplier-add-freight-price')]")
-        private ExtCheckbox addFreightPriceCheckbox;
-
         @FindBy(xpath = "//table[contains(@class, 'supplier-products-only-for-claim-handling')]")
         private ExtCheckbox claimHandlingProductsCheckbox;
 
         public OrdersTab setOrderEmail(String email) {
             emailField.clear();
             emailField.sendKeys(email);
+            return this;
+        }
+
+        public OrdersTab selectRadioOldOrderFlow() {
+            radioOldOrderFlow.click();
+            return this;
+        }
+
+        public OrdersTab selectRadioOrderService() {
+            radioOrderService.click();
             return this;
         }
 
@@ -209,7 +220,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             Wait.waitForAjaxCompleted();
             try {
                 return name.isDisplayed();
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error(e.getMessage());
                 return false;
             }
@@ -278,7 +289,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
                 return this;
             }
 
-            public Asserts assertIsDialogNotEditable(){
+            public Asserts assertIsDialogNotEditable() {
                 Assert.assertTrue(Wait.invisibleOfElement(By.id("editSupplierTabPanelId")));
                 return this;
             }
@@ -336,7 +347,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             private void clearField(WebElement element) {
                 element.sendKeys(Keys.chord(Keys.CONTROL, "a"), "");
-                if(!element.getText().equals("")){
+                if (!element.getText().equals("")) {
                     element.clear();
                 }
             }
@@ -374,30 +385,30 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public VoucherAgreementDialog.GeneralTab editVoucherAgreement(String agreementName) {
             int i = 0;
-            while (!isOn(VoucherAgreementDialog.GeneralTab.class) && i<2){
+            while (!isOn(VoucherAgreementDialog.GeneralTab.class) && i < 2) {
                 i++;
-                doubleClick(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'"+agreementName+"')]"));
+                doubleClick(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'" + agreementName + "')]"));
             }
             Wait.waitForAjaxCompleted();
             return at(VoucherAgreementDialog.GeneralTab.class);
         }
 
-        public enum  ActionType {
+        public enum ActionType {
             LEAVE,
             JOIN
         }
 
-        public boolean isExclusiveTickForFirstVoucherAvailable(){
+        public boolean isExclusiveTickForFirstVoucherAvailable() {
             return exclusiveGridCell.getAttribute("class").contains("tick");
         }
 
-        private WebElement findVoucher(String voucherName){
+        private WebElement findVoucher(String voucherName) {
             return voucherNameGridCell.stream()
                     .filter(element -> element.getText().equals(voucherName))
                     .findAny().orElseThrow(() -> new NoSuchElementException("Can't find voucher with name " + voucherName));
         }
 
-        public boolean isExclusiveTickForVoucherAvailable(String voucherName){
+        public boolean isExclusiveTickForVoucherAvailable(String voucherName) {
             return findVoucher(voucherName).findElement(By.xpath("./ancestor::tr//td[contains(@class, 'agreementsPanelExclusiveId')]"))
                     .getAttribute("class").contains("tick");
         }
@@ -441,12 +452,12 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
                 return this;
             }
 
-            public Asserts assertIsExclusiveTickForVoucherVisible(){
+            public Asserts assertIsExclusiveTickForVoucherVisible() {
                 Assert.assertTrue(isExclusiveTickForFirstVoucherAvailable());
                 return this;
             }
 
-            public Asserts assertIsExclusiveTickForVoucherNotVisible(String voucherName){
+            public Asserts assertIsExclusiveTickForVoucherNotVisible(String voucherName) {
                 Assert.assertFalse(isExclusiveTickForVoucherAvailable(voucherName));
                 return this;
             }
