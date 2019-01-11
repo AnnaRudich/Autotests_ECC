@@ -141,6 +141,12 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
                 Assert.assertTrue(claimHandlingProductsCheckbox.isSelected());
                 return this;
             }
+
+            public Asserts assertOldOrderFlowItemsDisabled() {
+                Assert.assertFalse(orderMailFormatSelect.isInputElementEnabled());
+                Assert.assertFalse(addFreightPriceCheckbox.isInputElementEnabled());
+                return this;
+            }
         }
 
         @Override

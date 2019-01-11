@@ -140,6 +140,7 @@ public class SupplierTests extends BaseTest {
                 .toSuppliersPage()
                 .editSupplier(supplier.getSupplierName())
                 .selectOrdersTab()
+                .doAssert(SupplierDialog.OrdersTab.Asserts::assertOldOrderFlowItemsDisabled)
                 .selectRadioOldOrderFlow()
                 .doAssert(ordersTab -> {
                     ordersTab.assertOrderEmailIs(supplier.getSupplierEmail());
