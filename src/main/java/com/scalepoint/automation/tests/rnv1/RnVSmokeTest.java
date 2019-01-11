@@ -5,20 +5,17 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.RnvTaskType;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
-public class RnVSmokeTest extends BaseTest{
+public class RnVSmokeTest extends BaseTest {
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "sendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = "Line_1";
@@ -37,11 +34,9 @@ public class RnVSmokeTest extends BaseTest{
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        RnvService rnvService = new RnvService();
-        rnvService.sendFeedback(claim);
+        new RnvService().sendFeedback(claim);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage()
-                .getAssertion()
+        new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
 }

@@ -93,18 +93,15 @@ public class RnvTaskWizardPage1 extends Page {
         clickAndWaitForDisplaying(By.xpath(xpathTask), By.cssSelector("ul.x-list-plain"));
         String xpathTaskType = tasksXpath.replace("$1", taskType);
         driver.findElement(By.xpath(xpathTaskType)).click();
-       // cityField.click();
         return this;
     }
 
     public RnvTaskWizardPage1 changeAgreement(String claimLineDescription, String agrName) {
       Wait.waitForDisplayed(By.xpath(agrByCLNameXpath.replace("$1", claimLineDescription))).click();
-        // lickAndWaitForStable(By.xpath(xpathAgreements), By.cssSelector("ul.x-list-plain li"));
         String xpathAgrName = agrXpath.replace("$1", agrName);
         WebElement item = find(By.xpath(xpathAgrName));
         scrollTo(item);
         item.click();
-        //cityField.click();
         return this;
     }
 
@@ -121,7 +118,6 @@ public class RnvTaskWizardPage1 extends Page {
 
     public void closeRnV() {
         clickAndWaitForDisplaying(closeBtn, By.cssSelector("div[id*='messagebox'] a:nth-of-type(2) span span span"));
-        //click Yes btn
         clickAndWaitForDisplaying(By.cssSelector("div[id*='messagebox'] a:nth-of-type(2) span span span"), By.xpath("//td[contains(@class,'descriptionColumn')]//a"));
     }
 
@@ -132,11 +128,11 @@ public class RnvTaskWizardPage1 extends Page {
 
     public boolean isAgrDisplaysInTheList(String claimLine, String agrName) {
         String xpathAgreements = agrByCLNameXpath.replace("$1", claimLine);
-        driver.findElement(By.xpath(xpathAgreements)).click();      //open dropdown
+        driver.findElement(By.xpath(xpathAgreements)).click();
         String xpathAgrName = agrXpath.replace("$1", agrName);
         boolean result  = isElementPresent(find(By.xpath(xpathAgrName)));
-        driver.findElement((By.xpath(xpathAgreements))).click();      //close dropdown
-        nameField.click(); //unfocus the field
+        driver.findElement((By.xpath(xpathAgreements))).click();
+        nameField.click();
         return result;
     }
 

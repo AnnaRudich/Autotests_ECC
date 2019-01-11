@@ -6,7 +6,7 @@ import com.scalepoint.automation.utils.data.entity.Supplier;
 public class BankBuilder {
     private BankImport bankImport;
 
-    public  BankBuilder setDefault(){
+    public  BankImport setDefault(){
         Supplier supplierData = TestData.getSupplier();
         bankImport = new BankImport();
         bankImport.setFikType(supplierData.getBankFikType());
@@ -15,11 +15,11 @@ public class BankBuilder {
         bankImport.setAccountNumber(supplierData.getBankAccNumber());
         bankImport.setRegNumber(supplierData.getBankRegNumber());
         bankImport.setBankName(supplierData.getBankName());
-        return this;
-}
-
-    public BankImport build(){
         return bankImport;
-    }
+}
+//
+//    public BankImport build(){
+//        return bankImport;
+//    }
 
 }

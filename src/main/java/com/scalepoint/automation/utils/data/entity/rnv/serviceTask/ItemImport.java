@@ -15,9 +15,7 @@ public class ItemImport extends Item{
         ItemExport itemExport = serviceLineExport.getItem();
 
         itemImport.setAge(itemExport.getAge());
-        //itemImport.setDescription(itemExport.getDescription());
-        itemImport.setDescription("Iphone");
-        //itemImport.setOriginalDescription(itemExport.getOriginalDescription());
+        itemImport.setDescription("Description");
         itemImport.setOriginalDescription("originalDescription");
         itemImport.setQuantity(itemExport.getQuantity());
         this.servicePartnerNote = "sePaNote";

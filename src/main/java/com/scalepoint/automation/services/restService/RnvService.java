@@ -11,10 +11,6 @@ import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksE
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import java.io.StringWriter;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 
@@ -35,18 +31,13 @@ public class RnvService extends BaseService {
     }
 
 
-    public void sendFeedback(Claim claimEnt) {
-        StringWriter writer = new StringWriter();
-        try {
-            JAXBContext.newInstance(ServiceTaskImport.class)
-                    .createMarshaller()
-                    .marshal(new ServiceTaskImportBuilder().setDefault(pullRnVTaskData(), claimEnt).build(), writer);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+    public void sendFeedback(Claim claim) {
+
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder().setDefault(pullRnVTaskData(), claim).build();
+
         given().log().all()
-                    .multiPart("securityToken", supplierSecurityToken)
-                    .multiPart("xmlString", writer.toString())
-                    .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
+                .multiPart("securityToken", supplierSecurityToken)
+                .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
+                .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
     }
 }

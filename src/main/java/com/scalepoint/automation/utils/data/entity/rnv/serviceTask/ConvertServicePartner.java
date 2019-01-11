@@ -6,7 +6,7 @@ public class ConvertServicePartner {
     public static ServicePartnerImport convertServicePartner(ServicePartnerExport servicePartnerExport){
         ServicePartnerImport servicePartnerImport = new ServicePartnerImport();
 
-        servicePartnerImport.setBank(new BankBuilder().setDefault().build());
+        servicePartnerImport.setBank(new BankBuilder().setDefault());
         servicePartnerImport.setAddress1(servicePartnerExport.getAddress1());
         servicePartnerImport.setAddress1(servicePartnerExport.getAddress1());
         servicePartnerImport.setCity(servicePartnerExport.getCity());
