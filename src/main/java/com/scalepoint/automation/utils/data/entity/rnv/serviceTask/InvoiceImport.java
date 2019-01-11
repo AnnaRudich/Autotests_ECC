@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 
-public class InvoiceImport extends Invoice{
+public class InvoiceImport extends Invoice {
 
     private List<InvoiceLine> invoiceLines;
     @XmlElementWrapper(name="invoiceLines")
@@ -13,7 +13,7 @@ public class InvoiceImport extends Invoice{
         return invoiceLines;
     }
 
-    void setInvoiceLines(List<InvoiceLine> invoiceLines) {
+    public void setInvoiceLines(List<InvoiceLine> invoiceLines) {
         this.invoiceLines = invoiceLines;
     }
 }

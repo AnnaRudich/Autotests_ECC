@@ -3,7 +3,7 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-class ServicePartnerExport extends ServicePartner {
+public class ServicePartnerExport extends ServicePartner {
 
     private String serviceAgreementName;
     private BankExport bank;
@@ -33,7 +33,7 @@ class ServicePartnerExport extends ServicePartner {
         return location;
     }
 
-    public void setLocation(LocationExport location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 }

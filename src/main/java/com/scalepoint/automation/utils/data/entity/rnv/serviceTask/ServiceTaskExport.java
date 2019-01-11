@@ -5,9 +5,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 
-class ServiceTaskExport extends ServiceTask{
+public class ServiceTaskExport extends ServiceTask{
 
-    private ClaimantExport claimant;
+    private Claimant claimant;
     private ClaimExport claim;
     private ServicePartnerExport servicePartner;
     private List<ServiceLineExport> serviceLines;
@@ -21,11 +21,11 @@ class ServiceTaskExport extends ServiceTask{
     }
 
     @XmlElement(nillable = true)
-    public ClaimantExport getClaimant() {
+    public Claimant getClaimant() {
         return claimant;
     }
 
-    public void setClaimant(ClaimantExport claimant) {
+    public void setClaimant(Claimant claimant) {
         this.claimant = claimant;
     }
 
@@ -39,7 +39,7 @@ class ServiceTaskExport extends ServiceTask{
     }
 
     @XmlElement(nillable = true)
-    ServicePartnerExport getServicePartner() {
+    public ServicePartnerExport getServicePartner() {
         return servicePartner;
     }
 
@@ -49,7 +49,7 @@ class ServiceTaskExport extends ServiceTask{
 
     @XmlElementWrapper(name = "serviceLines")
     @XmlElement(name = "serviceLine")
-    List<ServiceLineExport> getServiceLines() {
+    public List<ServiceLineExport> getServiceLines() {
         return serviceLines;
     }
 

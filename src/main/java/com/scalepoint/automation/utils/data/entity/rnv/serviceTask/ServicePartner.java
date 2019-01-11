@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "servicePartner")
-class ServicePartner {
+public class ServicePartner {
     private String name;
     private String address1;
     private String address2;
@@ -70,11 +70,11 @@ class ServicePartner {
     }
 
     @XmlAttribute
-    String getCvrNumber() {
+    public String getCvrNumber() {
         return cvrNumber;
     }
 
-    void setCvrNumber(String cvrNumber) {
+    public void setCvrNumber(String cvrNumber) {
         this.cvrNumber = cvrNumber;
     }
 

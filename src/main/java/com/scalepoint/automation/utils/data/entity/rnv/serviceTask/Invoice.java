@@ -38,7 +38,7 @@ public class Invoice {
         return invoiceNumber;
     }
 
-    void setInvoiceNumber(String invoiceNumber) {
+    public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 
@@ -56,7 +56,7 @@ public class Invoice {
         return paymentDueDate;
     }
 
-    void setPaymentDueDate(String paymentDueDate) {
+    public void setPaymentDueDate(String paymentDueDate) {
         this.paymentDueDate = paymentDueDate;
     }
 
@@ -92,7 +92,7 @@ public class Invoice {
         return netAmount;
     }
 
-    void setNetAmount(BigDecimal netAmount) {
+    public void setNetAmount(BigDecimal netAmount) {
         this.netAmount = netAmount;
     }
 
@@ -101,7 +101,7 @@ public class Invoice {
         return vat;
     }
 
-    void setVat(BigDecimal vat) {
+    public void setVat(BigDecimal vat) {
         this.vat = vat;
     }
 
@@ -110,7 +110,7 @@ public class Invoice {
         return totalAmount;
     }
 
-    void setTotalAmount(BigDecimal totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 }

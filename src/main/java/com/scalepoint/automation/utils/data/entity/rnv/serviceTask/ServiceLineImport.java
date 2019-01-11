@@ -2,12 +2,12 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 import javax.xml.bind.annotation.XmlElement;
 
-class ServiceLineImport extends ServiceLine{
+public class ServiceLineImport extends ServiceLine{
 
     private ItemImport item;
     private ValuationsImport valuations;
     
-    ServiceLineImport(){}
+    public ServiceLineImport(){}
 
 
     @XmlElement

@@ -35,7 +35,7 @@ public class InvoiceLine {
         return unitNetAmount;
     }
 
-    void setUnitNetAmount(BigDecimal unitNetAmount) {
+    public void setUnitNetAmount(BigDecimal unitNetAmount) {
         this.unitNetAmount = unitNetAmount;
     }
 
@@ -44,7 +44,7 @@ public class InvoiceLine {
         return unitVatAmount;
     }
 
-    void setUnitVatAmount(BigDecimal unitVatAmount) {
+    public void setUnitVatAmount(BigDecimal unitVatAmount) {
         this.unitVatAmount = unitVatAmount;
     }
 
@@ -53,7 +53,7 @@ public class InvoiceLine {
         return unitPrice;
     }
 
-    void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -71,7 +71,7 @@ public class InvoiceLine {
         return lineTotal;
     }
 
-    void setLineTotal(BigDecimal lineTotal) {
+    public void setLineTotal(BigDecimal lineTotal) {
         this.lineTotal = lineTotal;
     }
 }

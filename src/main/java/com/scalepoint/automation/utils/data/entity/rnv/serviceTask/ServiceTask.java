@@ -4,27 +4,27 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "serviceTask")
-class ServiceTask {
+public class ServiceTask {
 
     private String GUID;
     private String createdDate;
 
 
     @XmlAttribute(name = "uniqueId", required = true)
-    String getGUID() {
+    public String getGUID() {
         return GUID;
     }
 
-    void setGUID(String GUID) {
+    public void setGUID(String GUID) {
         this.GUID = GUID;
     }
 
     @XmlAttribute(required = true)
-    String getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    void setCreatedDate(String createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 }

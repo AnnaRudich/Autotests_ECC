@@ -1,8 +1,9 @@
-package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
+package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
 
 
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.InvoiceLine;
 
 import java.math.BigDecimal;
 
@@ -10,7 +11,7 @@ public class InvoiceLineBuilder {
 
     private InvoiceLine invoiceLine;
 
-    InvoiceLineBuilder setDefault() {
+    public InvoiceLineBuilder setDefault() {
         invoiceLine = new InvoiceLine();
         invoiceLine.setDescription("InvoiceLine" + RandomUtils.randomInt());
         invoiceLine.setQuantity(BigDecimal.valueOf(1));

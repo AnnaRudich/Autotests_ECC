@@ -1,4 +1,8 @@
-package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
+package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
+
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServicePartnerExport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServicePartnerImport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.BankBuilder;
 
 public class ConvertServicePartner {
 

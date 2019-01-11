@@ -2,7 +2,7 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 import javax.xml.bind.annotation.XmlElement;
 
-class ServicePartnerImport extends ServicePartner{
+public class ServicePartnerImport extends ServicePartner{
 
     private BankImport bank;
 
@@ -11,7 +11,7 @@ class ServicePartnerImport extends ServicePartner{
         return bank;
     }
 
-    ServicePartnerImport(){}
+    public ServicePartnerImport(){}
 
     public void setBank(BankImport bank) {
         this.bank = bank;

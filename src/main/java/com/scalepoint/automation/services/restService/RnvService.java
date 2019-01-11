@@ -6,7 +6,7 @@ import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImportBuilder;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;

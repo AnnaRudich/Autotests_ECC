@@ -1,15 +1,18 @@
-package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
+package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
 
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskExport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ConvertServiceLine.convertServiceLines;
-import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ConvertServicePartner.convertServicePartner;
+import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ConvertServiceLine.convertServiceLines;
+import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ConvertServicePartner.convertServicePartner;
 
 public class ServiceTaskImportBuilder {
     private ServiceTaskImport serviceTaskImport;

@@ -16,7 +16,7 @@ public class ServiceTaskImport extends ServiceTask{
     private BigDecimal updateClaimSelfRisk;
     private String updateClaimSelfRiskReason;
 
-    ServiceTaskImport(){
+    public ServiceTaskImport(){
     }
 
     @XmlElement(nillable = true)
@@ -24,7 +24,7 @@ public class ServiceTaskImport extends ServiceTask{
         return servicePartner;
     }
 
-    void setServicePartner(ServicePartnerImport servicePartner) {
+    public void setServicePartner(ServicePartnerImport servicePartner) {
         this.servicePartner = servicePartner;
     }
 
@@ -34,7 +34,7 @@ public class ServiceTaskImport extends ServiceTask{
         return serviceLines;
     }
 
-    void setServiceLines(List<ServiceLineImport> serviceLines) {
+    public void setServiceLines(List<ServiceLineImport> serviceLines) {
         this.serviceLines = serviceLines;
     }
 
@@ -53,7 +53,7 @@ public class ServiceTaskImport extends ServiceTask{
         return takenSelfRisk;
     }
 
-    void setTakenSelfRisk(BigDecimal takenSelfRisk) {
+    public void setTakenSelfRisk(BigDecimal takenSelfRisk) {
         this.takenSelfRisk = takenSelfRisk;
     }
 

@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 
-class ServiceLineExport extends ServiceLine {
+public class ServiceLineExport extends ServiceLine {
 
     private ItemExport item;
     private ValuationsExport valuations;

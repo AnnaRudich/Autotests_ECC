@@ -7,7 +7,7 @@ public class ItemImport extends Item{
     private String servicePartnerNote;
     private boolean totalDamage;
 
-    ItemImport(){}
+    public ItemImport(){}
 
     public ItemImport(ServiceLineExport serviceLineExport){
 
@@ -27,7 +27,7 @@ public class ItemImport extends Item{
         return servicePartnerNote;
     }
 
-    void setServicePartnerNote(String servicePartnerNote) {
+    public void setServicePartnerNote(String servicePartnerNote) {
         this.servicePartnerNote = servicePartnerNote;
     }
 
@@ -36,7 +36,7 @@ public class ItemImport extends Item{
         return totalDamage;
     }
 
-    void setTotalDamage(boolean totalDamage) {
+    public void setTotalDamage(boolean totalDamage) {
         this.totalDamage = totalDamage;
     }
 }

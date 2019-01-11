@@ -1,24 +1,26 @@
-package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
+package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
 
 
 import com.scalepoint.automation.services.restService.RnvInvoiceType;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.DateUtils;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.InvoiceImport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.InvoiceLine;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-class InvoiceBuilder {
+public class InvoiceBuilder {
     private InvoiceImport invoice;
 
-    InvoiceBuilder() {
+    public InvoiceBuilder() {
         this.invoice = new InvoiceImport();
     }
 
-    InvoiceBuilder setDefault() {
+    public InvoiceBuilder setDefault() {
         List<InvoiceLine> invoiceLineImports = new ArrayList<>();
         invoiceLineImports.add(new InvoiceLineBuilder().setDefault().build());
 

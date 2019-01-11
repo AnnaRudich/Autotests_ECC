@@ -1,9 +1,9 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
-class ValuationsImport extends Valuations{
+public class ValuationsImport extends Valuations{
     private ValuationsImport(){}
 
-    ValuationsImport(ServiceLineExport serviceLineExport){
+    public ValuationsImport(ServiceLineExport serviceLineExport){
         ValuationsImport valuationsImport = new ValuationsImport();
         ValuationsExport valuationsExport = serviceLineExport.getValuations();
 
