@@ -44,20 +44,6 @@ public class DatabaseApi {
                          Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")),new XpriceInfoMapper());
     }
 
-    public void createDefaultServiceAgreementIfNotExists(Integer icId) {
-        Integer count = jdbcTemplate.queryForObject("select count(*) from ServiceAgreementTemplate where name = ?", new Object[]{RV_SERVICE_AGREEMENT_NAME}, Integer.class);
-        if (count > 0) {
-            logger.info("RV agreement found");
-            return;
-        }
-
-        Integer rnvTemplateFileId = insertRnvTemplateFile(icId);
-        logger.info("RV template file inserted with id: {}", rnvTemplateFileId);
-        Integer serviceAgreementTemplateId = insertServiceAgreementTemplate(rnvTemplateFileId, icId);
-        logger.info("Service agreement inserted with id: {}", serviceAgreementTemplateId );
-        assignTemplateToServiceAgreements(serviceAgreementTemplateId);
-    }
-
     private Integer insertRnvTemplateFile(Integer insCompanyId) {
         try {
             byte[] bytes = IOUtils.toByteArray(DatabaseApi.class.getClassLoader().getResourceAsStream("templates/" + RV_TEMPLATE_FILENAME));

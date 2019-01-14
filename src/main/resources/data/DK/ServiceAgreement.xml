@@ -3,13 +3,18 @@
     <!-->Test data <-->
     <testRnVShop>Barbara Maria - Kongevejen 11</testRnVShop>
     <testSePa>Barbara Maria</testSePa>
-    <testAgrName>AutoTest Agreement</testAgrName>
-    <testAgrNameForRnV>AutoTest Agreement For Wizard</testAgrNameForRnV>
+    <testAgrName>serviceAgreement_autotests</testAgrName>
+    <testAgrNameForRnV>serviceAgreement_autotests</testAgrNameForRnV>
     <templateName>Jacobsen Plus</templateName>
+
+    <!--rnv Dedicated Supplier(Service Partner) Data -->
+    <rnvSupplier>Autotest-Supplier-RnV-Tests</rnvSupplier>
+    <supplierSecurityToken>7D1B2289-9365-4294-BD11-A7EB865B94E3</supplierSecurityToken>
 
     <!-->Service Agreement Details<-->
     <!--agreementEmail>ecc_auto@scalepoint.com</agreementEmail>
     <locationEmail>ecc_auto@scalepoint.com</locationEmail-->
+
     <agreementEmail>ecc_auto@scalepoint.com</agreementEmail>
     <locationEmail>ecc_auto_loc@scalepoint.com</locationEmail>
     <tags>testTag1, testTag2, testTag3</tags>

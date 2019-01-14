@@ -18,6 +18,11 @@
     <supplierNameHandling1>Webhallen</supplierNameHandling1>
     <supplierNameHandling2>Screwfix</supplierNameHandling2>
     <supplierNameHandling3>Brightstar</supplierNameHandling3>
-    <bankRegNumber>1234</bankRegNumber>
+
+    <bankFikType>A12</bankFikType>
+    <bankFikCreditorCode>abc123</bankFikCreditorCode>
+    <bankFikNumber>12341234</bankFikNumber>
     <bankAccNumber>987654321</bankAccNumber>
+    <bankRegNumber>1234</bankRegNumber>
+    <bankName>bankName</bankName>
 </supplier>

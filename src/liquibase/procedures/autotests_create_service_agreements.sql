@@ -5,49 +5,83 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_
 	DROP PROCEDURE [dbo].[autotests_create_service_agreements]
 GO
 
+
 CREATE PROCEDURE [dbo].[autotests_create_service_agreements]
 		@insCompanyId int,
-		@baseTemplateName VARCHAR(50),
 		@serviceAgreementName VARCHAR(50),
-		@serviceAgreementNameForWizard VARCHAR(50)
+		@serviceAgreementNameForWizard VARCHAR(50),
+		@targetInsCompanyCode VARCHAR(50)
 AS
 
 	SET NOCOUNT ON
 
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
-	declare @ServiceAgreementTemplateID int = (Select id from ServiceAgreementTemplate where name = @baseTemplateName)
-	declare @TargetCompanyName nvarchar(50) = (SELECT [ICNAME] FROM [INSCOMP] where [ICRFNBR] = @insCompanyId)
+	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
+	declare @targetInsCompanyId int = (select ICRFNBR from InsComp where CompanyCode = @targetInsCompanyCode) --SCALEPOINT is default, won't work
 
 	/* SUPPLIER DATA */
-	declare @SupplierName varchar(100) = CONCAT('Autotest-SA', '-', @insCompanyId )
+	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
 	declare @Address1 varchar(100) = 'Test address 1'
 	declare @Address2 varchar(100) = 'Test address 2'
 	declare @Phone varchar(100) = '0800 0833113'
-	declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
-	declare @PostalCode varchar(100) = '5000'
+    declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
+	declare @PostalCode varchar(100) = '4321'
 	declare @City varchar(100) = 'Test city'
+	declare @SecurityToken varchar(100) = '7D1B2289-9365-4294-BD11-A7EB865B94E3'
+	declare @RV_TaskWebServiceUrl varchar(100) = 'http://httpbin.org/post'
+    declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
 
 	/*---------------------------------------------------------*/
-	/* DELETE SUPPLIER, SERVICE AGREEMENT, LOCATION, MAPPINGS */
-	declare @DeleteSupplierID int = (select top 1 SURFNBR from [SUPPLIER] where [SUNAME] = @SupplierName)
-	IF (@DeleteSupplierID IS NOT NULL)
-		RETURN
 
-  declare @SupplierId int;
-  execute autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SupplierId OUTPUT;
+	/* SUPPLIER RnV*/
+	--If supplier is already exists use it
+	declare @ExistingSupplierID int = (select top 1 SURFNBR from [SUPPLIER] where [SUNAME] = @SupplierName)
+	declare @SupplierId int
 
+	IF(@ExistingSupplierID IS NOT NULL)
+	BEGIN
+		SET @SupplierId = @ExistingSupplierID
+	END
+     --add supplier if there is no
+	ELSE
+	BEGIN
+		EXEC autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, @SupplierId OUTPUT;
+	END
+
+    --add RnV_testUrl
+	declare @existing_RV_TaskWebServiceUrl varchar(100)= (SELECT url from [Testurls] where url = @RV_TaskWebServiceUrl)
+	IF NOT EXISTS(SELECT * from [Testurls] where url = @RV_TaskWebServiceUrl)
+	BEGIN
+	insert into [Testurls] ([url]) SELECT @RV_TaskWebServiceUrl
+	END
+
+    /* SERVICE AGREEMENT */
 	declare @AgreementTags varchar(100) = ''
 	declare @AgreementStatus bit = 1 -- 1 = Active, 0 = Inactive
-	declare @AgreementEmail varchar (1) = 'S' -- S = Supplier, A = Agreement, L = Location
+	declare @AgreementEmailType varchar (1) = 'S' -- S = Supplier, A = Agreement, L = Location
 
-	/* SERVICE AGREEMENT */
-	insert into [ServiceAgreement] ([name],[email],[tags],[status],[emailType],[supplierId],[insuranceCompanyId],[defaultTemplateId],[notes],[workflow],[reminder],[timeout])
-		select @serviceAgreementName,@Email,@AgreementTags,@AgreementStatus,@AgreementEmail,@SupplierID,@insCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
-	declare @AgreementId int = @@IDENTITY
-
+    --use service agreement but not add if it already exists
+    declare @AgreementId AS int
+    IF EXISTS (SELECT * from [ServiceAgreement] WHERE [name]=@serviceAgreementName)
+    BEGIN
+        PRINT FORMATMESSAGE('ServiceAgreement name "%s" is already exists', @serviceAgreementName)
+        SET @AgreementId = (SELECT top 1 id from [ServiceAgreement] WHERE [name]=@serviceAgreementName)
+    END
+    ELSE
+    BEGIN
+        insert into [ServiceAgreement] ([name],[email],[tags],[status],[emailType],[supplierId],
+	        [insuranceCompanyId],[defaultTemplateId],[notes],[workflow],[reminder],[timeout])
+	    SELECT @serviceAgreementName,@Email,@AgreementTags,@AgreementStatus,
+		@AgreementEmailType,@SupplierID,@ScalepointCompanyID,@ServiceAgreementTemplateID,'','',NULL,NULL
+	SET @AgreementId = @@IDENTITY
+	END
+	--make agreement shared
 	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
-		SELECT [PseudoCategoryID], @AgreementId, @insCompanyId, '' FROM [PsuedoCategory] where Published = 1
+		SELECT [PseudoCategoryID], @AgreementId, @ScalepointCompanyID, '' FROM [PsuedoCategory] where Published = 1
+	--map IC to the agreement so agreement is available in RnV wizzard
+	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
+		SELECT [PseudoCategoryID], @AgreementId, @targetInsCompanyId, '' FROM [PsuedoCategory] where Published = 1
 
 	insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
 		select @AgreementId, 1
@@ -60,7 +94,7 @@ AS
 
 	/* SERVICE AGREEMENT FOR WIZARD */
 	INSERT INTO [ServiceAgreement] ([name], [email], [tags], [status], [emailType], [supplierId], [insuranceCompanyId], [defaultTemplateId], [notes], [workflow], [reminder], [timeout])
-		select @serviceAgreementNameForWizard,@Email,@AgreementTags,@AgreementStatus,@AgreementEmail,@SupplierID,@insCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
+		select @serviceAgreementNameForWizard,@Email,@AgreementTags,@AgreementStatus,@AgreementEmailType,@SupplierID,@insCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
 
 	declare @AgreementIdForWizard int = @@IDENTITY
 	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
@@ -77,7 +111,7 @@ AS
 
 	/*---------------------------------------------------------*/
 	/* SHOP DATA */
-	declare @ShopName varchar(100) = CONCAT('Test shop ', @TargetCompanyName)
+	declare @ShopName varchar(100) = CONCAT('Test shop ', @ScalepointCompanyId)
 	declare @ShopName2 varchar(100) = @ShopName+' 2'
 	declare @IsRetailShop bit = 1
 	declare @IsRepairValuationLocation bit = 1

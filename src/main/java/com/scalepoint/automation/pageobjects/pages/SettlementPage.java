@@ -608,14 +608,14 @@ public class SettlementPage extends BaseClaimPage {
             }
 
             public Asserts assertLineIsSentToRepair() {
-                boolean lineSentToRepair = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0;
-                Assert.assertTrue(lineSentToRepair);
+                assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0)
+                        .as("repair icon should be displayed").isTrue();
                 return this;
             }
 
             public Asserts assertLineSentToValuation() {
-                boolean lineSentToValuation = claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0;
-                Assert.assertTrue(lineSentToValuation);
+                assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'view.png')]")).size() > 0)
+                        .as("valuation icon should be displayed").isTrue();
                 return this;
             }
 

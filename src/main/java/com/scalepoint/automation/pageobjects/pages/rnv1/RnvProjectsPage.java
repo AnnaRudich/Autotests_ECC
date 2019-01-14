@@ -11,14 +11,17 @@ import org.testng.Assert;
 
 @EccPage
 public class RnvProjectsPage extends Page {
-    @FindBy(css = "div[id*='tabbar'] a:nth-of-type(2) span span span:first-of-type")
-    private WebElement comunicationTab;
+    @FindBy(xpath = "//span[contains(text(),'Kommunikation')]")
+    private WebElement communicationTab;
 
-    @FindBy(css = "div[id*='tabbar'] a:nth-of-type(3) span span span:first-of-type")
+    @FindBy(xpath = "//span[contains(text(),'Factura')]")
     private WebElement invoiceTab;
 
-    @FindBy(css = "div[id*='tabbar'] a:last-of-type span span span:first-of-type")
+    @FindBy(xpath = "//span[contains(text(),'Status')]")
     private WebElement statusTab;
+
+    @FindBy(xpath = "//span[contains(text(),'Oversigt')]")
+    private WebElement overviewTab;
 
     //Overwiev tab
     private String byAgrXpath = "//div[contains(@id,'project_view_id')]//tr[1]//tr[1]/td/div[contains(text(), '$1')]";
@@ -76,7 +79,7 @@ public class RnvProjectsPage extends Page {
     }
 
     public RnvCommunicationPage toCommunicationTab() {
-        clickAndWaitForDisplaying(comunicationTab, By.cssSelector("td#combo-communication-task-inputCell"));
+        clickAndWaitForDisplaying(communicationTab, By.cssSelector("td#combo-communication-task-inputCell"));
         return at(RnvCommunicationPage.class);
     }
 

@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="1" author="ipo" runOnChange="true">
+<changeSet id="1" author="ipo" runOnChange="true">
 
-        <comment>Create Vouchers</comment>
+    <comment>Create Vouchers</comment>
 
-        <sql>
-            IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
-            BEGIN
-                UPDATE [dbo].[VoucherAgreement]
-                SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
-                WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
-            END
+    <sql>
+        IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
+        BEGIN
+        UPDATE [dbo].[VoucherAgreement]
+        SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
+        WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
+        END
 
-            IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
-            BEGIN
-                UPDATE [dbo].[VoucherAgreement]
-                SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
-                WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
-            END
+        IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
+        BEGIN
+        UPDATE [dbo].[VoucherAgreement]
+        SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
+        WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
+        END
 
-            /*
-            ---Category:---
-            22 - Babyudstyr
-            200018 - Hardware
-            */
+        /*
+        ---Category:---
+        22 - Babyudstyr
+        200018 - Hardware
+        */
 
-            /* 10socks.com.com supplier */
-            EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher', 17, '22', 10, 7
+        /* 10socks.com.com supplier */
+        EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher', 17, '22', 10, 7
 
-            declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
-            declare @SupplierVAId int
-            EXEC autotests_create_supplier 'Autotest-Supplier-Distance-Tests', @scalepointCompany, '5000', @SupplierVAId OUTPUT
-            EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierVAId, '22', 10, 7
+        declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
+        declare @SupplierVAId int
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Distance-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '5000', @SupplierId = @SupplierVAId OUTPUT
+        EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierVAId, '22', 10, 7
 
-            /* ComputerCity */
-            EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher1', 1663, '22', 10, 7
+        /* ComputerCity */
+        EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher1', 1663, '22', 10, 7
 
-            /* Cool Shop */
-            EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher2', 3921, '200018', 10, 7
+        /* Cool Shop */
+        EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher2', 3921, '200018', 10, 7
 
-            /* Webhallen */
-            EXEC autotests_create_voucher_agreement 'Autotest-BO', 24398, '200018', 6, 7
+        /* Webhallen */
+        EXEC autotests_create_voucher_agreement 'Autotest-BO', 24398, '200018', 6, 7
 
-            /* Autotest-Supplier-Bauta_SP,  bauta */
-            declare @SupplierId int
-            EXEC autotests_create_supplier 'Autotest-Supplier-Bauta_SP', 7, '9200', @SupplierId OUTPUT
-            EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, 12
-            EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
-            EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
+        /* Autotest-Supplier-Bauta_SP,  bauta */
+        declare @SupplierId int
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT
+        EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, 12
+        EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
+        EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
 
-            /* Autotest-Supplier-Bauta,  bauta */
-            declare @SupplierIdBauta int
-            EXEC autotests_create_supplier 'Autotest_Supplier_Bauta', 12, '9200', @SupplierIdBauta OUTPUT
-            EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
+        /* Autotest-Supplier-Bauta,  bauta */
+        declare @SupplierIdBauta int
+        EXEC autotests_create_supplier @SUNAME = 'Autotest_Supplier_Bauta', @insCompanyId = 12, @PostalCode = '9200', @SupplierId = @SupplierIdBauta OUTPUT
+        EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
 
-            /* Supplier without vouchers */
-            declare @SupplierIdScalepoint int
-            EXEC autotests_create_supplier 'Autotest-scalepoint-supplier', 7, '9200', @SupplierIdScalepoint OUTPUT
-        </sql>
-        <rollback/>
-    </changeSet>
+        /* Supplier without vouchers */
+        declare @SupplierIdScalepoint int
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-scalepoint-supplier', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierIdScalepoint OUTPUT
+    </sql>
+    <rollback/>
+</changeSet>
 </databaseChangeLog>
