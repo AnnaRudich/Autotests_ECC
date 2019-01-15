@@ -15,6 +15,7 @@ import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
@@ -23,6 +24,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -446,6 +448,20 @@ public class ClaimTests extends BaseTest {
                 .doAssert(mail -> {
                     mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);
                     mail.isMailExist(REPLACEMENT_WITH_MAIL);
+                });
+    }
+
+    @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_SID)
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
+                    "Claim status is Completed in the claims list")
+    public void contents173_AUTOCATEGORIZATION(User user, Claim claim, ClaimItem claimItem) {
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim).openSid();
+        settlementDialog.setDescription("iphone");
+        Wait.waitForDisplayed(By.id("pseudocategory-combobox-inputEl"), 10);
+        settlementDialog.doAssert(claimLine -> {
+                    claimLine.assertCategoryTextIs("Telefoni");
+                    claimLine.assertSubCategoryTextIs("Mobiltelefoner");
                 });
     }
 
