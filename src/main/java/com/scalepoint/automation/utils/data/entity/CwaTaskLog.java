@@ -1,7 +1,7 @@
 package com.scalepoint.automation.utils.data.entity;
 
-import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
 
 /**
  * Created by bza on 5/26/2017.
