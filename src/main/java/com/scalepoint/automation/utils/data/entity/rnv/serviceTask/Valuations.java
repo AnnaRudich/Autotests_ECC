@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 
 @XmlRootElement(name = "valuations")
-class Valuations {
+public class Valuations {
     private BigDecimal purchasePrice;
     private BigDecimal newPrice;
     private BigDecimal customerDemand;
@@ -13,6 +13,8 @@ class Valuations {
     private BigDecimal usedPrice;
     private BigDecimal repairEstimate;
     private BigDecimal repairPrice;
+
+    public Valuations(){}
 
 
     @XmlAttribute

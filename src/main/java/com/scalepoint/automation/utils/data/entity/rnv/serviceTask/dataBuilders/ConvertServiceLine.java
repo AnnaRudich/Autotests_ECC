@@ -2,7 +2,6 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders
 
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceLineExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceLineImport;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ValuationsImport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ConvertServiceLine {
         serviceLineImport.setTaskType(serviceLineExport.getTaskType());
         serviceLineImport.setCategory(serviceLineExport.getCategory());
         serviceLineImport.setItem(convertItem(serviceLineExport.getItem()));
-        serviceLineImport.setValuations(new ValuationsImport(serviceLineExport));
+        serviceLineImport.setValuations(new ValuationsBuilder().setDefault());
         return serviceLineImport;
     }
 }

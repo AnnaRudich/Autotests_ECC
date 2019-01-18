@@ -18,9 +18,4 @@ public class BankBuilder {
         bankImport.setBankName(supplierData.getBankName());
         return bankImport;
 }
-//
-//    public BankImport build(){
-//        return bankImport;
-//    }
-
 }

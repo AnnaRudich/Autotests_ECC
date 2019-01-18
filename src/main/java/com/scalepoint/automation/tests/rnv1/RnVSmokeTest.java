@@ -13,11 +13,35 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 
-@RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
 public class RnVSmokeTest extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "sendLine to RnV, send Service Partner feedback")
+    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+        String lineDescription = "Line_1";
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .closeSidWithOk()
+                .findClaimLine(lineDescription)
+                .selectLine()
+                .sendToRnV()
+                .changeTask(lineDescription, rnvTaskType.getRepair())
+                .nextRnVstep()
+                .sendRnV(agreement)
+
+                .findClaimLine(lineDescription)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+
+        new RnvService().sendFeedback(claim);
+
+        new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement);
+    }
+    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
+    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
+    public void IR2(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = "Line_1";
 
         loginAndCreateClaim(user, claim)
