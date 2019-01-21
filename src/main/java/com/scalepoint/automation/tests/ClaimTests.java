@@ -449,6 +449,20 @@ public class ClaimTests extends BaseTest {
                 });
     }
 
+    @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_SID)
+    @Test(dataProvider = "testDataProvider",
+            description = "CONTENTS-173 - after setting description the category and " +
+                    "pseudo-category in SID is auto selected")
+    public void contents173_autoCategorization(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setDescriptionAndWaitForCategoriesToAutoSelect("iphone")
+                .doAssert(claimLine -> {
+                    claimLine.assertCategoryTextIs("Telefoni");
+                    claimLine.assertSubCategoryTextIs("Mobiltelefoner");
+                });
+    }
+
     @FeatureToggleSetting(type = FeatureIds.COPY_NOTE_BUTTON)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
     @Test(dataProvider = "testDataProvider")
