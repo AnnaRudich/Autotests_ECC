@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
@@ -50,7 +51,7 @@ public class SelfService2Tests extends BaseTest {
             .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription(IPHONE)
-                .apply(p -> description = p.getProductMatchDescription())
+                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
                 .selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
@@ -88,7 +89,7 @@ public class SelfService2Tests extends BaseTest {
             .completeWithEmail()
             .openRecentClaim()
             .newSelfServicePassword()
-            .apply(p -> newPasswordToSelfService = p.getNewPasswordToSelfService())
+            .apply(SelfServicePasswordDialog.class, p -> newPasswordToSelfService = p.getNewPasswordToSelfService())
             .closeSelfServicePasswordDialog()
             .toMailsPage()
             .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -121,7 +122,7 @@ public class SelfService2Tests extends BaseTest {
             .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription("sony")
-                .apply(p -> description = p.getProductMatchDescription())
+                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
                 .selectAge("2")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)

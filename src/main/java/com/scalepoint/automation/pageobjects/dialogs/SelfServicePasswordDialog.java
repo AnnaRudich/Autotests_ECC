@@ -7,8 +7,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.function.Consumer;
-
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SelfServicePasswordDialog extends BaseDialog {
@@ -32,10 +30,5 @@ public class SelfServicePasswordDialog extends BaseDialog {
         ok.click();
         Wait.waitElementDisappeared(By.cssSelector("#new-password-dialog-ok-button-btnIconEl"));
         return Page.at(CustomerDetailsPage.class);
-    }
-
-    public SelfServicePasswordDialog apply(Consumer<SelfServicePasswordDialog> func) {
-        func.accept(this);
-        return this;
     }
 }
