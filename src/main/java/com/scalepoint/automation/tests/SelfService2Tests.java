@@ -134,6 +134,6 @@ public class SelfService2Tests extends BaseTest {
             .doAssert(asserts -> asserts.assertItemIsPresent(description))
             .doAssert(asserts -> asserts.assertItemNoteIsPresent(ITEM_CUSTOMER_NOTE))
             .toNotesPage()
-            .doAssert(asserts -> asserts.assertCustomerNotePresent(CLAIM_NOTE));
+            .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
     }
 }

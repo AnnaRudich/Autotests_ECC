@@ -252,6 +252,11 @@ public class SelfService2Page extends Page {
         return this;
     }
 
+    public <T extends Page> T apply(Class<T> currentClass, Consumer<T> func) {
+        func.accept((T) this);
+        return at(currentClass);
+    }
+
     public class Asserts {
 
         private Boolean assertSsLineIsVisible(String description){

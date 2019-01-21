@@ -103,7 +103,7 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public class Asserts {
         public Asserts assertCustomerNotePresent(String customerNote) {
-            Assert.assertTrue(isInternalNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
+            Assert.assertTrue(isCustomerNotesPresent(customerNote), errorMessage("Customer Note has not been added"));
             return this;
         }
 
