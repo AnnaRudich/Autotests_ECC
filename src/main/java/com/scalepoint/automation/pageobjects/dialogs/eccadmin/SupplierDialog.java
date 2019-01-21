@@ -349,6 +349,34 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
     }
 
+    public static class GeneralTabReadMode extends BaseDialog implements SupplierTabs {
+
+        @FindBy(xpath = "//label[contains(text(),'Supplier name:')]")
+        private WebElement name;
+
+        @Override
+        protected boolean areWeAt() {
+            Wait.waitForAjaxCompleted();
+            try {
+                return this.name.isDisplayed() && driver.findElements(By.name("name")).isEmpty();
+            }catch (Exception e){
+                logger.error(e.getMessage());
+                return false;
+            }
+        }
+
+        public GeneralTabReadMode setName(String name) {
+            this.name.clear();
+            this.name.sendKeys(name);
+            return this;
+        }
+
+        @Override
+        protected BaseDialog ensureWeAreAt() {
+            return this;
+        }
+    }
+
     public static class AgreementsTab extends BaseDialog implements SupplierTabs {
 
         public static final String DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT = "//div[@id='supplierVouchersGridId']//div[text()='";
