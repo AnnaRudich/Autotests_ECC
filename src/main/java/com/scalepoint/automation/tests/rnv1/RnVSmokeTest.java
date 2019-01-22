@@ -2,14 +2,17 @@ package com.scalepoint.automation.tests.rnv1;
 
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.RnvTaskType;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 
@@ -39,6 +42,7 @@ public class RnVSmokeTest extends BaseTest {
         new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
     public void IR2(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
@@ -62,6 +66,9 @@ public class RnVSmokeTest extends BaseTest {
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
+
+        new RnvProjectsPage().expandTopTaskDetails()
+                .getAssertion().assertAuditResponseText(RnvProjectsPage.AuditResponse.APPROVED);
     }
 }
 
