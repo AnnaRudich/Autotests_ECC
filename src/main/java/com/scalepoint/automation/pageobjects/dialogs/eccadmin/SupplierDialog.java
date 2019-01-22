@@ -535,6 +535,13 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             return at(AddShopDialog.class);
         }
 
+        public AddShopDialogViewMode openShopViewModel(String shopName) {
+            WebElement item = find(byShopNameXpath, shopName);
+            scrollTo(item);
+            doubleClick(item);
+            return at(AddShopDialogViewMode.class);
+        }
+
         public AddShopDialog openEditShopDialog(String shopName) {
             WebElement item = find(byShopNameXpath, shopName);
             scrollTo(item);
