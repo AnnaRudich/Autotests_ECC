@@ -192,13 +192,6 @@ public class SupplierTests extends BaseTest {
         checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Exclusive should be visible in supply management, voucher list")
-    public void ecc3039_exclusiveColumnShouldBeVisibleInVoucherList(@UserCompany(CompanyCode.BAUTA) User user){
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
-        suppliersPage.toVouchersPage()
-                .doAssert(VouchersPage.Asserts::assertsIsExclusiveColumnDisplayed);
-    }
-
     @Test(dataProvider = "testDataProvider", description = "Voucher tick should not be visible in supply management, suppliers list")
     public void ecc3039_voucherTickIsNotAvailableInSuppliersList(
             @UserCompany(CompanyCode.SCALEPOINT) User user, @SupplierCompany(areWithVouchers = false) SimpleSupplier simpleSupplier){
@@ -216,12 +209,6 @@ public class SupplierTests extends BaseTest {
     public void ecc3039_exclusiveTickIsAvailableInVoucherList(@UserCompany(CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier){
         loginToEccAdmin(user).toVouchersPage()
                 .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(simpleSupplier.getAgreement()));
-    }
-
-    @Test(dataProvider = "testDataProvider", description = "Active tick should be visible in supply management, vouchers list")
-    public void ecc3039_activeTickIsAvailableInVoucherList(@UserCompany(CompanyCode.BAUTA) User user, SimpleSupplier simpleSupplier){
-        loginToEccAdmin(user).toVouchersPage()
-                .doAssert(asserts -> asserts.assertsIsActiveTickForVoucherDisplayed(simpleSupplier.getAgreement()));
     }
 
     @Test(dataProvider = "testDataProvider")
@@ -247,6 +234,7 @@ public class SupplierTests extends BaseTest {
     @Test(dataProvider = "testDataProvider")
     public void ecc3039_sharedSupplierShouldBeInViewModeForIC(@UserCompany(CompanyCode.BAUTA)User user, SimpleSupplier simpleSupplier){
         final String supplierName = simpleSupplier.getName();
+        final String agreement = simpleSupplier.getAgreement();
 
         loginToEccAdmin(user)
                 .doAssert(SuppliersPage.Asserts::assertsIsToMatchingEngineLinkDisplayed)                //To matching engine link should be visible in supply management
@@ -260,12 +248,16 @@ public class SupplierTests extends BaseTest {
 
                 .selectShopsTab()
                 .openShopViewModel(simpleSupplier.getShopName())
-                .doAssert(AddShopDialogViewMode.Asserts::assertIsShopDialogNotEditable)                         // Shop data shouldn't be editable
+                .doAssert(AddShopDialogViewMode.Asserts::assertIsShopDialogNotEditable)                 // Shop data shouldn't be editable
                 .cancelViewShopDialog()
 
                 .selectAgreementsTab()
-                .doAssert(SupplierDialog.AgreementsTab.Asserts::assertIsExclusiveTickForVoucherVisible);// Exclusive tick for voucher should be visible on agreements tab when open supplier from suppliers list
+                .doAssert(SupplierDialog.AgreementsTab.Asserts::assertIsExclusiveTickForVoucherVisible) // Exclusive tick for voucher should be visible on agreements tab when open supplier from suppliers list
+                .closeSupplier()
 
+                .toVouchersPage()
+                .doAssert(asserts -> asserts.assertsIsActiveTickForVoucherDisplayed(agreement))         // Active tick should be visible in supply management, vouchers list
+                .doAssert(VouchersPage.Asserts::assertsIsExclusiveColumnDisplayed);                     // Exclusive should be visible in supply management, voucher list
     }
 
     private void checkVisibility(User userWhoCreates, User userWhoReads, Supplier supplier, boolean mustBeVisible) {
