@@ -199,16 +199,17 @@ public class SupplierTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierNotDisplayed(simpleSupplier.getName()));
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Exclusive tick should be visible in supply management, suppliers list")
-    public void ecc3039_exclusiveTickIsAvailableInSuppliersList(@UserCompany(CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier){
-        loginToEccAdmin(user)
-                .doAssert(asserts -> asserts.assertsIsExclusiveTickForSupplierDisplayed(simpleSupplier.getName()));
-    }
+    @Test(dataProvider = "testDataProvider")
+    public void ecc3039_exclusiveTickIsAvailableForIC(@UserCompany(CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier){
+        final String supplierName = simpleSupplier.getName();
+        final String agreement = simpleSupplier.getAgreement();
 
-    @Test(dataProvider = "testDataProvider", description = "Exclusive tick should be visible in supply management, vouchers list")
-    public void ecc3039_exclusiveTickIsAvailableInVoucherList(@UserCompany(CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier){
-        loginToEccAdmin(user).toVouchersPage()
-                .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(simpleSupplier.getAgreement()));
+        loginToEccAdmin(user)
+                .toSuppliersPage()
+                .doAssert(asserts -> asserts.assertsIsExclusiveTickForSupplierDisplayed(supplierName))  // Exclusive tick should be visible in supply management, suppliers list
+
+                .toVouchersPage()
+                .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(agreement));     // Exclusive tick should be visible in supply management, vouchers list
     }
 
     @Test(dataProvider = "testDataProvider")
