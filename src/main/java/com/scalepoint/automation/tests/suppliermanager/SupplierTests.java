@@ -192,12 +192,6 @@ public class SupplierTests extends BaseTest {
         checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Exclusive should not be visible in supply management, suppliers list")
-    public void eccl3039_exclusiveColumnShouldNotBeVisibleInSuppliersList(@UserCompany(CompanyCode.SCALEPOINT) User user){
-        loginToEccAdmin(user)
-                .doAssert(SuppliersPage.Asserts::assertsIsExclusiveColumnNotDisplayed);
-    }
-
     @Test(dataProvider = "testDataProvider", description = "Exclusive should be visible in supply management, voucher list")
     public void ecc3039_exclusiveColumnShouldBeVisibleInVoucherList(@UserCompany(CompanyCode.BAUTA) User user){
         SuppliersPage suppliersPage = loginToEccAdmin(user);
@@ -243,12 +237,18 @@ public class SupplierTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(simpleSupplier.getInactiveAgreement()));
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Exclusive tick for voucher should be not visible on agreements tab when open supplier from suppliers list")
-    public void ecc3039_exclusiveTickShouldBeNotVisibleForVoucherInSupplierDialog(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier){
+    @Test(dataProvider = "testDataProvider")
+    public void ecc3039_sharedSupplierShouldBeEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier){
+        final String supplierName = simpleSupplier.getName();
+        final String scalepointAgreement = simpleSupplier.getScalepointAgreement();
+
         loginToEccAdmin(user)
-                .editSupplier(simpleSupplier.getName())
+                .toSuppliersPage()
+                .doAssert(SuppliersPage.Asserts::assertsIsExclusiveColumnNotDisplayed)                          // Exclusive should not be visible in supply management, suppliers list
+
+                .editSupplier(supplierName)
                 .selectAgreementsTab()
-                .doAssert(asserts -> asserts.assertIsExclusiveTickForVoucherNotVisible(simpleSupplier.getScalepointAgreement()));
+                .doAssert(asserts -> asserts.assertIsExclusiveTickForVoucherNotVisible(scalepointAgreement));   // Exclusive tick for voucher should be not visible on agreements tab when open supplier from suppliers list
     }
 
     @Test(dataProvider = "testDataProvider")
