@@ -212,7 +212,7 @@ public class SupplierTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider")
-    public void ecc3039_sharedDataShouldBeEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier){
+    public void ecc3039_sharedDataAreEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier){
         final String supplierName = simpleSupplier.getName();
         final String scalepointAgreement = simpleSupplier.getScalepointAgreement();
         final String inactiveAgreement = simpleSupplier.getInactiveAgreement();
@@ -232,7 +232,7 @@ public class SupplierTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider")
-    public void ecc3039_sharedDataShouldBeInViewModeForIC(@UserCompany(CompanyCode.BAUTA)User user, SimpleSupplier simpleSupplier){
+    public void ecc3039_sharedDataAreInViewModeForIC(@UserCompany(CompanyCode.BAUTA)User user, SimpleSupplier simpleSupplier){
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
 
