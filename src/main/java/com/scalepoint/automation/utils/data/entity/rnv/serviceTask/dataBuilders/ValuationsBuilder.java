@@ -14,4 +14,10 @@ public class ValuationsBuilder {
         valuations.setCustomerDemand(BigDecimal.valueOf(Constants.PRICE_500));
         return valuations;
     }
+
+    public Valuations withRepairPrice(BigDecimal repairPrice){
+        valuations = setDefault();
+        valuations.setRepairPrice(repairPrice);
+        return valuations;
+    }
 }
