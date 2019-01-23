@@ -225,19 +225,10 @@ public class SupplierTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider")
-    public void ecc3039_sharedVoucherShouldBeEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT)User user, SimpleSupplier simpleSupplier){
-        final String inactiveAgreement = simpleSupplier.getInactiveAgreement();
-
-        loginToEccAdmin(user)
-                .toVouchersPage()
-                .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(inactiveAgreement))  // Active tick should be not visible in supply management, vouchers list
-                .doAssert(VouchersPage.Asserts::assertsIsExclusiveColumnNotDisplayed);                      // Exclusive should not be visible in supply management, voucher list
-    }
-
-    @Test(dataProvider = "testDataProvider")
     public void ecc3039_sharedSupplierShouldBeEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier){
         final String supplierName = simpleSupplier.getName();
         final String scalepointAgreement = simpleSupplier.getScalepointAgreement();
+        final String inactiveAgreement = simpleSupplier.getInactiveAgreement();
 
         loginToEccAdmin(user)
                 .toSuppliersPage()
@@ -245,7 +236,12 @@ public class SupplierTests extends BaseTest {
 
                 .editSupplier(supplierName)
                 .selectAgreementsTab()
-                .doAssert(asserts -> asserts.assertIsExclusiveTickForVoucherNotVisible(scalepointAgreement));   // Exclusive tick for voucher should be not visible on agreements tab when open supplier from suppliers list
+                .doAssert(asserts -> asserts.assertIsExclusiveTickForVoucherNotVisible(scalepointAgreement))   // Exclusive tick for voucher should be not visible on agreements tab when open supplier from suppliers list
+                .cancelSupplier()
+
+                .toVouchersPage()
+                .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(inactiveAgreement))  // Active tick should be not visible in supply management, vouchers list
+                .doAssert(VouchersPage.Asserts::assertsIsExclusiveColumnNotDisplayed);                      // Exclusive should not be visible in supply management, voucher list
     }
 
     @Test(dataProvider = "testDataProvider")
