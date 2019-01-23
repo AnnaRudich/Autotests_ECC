@@ -252,7 +252,7 @@ public class SupplierTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider")
-    public void ecc3039_testExclusiveSupplierDialog(@UserCompany(CompanyCode.BAUTA)User user, SimpleSupplier simpleSupplier){
+    public void ecc3039_sharedSupplierShouldBeOpenDisabledForIC(@UserCompany(CompanyCode.BAUTA)User user, SimpleSupplier simpleSupplier){
         final String supplierName = simpleSupplier.getName();
 
         loginToEccAdmin(user)
