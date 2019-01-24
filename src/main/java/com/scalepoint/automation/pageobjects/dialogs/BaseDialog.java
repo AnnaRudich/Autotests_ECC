@@ -1,11 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.Actions;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
+
+import java.util.function.Consumer;
 
 public abstract class BaseDialog implements Actions {
 
@@ -41,5 +44,10 @@ public abstract class BaseDialog implements Actions {
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
         }
+    }
+
+    public <T extends BaseDialog> T apply(Class<T> currentClass, Consumer<T> func) {
+        func.accept((T) this);
+        return at(currentClass);
     }
 }

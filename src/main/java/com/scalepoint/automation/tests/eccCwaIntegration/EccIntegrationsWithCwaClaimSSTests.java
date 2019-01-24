@@ -12,8 +12,8 @@ import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.ExtraModifier;
-import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
