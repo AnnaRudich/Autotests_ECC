@@ -89,6 +89,10 @@ public class Wait {
         return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+    public static WebElement waitForDisplayed(By locator, int timeoutInSeconds) {
+        return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator), timeoutInSeconds);
+    }
+
     public static WebElement waitForStaleElement(final By locator) {
         return wrap((WebDriver d) -> {
             try {
@@ -233,8 +237,12 @@ public class Wait {
         });
     }
 
+    private static <V> V wrapShort(ExpectedCondition<V> expectedCondition, int timeOutInSeconds) {
+        return new WebDriverWait(Browser.driver(), timeOutInSeconds, 1000).until(expectedCondition);
+    }
+
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), 60, 1000).until(expectedCondition);
+        return wrapShort(expectedCondition, 60);
     }
 
     public static void waitForElementWithPageReload(By locator) {
