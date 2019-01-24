@@ -10,6 +10,7 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
@@ -570,6 +571,7 @@ public class VoucherAgreementTests extends BaseTest {
                             .withAgreementDiscount(voucherAgreementData.discount);
                 })
                 .createVoucherAgreement();
+        Wait.waitForLoaded();
 
         if (!voucherAgreementData.voucherActive) {
             voucherAgreementGeneralTab
