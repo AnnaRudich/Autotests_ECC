@@ -101,8 +101,6 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         if (getOption(supplierName).getText().contains(supplierName)) {
             scrollTo(getOption(supplierName));
             doubleClickUsingJsIfSeleniumClickReturnError(getOption(supplierName));
-            BaseDialog.isOn(SupplierDialog.GeneralTab.class);
-            waitForStaleElement((By.xpath("//span[contains(text(),'General')]")));
         }
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
     }
