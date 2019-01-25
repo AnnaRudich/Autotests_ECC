@@ -308,7 +308,7 @@ public class VoucherAgreementTests extends BaseTest {
      * THEN: SP user can't view V1 details
      */
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-3038 It's possible to remove assigned category for new voucher")
+            description = "Scalepoint SupplyManager can't open IC voucher")
     public void ecc3038_spSMCantOpenICVoucher(User futureUser,
                                               @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
                                               ClaimItem claimItem,
