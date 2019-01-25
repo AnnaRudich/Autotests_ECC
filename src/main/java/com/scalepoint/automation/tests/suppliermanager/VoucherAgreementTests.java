@@ -13,11 +13,7 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.Supplier;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +21,7 @@ import org.testng.annotations.Test;
 
 import java.util.Objects;
 
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.EMAIL_REQUIRED;
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PERSONAL_CODE_REQUIRED;
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PHONE_REQUIRED;
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.USE_PORTAL_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.*;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
@@ -38,7 +31,7 @@ public class VoucherAgreementTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "Create voucher with brands and tags and later use it in sid")
-    public void charlie550_createVoucherWithBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher){
+    public void charlie550_createVoucherWithBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         String brand = "brand_test";
         String tag = "tag_test";
         loginToEccAdmin(user)
@@ -464,7 +457,7 @@ public class VoucherAgreementTests extends BaseTest {
      * GIVEN: SP and IC Users with Supply Manager credentials, SP Voucher V1
      * WHEN: SP User sets V1 as inactive
      * THEN: V1 is not available for IC User in Supplier dialog
-     *
+     * <p>
      * ecc3038_inactiveSPVoucherNotAvailableICVouchersList
      */
     @Test(dataProvider = "testDataProvider",
