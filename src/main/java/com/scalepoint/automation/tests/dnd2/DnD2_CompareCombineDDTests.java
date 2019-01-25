@@ -217,7 +217,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         login(user)
                 .openActiveRecentClaim();
                 new SettlementSummary().ensureAuditInfoPanelVisible()
-                .checkStatusFromAudit("APPROVED");
+                .checkStatusFromAudit("APPROVE");
     }
 
 }

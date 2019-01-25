@@ -184,9 +184,11 @@ public class RnvProjectsPage extends Page {
 
     public class Assertion {
 
-        public Assertion assertAuditResponseText(AuditResponse auditResponse){
+        public Assertion assertAuditResponseText(AuditResultEvaluationStatus auditResponse){
             String actualAuditResponse = getAuditInfoPanelText();
-            assertThat(actualAuditResponse).as("Expected Audit response is:" + auditResponse.getResponse() + "but actual was:" + actualAuditResponse).isEqualTo(auditResponse.getResponse());
+            assertThat(actualAuditResponse)
+                    .as("Expected Audit response is:" + auditResponse.getResponse() + "but actual was:" + actualAuditResponse)
+                    .isEqualTo(auditResponse.getResponse());
             return this;
         }
 
@@ -269,7 +271,7 @@ public class RnvProjectsPage extends Page {
 
         public Assertion assertClaimLineRejected(String claimLineName) {
             String action = getActionByCLName(claimLineName);
-            Assert.assertEquals(action, "REJECTED", "Claim line is not rejected");
+            Assert.assertEquals(action, "REJECT", "Claim line is not rejected");
             return this;
         }
 
@@ -307,15 +309,15 @@ public class RnvProjectsPage extends Page {
         }
     }
 
-    public enum AuditResponse{
-        APPROVED("Godkendt"),
-        REJECTED("Rejected"),
-        MANUAL("Manual"),
-        ERROR("Error");
+    public enum AuditResultEvaluationStatus {
+        APPROVE("Godkendt"),
+        REJECT("Afvist"),
+        MANUAL("Manuelt"),
+        ERROR("Intet svar fra Validering!");
 
         String response;
 
-        AuditResponse(String response) {
+        AuditResultEvaluationStatus(String response) {
             this.response = response;
         }
 

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceLineBuilder.convertServiceLines;
 import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ConvertServicePartner.convertServicePartner;
+import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceLineBuilder.convertServiceLinesWithRepairPrice;
 
 public class ServiceTaskImportBuilder {
     private ServiceTaskImport serviceTaskImport;
@@ -48,7 +49,7 @@ public class ServiceTaskImportBuilder {
         ServiceTaskExport serviceTask = result.get(0);
 
         serviceTaskImport = new ServiceTaskImport();
-        serviceTaskImport.setServiceLines(convertServiceLines(serviceTask.getServiceLines()));
+        serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, serviceTask.getServiceLines()));
         serviceTaskImport.setServicePartner(convertServicePartner(serviceTask.getServicePartner()));
         serviceTaskImport.setInvoice(new InvoiceBuilder().setDefault().build());
         serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));

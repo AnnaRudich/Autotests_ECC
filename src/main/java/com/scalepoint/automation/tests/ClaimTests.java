@@ -163,7 +163,7 @@ public class ClaimTests extends BaseTest {
     /*
     the claim which will be validated in Audit must have mobile, zipcode, address and city as required fields
     IC Validation code should be = topdanmark always
-    Product should not be Iphone to have APPROVED line
+    Product should not be Iphone to have APPROVE line
      */
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approves claim")
@@ -194,7 +194,7 @@ public class ClaimTests extends BaseTest {
                 .openActiveRecentClaim()
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
                 new SettlementSummary().ensureAuditInfoPanelVisible()
-                .checkStatusFromAudit("Approved");//"APPROVED" does not work. Change later.
+                .checkStatusFromAudit("Approved");//"APPROVE" does not work. Change later.
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
