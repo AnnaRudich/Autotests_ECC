@@ -22,96 +22,46 @@ public class Summary {
 
     @JsonProperty("manualReduction")
     private Double manualReduction;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("shareOfVat")
+
+    @JsonProperty(value = "shareOfVat", required = true)
     private Double shareOfVat;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("deductible")
+
+    @JsonProperty(value = "deductible", required = true)
     private Double deductible;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("depreciation")
+
+    @JsonProperty(value = "depreciation", required = true)
     private Double depreciation;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("manualReduction")
     public Double getManualReduction() {
         return manualReduction;
     }
 
-    @JsonProperty("manualReduction")
     public void setManualReduction(Double manualReduction) {
         this.manualReduction = manualReduction;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("shareOfVat")
     public Double getShareOfVat() {
         return shareOfVat;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("shareOfVat")
     public void setShareOfVat(Double shareOfVat) {
         this.shareOfVat = shareOfVat;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("deductible")
     public Double getDeductible() {
         return deductible;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("deductible")
     public void setDeductible(Double deductible) {
         this.deductible = deductible;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("depreciation")
     public Double getDepreciation() {
         return depreciation;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("depreciation")
     public void setDepreciation(Double depreciation) {
         this.depreciation = depreciation;
     }

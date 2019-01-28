@@ -22,227 +22,119 @@ import java.util.Map;
     "case",
     "settlement",
     "parties",
-    "payments"
+    "expenses",
+    "payments",
+    "obligations"
 })
 public class EventClaimSettled {
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("eventType")
+    @JsonProperty(value = "eventType", required = true)
     private String eventType;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payloadVersion")
-    private String payloadVersion;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("correlationId")
-    private String correlationId;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("timestamp")
-    private String timestamp;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("case")
-    private Case _case;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("settlement")
-    private Settlement settlement;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("parties")
-    private List<Party> parties = null;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payments")
-    private List<Payment> payments = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("eventType")
+    @JsonProperty(value = "payloadVersion", required = true)
+    private String payloadVersion;
+
+    @JsonProperty(value = "correlationId", required = true)
+    private String correlationId;
+
+    @JsonProperty(value = "timestamp", required = true)
+    private String timestamp;
+
+    @JsonProperty(value = "case", required = true)
+    private Case _case;
+
+    @JsonProperty(value = "settlement", required = true)
+    private Settlement settlement;
+
+    @JsonProperty(value = "parties", required = true)
+    private List<Party> parties = null;
+
+    @JsonProperty(value = "expenses", required = true)
+    private List<Expense> expenses = null;
+
+    @JsonProperty(value = "payments", required = true)
+    private List<Payment> payments = null;
+
+    @JsonProperty("obligations")
+    private List<Obligation> obligations = null;
+
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<>();
+
     public String getEventType() {
         return eventType;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("eventType")
     public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payloadVersion")
     public String getPayloadVersion() {
         return payloadVersion;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payloadVersion")
     public void setPayloadVersion(String payloadVersion) {
         this.payloadVersion = payloadVersion;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("correlationId")
     public String getCorrelationId() {
         return correlationId;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("correlationId")
     public void setCorrelationId(String correlationId) {
         this.correlationId = correlationId;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("timestamp")
     public String getTimestamp() {
         return timestamp;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("timestamp")
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("case")
     public Case getCase() {
         return _case;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("case")
     public void setCase(Case _case) {
         this._case = _case;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("settlement")
     public Settlement getSettlement() {
         return settlement;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("settlement")
     public void setSettlement(Settlement settlement) {
         this.settlement = settlement;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("parties")
     public List<Party> getParties() {
         return parties;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("parties")
     public void setParties(List<Party> parties) {
         this.parties = parties;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payments")
-    public List<Payment> getPayments() {
-        return payments;
+    public List<Expense> getExpenses() {
+        return expenses;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payments")
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
+    public List<Payment> getPayments() { return payments; }
+
     public void setPayments(List<Payment> payments) {
         this.payments = payments;
+    }
+
+    public List<Obligation> getObligations() { return obligations; }
+
+    public void setObligations(List<Obligation> obligations) {
+        this.obligations = obligations;
     }
 
     @Override

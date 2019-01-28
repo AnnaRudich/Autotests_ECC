@@ -29,7 +29,7 @@ public class PayerFinancialAccount {
     @JsonProperty("fiBranch")
     private FiBranch fiBranch;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * The identifier for the Financial Account; the Bank Account Number.
@@ -37,7 +37,6 @@ public class PayerFinancialAccount {
      * 
      * 
      */
-    @JsonProperty("id")
     public String getId() {
         return id;
     }
@@ -48,17 +47,14 @@ public class PayerFinancialAccount {
      * 
      * 
      */
-    @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
     }
 
-    @JsonProperty("fiBranch")
     public FiBranch getFiBranch() {
         return fiBranch;
     }
 
-    @JsonProperty("fiBranch")
     public void setFiBranch(FiBranch fiBranch) {
         this.fiBranch = fiBranch;
     }

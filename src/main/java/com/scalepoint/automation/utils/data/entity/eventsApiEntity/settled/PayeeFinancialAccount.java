@@ -38,7 +38,6 @@ public class PayeeFinancialAccount {
      * 
      * 
      */
-    @JsonProperty("id")
     public String getId() {
         return id;
     }
@@ -49,20 +48,11 @@ public class PayeeFinancialAccount {
      * 
      * 
      */
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
-    @JsonProperty("fiBranch")
-    public FiBranch_ getFiBranch() {
-        return fiBranch;
-    }
+    public FiBranch_ getFiBranch() { return fiBranch; }
 
-    @JsonProperty("fiBranch")
-    public void setFiBranch(FiBranch_ fiBranch) {
-        this.fiBranch = fiBranch;
-    }
+    public void setFiBranch(FiBranch_ fiBranch) { this.fiBranch = fiBranch; }
 
     @Override
     public String toString() {

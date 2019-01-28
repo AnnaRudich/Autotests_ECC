@@ -22,7 +22,8 @@ import java.util.Map;
     "payeeFinancialAccount",
     "paymentId",
     "instructionId",
-    "creditAccount"
+    "creditAccount",
+    "financialAccount"
 })
 public class PaymentMeans {
 
@@ -48,54 +49,39 @@ public class PaymentMeans {
     private String instructionId;
     @JsonProperty("creditAccount")
     private CreditAccount creditAccount;
+    @JsonProperty ("financialAccount")
+    private FinancialAccount financialAccount;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("paymentMeansCode")
     public PaymentMeans.PaymentMeansCode getPaymentMeansCode() {
         return paymentMeansCode;
     }
 
-    @JsonProperty("paymentMeansCode")
-    public void setPaymentMeansCode(PaymentMeans.PaymentMeansCode paymentMeansCode) {
-        this.paymentMeansCode = paymentMeansCode;
-    }
+    public void setPaymentMeansCode(PaymentMeans.PaymentMeansCode paymentMeansCode) { this.paymentMeansCode = paymentMeansCode; }
 
-    @JsonProperty("paymentChannelCode")
     public PaymentMeans.PaymentChannelCode getPaymentChannelCode() {
         return paymentChannelCode;
     }
 
-    @JsonProperty("paymentChannelCode")
-    public void setPaymentChannelCode(PaymentMeans.PaymentChannelCode paymentChannelCode) {
-        this.paymentChannelCode = paymentChannelCode;
-    }
+    public void setPaymentChannelCode(PaymentMeans.PaymentChannelCode paymentChannelCode) { this.paymentChannelCode = paymentChannelCode; }
 
-    @JsonProperty("payerFinancialAccount")
     public PayerFinancialAccount getPayerFinancialAccount() {
         return payerFinancialAccount;
     }
 
-    @JsonProperty("payerFinancialAccount")
-    public void setPayerFinancialAccount(PayerFinancialAccount payerFinancialAccount) {
-        this.payerFinancialAccount = payerFinancialAccount;
-    }
+    public void setPayerFinancialAccount(PayerFinancialAccount payerFinancialAccount) { this.payerFinancialAccount = payerFinancialAccount; }
 
-    @JsonProperty("payeeFinancialAccount")
     public PayeeFinancialAccount getPayeeFinancialAccount() {
         return payeeFinancialAccount;
     }
 
-    @JsonProperty("payeeFinancialAccount")
-    public void setPayeeFinancialAccount(PayeeFinancialAccount payeeFinancialAccount) {
-        this.payeeFinancialAccount = payeeFinancialAccount;
-    }
+    public void setPayeeFinancialAccount(PayeeFinancialAccount payeeFinancialAccount) { this.payeeFinancialAccount = payeeFinancialAccount; }
 
     /**
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
      * 
      */
-    @JsonProperty("paymentId")
     public String getPaymentId() {
         return paymentId;
     }
@@ -104,7 +90,6 @@ public class PaymentMeans {
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
      * 
      */
-    @JsonProperty("paymentId")
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
@@ -113,7 +98,6 @@ public class PaymentMeans {
      * Is used to specify an OCR reference from a payment form using the PaymentID 04, 15, 71 or 75. The number of digits depends on which PaymentID is being used.
      * 
      */
-    @JsonProperty("instructionId")
     public String getInstructionId() {
         return instructionId;
     }
@@ -122,19 +106,24 @@ public class PaymentMeans {
      * Is used to specify an OCR reference from a payment form using the PaymentID 04, 15, 71 or 75. The number of digits depends on which PaymentID is being used.
      * 
      */
-    @JsonProperty("instructionId")
     public void setInstructionId(String instructionId) {
         this.instructionId = instructionId;
     }
 
-    @JsonProperty("creditAccount")
     public CreditAccount getCreditAccount() {
         return creditAccount;
     }
 
-    @JsonProperty("creditAccount")
     public void setCreditAccount(CreditAccount creditAccount) {
         this.creditAccount = creditAccount;
+    }
+
+    public FinancialAccount getFinancialAccount() {
+        return financialAccount;
+    }
+
+    public void setFinancialAccount(FinancialAccount financialAccount) {
+        this.financialAccount = financialAccount;
     }
 
     @Override
@@ -155,7 +144,12 @@ public class PaymentMeans {
     public enum PaymentChannelCode {
 
         DK_BANK("DK:BANK"),
-        DK_FIK("DK:FIK");
+        DK_FIK("DK:FIK"),
+        IBAN("IBAN"),
+        DK_NEMKONTO("DK:NEMKONTO"),
+        SE_GIRO("SE:GIRO"),
+        NO_BANK("NO:BANK");
+
         private final String value;
         private final static Map<String, PaymentMeans.PaymentChannelCode> CONSTANTS = new HashMap<String, PaymentMeans.PaymentChannelCode>();
 
@@ -194,7 +188,11 @@ public class PaymentMeans {
     public enum PaymentMeansCode {
 
         DOMESTIC_BANK_TRANSFER("DOMESTIC_BANK_TRANSFER"),
-        FIK_PAYMENT("FIK_PAYMENT");
+        FIK_PAYMENT("FIK_PAYMENT"),
+        INTERNATIONAL_BANKA_TRANSFER("INTERNATIONAL_BANK_TRANSFER"),
+        NEMKONTO_BANKTRANSFER("NEMKONTO_BANK_TRANSFER"),
+        GIRO_TRANSFER("GIRO_TRANSFER");
+
         private final String value;
         private final static Map<String, PaymentMeans.PaymentMeansCode> CONSTANTS = new HashMap<String, PaymentMeans.PaymentMeansCode>();
 

@@ -25,13 +25,12 @@ public class FiBranch_ {
     @JsonProperty("id")
     private String id;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * For domestic bank transfer it is 4 digits bank branch number.
      * 
      */
-    @JsonProperty("id")
     public String getId() {
         return id;
     }
@@ -40,7 +39,6 @@ public class FiBranch_ {
      * For domestic bank transfer it is 4 digits bank branch number.
      * 
      */
-    @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
     }

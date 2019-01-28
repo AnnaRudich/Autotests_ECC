@@ -69,7 +69,7 @@ public class EventClaimUpdated {
      *
      */
     @JsonProperty("changes")
-    private List<Object> changes = null;
+    private List<Changes> changes = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -189,7 +189,7 @@ public class EventClaimUpdated {
      *
      */
     @JsonProperty("changes")
-    public List<Object> getChanges() {
+    public List<Changes> getChanges() {
         return changes;
     }
 
@@ -199,7 +199,7 @@ public class EventClaimUpdated {
      *
      */
     @JsonProperty("changes")
-    public void setChanges(List<Object> changes) {
+    public void setChanges(List<Changes> changes) {
         this.changes = changes;
     }
 

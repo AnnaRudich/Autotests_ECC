@@ -15,78 +15,39 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @JsonPropertyOrder({
     "approvedBy",
     "summary",
-    "revisionId"
+    "revisionToken"
 })
 public class Settlement {
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("approvedBy")
+    @JsonProperty(value = "approvedBy", required = true)
     private ApprovedBy approvedBy;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("summary")
-    private Summary summary;
-    @JsonProperty("revisionId")
-    private Integer revisionId;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("approvedBy")
+    @JsonProperty(value = "summary", required = true)
+    private Summary summary;
+    @JsonProperty("revisionToken")
+    private String revisionToken;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<>();
+
     public ApprovedBy getApprovedBy() {
         return approvedBy;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("approvedBy")
     public void setApprovedBy(ApprovedBy approvedBy) {
         this.approvedBy = approvedBy;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("summary")
     public Summary getSummary() {
         return summary;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("summary")
     public void setSummary(Summary summary) {
         this.summary = summary;
     }
 
-    @JsonProperty("revisionId")
-    public Integer getRevisionId() {
-        return revisionId;
-    }
+    public String getRevisionToken() { return revisionToken; }
 
-    @JsonProperty("revisionId")
-    public void setRevisionId(Integer revisionId) {
-        this.revisionId = revisionId;
-    }
+    public void setRevisionToken(String revisionToken) { this.revisionToken = revisionToken; }
 
     @Override
     public String toString() {

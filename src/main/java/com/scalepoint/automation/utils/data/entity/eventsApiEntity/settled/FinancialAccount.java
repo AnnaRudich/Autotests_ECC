@@ -1,4 +1,3 @@
-
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -14,34 +13,51 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id"
+        "id",
+        "fiBranch",
+        "paymentNote",
+        "paymentDescription"
 })
-public class FiBranch {
+public class FinancialAccount {
 
     /**
-     * For domestic bank transfer it is 4 digits bank branch number.
-     * 
+     * The identifier for the Financial Account; the Bank Account Number
+     *
      */
     @JsonProperty("id")
     private String id;
+    @JsonProperty ("fiBranch")
+    private FiBranch fiBranch;
+    @JsonProperty ("paymentNote")
+    private String paymentNote;
+    @JsonProperty ("paymentDescription")
+    private String paymentDescription;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * For domestic bank transfer it is 4 digits bank branch number.
-     * 
-     */
     public String getId() {
         return id;
     }
 
     /**
-     * For domestic bank transfer it is 4 digits bank branch number.
-     * 
+     * The identifier for the Financial Account; the Bank Account Number
+     *
      */
     public void setId(String id) {
         this.id = id;
     }
+
+    public FiBranch getFiBranch() { return fiBranch; }
+
+    public void setFiBranch(FiBranch fiBranch) { this.fiBranch = fiBranch; }
+
+    public String getPaymentNote() { return paymentNote; }
+
+    public void setPaymentNote(String paymentNote) { this.paymentNote = paymentNote; }
+
+    public String getPaymentDescription() { return paymentDescription; }
+
+    public void setPaymentDescription(String paymentDescription) { this.paymentDescription = paymentDescription; }
 
     @Override
     public String toString() {

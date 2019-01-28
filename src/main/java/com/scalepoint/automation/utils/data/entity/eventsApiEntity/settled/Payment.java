@@ -24,109 +24,51 @@ import java.util.Map;
 })
 public class Payment {
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("uuid")
+    @JsonProperty(value = "uuid", required = true)
     private String uuid;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("dueDate")
+
+    @JsonProperty(value = "dueDate", required = true)
     private String dueDate;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("total")
+
+    @JsonProperty(value = "total", required = true)
     private Double total;
     /**
      * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
-     * (Required)
      * 
      */
-    @JsonProperty("currencyCode")
+    @JsonProperty(value = "currencyCode", required = true)
     private String currencyCode;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payerParty")
+
+    @JsonProperty(value = "payerParty", required = true)
     private PayerParty payerParty;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payeeParty")
+
+    @JsonProperty(value = "payeeParty", required = true)
     private PayeeParty payeeParty;
     @JsonProperty("paymentMeans")
     private PaymentMeans paymentMeans;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("uuid")
     public String getUuid() {
         return uuid;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("uuid")
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("dueDate")
     public String getDueDate() {
         return dueDate;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("dueDate")
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("total")
     public Double getTotal() {
         return total;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("total")
     public void setTotal(Double total) {
         this.total = total;
     }
@@ -136,7 +78,6 @@ public class Payment {
      * (Required)
      * 
      */
-    @JsonProperty("currencyCode")
     public String getCurrencyCode() {
         return currencyCode;
     }
@@ -146,57 +87,30 @@ public class Payment {
      * (Required)
      * 
      */
-    @JsonProperty("currencyCode")
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payerParty")
     public PayerParty getPayerParty() {
         return payerParty;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payerParty")
     public void setPayerParty(PayerParty payerParty) {
         this.payerParty = payerParty;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payeeParty")
     public PayeeParty getPayeeParty() {
         return payeeParty;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("payeeParty")
     public void setPayeeParty(PayeeParty payeeParty) {
         this.payeeParty = payeeParty;
     }
 
-    @JsonProperty("paymentMeans")
     public PaymentMeans getPaymentMeans() {
         return paymentMeans;
     }
 
-    @JsonProperty("paymentMeans")
     public void setPaymentMeans(PaymentMeans paymentMeans) {
         this.paymentMeans = paymentMeans;
     }

@@ -89,7 +89,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         settlementClaimService
                 .close(claimRequest, CLOSE_WITH_MAIL);
 
-        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,3);
+        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,2);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)

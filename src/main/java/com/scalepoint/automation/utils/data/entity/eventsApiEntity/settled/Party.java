@@ -29,87 +29,43 @@ public class Party {
     private String $id;
     @JsonProperty("id")
     private Id id;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("name")
+
+    @JsonProperty(value = "name", required = true)
     private String name;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("address")
+
+    @JsonProperty(value = "address", required = true)
     private Address address;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * Internal object reference id.
-     * 
-     */
-    @JsonProperty("$id")
     public String get$id() {
         return $id;
     }
 
-    /**
-     * Internal object reference id.
-     * 
-     */
-    @JsonProperty("$id")
     public void set$id(String $id) {
         this.$id = $id;
     }
 
-    @JsonProperty("id")
     public Id getId() {
         return id;
     }
 
-    @JsonProperty("id")
     public void setId(Id id) {
         this.id = id;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("address")
     public Address getAddress() {
         return address;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("address")
     public void setAddress(Address address) {
         this.address = address;
     }

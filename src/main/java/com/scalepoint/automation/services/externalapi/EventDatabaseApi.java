@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.EventClaimUpdated;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class EventDatabaseApi {
         return eventClaimSettled;
     }
 
-    public EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest) {
+    private EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest) {
         boolean notFound = true;
         int i = 0;
         EventClaimUpdated eventClaimUpdated = new EventClaimUpdated();
@@ -160,7 +161,10 @@ public class EventDatabaseApi {
     }
 
     private List<EventClaimUpdated> getEventsUpdatedList(ClaimRequest claimRequest) {
-        return getEventsForClaimUpdate(claimRequest.getCompany()).stream().filter(event ->
-                event.getCase().getNumber().equals(claimRequest.getCaseNumber())).collect(Collectors.toList());
+        return getEventsForClaimUpdate(claimRequest.getCompany())
+                .stream()
+                .filter(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())
+                        && event.getChanges().stream().anyMatch(c -> c.getProperty().equals(Changes.Property.CASE_CLOSED)))
+                .collect(Collectors.toList());
     }
 }

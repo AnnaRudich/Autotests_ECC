@@ -25,13 +25,12 @@ public class PayerParty {
     @JsonProperty("$ref")
     private String $ref;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * Reference id to object. Defined in object by $id.
      * 
      */
-    @JsonProperty("$ref")
     public String get$ref() {
         return $ref;
     }
@@ -40,7 +39,6 @@ public class PayerParty {
      * Reference id to object. Defined in object by $id.
      * 
      */
-    @JsonProperty("$ref")
     public void set$ref(String $ref) {
         this.$ref = $ref;
     }
