@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class MailsPage extends BaseClaimPage {
@@ -208,6 +209,11 @@ public class MailsPage extends BaseClaimPage {
 
         public void noMailsOnThePage(){
             assertTrue(parseMails().getMails().isEmpty());
+        }
+
+        public void isMailExist(String subject, MailType mailType){
+            String latestMailSubject = getLatestMail(mailType).getSubject();
+            assertThat(latestMailSubject.equals(subject)).as("expected "+ subject + "but was: " + latestMailSubject).isTrue();
         }
     }
 }

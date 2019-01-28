@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.rnv1;
+package com.scalepoint.automation.tests.rnv;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
