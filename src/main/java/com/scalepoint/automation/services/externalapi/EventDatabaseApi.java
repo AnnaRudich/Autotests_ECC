@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_SETTLED;
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_UPDATED;
+import static com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes.Property.CASE_CLOSED;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.*;
@@ -144,7 +145,7 @@ public class EventDatabaseApi {
 
     public void assertThatCloseCaseEventWasNotCreated(ClaimRequest claimRequest) {
         assertThat(getEventsForClaimUpdate(claimRequest.getCompany())
-                .stream().anyMatch(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())))
+                .stream().anyMatch(event -> hasCaseNumber(event, claimRequest.getCaseNumber())))
                 .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was not created in event-api")
                 .isFalse();
     }
@@ -163,8 +164,16 @@ public class EventDatabaseApi {
     private List<EventClaimUpdated> getEventsUpdatedList(ClaimRequest claimRequest) {
         return getEventsForClaimUpdate(claimRequest.getCompany())
                 .stream()
-                .filter(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())
-                        && event.getChanges().stream().anyMatch(c -> c.getProperty().equals(Changes.Property.CASE_CLOSED)))
+                .filter(event -> hasCaseNumber(event, claimRequest.getCaseNumber()))
+                .filter(event -> hasProperty(event, CASE_CLOSED))
                 .collect(Collectors.toList());
+    }
+
+    private boolean hasProperty(EventClaimUpdated event, Changes.Property property) {
+        return event.getChanges().stream().anyMatch(c -> c.getProperty().equals(property));
+    }
+
+    private boolean hasCaseNumber(EventClaimUpdated event, String caseNumber) {
+        return event.getCase().getNumber().equals(caseNumber);
     }
 }
