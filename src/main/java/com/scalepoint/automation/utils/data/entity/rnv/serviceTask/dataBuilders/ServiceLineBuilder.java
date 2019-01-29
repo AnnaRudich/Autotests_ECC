@@ -17,14 +17,14 @@ public class ServiceLineBuilder {
     public static ServiceLineImport serviceLineImport;
 
     public static List<ServiceLineImport> convertServiceLines(List<ServiceLineExport> serviceLinesExport){
-       return test(serviceLinesExport, ServiceLineBuilder::setDefault);
+       return convert(serviceLinesExport, ServiceLineBuilder::setDefault);
     }
 
     public static List<ServiceLineImport> convertServiceLinesWithRepairPrice(BigDecimal repairPrice, List<ServiceLineExport> serviceLinesExport){
-        return test(serviceLinesExport,(serviceLineExport) -> withRepairPrice(repairPrice, serviceLineExport));
+        return convert(serviceLinesExport,(serviceLineExport) -> withRepairPrice(repairPrice, serviceLineExport));
     }
 
-    public static List test(List<ServiceLineExport> serviceLinesExport, Function<ServiceLineExport, ServiceLineImport> function) {
+    public static List convert(List<ServiceLineExport> serviceLinesExport, Function<ServiceLineExport, ServiceLineImport> function) {
         List<ServiceLineImport> importLines = new ArrayList<ServiceLineImport>();
         importLines.addAll(serviceLinesExport.stream().map(function).collect(Collectors.toList()));
         return importLines;

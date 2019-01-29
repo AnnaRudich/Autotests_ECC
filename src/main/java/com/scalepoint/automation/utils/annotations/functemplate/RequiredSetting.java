@@ -16,7 +16,7 @@ public @interface RequiredSetting {
     boolean enabled() default true;
 
     /**
-     * this filed is used to mark FT settings which are expected to be set by default and not to be set by test
+     * this filed is used to mark FT settings which are expected to be set by default and not to be set by convert
      */
     boolean isDefault() default false;
 }

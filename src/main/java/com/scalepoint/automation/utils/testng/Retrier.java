@@ -32,9 +32,9 @@ public class Retrier implements IRetryAnalyzer {
     }
 
     /**
-     * Retries the test if count is not 0.
+     * Retries the convert if count is not 0.
      *
-     * @param result The result of the test.
+     * @param result The result of the convert.
      */
     @Override
     public boolean retry(ITestResult result) {
@@ -44,11 +44,11 @@ public class Retrier implements IRetryAnalyzer {
     }
 
     /**
-     * The method implemented by the class that test if the test
+     * The method implemented by the class that convert if the convert
      * must be retried or not.
      *
-     * @param result The result of the test.
-     * @return true if the test must be retried, false otherwise.
+     * @param result The result of the convert.
+     * @return true if the convert must be retried, false otherwise.
      */
     private boolean retryMethod(ITestResult result) {
         return true;
