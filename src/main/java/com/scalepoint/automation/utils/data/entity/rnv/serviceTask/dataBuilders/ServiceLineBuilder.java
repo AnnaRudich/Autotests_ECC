@@ -6,6 +6,7 @@ import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceLineIm
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ConvertItem.convertItem;
@@ -16,19 +17,17 @@ public class ServiceLineBuilder {
     public static ServiceLineImport serviceLineImport;
 
     public static List<ServiceLineImport> convertServiceLines(List<ServiceLineExport> serviceLinesExport){
-        List<ServiceLineImport> serviceLinesImport = new ArrayList<>();
-
-        serviceLinesImport.addAll(serviceLinesExport.stream().map(ServiceLineBuilder::setDefault).collect(Collectors.toList()));
-
-       return serviceLinesImport;
+       return test(serviceLinesExport, ServiceLineBuilder::setDefault);
     }
 
     public static List<ServiceLineImport> convertServiceLinesWithRepairPrice(BigDecimal repairPrice, List<ServiceLineExport> serviceLinesExport){
-        List<ServiceLineImport> serviceLinesImport = new ArrayList<>();
+        return test(serviceLinesExport,(serviceLineExport) -> withRepairPrice(repairPrice, serviceLineExport));
+    }
 
-        serviceLinesImport.addAll(serviceLinesExport.stream().map((serviceLineExport) -> withRepairPrice(repairPrice, serviceLineExport)).collect(Collectors.toList()));
-
-        return serviceLinesImport;
+    public static List test(List<ServiceLineExport> serviceLinesExport, Function<ServiceLineExport, ServiceLineImport> function) {
+        List<ServiceLineImport> importLines = new ArrayList<ServiceLineImport>();
+        importLines.addAll(serviceLinesExport.stream().map(function).collect(Collectors.toList()));
+        return importLines;
     }
 
     public static ServiceLineImport setDefault(ServiceLineExport serviceLineExport){
