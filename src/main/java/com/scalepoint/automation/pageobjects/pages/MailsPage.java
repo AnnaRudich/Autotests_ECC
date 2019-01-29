@@ -211,9 +211,9 @@ public class MailsPage extends BaseClaimPage {
             assertTrue(parseMails().getMails().isEmpty());
         }
 
-        public void isMailExist(String subject, MailType mailType){
+        public void isMailExist(MailType mailType, String subject){
             String latestMailSubject = getLatestMail(mailType).getSubject();
-            assertThat(latestMailSubject.equals(subject)).as("expected "+ subject + "but was: " + latestMailSubject).isTrue();
+            assertThat(latestMailSubject.equals(subject)).as("expected mail subject: "+ subject + "but was: " + latestMailSubject).isTrue();
         }
     }
 }

@@ -10,13 +10,11 @@ import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.RnvTaskType;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -29,7 +27,6 @@ import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.A
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
 public class IntelligentRepair2 extends BaseTest {
 
-@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
     public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -57,12 +54,9 @@ public class IntelligentRepair2 extends BaseTest {
 
         Page.to(SettlementPage.class)
             .toMailsPage()
-            .doAssert(mail ->  mail.isMailExist("Faktura godkendt", REPAIR_AND_VALUATION));
-
-    //Faktura godkendt mail
+            .doAssert(mail ->  mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt"));
     }
 
-//IC setting Notify claim handler if response from Audit is Manual Or Reject:
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -89,7 +83,6 @@ public class IntelligentRepair2 extends BaseTest {
                 .getAssertion().assertAuditResponseText(REJECT);
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
