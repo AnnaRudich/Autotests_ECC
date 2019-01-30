@@ -44,7 +44,6 @@ public class EventDatabaseApi {
         while(i<5 && notFound){
             try {
                 i++;
-                logger.info("Get EventClaimSettled");
                 eventClaimSettled = getEventsForClaimSettled(claimRequest.getCompany(), claimRequest.getCaseNumber()).stream()
                         .findFirst().orElseThrow(NoSuchElementException::new);
                 notFound = false;
@@ -62,7 +61,6 @@ public class EventDatabaseApi {
         while(i<5 && notFound){
             try {
                 i++;
-                logger.info("Get EventClaimUpdated");
                 eventClaimUpdated = getEventsForClaimUpdate(claimRequest.getCompany(), claimRequest.getCaseNumber()).stream()
                         .findFirst().orElseThrow(NoSuchElementException::new);
                 notFound = false;
