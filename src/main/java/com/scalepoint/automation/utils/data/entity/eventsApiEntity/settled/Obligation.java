@@ -43,10 +43,10 @@ public class Obligation {
     private String currencyCode;
 
     @JsonProperty(value = "payerParty", required = true)
-    private PayerParty payerParty;
+    private PartyRef payerParty;
 
     @JsonProperty(value = "payeeParty", required = true)
-    private PayeeParty payeeParty;
+    private PartyRef payeeParty;
     @JsonProperty("expense")
     private Expense expense;
 
@@ -69,13 +69,13 @@ public class Obligation {
 
     public void setCurrencyCode(String currencyCode) { this.currencyCode = currencyCode; }
 
-    public PayerParty getPayerParty() { return payerParty; }
+    public PartyRef getPayerParty() { return payerParty; }
 
-    public void setPayerParty(PayerParty payerParty) { this.payerParty = payerParty; }
+    public void setPayerParty(PartyRef payerParty) { this.payerParty = payerParty; }
 
-    public PayeeParty getPayeeParty() { return payeeParty; }
+    public PartyRef getPayeeParty() { return payeeParty; }
 
-    public void setPayeeParty(PayeeParty payeeParty) { this.payeeParty = payeeParty; }
+    public void setPayeeParty(PartyRef payeeParty) { this.payeeParty = payeeParty; }
 
     public Expense getExpense() { return expense; }
 

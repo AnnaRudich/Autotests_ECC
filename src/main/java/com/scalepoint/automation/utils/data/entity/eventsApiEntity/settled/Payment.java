@@ -40,10 +40,10 @@ public class Payment {
     private String currencyCode;
 
     @JsonProperty(value = "payerParty", required = true)
-    private PayerParty payerParty;
+    private PartyRef payerParty;
 
     @JsonProperty(value = "payeeParty", required = true)
-    private PayeeParty payeeParty;
+    private PartyRef payeeParty;
     @JsonProperty("paymentMeans")
     private PaymentMeans paymentMeans;
     @JsonIgnore
@@ -91,19 +91,19 @@ public class Payment {
         this.currencyCode = currencyCode;
     }
 
-    public PayerParty getPayerParty() {
+    public PartyRef getPayerParty() {
         return payerParty;
     }
 
-    public void setPayerParty(PayerParty payerParty) {
+    public void setPayerParty(PartyRef payerParty) {
         this.payerParty = payerParty;
     }
 
-    public PayeeParty getPayeeParty() {
+    public PartyRef getPayeeParty() {
         return payeeParty;
     }
 
-    public void setPayeeParty(PayeeParty payeeParty) {
+    public void setPayeeParty(PartyRef payeeParty) {
         this.payeeParty = payeeParty;
     }
 

@@ -32,9 +32,9 @@ public class PaymentMeans {
     @JsonProperty("paymentChannelCode")
     private PaymentMeans.PaymentChannelCode paymentChannelCode;
     @JsonProperty("payerFinancialAccount")
-    private PayerFinancialAccount payerFinancialAccount;
+    private FinancialAccount payerFinancialAccount;
     @JsonProperty("payeeFinancialAccount")
-    private PayeeFinancialAccount payeeFinancialAccount;
+    private FinancialAccount payeeFinancialAccount;
     /**
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
      * 
@@ -49,8 +49,6 @@ public class PaymentMeans {
     private String instructionId;
     @JsonProperty("creditAccount")
     private CreditAccount creditAccount;
-    @JsonProperty ("financialAccount")
-    private FinancialAccount financialAccount;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -66,17 +64,17 @@ public class PaymentMeans {
 
     public void setPaymentChannelCode(PaymentMeans.PaymentChannelCode paymentChannelCode) { this.paymentChannelCode = paymentChannelCode; }
 
-    public PayerFinancialAccount getPayerFinancialAccount() {
+    public FinancialAccount getPayerFinancialAccount() {
         return payerFinancialAccount;
     }
 
-    public void setPayerFinancialAccount(PayerFinancialAccount payerFinancialAccount) { this.payerFinancialAccount = payerFinancialAccount; }
+    public void setPayerFinancialAccount(FinancialAccount payerFinancialAccount) { this.payerFinancialAccount = payerFinancialAccount; }
 
-    public PayeeFinancialAccount getPayeeFinancialAccount() {
+    public FinancialAccount getPayeeFinancialAccount() {
         return payeeFinancialAccount;
     }
 
-    public void setPayeeFinancialAccount(PayeeFinancialAccount payeeFinancialAccount) { this.payeeFinancialAccount = payeeFinancialAccount; }
+    public void setPayeeFinancialAccount(FinancialAccount payeeFinancialAccount) { this.payeeFinancialAccount = payeeFinancialAccount; }
 
     /**
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
@@ -116,14 +114,6 @@ public class PaymentMeans {
 
     public void setCreditAccount(CreditAccount creditAccount) {
         this.creditAccount = creditAccount;
-    }
-
-    public FinancialAccount getFinancialAccount() {
-        return financialAccount;
-    }
-
-    public void setFinancialAccount(FinancialAccount financialAccount) {
-        this.financialAccount = financialAccount;
     }
 
     @Override

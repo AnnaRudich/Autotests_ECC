@@ -6,6 +6,8 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
+import java.util.List;
+
 import static com.scalepoint.automation.services.restService.Common.BasePath.INSERT_SETTLEMENT;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
@@ -13,38 +15,29 @@ import static io.restassured.RestAssured.given;
 /**
  * Created by bza on 6/29/2017.
  */
-public class ClaimSettlementItemService extends BaseService {
+public class ClaimSettlementItemsService extends BaseService {
 
     private Response response;
-    private InsertSettlementItem item;
 
     public Response getResponse(){
         return this.response;
     }
 
-    public InsertSettlementItem getItem() {
-        return item;
-    }
 
-    public ClaimSettlementItemService setItem(InsertSettlementItem item) {
-        this.item = item;
+    public ClaimSettlementItemsService addLines(List<InsertSettlementItem> items){
+        items.forEach(item -> addLine(item));
+
         return this;
     }
 
-    public ClaimSettlementItemService setItemCaseAndClaimNumber(){
-        this.item.setCaseId(data.getUserId().toString());
-        this.item.getSettlementItem().getClaim().setClaimToken(getClaimTokenWithoutPrefix());
-        return this;
-    }
-
-    public ClaimSettlementItemService addLines(InsertSettlementItem item){
-        this.item = item;
-        setItemCaseAndClaimNumber();
+    public ClaimSettlementItemsService addLine(InsertSettlementItem item){
+        item.setCaseId(data.getUserId().toString());
+        item.getSettlementItem().getClaim().setClaimToken(getClaimTokenWithoutPrefix());
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
-                .formParam("xml", TestData.objectAsXml(this.item))
+                .formParam("xml", TestData.objectAsXml(item))
                 .formParam("productId", -1)
                 .formParam("replacedProductId", -1)
                 .formParam("GenericItemsreturnValue", "")

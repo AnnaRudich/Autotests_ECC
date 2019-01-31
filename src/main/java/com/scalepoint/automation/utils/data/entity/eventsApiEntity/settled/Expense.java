@@ -48,10 +48,10 @@ public class Expense{
     private Boolean administrative;
 
     @JsonProperty(value = "payerParty", required = true)
-    private PayerParty payerParty;
+    private PartyRef payerParty;
 
     @JsonProperty(value = "payeeParty", required = true)
-    private PayeeParty payeeParty;
+    private PartyRef payeeParty;
 
     @JsonProperty(value = "expenseType", required = true)
     private String expenseType;
@@ -86,13 +86,13 @@ public class Expense{
 
     public void setAdministrative(Boolean administrative) { this.administrative = administrative; }
 
-    public PayerParty getPayerParty() { return payerParty; }
+    public PartyRef getPayerParty() { return payerParty; }
 
-    public void setPayerParty(PayerParty payerParty) { this.payerParty = payerParty; }
+    public void setPayerParty(PartyRef payerParty) { this.payerParty = payerParty; }
 
-    public PayeeParty getPayeeParty() { return payeeParty; }
+    public PartyRef getPayeeParty() { return payeeParty; }
 
-    public void setPayeeParty(PayeeParty payeeParty) { this.payeeParty = payeeParty; }
+    public void setPayeeParty(PartyRef payeeParty) { this.payeeParty = payeeParty; }
 
     public String getExpenseType() { return expenseType; }
 

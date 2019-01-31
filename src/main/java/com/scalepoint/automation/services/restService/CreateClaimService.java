@@ -52,8 +52,8 @@ public class CreateClaimService extends BaseService {
         return this;
     }
 
-    public ClaimSettlementItemService claimLines(){
-        return new ClaimSettlementItemService();
+    public ClaimSettlementItemsService claimLines(){
+        return new ClaimSettlementItemsService();
     }
 
 }

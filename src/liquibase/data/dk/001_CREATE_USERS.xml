@@ -75,8 +75,16 @@
             --enable eventAPI and UnifiedPayments for Topdanmark
             declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'Topdanmark')
             UPDATE [dbo].[INSCOMP]
-            SET eventAPIEnabled=1, eventsConfiguration='{"validationEngineEventsEnabled":true,"selfServiceEventsEnabled":true,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":true}'
+            SET eventAPIEnabled=11, unifiedPaymentsVersion = 3, eventsConfiguration='{"validationEngineEventsEnabled":true,"selfServiceEventsEnabled":true,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":true}'
             WHERE ICRFNBR=@topdanmark_id
+        </sql>
+
+        <sql>
+            --enable eventAPI and UnifiedPayments for Scalepoint
+            declare @sclapoint_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
+            UPDATE [dbo].[INSCOMP]
+            SET eventAPIEnabled=1, unifiedPaymentsVersion = 1, eventsConfiguration='{"validationEngineEventsEnabled":true,"selfServiceEventsEnabled":true,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":true}'
+            WHERE ICRFNBR=@sclapoint_id
         </sql>
 
         <rollback/>

@@ -8,20 +8,17 @@ import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_SETTLED;
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_UPDATED;
 import static com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes.Property.CASE_CLOSED;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.*;
 
@@ -71,7 +68,7 @@ public class EventDatabaseApi {
         return eventClaimUpdated;
     }
 
-    private List<EventClaimUpdated> getEventsForClaimUpdate(String company, String caseNumber){
+    public List<EventClaimUpdated> getEventsForClaimUpdate(String company, String caseNumber){
         return getEventsForType(CLAIM_UPDATED, company, caseNumber);
     }
 
@@ -79,34 +76,27 @@ public class EventDatabaseApi {
         return getEventsForType(CLAIM_SETTLED, company, caseNumber);
     }
 
-    private List getEventsForType(EventType type, String company, String caseNumber){
+    public List<String> getEventPayloadsForType(EventType type, String company, String caseNumber){
         logger.info("Looking for events with type: " + type.getType());
         String query = "select Payload from dk_outbound_queue_%s where Type = ? and JSON_VALUE(Payload, '$.case.number')= ? order by id desc";
-        return this.jdbcTemplate.query(
-                String.format(query, company),
-                new EventsMapper(type),
-                type.getType(),
-                caseNumber
-        );
+        return jdbcTemplate.queryForList(String.format(query, company), String.class, type.getType(), caseNumber);
     }
 
-    private static final class EventsMapper<T> implements RowMapper<T> {
-
-        private EventType eventType;
-
-        EventsMapper(EventType eventType){
-            this.eventType = eventType;
-        }
-
-        public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public List getEventsForType(EventType type, List<String> payloadList) {
+        return payloadList.stream().map(json ->  {
             try {
-                final String payload = rs.getString("Payload");
-                logger.info("PayLoad: {}", payload);
-                return new ObjectMapper().readValue(payload, (Class<T>) eventType.getClazz());
+                logger.info("PayLoad: {}", json);
+                return new ObjectMapper().readValue(json,  type.getClazz());
             } catch (IOException e) {
                 throw new InvalidParameterException("Not valid object");
             }
-        }
+        }).collect(toList());
+    }
+
+    private List getEventsForType(EventType type, String company, String caseNumber) {
+        List<String> payloadList = getEventPayloadsForType(type, company, caseNumber);
+
+        return getEventsForType(type, payloadList);
     }
 
     public enum EventType {
@@ -166,7 +156,7 @@ public class EventDatabaseApi {
         return getEventsForClaimUpdate(claimRequest.getCompany(), claimRequest.getCaseNumber())
                 .stream()
                 .filter(event -> hasProperty(event, CASE_CLOSED))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private boolean hasProperty(EventClaimUpdated event, Changes.Property property) {

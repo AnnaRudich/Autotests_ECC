@@ -16,7 +16,7 @@ import java.util.Map;
 @JsonPropertyOrder({
     "$ref"
 })
-public class PayeeParty {
+public class PartyRef {
 
     /**
      * Reference id to object. Defined in object by $id.
