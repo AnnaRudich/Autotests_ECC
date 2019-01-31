@@ -42,11 +42,7 @@ public class BaseService {
         data.setUserId(data.getDatabaseApi().getUserIdByClaimToken(getClaimTokenWithoutPrefix()));
     }
 
-    public static ClaimSettlementItemsService loginAndOpenClaimWithItem(User user, ClaimRequest claimRequest, InsertSettlementItem item){
-        return loginAndOpenClaimWithItems(user, claimRequest, asList(item));
-    }
-
-    public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, List<InsertSettlementItem> items){
+    public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items){
         return new LoginProcessService()
                 .login(user)
                 .createClaim(new OauthTestAccountsApi().sendRequest().getToken())

@@ -15,7 +15,7 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItem;
+import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginUser;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
@@ -140,7 +140,7 @@ public class SendingToEventApiTests extends BaseApiTest {
 
     private SettlementClaimService createClaimWithItem(User user, InsertSettlementItem item){
         settlementClaimService =
-                loginAndOpenClaimWithItem(user, claimRequest, item).closeCase();
+                loginAndOpenClaimWithItems(user, claimRequest, item).closeCase();
         eccSettlementSummaryService = new EccSettlementSummaryService()
                 .getSummaryTotals();
         return settlementClaimService;

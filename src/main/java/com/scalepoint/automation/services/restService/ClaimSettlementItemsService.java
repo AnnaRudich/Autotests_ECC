@@ -24,9 +24,10 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
-    public ClaimSettlementItemsService addLines(List<InsertSettlementItem> items){
-        items.forEach(item -> addLine(item));
-
+    public ClaimSettlementItemsService addLines(InsertSettlementItem... items){
+        for (InsertSettlementItem item : items) {
+            addLine(item);
+        }
         return this;
     }
 

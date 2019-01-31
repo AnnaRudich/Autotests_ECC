@@ -11,7 +11,7 @@ import org.apache.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
-import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItem;
+import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -24,7 +24,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForClosedExternalClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
-        loginAndOpenClaimWithItem(user, claimRequest, item)
+        loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, CLOSE_EXTERNAL);
 
@@ -39,7 +39,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForClosedWithMailClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
-        loginAndOpenClaimWithItem(user, claimRequest, item)
+        loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL);
 
@@ -54,7 +54,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForClosedWithoutMailClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
-        loginAndOpenClaimWithItem(user, claimRequest, item)
+        loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL);
 
@@ -70,7 +70,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
     //TODO: fix
     @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForReplacement(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
-        loginAndOpenClaimWithItem(user, claimRequest, item)
+        loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, REPLACEMENT);
 
@@ -94,7 +94,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionForInvalidTenantShouldReturn400(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
-        loginAndOpenClaimWithItem(user, claimRequest, item)
+        loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, CLOSE_EXTERNAL);
 
@@ -106,7 +106,7 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForCanceledClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
-        loginAndOpenClaimWithItem(user, claimRequest, item)
+        loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL)
                 .cancel(claimRequest);
