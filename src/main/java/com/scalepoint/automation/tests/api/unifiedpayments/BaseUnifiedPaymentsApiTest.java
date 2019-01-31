@@ -25,6 +25,23 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     EccSettlementSummaryService eccSettlementSummaryService;
 
 
+
+    enum PartyReference {
+        SCALEPOINT(0),
+        INSURANCE_COMPANY(1),
+        CLAIMANT(2),
+        SERVICE_PARTNER(3);
+
+        private int value;
+        PartyReference(int s) {
+            value = s;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
+
+
     enum ExpenseType {
         INVOICE("invoice"),
         CREDIT_NOTE("creditNote"),
@@ -91,28 +108,28 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
 
 
-    void assertObligation(Obligation actualObligation, ObligationType expectedObligationType, double expectedTotal, int expectedPayerParty, int expectedPayeeParty){
+    void assertObligation(Obligation actualObligation, ObligationType expectedObligationType, double expectedTotal, PartyReference expectedPayerParty, PartyReference expectedPayeeParty){
         assertEquals(actualObligation.getObligationType(), expectedObligationType.getValue());
         assertEquals(actualObligation.getTotal(), expectedTotal);
         assertPartyRef(actualObligation.getPayerParty(), expectedPayerParty);
         assertPartyRef(actualObligation.getPayeeParty(), expectedPayeeParty);
     }
 
-    void assertExpense(Expense actualExpense, ExpenseType expectedExpenseType, double expectedTotal, int expectedPayerParty, int expectedPayeeParty){
+    void assertExpense(Expense actualExpense, ExpenseType expectedExpenseType, double expectedTotal, PartyReference expectedPayerParty, PartyReference expectedPayeeParty){
         assertEquals(actualExpense.getExpenseType(), expectedExpenseType.getValue());
         assertEquals(actualExpense.getTotal(), expectedTotal);
         assertPartyRef(actualExpense.getPayerParty(), expectedPayerParty);
         assertPartyRef(actualExpense.getPayeeParty(), expectedPayeeParty);
     }
 
-    void assertPayment(Payment actualPayment, double expectedTotal, int expectedPayerParty, int expectedPayeeParty){
+    void assertPayment(Payment actualPayment, double expectedTotal, PartyReference expectedPayerParty, PartyReference expectedPayeeParty){
         assertEquals(actualPayment.getTotal(), expectedTotal);
         assertPartyRef(actualPayment.getPayerParty(), expectedPayerParty);
         assertPartyRef(actualPayment.getPayeeParty(), expectedPayeeParty);
     }
 
-    void assertPartyRef(PartyRef partyRef, int partyNum){
-        assertEquals(partyRef.get$ref(), "/parties/" + partyNum);
+    void assertPartyRef(PartyRef partyRef, PartyReference partyNum){
+        assertEquals(partyRef.get$ref(), "/parties/" + partyNum.getValue());
     }
 
 }
