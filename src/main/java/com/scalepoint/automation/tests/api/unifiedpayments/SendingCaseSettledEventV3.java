@@ -52,6 +52,7 @@ public class SendingCaseSettledEventV3 extends BaseUnifiedPaymentsApiTest {
 
 
         //THEN
+        assertEquals(jsons.size(), 1);
         assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(jsons.get(0)));
 
         EventClaimSettled event = (EventClaimSettled)eventDatabaseApi.getEventsForType(CLAIM_SETTLED, jsons).get(0);
