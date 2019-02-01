@@ -1,21 +1,14 @@
 package com.scalepoint.automation.tests.api.unifiedpayments;
 
-import com.scalepoint.automation.services.restService.EccSettlementSummaryService;
-import com.scalepoint.automation.services.restService.ManualReductionService;
-import com.scalepoint.automation.services.restService.OwnRiskService;
-import com.scalepoint.automation.services.restService.SettlementClaimService;
+import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Expense;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Obligation;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.PartyRef;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Payment;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.*;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.Valuation;
 
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
-import static java.util.Arrays.asList;
 import static org.testng.Assert.assertEquals;
 
 public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
@@ -23,6 +16,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     ClaimRequest claimRequest;
     SettlementClaimService settlementClaimService;
     EccSettlementSummaryService eccSettlementSummaryService;
+    ClaimSettlementItemsService claimSettlementItemsService;
 
 
 
@@ -89,6 +83,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
                 loginAndOpenClaimWithItems(user, claimRequest, items).closeCase();
         eccSettlementSummaryService = new EccSettlementSummaryService()
                 .getSummaryTotals();
+        claimSettlementItemsService = new ClaimSettlementItemsService();
         return settlementClaimService;
     }
 
@@ -106,7 +101,13 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         }
     }
 
-
+    void assertSummary(EventClaimSettled event, double expectedDeductible, double expectedShareOfVat, double expectedDepreciation, double expectedManualReduction) {
+        final Summary summary = event.getSettlement().getSummary();
+        assertEquals(summary.getDeductible(), expectedDeductible);
+        assertEquals(summary.getShareOfVat(), expectedShareOfVat);
+        assertEquals(summary.getDepreciation(), expectedDepreciation);
+        assertEquals(summary.getManualReduction(), expectedManualReduction);
+    }
 
     void assertObligation(Obligation actualObligation, ObligationType expectedObligationType, double expectedTotal, PartyReference expectedPayerParty, PartyReference expectedPayeeParty){
         assertEquals(actualObligation.getObligationType(), expectedObligationType.getValue());

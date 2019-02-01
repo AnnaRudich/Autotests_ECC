@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.Map;
     "payments",
     "obligations"
 })
-public class EventClaimSettled {
+public class EventClaimSettled extends EventClaim {
 
     @JsonProperty(value = "eventType", required = true)
     private String eventType;

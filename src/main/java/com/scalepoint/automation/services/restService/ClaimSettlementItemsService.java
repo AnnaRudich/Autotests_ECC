@@ -3,12 +3,15 @@ package com.scalepoint.automation.services.restService;
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import com.scalepoint.automation.utils.data.request.Valuation;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
-import java.util.List;
+import java.util.Arrays;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.INSERT_SETTLEMENT;
+import static com.scalepoint.automation.services.restService.Common.BasePath.INSERT_SETTLEMENT_ITEM;
+import static com.scalepoint.automation.services.restService.Common.BasePath.REMOVE_SETTLEMENT_ITEM;
+import static com.scalepoint.automation.services.restService.Common.BasePath.UPDATE_SETTLEMENT_ITEM;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
@@ -25,11 +28,15 @@ public class ClaimSettlementItemsService extends BaseService {
 
 
     public ClaimSettlementItemsService addLines(InsertSettlementItem... items){
-        for (InsertSettlementItem item : items) {
-            addLine(item);
-        }
+        Arrays.stream(items).forEach(i -> addLine(i));
         return this;
     }
+
+    public ClaimSettlementItemsService removeLines(InsertSettlementItem... items){
+        Arrays.stream(items).filter(i -> i.eccItemId != null).forEach(i -> removeLine(i.eccItemId));
+        return this;
+    }
+
 
     public ClaimSettlementItemsService addLine(InsertSettlementItem item){
         item.setCaseId(data.getUserId().toString());
@@ -44,8 +51,23 @@ public class ClaimSettlementItemsService extends BaseService {
                 .formParam("GenericItemsreturnValue", "")
                 .formParam("fromNewSid", true)
                 .when()
-                .post(INSERT_SETTLEMENT)
+                .post(INSERT_SETTLEMENT_ITEM)
                 .then().log().all().statusCode(HttpStatus.SC_OK).extract().response();
+        item.eccItemId = response.jsonPath().get("itemId");
+        return this;
+    }
+
+
+    public ClaimSettlementItemsService removeLine(Integer id){
+
+        this.response = given().baseUri(getEccUrl()).log().all()
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .contentType("application/json")
+                .body("{\"selectedGroups\":[], \"selectedLines\":[\"" + id + "\"]}")
+                .post(REMOVE_SETTLEMENT_ITEM)
+                .then().statusCode(HttpStatus.SC_OK).extract().response();
+
         return this;
     }
 
