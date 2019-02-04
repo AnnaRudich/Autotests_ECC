@@ -122,17 +122,4 @@ public class AddShopDialog extends BaseDialog {
         eVoucherNotificationEmails.sendKeys(shop.geteVoucherEmail());
     }
 
-    public AddShopDialog doAssert(Consumer<Asserts> assertFunc) {
-        assertFunc.accept(new Asserts());
-        return AddShopDialog.this;
-    }
-
-    public class Asserts {
-
-        public Asserts assertIsShopDialogNotEditable() {
-            Assert.assertTrue(Wait.invisibleOfElement(By.id("editSupplierShopTabFormId")));
-            return this;
-        }
-    }
-
 }
