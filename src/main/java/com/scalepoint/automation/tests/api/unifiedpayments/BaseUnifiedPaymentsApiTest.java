@@ -8,8 +8,11 @@ import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.Valuation;
 
+import java.util.List;
+
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
@@ -116,6 +119,15 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         assertPartyRef(actualObligation.getPayeeParty(), expectedPayeeParty);
     }
 
+    void assertObligation(List<Obligation> obligations, ObligationType expectedObligationType, double expectedTotal, PartyReference expectedPayerParty, PartyReference expectedPayeeParty){
+        assertTrue(obligations.stream().anyMatch(o ->
+                o.getObligationType().equals(expectedObligationType.getValue())
+                        && o.getTotal().equals(expectedTotal)
+                        && isEqual(o.getPayeeParty(), expectedPayeeParty)
+                        && isEqual(o.getPayerParty(), expectedPayerParty)
+        ));
+    }
+
     void assertExpense(Expense actualExpense, ExpenseType expectedExpenseType, double expectedTotal, PartyReference expectedPayerParty, PartyReference expectedPayeeParty){
         assertEquals(actualExpense.getExpenseType(), expectedExpenseType.getValue());
         assertEquals(actualExpense.getTotal(), expectedTotal);
@@ -131,6 +143,10 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
     void assertPartyRef(PartyRef partyRef, PartyReference partyNum){
         assertEquals(partyRef.get$ref(), "/parties/" + partyNum.getValue());
+    }
+
+    private boolean isEqual(PartyRef partyRef, PartyReference partyNum){
+        return partyRef.get$ref().equals("/parties/" + partyNum.getValue());
     }
 
 }

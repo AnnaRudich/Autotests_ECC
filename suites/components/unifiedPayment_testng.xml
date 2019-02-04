@@ -4,6 +4,7 @@
        <classes>
            <class name="com.scalepoint.automation.tests.api.CaseSettlementDataApiTests"/>
            <class name="com.scalepoint.automation.tests.api.SendingToEventApiTests"/>
+           <class name="com.scalepoint.automation.tests.api.unifiedpayments.SendingCaseSettledEventV3Case1"/>
        </classes>
     </test>
 </suite>
