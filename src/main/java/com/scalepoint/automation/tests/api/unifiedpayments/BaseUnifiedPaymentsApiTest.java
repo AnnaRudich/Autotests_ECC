@@ -101,16 +101,24 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         return eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
     }
 
+    EventClaimSettled getThirdEventClaimSettled() {
+        return eventDatabaseApi.getEventClaimSettled(claimRequest, 2);
+    }
+
     SettlementClaimService close(SettlementClaimService.CloseCaseReason closeCaseReason) {
         return settlementClaimService.close(claimRequest, closeCaseReason);
+    }
+
+    void assertThatCloseCaseEventWasCreated() {
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
     }
 
     void assertThatSecondCloseCaseEventWasCreated() {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
     }
 
-    void assertThatCloseCaseEventWasCreated() {
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+    void assertThatThirdCloseCaseEventWasCreated() {
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 2);
     }
 
     SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items){
