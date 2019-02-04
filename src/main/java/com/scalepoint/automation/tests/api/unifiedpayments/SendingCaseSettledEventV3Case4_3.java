@@ -11,30 +11,27 @@ import static com.scalepoint.automation.services.restService.SettlementClaimServ
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ExpenseType.CASH_COMPENSATION;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ObligationType.*;
-import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ObligationType.COMPENSATION;
-import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.CLAIMANT;
-import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.INSURANCE_COMPANY;
-import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
+import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPaymentsAssertUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.testng.Assert.assertTrue;
 
-public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3Case4 {
+public class SendingCaseSettledEventV3Case4_3 extends SendingCaseSettledEventV3Case4 {
 
 
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeWithMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
-        close(user, item1, item2, item3, CLOSE_WITH_MAIL);
+    public void closeWithMail(User user, InsertSettlementItem item1, InsertSettlementItem item2) {
+        close(user, item1, item2, CLOSE_WITH_MAIL);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeWithoutMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
-        close(user, item1, item2, item3, CLOSE_WITHOUT_MAIL);
+    public void closeWithoutMail(User user, InsertSettlementItem item1, InsertSettlementItem item2) {
+        close(user, item1, item2, CLOSE_WITHOUT_MAIL);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    private void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
+    private void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2) {
         //GIVEN
         /*
             1st item with price 3000 and depreciation  600    (20%)
@@ -54,21 +51,21 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 5000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 5000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {3400.0,INSURANCE_COMPANY, CLAIMANT}
+                        {3400.0,INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 600.0, CLAIMANT, CLAIMANT},
-                    {DEDUCTIBLE, 1000.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 3400.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 600.0, CLAIMANT, CLAIMANT},
+                        {DEDUCTIBLE, 1000.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 3400.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -77,9 +74,10 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //WHEN
         reopenClaim();
 
-        setPrice(item3, 1000, 20);
+        setPrice(item1, 3000, 55);
+        setPrice(item2, 1000, 20);
         claimSettlementItemsService
-                .addLines(item3);
+                .editLines(item1, item2);
 
         closeExternally();
         event = getSecondEventClaimSettled();
@@ -88,24 +86,24 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 200.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 1250.0, 0.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {ExpenseType.CREDIT_NOTE, 1000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {800.0, INSURANCE_COMPANY, CLAIMANT}
+                        {2250.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 800.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 1250.0, CLAIMANT, INSURANCE_COMPANY},
+                        {COMPENSATION, 1000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
@@ -115,7 +113,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
 
 
-    private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
+    private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
         /*
             1st item with price 3000 and depreciation  600    (20%)
@@ -159,9 +157,10 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //WHEN
         reopenClaim();
 
-        setPrice(item3, 1000, 20);
+        setPrice(item1, 3000, 55);
+        setPrice(item2, 1000, 20);
         claimSettlementItemsService
-                .addLines(item3);
+                .editLines(item1, item2);
 
         close(closeCaseReason);
         event = getSecondEventClaimSettled();
@@ -170,25 +169,26 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 200.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 1250.0, 0.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                    {ExpenseType.CREDIT_NOTE, 1000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {800.0, INSURANCE_COMPANY, SCALEPOINT}
+                    {2250.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 800.0, SCALEPOINT, CLAIMANT},
-                    {COMPENSATION, 800.0, INSURANCE_COMPANY, SCALEPOINT}
+                    {DEPRECIATION, 1250.0, CLAIMANT, SCALEPOINT},
+                    {DEPRECIATION, 1250.0, SCALEPOINT, INSURANCE_COMPANY},
+                    {COMPENSATION, 1000.0, CLAIMANT, SCALEPOINT},
+                    {COMPENSATION, 1000.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 

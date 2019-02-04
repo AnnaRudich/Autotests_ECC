@@ -72,7 +72,7 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
                 }
         );
 
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        assertThatCloseCaseEventWasCreated();
 
         //WHEN
         reopenClaim();
@@ -156,7 +156,7 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
                 }
         );
 
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        assertThatCloseCaseEventWasCreated();
 
         //WHEN
         reopenClaim();
