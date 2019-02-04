@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.api.unifiedpayments;
 
-import com.scalepoint.automation.services.restService.ReopenClaimService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.TestData;
@@ -11,7 +10,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ExpenseType.CASH_COMPENSATION;
@@ -20,8 +18,6 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPay
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.INSURANCE_COMPANY;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
 import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPaymentsAssertUtils.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.testng.Assert.assertTrue;
 
 
 public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
@@ -69,76 +65,75 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
         //item4 with price=500  and depreciation=100    (20%)
 
 
-        //WHEN
-        settlementClaimService.close(claimRequest, CLOSE_EXTERNAL);
+        //WHEN----------------------------------------------------------------------------------------------------------
+        closeExternally();
         EventClaimSettled event = eventDatabaseApi.getEventClaimSettled(claimRequest);
 
 
         //THEN
-        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+        validateAgainstSchema(event);
 
         assertSummary(event, 250.0, 0.0, 700.0, 50.0);
 
-        assertObligations(event.getObligations(), new Object[][]
-                {
-                        {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
-                        {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
-                        {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
-                        {COMPENSATION, 1100.0, INSURANCE_COMPANY, CLAIMANT}
-                }
-        );
-
-
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                        {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
+                    {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {1100.0,INSURANCE_COMPANY, CLAIMANT}
+                    {1100.0,INSURANCE_COMPANY, CLAIMANT}
+                }
+        );
+
+        assertObligations(event.getObligations(), new Object[][]
+                {
+                    {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
+                    {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
+                    {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
+                    {COMPENSATION, 1100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
 
-        //WHEN
-        new ReopenClaimService().reopenClaim();
+        //WHEN----------------------------------------------------------------------------------------------------------
+        reopenClaim();
 
         setPrice(item1, 100, 0);
         claimSettlementItemsService
                 .removeLines(item1, item2, item3, item4)
                 .addLines(item1);
 
-        settlementClaimService.close(claimRequest, CLOSE_EXTERNAL);
+        closeExternally();
         event = eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
 
 
         //THEN
-        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+        validateAgainstSchema(event);
 
         assertSummary(event, -150.0, 0.0, -700.0, -50.0);
 
-        assertObligations(event.getObligations(), new Object[][]
-                {
-                        {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                        {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                        {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                        {COMPENSATION, 1100.0, CLAIMANT, INSURANCE_COMPANY}
-                }
-        );
-
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                        {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
+                    {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {1100.0, CLAIMANT, INSURANCE_COMPANY}
+                    {1100.0, CLAIMANT, INSURANCE_COMPANY}
+                }
+        );
+
+        assertObligations(event.getObligations(), new Object[][]
+                {
+                    {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                    {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                    {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                    {COMPENSATION, 1100.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
@@ -154,42 +149,43 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
         //item4 with price=500  and depreciation=100    (20%)
 
 
-        //WHEN
+        //WHEN----------------------------------------------------------------------------------------------------------
         settlementClaimService.close(claimRequest, closeCaseReason);
         EventClaimSettled event = eventDatabaseApi.getEventClaimSettled(claimRequest);
 
 
         //THEN
-        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+        validateAgainstSchema(event);
 
         assertSummary(event, 250.0, 0.0, 700.0, 50.0);
 
-        assertObligations(event.getObligations(), new Object[][]
-                {
-                        {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
-                        {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
-                        {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
-                        {COMPENSATION, 1100.0, INSURANCE_COMPANY, SCALEPOINT},
-                        {COMPENSATION, 1100.0, SCALEPOINT, CLAIMANT}
-                }
-        );
-
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                        {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
+                    {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {1100.0,INSURANCE_COMPANY, SCALEPOINT}
+                    {1100.0,INSURANCE_COMPANY, SCALEPOINT}
+                }
+        );
+
+        assertObligations(event.getObligations(), new Object[][]
+                {
+                    {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
+                    {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
+                    {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
+                    {COMPENSATION, 1100.0, INSURANCE_COMPANY, SCALEPOINT},
+                    {COMPENSATION, 1100.0, SCALEPOINT, CLAIMANT}
                 }
         );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
 
-        //WHEN
-        new ReopenClaimService().reopenClaim();
+
+        //WHEN----------------------------------------------------------------------------------------------------------
+        reopenClaim();
 
         setPrice(item1, 100, 0);
         claimSettlementItemsService
@@ -201,38 +197,35 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
 
         //THEN
-        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+        validateAgainstSchema(event);
 
         assertSummary(event, -150.0, 0.0, -700.0, -50.0);
 
-
-        assertObligations(event.getObligations(), new Object[][]
-                {
-                        {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                        {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                        {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                        {COMPENSATION, 1100.0, CLAIMANT, SCALEPOINT},
-                        {COMPENSATION, 1100.0, SCALEPOINT, INSURANCE_COMPANY}
-                }
-        );
-
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                        {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
+                    {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {1100.0,SCALEPOINT, INSURANCE_COMPANY}
+                    {1100.0,SCALEPOINT, INSURANCE_COMPANY}
+                }
+        );
+
+        assertObligations(event.getObligations(), new Object[][]
+                {
+                    {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                    {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                    {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                    {COMPENSATION, 1100.0, CLAIMANT, SCALEPOINT},
+                    {COMPENSATION, 1100.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
 
     }
-
-
 
 
 

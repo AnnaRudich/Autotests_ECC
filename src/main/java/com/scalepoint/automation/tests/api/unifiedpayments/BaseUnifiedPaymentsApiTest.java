@@ -3,12 +3,16 @@ package com.scalepoint.automation.tests.api.unifiedpayments;
 import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.Valuation;
 
 
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.testng.Assert.assertTrue;
 
 
 public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
@@ -75,6 +79,18 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
         new OwnRiskService().setSelfRiskForClaim(selfRisk + "");
         new ManualReductionService().setManualReductionForClaim(manualReduction + "");
+    }
+
+    SettlementClaimService closeExternally() {
+        return settlementClaimService.close(claimRequest, CLOSE_EXTERNAL);
+    }
+
+    void validateAgainstSchema(EventClaimSettled event) {
+        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+    }
+
+    void reopenClaim() {
+        new ReopenClaimService().reopenClaim();
     }
 
 
