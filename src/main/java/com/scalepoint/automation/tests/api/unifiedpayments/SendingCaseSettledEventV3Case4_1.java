@@ -37,7 +37,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
     private void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         //GIVEN
         //1st item with price 3000 and depreciation  600    (20%)
-        //2nd item with price 2000  and depreciation  0      (0%)
+        //2nd item with price 2000 and depreciation  0      (0%)
 
 
         //WHEN
@@ -116,7 +116,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
     private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
         //1st item with price 3000 and depreciation  600    (20%)
-        //2nd item with price 2000  and depreciation  0      (0%)
+        //2nd item with price 2000 and depreciation  0      (0%)
 
 
         //WHEN
