@@ -67,11 +67,11 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         //WHEN----------------------------------------------------------------------------------------------------------
         closeExternally();
-        EventClaimSettled event = eventDatabaseApi.getEventClaimSettled(claimRequest);
+        EventClaimSettled event = getEventClaimSettled();
 
 
         //THEN
-        validateAgainstSchema(event);
+        validateJsonSchema(event);
 
         assertSummary(event, 250.0, 0.0, 700.0, 50.0);
 
@@ -97,7 +97,7 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        assertThatCloseCaseEventWasCreated();
 
         //WHEN----------------------------------------------------------------------------------------------------------
         reopenClaim();
@@ -108,11 +108,11 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 .addLines(item1);
 
         closeExternally();
-        event = eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
+        event = getSecondEventClaimSettled();
 
 
         //THEN
-        validateAgainstSchema(event);
+        validateJsonSchema(event);
 
         assertSummary(event, -150.0, 0.0, -700.0, -50.0);
 
@@ -137,9 +137,10 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
+        assertThatSecondCloseCaseEventWasCreated();
 
     }
+
 
     private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
@@ -150,12 +151,12 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
 
         //WHEN----------------------------------------------------------------------------------------------------------
-        settlementClaimService.close(claimRequest, closeCaseReason);
-        EventClaimSettled event = eventDatabaseApi.getEventClaimSettled(claimRequest);
+        close(closeCaseReason);
+        EventClaimSettled event = getEventClaimSettled();
 
 
         //THEN
-        validateAgainstSchema(event);
+        validateJsonSchema(event);
 
         assertSummary(event, 250.0, 0.0, 700.0, 50.0);
 
@@ -181,7 +182,7 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+        assertThatCloseCaseEventWasCreated();
 
 
         //WHEN----------------------------------------------------------------------------------------------------------
@@ -192,12 +193,12 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 .removeLines(item1, item2, item3, item4)
                 .addLines(item1);
 
-        settlementClaimService.close(claimRequest, closeCaseReason);
-        event = eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
+        close(closeCaseReason);
+        event = getSecondEventClaimSettled();
 
 
         //THEN
-        validateAgainstSchema(event);
+        validateJsonSchema(event);
 
         assertSummary(event, -150.0, 0.0, -700.0, -50.0);
 
@@ -223,10 +224,9 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
+        assertThatSecondCloseCaseEventWasCreated();
 
     }
-
 
 
 }

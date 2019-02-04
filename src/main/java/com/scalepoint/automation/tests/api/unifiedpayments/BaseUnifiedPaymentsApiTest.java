@@ -85,7 +85,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         return settlementClaimService.close(claimRequest, CLOSE_EXTERNAL);
     }
 
-    void validateAgainstSchema(EventClaimSettled event) {
+    void validateJsonSchema(EventClaimSettled event) {
         assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
     }
 
@@ -93,6 +93,25 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         new ReopenClaimService().reopenClaim();
     }
 
+    EventClaimSettled getEventClaimSettled() {
+        return eventDatabaseApi.getEventClaimSettled(claimRequest);
+    }
+
+    EventClaimSettled getSecondEventClaimSettled() {
+        return eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
+    }
+
+    SettlementClaimService close(SettlementClaimService.CloseCaseReason closeCaseReason) {
+        return settlementClaimService.close(claimRequest, closeCaseReason);
+    }
+
+    void assertThatSecondCloseCaseEventWasCreated() {
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
+    }
+
+    void assertThatCloseCaseEventWasCreated() {
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
+    }
 
     SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items){
         settlementClaimService =
