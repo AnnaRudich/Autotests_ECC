@@ -16,51 +16,41 @@ import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBu
 import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceLineBuilder.convertServiceLinesWithRepairPrice;
 
 public class ServiceTaskImportBuilder {
-    private ServiceTaskImport serviceTaskImport;
 
-    public ServiceTaskImportBuilder setDefault(ServiceTasksExport export, Claim claim) {
+        private ServiceTaskImport serviceTaskImport;
+        private ServiceTaskExport serviceTaskExport;
+        public Claim claim;
+        private ServiceTasksExport export;
 
-        List<ServiceTaskExport> serviceTaskList = export.getServiceTasks();
+        public ServiceTaskImportBuilder(Claim claim, ServiceTasksExport export){
+            this.claim = claim;
+            this.export = export;
+            this.serviceTaskExport = getFirstServiceTaskExportByClaimNumber();
+        }
 
-        Predicate<ServiceTaskExport> byClaimNumber = serviceTaskExport -> serviceTaskExport.getClaim().getClaimNumber().equals(claim.getClaimNumber());
-        List<ServiceTaskExport> result = serviceTaskList.stream().filter(byClaimNumber).collect(Collectors.toList());
+        private ServiceTaskExport getFirstServiceTaskExportByClaimNumber(){
+            List<ServiceTaskExport> serviceTaskList = export.getServiceTasks();
+
+            Predicate<ServiceTaskExport> byClaimNumber = serviceTaskExport -> serviceTaskExport.getClaim().getClaimNumber().equals(claim.getClaimNumber());
+            List<ServiceTaskExport> result = serviceTaskList.stream().filter(byClaimNumber).collect(Collectors.toList());
+            return result.get(0);
+        }
 
 
-        ServiceTaskExport serviceTask = result.get(0);
+        public ServiceTaskImport setDefault() {
+            serviceTaskImport = new ServiceTaskImport();
+            serviceTaskImport.setServiceLines(convertServiceLines(serviceTaskExport.getServiceLines()));
+            serviceTaskImport.setServicePartner(convertServicePartner(serviceTaskExport.getServicePartner()));
+            serviceTaskImport.setInvoice(new InvoiceBuilder().setDefault().build());
+            serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
+            serviceTaskImport.setGUID(serviceTaskExport.getGUID());
+            serviceTaskImport.setCreatedDate(serviceTaskExport.getCreatedDate());
+            return serviceTaskImport;
+        }
 
-        serviceTaskImport = new ServiceTaskImport();
-        serviceTaskImport.setServiceLines(convertServiceLines(serviceTask.getServiceLines()));
-        serviceTaskImport.setServicePartner(convertServicePartner(serviceTask.getServicePartner()));
-        serviceTaskImport.setInvoice(new InvoiceBuilder().setDefault().build());
-        serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
-        serviceTaskImport.setGUID(serviceTask.getGUID());
-        serviceTaskImport.setCreatedDate(serviceTask.getCreatedDate());
-        return this;
+        public ServiceTaskImport withRepairPrice(BigDecimal repairPrice){
+            setDefault().setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, serviceTaskExport.getServiceLines()));
+            return serviceTaskImport;
+        }
     }
 
-    public ServiceTaskImportBuilder withRepairPrice(BigDecimal repairPrice, ServiceTasksExport export, Claim claim) {
-
-        List<ServiceTaskExport> serviceTaskList = export.getServiceTasks();
-
-        Predicate<ServiceTaskExport> byClaimNumber = serviceTaskExport -> serviceTaskExport.getClaim().getClaimNumber().equals(claim.getClaimNumber());
-        List<ServiceTaskExport> result = serviceTaskList.stream().filter(byClaimNumber).collect(Collectors.toList());
-
-
-        ServiceTaskExport serviceTask = result.get(0);
-
-        serviceTaskImport = new ServiceTaskImport();
-        serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, serviceTask.getServiceLines()));
-        serviceTaskImport.setServicePartner(convertServicePartner(serviceTask.getServicePartner()));
-        serviceTaskImport.setInvoice(new InvoiceBuilder().setDefault().build());
-        serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
-        serviceTaskImport.setGUID(serviceTask.getGUID());
-        serviceTaskImport.setCreatedDate(serviceTask.getCreatedDate());
-        return this;
-    }
-
-
-
-    public ServiceTaskImport build() {
-        return this.serviceTaskImport;
-    }
-}

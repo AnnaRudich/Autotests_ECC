@@ -32,6 +32,11 @@ public class IntelligentRepair2 extends BaseTest {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail()
+                .openRecentClaim()
+                .reopenClaim()
                 .openSid()
                 .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .closeSidWithOk()
