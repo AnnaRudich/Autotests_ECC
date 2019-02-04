@@ -56,8 +56,8 @@ public class EventDatabaseApi {
     public EventClaim getEventClaim(EventType eventType, ClaimRequest claimRequest, int eventIndex) {
         boolean notFound = true;
         int i = 0;
-        EventClaim eventClaim = new EventClaim();
-        while(i<5 && notFound){
+        EventClaim eventClaim = null;
+        while(i<15 && notFound){
             try {
                 i++;
                 final List<EventClaim> events = getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber());
@@ -69,6 +69,12 @@ public class EventDatabaseApi {
                 logger.info("No found element in events database");
             }
         }
+
+        if (eventClaim == null){
+            logger.error("Please look into Events API DB, event might not have been managed to be created in time. Look into DB for {}th event({}) for case number {} of {}",
+                    eventIndex+1, eventType.getType(), claimRequest.getCaseNumber(), claimRequest.getCompany());
+        }
+
         return eventClaim;
     }
 

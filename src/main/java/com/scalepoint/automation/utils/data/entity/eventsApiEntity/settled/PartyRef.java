@@ -47,7 +47,9 @@ public class PartyRef {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return "PartyRef{" +
+                "$ref='" + $ref + '\'' +
+                '}';
     }
 
     @JsonAnyGetter

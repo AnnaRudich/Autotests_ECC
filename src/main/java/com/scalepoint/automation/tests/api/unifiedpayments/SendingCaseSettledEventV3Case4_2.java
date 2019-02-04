@@ -19,7 +19,7 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPayment
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.testng.Assert.assertTrue;
 
-public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3Case4 {
+public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3Case4 {
 
 
 
@@ -52,21 +52,21 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 5000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 5000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {3400.0,INSURANCE_COMPANY, CLAIMANT}
+                        {3400.0,INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 600.0, CLAIMANT, CLAIMANT},
-                    {DEDUCTIBLE, 1000.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 3400.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 600.0, CLAIMANT, CLAIMANT},
+                        {DEDUCTIBLE, 1000.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 3400.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -75,8 +75,10 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //WHEN
         reopenClaim();
 
+        setPrice(item1, 3000, 55);
         setPrice(item3, 1000, 20);
         claimSettlementItemsService
+                .editLines(item1)
                 .addLines(item3);
 
         closeExternally();
@@ -86,24 +88,24 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 200.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 1250.0, 0.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {ExpenseType.CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {800.0, INSURANCE_COMPANY, CLAIMANT}
+                        {250.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 800.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 1000.0, CLAIMANT, CLAIMANT},
+                        {DEPRECIATION, 250.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
@@ -155,8 +157,10 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //WHEN
         reopenClaim();
 
+        setPrice(item1, 3000, 55);
         setPrice(item3, 1000, 20);
         claimSettlementItemsService
+                .editLines(item1)
                 .addLines(item3);
 
         close(closeCaseReason);
@@ -166,7 +170,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 200.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 1250.0, 0.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -176,15 +180,15 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {800.0, INSURANCE_COMPANY, SCALEPOINT}
+                    {250.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 800.0, SCALEPOINT, CLAIMANT},
-                    {COMPENSATION, 800.0, INSURANCE_COMPANY, SCALEPOINT}
+                    {DEPRECIATION, 1000.0, CLAIMANT, CLAIMANT},
+                    {DEPRECIATION, 250.0, CLAIMANT, SCALEPOINT},
+                    {DEPRECIATION, 250.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
