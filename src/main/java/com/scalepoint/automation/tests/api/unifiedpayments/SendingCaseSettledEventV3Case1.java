@@ -104,8 +104,8 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         setPrice(item1, 100, 0);
         claimSettlementItemsService
-                .removeLines(item1, item2, item3, item4)
-                .addLines(item1);
+                .removeLines(item2, item3, item4)
+                .editLines(item1);
 
         closeExternally();
         event = getSecondEventClaimSettled();
@@ -190,8 +190,8 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         setPrice(item1, 100, 0);
         claimSettlementItemsService
-                .removeLines(item1, item2, item3, item4)
-                .addLines(item1);
+                .removeLines(item2, item3, item4)
+                .editLines(item1);
 
         close(closeCaseReason);
         event = getSecondEventClaimSettled();

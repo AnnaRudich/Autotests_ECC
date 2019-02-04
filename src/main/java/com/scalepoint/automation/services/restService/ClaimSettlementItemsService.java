@@ -37,8 +37,17 @@ public class ClaimSettlementItemsService extends BaseService {
         return this;
     }
 
+    public ClaimSettlementItemsService editLines(InsertSettlementItem... items){
+        Arrays.stream(items).filter(i -> i.eccItemId != null).forEach(i -> {
+            removeLine(i.eccItemId);
+            addLine(i);
+        });
 
-    public ClaimSettlementItemsService addLine(InsertSettlementItem item){
+        return this;
+    }
+
+
+    private ClaimSettlementItemsService addLine(InsertSettlementItem item){
         item.setCaseId(data.getUserId().toString());
         item.getSettlementItem().getClaim().setClaimToken(getClaimTokenWithoutPrefix());
 
@@ -58,7 +67,7 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
-    public ClaimSettlementItemsService removeLine(Integer id){
+    private ClaimSettlementItemsService removeLine(Integer id){
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
@@ -70,6 +79,7 @@ public class ClaimSettlementItemsService extends BaseService {
 
         return this;
     }
+
 
     public SettlementClaimService closeCase(){
         return new SettlementClaimService();
