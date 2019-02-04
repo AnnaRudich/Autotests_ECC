@@ -20,19 +20,47 @@ public class UnifiedPaymentsAssertUtils {
     }
 
 
-    public static void assertObligation(Obligation actualObligation, BaseUnifiedPaymentsApiTest.ObligationType expectedObligationType, double expectedTotal, BaseUnifiedPaymentsApiTest.PartyReference expectedPayerParty, BaseUnifiedPaymentsApiTest.PartyReference expectedPayeeParty){
-        assertEquals(actualObligation.getObligationType(), expectedObligationType.getValue());
-        assertEquals(actualObligation.getTotal(), expectedTotal);
-        assertPartyRef(actualObligation.getPayerParty(), expectedPayerParty);
-        assertPartyRef(actualObligation.getPayeeParty(), expectedPayeeParty);
-    }
-
     public static void assertObligation(List<Obligation> obligations, BaseUnifiedPaymentsApiTest.ObligationType expectedObligationType, double expectedTotal, BaseUnifiedPaymentsApiTest.PartyReference expectedPayerParty, BaseUnifiedPaymentsApiTest.PartyReference expectedPayeeParty){
         assertTrue(obligations.stream().anyMatch(o ->
                 o.getObligationType().equals(expectedObligationType.getValue())
                         && o.getTotal().equals(expectedTotal)
                         && isEqual(o.getPayeeParty(), expectedPayeeParty)
                         && isEqual(o.getPayerParty(), expectedPayerParty)
+        ));
+    }
+
+    public static void assertPayments(List<Payment> actualPayments, Object[][] expectedPayments){
+        assertEquals(actualPayments.size(), expectedPayments.length);
+
+        Arrays.stream(expectedPayments).forEach(p ->
+                assertPayment(actualPayments, (Double)p[0], (BaseUnifiedPaymentsApiTest.PartyReference)p[1], (BaseUnifiedPaymentsApiTest.PartyReference)p[2])
+        );
+
+    }
+
+    public static void assertPayment(List<Payment> payments, double expectedTotal, BaseUnifiedPaymentsApiTest.PartyReference expectedPayerParty, BaseUnifiedPaymentsApiTest.PartyReference expectedPayeeParty){
+        assertTrue(payments.stream().anyMatch(p ->
+                p.getTotal().equals(expectedTotal)
+                        && isEqual(p.getPayeeParty(), expectedPayeeParty)
+                        && isEqual(p.getPayerParty(), expectedPayerParty)
+        ));
+    }
+
+    public static void assertExpenses(List<Expense> actualExpenses, Object[][] expectedExpenses){
+        assertEquals(actualExpenses.size(), expectedExpenses.length);
+
+        Arrays.stream(expectedExpenses).forEach(o ->
+                assertExpense(actualExpenses, (BaseUnifiedPaymentsApiTest.ExpenseType)o[0], (Double)o[1], (BaseUnifiedPaymentsApiTest.PartyReference)o[2], (BaseUnifiedPaymentsApiTest.PartyReference)o[3])
+        );
+
+    }
+
+    public static void assertExpense(List<Expense> expenses, BaseUnifiedPaymentsApiTest.ExpenseType expectedExpenseType, double expectedTotal, BaseUnifiedPaymentsApiTest.PartyReference expectedPayerParty, BaseUnifiedPaymentsApiTest.PartyReference expectedPayeeParty){
+        assertTrue(expenses.stream().anyMatch(e ->
+                e.getExpenseType().equals(expectedExpenseType.getValue())
+                        && e.getTotal().equals(expectedTotal)
+                        && isEqual(e.getPayeeParty(), expectedPayeeParty)
+                        && isEqual(e.getPayerParty(), expectedPayerParty)
         ));
     }
 
@@ -45,22 +73,6 @@ public class UnifiedPaymentsAssertUtils {
     }
 
 
-    public static void assertExpense(Expense actualExpense, BaseUnifiedPaymentsApiTest.ExpenseType expectedExpenseType, double expectedTotal, BaseUnifiedPaymentsApiTest.PartyReference expectedPayerParty, BaseUnifiedPaymentsApiTest.PartyReference expectedPayeeParty){
-        assertEquals(actualExpense.getExpenseType(), expectedExpenseType.getValue());
-        assertEquals(actualExpense.getTotal(), expectedTotal);
-        assertPartyRef(actualExpense.getPayerParty(), expectedPayerParty);
-        assertPartyRef(actualExpense.getPayeeParty(), expectedPayeeParty);
-    }
-
-    public static void assertPayment(Payment actualPayment, double expectedTotal, BaseUnifiedPaymentsApiTest.PartyReference expectedPayerParty, BaseUnifiedPaymentsApiTest.PartyReference expectedPayeeParty){
-        assertEquals(actualPayment.getTotal(), expectedTotal);
-        assertPartyRef(actualPayment.getPayerParty(), expectedPayerParty);
-        assertPartyRef(actualPayment.getPayeeParty(), expectedPayeeParty);
-    }
-
-    public static void assertPartyRef(PartyRef partyRef, BaseUnifiedPaymentsApiTest.PartyReference partyNum){
-        assertEquals(partyRef.get$ref(), "/parties/" + partyNum.getValue());
-    }
 
     private static boolean isEqual(PartyRef partyRef, BaseUnifiedPaymentsApiTest.PartyReference partyNum){
         return partyRef.get$ref().equals("/parties/" + partyNum.getValue());

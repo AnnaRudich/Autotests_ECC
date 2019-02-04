@@ -10,7 +10,6 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.List;
 
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
@@ -22,7 +21,6 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPay
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
 import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPaymentsAssertUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 
@@ -91,13 +89,18 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
         );
 
 
-        List<Expense> expenses = event.getExpenses();
-        assertEquals(expenses.size(), 1);
-        assertExpense(expenses.get(0), CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT);
+        assertExpenses(event.getExpenses(), new Object[][]
+                {
+                        {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
+                }
+        );
 
-        List<Payment> payments = event.getPayments();
-        assertEquals(payments.size(), 1);
-        assertPayment(payments.get(0), 1100.0,INSURANCE_COMPANY, CLAIMANT);
+
+        assertPayments(event.getPayments(), new Object[][]
+                {
+                        {1100.0,INSURANCE_COMPANY, CLAIMANT}
+                }
+        );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
 
@@ -127,13 +130,17 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        expenses = event.getExpenses();
-        assertEquals(expenses.size(), 1);
-        assertExpense(expenses.get(0), ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY);
+        assertExpenses(event.getExpenses(), new Object[][]
+                {
+                        {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
+                }
+        );
 
-        payments = event.getPayments();
-        assertEquals(payments.size(), 1);
-        assertPayment(payments.get(0), 1100.0,CLAIMANT, INSURANCE_COMPANY);
+        assertPayments(event.getPayments(), new Object[][]
+                {
+                        {1100.0, CLAIMANT, INSURANCE_COMPANY}
+                }
+        );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
 
@@ -167,13 +174,17 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        List<Expense> expenses = event.getExpenses();
-        assertEquals(expenses.size(), 1);
-        assertExpense(expenses.get(0), CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT);
+        assertExpenses(event.getExpenses(), new Object[][]
+                {
+                        {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
+                }
+        );
 
-        List<Payment> payments = event.getPayments();
-        assertEquals(payments.size(), 1);
-        assertPayment(payments.get(0), 1100.0,INSURANCE_COMPANY, SCALEPOINT);
+        assertPayments(event.getPayments(), new Object[][]
+                {
+                        {1100.0,INSURANCE_COMPANY, SCALEPOINT}
+                }
+        );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
 
@@ -205,13 +216,17 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
                 }
         );
 
-        expenses = event.getExpenses();
-        assertEquals(expenses.size(), 1);
-        assertExpense(expenses.get(0), ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY);
+        assertExpenses(event.getExpenses(), new Object[][]
+                {
+                        {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
+                }
+        );
 
-        payments = event.getPayments();
-        assertEquals(payments.size(), 1);
-        assertPayment(payments.get(0), 1100.0,SCALEPOINT, INSURANCE_COMPANY);
+        assertPayments(event.getPayments(), new Object[][]
+                {
+                        {1100.0,SCALEPOINT, INSURANCE_COMPANY}
+                }
+        );
 
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
 
