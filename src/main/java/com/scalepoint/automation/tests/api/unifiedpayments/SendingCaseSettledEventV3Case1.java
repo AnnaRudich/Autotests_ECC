@@ -30,15 +30,18 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
 
     @BeforeMethod
-    private void prepareClaimRequest(){
+    private void setUp(Object[] testArgs){
         claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant("topdanmark");
         claimRequest.setCompany("topdanmark");
-    }
 
 
+        User user = (User)testArgs[0];
+        InsertSettlementItem item1 = (InsertSettlementItem) testArgs[1];
+        InsertSettlementItem item2 = (InsertSettlementItem) testArgs[2];
+        InsertSettlementItem item3 = (InsertSettlementItem) testArgs[3];
+        InsertSettlementItem item4 = (InsertSettlementItem) testArgs[4];
 
-    private void setInitialData(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
         setPrice(item1, 1000, 50);
         setPrice(item2, 100, 0);
         setPrice(item3, 500, 20);
@@ -46,6 +49,7 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         createClaim(user, 250, 50, item1, item2, item3, item4);
     }
+
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeWithMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
@@ -60,7 +64,10 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
         //GIVEN
-        setInitialData(user, item1, item2, item3, item4);
+        //item1 with price=1000 and depreciation=500    (50%)
+        //item2 with price=100  and depreciation=0      (0%)
+        //item3 with price=500  and depreciation=100    (20%)
+        //item4 with price=500  and depreciation=100    (20%)
 
 
         //WHEN
@@ -126,9 +133,12 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
     }
 
-    public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4, SettlementClaimService.CloseCaseReason closeCaseReason) {
+    private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
-        setInitialData(user, item1, item2, item3, item4);
+        //item1 with price=1000 and depreciation=500    (50%)
+        //item2 with price=100  and depreciation=0      (0%)
+        //item3 with price=500  and depreciation=100    (20%)
+        //item4 with price=500  and depreciation=100    (20%)
 
 
         //WHEN
