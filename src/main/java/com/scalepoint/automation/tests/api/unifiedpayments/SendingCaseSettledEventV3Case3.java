@@ -59,10 +59,10 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
         //GIVEN
-        //item1 with price=1000 and depreciation=500    (50%)
-        //item2 with price=100  and depreciation=0      (0%)
-        //item3 with price=500  and depreciation=100    (20%)
-        //item4 with price=500  and depreciation=100    (20%)
+        //1st item with price 1000 and depreciation  500    (50%)
+        //2nd item with price 100  and depreciation  0      (0%)
+        //3rd item with price 500  and depreciation  100    (20%)
+        //4th item with price 500  and depreciation  100    (20%)
 
 
         //WHEN----------------------------------------------------------------------------------------------------------
@@ -144,10 +144,10 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
 
     private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
-        //item1 with price=1000 and depreciation=500    (50%)
-        //item2 with price=100  and depreciation=0      (0%)
-        //item3 with price=500  and depreciation=100    (20%)
-        //item4 with price=500  and depreciation=100    (20%)
+        //1st item with price 1000 and depreciation  500    (50%)
+        //2nd item with price 100  and depreciation  0      (0%)
+        //3rd item with price 500  and depreciation 100    (20%)
+        //4th item with price 500  and depreciation 100    (20%)
 
 
         //WHEN----------------------------------------------------------------------------------------------------------
