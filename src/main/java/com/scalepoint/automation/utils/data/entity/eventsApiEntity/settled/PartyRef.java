@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest;
 import lombok.ToString;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,9 +47,7 @@ public class PartyRef {
 
     @Override
     public String toString() {
-        return "PartyRef{" +
-                "$ref='" + $ref + '\'' +
-                '}';
+        return BaseUnifiedPaymentsApiTest.PartyReference.getByValue(Integer.parseInt($ref.replaceAll("\\D+",""))).name();
     }
 
     @JsonAnyGetter

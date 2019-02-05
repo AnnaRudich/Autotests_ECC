@@ -24,18 +24,29 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
 
 
-    enum PartyReference {
+    public enum PartyReference {
         SCALEPOINT(0),
         INSURANCE_COMPANY(1),
         CLAIMANT(2),
         SERVICE_PARTNER(3);
 
         private int value;
+
         PartyReference(int s) {
             value = s;
         }
+
         public int getValue() {
             return value;
+        }
+
+        public static PartyReference getByValue(int value) {
+            for (PartyReference partyReference : PartyReference.values()) {
+                if (value == partyReference.getValue()) {
+                    return partyReference;
+                }
+            }
+            return null;
         }
     }
 
