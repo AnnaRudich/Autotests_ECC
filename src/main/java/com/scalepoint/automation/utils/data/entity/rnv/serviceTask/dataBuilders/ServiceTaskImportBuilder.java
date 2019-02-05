@@ -38,19 +38,20 @@ public class ServiceTaskImportBuilder {
 
 
         public ServiceTaskImport buildDefault() {
-            serviceTaskImport = new ServiceTaskImport();
-            serviceTaskImport.setServiceLines(convertServiceLines(serviceTaskExport.getServiceLines()));
-            serviceTaskImport.setServicePartner(convertServicePartner(serviceTaskExport.getServicePartner()));
-            serviceTaskImport.setInvoice(new InvoiceBuilder().setDefault().build());
-            serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
-            serviceTaskImport.setGUID(serviceTaskExport.getGUID());
-            serviceTaskImport.setCreatedDate(serviceTaskExport.getCreatedDate());
-            return serviceTaskImport;
+            this.serviceTaskImport = new ServiceTaskImport();
+            this.serviceTaskImport.setServiceLines(convertServiceLines(this.serviceTaskExport.getServiceLines()));
+            this.serviceTaskImport.setServicePartner(convertServicePartner(this.serviceTaskExport.getServicePartner()));
+            this.serviceTaskImport.setInvoice(new InvoiceBuilder().build());
+            this.serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
+            this.serviceTaskImport.setGUID(this.serviceTaskExport.getGUID());
+            this.serviceTaskImport.setCreatedDate(this.serviceTaskExport.getCreatedDate());
+            return this.serviceTaskImport;
         }
 
         public ServiceTaskImport buildWithRepairPrice(BigDecimal repairPrice){
-            buildDefault().setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, serviceTaskExport.getServiceLines()));
-            return serviceTaskImport;
+            buildDefault();
+            this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
+            return this.serviceTaskImport;
         }
     }
 

@@ -8,16 +8,18 @@ import java.math.BigDecimal;
 public class ValuationsBuilder {
     private Valuations valuations;
 
-    public Valuations setDefault(){
+    public ValuationsBuilder() {
         valuations = new Valuations();
         valuations.setRepairPrice(BigDecimal.valueOf(Constants.PRICE_50));
         valuations.setCustomerDemand(BigDecimal.valueOf(Constants.PRICE_500));
+    }
+
+    public Valuations build() {
         return valuations;
     }
 
-    public Valuations withRepairPrice(BigDecimal repairPrice){
-        valuations = setDefault();
-        valuations.setRepairPrice(repairPrice);
-        return valuations;
+    public ValuationsBuilder withRepairPrice(BigDecimal repairPrice) {
+        this.valuations.setRepairPrice(repairPrice);
+        return this;
     }
 }
