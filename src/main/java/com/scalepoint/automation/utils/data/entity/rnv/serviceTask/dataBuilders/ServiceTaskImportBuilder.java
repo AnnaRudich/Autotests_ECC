@@ -19,7 +19,7 @@ public class ServiceTaskImportBuilder {
 
         private ServiceTaskImport serviceTaskImport;
         private ServiceTaskExport serviceTaskExport;
-        public Claim claim;
+        private Claim claim;
         private ServiceTasksExport export;
 
         public ServiceTaskImportBuilder(Claim claim, ServiceTasksExport export){
@@ -37,7 +37,7 @@ public class ServiceTaskImportBuilder {
         }
 
 
-        public ServiceTaskImport setDefault() {
+        public ServiceTaskImport buildDefault() {
             serviceTaskImport = new ServiceTaskImport();
             serviceTaskImport.setServiceLines(convertServiceLines(serviceTaskExport.getServiceLines()));
             serviceTaskImport.setServicePartner(convertServicePartner(serviceTaskExport.getServicePartner()));
@@ -48,8 +48,8 @@ public class ServiceTaskImportBuilder {
             return serviceTaskImport;
         }
 
-        public ServiceTaskImport withRepairPrice(BigDecimal repairPrice){
-            setDefault().setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, serviceTaskExport.getServiceLines()));
+        public ServiceTaskImport buildWithRepairPrice(BigDecimal repairPrice){
+            buildDefault().setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, serviceTaskExport.getServiceLines()));
             return serviceTaskImport;
         }
     }

@@ -27,7 +27,7 @@ import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.A
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
 public class IntelligentRepair2 extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
     public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
