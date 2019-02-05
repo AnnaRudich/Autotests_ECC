@@ -579,16 +579,6 @@ public class SettlementDialog extends BaseDialog {
             acceptAlert();
         }
 
-        try {
-            Wait.forCondition((WebDriver driver) -> {
-                assert driver != null;
-                WebElement element = driver.findElement(By.xpath("//button[@onclick='spsubmit()']"));
-                element.click();
-                acceptAlert();
-                return element;
-            }, 10, 1000);
-        } catch (Exception ignored) {
-        }
         return Page.at(pageClass);
     }
 
