@@ -41,36 +41,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
 
         //WHEN----------------------------------------------------------------------------------------------------------
-        closeExternally();
-        EventClaimSettled event = getEventClaimSettled();
-
-
-        //THEN
-        validateJsonSchema(event);
-
-        assertSummary(event, 0.0, 0.0, 1000.0, 600.0);
-
-        assertExpenses(event.getExpenses(), new Object[][]
-                {
-                    {CASH_COMPENSATION, 5000.0, INSURANCE_COMPANY, CLAIMANT}
-                }
-        );
-
-        assertPayments(event.getPayments(), new Object[][]
-                {
-                    {3400.0,INSURANCE_COMPANY, CLAIMANT}
-                }
-        );
-
-        assertObligations(event.getObligations(), new Object[][]
-                {
-                    {DEPRECIATION, 600.0, CLAIMANT, CLAIMANT},
-                    {DEDUCTIBLE, 1000.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 3400.0, INSURANCE_COMPANY, CLAIMANT}
-                }
-        );
-
-        assertThatCloseCaseEventWasCreated();
+        settleExternallyAndAssert();
 
         //WHEN----------------------------------------------------------------------------------------------------------
         reopenClaim();
@@ -80,7 +51,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
                 .addLines(item3);
 
         closeExternally();
-        event = getSecondEventClaimSettled();
+        EventClaimSettled event = getSecondEventClaimSettled();
 
 
         //THEN
