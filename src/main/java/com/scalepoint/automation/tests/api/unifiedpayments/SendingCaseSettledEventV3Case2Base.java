@@ -16,7 +16,7 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPay
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
 import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPaymentsAssertUtils.*;
 
-public class SendingCaseSettledEventV3Case4 extends BaseUnifiedPaymentsApiTest {
+public class SendingCaseSettledEventV3Case2Base extends BaseUnifiedPaymentsApiTest {
 
     @BeforeMethod
     void setUp(Object[] testArgs){

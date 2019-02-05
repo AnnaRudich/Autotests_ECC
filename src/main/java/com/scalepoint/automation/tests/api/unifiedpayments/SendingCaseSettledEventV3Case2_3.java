@@ -13,7 +13,7 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPay
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPaymentsAssertUtils.*;
 
-public class SendingCaseSettledEventV3Case4_3 extends SendingCaseSettledEventV3Case4 {
+public class SendingCaseSettledEventV3Case2_3 extends SendingCaseSettledEventV3Case2Base {
 
 
 
