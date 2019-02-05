@@ -64,7 +64,7 @@ public class UnifiedPaymentsAssertUtils {
         ));
     }
 
-    public static void assertSummary(EventClaimSettled event, double expectedDeductible, double expectedShareOfVat, double expectedDepreciation, double expectedManualReduction) {
+    public static void assertSummary(EventClaimSettled event, double expectedManualReduction, double expectedShareOfVat, double expectedDeductible, double expectedDepreciation) {
         final Summary summary = event.getSettlement().getSummary();
         assertEquals(summary.getDeductible(), expectedDeductible);
         assertEquals(summary.getShareOfVat(), expectedShareOfVat);

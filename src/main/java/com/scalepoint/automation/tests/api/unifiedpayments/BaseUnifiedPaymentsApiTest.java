@@ -77,7 +77,15 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     void createClaim(User user, int selfRisk, int manualReduction, InsertSettlementItem... items) {
         createClaimWithItems(user, items);
 
+        setSelfRisk(selfRisk);
+        setManualReduction(manualReduction);
+    }
+
+    void setSelfRisk(int selfRisk) {
         new OwnRiskService().setSelfRiskForClaim(selfRisk + "");
+    }
+
+    void setManualReduction(int manualReduction) {
         new ManualReductionService().setManualReductionForClaim(manualReduction + "");
     }
 
@@ -105,6 +113,10 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         return eventDatabaseApi.getEventClaimSettled(claimRequest, 2);
     }
 
+    EventClaimSettled getFourthEventClaimSettled() {
+        return eventDatabaseApi.getEventClaimSettled(claimRequest, 3);
+    }
+
     SettlementClaimService close(SettlementClaimService.CloseCaseReason closeCaseReason) {
         return settlementClaimService.close(claimRequest, closeCaseReason);
     }
@@ -119,6 +131,10 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
     void assertThatThirdCloseCaseEventWasCreated() {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 2);
+    }
+
+    void assertThatFourthCloseCaseEventWasCreated() {
+        eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 3);
     }
 
     SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items){

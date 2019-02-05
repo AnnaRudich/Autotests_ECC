@@ -16,8 +16,6 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPay
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.INSURANCE_COMPANY;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
 import static com.scalepoint.automation.tests.api.unifiedpayments.UnifiedPaymentsAssertUtils.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.testng.Assert.assertTrue;
 
 public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3Case4 {
 
@@ -42,15 +40,15 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
         */
 
 
-        //WHEN
+        //WHEN----------------------------------------------------------------------------------------------------------
         closeExternally();
         EventClaimSettled event = getEventClaimSettled();
 
 
         //THEN
-        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+        validateJsonSchema(event);
 
-        assertSummary(event, 1000.0, 0.0, 600.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 1000.0, 600.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -74,7 +72,7 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
 
         assertThatCloseCaseEventWasCreated();
 
-        //WHEN
+        //WHEN----------------------------------------------------------------------------------------------------------
         reopenClaim();
 
         setPrice(item1, 3000, 55);
@@ -90,7 +88,7 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 1250.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 0.0, 1250.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -125,15 +123,15 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
         */
 
 
-        //WHEN
+        //WHEN----------------------------------------------------------------------------------------------------------
         close(closeCaseReason);
         EventClaimSettled event = getEventClaimSettled();
 
 
         //THEN
-        assertTrue(matchesJsonSchemaInClasspath("schema/case_settled.schema.json").matches(event.getJsonString()));
+        validateJsonSchema(event);
 
-        assertSummary(event, 1000.0, 0.0, 600.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 1000.0, 600.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -158,7 +156,7 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
 
         assertThatCloseCaseEventWasCreated();
 
-        //WHEN
+        //WHEN----------------------------------------------------------------------------------------------------------
         reopenClaim();
 
         setPrice(item1, 3000, 55);
@@ -174,7 +172,7 @@ public class SendingCaseSettledEventV3Case4_2 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 1250.0, 0.0);
+        assertSummary(event, 0.0, 0.0, 0.0, 1250.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {

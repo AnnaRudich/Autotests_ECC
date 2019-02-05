@@ -75,7 +75,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 250.0, 0.0, 700.0, 50.0);
+        assertSummary(event, 50.0, 0.0, 250.0, 700.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -116,7 +116,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, -150.0, 0.0, -700.0, -50.0);
+        assertSummary(event, -50.0, 0.0, -150.0, -700.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -162,7 +162,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 250.0, 0.0, 700.0, 50.0);
+        assertSummary(event, 50.0, 0.0, 250.0, 700.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -204,7 +204,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, -150.0, 0.0, -700.0, -50.0);
+        assertSummary(event, -50.0, 0.0, -150.0, -700.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
