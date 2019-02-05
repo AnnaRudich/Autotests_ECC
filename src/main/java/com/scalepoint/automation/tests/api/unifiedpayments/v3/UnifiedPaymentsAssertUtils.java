@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.api.unifiedpayments;
+package com.scalepoint.automation.tests.api.unifiedpayments.v3;
 
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.*;
 

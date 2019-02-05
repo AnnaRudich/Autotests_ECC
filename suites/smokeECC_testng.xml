@@ -69,7 +69,7 @@
     <test verbose="1" name="Api" enabled="true" preserve-order="true" thread-count="1">
         <classes>
             <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>
-            <class name="com.scalepoint.automation.tests.api.CaseSettlementDataApiTests"/>
+            <class name="com.scalepoint.automation.tests.api.unifiedpayments.v1.CaseSettlementDataApiTests"/>
         </classes>
     </test>
 

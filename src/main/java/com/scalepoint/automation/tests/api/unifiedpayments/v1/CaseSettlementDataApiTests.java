@@ -1,9 +1,10 @@
-package com.scalepoint.automation.tests.api;
+package com.scalepoint.automation.tests.api.unifiedpayments.v1;
 
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;

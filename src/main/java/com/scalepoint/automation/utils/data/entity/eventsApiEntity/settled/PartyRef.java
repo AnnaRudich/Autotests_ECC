@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest;
+import com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest;
 import lombok.ToString;
 
 import java.util.HashMap;

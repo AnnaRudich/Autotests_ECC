@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.api;
+package com.scalepoint.automation.tests.api.unifiedpayments.v1;
 
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.EccSettlementSummaryService;
@@ -6,6 +6,7 @@ import com.scalepoint.automation.services.restService.OwnRiskService;
 import com.scalepoint.automation.services.restService.ReopenClaimService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
