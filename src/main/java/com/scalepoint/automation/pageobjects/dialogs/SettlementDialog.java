@@ -424,6 +424,12 @@ public class SettlementDialog extends BaseDialog {
         return setExtInputValue(description, descriptionText);
     }
 
+    public SettlementDialog setDescriptionAndWaitForCategoriesToAutoSelect(String descriptionText) {
+        SettlementDialog settlementDialog = setDescription(descriptionText);
+        Wait.waitForDisplayed(By.id("pseudocategory-combobox-inputEl"), 10);
+        return settlementDialog;
+    }
+
     public SettlementDialog setNewPrice(Double amount) {
         return setExtInputValue(newPrice, OperationalUtils.format(amount));
     }
@@ -573,16 +579,6 @@ public class SettlementDialog extends BaseDialog {
             acceptAlert();
         }
 
-        try {
-            Wait.forCondition((WebDriver driver) -> {
-                assert driver != null;
-                WebElement element = driver.findElement(By.xpath("//button[@onclick='spsubmit()']"));
-                element.click();
-                acceptAlert();
-                return element;
-            }, 10, 1000);
-        } catch (Exception ignored) {
-        }
         return Page.at(pageClass);
     }
 

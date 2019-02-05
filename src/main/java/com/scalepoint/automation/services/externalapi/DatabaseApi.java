@@ -3,8 +3,8 @@ package com.scalepoint.automation.services.externalapi;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
-import com.scalepoint.ecc.thirdparty.integrations.model.cwa.TaskType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,20 +42,6 @@ public class DatabaseApi {
                 "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
                          Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")),new XpriceInfoMapper());
-    }
-
-    public void createDefaultServiceAgreementIfNotExists(Integer icId) {
-        Integer count = jdbcTemplate.queryForObject("select count(*) from ServiceAgreementTemplate where name = ?", new Object[]{RV_SERVICE_AGREEMENT_NAME}, Integer.class);
-        if (count > 0) {
-            logger.info("RV agreement found");
-            return;
-        }
-
-        Integer rnvTemplateFileId = insertRnvTemplateFile(icId);
-        logger.info("RV template file inserted with id: {}", rnvTemplateFileId);
-        Integer serviceAgreementTemplateId = insertServiceAgreementTemplate(rnvTemplateFileId, icId);
-        logger.info("Service agreement inserted with id: {}", serviceAgreementTemplateId );
-        assignTemplateToServiceAgreements(serviceAgreementTemplateId);
     }
 
     private Integer insertRnvTemplateFile(Integer insCompanyId) {

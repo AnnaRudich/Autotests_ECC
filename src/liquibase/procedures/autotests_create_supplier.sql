@@ -9,8 +9,11 @@ CREATE PROCEDURE [dbo].[autotests_create_supplier]
     @SUNAME NVARCHAR(50),
 	  @insCompanyId BIGINT,
 	  @PostalCode NVARCHAR(20),
-	  @SupplierId int OUTPUT
-AS
+	  @SecurityToken varchar(100) = null,
+      @RV_TaskWebServiceUrl varchar(100) = null,
+      @SecurityTokenIssued varchar(100) = null,
+ 	  @SupplierId int OUTPUT
+     AS
 
 SET NOCOUNT ON
 
@@ -42,14 +45,14 @@ insert into [SUPPLIER] (
 		[SUORNOT], [SUSUPDELIV], [SUSUPPICKUP],	[SULOGO],[SUVCPICT],
 		[suDeliveryTime], [suHandlesWeee], [suCulture], [SUFREIGHTPRICE], [SUORDERRETURNADDRESS],
 		[SUOPENINGHOURS], [SUVOUCHERSONLY], [LogoFileId], [BannerFileId],[SUVENDORACCTNO],
-		[PushOrderDocument],[rvIntegrationType])
+		[PushOrderDocument], [RV_TaskWebServiceUrl], [securityToken], [securityTokenIssued], [rvIntegrationType])
 		SELECT
 			@SUNAME, 'ecc_auto@scalepoint.com', @SUCVRNBR, @SUPHONE, @SUADDR,
 			@SUADDR2, @PostalCode, @City, '', @insCompanyId,
 			'M',     1,           1,     '\jessops_logo.gif', '\jessops_logo.gif',
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
-			0, 1
+			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, 2
 
 	select @SupplierID = @@IDENTITY
 

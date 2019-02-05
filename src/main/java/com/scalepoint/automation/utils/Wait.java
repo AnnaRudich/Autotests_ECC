@@ -4,17 +4,10 @@ import com.codeborne.selenide.Condition;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
-import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -89,6 +82,10 @@ public class Wait {
         return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+    public static WebElement waitForDisplayed(By locator, int timeoutInSeconds) {
+        return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator), timeoutInSeconds);
+    }
+
     public static WebElement waitForStaleElement(final By locator) {
         return wrap((WebDriver d) -> {
             try {
@@ -130,17 +127,8 @@ public class Wait {
     }
 
     public static void waitElementDisappeared(By element) {
-        Browser.driver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         getWebDriverWaitWithDefaultTimeoutAndPooling()
-                .until((Function<WebDriver, Boolean>) webDriver -> {
-            try {
-                Browser.driver().findElement(element);
-                return false;
-            } catch (Exception e) {
-                return true;
-            }
-        });
-        Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
+                .until(ExpectedConditions.invisibilityOfElementLocated(element));
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {
@@ -233,8 +221,12 @@ public class Wait {
         });
     }
 
+    private static <V> V wrapShort(ExpectedCondition<V> expectedCondition, int timeOutInSeconds) {
+        return new WebDriverWait(Browser.driver(), timeOutInSeconds, 1000).until(expectedCondition);
+    }
+
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), 60, 1000).until(expectedCondition);
+        return wrapShort(expectedCondition, 60);
     }
 
     public static void waitForElementWithPageReload(By locator) {

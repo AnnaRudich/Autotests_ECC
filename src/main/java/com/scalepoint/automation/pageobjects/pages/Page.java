@@ -22,6 +22,7 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unchecked")
 public abstract class Page implements Actions {
@@ -208,5 +209,10 @@ public abstract class Page implements Actions {
     public <T extends Page> T backToSavePoint(Class<T> pointPageClass) {
         Browser.driver().get(PagesCache.getSavePointUrl());
         return at(pointPageClass);
+    }
+
+    public <T extends Page> T apply(Class<T> currentClass, Consumer<T> func) {
+        func.accept((T) this);
+        return at(currentClass);
     }
 }

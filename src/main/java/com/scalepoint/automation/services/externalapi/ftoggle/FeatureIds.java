@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.externalapi.ftoggle;
 
 public enum FeatureIds {
     DB_BLOCKING,
+    AUTOCAT_IN_SID,
     EVOUCHER_BACKEND_SYNCHRONOUS_CALLS,
     NAVISION_MANDATORY_BANK_ACCOUNT_NUMBER,
     NAVISION_MANDATORY_BANK_NAME,
