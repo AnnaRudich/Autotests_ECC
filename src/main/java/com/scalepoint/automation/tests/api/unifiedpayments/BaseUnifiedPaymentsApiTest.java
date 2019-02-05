@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.api.unifiedpayments;
 
 import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.tests.api.BaseApiTest;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -82,6 +83,13 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         public String getValue() {
             return value;
         }
+    }
+
+
+    void initClaimRequest() {
+        claimRequest = TestData.getClaimRequest();
+        claimRequest.setTenant("topdanmark");
+        claimRequest.setCompany("topdanmark");
     }
 
 

@@ -20,10 +20,7 @@ public class SendingCaseSettledEventV3Case4 extends BaseUnifiedPaymentsApiTest {
 
     @BeforeMethod
     void setUp(Object[] testArgs){
-        claimRequest = TestData.getClaimRequest();
-        claimRequest.setTenant("topdanmark");
-        claimRequest.setCompany("topdanmark");
-
+        initClaimRequest();
 
         User user = (User)testArgs[0];
         InsertSettlementItem item1 = (InsertSettlementItem) testArgs[1];
