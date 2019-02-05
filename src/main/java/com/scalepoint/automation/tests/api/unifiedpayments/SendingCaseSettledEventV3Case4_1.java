@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
+import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ExpenseType.CASH_COMPENSATION;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ObligationType.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.ObligationType.COMPENSATION;
 import static com.scalepoint.automation.tests.api.unifiedpayments.BaseUnifiedPaymentsApiTest.PartyReference.CLAIMANT;
@@ -60,7 +61,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                    {CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -112,7 +113,7 @@ public class SendingCaseSettledEventV3Case4_1 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                    {CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
