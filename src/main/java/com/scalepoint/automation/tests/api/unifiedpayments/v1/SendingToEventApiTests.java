@@ -33,8 +33,8 @@ public class SendingToEventApiTests extends BaseApiTest {
     @BeforeMethod
     private void prepareClaimRequest(){
         claimRequest = TestData.getClaimRequest();
-        claimRequest.setTenant("scalepoint");
-        claimRequest.setCompany("scalepoint");
+        claimRequest.setTenant("lb");
+        claimRequest.setCompany("lb");
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
@@ -132,7 +132,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         settlementClaimService
                 .cancel(claimRequest);
 
-        EventClaimSettled eventClaimSettledAfterCanceled = eventDatabaseApi.getEventClaimSettled(claimRequest);
+        EventClaimSettled eventClaimSettledAfterCanceled = eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
 
         assertThat(eventClaimSettledAfterCanceled.getPayments().get(0).getPayeeParty()).isEqualToComparingFieldByField(eventClaimSettledAfterClose.getPayments().get(0).getPayerParty());
         assertThat(eventClaimSettledAfterClose.getPayments().get(0).getPayeeParty()).isEqualToComparingFieldByField(eventClaimSettledAfterCanceled.getPayments().get(0).getPayerParty());
