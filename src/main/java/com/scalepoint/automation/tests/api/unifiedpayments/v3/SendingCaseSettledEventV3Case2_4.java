@@ -130,8 +130,8 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
 
         claimSettlementItemsService
                 .removeLines(item3);
-        setManualReduction(0);
-        setSelfRisk(700);
+        setManualReduction(600);
+        setSelfRisk(1200);
 
         closeExternally();
         event = getFourthEventClaimSettled();
@@ -140,7 +140,7 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 0.0, -400.0);
+        assertSummary(event, 600.0, 0.0, 500.0, -400.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -150,13 +150,15 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {600.0, CLAIMANT, INSURANCE_COMPANY}
+                        {1700.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
                         {DEPRECIATION, 400.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {DEDUCTIBLE, 500.0, CLAIMANT, INSURANCE_COMPANY},
+                        {MANUAL_REDUCTION, 600.0, CLAIMANT, INSURANCE_COMPANY},
                         {COMPENSATION, 600.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
@@ -270,8 +272,8 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
 
         claimSettlementItemsService
                 .removeLines(item3);
-        setManualReduction(0);
-        setSelfRisk(700);
+        setManualReduction(600);
+        setSelfRisk(1200);
 
         close(closeCaseReason);
         event = getFourthEventClaimSettled();
@@ -280,7 +282,7 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
         //THEN
         validateJsonSchema(event);
 
-        assertSummary(event, 0.0, 0.0, 0.0, -400.0);
+        assertSummary(event, 600.0, 0.0, 500.0, -400.0);
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
@@ -290,13 +292,17 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {600.0, SCALEPOINT, INSURANCE_COMPANY}
+                        {1700.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
                         {DEPRECIATION, 400.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {DEDUCTIBLE, 500.0, CLAIMANT, SCALEPOINT},
+                        {DEDUCTIBLE, 500.0, SCALEPOINT, INSURANCE_COMPANY},
+                        {MANUAL_REDUCTION, 600.0, CLAIMANT, SCALEPOINT},
+                        {MANUAL_REDUCTION, 600.0, SCALEPOINT, INSURANCE_COMPANY},
                         {COMPENSATION, 600.0, CLAIMANT, SCALEPOINT},
                         {COMPENSATION, 600.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
