@@ -4,17 +4,10 @@ import com.codeborne.selenide.Condition;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
-import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -134,17 +127,8 @@ public class Wait {
     }
 
     public static void waitElementDisappeared(By element) {
-        Browser.driver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         getWebDriverWaitWithDefaultTimeoutAndPooling()
-                .until((Function<WebDriver, Boolean>) webDriver -> {
-            try {
-                Browser.driver().findElement(element);
-                return false;
-            } catch (Exception e) {
-                return true;
-            }
-        });
-        Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
+                .until(ExpectedConditions.invisibilityOfElementLocated(element));
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {

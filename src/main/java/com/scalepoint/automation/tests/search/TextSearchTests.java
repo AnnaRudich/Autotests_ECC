@@ -15,7 +15,9 @@ import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_EQUALS_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 
 public class TextSearchTests extends BaseTest {
 
@@ -103,7 +105,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
     public void charlie516_checkSortingByPopularity(User user, Claim claim, TextSearch textSearch) {
-        String brand = "samsung galaxy";
+        String brand = "samsung galaxy s7";
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(brand);
@@ -113,11 +115,7 @@ public class TextSearchTests extends BaseTest {
         tsp.sortPopularityDescending()
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> {
-                            asserts.assertActualModelListIsDifferentThan(modelsDefault);
-                        });
-
-        List<String> modelsDesc = tsp.getModelListAsString();
+                        asserts -> asserts.assertActualModelListIsDifferentThan(modelsDefault));
 
         tsp.sortPopularityAscending()
                 .waitForResultsLoad()
@@ -127,21 +125,17 @@ public class TextSearchTests extends BaseTest {
         List<String> modelsAsc = tsp.getModelListAsString();
 
         tsp.selectBrand(textSearch.getBrand1())
-                .selectModel("Galaxy Note 8 64GB Sort")
+                .selectModel(textSearch.getModel1())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> {
-                            asserts.assertActualModelListIsDifferentThan(modelsAsc);
-                        });
+                        asserts -> asserts.assertActualModelListIsDifferentThan(modelsAsc));
 
         List<String> models = tsp.getModelListAsString();
 
         tsp.searchByProductName(brand)
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> {
-                            asserts.assertActualModelListIsDifferentThan(models);
-                        });
+                        asserts -> asserts.assertActualModelListIsDifferentThan(models));
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
