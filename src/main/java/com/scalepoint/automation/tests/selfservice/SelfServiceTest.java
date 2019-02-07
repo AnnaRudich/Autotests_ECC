@@ -285,7 +285,7 @@ public class SelfServiceTest extends BaseTest {
                 .addRandomAcquired(1)
 
                 .uploadDocumentation(1, false)
-                .addCustomerComment("test customer comment");
+                .addCustomerComment("convert customer comment");
 
         new SelfServicePage().selectSubmitOption();
 
@@ -294,7 +294,7 @@ public class SelfServiceTest extends BaseTest {
                 .toNotesPage()
 
         .doAssert(NotesPage-> {
-            NotesPage.assertInternalNotePresent("test customer comment");
+            NotesPage.assertInternalNotePresent("convert customer comment");
         });
     }
 

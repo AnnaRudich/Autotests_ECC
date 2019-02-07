@@ -11,33 +11,47 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ConvertServiceLine.convertServiceLines;
+import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceLineBuilder.convertServiceLines;
 import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ConvertServicePartner.convertServicePartner;
+import static com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceLineBuilder.convertServiceLinesWithRepairPrice;
 
 public class ServiceTaskImportBuilder {
-    private ServiceTaskImport serviceTaskImport;
 
-    public ServiceTaskImportBuilder setDefault(ServiceTasksExport export, Claim claim) {
+        private ServiceTaskImport serviceTaskImport;
+        private ServiceTaskExport serviceTaskExport;
+        private Claim claim;
+        private ServiceTasksExport export;
 
-        List<ServiceTaskExport> serviceTaskList = export.getServiceTasks();
+        public ServiceTaskImportBuilder(Claim claim, ServiceTasksExport export){
+            this.claim = claim;
+            this.export = export;
+            this.serviceTaskExport = getFirstServiceTaskExportByClaimNumber();
+        }
 
-        Predicate<ServiceTaskExport> byClaimNumber = serviceTaskExport -> serviceTaskExport.getClaim().getClaimNumber().equals(claim.getClaimNumber());
-        List<ServiceTaskExport> result = serviceTaskList.stream().filter(byClaimNumber).collect(Collectors.toList());
+        private ServiceTaskExport getFirstServiceTaskExportByClaimNumber(){
+            List<ServiceTaskExport> serviceTaskList = export.getServiceTasks();
+
+            Predicate<ServiceTaskExport> byClaimNumber = serviceTaskExport -> serviceTaskExport.getClaim().getClaimNumber().equals(claim.getClaimNumber());
+            List<ServiceTaskExport> result = serviceTaskList.stream().filter(byClaimNumber).collect(Collectors.toList());
+            return result.get(0);
+        }
 
 
-        ServiceTaskExport serviceTask = result.get(0);
+        public ServiceTaskImport buildDefault() {
+            this.serviceTaskImport = new ServiceTaskImport();
+            this.serviceTaskImport.setServiceLines(convertServiceLines(this.serviceTaskExport.getServiceLines()));
+            this.serviceTaskImport.setServicePartner(convertServicePartner(this.serviceTaskExport.getServicePartner()));
+            this.serviceTaskImport.setInvoice(new InvoiceBuilder().build());
+            this.serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
+            this.serviceTaskImport.setGUID(this.serviceTaskExport.getGUID());
+            this.serviceTaskImport.setCreatedDate(this.serviceTaskExport.getCreatedDate());
+            return this.serviceTaskImport;
+        }
 
-        serviceTaskImport = new ServiceTaskImport();
-        serviceTaskImport.setServiceLines(convertServiceLines(serviceTask.getServiceLines()));
-        serviceTaskImport.setServicePartner(convertServicePartner(serviceTask.getServicePartner()));
-        serviceTaskImport.setInvoice(new InvoiceBuilder().setDefault().build());
-        serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
-        serviceTaskImport.setGUID(serviceTask.getGUID());
-        serviceTaskImport.setCreatedDate(serviceTask.getCreatedDate());
-        return this;
+        public ServiceTaskImport buildWithRepairPrice(BigDecimal repairPrice){
+            buildDefault();
+            this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
+            return this.serviceTaskImport;
+        }
     }
 
-    public ServiceTaskImport build() {
-        return this.serviceTaskImport;
-    }
-}

@@ -24,7 +24,7 @@ public class ReductionRulesTest extends BaseTest {
     private static String yellow = "Yellow";
     private static String green = "Green";
     private static String red = "Red";
-    private static String description = "test description";
+    private static String description = "convert description";
 
     /**
      * GIVEN: SP user U1 with Admin permissions

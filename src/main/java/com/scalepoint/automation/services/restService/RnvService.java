@@ -11,6 +11,8 @@ import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksE
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 
+import java.math.BigDecimal;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 
@@ -31,9 +33,19 @@ public class RnvService extends BaseService {
     }
 
 
-    public void sendFeedback(Claim claim) {
+    public void sendDefaultFeedback(Claim claim) {
 
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder().setDefault(pullRnVTaskData(), claim).build();
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefault();
+
+        given().log().all()
+                .multiPart("securityToken", supplierSecurityToken)
+                .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
+                .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
+    }
+
+    public void sendFeedbackWithRepairPrice(BigDecimal repairPrice, Claim claim) {
+
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildWithRepairPrice(repairPrice);
 
         given().log().all()
                 .multiPart("securityToken", supplierSecurityToken)

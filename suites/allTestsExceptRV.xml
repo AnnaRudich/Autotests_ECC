@@ -6,7 +6,6 @@
             <package name="com.scalepoint.automation.tests.suppliermanager"/>
             <package name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
             <package name=".*">
-                <exclude name="com.scalepoint.automation.tests.rnv1"/>
                 <exclude name="com.scalepoint.automation.tests.api"/>
                 <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
                 <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>

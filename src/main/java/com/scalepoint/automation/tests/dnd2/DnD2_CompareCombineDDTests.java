@@ -199,7 +199,6 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                //.enableAuditForIc(user.getCompanyName())
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -219,5 +218,4 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");
     }
-
 }

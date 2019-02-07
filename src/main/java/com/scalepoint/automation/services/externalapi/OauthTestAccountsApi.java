@@ -14,7 +14,7 @@ public class OauthTestAccountsApi {
     }
 
     public OauthTestAccountsApi sendRequest(Scope scope){
-        this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
+        this.token = given().baseUri("https://convert-accounts.scalepoint.com").basePath("/connect/token").log().all()
                 .formParam("grant_type", "client_credentials")
                 .formParam("client_id", "test_integration_all_tenants")
                 .formParam("client_secret", "8Qgwd8rlCEGOWZH861f_XWC-m_mxKtJgnJj6Rbq8kMU")
