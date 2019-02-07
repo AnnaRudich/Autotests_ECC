@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.EventClaimUpdated;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -27,7 +27,7 @@ import static org.awaitility.Awaitility.*;
 @SuppressWarnings("unchecked")
 public class EventDatabaseApi {
 
-    private static Logger logger = LoggerFactory.getLogger(DatabaseApi.class);
+    private static Logger logger = LogManager.getLogger(EventDatabaseApi.class);
 
     private JdbcTemplate jdbcTemplate;
 
@@ -39,7 +39,7 @@ public class EventDatabaseApi {
         boolean notFound = true;
         int i = 0;
         EventClaimSettled eventClaimSettled = new EventClaimSettled();
-        while(i<5 && notFound){
+        while(i<10 && notFound){
             try {
                 i++;
                 eventClaimSettled = getEventsForClaimSettled(claimRequest.getCompany()).stream()
