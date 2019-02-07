@@ -58,7 +58,7 @@
 
         <sql>
             -- switch off password validation
-            UPDATE [FUNCTEMPLATE] SET [ftUserPasswordValidationStrategy] = 0
+            -- UPDATE [FUNCTEMPLATE] SET [ftUserPasswordValidationStrategy] = 2
 
             -- switch off password expiration
             UPDATE [FUNCTEMPLATE] SET ftfunctionflags5 = ftfunctionflags5 &amp; ~1

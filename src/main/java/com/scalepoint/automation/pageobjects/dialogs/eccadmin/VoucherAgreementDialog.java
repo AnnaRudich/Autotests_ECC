@@ -15,6 +15,7 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertTrue;
 
 public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreementTabs {
@@ -498,19 +499,11 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             }
 
             private boolean isCategoryMapped(String categoryGroup, String category) {
-                boolean found = false;
                 String expectedCategory = EditCategoryMappingsDialog.formatCategoryOption(categoryGroup, category);
-                for (WebElement mappedCategory : mappedCategories) {
-                    if (mappedCategory.getText().equals(expectedCategory)) {
-                        found = true;
-                        break;
-                    }
-                }
-                return found;
+                return $(By.xpath("//div[@id='categoriesVoucherTabId']//div[text()='" + expectedCategory + "']")).isDisplayed();
             }
 
         }
-
         public EditCategoryMappingsDialog openEditMappingsDialog() {
             clickUsingJsIfSeleniumClickReturnError(editMappingsBtn);
             return BaseDialog.at(EditCategoryMappingsDialog.class);

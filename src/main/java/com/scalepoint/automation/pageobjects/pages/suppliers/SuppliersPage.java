@@ -100,12 +100,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
         if (getOption(supplierName).getText().contains(supplierName)) {
             scrollTo(getOption(supplierName));
-            int i = 0;
-            while (!BaseDialog.isOn(SupplierDialog.GeneralTab.class) && i < 2){
-                i++;
-                doubleClickUsingJsIfSeleniumClickReturnError(getOption(supplierName));
-            }
-            waitForStaleElement((By.xpath("//span[contains(text(),'General')]")));
+            doubleClickUsingJsIfSeleniumClickReturnError(getOption(supplierName));
         }
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
     }
