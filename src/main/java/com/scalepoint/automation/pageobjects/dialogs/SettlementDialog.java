@@ -55,7 +55,6 @@ import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubl
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertEqualsNoOrder;
@@ -386,10 +385,10 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setBaseData(ClaimItem claimItem) {
         return setDescription(claimItem.getTextFieldSP()).
-                setCustomerDemand(claimItem.getCustomerDemand()).
-                setNewPrice(claimItem.getNewPriceSP()).
                 setCategory(claimItem.getCategoryGroupBorn()).
-                setSubCategory(claimItem.getCategoryBornBabyudstyr());
+                setSubCategory(claimItem.getCategoryBornBabyudstyr()).
+                setCustomerDemand(claimItem.getCustomerDemand()).
+                setNewPrice(claimItem.getNewPriceSP());
     }
 
     public SettlementDialog fill(String description, String category, String subcategory, Double newPrice) {
