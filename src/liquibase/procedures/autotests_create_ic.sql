@@ -26,8 +26,7 @@ CREATE PROCEDURE [dbo].[autotests_create_ic]
 	  @icEventAPIEnabled INT = 1,
 	  @icAuditAllowAutoComplete INT = 1,
 	  @auditButtonEnabled INT = 1,
-	  @auditAllowValidateRV INT = 1,
-	  @auditManualRejectNotify INT = 1
+	  @auditAllowValidateRV INT = 1
 AS
 
 SET NOCOUNT ON
@@ -295,8 +294,7 @@ INSERT INTO [INSCOMP]
        ,[eventAPIEnabled]
        ,[auditAllowAutoComplete]
        ,[auditButtonEnabled]
-       ,[auditAllowValidateRV]
-       ,[auditManualRejectNotify])
+       ,[auditAllowValidateRV])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -334,8 +332,7 @@ INSERT INTO [INSCOMP]
            ,@icEventAPIEnabled
            ,@icAuditAllowAutoComplete
            ,@auditButtonEnabled
-           ,@auditAllowValidateRV
-           ,@auditManualRejectNotify)
+           ,@auditAllowValidateRV)
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
