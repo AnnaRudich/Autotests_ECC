@@ -1,7 +1,5 @@
 package com.scalepoint.automation.utils.testng;
 
-import com.scalepoint.automation.tests.BaseTest;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.IRetryAnalyzer;

@@ -21,7 +21,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class SidQunitTests extends BaseTest {
 
     @RunOn(DriverType.CHROME_REMOTE)
-    @Test(dataProvider = "qunitTests", description = "Check results from qunit convert in ecc")
+    @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterTests(String test) {
         List<WebElement> results = openPage(test);
         assertThat(results.stream().noneMatch(findFailed()))
@@ -30,7 +30,7 @@ public class SidQunitTests extends BaseTest {
     }
 
     @RunOn(DriverType.IE_REMOTE)
-    @Test(dataProvider = "qunitTests", description = "Check results from qunit convert in ecc")
+    @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterOnIETests(String test) {
         List<WebElement> results = openPage(test);
         assertThat(results.stream().noneMatch(findFailed()))
@@ -39,8 +39,8 @@ public class SidQunitTests extends BaseTest {
     }
 
     private List<WebElement> openPage(String path) {
-        Browser.driver().get(getEccUrl() + "webshop/jsp/matching_engine/convert/" + path);
-        return Wait.forCondition(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//li[contains(@id,'qunit-convert-output')]")));
+        Browser.driver().get(getEccUrl() + "webshop/jsp/matching_engine/test/" + path);
+        return Wait.forCondition(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//li[contains(@id,'qunit-test-output')]")));
     }
 
     private Predicate<WebElement> findFailed() {
@@ -54,17 +54,17 @@ public class SidQunitTests extends BaseTest {
     private String getErrorMessage(WebElement element){
         return element.findElement(By.className("module-name")).getText() + " -> " +
                 element.findElements(By.className("fail")).stream()
-                        .map(e -> e.findElement(By.className("convert-message")).getText()).collect(Collectors.joining(","));
+                        .map(e -> e.findElement(By.className("test-message")).getText()).collect(Collectors.joining(","));
     }
 
     @DataProvider(name = "qunitTests")
     public static Object[][] provide() {
         return new Object[][] {
-                {"voucher-adapter-convert.jsp"},
-                {"settlement-panel-adapter-convert.jsp"},
-                {"settlement-item-adapter-convert.jsp"},
-                {"customer-mail-adapter-convert.jsp"},
-                {"customer-details-adapter-convert.jsp"}
+                {"voucher-adapter-test.jsp"},
+                {"settlement-panel-adapter-test.jsp"},
+                {"settlement-item-adapter-test.jsp"},
+                {"customer-mail-adapter-test.jsp"},
+                {"customer-details-adapter-test.jsp"}
         };
     }
 
