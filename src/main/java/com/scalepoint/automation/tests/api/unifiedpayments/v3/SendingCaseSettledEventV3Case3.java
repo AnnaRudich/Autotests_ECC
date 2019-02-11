@@ -131,7 +131,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
     }
 
 
-    private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
+    public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
         /*
             1st item with price 2000 and depreciation  500    (25%)

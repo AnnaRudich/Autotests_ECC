@@ -96,8 +96,10 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     void createClaim(User user, int selfRisk, int manualReduction, InsertSettlementItem... items) {
         createClaimWithItems(user, items);
 
-        setSelfRisk(selfRisk);
-        setManualReduction(manualReduction);
+        if (selfRisk > 0)
+            setSelfRisk(selfRisk);
+        if (manualReduction > 0)
+            setManualReduction(manualReduction);
     }
 
     void setSelfRisk(int selfRisk) {

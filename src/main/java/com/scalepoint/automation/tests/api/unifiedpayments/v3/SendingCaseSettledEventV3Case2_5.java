@@ -30,7 +30,7 @@ public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3C
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    private void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
+    public void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         //GIVEN
         /*
             1st item with price 3000 and depreciation  600    (20%)
@@ -129,7 +129,7 @@ public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3C
 
 
 
-    private void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
+    public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
         /*
             1st item with price 3000 and depreciation  600    (20%)
