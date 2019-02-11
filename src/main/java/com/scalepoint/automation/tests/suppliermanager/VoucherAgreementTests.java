@@ -591,7 +591,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .logout();
         VouchersPage vouchersPage = loginToEccAdmin(voucherAgreementData.anotherUser).toVouchersPage();
 
-        /* test voucher state for voucher list page*/
+        /* convert voucher state for voucher list page*/
         switch (voucherAgreementData.voucherAgreementState) {
             case ACTIVE:
             case NOT_ACTIVE:
@@ -602,7 +602,7 @@ public class VoucherAgreementTests extends BaseTest {
                 return null;
         }
 
-        /* test voucher state in supplier window*/
+        /* convert voucher state in supplier window*/
         vouchersPage.toSuppliersPage()
                 .editSupplier(supplierName)
                 .selectAgreementsTab()

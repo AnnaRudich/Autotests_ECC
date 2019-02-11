@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class ServiceLineImport extends ServiceLine{
 
     private ItemImport item;
-    private ValuationsImport valuations;
+    private Valuations valuations;
     
     public ServiceLineImport(){}
 
@@ -20,11 +20,11 @@ public class ServiceLineImport extends ServiceLine{
     }
 
     @XmlElement
-    public ValuationsImport getValuations() {
+    public Valuations getValuations() {
         return valuations;
     }
 
-    public void setValuations(ValuationsImport valuations) {
+    public void setValuations(Valuations valuations) {
         this.valuations = valuations;
     }
 }

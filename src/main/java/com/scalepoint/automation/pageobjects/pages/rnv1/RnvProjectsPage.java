@@ -9,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @EccPage
 public class RnvProjectsPage extends Page {
     @FindBy(xpath = "//span[contains(text(),'Kommunikation')]")
@@ -58,6 +60,9 @@ public class RnvProjectsPage extends Page {
 
     @FindBy(css = "div.x-column-header-checkbox span")
     private WebElement selectAllLinesCheckbox;
+
+    @FindBy(css = ".x-panel-header span span")
+    private WebElement auditInfoPanelHeader;
 
     @Override
     protected Page ensureWeAreOnPage() {
@@ -169,11 +174,23 @@ public class RnvProjectsPage extends Page {
         return this;
     }
 
+    private String getAuditInfoPanelText(){
+        return auditInfoPanelHeader.getText();
+    }
+
     public Assertion getAssertion() {
         return new Assertion();
     }
 
     public class Assertion {
+
+        public Assertion assertAuditResponseText(AuditResultEvaluationStatus auditResponse){
+            String actualAuditResponse = getAuditInfoPanelText();
+            assertThat(actualAuditResponse)
+                    .as("Expected Audit response is:" + auditResponse.getResponse() + "but actual was:" + actualAuditResponse)
+                    .isEqualTo(auditResponse.getResponse());
+            return this;
+        }
 
         public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement) {
             String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
@@ -254,7 +271,7 @@ public class RnvProjectsPage extends Page {
 
         public Assertion assertClaimLineRejected(String claimLineName) {
             String action = getActionByCLName(claimLineName);
-            Assert.assertEquals(action, "REJECTED", "Claim line is not rejected");
+            Assert.assertEquals(action, "REJECT", "Claim line is not rejected");
             return this;
         }
 
@@ -289,6 +306,23 @@ public class RnvProjectsPage extends Page {
 
         public boolean isValidPresence(boolean actualPresence) {
             return presence == actualPresence;
+        }
+    }
+
+    public enum AuditResultEvaluationStatus {
+        APPROVE("Godkendt"),
+        REJECT("Afvist"),
+        MANUAL("Manuelt"),
+        ERROR("Intet svar fra Validering!");
+
+        String response;
+
+        AuditResultEvaluationStatus(String response) {
+            this.response = response;
+        }
+
+        String getResponse(){
+            return response;
         }
     }
 }

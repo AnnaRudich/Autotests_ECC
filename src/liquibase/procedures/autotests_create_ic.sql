@@ -20,7 +20,13 @@ CREATE PROCEDURE [dbo].[autotests_create_ic]
 	  @icSendNoteNotificationTo INT =  0,
 	  @icRecieveSPNotification BIT = 1,
 	  @icSendSPNotificationTo INT = 0,
-	  @icEmailAddressInCustomerMail INT = 0
+	  @icEmailAddressInCustomerMail INT = 0,
+
+	  @icAuditEnabled INT = 1,
+	  @icEventAPIEnabled INT = 1,
+	  @icAuditAllowAutoComplete INT = 1,
+	  @auditButtonEnabled INT = 1,
+	  @auditAllowValidateRV INT = 1
 AS
 
 SET NOCOUNT ON
@@ -283,7 +289,12 @@ INSERT INTO [INSCOMP]
        ,[reminderDays]
        ,[autoApproveDays]
        ,[icReceiveCancelClaimNotification]
-       ,[auditCompanyCode])
+       ,[auditCompanyCode]
+       ,[auditEnabled]
+       ,[eventAPIEnabled]
+       ,[auditAllowAutoComplete]
+       ,[auditButtonEnabled]
+       ,[auditAllowValidateRV])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -316,7 +327,12 @@ INSERT INTO [INSCOMP]
 		   ,5
 		   ,2
 		   ,1
-		   ,@ICNAME)
+		   ,@ICNAME
+		   ,@icAuditEnabled
+           ,@icEventAPIEnabled
+           ,@icAuditAllowAutoComplete
+           ,@auditButtonEnabled
+           ,@auditAllowValidateRV)
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId

@@ -211,6 +211,7 @@ public class TextSearchPage extends Page {
     }
 
     public ProductDetailsPage openProductDetailsOfFirstProduct() {
+        Wait.waitForVisible(match);
         openDialog(firstProductDetails);
         return at(ProductDetailsPage.class);
     }

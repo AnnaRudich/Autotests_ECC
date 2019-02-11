@@ -146,7 +146,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "test for claim line without voucher and depreciation and no reduction rule")
+    @Test(dataProvider = "testDataProvider", description = "convert for claim line without voucher and depreciation and no reduction rule")
     public void charlie514_claimLineWithoutVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -168,7 +168,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "test for claim line with voucher and no depreciation and reduction rule")
+    @Test(dataProvider = "testDataProvider", description = "convert for claim line with voucher and no depreciation and reduction rule")
     public void charlie514_claimLineWithVoucherAndNoDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -190,7 +190,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     }
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "test for claim line with voucher and depreciation and no reduction rule")
+    @Test(dataProvider = "testDataProvider", description = "convert for claim line with voucher and depreciation and no reduction rule")
     public void charlie514_claimLineWithVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
