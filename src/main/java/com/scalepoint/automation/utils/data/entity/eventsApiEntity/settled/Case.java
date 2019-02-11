@@ -20,86 +20,38 @@ import java.util.Map;
 })
 public class Case {
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("uuid")
+    @JsonProperty(value = "uuid", required = true)
     private String uuid;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("token")
+
+    @JsonProperty(value = "token", required = true)
     private String token;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("number")
+
+    @JsonProperty( value = "number", required = true)
     private String number;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("uuid")
+
     public String getUuid() {
         return uuid;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("uuid")
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("token")
     public String getToken() {
         return token;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("token")
     public void setToken(String token) {
         this.token = token;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("number")
     public String getNumber() {
         return number;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("number")
     public void setNumber(String number) {
         this.number = number;
     }

@@ -37,44 +37,36 @@ public class Address {
     @JsonProperty("countryCode")
     private String countryCode;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("street")
     public String getStreet() {
         return street;
     }
 
-    @JsonProperty("street")
     public void setStreet(String street) {
         this.street = street;
     }
 
-    @JsonProperty("street2")
     public String getStreet2() {
         return street2;
     }
 
-    @JsonProperty("street2")
     public void setStreet2(String street2) {
         this.street2 = street2;
     }
 
-    @JsonProperty("city")
     public String getCity() {
         return city;
     }
 
-    @JsonProperty("city")
     public void setCity(String city) {
         this.city = city;
     }
 
-    @JsonProperty("postalCode")
     public String getPostalCode() {
         return postalCode;
     }
 
-    @JsonProperty("postalCode")
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
@@ -83,7 +75,6 @@ public class Address {
      * ISO 3166-1 alpha 2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
      * 
      */
-    @JsonProperty("countryCode")
     public String getCountryCode() {
         return countryCode;
     }
@@ -92,7 +83,6 @@ public class Address {
      * ISO 3166-1 alpha 2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
      * 
      */
-    @JsonProperty("countryCode")
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }

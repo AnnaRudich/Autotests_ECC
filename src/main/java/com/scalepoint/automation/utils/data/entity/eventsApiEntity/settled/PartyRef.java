@@ -7,47 +7,47 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id"
+    "$ref"
 })
-public class FiBranch_ {
+public class PartyRef {
 
     /**
-     * For domestic bank transfer it is 4 digits bank branch number.
+     * Reference id to object. Defined in object by $id.
      * 
      */
-    @JsonProperty("id")
-    private String id;
+    @JsonProperty("$ref")
+    private String $ref;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
-     * For domestic bank transfer it is 4 digits bank branch number.
+     * Reference id to object. Defined in object by $id.
      * 
      */
-    @JsonProperty("id")
-    public String getId() {
-        return id;
+    public String get$ref() {
+        return $ref;
     }
 
     /**
-     * For domestic bank transfer it is 4 digits bank branch number.
+     * Reference id to object. Defined in object by $id.
      * 
      */
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
+    public void set$ref(String $ref) {
+        this.$ref = $ref;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return BaseUnifiedPaymentsApiTest.PartyReference.getByValue(Integer.parseInt($ref.replaceAll("\\D+",""))).name();
     }
 
     @JsonAnyGetter

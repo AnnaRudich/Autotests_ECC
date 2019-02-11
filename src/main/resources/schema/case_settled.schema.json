@@ -1,0 +1,552 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    },
+    "case": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "$ref": "#/definitions/uuid"
+        },
+        "token": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "externalClaimId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "uuid",
+        "token",
+        "number"
+      ]
+    },
+    "settlement": {
+      "type": "object",
+      "properties": {
+        "approvedBy": {
+          "$ref": "#/definitions/approvedBy"
+        },
+        "summary": {
+          "$ref": "#/definitions/summary"
+        },
+        "revisionToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "approvedBy",
+        "summary"
+      ]
+    },
+    "approvedBy": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of actor",
+          "options": {
+            "user": {
+              "title": "User"
+            },
+            "automatic": {
+              "title": "Automatic"
+            }
+          }
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "manualReduction": {
+          "type": "number"
+        },
+        "shareOfVat": {
+          "type": "number"
+        },
+        "deductible": {
+          "type": "number"
+        },
+        "depreciation": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "shareOfVat",
+        "deductible",
+        "depreciation"
+      ]
+    },
+    "party": {
+      "type": "object",
+      "properties": {
+        "$id": {
+          "type": "string",
+          "description": "JSON object reference id"
+        },
+        "id": {
+          "$ref": "#/definitions/partyIdentifier"
+        },
+        "name": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/address"
+        },
+        "internalId": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "options": {
+              "policyHolder": {
+                "title": "Policy holder"
+              },
+              "claimant": {
+                "title": "Claimant"
+              },
+              "insuranceCompany": {
+                "title": "Insurance company"
+              },
+              "serviceProvider": {
+                "title": "Service provider"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "name",
+        "address"
+      ]
+    },
+    "partyIdentifier": {
+      "type": "object",
+      "properties": {
+        "schemeId": {
+          "type": "string",
+          "enum": [
+            "DK:CVR",
+            "DK:CPR"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemeId",
+        "value"
+      ]
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha 2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)"
+        }
+      }
+    },
+    "expense": {
+      "type": "object",
+      "properties": {
+        "$id": {
+          "type": "string",
+          "description": "JSON object reference id"
+        },
+        "uuid": {
+          "$ref": "#/definitions/uuid"
+        },
+        "id": {
+          "type": "string"
+        },
+        "subtotal": {
+          "type": "number"
+        },
+        "vat": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)"
+        },
+        "issueDate": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "administrative": {
+          "type": "boolean"
+        },
+        "payerParty": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "payeeParty": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "expenseType": {
+          "type": "string",
+          "options":{
+            "invoice": {
+              "title": "Invoice"
+            },
+            "repairInvoice": {
+              "title": "Repair invoice"
+            },
+            "assessmentInvoice": {
+              "title": "Assessment invoice"
+            },
+            "rejectionInvoice": {
+              "title": "Rejection invoice"
+            },
+            "damageServiceInvoice": {
+              "title": "Damage service invoice"
+            },
+            "externalSupplierInvoice": {
+              "title": "External supplier invoice"
+            },
+            "unrelatedInvoice": {
+              "title": "Unrelated invoice"
+            },
+            "creditNote": {
+              "title": "Credit note"
+            },
+            "paymentOnAccountInovice": {
+              "title": "Payment on account invoice"
+            },
+            "cashCompensation": {
+              "title": "Cash compensation"
+            },
+            "claimantOwnWork": {
+              "title": "Claimant own work"
+            },
+            "externalCompensation": {
+              "title": "External compensation"
+            },
+            "cashCollection": {
+              "title": "Cash collection"
+            }
+          }
+        }
+      },
+      "required": [
+        "$id",
+        "total",
+        "currencyCode",
+        "payerParty",
+        "payeeParty",
+        "expenseType"
+      ]
+    },
+    "obligation": {
+      "type": "object",
+      "properties": {
+        "$id": {
+          "type": "string",
+          "description": "JSON object reference id"
+        },
+        "obligationType": {
+          "type": "string",
+          "description": "",
+          "options": {
+            "compensation": {
+              "title": "Expense compensation"
+            },
+            "deductible": {
+              "title": "Deductible"
+            },
+            "depreciation": {
+              "title": "Depreciation"
+            },
+            "creditNote": {
+              "title": "Credit note to invoice"
+            },
+            "vat": {
+              "title": "Explicit share of VAT",
+              "description": "for commercial customers"
+            },
+            "manualReduction": {
+              "title": "Manual reduction"
+            }
+          }
+        },
+        "total": {
+          "type": "number"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)"
+        },
+        "payerParty": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "payeeParty": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "expense": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "creditNote": {
+          "$ref": "#/definitions/objectReference",
+          "description": "Provided when obligationType is creditNote"
+        },
+        "ruleName": {
+          "type": "string",
+          "description": "Applied business rule name. This is an optional informational field not to be used in aggregation logic"
+        }
+      },
+      "required": [
+        "$id",
+        "obligationType",
+        "total",
+        "currencyCode",
+        "payerParty",
+        "payeeParty"
+      ]
+    },
+    "payment": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "$ref": "#/definitions/uuid"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "total": {
+          "type": "number"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)"
+        },
+        "payerParty": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "payeeParty": {
+          "$ref": "#/definitions/objectReference"
+        },
+        "paymentMeans": {
+          "$ref": "#/definitions/paymentMeans"
+        },
+        "additionalPaymentMeans": {
+          "type" :"array",
+          "items" :{
+            "$ref": "#/definitions/paymentMeans"
+          }
+        },
+        "expenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/objectReference"
+          }
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/objectReference"
+          }
+        }
+      },
+      "required": [
+        "uuid",
+        "dueDate",
+        "total",
+        "currencyCode",
+        "payerParty",
+        "payeeParty",
+        "expenses",
+        "obligations"
+      ]
+    },
+    "paymentMeans": {
+      "type": "object",
+      "properties": {
+        "paymentMeansCode": {
+          "type": "string",
+          "enum": [
+            "DOMESTIC_BANK_TRANSFER",
+            "INTERNATIONAL_BANK_TRANSFER",
+            "FIK_PAYMENT",
+            "NEMKONTO_BANK_TRANSFER",
+            "GIRO_TRANSFER"
+          ]
+        },
+        "paymentChannelCode": {
+          "type": "string",
+          "enum": [
+            "DK:BANK",
+            "DK:FIK",
+            "IBAN",
+            "DK:NEMKONTO",
+            "SE:GIRO",
+            "NO:BANK"
+          ]
+        },
+        "payerFinancialAccount": {
+          "$ref": "#/definitions/financialAccount"
+        },
+        "payeeFinancialAccount": {
+          "$ref": "#/definitions/financialAccount"
+        },
+        "paymentId": {
+          "type": "string",
+          "description": "Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms"
+        },
+        "instructionId": {
+          "type": "string",
+          "description": "Is used to specify an OCR reference from a payment form using the PaymentID 04, 15, 71 or 75. The number of digits depends on which PaymentID is being used"
+        },
+        "creditAccount": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string",
+              "maxLength": 8,
+              "description": "AccountID is used to identify the account ID on payment forms with the paymentId FIK71,FIK73,FIK75. The accountId is always 8 numeric characters"
+            }
+          },
+          "required": [
+            "accountId"
+          ]
+        }
+      }
+    },
+    "financialAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "The identifier for the Financial Account; the Bank Account Number"
+        },
+        "fiBranch": {
+          "$ref": "#/definitions/branch"
+        },
+        "paymentNote": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "paymentDescription": {
+          "type": "string"
+        }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "For domestic bank transfer it is 4 digits bank branch number"
+        }
+      }
+    },
+    "objectReference": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "type": "string",
+          "description": "Reference to object. Defined on referenced object as $id"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "eventType": {
+      "type": "string"
+    },
+    "payloadVersion": {
+      "type": "string"
+    },
+    "correlationId": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "case": {
+      "$ref": "#/definitions/case"
+    },
+    "settlement": {
+      "$ref": "#/definitions/settlement"
+    },
+    "parties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/party"
+      }
+    },
+    "expenses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/expense"
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/obligation"
+      }
+    },
+    "payments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/payment"
+      }
+    }
+  },
+  "required": [
+    "eventType",
+    "payloadVersion",
+    "correlationId",
+    "timestamp",
+    "case",
+    "settlement",
+    "parties",
+    "expenses",
+    "obligations",
+    "payments"
+  ]
+}

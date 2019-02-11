@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -24,7 +25,7 @@ import java.util.Map;
         "changedBy",
         "changes"
 })
-public class EventClaimUpdated {
+public class EventClaimUpdated extends EventClaim {
 
     /**
      *
@@ -69,7 +70,7 @@ public class EventClaimUpdated {
      *
      */
     @JsonProperty("changes")
-    private List<Object> changes = null;
+    private List<Changes> changes = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -189,7 +190,7 @@ public class EventClaimUpdated {
      *
      */
     @JsonProperty("changes")
-    public List<Object> getChanges() {
+    public List<Changes> getChanges() {
         return changes;
     }
 
@@ -199,7 +200,7 @@ public class EventClaimUpdated {
      *
      */
     @JsonProperty("changes")
-    public void setChanges(List<Object> changes) {
+    public void setChanges(List<Changes> changes) {
         this.changes = changes;
     }
 
