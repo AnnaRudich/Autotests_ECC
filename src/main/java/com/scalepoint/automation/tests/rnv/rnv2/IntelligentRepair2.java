@@ -62,7 +62,7 @@ public class IntelligentRepair2 extends BaseTest {
             .doAssert(mail ->  mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt"));
     }
 
-    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -88,7 +88,7 @@ public class IntelligentRepair2 extends BaseTest {
                 .getAssertion().assertAuditResponseText(REJECT);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
+    @Test(enabled=false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
