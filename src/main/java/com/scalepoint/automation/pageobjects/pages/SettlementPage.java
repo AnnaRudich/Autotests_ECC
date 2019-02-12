@@ -203,9 +203,9 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage addLinesForChosenCategories(String... categories) {
         for (String category : categories) {
             openSidAndFill(sid -> sid
-                    .withNewPrice(PRICE_2400)
                     .withCategory(category)
                     .withSubCategoryFromTheListByIndex(0)
+                    .withNewPrice(PRICE_2400)
                     .withAge(AGE_YEAR, AGE_MONTH))
                     .closeSidWithOk();
         }
