@@ -62,7 +62,7 @@ public class IntelligentRepair2 extends BaseTest {
             .doAssert(mail ->  mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt"));
     }
 
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
+    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -81,14 +81,15 @@ public class IntelligentRepair2 extends BaseTest {
 
         new RnvService().sendFeedbackWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_10), claim);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
+        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
 
-        new RnvProjectsPage().expandTopTaskDetails()
-                .getAssertion().assertAuditResponseText(REJECT);
+        new RnvProjectsPage().getAssertion().assertAuditResponseText(REJECT);
     }
 
-    @Test(enabled=false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
+    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -106,11 +107,11 @@ public class IntelligentRepair2 extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
         new RnvService().sendFeedbackWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim);
-
-        new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
+        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
 
-        new RnvProjectsPage().expandTopTaskDetails()
-                .getAssertion().assertAuditResponseText(MANUAL);
+        new RnvProjectsPage().getAssertion().assertAuditResponseText(MANUAL);
     }
 }
