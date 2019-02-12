@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -77,7 +76,6 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price value displays on Product Details page
      * THEN: Market Price supplier displays on Product Details page
      */
-    @Bug(bug = "CHARLIE-1033")
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
@@ -88,7 +86,6 @@ public class ShowMarketPricesTests extends BaseTest {
                 .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceAscendant)
                 .sortMarketPricesDescending()
                 .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceDescendant)
-                .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
                 .doAssert(productDetails->{
                     productDetails.assertMarketPriceVisible();
