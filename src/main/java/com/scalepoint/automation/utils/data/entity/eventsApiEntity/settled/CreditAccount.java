@@ -23,27 +23,15 @@ public class CreditAccount {
      * (Required)
      * 
      */
-    @JsonProperty("accountId")
+    @JsonProperty(value = "accountId", required = true)
      private String accountId;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * AccountID is used to identify the account ID on payment forms with the paymentId FIK71,FIK73,FIK75. The accountId is always 8 numeric characters.
-     * (Required)
-     * 
-     */
-    @JsonProperty("accountId")
     public String getAccountId() {
         return accountId;
     }
 
-    /**
-     * AccountID is used to identify the account ID on payment forms with the paymentId FIK71,FIK73,FIK75. The accountId is always 8 numeric characters.
-     * (Required)
-     * 
-     */
-    @JsonProperty("accountId")
     public void setAccountId(String accountId) {
         this.accountId = accountId;
     }

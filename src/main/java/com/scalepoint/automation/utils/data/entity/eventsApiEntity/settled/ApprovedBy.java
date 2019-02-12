@@ -16,6 +16,7 @@ import java.util.Map;
 @JsonPropertyOrder({
     "email",
     "name",
+    "username",
     "type"
 })
 public class ApprovedBy {
@@ -27,64 +28,48 @@ public class ApprovedBy {
      * (Required)
      * 
      */
-    @JsonProperty("name")
+    @JsonProperty(value = "name", required = true)
     private String name;
+
+    @JsonProperty("username")
+    private String username;
+
     /**
      * 'user', 'automatic' etc.
      * (Required)
      * 
      */
-    @JsonProperty("type")
+    @JsonProperty(value = "type", required = true)
     private String type;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("email")
     public String getEmail() {
         return email;
     }
 
-    @JsonProperty("email")
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 'user', 'automatic' etc.
-     * (Required)
-     * 
-     */
-    @JsonProperty("type")
+    @JsonProperty("username")
+    public String getUsername() { return username; }
+
+    @JsonProperty("username")
+    public void setUsername(String username) { this.username = username; }
+
     public String getType() {
         return type;
     }
 
-    /**
-     * 'user', 'automatic' etc.
-     * (Required)
-     * 
-     */
-    @JsonProperty("type")
     public void setType(String type) {
         this.type = type;
     }

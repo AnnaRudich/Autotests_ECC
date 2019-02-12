@@ -21,59 +21,26 @@ import java.util.Map;
 })
 public class Id {
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("schemeId")
+    @JsonProperty(value = "schemeId", required = true)
     private Id.SchemeId schemeId;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("value")
+
+    @JsonProperty(value = "value", required = true)
     private String value;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("schemeId")
     public Id.SchemeId getSchemeId() {
         return schemeId;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("schemeId")
     public void setSchemeId(Id.SchemeId schemeId) {
         this.schemeId = schemeId;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("value")
     public String getValue() {
         return value;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("value")
     public void setValue(String value) {
         this.value = value;
     }

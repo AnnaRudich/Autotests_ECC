@@ -1,25 +1,25 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.EventClaimUpdated;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_SETTLED;
 import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_UPDATED;
+import static com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes.Property.CASE_CLOSED;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.*;
 
@@ -36,74 +36,72 @@ public class EventDatabaseApi {
     }
 
     public EventClaimSettled getEventClaimSettled(ClaimRequest claimRequest) {
-        boolean notFound = true;
-        int i = 0;
-        EventClaimSettled eventClaimSettled = new EventClaimSettled();
-        while(i<10 && notFound){
-            try {
-                i++;
-                eventClaimSettled = getEventsForClaimSettled(claimRequest.getCompany()).stream()
-                        .filter(eventClaim -> eventClaim.getCase().getNumber().equals(claimRequest.getCaseNumber()))
-                        .findFirst().orElseThrow(NoSuchElementException::new);
-                notFound = false;
-            } catch (NoSuchElementException ex){
-                logger.info("No found element in events database");
-            }
-        }
-        return eventClaimSettled;
+        return getEventClaimSettled(claimRequest, 0);
+    }
+
+    public EventClaimSettled getEventClaimSettled(ClaimRequest claimRequest, int eventIndex) {
+        return (EventClaimSettled) getEventClaim(CLAIM_SETTLED, claimRequest, eventIndex);
+
     }
 
     public EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest) {
+        return getEventClaimUpdated(claimRequest, 0);
+    }
+
+    public EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest, int eventIndex) {
+        return (EventClaimUpdated)getEventClaim(CLAIM_UPDATED, claimRequest, eventIndex);
+    }
+
+
+    public EventClaim getEventClaim(EventType eventType, ClaimRequest claimRequest, int eventIndex) {
         boolean notFound = true;
         int i = 0;
-        EventClaimUpdated eventClaimUpdated = new EventClaimUpdated();
-        while(i<5 && notFound){
+        EventClaim eventClaim = null;
+        while(i<15 && notFound){
             try {
                 i++;
-                eventClaimUpdated = getEventsForClaimUpdate(claimRequest.getCompany()).stream()
-                        .filter(eventClaim -> eventClaim.getCase().getNumber().equals(claimRequest.getCaseNumber()))
-                        .findFirst().orElseThrow(NoSuchElementException::new);
+                final List<EventClaim> events = getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber());
+                if (events.size() < eventIndex + 1)
+                    throw  new NoSuchElementException();
+                eventClaim = events.get(eventIndex);
                 notFound = false;
             } catch (NoSuchElementException ex){
                 logger.info("No found element in events database");
             }
         }
-        return eventClaimUpdated;
-    }
 
-    private List<EventClaimUpdated> getEventsForClaimUpdate(String company){
-        return getEventsForType(CLAIM_UPDATED, company);
-    }
-
-    private List<EventClaimSettled> getEventsForClaimSettled(String company){
-        return getEventsForType(CLAIM_SETTLED, company);
-    }
-
-    private <T> List getEventsForType(EventType type, String company){
-        logger.info("Looking for events with type: " + type.getType());
-        String query = "select Payload from dk_outbound_queue_%s where Type = ? order by id desc";
-        return this.jdbcTemplate.query(
-                String.format(query, company),
-                new EventsMapper(type),
-                (T) type.getType()
-        );
-    }
-
-    private static final class EventsMapper<T> implements RowMapper<T> {
-
-        private EventType eventType;
-
-        EventsMapper(EventType eventType){
-            this.eventType = eventType;
+        if (eventClaim == null){
+            logger.error("Please look into Events API DB, event might not have been managed to be created in time. Look into DB for {}th event({}) for case number {} of {}",
+                    eventIndex+1, eventType.getType(), claimRequest.getCaseNumber(), claimRequest.getCompany());
         }
 
-        public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return eventClaim;
+    }
+
+
+    private List<String> getEventPayloadsForType(EventType type, String company, String caseNumber){
+        logger.info("Looking for events with type: " + type.getType());
+        String query = "select Payload from dk_outbound_queue_%s where Type = ? and JSON_VALUE(Payload, '$.case.number')= ? order by id asc";
+        return jdbcTemplate.queryForList(String.format(query, company), String.class, type.getType(), caseNumber);
+    }
+
+    private List<EventClaim> getEventsForType(EventType type, List<String> payloadList) {
+        return payloadList.stream().map(json ->  {
             try {
-                return new ObjectMapper().readValue(rs.getString("Payload"), (Class<T>) eventType.getClazz());
+                logger.info("PayLoad: {}", json);
+                final EventClaim event = (EventClaim) new ObjectMapper().readValue(json, type.getClazz());
+                event.setJsonString(json);
+                return event;
             } catch (IOException e) {
                 throw new InvalidParameterException("Not valid object");
             }
-        }
+        }).collect(toList());
+    }
+
+    private List<EventClaim> getEventsForType(EventType type, String company, String caseNumber) {
+        List<String> payloadList = getEventPayloadsForType(type, company, caseNumber);
+
+        return getEventsForType(type, payloadList);
     }
 
     public enum EventType {
@@ -129,7 +127,11 @@ public class EventDatabaseApi {
     }
 
     public void assertThatCloseCaseEventWasCreated(ClaimRequest claimRequest) {
-        assertThat(getEventClaimUpdated(claimRequest).getCase().getNumber())
+        assertThatCloseCaseEventWasCreated(claimRequest, 0);
+    }
+
+    public void assertThatCloseCaseEventWasCreated(ClaimRequest claimRequest, int eventIndex) {
+        assertThat(getEventClaimUpdated(claimRequest, eventIndex).getCase().getNumber())
                 .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was created in event-api")
                 .isEqualTo(claimRequest.getCaseNumber());
     }
@@ -142,10 +144,10 @@ public class EventDatabaseApi {
     }
 
     public void assertThatCloseCaseEventWasNotCreated(ClaimRequest claimRequest) {
-        assertThat(getEventsForClaimUpdate(claimRequest.getCompany())
-                .stream().anyMatch(event -> event.getCase().getNumber().equals(claimRequest.getCaseNumber())))
+        final List<EventClaim> eventsForClaimUpdate = getEventsForType(CLAIM_UPDATED, claimRequest.getCompany(), claimRequest.getCaseNumber());
+        assertThat(eventsForClaimUpdate.isEmpty())
                 .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was not created in event-api")
-                .isFalse();
+                .isTrue();
     }
 
     public void assertNumberOfCloseCaseEventsThatWasCreatedForClaim(ClaimRequest claimRequest, int eventsNumber) {
@@ -159,8 +161,18 @@ public class EventDatabaseApi {
         return getEventsUpdatedList(claimRequest).size();
     }
 
-    private List<EventClaimUpdated> getEventsUpdatedList(ClaimRequest claimRequest) {
-        return getEventsForClaimUpdate(claimRequest.getCompany()).stream().filter(event ->
-                event.getCase().getNumber().equals(claimRequest.getCaseNumber())).collect(Collectors.toList());
+    private List getEventsUpdatedList(ClaimRequest claimRequest) {
+        return getEventsForType(CLAIM_UPDATED, claimRequest.getCompany(), claimRequest.getCaseNumber())
+                .stream()
+                .filter(event -> hasProperty((EventClaimUpdated)event, CASE_CLOSED))
+                .collect(toList());
+    }
+
+    private boolean hasProperty(EventClaimUpdated event, Changes.Property property) {
+        return event.getChanges().stream().anyMatch(c -> c.getProperty().equals(property));
+    }
+
+    private boolean hasCaseNumber(EventClaimUpdated event, String caseNumber) {
+        return event.getCase().getNumber().equals(caseNumber);
     }
 }

@@ -1,8 +1,5 @@
-
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,57 +8,56 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id",
-    "fiBranch"
+        "id",
+        "fiBranch",
+        "paymentNote",
+        "paymentDescription"
 })
-public class PayerFinancialAccount {
+public class FinancialAccount {
 
     /**
-     * The identifier for the Financial Account; the Bank Account Number.
-     * <p>
-     * 
-     * 
+     * The identifier for the Financial Account; the Bank Account Number
+     *
      */
     @JsonProperty("id")
     private String id;
-    @JsonProperty("fiBranch")
+    @JsonProperty ("fiBranch")
     private FiBranch fiBranch;
+    @JsonProperty ("paymentNote")
+    private String paymentNote;
+    @JsonProperty ("paymentDescription")
+    private String paymentDescription;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * The identifier for the Financial Account; the Bank Account Number.
-     * <p>
-     * 
-     * 
-     */
-    @JsonProperty("id")
     public String getId() {
         return id;
     }
 
     /**
-     * The identifier for the Financial Account; the Bank Account Number.
-     * <p>
-     * 
-     * 
+     * The identifier for the Financial Account; the Bank Account Number
+     *
      */
-    @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
     }
 
-    @JsonProperty("fiBranch")
-    public FiBranch getFiBranch() {
-        return fiBranch;
-    }
+    public FiBranch getFiBranch() { return fiBranch; }
 
-    @JsonProperty("fiBranch")
-    public void setFiBranch(FiBranch fiBranch) {
-        this.fiBranch = fiBranch;
-    }
+    public void setFiBranch(FiBranch fiBranch) { this.fiBranch = fiBranch; }
+
+    public String getPaymentNote() { return paymentNote; }
+
+    public void setPaymentNote(String paymentNote) { this.paymentNote = paymentNote; }
+
+    public String getPaymentDescription() { return paymentDescription; }
+
+    public void setPaymentDescription(String paymentDescription) { this.paymentDescription = paymentDescription; }
 
     @Override
     public String toString() {

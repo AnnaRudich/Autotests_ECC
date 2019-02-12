@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService.Common;
 
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
-import com.scalepoint.automation.services.restService.ClaimSettlementItemService;
+import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -10,7 +10,10 @@ import io.restassured.RestAssured;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
+
 import static com.scalepoint.automation.utils.Configuration.getEccAdminUrl;
+import static java.util.Arrays.asList;
 
 /**
  * Created by bza on 6/29/2017.
@@ -39,14 +42,14 @@ public class BaseService {
         data.setUserId(data.getDatabaseApi().getUserIdByClaimToken(getClaimTokenWithoutPrefix()));
     }
 
-    public static ClaimSettlementItemService loginAndOpenClaimWithItem(User user, ClaimRequest claimRequest, InsertSettlementItem item){
+    public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items){
         return new LoginProcessService()
                 .login(user)
                 .createClaim(new OauthTestAccountsApi().sendRequest().getToken())
                 .addClaim(claimRequest)
                 .openClaim()
                 .claimLines()
-                .addLines(item);
+                .addLines(items);
     }
 
     public static LoginProcessService loginUser(User user){
