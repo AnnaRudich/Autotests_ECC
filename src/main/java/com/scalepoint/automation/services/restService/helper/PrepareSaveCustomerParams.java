@@ -64,7 +64,6 @@ public class PrepareSaveCustomerParams {
         saveCustomerParams.put("adr2", "");
         saveCustomerParams.put("zipcode", claimRequest.getCustomer().getAddress().getPostalCode());
         saveCustomerParams.put("city", claimRequest.getCustomer().getAddress().getCity());
-        saveCustomerParams.put("claim_number", claimRequest.getCaseNumber());
     }
 
     private void setParamsBaseOnEccIntegration(EccIntegration eccIntegration){

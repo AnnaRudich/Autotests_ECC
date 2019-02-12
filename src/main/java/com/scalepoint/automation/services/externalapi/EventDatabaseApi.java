@@ -80,9 +80,11 @@ public class EventDatabaseApi {
 
 
     private List<String> getEventPayloadsForType(EventType type, String company, String caseNumber){
-        logger.info("Looking for events with type: " + type.getType());
-        String query = "select Payload from dk_outbound_queue_%s where Type = ? and JSON_VALUE(Payload, '$.case.number')= ? order by id asc";
-        return jdbcTemplate.queryForList(String.format(query, company), String.class, type.getType(), caseNumber);
+        String query = String.format("select Payload from dk_outbound_queue_%s where Type = ? and JSON_VALUE(Payload, '$.case.number')= ? order by id asc", company);
+        logger.info("Looking for events with type: {}, and case_number: {} \n{}", type.getType(), caseNumber, query);
+        final List<String> list = jdbcTemplate.queryForList(query, String.class, type.getType(), caseNumber);
+        logger.info("Result is {} size", list.size());
+        return list;
     }
 
     private List<EventClaim> getEventsForType(EventType type, List<String> payloadList) {

@@ -59,6 +59,9 @@ public class SettlementClaimService extends BaseService {
     }
 
     public SettlementClaimService close(Object claimRequest, CloseCaseReason reason ){
+        //make request to save customer with NULL claim_number in order to be redirected to enter_base_info.jsp
+        //in order to set session attribute SESSION_CUSTOMER_SAVED
+        //For this we need ft FUNC_DISALLOW_DUPLICATE_CLAIMS_NUMBER to be enabled
         saveCustomer(claimRequest, reason);
         if(reason.equals(REPLACEMENT)){
             new ReplacementService().makeReplacement(claimRequest);
