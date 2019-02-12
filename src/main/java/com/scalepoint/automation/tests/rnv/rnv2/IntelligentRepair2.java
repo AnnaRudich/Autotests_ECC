@@ -2,6 +2,8 @@ package com.scalepoint.automation.tests.rnv.rnv2;
 
 
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
@@ -19,6 +21,7 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPAIR_AND_VALUATION;
 import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.APPROVE;
 import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.MANUAL;
@@ -27,7 +30,7 @@ import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.A
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
 public class IntelligentRepair2 extends BaseTest {
 
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
+    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
     public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -51,15 +54,18 @@ public class IntelligentRepair2 extends BaseTest {
 
         new RnvService().sendFeedbackWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage().getAssertion()
-                .assertTaskHasFeedbackReceivedStatus(agreement);
+        Page.to(MyPage.class).openRecentClaim().toMailsPage()
 
-        new RnvProjectsPage().expandTopTaskDetails()
-                .getAssertion().assertAuditResponseText(APPROVE);
+                .doAssert(mail -> {
+                    mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt");
+                    mail.isMailExist(CUSTOMER_WELCOME);
+                });
 
-        Page.to(SettlementPage.class)
-            .toMailsPage()
-            .doAssert(mail ->  mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt"));
+        new CustomerDetailsPage().toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertAuditResponseText(APPROVE);
     }
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
