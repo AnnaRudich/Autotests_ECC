@@ -68,7 +68,7 @@ public class IntelligentRepair2 extends BaseTest {
                 .assertAuditResponseText(APPROVE);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -95,7 +95,7 @@ public class IntelligentRepair2 extends BaseTest {
         new RnvProjectsPage().getAssertion().assertAuditResponseText(REJECT);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
