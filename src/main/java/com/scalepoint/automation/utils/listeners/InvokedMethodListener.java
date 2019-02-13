@@ -130,14 +130,19 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     private void rollbackToggleSetting(IInvokedMethod iInvokedMethod){
 
         FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
-        FeatureIds toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod()).type();
+        final FeatureToggleSetting toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod());
+        if (toggleSetting == null) {
+            return;
+        }
+
+        FeatureIds toggleSettingType = toggleSetting.type();
         ActionsOnToggle expectedActionOnToggle;
 
-        if (!featureTogglesDefaultState.get((toggleSetting))) {
+        if (!featureTogglesDefaultState.get((toggleSettingType))) {
             expectedActionOnToggle = ActionsOnToggle.enable;
         } else expectedActionOnToggle = ActionsOnToggle.disable;
 
-        featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSetting);
+        featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSettingType);
     }
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
