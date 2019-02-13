@@ -109,9 +109,15 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
                     if (featureTogglesDefaultState.isEmpty()) {
                         logger.info("No feature toggle to rollback");
-                    } else rollbackToggleSetting(iInvokedMethod);
+                    } else {
+                        rollbackToggleSetting(iInvokedMethod);
+                    }
 
                     Page.to(LoginPage.class);
+
+                    FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
+                    List<FtOperation> operations = rollbackContext.getOperations();
+                    functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
 
                 } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
