@@ -57,16 +57,20 @@ public class EventDatabaseApi {
         boolean notFound = true;
         int i = 0;
         EventClaim eventClaim = null;
-        while(i<15 && notFound){
+        while(i<5 && notFound){
             try {
                 i++;
                 final List<EventClaim> events = getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber());
-                if (events.size() < eventIndex + 1)
-                    throw  new NoSuchElementException();
+                if (events.size() < eventIndex + 1) {
+                    Thread.sleep(500);
+                    throw new NoSuchElementException();
+                }
                 eventClaim = events.get(eventIndex);
                 notFound = false;
             } catch (NoSuchElementException ex){
                 logger.info("No found element in events database");
+            } catch (InterruptedException ex){
+                logger.error(ex);
             }
         }
 
