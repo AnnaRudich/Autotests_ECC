@@ -6,12 +6,11 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.spring.Application;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
-import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -48,7 +47,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     public void setUpData(Method method){
         Thread.currentThread().setName("Thread "+method.getName());
-        MDC.put("sessionid", method.getName());
+        ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
         ServiceData.init(databaseApi);
     }
@@ -57,7 +56,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     public void cleanup(Method method) {
         log.info("Clean up after: {}", method.toString());
         CurrentUser.cleanUp();
-        MDC.clear();
+        ThreadContext.clearMap();
     }
 
     protected CaseSettlementDataService getSettlementData(ClaimRequest claimRequest){

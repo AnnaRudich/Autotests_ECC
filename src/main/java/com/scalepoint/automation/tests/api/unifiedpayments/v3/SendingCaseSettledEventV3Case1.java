@@ -43,17 +43,17 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeWithMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
+    public void closeWithMailSendingCaseSettledEventV3Case1(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
         close(user, item1, item2, item3, item4, CLOSE_WITH_MAIL);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeWithoutMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
+    public void closeWithoutMailSendingCaseSettledEventV3Case1(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
         close(user, item1, item2, item3, item4, CLOSE_WITHOUT_MAIL);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
+    public void closeExternallySendingCaseSettledEventV3Case1(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, InsertSettlementItem item4) {
         //GIVEN
         /*
             1st item with price 1000 and depreciation  500    (50%)

@@ -20,17 +20,17 @@ public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3C
 
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeWithMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
+    public void closeWithMailSendingCaseSettledEventV3Case2_5(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         close(user, item1, item2, item3, CLOSE_WITH_MAIL);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeWithoutMail(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
+    public void closeWithoutMailSendingCaseSettledEventV3Case2_5(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         close(user, item1, item2, item3, CLOSE_WITHOUT_MAIL);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
-    public void closeExternally(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
+    public void closeExternallySendingCaseSettledEventV3Case2_5(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         //GIVEN
         /*
             1st item with price 3000 and depreciation  600    (20%)
