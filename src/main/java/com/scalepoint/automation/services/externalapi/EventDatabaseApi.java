@@ -58,6 +58,7 @@ public class EventDatabaseApi {
         int i = 0;
         EventClaim eventClaim = null;
         while(i<5 && notFound){
+            logger.info("Looking for {}th event with type: {}, and case_number: {}", eventIndex, eventType.getType(), claimRequest.getCaseNumber());
             try {
                 i++;
                 final List<EventClaim> events = getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber());
@@ -85,7 +86,7 @@ public class EventDatabaseApi {
 
     private List<String> getEventPayloadsForType(EventType type, String company, String caseNumber){
         String query = String.format("select Payload from dk_outbound_queue_%s where Type = ? and JSON_VALUE(Payload, '$.case.number')= ? order by id asc", company);
-        logger.info("Looking for events with type: {}, and case_number: {} \n{}", type.getType(), caseNumber, query);
+        logger.info("Query: {}", query);
         final List<String> list = jdbcTemplate.queryForList(query, String.class, type.getType(), caseNumber);
         logger.info("Result is {} size", list.size());
         return list;
