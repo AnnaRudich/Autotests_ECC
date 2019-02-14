@@ -57,13 +57,13 @@ public class EventDatabaseApi {
         boolean notFound = true;
         int i = 0;
         EventClaim eventClaim = null;
-        while(i<5 && notFound){
-            logger.info("Looking for {}th event with type: {}, and case_number: {}", eventIndex, eventType.getType(), claimRequest.getCaseNumber());
+        while(i<20 && notFound){
+            logger.info("Looking for {}th event with type: {}, and case_number: {}", eventIndex+1, eventType.getType(), claimRequest.getCaseNumber());
             try {
                 i++;
                 final List<EventClaim> events = getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber());
                 if (events.size() < eventIndex + 1) {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                     throw new NoSuchElementException();
                 }
                 eventClaim = events.get(eventIndex);
