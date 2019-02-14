@@ -87,6 +87,14 @@
             WHERE ICRFNBR=@lb_id
         </sql>
 
+        <sql>
+            --disable audit for LB
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
+            UPDATE [dbo].[INSCOMP]
+            SET auditEnabled=0
+            WHERE ICRFNBR=@lb_id
+        </sql>
+
         <rollback/>
     </changeSet>
 </databaseChangeLog>
