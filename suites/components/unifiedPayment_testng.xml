@@ -2,7 +2,6 @@
 <suite name="UnifiedPayment" configfailurepolicy="continue" parallel="methods" thread-count="1">
     <test verbose="1" name="UnifiedPayment" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
-            <package name="com.scalepoint.automation.tests.api"/>
             <package name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
             <package name="com.scalepoint.automation.tests.api.unifiedpayments.v3"/>
         </packages>
