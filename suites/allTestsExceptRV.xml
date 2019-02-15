@@ -7,6 +7,8 @@
             <package name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
             <package name=".*">
                 <exclude name="com.scalepoint.automation.tests.api"/>
+                <exclude name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
+                <exclude name="com.scalepoint.automation.tests.api.unifiedpayments.v3"/>
                 <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
                 <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
                 <exclude name="com.scalepoint.automation.tests.selfservice"/>
@@ -35,6 +37,8 @@
     <test verbose="1" name="api" enabled="true" preserve-order="true" thread-count="1">
         <packages>
             <package name="com.scalepoint.automation.tests.api"/>
+            <package name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
+            <package name="com.scalepoint.automation.tests.api.unifiedpayments.v3"/>
         </packages>
     </test>
 
