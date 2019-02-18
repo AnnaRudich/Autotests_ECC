@@ -74,7 +74,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addDescription(String text) {
-        sendKeys(descriptionField, text);
+        $("#description-text").setValue(text);
         waitForVisible(suggestions);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
