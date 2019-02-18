@@ -16,12 +16,14 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -412,6 +414,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with shop
      * THEN: C1 status is "Completed"
      */
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
@@ -441,7 +444,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
 
 
-                new MyPage().openRecentClaim()
+                new MyPage().openRecentClaimAndCloseTheTab()
                 .toMailsPage()
                 .doAssert(mail -> {
                     mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);

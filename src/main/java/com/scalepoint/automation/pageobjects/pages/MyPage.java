@@ -59,6 +59,17 @@ public class MyPage extends Page {
         return at(CustomerDetailsPage.class);
     }
 
+    public CustomerDetailsPage openRecentClaimAndCloseTheTab() {
+        recentCustomer.click();
+        closeSecondTabAndSwitchToLast();
+        return at(CustomerDetailsPage.class);
+    }
+
+    private void closeSecondTabAndSwitchToLast(){
+        driver.close();
+        switchToLast();
+    }
+
     public SettlementPage openActiveRecentClaim() {
         activeCustomerLink.click();
         return at(SettlementPage.class);
