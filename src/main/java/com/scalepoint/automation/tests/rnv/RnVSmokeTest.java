@@ -4,8 +4,10 @@ import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.RnvTaskType;
@@ -17,18 +19,23 @@ import org.testng.annotations.Test;
 public class RnVSmokeTest extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void sendLineToRnv_SendFeedbackIsSuccess(@UserCompany(CompanyCode.FUTURE50)User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail()
+                .openRecentClaim()
+                .reopenClaim()
                 .openSid()
                 .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .retryChangeTask(lineDescription, rnvTaskType.getRepair())
+                .changeTask(lineDescription, rnvTaskType.getRepair())
                 .nextRnVstep()
                 .sendRnV(agreement)
 

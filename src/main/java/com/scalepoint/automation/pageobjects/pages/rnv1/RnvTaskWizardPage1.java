@@ -5,7 +5,6 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -89,32 +88,13 @@ public class RnvTaskWizardPage1 extends Page {
         return "/?orderToken";
     }
 
-    public void changeTask(String claimLineDescription, String taskType) {
+    public RnvTaskWizardPage1 changeTask(String claimLineDescription, String taskType) {
         Wait.waitForVisible(postalCodeField).click();
         Wait.waitForAjaxCompleted();
         String xpathTask = taskTypeFieldByCLNameXpath.replace("$1", claimLineDescription);
         clickAndWaitForDisplaying(By.xpath(xpathTask), By.cssSelector("ul.x-list-plain"));
         String xpathTaskType = tasksXpath.replace("$1", taskType);
         driver.findElement(By.xpath(xpathTaskType)).click();
-    }
-
-    public RnvTaskWizardPage1 retryChangeTask(String claimLineDescription, String taskType){
-        int attempt = 0;
-        while (attempt <= 3) {
-            try {
-                changeTask(claimLineDescription, taskType);
-                break;
-            } catch (NoSuchElementException e){
-                throw e;
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                logger.error("Next attempt");
-                attempt++;
-                if (attempt > 3) {
-                    throw e;
-                }
-            }
-        }
         return this;
     }
 
