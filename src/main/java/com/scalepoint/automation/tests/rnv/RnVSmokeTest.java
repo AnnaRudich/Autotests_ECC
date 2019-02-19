@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 
 
 public class RnVSmokeTest extends BaseTest {
-
     @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
@@ -29,7 +28,7 @@ public class RnVSmokeTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, rnvTaskType.getRepair())
+                .retryChangeTask(lineDescription, rnvTaskType.getRepair())
                 .nextRnVstep()
                 .sendRnV(agreement)
 
