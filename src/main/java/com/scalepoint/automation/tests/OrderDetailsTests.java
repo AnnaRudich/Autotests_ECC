@@ -95,7 +95,6 @@ public class OrderDetailsTests extends BaseTest {
                 .goToShop()
                 .addFirstRecommendedItemToCart()
                 .checkoutProduct()
-                .openRecentClaim()
                 .toOrdersDetailsPage();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
@@ -159,7 +158,6 @@ public class OrderDetailsTests extends BaseTest {
         OrderDetailsPage ordersPage = searchForProductPage
                 .addProductToCart(productIndex)
                 .checkoutProductWithdrawal()
-                .openRecentClaim()
                 .toOrdersDetailsPage();
 
         double withdrawValue = activeValuation - productPrice;

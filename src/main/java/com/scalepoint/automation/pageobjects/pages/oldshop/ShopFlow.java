@@ -2,30 +2,27 @@ package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.modules.oldshop.AccountBox;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.data.entity.payments.Dankort;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public abstract class ShopFlow extends Page {
 
-    public MyPage checkoutProduct() {
+    public CustomerDetailsPage checkoutProduct() {
         return getAccountBox().
                 toShoppingCart().
                 toOrderVerificationPage().
                 selectAgreeOption().
-                selectPlaceMyOrderOption().
-                to(MyPage.class);
+                selectPlaceMyOrderOption();
     }
 
-    public MyPage checkoutProductWithdrawal() {
+    public CustomerDetailsPage checkoutProductWithdrawal() {
         return getAccountBox().
                 toShoppingCart().
                 toCashPayoutPage().
                 withdrawMoney().
                 selectAgreeOption().
-                selectPlaceMyOrderOption().
-                to(MyPage.class);
+                selectPlaceMyOrderOption();
     }
 
     public CustomerDetailsPage checkoutWithBankTransfer() {

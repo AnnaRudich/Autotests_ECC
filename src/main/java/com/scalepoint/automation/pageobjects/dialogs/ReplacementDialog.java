@@ -19,6 +19,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.waitForSpinnerToDisappear;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReplacementDialog extends BaseDialog {
@@ -57,7 +58,7 @@ public class ReplacementDialog extends BaseDialog {
     public ReplacementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
         switchToLast();
-        Wait.waitForVisible(cancelButton);
+        waitForVisible(cancelButton);
         return this;
     }
 
@@ -71,7 +72,7 @@ public class ReplacementDialog extends BaseDialog {
 
 
     public void closeReplacementDialog() {
-        Wait.waitForVisible(cancelButton);
+        waitForVisible(cancelButton);
         cancelButton.click();
     }
 
@@ -110,9 +111,8 @@ public class ReplacementDialog extends BaseDialog {
         $(selectAllItemsCheckbox).waitUntil(Condition.visible, 15L).click();
         $(nextButtonByXpath).click();
         $(finishButtonByXpath).click();
-        Wait.waitForVisible(cancelButton);
-        Wait.waitForVisible(closeButtonByXpath);
-        $(closeButtonByXpath).click();
+        waitForSpinnerToDisappear();
+        waitForVisible(alertOk).click();
         return Page.at(CustomerDetailsPage.class);
     }
 
