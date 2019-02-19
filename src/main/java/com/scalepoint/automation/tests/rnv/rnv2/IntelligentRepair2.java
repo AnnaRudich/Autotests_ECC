@@ -9,11 +9,9 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
-import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.RnvTaskType;
@@ -33,7 +31,7 @@ import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.A
 public class IntelligentRepair2 extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
-    public void feedback_Approved(@UserCompany(CompanyCode.FUTURE50)User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -71,7 +69,7 @@ public class IntelligentRepair2 extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
-    public void feedback_Rejected(@UserCompany(CompanyCode.FUTURE50)User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -103,7 +101,7 @@ public class IntelligentRepair2 extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
-    public void feedback_Manual(@UserCompany(CompanyCode.FUTURE50)User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)

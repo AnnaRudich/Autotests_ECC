@@ -13,6 +13,13 @@
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 
             EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard','FUTURE50'
+
+            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests1', 'serviceAgreement_NameWizzard1','FUTURE51'
+
+            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests2', 'serviceAgreement_NameWizzard2','FUTURE52'
+
+            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests3', 'serviceAgreement_NameWizzard3','FUTURE53'
+
         </sql>
     </changeSet>
 </databaseChangeLog>
