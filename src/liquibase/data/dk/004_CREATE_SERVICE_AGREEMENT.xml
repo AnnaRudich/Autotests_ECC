@@ -10,9 +10,25 @@
         <comment>Create_Service_agreement</comment>
 
         <sql>
+            --create shared service agreement under Scalepoint
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 
-            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard','FUTURE50'
+            --map this agreement to all ICs
+            Declare @targetInsCompCodes table (InsCompCode varchar(200)
+            )
+
+            insert @targetInsCompCodes values
+            ('FUTURE50'), (' FUTURE51'), ( 'FUTURE52'), ('FUTURE53'),
+            ('FUTURE54'), (' FUTURE55'), ( 'FUTURE56'), ('FUTURE57'),
+            ('FUTURE58'), (' FUTURE59'), ( 'FUTURE60')
+
+
+            declare @targetInsCompCodesList varchar(max) = (select * from @targetInsCompCodes)
+
+
+            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard',@targetInsCompCodesList
+
+
         </sql>
     </changeSet>
 </databaseChangeLog>

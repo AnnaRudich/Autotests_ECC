@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[autotests_create_service_agreements]
 		@insCompanyId int,
 		@serviceAgreementName VARCHAR(50),
 		@serviceAgreementNameForWizard VARCHAR(50),
-		@targetInsCompanyCode VARCHAR(50)
+		@targetInsCompanyCodes VARCHAR(max)
 AS
 
 	SET NOCOUNT ON
@@ -18,7 +18,7 @@ AS
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
-	declare @targetInsCompanyId int = (select ICRFNBR from InsComp where CompanyCode = @targetInsCompanyCode) --SCALEPOINT is default, won't work
+	declare @targetInsCompanyIds int = (select ICRFNBR from InsComp where CompanyCode IN (@targetInsCompanyCodes)) --SCALEPOINT is default, won't work
 
 	/* SUPPLIER DATA */
 	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
@@ -81,7 +81,7 @@ AS
 		SELECT [PseudoCategoryID], @AgreementId, @ScalepointCompanyID, '' FROM [PsuedoCategory] where Published = 1
 	--map IC to the agreement so agreement is available in RnV wizzard
 	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
-		SELECT [PseudoCategoryID], @AgreementId, @targetInsCompanyId, '' FROM [PsuedoCategory] where Published = 1
+		SELECT [PseudoCategoryID], @AgreementId, @targetInsCompanyIds, '' FROM [PsuedoCategory] where Published = 1
 
 	insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
 		select @AgreementId, 1
