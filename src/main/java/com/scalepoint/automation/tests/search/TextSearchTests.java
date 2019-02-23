@@ -53,12 +53,12 @@ public class TextSearchTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName("samsung galaxy s7")
-                .selectBrand(textSearch.getBrand1())
+                .selectBrand(textSearch.getBrandSamsung())
                 .selectModel(textSearch.getModel1())
                 .doAssert(
                         asserts -> {
                             asserts.assertSearchResultsContainsSearchModel(textSearch.getModel1());
-                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
+                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrandSamsung());
                         });
     }
 
@@ -70,7 +70,7 @@ public class TextSearchTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName("samsung galaxy s7")
-                .selectBrand(textSearch.getBrand1())
+                .selectBrand(textSearch.getBrandSamsung())
                 .openAttributesMenu()
                 .selectAttribute(attributes)
                 .searchAttributes()
@@ -124,7 +124,7 @@ public class TextSearchTests extends BaseTest {
 
         List<String> modelsAsc = tsp.getModelListAsString();
 
-        tsp.selectBrand(textSearch.getBrand1())
+        tsp.selectBrand(textSearch.getBrandSamsung())
                 .selectModel(textSearch.getModel1())
                 .waitForResultsLoad()
                 .doAssert(
@@ -164,7 +164,7 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
+                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrandSamsung());
                         });
     }
 
@@ -183,7 +183,7 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> {
-                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrand1());
+                            asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrandSamsung());
                         });
     }
 

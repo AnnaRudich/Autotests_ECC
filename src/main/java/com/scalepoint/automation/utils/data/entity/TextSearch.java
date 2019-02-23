@@ -232,7 +232,7 @@ public class TextSearch {
         return bnOProduct2;
     }
 
-    public String getBrand1() {
+    public String getBrandSamsung() {
         return brand1;
     }
 

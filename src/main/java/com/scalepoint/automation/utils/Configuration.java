@@ -11,7 +11,7 @@ public class Configuration {
   public static final String KEY_CONTEXT_ECC_ADMIN = "context.ecc.admin";
   public static final String KEY_CONTEXT_ECC_RNV = "context.ecc.rnv";
   public static final String KEY_SERVER_URL = "url.base.server";
-  public static final String KEY_ECC_SOLR_PRODUCTS_URL = "url.solr.products";
+  public static final String KEY_ECC_SOLR_URL = "url.solr.base";
   public static final String KEY_ECC_DB_URL = "url";
   public static final String KEY_EVENT_API_DB_URL = "eventApiDbUrl";
 
@@ -34,10 +34,7 @@ public class Configuration {
   private static String eccContext;
   private static String eccAdminContext;
   private static String eccRnvContext;
-  private static String eccBaseUrl;
-  private static String eccAdminBaseUrl;
-  private static String eccRnvBaseUrl;
-  private static String solrProductsUrl;
+  private static String solrBaseUrl;
   private static String hubRemote;
   private static String hubRemoteZalenium;
   private static String hubLocalZalenium;
@@ -122,8 +119,8 @@ public class Configuration {
     return locale.equals(Locale.DK);
   }
 
-  public static String getSolrProductsUrl() {
-    return solrProductsUrl;
+  public static String getSolrBaseUrl() {
+    return solrBaseUrl;
   }
 
   public Configuration setProtocol(String protocol) {
@@ -161,36 +158,9 @@ public class Configuration {
     return this;
   }
 
-  public static String getEccBaseUrl() {
-    return eccBaseUrl;
-  }
-
-  public Configuration setEccBaseUrl(String eccBaseUrl) {
-    Configuration.eccBaseUrl = eccBaseUrl;
-    return this;
-  }
-
-  public static String getEccAdminBaseUrl() {
-    return eccAdminBaseUrl;
-  }
-
-  public Configuration setEccAdminBaseUrl(String eccAdminBaseUrl) {
-    Configuration.eccAdminBaseUrl = eccAdminBaseUrl;
-    return this;
-  }
-
-  public static String getEccRnvBaseUrl() {
-    return eccRnvBaseUrl;
-  }
-
-  public Configuration setEccRnvBaseUrl(String eccRnvBaseUrl) {
-    Configuration.eccRnvBaseUrl = eccRnvBaseUrl;
-    return this;
-  }
-
-  public Configuration setSolrProductsUrl(String solrProductsUrl) {
-    Assert.notNull(solrProductsUrl, errorMessage(KEY_ECC_SOLR_PRODUCTS_URL));
-    Configuration.solrProductsUrl = solrProductsUrl;
+  public Configuration setSolrBaseUrl(String solrBaseUrl) {
+    Assert.notNull(solrBaseUrl, errorMessage(KEY_ECC_SOLR_URL));
+    Configuration.solrBaseUrl = solrBaseUrl;
     return this;
   }
 
