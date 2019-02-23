@@ -1,7 +1,9 @@
 package com.scalepoint.automation.shared;
 
+import lombok.Data;
 import org.apache.solr.client.solrj.beans.Field;
 
+@Data
 public class ProductInfo {
 
     @Field("id")
@@ -9,6 +11,9 @@ public class ProductInfo {
 
     @Field("parent_id")
     private long parentId;
+
+    @Field("popularity_rating")
+    private int popularityRating;
 
     @Field("brand")
     private String brand;
@@ -37,6 +42,8 @@ public class ProductInfo {
     @Field("price_voucher_only_in_shop_1")
     private boolean voucherOnlyInShop;
 
+
+
     private double invoicePrice;
     private Double supplierShopPrice;
     private String supplierName;
@@ -45,97 +52,5 @@ public class ProductInfo {
         setSupplierName(xpriceInfo.getSupplierName());
         setInvoicePrice(xpriceInfo.getInvoicePrice());
         setSupplierShopPrice(xpriceInfo.getSupplierShopPrice());
-    }
-
-    public void setSupplierShopPrice(Double supplierShopPrice) {
-        this.supplierShopPrice = supplierShopPrice;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    public void setInvoicePrice(double invoicePrice) {
-        this.invoicePrice = invoicePrice;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public long getParentId() {
-        return parentId;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public double getMarketPrice() {
-        return marketPrice;
-    }
-
-    public boolean isOrderable() {
-        return orderable;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public double getLowestPrice() {
-        return lowestPrice;
-    }
-
-    public double getInvoicePrice() {
-        return invoicePrice;
-    }
-
-    public Double getSupplierShopPrice() {
-        return supplierShopPrice;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public boolean isVoucherOnlyInShop() {
-        return voucherOnlyInShop;
-    }
-
-    public String getModelAndCategory(){
-        return model + " " + category;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductInfo{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", category='" + category + '\'' +
-                ", price=" + price +
-                ", marketPrice=" + marketPrice +
-                ", orderable=" + orderable +
-                ", sku='" + sku + '\'' +
-                ", lowestPrice=" + lowestPrice +
-                ", invoicePrice=" + invoicePrice +
-                ", supplierShopPrice=" + supplierShopPrice +
-                ", supplierName='" + supplierName + '\'' +
-                ", voucherOnlyInShop=" + voucherOnlyInShop +
-                '}';
     }
 }

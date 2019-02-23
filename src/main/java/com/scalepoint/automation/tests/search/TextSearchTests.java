@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -11,13 +12,9 @@ import com.scalepoint.automation.utils.data.entity.TextSearch;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_EQUALS_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 public class TextSearchTests extends BaseTest {
 
@@ -110,32 +107,32 @@ public class TextSearchTests extends BaseTest {
                 .toTextSearchPage()
                 .searchByProductName(brand);
 
-        List<String> modelsDefault = tsp.getModelListAsString();
-
         tsp.sortPopularityDescending()
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertActualModelListIsDifferentThan(modelsDefault));
+                        asserts -> asserts.assertPopularityInCorrectOrder(SortOrder.DESCENDING));
 
         tsp.sortPopularityAscending()
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertActualModelListIsDifferentThan(modelsDefault));
+                        asserts -> asserts.assertPopularityInCorrectOrder(SortOrder.ASCENDING));
 
-        List<String> modelsAsc = tsp.getModelListAsString();
-
+        /* popularity sort should be left the same with enabling brand filter*/
         tsp.selectBrand(textSearch.getBrandSamsung())
-                .selectModel(textSearch.getModel1())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertActualModelListIsDifferentThan(modelsAsc));
+                        asserts -> asserts.assertPopularityInCorrectOrder(SortOrder.ASCENDING));
 
-        List<String> models = tsp.getModelListAsString();
+        /* selecting model we have only one result shown so we can check only icon presence*/
+        tsp.selectModel(textSearch.getModel1())
+                .waitForResultsLoad()
+                .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
 
+        /* new search should reset popularity sort so no icons will be present */
         tsp.searchByProductName(brand)
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertActualModelListIsDifferentThan(models));
+                        TextSearchPage.Asserts::assertNoPopularitySortChosen);
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
@@ -216,7 +213,7 @@ public class TextSearchTests extends BaseTest {
                 .waitForResultsLoad()
                 .doAssert(
                         TextSearchPage.Asserts::assertSearchResultsCategoryIsEmpty
-                ).snappCategory()
+                ).snapCategory()
                 .waitForResultsLoad()
                 .doAssert(
                         asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())

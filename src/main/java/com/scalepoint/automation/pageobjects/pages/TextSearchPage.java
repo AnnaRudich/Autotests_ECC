@@ -1,12 +1,16 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
 import com.scalepoint.automation.pageobjects.modules.textSearch.TextSearchAttributesMenu;
+import com.scalepoint.automation.services.externalapi.SolrApi;
+import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
@@ -16,11 +20,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.Image;
-import ru.yandex.qatools.htmlelements.element.Link;
-import ru.yandex.qatools.htmlelements.element.Select;
-import ru.yandex.qatools.htmlelements.element.Table;
+import ru.yandex.qatools.htmlelements.element.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,13 +29,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForElementContainsText;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -220,7 +215,7 @@ public class TextSearchPage extends Page {
         Wait.waitForAjaxCompleted();
         Wait.waitForVisible(match);
         clickUsingJsIfSeleniumClickReturnError(match);
-        if(!BaseDialog.isOn(SettlementDialog.class)){
+        if (!BaseDialog.isOn(SettlementDialog.class)) {
             clickUsingJsIfSeleniumClickReturnError(match);
         }
         return BaseDialog.at(SettlementDialog.class);
@@ -286,7 +281,7 @@ public class TextSearchPage extends Page {
         return searchBy(productName);
     }
 
-    public TextSearchPage searchBySku(String sku){
+    public TextSearchPage searchBySku(String sku) {
         return searchBy("SKU:" + sku);
     }
 
@@ -311,11 +306,11 @@ public class TextSearchPage extends Page {
         }
     }
 
-    private void waitForSuggestions(){
+    private void waitForSuggestions() {
         waitForDisplayed(By.xpath("//div[@id='suggest_div']/table"));
     }
 
-    public TextSearchPage searchProductAndSelectFirstSuggestion(String productName){
+    public TextSearchPage searchProductAndSelectFirstSuggestion(String productName) {
         searchInput.sendKeys(productName);
         waitForSuggestions();
         searchInput.sendKeys(Keys.ARROW_DOWN);
@@ -325,7 +320,7 @@ public class TextSearchPage extends Page {
         return this;
     }
 
-    public String getSearchInputText(){
+    public String getSearchInputText() {
         return searchInput.getText();
     }
 
@@ -351,7 +346,7 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage waitForResultsLoad() {
         try {
-            waitForDisplayed(fieldSetDisabled);
+            waitForDisplayed(fieldSetDisabled, 10);
         } catch (Exception e) {
             logger.info(e.getMessage());
         }
@@ -372,35 +367,25 @@ public class TextSearchPage extends Page {
         return this;
     }
 
-    public SettlementDialog openSid(){
+    public SettlementDialog openSid() {
         createManually.click();
         return BaseDialog.at(SettlementDialog.class);
     }
 
-    public List<WebElement> getBrandList() {
-        return brandList;
-    }
-
-    public List<String> getBrandListAsString(){
-        return getBrandList().stream().map(WebElement::getText).collect(Collectors.toList());
-    }
-
-    public List<WebElement> getModelList() {
-        return modelList;
-    }
-
-    public List<String> getModelListAsString(){
-        return getModelList().stream().map(WebElement::getText).collect(Collectors.toList());
-    }
-
-    public TextSearchPage clickOnDidYouMean(){
+    public TextSearchPage clickOnDidYouMean() {
         didYouMeanLink.click();
         return this;
     }
 
-    public TextSearchPage snappCategory(){
+    public TextSearchPage snapCategory() {
         snappingCategory.click();
         return this;
+    }
+
+    private List<String> getProductIds() {
+        Wait.waitForAjaxCompleted();
+        ElementsCollection elements = $$(By.xpath("(.//*[@id='productsTable']/table//td[@productid])"));
+        return elements.stream().map(e -> e.attr("productId")).collect(Collectors.toList());
     }
 
     public TextSearchPage doAssert(Consumer<Asserts> assertsFunc) {
@@ -408,6 +393,7 @@ public class TextSearchPage extends Page {
         return TextSearchPage.this;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public class Asserts {
         public Asserts assertSortingMarketPriceAscendant() {
             Assert.assertTrue(isSortingMarketPriceAscendant(), "Ascendant sorting of Market Price does not work");
@@ -445,7 +431,7 @@ public class TextSearchPage extends Page {
             return this;
         }
 
-        public Asserts assertSearchResultsCategoryIsEmpty(){
+        public Asserts assertSearchResultsCategoryIsEmpty() {
             assertThat(resultsCategoriesList).isEmpty();
             return this;
         }
@@ -461,23 +447,50 @@ public class TextSearchPage extends Page {
             return this;
         }
 
-        public Asserts assertActualBrandListIsDifferentThan(List<String> list) {
-            assertThat(brandList.stream().map(WebElement::getText).collect(Collectors.toList())).isNotEqualTo(list);
-            return this;
-        }
-
-        public Asserts assertActualModelListIsDifferentThan(List<String> list) {
-            assertThat(modelList.stream().map(WebElement::getText).collect(Collectors.toList())).isNotEqualTo(list);
-            return this;
-        }
-
-        public Asserts assertIsDidYouMeanDisplayed(){
+        public Asserts assertIsDidYouMeanDisplayed() {
             assertThat(didYouMeanLink.isDisplayed()).isTrue();
             return this;
         }
 
-        public Asserts assertQueryContainsDidYouMeanText(String query){
+        public Asserts assertQueryContainsDidYouMeanText(String query) {
             assertThat(query).contains(didYouMeanLink.getText());
+            return this;
+        }
+
+        public Asserts assertNoPopularitySortChosen() {
+            boolean noAscendingImagesOnPage = driver.findElements(By.xpath("//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")).isEmpty();
+            boolean noDescendingImagesOnPage = driver.findElements(By.xpath("//img[@id='sortPopularityImg' and contains(@src,'text_search\\icon_order_za.gif')]")).isEmpty();
+            Assert.assertTrue(noAscendingImagesOnPage && noDescendingImagesOnPage);
+            return this;
+        }
+
+        public Asserts assertAscendingPopularityChosen() {
+            Assert.assertTrue(ascendingPopularity.isDisplayed());
+            return this;
+        }
+
+        public Asserts assertPopularityInCorrectOrder(SortOrder sortOrder) {
+            List<ProductInfo> shownProducts = SolrApi.findProducts(getProductIds());
+            if (shownProducts.isEmpty()) {
+                Assert.fail("No results found");
+            }
+            boolean orderCorrect = true;
+            int currentPopularity = shownProducts.get(0).getPopularityRating();
+            for (int i = 1; i < shownProducts.size(); i++) {
+                ProductInfo nextProduct = shownProducts.get(i);
+                if (sortOrder.equals(SortOrder.DESCENDING) && nextProduct.getPopularityRating() > currentPopularity
+                        ||
+                        sortOrder.equals(SortOrder.ASCENDING) && nextProduct.getPopularityRating() < currentPopularity) {
+                    orderCorrect = false;
+                    break;
+                }
+                currentPopularity = nextProduct.getPopularityRating();
+            }
+            if (!orderCorrect) {
+                logger.warn("Order of products in not correct. Required popularity sort: {}", sortOrder);
+                shownProducts.forEach(logger::error);
+            }
+            Assert.assertTrue(orderCorrect, "Popularity Order is broken");
             return this;
         }
     }

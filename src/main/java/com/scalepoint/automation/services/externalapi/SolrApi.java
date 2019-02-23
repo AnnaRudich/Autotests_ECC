@@ -13,6 +13,10 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class SolrApi {
 
@@ -37,6 +41,10 @@ public class SolrApi {
             logger.error(e.getMessage(), e);
             throw new IllegalArgumentException("no products found", e);
         }
+    }
+
+    public static List<ProductInfo> findProducts(List<String> productIds) {
+        return productIds.stream().map(SolrApi::findProduct).collect(Collectors.toCollection(() -> new ArrayList<>(productIds.size())));
     }
 
     public static SolrClaim findClaim(String claimId) {
