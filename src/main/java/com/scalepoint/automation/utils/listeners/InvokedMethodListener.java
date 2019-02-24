@@ -27,14 +27,7 @@ import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
 
@@ -62,12 +55,12 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private void retryUpdateFtTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         int attempt = 0;
-            /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
+        /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
         while (attempt <= 1) {
             try {
                 updateTemplate(invokedMethod, iTestResult);
                 break;
-            } catch (InvalidFtOperationException e){
+            } catch (InvalidFtOperationException e) {
                 throw e;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -93,7 +86,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings("unchecked")
     @Override
     public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
-        if(Browser.driver() != null) {
+        if (Browser.driver() != null) {
             if (iInvokedMethod.isTestMethod()) {
                 try {
                     takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
@@ -120,14 +113,14 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
 
                 } catch (Exception e) {
-                /* if not caught it breaks the call of AfterMethod*/
+                    /* if not caught it breaks the call of AfterMethod*/
                     logger.error(e.getMessage(), e);
                 }
             }
         }
     }
 
-    private void rollbackToggleSetting(IInvokedMethod iInvokedMethod){
+    private void rollbackToggleSetting(IInvokedMethod iInvokedMethod) {
 
         FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
         final FeatureToggleSetting toggleSetting = getToggleSetting(iInvokedMethod.getTestMethod());
@@ -153,7 +146,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     }
 
     private String getFileName(Method method) {
-        return "node_" + gridNode.replace("http://", "").replace(gridNode.substring(gridNode.lastIndexOf(":")), "")
+        return "node_" + gridNode.replace("http://", "").replace(":", "")
                 + "_" + Browser.getDriverType()
                 + "_" + method.getName();
     }
@@ -228,16 +221,16 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         updateFtTemplateWithRequiredSettings(user, ftOperations, iTestResult);
     }
 
-    private void checkDefaultSettings(User user, List<FtOperation> ftOperations){
+    private void checkDefaultSettings(User user, List<FtOperation> ftOperations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
         FTSettings.ComparingResult comparingResult = functionalTemplatesApi.findDifferences(user.getFtId(), ftOperations.toArray(new FtOperation[0]));
 
-        if(!comparingResult.hasSameStateAsRequested()){
+        if (!comparingResult.hasSameStateAsRequested()) {
             throw new InvalidFtOperationException(comparingResult.getDifferedOperations());
         }
     }
 
-    private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations, ITestResult iTestResult){
+    private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations, ITestResult iTestResult) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
 

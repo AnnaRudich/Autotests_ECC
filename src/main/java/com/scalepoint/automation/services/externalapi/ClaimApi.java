@@ -1,7 +1,9 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -11,9 +13,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.message.BasicHeader;
+import org.openqa.selenium.WebDriver;
 
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.utils.Http.*;
@@ -21,89 +24,77 @@ import static com.scalepoint.automation.utils.Http.*;
 @SuppressWarnings("ConstantConditions")
 public class ClaimApi extends AuthenticationApi {
 
-  private static final int ATTEMPTS_LIMIT = 1;
-  private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
-  private Header headerLocation;
+    private static final int ATTEMPTS_LIMIT = 1;
+    private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
+    private static final Pattern USER_ID_REGEX = Pattern.compile("/(?<id>\\d+)/");
+    private Header headerLocation;
 
-  public Header getHeaderLocation() {
-    return headerLocation;
-  }
-
-  public ClaimApi(User user) {
-    super(user);
-  }
-
-  public ClaimApi(Executor executor) {
-    super(executor);
-  }
-
-  public void createClaim(Claim claim, String policyType) {
-    createClaim(claim, 0, policyType);
-  }
-
-  public void createClaim(Claim claim) {
-    createClaim(claim, 0, null);
-  }
-
-  private void createClaim(Claim claim, int attempt, String policyType) {
-    log.info("Create client: " + claim.getClaimNumber());
-
-    String DATE_FORMAT = "yyyy-MM-dd";
-    List<NameValuePair> clientParams = ParamsBuilder.create().
-            add("policytype", policyType).
-            add("damageDate", claim.getDamageDate()).
-            add("last_name", claim.getLastName()).
-            add("first_name", claim.getFirstName()).
-            add("policy_number", claim.getPolicyNumber()).
-            add("claim_number", claim.getClaimNumber()).
-            add("url", "").get();
-
-    try {
-      HttpResponse createUserResponse = post(URL_CREATE_CUSTOMER, clientParams, executor).returnResponse();
-      ensure302Code(createUserResponse.getStatusLine().getStatusCode());
-
-      headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
-              createUserResponse.getHeaders("Location")[0] :
-              new BasicHeader("Location", "error=1");
-
-      if (headerLocation.getValue().contains("error=1")) {
-        throw new IllegalStateException("Response contains wrong location: " + headerLocation.getValue());
-      }
-
-      log.info("CreateUser redirected to: " + headerLocation);
-      log.info("Base ECC URL is:          " + Configuration.getEccUrl());
-
-      String claimId = headerLocation.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
-      CurrentUser.setClaimId(claimId);
-
-      String redirectTo = headerLocation.getValue() + "settlement.jsp";
-
-      log.info("Go to " + redirectTo);
-      Browser.driver().get(redirectTo);
-    } catch (Exception e) {
-      log.error("Can't create claim", e);
-      if (attempt < ATTEMPTS_LIMIT) {
-        createClaim(claim, ++attempt, policyType);
-      } else {
-        throw new ServerApiException(e);
-      }
+    public Header getHeaderLocation() {
+        return headerLocation;
     }
-  }
 
-  private String extractUrl(String html) {
-    String eccContext = Configuration.getEccContext();
-    String locale = Configuration.getLocale().toString().toLowerCase();
-
-    String regex = String.format("href=\"/%s/%s(.*?)\"", eccContext, locale);
-
-    Pattern p = Pattern.compile(regex);
-    Matcher m = p.matcher(html);
-    String url = null;
-    if (m.find()) {
-      url = m.group(1);
+    public ClaimApi(User user) {
+        super(user);
     }
-    return url;
-  }
 
+    public ClaimApi(Executor executor) {
+        super(executor);
+    }
+
+    public void createClaim(Claim claim, String policyType) {
+        createClaim(claim, 0, policyType);
+    }
+
+    private void createClaim(Claim claim, int attempt, String policyType) {
+        log.info("Create client: " + claim.getClaimNumber());
+
+        List<NameValuePair> clientParams = ParamsBuilder.create().
+                add("policytype", policyType).
+                add("damageDate", claim.getDamageDate()).
+                add("last_name", claim.getLastName()).
+                add("first_name", claim.getFirstName()).
+                add("policy_number", claim.getPolicyNumber()).
+                add("claim_number", claim.getClaimNumber()).
+                add("url", "").get();
+
+        try {
+            HttpResponse createUserResponse = post(URL_CREATE_CUSTOMER, clientParams, executor).returnResponse();
+            ensure302Code(createUserResponse.getStatusLine().getStatusCode());
+
+            headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
+                    createUserResponse.getHeaders("Location")[0] :
+                    new BasicHeader("Location", "error=1");
+
+            if (headerLocation.getValue().contains("error=1")) {
+                throw new IllegalStateException("Response contains wrong location: " + headerLocation.getValue());
+            }
+
+            log.info("CreateUser redirected to: " + headerLocation);
+            log.info("Base ECC URL is:          " + Configuration.getEccUrl());
+
+            String claimId = headerLocation.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
+            CurrentUser.setClaimId(claimId);
+
+            Wait.forCondition(new Function<WebDriver, Object>() {
+                @Nullable
+                @Override
+                public Object apply(@Nullable WebDriver webDriver) {
+                    return SolrApi.findClaim(claimId);
+                }
+            }, 10, 500);
+
+            String redirectTo = headerLocation.getValue() + "settlement.jsp";
+
+            log.info("Go to " + redirectTo);
+            Browser.driver().get(redirectTo);
+        } catch (Exception e) {
+            log.error("Can't create claim", e);
+            if (attempt < ATTEMPTS_LIMIT) {
+                createClaim(claim, ++attempt, policyType);
+            } else {
+                throw new ServerApiException(e);
+            }
+        }
+    }
 
 }
