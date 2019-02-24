@@ -8,9 +8,7 @@ GO
 
 CREATE PROCEDURE [dbo].[autotests_create_service_agreements]
 		@insCompanyId int,
-		@serviceAgreementName VARCHAR(50),
-		@serviceAgreementNameForWizard VARCHAR(50),
-		@targetInsCompanyCodes VARCHAR(max)
+		@serviceAgreementName VARCHAR(50)
 AS
 
 	SET NOCOUNT ON
@@ -18,7 +16,6 @@ AS
 	/* INSURANCE COMPANY */
 	declare @ScalepointCompanyID int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
-	declare @targetInsCompanyIds int = (select ICRFNBR from InsComp where CompanyCode IN (@targetInsCompanyCodes)) --SCALEPOINT is default, won't work
 
 	/* SUPPLIER DATA */
 	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
@@ -76,38 +73,16 @@ AS
 		@AgreementEmailType,@SupplierID,@ScalepointCompanyID,@ServiceAgreementTemplateID,'','',NULL,NULL
 	SET @AgreementId = @@IDENTITY
 	END
-	--make agreement shared
-	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
-		SELECT [PseudoCategoryID], @AgreementId, @ScalepointCompanyID, '' FROM [PsuedoCategory] where Published = 1
-	--map IC to the agreement so agreement is available in RnV wizzard
-	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
-		SELECT [PseudoCategoryID], @AgreementId, @targetInsCompanyIds, '' FROM [PsuedoCategory] where Published = 1
 
-	insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
-		select @AgreementId, 1
-		union all
-		select @AgreementId, 2
-		union all
-		select @AgreementId, 3
-		union all
-		select @AgreementId, 4
-
-	/* SERVICE AGREEMENT FOR WIZARD */
-	INSERT INTO [ServiceAgreement] ([name], [email], [tags], [status], [emailType], [supplierId], [insuranceCompanyId], [defaultTemplateId], [notes], [workflow], [reminder], [timeout])
-		select @serviceAgreementNameForWizard,@Email,@AgreementTags,@AgreementStatus,@AgreementEmailType,@SupplierID,@insCompanyId,@ServiceAgreementTemplateID,'','',NULL,NULL
-
-	declare @AgreementIdForWizard int = @@IDENTITY
-	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
-		SELECT [PseudoCategoryID], @AgreementIdForWizard, @insCompanyId,'' FROM [PsuedoCategory] where Published = 1
-
-	insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
-		select @AgreementIdForWizard, 1
-		union all
-		select @AgreementIdForWizard, 2
-		union all
-		select @AgreementIdForWizard, 3
-		union all
-		select @AgreementIdForWizard, 4
+    --map new service agreement to all task types
+    insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
+    		select @AgreementId, 1
+    		union all
+    		select @AgreementId, 2
+    		union all
+    		select @AgreementId, 3
+    		union all
+    		select @AgreementId, 4
 
 	/*---------------------------------------------------------*/
 	/* SHOP DATA */
@@ -129,7 +104,7 @@ AS
 	declare @PickupId2 int
 	exec autotests_create_shop @ShopName2, @SupplierID, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, @PickupId2 OUTPUT
 
-	insert into [Location] ([shopId], [serviceAgreementId],[contactEmail]) select @PickupId2, @AgreementIdForWizard, @Email
+	insert into [Location] ([shopId], [serviceAgreementId],[contactEmail]) select @PickupId2, @AgreementId, @Email
 	declare @LocationId2 int = @@IDENTITY
 
 	insert into [Location_ZipCode] ([locationId],[zipCodeId]) select distinct @LocationId2,ZIPCODE from ZipCodes

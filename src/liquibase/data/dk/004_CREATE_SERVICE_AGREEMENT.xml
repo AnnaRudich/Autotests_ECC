@@ -10,23 +10,46 @@
         <comment>Create_Service_agreement</comment>
 
         <sql>
+
+            declare @agreementName varchar(50) = 'serviceAgreement_autotests'
+
             --create shared service agreement under Scalepoint
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 
+            EXEC autotests_create_service_agreements @insCompanyId, @agreementName
+
+
             --map this agreement to all ICs
-            Declare @targetInsCompCodes table (InsCompCode varchar(200)
+
+            declare @targetInsCompCode varchar(200);
+
+
+            Declare @targetInsCompCodesList table
+            (
+            InsCompCode varchar(200)
             )
 
-            insert @targetInsCompCodes values
-            ('FUTURE50'), (' FUTURE51'), ( 'FUTURE52'), ('FUTURE53'),
-            ('FUTURE54'), (' FUTURE55'), ( 'FUTURE56'), ('FUTURE57'),
-            ('FUTURE58'), (' FUTURE59'), ( 'FUTURE60')
+
+            insert @targetInsCompCodesList values
+            ('FUTURE50'), ('FUTURE51'), ( 'FUTURE52'), ('FUTURE53'),
+            ('FUTURE54'), ('FUTURE55'), ( 'FUTURE56'), ('FUTURE57'),
+            ('FUTURE58'), ('FUTURE59'), ( 'FUTURE60')
+
+            DECLARE cursor_icCodes CURSOR FOR select * from @targetInsCompCodesList where InsCompCode in (select InsCompCode from @targetInsCompCodesList);
+
+            OPEN cursor_icCodes;
+
+            FETCH cursor_icCodes INTO @targetInsCompCode;
 
 
-            declare @targetInsCompCodesList varchar(max) = (select * from @targetInsCompCodes)
-
-
-            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard',@targetInsCompCodesList
+            WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    FETCH NEXT FROM cursor_icCodes;
+                    EXEC autotests_map_service_agreement @agreementName, @targetInsCompCode
+                END;
+            CLOSE cursor_icCodes;
+            DEALLOCATE cursor_icCodes;
+            GO
 
 
         </sql>
