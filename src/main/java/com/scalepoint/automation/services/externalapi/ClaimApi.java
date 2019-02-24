@@ -81,7 +81,7 @@ public class ClaimApi extends AuthenticationApi {
                 public Object apply(@Nullable WebDriver webDriver) {
                     return SolrApi.findClaim(claimId);
                 }
-            }, 10, 500);
+            }, 16, 500);
 
             String redirectTo = headerLocation.getValue() + "settlement.jsp";
 
