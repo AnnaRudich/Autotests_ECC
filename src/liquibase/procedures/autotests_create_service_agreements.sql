@@ -73,6 +73,9 @@ AS
 		@AgreementEmailType,@SupplierID,@ScalepointCompanyID,@ServiceAgreementTemplateID,'','',NULL,NULL
 	SET @AgreementId = @@IDENTITY
 	END
+    --make agreement shared
+    	insert into [PseudocatAgreements] ([PseudoCategoryId],[ServiceAgreementId],[insuranceCompanyId],templateId)
+    		SELECT [PseudoCategoryID], @AgreementId, @ScalepointCompanyID, '' FROM [PsuedoCategory] where Published = 1
 
     --map new service agreement to all task types
     insert into [ServiceAgreementTaskTypeMap] (ServiceAgreementId,TaskTypeId)
