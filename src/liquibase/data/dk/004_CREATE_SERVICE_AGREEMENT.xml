@@ -10,9 +10,29 @@
         <comment>Create_Service_agreement</comment>
 
         <sql>
+
+            declare @agreementName varchar(50) = 'serviceAgreement_autotests'
+
+            --create shared service agreement under Scalepoint
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 
-            EXEC autotests_create_service_agreements @insCompanyId, 'serviceAgreement_autotests', 'serviceAgreement_NameWizzard','FUTURE50'
+            EXEC autotests_create_service_agreements @insCompanyId, @agreementName
+
+
+            --map this agreement to all test ICs
+
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE50'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE51'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE52'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE53'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE54'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE55'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE56'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE57'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE58'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE59'
+            EXEC autotests_map_service_agreement @agreementName, 'FUTURE60'
+
         </sql>
     </changeSet>
 </databaseChangeLog>
