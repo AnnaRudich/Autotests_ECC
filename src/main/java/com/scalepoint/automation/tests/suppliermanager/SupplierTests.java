@@ -15,6 +15,7 @@ import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.Supplier;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-521")
@@ -213,6 +214,19 @@ public class SupplierTests extends BaseTest {
 
                 .toVouchersPage()
                 .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(agreement));     // Exclusive tick should be visible in supply management, vouchers list
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Check if invoiceSetting is set correctly")
+    public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT)User user){
+        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SupplierDialog supplierDialog = suppliersPage.openFirstSupplier();
+        supplierDialog.selectOrdersTab().getInvoiceSettings().select(0);
+        supplierDialog.saveSupplier();
+        Assert.assertEquals(supplierDialog.selectOrdersTab().getInvoiceSettings().getSelected(), 0);
+        supplierDialog.selectOrdersTab().getInvoiceSettings().select(1);
+        supplierDialog.saveSupplier();
+        supplierDialog = suppliersPage.openFirstSupplier();
+        Assert.assertEquals(supplierDialog.selectOrdersTab().getInvoiceSettings().getSelected(), 1);
     }
 
     @Test(dataProvider = "testDataProvider")
