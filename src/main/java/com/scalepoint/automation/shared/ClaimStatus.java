@@ -7,6 +7,14 @@ import java.util.Map;
 
 public class ClaimStatus {
 
+    public static final String WORKING = "W";
+    public static final String IN_PROGRESS = "P";
+    public static final String SETTLED = "S";
+    public static final String LOCKED = "L";
+    public static final String CANCELED = "X";
+    public static final String DROPED = "D";
+    public static final String CLOSED_EXTERNAL = "E";
+
     private static final Map<Locale, String> saved = new HashMap<>();
     private static final Map<Locale, String> cancelled = new HashMap<>();
     private static final Map<Locale, String> closedExternally = new HashMap<>();

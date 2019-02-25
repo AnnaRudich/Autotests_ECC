@@ -15,9 +15,7 @@ import org.apache.http.client.fluent.Executor;
 import org.apache.http.message.BasicHeader;
 import org.openqa.selenium.WebDriver;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.utils.Http.*;
 
@@ -26,7 +24,6 @@ public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
     private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
-    private static final Pattern USER_ID_REGEX = Pattern.compile("/(?<id>\\d+)/");
     private Header headerLocation;
 
     public Header getHeaderLocation() {
@@ -74,14 +71,9 @@ public class ClaimApi extends AuthenticationApi {
 
             String claimId = headerLocation.getValue().replaceAll(".*/([0-9]+)/.*", "$1");
             CurrentUser.setClaimId(claimId);
+            claim.setClaimId(claimId);
 
-            Wait.forCondition(new Function<WebDriver, Object>() {
-                @Nullable
-                @Override
-                public Object apply(@Nullable WebDriver webDriver) {
-                    return SolrApi.findClaim(claimId);
-                }
-            }, 16, 500);
+            Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaim(claimId), SolrApi.HARD_COMMIT_TIME, 500);
 
             String redirectTo = headerLocation.getValue() + "settlement.jsp";
 

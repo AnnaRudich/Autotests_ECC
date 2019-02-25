@@ -115,7 +115,7 @@ public class ClaimSearchTest extends BaseTest {
   @Test(dataProvider = "testDataProvider", description = "Search for claim closed externally")
   public void searchClaim_closedExternally(User user, Claim claim) {
     loginAndCreateClaim(user, claim)
-            .completeClaimWithoutMail()
+            .completeClaimWithoutMail(claim)
             .getMainMenu()
             .openClaimSearch()
             .fillClaimNumber(claim.getClaimNumber())

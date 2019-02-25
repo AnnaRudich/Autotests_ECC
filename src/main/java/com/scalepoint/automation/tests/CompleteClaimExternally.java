@@ -40,7 +40,7 @@ public class CompleteClaimExternally extends BaseTest {
                     "Possible to Complete claim Externally from Settlement page")
     public void charlie515_completeClaimExternallyFromSettlementPage(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .completeClaimWithoutMail()
+                .completeClaimWithoutMail(claim)
                 .doAssert(myPage ->
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )

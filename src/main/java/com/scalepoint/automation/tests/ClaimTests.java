@@ -13,6 +13,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -96,7 +97,7 @@ public class ClaimTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeExternally()
-                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusClosedExternally()));
+                .doAssert(myPage -> myPage.assertClaimHasStatus(ClaimStatus.CLOSED_EXTERNAL));
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")

@@ -1,10 +1,14 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
+import com.scalepoint.automation.services.externalapi.SolrApi;
+import com.scalepoint.automation.shared.ClaimStatus;
+import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -217,16 +221,25 @@ public class SettlementPage extends BaseClaimPage {
         settlementSummary.cancel();
     }
 
-
-
     public MyPage saveClaim() {
         settlementSummary.saveClaim();
         return at(MyPage.class);
     }
 
-    public MyPage completeClaimWithoutMail() {
+    public MyPage completeClaimWithoutMail(Claim claim) {
         settlementSummary.completeClaimWithoutMail();
+        waitForStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNAL);
         return at(MyPage.class);
+    }
+
+    private void waitForStatusChangedTo(Claim claim, String status) {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
+            SolrClaim solrClaim = SolrApi.findClaim(claim.getClaimId());
+            if (solrClaim != null) {
+                return solrClaim.getClaimStatus().equalsIgnoreCase(status);
+            }
+            return null;
+        }, SolrApi.HARD_COMMIT_TIME, 500);
     }
 
     public CompleteClaimPage toCompleteClaimPage() {

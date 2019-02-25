@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class UsersManager {
 
@@ -51,7 +52,8 @@ public class UsersManager {
     }
 
     private synchronized static boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
-        logger.info("Requested: {}", companyMethodArguments.size());
+        String users = companyMethodArguments.entrySet().stream().map(e -> (e.getKey().companyCode + ":" + (e.getValue() != null ? e.getValue().getLogin() : "?"))).collect(Collectors.joining(", "));
+        logger.info("Requested: {}", users);
 
         int requestedBasicUsersCount = (int)companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
         boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
@@ -139,6 +141,14 @@ public class UsersManager {
             int result = index;
             result = 31 * result + (companyCode != null ? companyCode.hashCode() : 0);
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return "CompanyMethodArgument{" +
+                    "index=" + index +
+                    ", companyCode=" + companyCode +
+                    '}';
         }
     }
 
