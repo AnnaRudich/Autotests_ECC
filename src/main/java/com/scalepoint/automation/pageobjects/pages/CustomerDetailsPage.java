@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.modules.CustomerDetails;
+import com.scalepoint.automation.utils.DateUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
@@ -19,7 +20,6 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.DateUtils.getDateFromString;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.visible;
 import static com.scalepoint.automation.utils.Wait.waitForInvisible;
@@ -118,6 +118,12 @@ public class CustomerDetailsPage extends BaseClaimPage {
 
     public class Asserts {
 
+        private static final String PAGE_FORMAT = "dd-MM-yyyy";
+
+        private String toPageFormat(LocalDate date) {
+            return DateUtils.format(date, PAGE_FORMAT);
+        }
+
         public Asserts assertCustomerCashValueIs(Double expectedPrice) {
             assertEqualsDouble(customerDetails.getCashValue(), expectedPrice, "Voucher cash value %s should be assertEqualsDouble to not depreciated voucher cash value %s");
             return this;
@@ -133,8 +139,8 @@ public class CustomerDetailsPage extends BaseClaimPage {
             return this;
         }
 
-        public Asserts assertDamageDateIsEqual(LocalDate localDate) {
-            assertThat(getDateFromString(damageDate.getText())).isEqualTo(localDate);
+        public Asserts assertDamageDateIs(LocalDate expectedDamageData) {
+            assertThat(damageDate.getText()).isEqualTo(toPageFormat(expectedDamageData));
             return this;
         }
 

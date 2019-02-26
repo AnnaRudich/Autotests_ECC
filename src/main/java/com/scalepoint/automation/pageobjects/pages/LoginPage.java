@@ -64,6 +64,11 @@ public class LoginPage extends Page {
     }
 
     public <T extends Page> T login(String userLogin, String userPassword, Class<T> pageClass) {
+        loginWithoutExpectedPage(userLogin, userPassword);
+        return at(pageClass);
+    }
+
+    public void loginWithoutExpectedPage(String userLogin, String userPassword) {
         Wait.waitForDisplayed(By.id("j_username"));
         username.sendKeys(userLogin);
         password.sendKeys(userPassword);
@@ -73,7 +78,6 @@ public class LoginPage extends Page {
         if (loginError) {
             throw new LoginInvalidException();
         }
-        return at(pageClass);
     }
 
     private boolean isLoginErrorPresent() {

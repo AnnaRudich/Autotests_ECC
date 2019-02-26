@@ -25,8 +25,8 @@ public class InvoiceBuilder {
         this.invoice.setInvoiceLines(invoiceLineImports);
         this.invoice.setInvoiceType(String.valueOf(RnvInvoiceType.INVOICE));
         this.invoice.setInvoiceNumber(String.valueOf(RandomUtils.randomInt()));
-        this.invoice.setInvoiceDate(DateUtils.localDateToString(LocalDate.now(), "yyyy-MM-dd"));
-        this.invoice.setPaymentDueDate(DateUtils.localDateToString(LocalDate.now(), "yyyy-MM-dd"));
+        this.invoice.setInvoiceDate(DateUtils.format(LocalDate.now(), "yyyy-MM-dd"));
+        this.invoice.setPaymentDueDate(DateUtils.format(LocalDate.now(), "yyyy-MM-dd"));
         this.invoice.setVat(BigDecimal.valueOf(Constants.VAT_AMOUNT_200));
         this.invoice.setTotalAmount(BigDecimal.valueOf(Constants.PRICE_500));
         this.invoice.setNetAmount(BigDecimal.valueOf(Constants.PRICE_500 - Constants.VAT_AMOUNT_200));

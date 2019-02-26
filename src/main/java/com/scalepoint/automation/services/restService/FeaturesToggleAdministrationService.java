@@ -16,14 +16,13 @@ public class FeaturesToggleAdministrationService extends BaseService {
 
     public FeaturesToggleAdministrationService updateToggle(ActionsOnToggle expectedActionOnToggle, FeatureIds featureId) {
 
-        given().log().all().param("op", expectedActionOnToggle.name()).
+        given().param("op", expectedActionOnToggle.name()).
                 param("uid", featureId.name()).
                 sessionId(sessionId).
                 when().
                 get(Configuration.getFeatureToggleAdminUrl()).
                 then().
-                statusCode(200).
-                log().all();
+                statusCode(200);
 
         assertToggleStatus(featureId, expectedActionOnToggle.getEnableParameterValue());
         return this;
@@ -37,9 +36,9 @@ public class FeaturesToggleAdministrationService extends BaseService {
     public Boolean getToggleStatus(String featureId) {
 
         ValidatableResponse response =
-                given().log().all().
+                given().
                         sessionId(sessionId).
-                        get(Configuration.getFeaturesApiUrl() + featureId).then().statusCode(200).log().all();
+                        get(Configuration.getFeaturesApiUrl() + featureId).then().statusCode(200);
         return response.extract().jsonPath().getBoolean("enable");
     }
 

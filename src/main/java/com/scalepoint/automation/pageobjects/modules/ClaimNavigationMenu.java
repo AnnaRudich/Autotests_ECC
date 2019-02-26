@@ -1,9 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.NotesPage;
-import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -40,8 +37,9 @@ public class ClaimNavigationMenu extends Module {
     @FindBy(id = "historyButton")
     private Link history;
 
-    public void toSettlementPage() {
+    public SettlementPage toSettlementPage() {
         clickUsingJsIfSeleniumClickReturnError(settelment);
+        return at(SettlementPage.class);
     }
 
     public MailsPage toMailsPage() {

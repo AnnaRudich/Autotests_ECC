@@ -88,6 +88,11 @@ public abstract class Page implements Actions {
         return to(pageClass, "");
     }
 
+    public static <T extends Page> T getUrlAndExpectPage(String url, Class<T> pageClass) {
+        Browser.open(url);
+        return at(pageClass);
+    }
+
     public static <T extends Page> String getUrl(Class<T> pageClass, Object... params) {
         String relativeUrl = PagesCache.get(pageClass).getRelativeUrl();
         String baseUrl = null;

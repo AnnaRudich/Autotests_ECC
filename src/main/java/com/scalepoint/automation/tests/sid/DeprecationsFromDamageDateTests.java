@@ -1,12 +1,12 @@
 package com.scalepoint.automation.tests.sid;
 
+import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.IP1Api;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -18,181 +18,162 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
-import static com.scalepoint.automation.utils.DateUtils.localDateToString;
+import static com.scalepoint.automation.utils.DateUtils.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeprecationsFromDamageDateTests extends BaseTest {
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed and can be setup on creating new claim and on customer details page")
-  public void charlie_554_verifyDamageDateIsDisplayedAndCanBeSetOnCreatingAndDetails(User user, Claim claim) {
-    login(user)
-            .clickCreateNewCase()
-            .enterClaimNumber(claim.getClaimNumber())
-            .enterFirstName(claim.getFirstName())
-            .enterSurname(claim.getLastName())
-            .selectDamageDate(LocalDate.now().minusDays(3))
-            .selectPolicyType(1)
-            .create()
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(3))
-            )
-            .selectDamageDate(LocalDate.now().minusDays(5))
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(5))
-            );
-  }
+    private static final String API_FORMAT = "yyyy-MM-dd";
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-  public void charlie_554_createClaimUsingIP1WithoutDamageDate(User user, Claim claim) {
-    claim.setDamageDate("");
-    loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
-            );
-  }
+    private String toDamageFormat(LocalDate initialDamageDate) {
+        return format(initialDamageDate, API_FORMAT);
+    }
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-  public void charlie_554_createClaimUsingIP1ReintegrateClaimWithUpdatedNotAllowed(User user, Claim claim) {
-    claim.setDamageDate(localDateToString(LocalDate.now()));
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed and can be setup on creating new claim and on customer details page")
+    public void charlie_554_verifyDamageDateIsDisplayedAndCanBeSetOnCreatingAndDetails(User user, Claim claim) {
+        LocalDate threeDaysBefore = LocalDate.now().minusDays(3);
+        LocalDate fiveDaysBefore = LocalDate.now().minusDays(5);
 
-    CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
-            );
+        login(user)
+                .clickCreateNewCase()
+                .enterClaimNumber(claim.getClaimNumber())
+                .enterFirstName(claim.getFirstName())
+                .enterSurname(claim.getLastName())
+                .selectDamageDate(threeDaysBefore)
+                .selectPolicyType(1)
+                .create()
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIs(threeDaysBefore)
+                )
+                .selectDamageDate(fiveDaysBefore)
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIs(fiveDaysBefore)
+                );
+    }
 
-    claim.setClaimNumber(detailsPage.getClaimNumber());
-    claim.setDamageDate(localDateToString(LocalDate.now().minusDays(1L)));
+    @Test(dataProvider = "testDataProvider", description = "Damage date should be set to current date if it's not passed in IP1")
+    public void charlie_554_ip1_shouldSetDamageDateToCurrentDate(User user, Claim claim) {
+        LocalDate initialDamageDate = LocalDate.now();
+        claim.setDamageDate("");
+        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().doAssert(
+                asserts -> asserts.assertDamageDateIs(initialDamageDate)
+        );
+    }
 
-    createClaimIgnoringExceptions(user, claim);
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date created/updated for empty claims")
+    public void charlie_554_ip1_shouldCreateAndUpdateClaimWithDamageDate(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
+        LocalDate initialDamageDate = LocalDate.now();
+        claim.setDamageDate(toDamageFormat(initialDamageDate));
 
-    login(user)
-            .openActiveRecentClaim()
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(1L))
-            );
-  }
+        /* claim is created with damage date*/
+        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().doAssert(
+                asserts -> asserts.assertDamageDateIs(initialDamageDate)
+        ).toSettlementPage().saveClaim();
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-  public void charlie_554_createClaimUsingIP1ReintegrateClaimWithUpdateAllowed(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
-    claim.setDamageDate(localDateToString(LocalDate.now()));
+        LocalDate updatedDamageData = LocalDate.now().minusDays(1L);
+        claim.setDamageDate(toDamageFormat(updatedDamageData));
 
-    CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
-            );
+        /* claim is updated with damage date*/
+        IP1Api.doGetIntegration(user, claim, false).toCustomerDetails().doAssert(
+                asserts -> asserts.assertDamageDateIs(updatedDamageData)
+        ).toSettlementPage().saveClaim();
 
-    claim.setClaimNumber(detailsPage.getClaimNumber());
-    claim.setDamageDate(localDateToString(LocalDate.now().minusDays(1L)));
+        /* damage data shouldn't be updated when damage date is absent*/
+        claim.setDamageDate("");
+        IP1Api.doGetIntegration(user, claim, false).toCustomerDetails().doAssert(
+                asserts -> asserts.assertDamageDateIs(updatedDamageData)
+        );
+    }
 
-    loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(1L))
-            );
-  }
-  @RequiredSetting(type = FTSetting.DISALLOW_DUPLICATE_CLAIMS_NUMBER, enabled = false)
-  @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-  public void charlie_554_createClaimUsingIP1ReintegrateClaimWithLineExisting(User user, Claim claim, ClaimItem claimItem) {
-    claim.setDamageDate(localDateToString(LocalDate.now()));
 
-    CustomerDetailsPage detailsPage = loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
-            );
+    @Test(dataProvider = "testDataProvider", description = "Check ip1 rejects wrong damage dates")
+    public void charlie_554_ip1_shouldRejectNotValidDamageDates(User user, Claim claim) {
+        /* damage date from future */
+        claim.setDamageDate(toDamageFormat(LocalDate.now().plusDays(1L)));
+        IP1Api.assertGetIntegrationHasError(user, claim, true, "The entered Damage Date must not be later than today");
 
-    claim.setClaimNumber(detailsPage.getClaimNumber());
-    claim.setDamageDate(localDateToString(LocalDate.now().minusDays(1L)));
+        /* damage date with wrong format */
+        //claim.setDamageDate("15-02-2018");
+        Lists.newArrayList("19-01-2008", "2008-19-01", "01-2008-19", "19-2008-01").forEach(date -> {
+            claim.setDamageDate(date);
+            IP1Api.assertGetIntegrationHasError(user, claim, false, "The entered Damage Date is not valid");
+        });
+    }
 
-    detailsPage.toSettlementPageUsingNavigationMenu()
-            .openSid()
-            .setDescription(claimItem.getTextFieldSP())
-            .setCategory(claimItem.getCategoryGroupBorn())
-            .setSubCategory(claimItem.getCategoryBornBabyudstyr())
-            .setNewPrice(Constants.PRICE_2400)
-            .closeSidWithOk();
 
-    createClaimIgnoringExceptions(user, claim);
+    @Test(dataProvider = "testDataProvider", description = "Check ip1 doesn't update damage date if claims lines present")
+    public void charlie_554_ip1_shouldNotUpdateDamageDateIfClaimsLinesPresent(User user, Claim claim, ClaimItem claimItem) {
+        LocalDate initialDamageDate = LocalDate.now();
+        claim.setDamageDate(toDamageFormat(initialDamageDate));
 
-    login(user)
-            .openActiveRecentClaim()
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(1L))
-            );
-  }
+        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().toSettlementPage().addLines(claimItem, claimItem.getTextFieldSP()).saveClaim();
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage is today after creating claim using ip1 without damage date")
-  public void charlie_554_createClaimUsingIP1WithFutureDamageDate(User user, Claim claim) {
-    claim.setDamageDate(localDateToString(LocalDate.now().plusDays(1L)));
-    loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    CustomerDetailsPage.Asserts::assertDamageDateIsEmpty
-            );
-  }
+        LocalDate updatedDamageData = LocalDate.now().minusDays(1L);
+        claim.setDamageDate(toDamageFormat(updatedDamageData));
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
-  public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem) {
-    loginAndCreateClaim(user, claim)
-            .openSid()
-            .setDescription(claimItem.getTextFieldSP())
-            .setCategory(claimItem.getCategoryGroupBorn())
-            .setSubCategory(claimItem.getCategoryBornBabyudstyr())
-            .setNewPrice(Constants.PRICE_2400)
-            .closeSidWithOk()
-            .toCustomerDetails()
-            .doAssert(
-                    CustomerDetailsPage.Asserts::assertIsDamageDateEditNotAvailable
-            );
-  }
+        IP1Api.doGetIntegration(user, claim, false).toCustomerDetails().doAssert(
+                asserts -> asserts.assertDamageDateIs(initialDamageDate)
+        );
+    }
 
-  @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
-  public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim) {
-    loginAndCreateClaim(user, claim)
-            .toCustomerDetails()
-            .doAssert(
-                    CustomerDetailsPage.Asserts::assertIsDamageDateEditAvailable
-            );
-  }
 
-  @Test(dataProvider = "testDataProvider", description = "create claim with wrong damage date")
-  public void charlie_554_createClaimWithWrongDataFormat(User user, EccIntegration eccIntegration) {
-    eccIntegration.getClaim().getDamage().setDamageDate("2017-19-01");
-    String response = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().response().getBody().asString();
-    assertThat(response).contains("The entered Damage Date is not valid.");
-  }
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
+    public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setNewPrice(Constants.PRICE_2400)
+                .closeSidWithOk()
+                .toCustomerDetails()
+                .doAssert(
+                        CustomerDetailsPage.Asserts::assertIsDamageDateEditNotAvailable
+                );
+    }
 
-  @Test(dataProvider = "testDataProvider", description = "Create claim using unified integration")
-  public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest) {
-    claimRequest.setAccidentDate(localDateToString(LocalDateTime.now().minusDays(2L), ISO8601));
-    loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now().minusDays(2L))
-            );
-  }
+    @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
+    public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCustomerDetails()
+                .doAssert(
+                        CustomerDetailsPage.Asserts::assertIsDamageDateEditAvailable
+                );
+    }
 
-  @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
-  public void charlie_554_createClaimUsingUnifiedIntegrationWithNoDamageDate(User user, ClaimRequest claimRequest) {
-    claimRequest.setAccidentDate(null);
-    loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
-            .toCustomerDetails()
-            .doAssert(
-                    asserts -> asserts.assertDamageDateIsEqual(LocalDate.now())
-            );
-  }
+    @Test(dataProvider = "testDataProvider", description = "create claim with wrong damage date")
+    public void charlie_554_createClaimWithWrongDataFormat(User user, EccIntegration eccIntegration) {
+        eccIntegration.getClaim().getDamage().setDamageDate("2017-19-01");
+        String response = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().response().getBody().asString();
+        assertThat(response).contains("The entered Damage Date is not valid.");
+    }
 
-  @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
-  public void charlie_554_createClaimUsingUnifiedIntegrationWithWrongDamageDate(ClaimRequest claimRequest) {
-    claimRequest.setAccidentDate("2017-19-01");
-    String response = createCwaClaim(claimRequest).getResponse().body().asString();
-    assertThat(response).contains("Failure: Invalid damageDate");
-  }
+    @Test(dataProvider = "testDataProvider", description = "Create claim using unified integration")
+    public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest) {
+        claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
+        loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIs(LocalDate.now().minusDays(2L))
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
+    public void charlie_554_createClaimUsingUnifiedIntegrationWithNoDamageDate(User user, ClaimRequest claimRequest) {
+        claimRequest.setAccidentDate(null);
+        loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
+                .toCustomerDetails()
+                .doAssert(
+                        asserts -> asserts.assertDamageDateIs(LocalDate.now())
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
+    public void charlie_554_createClaimUsingUnifiedIntegrationWithWrongDamageDate(ClaimRequest claimRequest) {
+        claimRequest.setAccidentDate("2017-19-01");
+        String response = createCwaClaim(claimRequest).getResponse().body().asString();
+        assertThat(response).contains("Failure: Invalid damageDate");
+    }
 
 }

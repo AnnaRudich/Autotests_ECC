@@ -47,7 +47,6 @@ public class ClaimApi extends AuthenticationApi {
 
         List<NameValuePair> clientParams = ParamsBuilder.create().
                 add("policytype", policyType).
-                add("damageDate", claim.getDamageDate()).
                 add("last_name", claim.getLastName()).
                 add("first_name", claim.getFirstName()).
                 add("policy_number", claim.getPolicyNumber()).
