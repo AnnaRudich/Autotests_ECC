@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class SolrApi {
 
-    public static final int HARD_COMMIT_TIME = 15; //seconds
+    public static final int HARD_COMMIT_TIME = 20; //seconds
 
     private static final String PRODUCTS_COLLECTION = "da_DK";
     private static final String CLAIMS_COLLECTION = "claim_DK";
