@@ -228,18 +228,8 @@ public class SettlementPage extends BaseClaimPage {
 
     public MyPage completeClaimWithoutMail(Claim claim) {
         settlementSummary.completeClaimWithoutMail();
-        waitForStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNAL);
+        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNAL);
         return at(MyPage.class);
-    }
-
-    private void waitForStatusChangedTo(Claim claim, String status) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
-            SolrClaim solrClaim = SolrApi.findClaim(claim.getClaimId());
-            if (solrClaim != null) {
-                return solrClaim.getClaimStatus().equalsIgnoreCase(status);
-            }
-            return null;
-        }, SolrApi.HARD_COMMIT_TIME, 500);
     }
 
     public CompleteClaimPage toCompleteClaimPage() {

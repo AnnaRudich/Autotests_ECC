@@ -96,8 +96,8 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeExternally()
-                .doAssert(myPage -> myPage.assertClaimHasStatus(ClaimStatus.CLOSED_EXTERNAL));
+                .completeExternally(claim)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusClosedExternally()));
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")

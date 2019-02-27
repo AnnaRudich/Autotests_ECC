@@ -1,9 +1,12 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.google.common.base.Function;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -12,6 +15,8 @@ import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.openqa.selenium.WebDriver;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,5 +70,15 @@ public class SolrApi {
             logger.error("Couldn't found claim in solr by id [{}] cause {}", claimId, e.getMessage());
             return null;
         }
+    }
+
+    public static void waitForClaimStatusChangedTo(Claim claim, String status) {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
+            SolrClaim solrClaim = SolrApi.findClaim(claim.getClaimId());
+            if (solrClaim != null) {
+                return solrClaim.getClaimStatus().equalsIgnoreCase(status);
+            }
+            return null;
+        }, SolrApi.HARD_COMMIT_TIME, 500);
     }
 }

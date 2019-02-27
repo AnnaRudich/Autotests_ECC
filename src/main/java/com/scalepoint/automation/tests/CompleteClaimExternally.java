@@ -21,7 +21,7 @@ public class CompleteClaimExternally extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeExternally()
+                .completeExternally(claim)
                 .doAssert(myPage ->
                     myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
