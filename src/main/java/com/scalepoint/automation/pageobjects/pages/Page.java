@@ -58,7 +58,7 @@ public abstract class Page implements Actions {
             return;
         }
 
-        int totalTimeoutInSeconds = 80;
+        int totalTimeoutInSeconds = 20;
         int pollingMs = 1000;
 
         Wait.forCondition(webDriver -> {

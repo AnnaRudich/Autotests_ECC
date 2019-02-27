@@ -107,7 +107,13 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate(toDamageFormat(initialDamageDate));
 
-        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().toSettlementPage().addLines(claimItem, claimItem.getTextFieldSP()).saveClaim();
+        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().toSettlementPage().openSid()
+                .setDescription(claimItem.getTextFieldSP())
+                .setCategory(claimItem.getCategoryGroupBorn())
+                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setNewPrice(Constants.PRICE_2400)
+                .closeSidWithOk()
+                .saveClaim();
 
         LocalDate updatedDamageData = LocalDate.now().minusDays(1L);
         claim.setDamageDate(toDamageFormat(updatedDamageData));
