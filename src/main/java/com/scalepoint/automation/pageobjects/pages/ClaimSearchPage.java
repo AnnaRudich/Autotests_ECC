@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -176,10 +176,10 @@ public class ClaimSearchPage extends Page {
             return this;
         }
 
-        public Asserts isClaimState(ClaimState state) {
+        public Asserts isClaimState(ClaimStatus state) {
             assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(()-> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber()))
                     .getClaimState())
-                    .isEqualToIgnoringCase(state.getStateFullText());
+                    .isEqualToIgnoringCase(state.getText());
             return this;
         }
 
@@ -202,27 +202,6 @@ public class ClaimSearchPage extends Page {
         public Asserts areClaimsMatchingClaimHandler(String claimHandler) {
             assertThat(claimRows.stream().map(ClaimRow::getClaimHandler)).allMatch(row -> row.equals(claimHandler));
             return this;
-        }
-    }
-
-    public enum ClaimState {
-
-        IN_USE('W'),
-        DELETED('D'),
-        OPEN('P'),
-        COMPLETED('S'),
-        LOCKED_BY_ORDER('L'),
-        CANCELED('X'),
-        CLOSED_EXTERNALLY('E');
-
-        private Character state;
-
-        ClaimState(Character state) {
-            this.state = state;
-        }
-
-        public String getStateFullText() {
-            return TestData.getClaimStates().get(this.state);
         }
     }
 

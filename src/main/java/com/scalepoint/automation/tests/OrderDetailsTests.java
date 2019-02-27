@@ -331,7 +331,7 @@ public class OrderDetailsTests extends BaseTest {
                 .replaceAllItems()
                 .reopenClaim()
                 .toCompleteClaimPage()
-                .completeWithEmail()
+                .completeWithEmail(claim)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 

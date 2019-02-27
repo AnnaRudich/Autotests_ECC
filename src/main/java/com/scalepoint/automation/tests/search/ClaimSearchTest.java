@@ -8,7 +8,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.pages.ClaimSearchPage.ClaimState.*;
+import static com.scalepoint.automation.shared.ClaimStatus.*;
+
 
 public class ClaimSearchTest extends BaseTest {
 
@@ -98,7 +99,7 @@ public class ClaimSearchTest extends BaseTest {
     loginAndCreateClaim(user, claim)
             .toCompleteClaimPage()
             .fillClaimForm(claim)
-            .completeWithEmail()
+            .completeWithEmail(claim)
             .getMainMenu()
             .openClaimSearch()
             .fillClaimNumber(claim.getClaimNumber())

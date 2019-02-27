@@ -1,45 +1,39 @@
 package com.scalepoint.automation.shared;
 
-import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.TestData;
 
-import java.util.HashMap;
-import java.util.Map;
+public enum ClaimStatus {
 
-public class ClaimStatus {
+    IN_USE("W"),
+    DELETED("D"),
+    OPEN("P"),
+    COMPLETED("S"),
+    LOCKED_BY_ORDER("L"),
+    CANCELLED("X"),
+    CLOSED_EXTERNALLY("E");
 
-    public static final String WORKING = "W";
-    public static final String IN_PROGRESS = "P";
-    public static final String SETTLED = "S";
-    public static final String LOCKED = "L";
-    public static final String CANCELED = "X";
-    public static final String DROPED = "D";
-    public static final String CLOSED_EXTERNAL = "E";
+    private String status;
 
-    private static final Map<Locale, String> saved = new HashMap<>();
-    private static final Map<Locale, String> cancelled = new HashMap<>();
-    private static final Map<Locale, String> closedExternally = new HashMap<>();
-    private static final Map<Locale, String> completed = new HashMap<>();
-
-    static {
-        saved.put(Locale.DK, "Åben");
-        cancelled.put(Locale.DK, "Annulleret");
-        closedExternally.put(Locale.DK, "Lukket eksternt");
-        completed.put(Locale.DK, "Afsluttet");
+    ClaimStatus(String status) {
+        this.status = status;
     }
 
-    public static String saved() {
-        return saved.get(Configuration.getLocale());
+    public String getText() {
+        return TestData.getClaimStatuses().get(this);
     }
 
-    public static String cancelled() {
-        return cancelled.get(Configuration.getLocale());
+    public String getStatus() {
+        return status;
     }
 
-    public static String closed() {
-        return closedExternally.get(Configuration.getLocale());
+    public static ClaimStatus findByStatus(String status) {
+        for (ClaimStatus value : ClaimStatus.values()) {
+            if (value.status.equalsIgnoreCase(status)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Status [" + status + "] is not supported");
     }
 
-    public static String completed() {
-        return completed.get(Configuration.getLocale());
-    }
+
 }

@@ -1,31 +1,31 @@
 {
-  "claimStates": [
+  "claimStatuses": [
     {
-      "state": "W",
+      "status": "W",
       "name": "I brug"
     },
     {
-      "state": "D",
+      "status": "D",
       "name": "Slettet"
     },
     {
-      "state": "P",
+      "status": "P",
       "name": "Åben"
     },
     {
-      "state": "S",
+      "status": "S",
       "name": "Afsluttet"
     },
     {
-      "state": "L",
+      "status": "L",
       "name": "Låst af ordre"
     },
     {
-      "state": "X",
+      "status": "X",
       "name": "Annulleret"
     },
     {
-      "state": "E",
+      "status": "E",
       "name": "Lukket eksternt"
     }
   ]

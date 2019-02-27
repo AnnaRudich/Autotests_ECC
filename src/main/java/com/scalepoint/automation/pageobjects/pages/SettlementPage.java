@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -8,7 +7,6 @@ import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
-import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -228,7 +226,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public MyPage completeClaimWithoutMail(Claim claim) {
         settlementSummary.completeClaimWithoutMail();
-        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNAL);
+        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
     }
 

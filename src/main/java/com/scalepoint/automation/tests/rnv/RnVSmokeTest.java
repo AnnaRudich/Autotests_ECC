@@ -24,7 +24,7 @@ public class RnVSmokeTest extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail()
+                .completeWithEmail(claim)
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()

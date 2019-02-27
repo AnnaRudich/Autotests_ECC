@@ -1,6 +1,7 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.google.common.base.Function;
+import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.shared.XpriceInfo;
@@ -72,11 +73,11 @@ public class SolrApi {
         }
     }
 
-    public static void waitForClaimStatusChangedTo(Claim claim, String status) {
+    public static void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimState) {
         Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
             SolrClaim solrClaim = SolrApi.findClaim(claim.getClaimId());
             if (solrClaim != null) {
-                return solrClaim.getClaimStatus().equalsIgnoreCase(status);
+                return solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
             }
             return null;
         }, SolrApi.HARD_COMMIT_TIME, 500);

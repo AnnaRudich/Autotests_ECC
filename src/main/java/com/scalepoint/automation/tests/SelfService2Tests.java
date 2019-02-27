@@ -86,7 +86,7 @@ public class SelfService2Tests extends BaseTest {
             .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
             .toCompleteClaimPage()
             .fillClaimForm(claim)
-            .completeWithEmail()
+            .completeWithEmail(claim)
             .openRecentClaim()
             .newSelfServicePassword()
             .apply(SelfServicePasswordDialog.class, p -> newPasswordToSelfService = p.getNewPasswordToSelfService())

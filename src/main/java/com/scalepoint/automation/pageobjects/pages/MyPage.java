@@ -89,12 +89,12 @@ public class MyPage extends Page {
 
     public class Asserts {
         public Asserts assertClaimCompleted() {
-            Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.completed()), "Claim must be completed");
+            Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.COMPLETED.getText()), "Claim must be completed");
             return this;
         }
 
         public Asserts assertRecentClaimCancelled() {
-            Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.cancelled()), "Claim must be cancelled");
+            Assert.assertTrue(latestCustomerStatus.getText().contains(ClaimStatus.CANCELLED.getText()), "Claim must be cancelled");
             return this;
         }
 

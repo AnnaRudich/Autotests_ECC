@@ -2,15 +2,15 @@ package com.scalepoint.automation.utils.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ClaimState {
+public class ClaimStatus {
 
-    @JsonProperty("state")
-    private Character state;
+    @JsonProperty("status")
+    private String status;
     @JsonProperty("name")
     private String name;
 
-    public Character getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
     public String getName() {

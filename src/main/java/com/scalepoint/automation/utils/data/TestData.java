@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
@@ -21,7 +22,6 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 @SuppressWarnings("unchecked")
@@ -153,14 +153,15 @@ public class TestData {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
-    public static RnvTaskType getRnvTaskType(){
+    public static RnvTaskType getRnvTaskType() {
         return (RnvTaskType) getData(Data.RNVTASKTYPE);
     }
 
-    public static Map<Character, String> getClaimStates() {
-        Map<Character, String> states = new HashMap<>();
-        ((ClaimStates) Objects.requireNonNull(getData(Data.CLAIM_STATE))).getClaimStates().forEach(state -> states.put(state.getState(), state.getName()));
-        return states;
+    @SuppressWarnings("ConstantConditions")
+    public static Map<ClaimStatus, String> getClaimStatuses() {
+        Map<ClaimStatus, String> statusPerText = new HashMap<>();
+        ((ClaimStatuses) getData(Data.CLAIM_STATUS)).getClaimStatuses().forEach(state -> statusPerText.put(ClaimStatus.findByStatus(state.getStatus()), state.getName()));
+        return statusPerText;
     }
 
     public static PasswordsVerification getPasswordRules() {
@@ -264,7 +265,7 @@ public class TestData {
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
-        CLAIM_STATE("ClaimState.json", ClaimStates.class),
+        CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
         ACQUIRED("Acquired.xml", Acquired.class),
         RNVTASKTYPE("RnVTaskType.xml", RnvTaskType.class);
 

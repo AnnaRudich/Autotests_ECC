@@ -153,8 +153,9 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
-    public MyPage completeWithEmail() {
+    public MyPage completeWithEmail(Claim claim) {
         compWthMailButton.click();
+        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
 
@@ -165,12 +166,12 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeExternally(Claim claim) {
         compExternallyButton.click();
-        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNAL);
+        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
     }
 
-    public ShopWelcomePage completeWithEmailAndLoginToShop() {
-        return completeWithEmail().
+    public ShopWelcomePage completeWithEmailAndLoginToShop(Claim claim) {
+        return completeWithEmail(claim).
                 openRecentClaim().
                 toMailsPage().
                 viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
