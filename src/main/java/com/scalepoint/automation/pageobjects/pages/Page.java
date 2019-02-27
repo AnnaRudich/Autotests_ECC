@@ -34,6 +34,7 @@ public abstract class Page implements Actions {
     }
 
     protected Logger logger = LogManager.getLogger(Page.class);
+    private static Logger innerLogger = LogManager.getLogger(Page.class);
     protected WebDriver driver;
 
     public Page() {
@@ -119,13 +120,15 @@ public abstract class Page implements Actions {
     }
 
     public static <T extends Page> T to(Class<T> pageClass, Object... parameters) {
+        long start = System.currentTimeMillis();
         String initialUrl = buildFullUrl(pageClass, getUrl(pageClass), parameters);
 
         LogManager.getLogger(Page.class).info("Open page: " + initialUrl);
         Browser.open(initialUrl);
         Wait.waitForPageLoaded();
-
-        return at(pageClass);
+        T atPage = at(pageClass);
+        innerLogger.info("To {} -> {} ms.", pageClass.getSimpleName(), (System.currentTimeMillis() - start));
+        return atPage;
     }
 
     private static <T extends Page> String buildFullUrl(Class<T> pageClass, String initialUrl, Object[] parameters) {
@@ -142,9 +145,11 @@ public abstract class Page implements Actions {
     }
 
     public static <T extends Page> T at(Class<T> pageClass) {
+        long start = System.currentTimeMillis();
         T page = PagesCache.get(pageClass);
         loadJavascriptHelpersIfNeeds(page);
         page.ensureWeAreOnPage();
+        innerLogger.info("At {} -> {} ms.", pageClass.getSimpleName(), (System.currentTimeMillis() - start));
         return page;
     }
 

@@ -25,7 +25,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllE
 public class Wait {
     private static final int TIME_OUT_IN_SECONDS = 60;
     private static final int POLL_IN_MS = 1000;
-    public static final int DEFAULT_TIMEOUT = 60;
+    private static final int DEFAULT_TIMEOUT = 60;
 
     private static Logger log = LogManager.getLogger(Wait.class);
 
@@ -52,6 +52,14 @@ public class Wait {
     public static void wait(int seconds) {
         try {
             Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void waitMillis(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
         } catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
         }

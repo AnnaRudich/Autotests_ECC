@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.Actions;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +12,7 @@ import java.util.function.Consumer;
 public abstract class BaseDialog implements Actions {
 
     protected Logger logger = LogManager.getLogger(BaseDialog.class);
+    private static Logger innerLogger = LogManager.getLogger(BaseDialog.class);
 
     protected WebDriver driver;
 
@@ -37,9 +37,11 @@ public abstract class BaseDialog implements Actions {
     }
 
     public static <T extends BaseDialog> T at(Class<T> baseDialogClass) {
+        long start = System.currentTimeMillis();
         try {
             T t = baseDialogClass.newInstance();
             t.ensureWeAreAt();
+            innerLogger.info("At {} -> {} ms.", baseDialogClass.getSimpleName(), (System.currentTimeMillis() - start));
             return t;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);

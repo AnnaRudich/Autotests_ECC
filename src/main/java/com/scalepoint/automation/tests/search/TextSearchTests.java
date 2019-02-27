@@ -18,6 +18,8 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
 
 public class TextSearchTests extends BaseTest {
 
+    private static final String SAMSUNG_GALAXY_S_7 = "samsung galaxy s7";
+
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
@@ -46,10 +48,11 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
-    public void charlie510_selectBrandAndModel(User user, Claim claim, TextSearch textSearch) {
+    public void charlie510_selectBrandAndModel(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("samsung galaxy s7")
+                .searchByProductName(SAMSUNG_GALAXY_S_7)
+                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectBrand(textSearch.getBrandSamsung())
                 .selectModel(textSearch.getModel1())
                 .doAssert(
@@ -60,13 +63,14 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
-    public void charlie510_selectAttributes(User user, Claim claim, TextSearch textSearch) {
+    public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
         int index = 0;
         Attributes[] attributes = {DUAL_KAMERA_NEJ, NFC_NEJ};
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName("samsung galaxy s7")
+                .searchByProductName(SAMSUNG_GALAXY_S_7)
+                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectBrand(textSearch.getBrandSamsung())
                 .openAttributesMenu()
                 .selectAttribute(attributes)
@@ -101,11 +105,12 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
-    public void charlie516_checkSortingByPopularity(User user, Claim claim, TextSearch textSearch) {
-        String brand = "samsung galaxy s7";
+    public void charlie516_checkSortingByPopularity(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
+        String product = SAMSUNG_GALAXY_S_7;
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(brand);
+                .searchByProductName(product)
+                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner());
 
         tsp.sortPopularityDescending()
                 .waitForResultsLoad()
@@ -129,7 +134,7 @@ public class TextSearchTests extends BaseTest {
                 .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
 
         /* new search should reset popularity sort so no icons will be present */
-        tsp.searchByProductName(brand)
+        tsp.searchByProductName(product)
                 .waitForResultsLoad()
                 .doAssert(
                         TextSearchPage.Asserts::assertNoPopularitySortChosen);

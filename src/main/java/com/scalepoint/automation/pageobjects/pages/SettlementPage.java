@@ -15,6 +15,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -172,7 +173,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementDialog openSid() {
-        if($(cancelPolicy).isDisplayed()){
+        if ($(cancelPolicy).isDisplayed()) {
             $(cancelPolicy).click();
         }
         return functionalMenu.addManually();
@@ -188,9 +189,13 @@ public class SettlementPage extends BaseClaimPage {
         return openSid().setDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
 
+    public SettlementDialog openSidAndFillWithCustomDescription(Consumer<SettlementDialog.FormFiller> fillfunc) {
+        return openSid().fill(fillfunc);
+    }
+
     public SettlementPage addLines(ClaimItem claimItem, String... lineDescriptions) {
         for (String lineDescription : lineDescriptions) {
-            openSidAndFill(sid -> sid
+            openSidAndFillWithCustomDescription(sid -> sid
                     .withText(lineDescription)
                     .withNewPrice(PRICE_2400)
                     .withCategory(claimItem.getCategoryGroupBorn())
@@ -241,18 +246,18 @@ public class SettlementPage extends BaseClaimPage {
         return at(CompleteClaimPage.class);
     }
 
-    public SettlementGroupDialog openGroupCreationDialog(){
+    public SettlementGroupDialog openGroupCreationDialog() {
         $$(groupButton).get(0).click();
         return BaseDialog.at(SettlementGroupDialog.class);
     }
 
-    public SettlementPage rejectLines(){
+    public SettlementPage rejectLines() {
         $(rejectButton).click();
         waitForAjaxCompleted();
         return this;
     }
 
-    public SettlementPage deleteGroup(){
+    public SettlementPage deleteGroup() {
         $(deleteGroupButton).click();
         waitForAjaxCompleted();
         $(By.xpath("//span[text() = 'Ja']")).click();
@@ -262,7 +267,7 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage selectLinesByIndex(int... lines) {
         try {
             selectLines(lines, claimLineDescription);
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             logger.error(e.getMessage());
         }
         return this;
@@ -274,7 +279,7 @@ public class SettlementPage extends BaseClaimPage {
                     .keyDown(Keys.CONTROL)
                     .click(claimLineDescription.stream().filter(line -> line.getText().equals(desc)).findFirst().get())
                     .keyUp(Keys.CONTROL).build().perform());
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             logger.error(e.getMessage());
         }
         return this;
@@ -375,17 +380,17 @@ public class SettlementPage extends BaseClaimPage {
             return this;
         }
 
-        public Asserts assertSettlementPageIsInFlatView(){
+        public Asserts assertSettlementPageIsInFlatView() {
             assertThat(invisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
             return this;
         }
 
-        public Asserts assertSettlementPageIsNotInFlatView(){
+        public Asserts assertSettlementPageIsNotInFlatView() {
             assertThat(visible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isTrue();
             return this;
         }
 
-        public Asserts assertSettlementContainsLinesWithDescriptions(String... descriptions){
+        public Asserts assertSettlementContainsLinesWithDescriptions(String... descriptions) {
             assertThat(Arrays.stream(descriptions).anyMatch(desc -> claimLineDescription.stream().anyMatch(claim -> claim.getText().equals(desc)))).isTrue();
             return this;
         }
@@ -427,23 +432,26 @@ public class SettlementPage extends BaseClaimPage {
             this.category = claimLine.findElement(By.xpath(".//*[@data-columnid='categoryGroupColumn']")).getText();
             this.quantity = Integer.valueOf(claimLine.findElement(By.xpath(".//*[@data-columnid='quantityColumn']")).getText());
 
-            this.age  = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
+            this.age = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
 
-            try {
-                purchasePrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")).getText());
-            }catch (Exception e){
-                logger.warn(e.getMessage());
+            List<WebElement> purchasePriceElements = claimLine.findElements(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']"));
+            if (!purchasePriceElements.isEmpty()) {
+                String text = purchasePriceElements.get(0).getText();
+                if (StringUtils.isNotBlank(text)) {
+                    purchasePrice = OperationalUtils.getDoubleValue(text);
+                }
             }
 
             String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
-            try {
-                this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")).getText());
-            }catch (Exception e){
-                logger.warn(e.getMessage());
+            List<WebElement> purchaseAmountElements = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']"));
+            if (!purchaseAmountElements.isEmpty()) {
+                String text = purchaseAmountElements.get(0).getText();
+                if (StringUtils.isNotBlank(text)) {
+                    this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(text);
+                }
             }
-
         }
 
         public SettlementPage selectLine() {
@@ -456,7 +464,7 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public SettlementGroupDialog editGroup() {
-            doubleClickClaimLine();
+            doubleClickGroupLine();
             return BaseDialog.at(SettlementGroupDialog.class);
         }
 
@@ -487,9 +495,18 @@ public class SettlementPage extends BaseClaimPage {
                                 "}" +
                                 "groupsLoaded();";
                 ((JavascriptExecutor) driver).executeAsyncScript(js);
-            }catch (ScriptTimeoutException e){
+            } catch (ScriptTimeoutException e) {
                 logger.error(e.getMessage());
-                ((JavascriptExecutor) driver).executeScript(dblClick,descriptionElement);
+                ((JavascriptExecutor) driver).executeScript(dblClick, descriptionElement);
+            }
+        }
+
+        private void doubleClickGroupLine() {
+            try {
+                doubleClick(descriptionElement);
+                waitForAjaxCompleted();
+            } catch (ScriptTimeoutException e) {
+                logger.error(e.getMessage());
             }
         }
 
@@ -622,7 +639,7 @@ public class SettlementPage extends BaseClaimPage {
             }
 
             public Asserts assertVoucherPurchaseAmount(double expectedAmount) {
-                OperationalUtils.assertEqualsDouble(voucherPurchaseAmount, expectedAmount, "Expected amount is: "+expectedAmount);
+                OperationalUtils.assertEqualsDouble(voucherPurchaseAmount, expectedAmount, "Expected amount is: " + expectedAmount);
                 return this;
             }
 
@@ -632,23 +649,23 @@ public class SettlementPage extends BaseClaimPage {
                 return this;
             }
 
-            public Asserts assertProductDetailsIconIsDisplayed(){
+            public Asserts assertProductDetailsIconIsDisplayed() {
                 boolean productInfoPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='typeColumn']//img[contains(@src, 'info.png')]")).isDisplayed();
                 return this;
             }
 
-            public Asserts assertAttachmentsIconIsDisplayed(){
+            public Asserts assertAttachmentsIconIsDisplayed() {
                 boolean attachmentsIconPresent = claimLine.findElement(By.xpath(".//*[@data-columnid='hasAttachmentColumn']//img[contains(@src, 'paperclip.png')]")).isDisplayed();
                 assertTrue(attachmentsIconPresent, "Attachment icon should be displayed");
                 return this;
             }
 
-            public Asserts assertQuantityIs(int quantity){
+            public Asserts assertQuantityIs(int quantity) {
                 assertThat(getQuantity()).isEqualTo(quantity);
                 return this;
             }
 
-            public Asserts assertAgeIs(String age){
+            public Asserts assertAgeIs(String age) {
                 assertThat(getAge()).containsIgnoringCase(age);
                 return this;
             }
@@ -658,7 +675,7 @@ public class SettlementPage extends BaseClaimPage {
                 return this;
             }
 
-            public Asserts assertClaimLineIsCrossedOut(){
+            public Asserts assertClaimLineIsCrossedOut() {
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");
                 assertThat(claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']/div")).getAttribute("style")).containsIgnoringCase("line-through");

@@ -260,6 +260,7 @@ public class SettlementDialog extends BaseDialog {
 
     public static class FormFiller {
 
+        public static final int DELAY = 50;
         private SettlementDialog sid;
 
         public FormFiller(SettlementDialog settlementDialog) {
@@ -268,88 +269,105 @@ public class SettlementDialog extends BaseDialog {
 
         public FormFiller withText(String text) {
             sid.setDescription(text);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withCategory(String category) {
             sid.setCategory(category);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withCategory(VoucherAgreementApi.AssignedCategory category) {
             sid.setCategory(category);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withSubCategory(String subcategory) {
             sid.setSubCategory(subcategory);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withSubCategoryFromTheListByIndex(int index) {
             sid.subCategory.select(index);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withNewPrice(Double newPrice) {
             sid.setNewPrice(newPrice);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withCustomerDemandPrice(Double customerDemandPrice) {
             sid.setCustomerDemand(customerDemandPrice);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withVoucher(String voucher) {
             sid.fillVoucher(voucher);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDepreciation(int depreciation, DepreciationType depreciationType) {
             sid.setDepreciation(depreciation);
             sid.setDepreciationType(depreciationType);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDepreciation(int depreciation) {
             sid.setDepreciation(depreciation);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDepreciation(DepreciationType depreciationType) {
             sid.setDepreciationType(depreciationType);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withReductionRule(Integer reductionRuleValue) {
             sid.applyReductionRuleByValue(reductionRuleValue);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDiscretionaryPrice(double discretionaryPrice) {
             sid.setDiscretionaryPrice(discretionaryPrice);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withAge(int years, int month) {
             sid.enableAge(Integer.toString(years))
                     .selectMonth(Integer.toString(month));
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withAgeDisabled() {
             sid.disableAge();
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withValuation(Valuation valuation) {
             sid.setValuation(valuation);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDiscountAndDepreciation(boolean enabled) {
             sid.setDiscountAndDepreciation(enabled);
+            Wait.waitMillis(DELAY);
             return this;
         }
 
@@ -570,6 +588,7 @@ public class SettlementDialog extends BaseDialog {
                 logger.error(e.getMessage());
                 clickAndWait(buttonBy, button);
             }
+            Wait.waitMillis(100);
             Wait.waitForAjaxCompleted();
         } catch (UnhandledAlertException ignored) {
         }
