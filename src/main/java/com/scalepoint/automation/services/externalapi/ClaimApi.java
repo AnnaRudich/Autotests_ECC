@@ -72,7 +72,7 @@ public class ClaimApi extends AuthenticationApi {
             CurrentUser.setClaimId(claimId);
             claim.setClaimId(claimId);
 
-            Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaim(claimId), SolrApi.HARD_COMMIT_TIME, 500);
+            SolrApi.waitForClaimAppearedInIndex(claim);
 
             String redirectTo = headerLocation.getValue() + "settlement.jsp";
 

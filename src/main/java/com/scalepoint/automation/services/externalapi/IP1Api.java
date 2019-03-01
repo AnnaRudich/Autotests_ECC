@@ -19,9 +19,13 @@ public class IP1Api {
     public static SettlementPage doGetIntegration(User user, Claim claim, boolean withLogin) {
         String url = buildUrl(claim);
         if (withLogin) {
-            return Page.getUrlAndExpectPage(url, LoginPage.class).login(user.getLogin(), user.getPassword(), SettlementPage.class);
+            SettlementPage settlementPage = Page.getUrlAndExpectPage(url, LoginPage.class).login(user.getLogin(), user.getPassword(), SettlementPage.class);
+            SolrApi.waitForClaimAppearedInIndex(claim);
+            return settlementPage;
         }
-        return Page.getUrlAndExpectPage(url, SettlementPage.class);
+        SettlementPage settlementPage = Page.getUrlAndExpectPage(url, SettlementPage.class);
+        SolrApi.waitForClaimAppearedInIndex(claim);
+        return settlementPage;
     }
 
     public static void assertGetIntegrationHasError(User user, Claim claim, boolean withLogin, String expectedError) {
