@@ -100,6 +100,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .selectLine()
                 .getToolBarMenu()
                 .toProductMatchPage()
+                .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setValuation(NEW_PRICE)
                 .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));

@@ -20,11 +20,11 @@ public class IP1Api {
         String url = buildUrl(claim);
         if (withLogin) {
             SettlementPage settlementPage = Page.getUrlAndExpectPage(url, LoginPage.class).login(user.getLogin(), user.getPassword(), SettlementPage.class);
-            SolrApi.waitForClaimAppearedInIndex(claim);
+            SolrApi.waitForClaimAppearedInIndexByClaimNumber(claim);
             return settlementPage;
         }
         SettlementPage settlementPage = Page.getUrlAndExpectPage(url, SettlementPage.class);
-        SolrApi.waitForClaimAppearedInIndex(claim);
+        SolrApi.waitForClaimAppearedInIndexByClaimNumber(claim);
         return settlementPage;
     }
 

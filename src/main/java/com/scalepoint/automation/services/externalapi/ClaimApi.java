@@ -1,9 +1,7 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.google.common.base.Function;
 import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -13,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.message.BasicHeader;
-import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
@@ -72,7 +69,7 @@ public class ClaimApi extends AuthenticationApi {
             CurrentUser.setClaimId(claimId);
             claim.setClaimId(claimId);
 
-            SolrApi.waitForClaimAppearedInIndex(claim);
+            SolrApi.waitForClaimAppearedInIndexById(claim);
 
             String redirectTo = headerLocation.getValue() + "settlement.jsp";
 

@@ -54,13 +54,23 @@ public class SolrApi {
         return productIds.stream().map(SolrApi::findProduct).collect(Collectors.toCollection(() -> new ArrayList<>(productIds.size())));
     }
 
-    public static SolrClaim findClaim(String claimId) {
+    private static SolrClaim findClaimById(String claimId) {
+        SolrQuery solrQuery = new SolrQuery("id:" + claimId);
+        return findOneClaim(solrQuery);
+    }
+
+    private static SolrClaim findClaimByClaimNumber(String claimNumber) {
+        SolrQuery solrQuery = new SolrQuery("claim_number:" + claimNumber);
+        return findOneClaim(solrQuery);
+    }
+
+    private static SolrClaim findOneClaim(SolrQuery solrQuery) {
         try {
             SolrClient solr = new HttpSolrClient.Builder(Configuration.getSolrBaseUrl()).build();
-            SolrQuery solrQuery = new SolrQuery("id:" + claimId);
+
             SolrDocumentList list = solr.query(CLAIMS_COLLECTION, solrQuery).getResults();
             if (list.isEmpty()) {
-                logger.info("Claim is not found: {}", claimId);
+                logger.info("Claim is not found: {}", solrQuery.toQueryString());
                 return null;
             }
             DocumentObjectBinder binder = new DocumentObjectBinder();
@@ -68,14 +78,14 @@ public class SolrApi {
             logger.info("Claim is found: {}", solrClaim);
             return solrClaim;
         } catch (Exception e) {
-            logger.error("Couldn't found claim in solr by id [{}] cause {}", claimId, e.getMessage());
+            logger.info("Claim is not found: {} {}", solrQuery.toQueryString(), e.getMessage());
             return null;
         }
     }
 
     public static void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimState) {
         Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
-            SolrClaim solrClaim = SolrApi.findClaim(claim.getClaimId());
+            SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
             if (solrClaim != null) {
                 return solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
             }
@@ -83,7 +93,11 @@ public class SolrApi {
         }, SolrApi.HARD_COMMIT_TIME, 500);
     }
 
-    public static void waitForClaimAppearedInIndex(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaim(claim.getClaimId()), SolrApi.HARD_COMMIT_TIME, 100);
+    public static void waitForClaimAppearedInIndexById(Claim claim) {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimById(claim.getClaimId()), SolrApi.HARD_COMMIT_TIME, 100);
+    }
+
+    public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimByClaimNumber(claim.getClaimNumber()), SolrApi.HARD_COMMIT_TIME, 100);
     }
 }
