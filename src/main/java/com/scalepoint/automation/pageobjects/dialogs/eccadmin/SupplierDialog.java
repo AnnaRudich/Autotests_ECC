@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
@@ -71,6 +72,13 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @FindBy(xpath = "//table[contains(@class, 'supplier-products-only-for-claim-handling')]")
         private ExtCheckbox claimHandlingProductsCheckbox;
+
+        @FindBy(id = "invoiceSettingRadioGroup")
+        private ExtRadioGroup invoiceSettings;
+
+        public ExtRadioGroup getInvoiceSettings() {
+            return invoiceSettings;
+        }
 
         public OrdersTab setOrderEmail(String email) {
             emailField.clear();
