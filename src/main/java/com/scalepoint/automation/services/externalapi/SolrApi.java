@@ -99,5 +99,7 @@ public class SolrApi {
 
     public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
         Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimByClaimNumber(claim.getClaimNumber()), SolrApi.HARD_COMMIT_TIME, 100);
+        SolrClaim claimByClaimNumber = findClaimByClaimNumber(claim.getClaimNumber());
+        claim.setClaimId(Long.toString(claimByClaimNumber.getId()));
     }
 }

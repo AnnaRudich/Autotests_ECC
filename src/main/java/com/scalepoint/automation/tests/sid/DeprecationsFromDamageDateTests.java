@@ -69,7 +69,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         /* claim is created with damage date*/
         IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().doAssert(
                 asserts -> asserts.assertDamageDateIs(initialDamageDate)
-        ).toSettlementPage().saveClaim();
+        ).toSettlementPage().saveClaim(claim);
 
         LocalDate updatedDamageData = LocalDate.now().minusDays(1L);
         claim.setDamageDate(toDamageFormat(updatedDamageData));
@@ -77,7 +77,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         /* claim is updated with damage date*/
         IP1Api.doGetIntegration(user, claim, false).toCustomerDetails().doAssert(
                 asserts -> asserts.assertDamageDateIs(updatedDamageData)
-        ).toSettlementPage().saveClaim();
+        ).toSettlementPage().saveClaim(claim);
 
         /* damage data shouldn't be updated when damage date is absent*/
         claim.setDamageDate("");
@@ -113,7 +113,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 .setSubCategory(claimItem.getCategoryBornBabyudstyr())
                 .setNewPrice(Constants.PRICE_2400)
                 .closeSidWithOk()
-                .saveClaim();
+                .saveClaim(claim);
 
         LocalDate updatedDamageData = LocalDate.now().minusDays(1L);
         claim.setDamageDate(toDamageFormat(updatedDamageData));

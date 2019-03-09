@@ -50,7 +50,7 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void charlie544_reopenSavedClaim(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .saveClaim()
+                .saveClaim(claim)
                 .openRecentClaim()
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
@@ -66,7 +66,7 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
         loginAndCreateClaim(user, claim)
-                .saveClaim()
+                .saveClaim(claim)
                 .openRecentClaim()
                 .cancelClaim()
                 .to(MyPage.class)

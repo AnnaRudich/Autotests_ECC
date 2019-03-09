@@ -480,7 +480,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                     sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason6());
                 })
                 .selectLine()
-                .saveClaim()
+                .saveClaim(claim)
                 .getClaimMenu()
                 .logout();
 

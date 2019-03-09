@@ -82,7 +82,7 @@ public class ClaimSearchTest extends BaseTest {
   @Test(dataProvider = "testDataProvider", description = "Search for open claim")
   public void searchClaim_open(User user, Claim claim) {
     loginAndCreateClaim(user, claim)
-            .saveClaim()
+            .saveClaim(claim)
             .getMainMenu()
             .openClaimSearch()
             .fillClaimNumber(claim.getClaimNumber())

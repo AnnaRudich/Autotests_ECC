@@ -224,8 +224,9 @@ public class SettlementPage extends BaseClaimPage {
         settlementSummary.cancel();
     }
 
-    public MyPage saveClaim() {
+    public MyPage saveClaim(Claim claim) {
         settlementSummary.saveClaim();
+        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.OPEN);
         return at(MyPage.class);
     }
 
