@@ -29,6 +29,7 @@ public class SolrApi {
 
     private static final String PRODUCTS_COLLECTION = "da_DK";
     private static final String CLAIMS_COLLECTION = "claim_DK";
+    private static final int POLL_MS = 1000;
 
     private static Logger logger = LogManager.getLogger(SolrApi.class);
 
@@ -90,15 +91,15 @@ public class SolrApi {
                 return solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
             }
             return null;
-        }, SolrApi.HARD_COMMIT_TIME, 1000);
+        }, SolrApi.HARD_COMMIT_TIME, POLL_MS);
     }
 
     public static void waitForClaimAppearedInIndexById(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimById(claim.getClaimId()), SolrApi.HARD_COMMIT_TIME, 100);
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimById(claim.getClaimId()), SolrApi.HARD_COMMIT_TIME, POLL_MS);
     }
 
     public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimByClaimNumber(claim.getClaimNumber()), SolrApi.HARD_COMMIT_TIME, 100);
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimByClaimNumber(claim.getClaimNumber()), SolrApi.HARD_COMMIT_TIME, POLL_MS);
         SolrClaim claimByClaimNumber = findClaimByClaimNumber(claim.getClaimNumber());
         claim.setClaimId(Long.toString(claimByClaimNumber.getId()));
     }
