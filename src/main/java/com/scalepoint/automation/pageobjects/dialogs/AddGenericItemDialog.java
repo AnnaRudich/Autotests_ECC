@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -30,6 +31,7 @@ public class AddGenericItemDialog extends BaseDialog {
     public AddGenericItemDialog ensureWeAreAt() {
         waitForVisible(category);
         waitForVisible(ok);
+        waitForAjaxCompleted();
         return this;
     }
 
@@ -49,7 +51,6 @@ public class AddGenericItemDialog extends BaseDialog {
     private AddGenericItemDialog selectCategory(String categoryGroup, String category) {
         this.category.select(categoryGroup +" - "+category);
         Wait.waitForAjaxCompleted();
-        Wait.wait(3);
         return this;
     }
 
