@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class SolrApi {
 
-    public static final int HARD_COMMIT_TIME = 30; //seconds
+    private static final int HARD_COMMIT_TIME = 60; //seconds
 
     private static final String PRODUCTS_COLLECTION = "da_DK";
     private static final String CLAIMS_COLLECTION = "claim_DK";
@@ -90,7 +90,7 @@ public class SolrApi {
                 return solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
             }
             return null;
-        }, SolrApi.HARD_COMMIT_TIME, 500);
+        }, SolrApi.HARD_COMMIT_TIME, 1000);
     }
 
     public static void waitForClaimAppearedInIndexById(Claim claim) {
