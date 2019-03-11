@@ -155,8 +155,7 @@ public class TextSearchPage extends Page {
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
             $(sortLink).click();
-            Wait.waitForAjaxCompleted();
-            Boolean isDisplayed = false;
+            boolean isDisplayed = false;
             try {
                 isDisplayed = sortIconToWait.isDisplayed();
             } catch (Exception e) {
@@ -167,6 +166,7 @@ public class TextSearchPage extends Page {
             }
             currentAttempt++;
         }
+        Wait.waitForXhrAjaxCompleted();
         return this;
     }
 

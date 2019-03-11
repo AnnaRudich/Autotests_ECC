@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,17 @@ public class Wait {
     public static void waitForAjaxCompleted() {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
+    }
+
+    //TODO remove when https://jira.scalepoint.com/browse/CONTENTS-4484 is done
+    public static void waitForXhrAjaxCompleted() {
+        getWebDriverWaitWithDefaultTimeoutAndPooling().until(new ExpectedCondition<Boolean>() {
+            @Nullable
+            @Override
+            public Boolean apply(@Nullable WebDriver wrapWait) {
+                return (Boolean)((JavascriptExecutor) wrapWait).executeScript("var searchReq = getXmlHttpRequestObject(); return (searchReq.readyState == 4 || searchReq.readyState == 0);");
+            }
+        });
     }
 
     public static void waitForSpinnerToDisappear(){
