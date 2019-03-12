@@ -65,7 +65,7 @@ public class SelfService2Tests extends BaseTest {
                 .finishEditItem()
 
                 .deleteItem()
-              //.doAssert(asserts -> asserts.assertLineIsNotPresent(description))
+                .doAssert(asserts -> asserts.assertLineIsNotPresent(description))
 
                 .undoDelete()
                 .doAssert(asserts -> asserts.assertLineIsPresent(description))

@@ -53,7 +53,9 @@ public class Wait {
     }
 
     public static void waitForSpinnerToDisappear(){
+        long start = System.currentTimeMillis();
         waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
+        log.info("waitForSpinnerToDisappear: {}", (System.currentTimeMillis() - start));
     }
 
     public static void waitForPageLoaded() {

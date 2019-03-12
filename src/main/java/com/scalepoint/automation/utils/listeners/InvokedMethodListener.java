@@ -1,6 +1,6 @@
 package com.scalepoint.automation.utils.listeners;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.Configuration;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -25,8 +25,15 @@ import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
@@ -141,14 +148,28 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
         if (!iTestResult.isSuccess()) {
-            Selenide.screenshot(getFileName(method));
+            takeScreenshot(getFileName(method));
+        }
+    }
+
+    private void takeScreenshot(String fileName){
+        Screenshot screenshot = new AShot()
+                .shootingStrategy(ShootingStrategies.viewportPasting(100))
+                .takeScreenshot(Browser.driver());
+        BufferedImage image = screenshot.getImage();
+        try {
+            File imageFile = new File(Configuration.reportsFolder, fileName + ".png");
+            ImageIO.write(image, "png", imageFile);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
     private String getFileName(Method method) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
         return "node_" + gridNode.replace("http://", "").replace(":", "")
                 + "_" + Browser.getDriverType()
-                + "_" + method.getName();
+                + "_" + method.getName()+ "_" + sdf.format(new Date());
     }
 
 
