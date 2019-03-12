@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.listeners;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -148,7 +149,12 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
         if (!iTestResult.isSuccess()) {
-            takeScreenshot(getFileName(method));
+            try {
+                takeScreenshot(getFileName(method));
+            } catch (Exception e) {
+                logger.error("Can't make sreenshot with ashot for {} cause {}", method.getName(), e.getMessage());
+                Selenide.screenshot(getFileName(method));
+            }
         }
     }
 

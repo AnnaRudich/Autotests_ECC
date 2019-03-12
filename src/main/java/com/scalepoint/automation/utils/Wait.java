@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.extjs.ExtElement;
+import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +56,14 @@ public class Wait {
 
     public static void waitForSpinnerToDisappear(){
         long start = System.currentTimeMillis();
-        waitElementDisappeared(By.xpath("//div[contains(@class, 'loader')]"));
+        forCondition(new Function<WebDriver, Object>() {
+            @Nullable
+            @Override
+            public Object apply(@Nullable WebDriver webDriver) {
+                boolean empty = webDriver.findElements(By.xpath("//div[contains(@class, 'loader')]")).isEmpty();
+                return empty;
+            }
+        }, 1, 100);
         log.info("waitForSpinnerToDisappear: {}", (System.currentTimeMillis() - start));
     }
 
@@ -158,7 +167,18 @@ public class Wait {
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
-        return new WebDriverWait(Browser.driver(), timeoutSeconds, pollMs).ignoring(StaleElementReferenceException.class).until(condition);
+        Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        T until;
+        try {
+            FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Browser.driver())
+                    .withTimeout(Duration.ofSeconds(timeoutSeconds))
+                    .pollingEvery(Duration.ofMillis(pollMs))
+                    .ignoring(StaleElementReferenceException.class);
+            return wait.until(condition);
+        } finally {
+            Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
+
+        }
 }
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
