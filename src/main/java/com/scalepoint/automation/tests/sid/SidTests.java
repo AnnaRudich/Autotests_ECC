@@ -306,7 +306,7 @@ public class SidTests extends BaseTest {
      * THAN: Depreciation is 0.00
      */
     @SuppressWarnings("AccessStaticViaInstance")
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price minus voucher percent if voucher selected in Add settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price minus voucher percent if voucher selected in Add settlement dialog", invocationCount = 5)
     public void ecc3025_cashCompensationWithoutDepVoucher(User user, Claim claim, ClaimItem item) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation = SidCalculator.calculateVoucherValuation(
                 Constants.PRICE_2400,
@@ -317,6 +317,7 @@ public class SidTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
+                            .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withCategory(item.getCategoryGroupBorn())
                             .withSubCategory(item.getCategoryBornBabyudstyr())

@@ -85,7 +85,7 @@ public class SolrApi {
     }
 
     public static void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimState) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
+        Wait.forConditionLong((Function<WebDriver, Object>) webDriver -> {
             SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
             if (solrClaim != null) {
                 return solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
@@ -95,11 +95,11 @@ public class SolrApi {
     }
 
     public static void waitForClaimAppearedInIndexById(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimById(claim.getClaimId()), SolrApi.HARD_COMMIT_TIME, POLL_MS);
+        Wait.forConditionLong((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimById(claim.getClaimId()), SolrApi.HARD_COMMIT_TIME, POLL_MS);
     }
 
     public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimByClaimNumber(claim.getClaimNumber()), SolrApi.HARD_COMMIT_TIME, POLL_MS);
+        Wait.forConditionLong((Function<WebDriver, Object>) webDriver -> SolrApi.findClaimByClaimNumber(claim.getClaimNumber()), SolrApi.HARD_COMMIT_TIME, POLL_MS);
         SolrClaim claimByClaimNumber = findClaimByClaimNumber(claim.getClaimNumber());
         claim.setClaimId(Long.toString(claimByClaimNumber.getId()));
     }

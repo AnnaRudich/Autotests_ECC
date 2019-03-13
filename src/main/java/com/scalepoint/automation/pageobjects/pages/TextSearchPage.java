@@ -281,6 +281,10 @@ public class TextSearchPage extends Page {
         return searchBy(productName);
     }
 
+    public TextSearchPage searchByProductNameAndCategory(String productName, String category) {
+        return searchBy(productName + " " + category);
+    }
+
     public TextSearchPage searchBySku(String sku) {
         return searchBy("SKU:" + sku);
     }

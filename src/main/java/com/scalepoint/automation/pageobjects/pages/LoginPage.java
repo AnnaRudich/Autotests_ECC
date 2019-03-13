@@ -82,7 +82,7 @@ public class LoginPage extends Page {
 
     private boolean isLoginErrorPresent() {
         try {
-            Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
+            Wait.forConditionShort((Function<WebDriver, Object>) webDriver -> {
                 try {
                     driver.findElement(By.id("loginError"));
                     return true;

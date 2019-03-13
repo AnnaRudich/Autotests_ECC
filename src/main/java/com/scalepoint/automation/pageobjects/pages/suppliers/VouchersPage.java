@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.refresh;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -48,7 +49,13 @@ public class VouchersPage extends BaseEccAdminNavigation {
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(firstVoucherItem);
+        try {
+            Wait.waitForVisible(firstVoucherItem);
+        } catch (Exception e) {
+            refresh();
+            //TODO remove after https://jira.scalepoint.com/browse/CONTENTS-4491
+            Wait.waitForVisible(firstVoucherItem);
+        }
         return this;
     }
 

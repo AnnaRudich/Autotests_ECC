@@ -112,7 +112,11 @@ public enum DriversFactory {
 
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
-            WebDriverManager.chromedriver().setup();
+            if (System.getProperty("webdriver.chrome.driver") == null) {
+                File ieDriver = new File("src/main/resources/drivers/chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", ieDriver.getAbsolutePath());
+            }
+//            WebDriverManager.chromedriver().setup();
             ChromeDriver chromeDriver = new ChromeDriver(getDesiredCapabilitiesForChrome().merge(capabilities));
             setTimeouts(chromeDriver);
             return chromeDriver;

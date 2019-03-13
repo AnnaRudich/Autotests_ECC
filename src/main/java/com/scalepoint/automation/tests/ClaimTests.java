@@ -367,7 +367,7 @@ public class ClaimTests extends BaseTest {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(claimLineDescription)
+                .searchByProductNameAndCategory(claimLineDescription, claimItem.getExistingSubCat3_Mobiltelefoner())
                 .sortOrderableFirst()
                 .match(claimLineDescription)
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));

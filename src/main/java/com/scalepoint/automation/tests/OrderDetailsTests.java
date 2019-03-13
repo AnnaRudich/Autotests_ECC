@@ -283,9 +283,11 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
-    public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
+    public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .toTextSearchPage(textSearch.getCatProduct1())
+                .toTextSearchPage()
+                .searchByProductNameAndCategory(claimItem.getSetDialogTextMatch(), claimItem.getExistingSubCat3_Mobiltelefoner())
+                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .sortOrderableFirst()
                 .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
@@ -317,9 +319,11 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
-    public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, OrderDetails orderDetails, TextSearch textSearch) {
+    public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .toTextSearchPage(textSearch.getCatProduct1())
+                .toTextSearchPage()
+                .searchByProductNameAndCategory(claimItem.getSetDialogTextMatch(), claimItem.getExistingSubCat3_Mobiltelefoner())
+                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .sortOrderableFirst()
                 .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();

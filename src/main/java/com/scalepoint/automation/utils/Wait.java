@@ -32,7 +32,7 @@ public class Wait {
 
     private static Logger log = LogManager.getLogger(Wait.class);
 
-    private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling(){
+    private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling() {
         return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)
                 .pollingEvery(500, TimeUnit.MILLISECONDS)
                 .ignoring(StaleElementReferenceException.class);
@@ -49,19 +49,18 @@ public class Wait {
             @Nullable
             @Override
             public Boolean apply(@Nullable WebDriver wrapWait) {
-                return (Boolean)((JavascriptExecutor) wrapWait).executeScript("var searchReq = getXmlHttpRequestObject(); return (searchReq.readyState == 4 || searchReq.readyState == 0);");
+                return (Boolean) ((JavascriptExecutor) wrapWait).executeScript("var searchReq = getXmlHttpRequestObject(); return (searchReq.readyState == 4 || searchReq.readyState == 0);");
             }
         });
     }
 
-    public static void waitForSpinnerToDisappear(){
+    public static void waitForSpinnerToDisappear() {
         long start = System.currentTimeMillis();
-        forCondition(new Function<WebDriver, Object>() {
+        forConditionShort(new Function<WebDriver, Object>() {
             @Nullable
             @Override
             public Object apply(@Nullable WebDriver webDriver) {
-                boolean empty = webDriver.findElements(By.xpath("//div[contains(@class, 'loader')]")).isEmpty();
-                return empty;
+                return webDriver.findElements(By.xpath("//div[contains(@class, 'loader')]")).isEmpty();
             }
         }, 1, 100);
         log.info("waitForSpinnerToDisappear: {}", (System.currentTimeMillis() - start));
@@ -97,8 +96,8 @@ public class Wait {
         return wrapShort(ExpectedConditions.invisibilityOfAllElements(Lists.newArrayList(element)));
     }
 
-    public static Boolean isElementNotPresent(By locator){
-        return $$(locator).filter(Condition.visible).size()==0;
+    public static Boolean isElementNotPresent(By locator) {
+        return $$(locator).filter(Condition.visible).size() == 0;
     }
 
     public static Boolean invisibleOfElement(By locator) {
@@ -166,9 +165,8 @@ public class Wait {
         return wrap(condition);
     }
 
-    public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
+    public static <T> T forConditionShort(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
         Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-        T until;
         try {
             FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Browser.driver())
                     .withTimeout(Duration.ofSeconds(timeoutSeconds))
@@ -179,7 +177,15 @@ public class Wait {
             Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
 
         }
-}
+    }
+
+    public static <T> T forConditionLong(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
+        FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
+                .withTimeout(Duration.ofSeconds(timeoutSeconds))
+                .pollingEvery(Duration.ofMillis(pollMs))
+                .ignoring(StaleElementReferenceException.class);
+        return wait.until(condition);
+    }
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
@@ -208,7 +214,7 @@ public class Wait {
         return element;
     }
 
-    public static  WebElement waitForVisible(By by){
+    public static WebElement waitForVisible(By by) {
         return waitForVisible(Browser.driver().findElement(by));
     }
 

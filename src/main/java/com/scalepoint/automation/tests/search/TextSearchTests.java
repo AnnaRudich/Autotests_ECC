@@ -51,7 +51,7 @@ public class TextSearchTests extends BaseTest {
     public void charlie510_selectBrandAndModel(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(SAMSUNG_GALAXY_S_7)
+                .searchByProductNameAndCategory(SAMSUNG_GALAXY_S_7, claimItem.getExistingSubCat3_Mobiltelefoner())
                 .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectBrand(textSearch.getBrandSamsung())
                 .selectModel(textSearch.getModel1())
@@ -69,7 +69,7 @@ public class TextSearchTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(SAMSUNG_GALAXY_S_7)
+                .searchByProductNameAndCategory(SAMSUNG_GALAXY_S_7, claimItem.getExistingSubCat3_Mobiltelefoner())
                 .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectBrand(textSearch.getBrandSamsung())
                 .openAttributesMenu()
@@ -92,7 +92,7 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group", invocationCount = 5)
     public void charlie510_createClaimManuallyFromSearch(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -109,7 +109,7 @@ public class TextSearchTests extends BaseTest {
         String product = SAMSUNG_GALAXY_S_7;
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(product)
+                .searchByProductNameAndCategory(product, claimItem.getExistingSubCat3_Mobiltelefoner())
                 .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner());
 
         tsp.sortPopularityDescending()
@@ -134,7 +134,7 @@ public class TextSearchTests extends BaseTest {
                 .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
 
         /* new search should reset popularity sort so no icons will be present */
-        tsp.searchByProductName(product)
+        tsp.searchByProductNameAndCategory(product, claimItem.getExistingSubCat3_Mobiltelefoner())
                 .waitForResultsLoad()
                 .doAssert(
                         TextSearchPage.Asserts::assertNoPopularitySortChosen);

@@ -62,7 +62,7 @@ public abstract class Page implements Actions {
         int totalTimeoutInSeconds = 20;
         int pollingMs = 1000;
 
-        Wait.forCondition(webDriver -> {
+        Wait.forConditionLong(webDriver -> {
             try {
                 String currentUrl = driver.getCurrentUrl();
 

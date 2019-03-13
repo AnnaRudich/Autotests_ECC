@@ -260,7 +260,7 @@ public class SettlementDialog extends BaseDialog {
 
     public static class FormFiller {
 
-        public static final int DELAY = 50;
+        static final int DELAY = 100;
         private SettlementDialog sid;
 
         public FormFiller(SettlementDialog settlementDialog) {
@@ -418,7 +418,6 @@ public class SettlementDialog extends BaseDialog {
 
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
-        input.clear();
         input.enter(value);
         simulateBlurEvent(input);
         return this;
