@@ -33,9 +33,12 @@ public class Browser {
             logger.info("Quit requested");
             DriverData data = holder.get();
             logger.info("Data found {}", data);
-            data.getDriver().quit();
+            if (data != null) {
+                data.getDriver().quit();
+            }
             logger.info("Holder remove");
             holder.remove();
+
             logger.info("Completed browser quit!");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
