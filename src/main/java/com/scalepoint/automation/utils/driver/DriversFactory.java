@@ -112,11 +112,11 @@ public enum DriversFactory {
 
     CHROME(DriverType.CHROME) {
         protected WebDriver getDriverInstance(DesiredCapabilities capabilities) {
-//            if (System.getProperty("webdriver.chrome.driver") == null) {
-//                File ieDriver = new File("src/main/resources/drivers/chromedriver.exe");
-//                System.setProperty("webdriver.chrome.driver", ieDriver.getAbsolutePath());
-//            }
-            WebDriverManager.chromedriver().setup();
+            if (System.getProperty("webdriver.chrome.driver") == null) {
+                File ieDriver = new File("src/main/resources/drivers/chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", ieDriver.getAbsolutePath());
+            }
+//            WebDriverManager.chromedriver().setup();
             ChromeDriver chromeDriver = new ChromeDriver(getDesiredCapabilitiesForChrome().merge(capabilities));
             setTimeouts(chromeDriver);
             return chromeDriver;
@@ -128,7 +128,9 @@ public enum DriversFactory {
     private static WebDriver getChromeRemote(String hubUrl, DesiredCapabilities capabilities){
         WebDriver driver = null;
         try {
-            driver = new RemoteWebDriver(new URL(hubUrl), getDesiredCapabilitiesForChrome().merge(capabilities));
+            ChromeOptions desiredCapabilitiesForChrome = getDesiredCapabilitiesForChrome();
+            desiredCapabilitiesForChrome.setBinary("C:\\Users\\ecc_auto\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe");
+            driver = new RemoteWebDriver(new URL(hubUrl), desiredCapabilitiesForChrome.merge(capabilities));
             ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
             setTimeouts(driver);
         } catch (MalformedURLException e) {
