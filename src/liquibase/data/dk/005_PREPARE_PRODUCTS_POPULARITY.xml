@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="ipo" runOnChange="true">
+
+        <comment>Prepare products popularity</comment>
+
+        <sql>
+            EXEC autotests_add_popularity 'cellphones', 'Galaxy S7'
+            EXEC autotests_add_popularity 'digcameras', 'DMC-'
+            EXEC autotests_add_popularity 'videocameras', 'Vision'
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

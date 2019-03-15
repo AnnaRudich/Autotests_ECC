@@ -359,10 +359,10 @@ public class OrderDetailsTests extends BaseTest {
      * complete order using Credit card
      */
 
-//    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
-//    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
-//    @Test(dataProvider = "testDataProvider",
-//            description = "shopSmokeE2E")
+    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
+    @Test(dataProvider = "testDataProvider",
+            description = "shopSmokeE2E")
     public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
