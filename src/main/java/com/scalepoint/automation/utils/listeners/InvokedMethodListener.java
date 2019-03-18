@@ -33,6 +33,7 @@ import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -158,24 +159,20 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         }
     }
 
-    private void takeScreenshot(String fileName){
+    private void takeScreenshot(String fileName) throws IOException {
         Screenshot screenshot = new AShot()
                 .shootingStrategy(ShootingStrategies.viewportPasting(100))
                 .takeScreenshot(Browser.driver());
         BufferedImage image = screenshot.getImage();
-        try {
-            File imageFile = new File(Configuration.reportsFolder, fileName + ".png");
-            ImageIO.write(image, "png", imageFile);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
+        File imageFile = new File(Configuration.reportsFolder, fileName + ".png");
+        ImageIO.write(image, "png", imageFile);
     }
 
     private String getFileName(Method method) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
         return "node_" + gridNode.replace("http://", "").replace(":", "")
                 + "_" + Browser.getDriverType()
-                + "_" + method.getName()+ "_" + sdf.format(new Date());
+                + "_" + method.getName() + "_" + sdf.format(new Date());
     }
 
 
