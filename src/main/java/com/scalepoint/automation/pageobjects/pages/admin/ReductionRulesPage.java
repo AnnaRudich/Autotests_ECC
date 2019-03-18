@@ -5,6 +5,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -57,8 +58,7 @@ public class ReductionRulesPage extends AdminBasePage {
 
     public boolean isRuleDisplayed(ReductionRule rr) {
         try {
-            findRule(rr);
-            return true;
+            return Wait.forConditionShort(webDriver -> !Browser.driver().findElements(By.xpath(".//*[@id='ruleItemsList']/option[text() = '" + rr.getRrName() + "']")).isEmpty(), 3, 1000);
         } catch (Exception e) {
             return false;
         }
