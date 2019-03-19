@@ -207,6 +207,7 @@ public class TextSearchPage extends Page {
 
     public ProductDetailsPage openProductDetailsOfFirstProduct() {
         Wait.waitForVisible(match);
+        Wait.waitForXhrAjaxCompleted();
         openDialog(firstProductDetails);
         return at(ProductDetailsPage.class);
     }
