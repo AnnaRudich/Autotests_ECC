@@ -24,7 +24,7 @@ public interface Actions {
     Logger logger = LogManager.getLogger(Actions.class);
 
     default boolean openDialog(WebElement openButton) {
-        return Window.get().openDialog($(openButton));
+        return Window.get().openDialog(openButton);
     }
 
     default void openDialogWithJavascriptHelper(WebElement openButton) {

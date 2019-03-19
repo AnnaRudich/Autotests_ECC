@@ -41,11 +41,7 @@ public class Window {
 
         public boolean openDialog(WebElement openButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
-            if (openButton.isDisplayed()) {
-                $(openButton).click();
-            } else {
-                logger.error("Button is not displayed");
-            }
+            openButton.click();
             if (isAlertPresent()) {
                 String alertText = getAlertTextAndAccept();
                 logger.info("Text of alert: " + alertText);

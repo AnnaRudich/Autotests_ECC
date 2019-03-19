@@ -58,7 +58,7 @@ public class TextSearchPage extends Page {
     @FindBy(css = ".bestfitbutton")
     private Button bestFit;
 
-    @FindBy(xpath = "//a[@id='details0']")
+    @FindBy(id = "details0")
     private WebElement firstProductDetails;
 
     @FindBy(css = ".ygtvitem span span")
