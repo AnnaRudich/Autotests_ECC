@@ -27,11 +27,6 @@ public interface Actions {
         return Window.get().openDialog(openButton);
     }
 
-    default void openDialogWithJavascriptHelper(WebElement openButton) {
-        openDialog(openButton);
-        JavascriptHelper.initializeCommonFunctions();
-    }
-
     default void closeDialog(WebElement closeButton) {
         Window.get().closeDialog(closeButton);
     }

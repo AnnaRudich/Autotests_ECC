@@ -28,7 +28,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllE
 public class Wait {
     private static final int TIME_OUT_IN_SECONDS = 60;
     private static final int POLL_IN_MS = 1000;
-    private static final int DEFAULT_TIMEOUT = 60;
+    private static final int DEFAULT_TIMEOUT = 30;
 
     private static Logger log = LogManager.getLogger(Wait.class);
 
