@@ -255,7 +255,7 @@ public interface Actions {
         logger.info("SetValue {} --> {}", getElementIdentifier(element), value);
         JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
         for(int i=0; i<3; i++){
-            if(element.getText().contains(value)){
+            if(element.getText().equals(value)){
                break;
             }else {
                 executor.executeScript("arguments[0].value=arguments[1];", element, value);

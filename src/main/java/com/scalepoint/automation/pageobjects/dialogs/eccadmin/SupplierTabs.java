@@ -36,7 +36,9 @@ interface SupplierTabs {
     }
 
     default SuppliersPage saveSupplier() {
-        $(By.className("edit-supplier-save-btn")).click();
+        By editSupplierBtn = By.className("edit-supplier-save-btn");
+        Wait.waitForDisplayed(editSupplierBtn);
+        $(editSupplierBtn).click();
         Wait.waitForAjaxCompleted();
         return Page.at(SuppliersPage.class);
     }

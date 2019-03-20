@@ -140,8 +140,8 @@ public enum DriversFactory {
     }
 
     private static void setTimeouts(WebDriver driver) {
-//        driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
-//        driver.manage().timeouts().setScriptTimeout(DEFAULT_SCRIPT_TIMEOUT, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(DEFAULT_SCRIPT_TIMEOUT, TimeUnit.SECONDS);
     }
 
     private static ChromeOptions getDesiredCapabilitiesForChrome() {
