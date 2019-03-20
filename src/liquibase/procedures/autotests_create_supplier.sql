@@ -10,8 +10,9 @@ CREATE PROCEDURE [dbo].[autotests_create_supplier]
 	  @insCompanyId BIGINT,
 	  @PostalCode NVARCHAR(20),
 	  @SecurityToken varchar(100) = null,
-      @RV_TaskWebServiceUrl varchar(100) = null,
-      @SecurityTokenIssued varchar(100) = null,
+    @RV_TaskWebServiceUrl varchar(100) = null,
+    @SecurityTokenIssued varchar(100) = null,
+	  @rvIntegrationType int = 1,
  	  @SupplierId int OUTPUT
      AS
 
@@ -37,8 +38,6 @@ BEGIN
   CONTINUE
 END
 
-DECLARE @mainInsuranceCompanyId INT = (SELECT COALESCE(ic.ICPRFNBR, ic.ICRFNBR) FROM dbo.INSCOMP ic WHERE ic.ICRFNBR = @insCompanyId )
-
 insert into [SUPPLIER] (
 		[SUNAME],  [SUEMAIL], [SUCVRNBR], [SUPHONE], [SUADDR],
 		[SUADDR2], [PostalCode],[City], [SUURL], [insuranceCompanyId],
@@ -52,7 +51,7 @@ insert into [SUPPLIER] (
 			'M',     1,           1,     '\jessops_logo.gif', '\jessops_logo.gif',
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
-			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, 1
+			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType
 
 	select @SupplierID = @@IDENTITY
 
