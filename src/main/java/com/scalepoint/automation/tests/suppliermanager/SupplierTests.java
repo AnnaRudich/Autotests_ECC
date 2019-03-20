@@ -217,16 +217,22 @@ public class SupplierTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if invoiceSetting is set correctly")
-    public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT)User user){
+    public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT) User user) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SupplierDialog supplierDialog = suppliersPage.openFirstSupplier();
-        supplierDialog.selectOrdersTab().getInvoiceSettings().select(0);
-        supplierDialog.saveSupplier();
-        Assert.assertEquals(supplierDialog.selectOrdersTab().getInvoiceSettings().getSelected(), 0);
-        supplierDialog.selectOrdersTab().getInvoiceSettings().select(1);
-        supplierDialog.saveSupplier();
-        supplierDialog = suppliersPage.openFirstSupplier();
-        Assert.assertEquals(supplierDialog.selectOrdersTab().getInvoiceSettings().getSelected(), 1);
+        suppliersPage.openFirstSupplier()
+                .selectOrdersTab()
+                .selectInvoiceSetting(0)
+                .saveSupplier();
+
+        suppliersPage.openFirstSupplier()
+                .selectOrdersTab()
+                .doAssert(a -> a.assertInvoiceSettingIs(0))
+                .selectInvoiceSetting(1)
+                .saveSupplier();
+
+        suppliersPage.openFirstSupplier()
+                .selectOrdersTab()
+                .doAssert(a -> a.assertInvoiceSettingIs(1));
     }
 
     @Test(dataProvider = "testDataProvider")

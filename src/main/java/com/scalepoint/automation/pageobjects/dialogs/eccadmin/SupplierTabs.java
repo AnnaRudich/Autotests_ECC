@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
+import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -36,6 +37,7 @@ interface SupplierTabs {
 
     default SuppliersPage saveSupplier() {
         $(By.className("edit-supplier-save-btn")).click();
+        Wait.waitForAjaxCompleted();
         return Page.at(SuppliersPage.class);
     }
 

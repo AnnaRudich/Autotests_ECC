@@ -80,6 +80,11 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             return invoiceSettings;
         }
 
+        public OrdersTab selectInvoiceSetting(int value) {
+            invoiceSettings.select(value);
+            return this;
+        }
+
         public OrdersTab setOrderEmail(String email) {
             emailField.clear();
             emailField.sendKeys(email);
@@ -147,6 +152,11 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             public Asserts assertProductsUsedAsVouchers() {
                 Assert.assertTrue(claimHandlingProductsCheckbox.isSelected());
+                return this;
+            }
+
+            public Asserts assertInvoiceSettingIs(int value) {
+                Assert.assertEquals(invoiceSettings.getSelected(), value);
                 return this;
             }
 
