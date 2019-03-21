@@ -62,9 +62,13 @@ public class SuppliersPage extends BaseEccAdminNavigation {
 
     @Override
     protected Page ensureWeAreOnPage() {
-        waitForVisible(createSupplierButton);
-//        refresh();
         waitForAjaxCompleted();
+        try {
+            waitForVisible(createSupplierButton);
+        } catch (Exception e) {
+            refresh();
+            Wait.waitForVisible(createSupplierButton);
+        }
         return this;
     }
 

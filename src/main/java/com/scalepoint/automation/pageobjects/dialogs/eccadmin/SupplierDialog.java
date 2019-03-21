@@ -370,12 +370,11 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
 
             private void clearField(WebElement element) {
+                Wait.wait(1);
                 element.sendKeys(Keys.chord(Keys.CONTROL, "a"));
                 element.sendKeys(Keys.DELETE);
                 for (int i = 0; i < 3; i++) {
                     if (!element.getText().equals("")) {
-                        Wait.wait(1);
-                        System.out.println("Attempt 1");
                         element.clear();
                     }
                 }
