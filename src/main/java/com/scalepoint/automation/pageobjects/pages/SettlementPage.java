@@ -435,7 +435,7 @@ public class SettlementPage extends BaseClaimPage {
 
             this.age = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
 
-            List<WebElement> purchasePriceElements = claimLine.findElements(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']"));
+            List<WebElement> purchasePriceElements = Wait.forConditionShort(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")), 3, 1000);
             if (!purchasePriceElements.isEmpty()) {
                 String text = purchasePriceElements.get(0).getText();
                 if (StringUtils.isNotBlank(text)) {
@@ -446,7 +446,8 @@ public class SettlementPage extends BaseClaimPage {
             String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
-            List<WebElement> purchaseAmountElements = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']"));
+
+            List<WebElement> purchaseAmountElements = Wait.forConditionShort(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")), 3, 1000);
             if (!purchaseAmountElements.isEmpty()) {
                 String text = purchaseAmountElements.get(0).getText();
                 if (StringUtils.isNotBlank(text)) {

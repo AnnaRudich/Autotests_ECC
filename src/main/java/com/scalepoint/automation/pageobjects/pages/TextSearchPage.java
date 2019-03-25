@@ -139,6 +139,7 @@ public class TextSearchPage extends Page {
     public TextSearchPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForDisplayed(By.id("categoryLegend"));
+        Wait.waitForXhrAjaxCompleted();
         return this;
     }
 
@@ -213,7 +214,7 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog openSidForFirstProduct() {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         Wait.waitForVisible(match);
         clickUsingJsIfSeleniumClickReturnError(match);
         if (!BaseDialog.isOn(SettlementDialog.class)) {
@@ -223,7 +224,7 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog openSidForProductWithVoucher() {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         Wait.waitForVisible(match);
         match.click();
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
@@ -235,7 +236,7 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog match(String productDescription) {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         waitForStaleElement(By.cssSelector("#productsTable table td"));
         List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//button[@class='matchbutton']"));
         if (matchButtons.isEmpty()) {
@@ -258,7 +259,7 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog matchStrict(String productDescription) {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         waitForStaleElement(By.cssSelector("#productsTable table td"));
         sortOrderableFirst();
         By matchButtonsLocator = By.xpath(".//*[@id='productsTable']//span[contains(text(), '" + productDescription + "')]/ancestor::td[1]/..//button[@class='matchbutton']");
@@ -293,7 +294,7 @@ public class TextSearchPage extends Page {
     private TextSearchPage searchBy(String productName) {
         searchProduct(productName);
         search.click();
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         waitForStaleElement(By.cssSelector("#productsTable table tbody"));
         return this;
     }
@@ -320,7 +321,7 @@ public class TextSearchPage extends Page {
         waitForSuggestions();
         searchInput.sendKeys(Keys.ARROW_DOWN);
         searchInput.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         waitForStaleElement(By.cssSelector("#productsTable table tbody"));
         return this;
     }
@@ -330,7 +331,7 @@ public class TextSearchPage extends Page {
     }
 
     public String getFirstProductId() {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         Wait.waitForDisplayed(By.xpath("(.//*[@id='productsTable']/table//td[@productid])[1]"));
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productid])")).attr("productid");
     }
@@ -356,7 +357,7 @@ public class TextSearchPage extends Page {
             logger.info(e.getMessage());
         }
         waitForDisplayed(fieldSetNotDisabled);
-        waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         return this;
     }
 
@@ -388,7 +389,7 @@ public class TextSearchPage extends Page {
     }
 
     private List<String> getProductIds() {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForXhrAjaxCompleted();
         ElementsCollection elements = $$(By.xpath("(.//*[@id='productsTable']/table//td[@productid])"));
         return elements.stream().map(e -> e.attr("productId")).collect(Collectors.toList());
     }

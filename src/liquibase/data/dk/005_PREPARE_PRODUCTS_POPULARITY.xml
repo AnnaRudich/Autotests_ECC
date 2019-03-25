@@ -13,6 +13,7 @@
             EXEC autotests_add_popularity 'cellphones', 'Galaxy S7'
             EXEC autotests_add_popularity 'digcameras', 'DMC-'
             EXEC autotests_add_popularity 'videocameras', 'Vision'
+            EXEC autotests_add_popularity 'cellphones', 'iphone'
 
         </sql>
     </changeSet>
