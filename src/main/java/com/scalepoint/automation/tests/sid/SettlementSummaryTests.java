@@ -62,7 +62,7 @@ public class SettlementSummaryTests extends BaseTest {
      * WHEN: and navigates to Settlement Summary page
      * THEN: Result Value is correct
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value is correct for multi string claim")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value is correct for multi string claim", invocationCount = 10)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3034_setSummaryCheckMultipleItems(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
@@ -76,10 +76,10 @@ public class SettlementSummaryTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withNewPrice(PRICE_2400)
-                            .withDepreciation(DEPRECIATION_10)
                             .withCategory(item.getCategoryGroupBorn())
                             .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withNewPrice(PRICE_2400)
+                            .withDepreciation(DEPRECIATION_10)
                             .withVoucher(voucher.getExistingVoucher_10());
                 })
                 .closeSidWithOk()

@@ -260,7 +260,7 @@ public class SettlementDialog extends BaseDialog {
 
     public static class FormFiller {
 
-        static final int DELAY = 100;
+        static final int DELAY = 200;
         private SettlementDialog sid;
 
         public FormFiller(SettlementDialog settlementDialog) {
