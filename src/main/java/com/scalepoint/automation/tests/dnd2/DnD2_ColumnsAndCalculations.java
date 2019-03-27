@@ -40,7 +40,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher is added to claim line but no depreciation")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusVoucherValueWhenDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem, Voucher voucher){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusVoucherValueWhenDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem){
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withDepreciation(0)
@@ -59,12 +59,12 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem, Voucher voucher){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem){
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
-                        .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withNewPrice(claimItem.getTrygNewPrice())
                         .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
                 .doAssert(asserts -> {
@@ -99,7 +99,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line and red rule is discretionary type")
+    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line and red rule is discretionary type", invocationCount = 5)
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAddedAndRedRuleIsDiscretionaryType(User user, Claim claim, ClaimItem claimItem){
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -172,9 +172,9 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     public void charlie514_claimLineWithVoucherAndNoDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
-                        .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()));
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withNewPrice(claimItem.getTrygNewPrice()));
         double voucherPercentage = settlementDialog.getVoucherPercentage();
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
@@ -194,9 +194,9 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     public void charlie514_claimLineWithVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
-                        .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryGroupBorn())
                         .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withNewPrice(claimItem.getTrygNewPrice())
                         .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
                         .closeSidWithOk();
@@ -215,13 +215,13 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
+    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type", invocationCount = 5)
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem){
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
-                        .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withNewPrice(claimItem.getTrygNewPrice()))
                 .setDepreciation(depreciationValue)
                 .setDiscountAndDepreciation(true);
         double voucherPercentage = settlementDialog.getVoucherPercentage();
