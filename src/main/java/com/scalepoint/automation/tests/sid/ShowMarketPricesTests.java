@@ -105,7 +105,7 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price value displays on Product Info page
      * THEN: Market Price Supplier displays on Product Info page
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID", invocationCount = 5)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
     public void charlie_588_5_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

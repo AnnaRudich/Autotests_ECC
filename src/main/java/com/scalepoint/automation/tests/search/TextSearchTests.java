@@ -92,7 +92,7 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group", invocationCount = 5)
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
     public void charlie510_createClaimManuallyFromSearch(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

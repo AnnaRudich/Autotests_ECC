@@ -29,7 +29,7 @@ public class SettlementSummaryTests extends BaseTest {
      * THEN: Result Value is correct
      * THEN: Result Total New Price is correct
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value and Total New Price result value are correct for claim with depreciated claim line", invocationCount = 5)
+    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value and Total New Price result value are correct for claim with depreciated claim line")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3034_setSummaryCheck(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
