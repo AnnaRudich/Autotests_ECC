@@ -29,7 +29,7 @@ public class SettlementSummaryTests extends BaseTest {
      * THEN: Result Value is correct
      * THEN: Result Total New Price is correct
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value and Total New Price result value are correct for claim with depreciated claim line")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value and Total New Price result value are correct for claim with depreciated claim line", invocationCount = 5)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3034_setSummaryCheck(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
@@ -37,10 +37,10 @@ public class SettlementSummaryTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withNewPrice(PRICE_2400)
-                            .withDepreciation(DEPRECIATION_10)
                             .withCategory(item.getCategoryGroupBorn())
                             .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withNewPrice(PRICE_2400)
+                            .withDepreciation(DEPRECIATION_10)
                             .withVoucher(voucher.getExistingVoucher_10());
                 })
                 .closeSidWithOk()

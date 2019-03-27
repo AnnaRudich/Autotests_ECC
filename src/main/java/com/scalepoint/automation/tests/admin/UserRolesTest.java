@@ -46,7 +46,7 @@ public class UserRolesTest extends BaseTest {
      * THEN: U2 details are stored correctly
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to update new SP admin user")
-    public void charlie537_updateNewSPAdminUser(SystemUser user) throws Exception {
+    public void charlie537_updateNewSPAdminUser(SystemUser user) {
         SystemUser newUser = TestData.getSystemUser();
         login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
