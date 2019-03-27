@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SystemUser {
 
     private String login = RandomUtils.randomName("Autotest");
-    private String password = RandomUtils.randomName("!2Qpasso");
+    private String password = "!Q@W#E$R5t6t!";
     private String firstName = RandomUtils.randomName("AutotestFirst");
     private String lastName = RandomUtils.randomName("AutotestSecond");
     private String email = RandomUtils.randomName("autotest") + "@scalepoint.com";
