@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="ipo" runOnChange="true">
+
+        <comment>Cleanup products</comment>
+
+        <sql>
+            create table #categories(cgnbr nvarchar(64))
+            insert into #categories (cgnbr)
+            values ('personal_care'), ('pho_vid_acc_obj'), ('bicycle_accessories'), ('bicycle_others'), ('videocameras'), ('cellphones'), ('clocks_luksus'), ('childrenacc')
+
+            create table #pids(id int, cgId int, seq real)
+            create table #vids(id int)
+
+            insert into #pids(id, cgId, seq)
+            select p.ProductID, cgp.CPCGNBR, cgp.CPSEQNBR from CGPRREL cgp
+            join Product p on cgp.CPPRNBR = p.ProductID
+            join Product v on p.ProductID = v.ParentProduct
+            join CATEGORY c on cgp.CPCGNBR = c.CGRFNBR
+            join #categories cToLeave on c.CGNBR = cToLeave.cgnbr collate SQL_Latin1_General_CP1_CI_AS
+            where p.Published in (1,3) and v.Published in (1,3) and c.CGPUB = 1
+
+            insert into #vids(id)
+            select v.ProductID from CGPRREL cgp
+            join Product p on cgp.CPPRNBR = p.ProductID
+            join Product v on p.ProductID = v.ParentProduct
+            join CATEGORY c on cgp.CPCGNBR = c.CGRFNBR
+            join #categories cToLeave on c.CGNBR = cToLeave.cgnbr collate SQL_Latin1_General_CP1_CI_AS
+            where p.Published in (1,3) and v.Published in (1,3) and c.CGPUB = 1
+
+            truncate table CGPRREL
+
+            insert into CGPRREL(CPCGNBR, CPPRNBR, CPSEQNBR)
+            select pids.cgId, pids.id, pids.seq from #pids pids
+
+            drop table #categories
+            drop table #pids
+            drop table #vids
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
