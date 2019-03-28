@@ -51,7 +51,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @Override
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult iTestResult) {
         if (invokedMethod.isTestMethod()) {
-            if (Browser.driver() != null) {
+            if (Browser.hasDriver()) {
                 logger.info("Using driver type: " + Browser.getDriverType());
                 logger.info("Start from: " + SystemUtils.getHostname());
                 gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
@@ -95,7 +95,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     @SuppressWarnings("unchecked")
     @Override
     public void afterInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
-        if (Browser.driver() != null) {
+        if (Browser.hasDriver()) {
             if (iInvokedMethod.isTestMethod()) {
                 try {
 

@@ -17,7 +17,12 @@ public class Browser {
     }
 
     public static WebDriver driver() {
-        return holder.get() != null ? holder.get().getDriver() : null;
+        if (holder.get() != null) return holder.get().getDriver();
+        else throw new IllegalStateException("Driver is not initialized");
+    }
+
+    public static boolean hasDriver() {
+        return holder.get() != null;
     }
 
     public static String getDriverType() {
