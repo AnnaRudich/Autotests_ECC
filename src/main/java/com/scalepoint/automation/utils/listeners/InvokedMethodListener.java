@@ -98,10 +98,17 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         if (Browser.driver() != null) {
             if (iInvokedMethod.isTestMethod()) {
                 try {
+
                     takeScreenshot(iInvokedMethod.getTestMethod().getConstructorOrMethod().getMethod(), iTestResult);
 
                     logger.info("-------- InvokedMethodListener after. Thread: {} ----------", Thread.currentThread().getId());
                     printErrorStackTraceIfAny(iTestResult);
+
+                    int left = TestCountdown.countDown(iInvokedMethod.getTestMethod().getRealClass().getSimpleName()
+                            + "." + iInvokedMethod.getTestMethod().getMethodName()
+                    );
+
+                    logger.info("Left tests: {}", left);
 
                     RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
                     if (rollbackContext == null || rollbackContext.getOperations().isEmpty()) {

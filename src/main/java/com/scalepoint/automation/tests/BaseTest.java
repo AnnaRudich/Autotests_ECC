@@ -33,6 +33,7 @@ import com.scalepoint.automation.utils.driver.DriverHelper;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.InvokedMethodListener;
+import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -68,7 +69,7 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @IntegrationTest
-@Listeners({InvokedMethodListener.class})
+@Listeners({InvokedMethodListener.class, SuiteListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger log = LogManager.getLogger(BaseTest.class);
