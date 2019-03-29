@@ -116,7 +116,7 @@ public enum DriversFactory {
                 File ieDriver = new File("src/main/resources/drivers/chromedriver.exe");
                 System.setProperty("webdriver.chrome.driver", ieDriver.getAbsolutePath());
             }
-//            WebDriverManager.chromedriver().setup();
+            System.setProperty("webdriver.timeouts.implicitlywait", "1");
             ChromeDriver chromeDriver = new ChromeDriver(getDesiredCapabilitiesForChrome().merge(capabilities));
             setTimeouts(chromeDriver);
             return chromeDriver;

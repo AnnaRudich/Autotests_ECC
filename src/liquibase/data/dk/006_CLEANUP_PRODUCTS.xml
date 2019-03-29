@@ -12,7 +12,23 @@
         <sql>
             create table #categories(cgnbr nvarchar(64))
             insert into #categories (cgnbr)
-            values ('personal_care'), ('pho_vid_acc_obj'), ('bicycle_accessories'), ('bicycle_others'), ('videocameras'), ('cellphones'), ('clocks_luksus'), ('childrenacc')
+            values ('personal_care_shave'),
+            ('personal_care_tooth'),
+            ('pho_vid_acc_obj'),
+            ('bicycle_others'),
+            ('videocameras'),
+            ('cellphones'),
+            ('clocksluksus_man'),
+            ('childrenacc')
+
+            insert into #categories (cgnbr)
+            select distinct c1.CGNBR from prpcgrel ppc
+            join CATEGORY c on ppc.PPCGNBR = c.CGRFNBR
+            join product p on ppc.PPPRNBR = p.ProductID
+            join CGPRREL cgp on cgp.CPPRNBR = p.ParentProduct
+            join CATEGORY c1 on c1.CGRFNBR = cgp.CPCGNBR
+
+
 
             create table #pids(id int, cgId int, seq real)
             create table #vids(id int)
@@ -37,6 +53,12 @@
 
             insert into CGPRREL(CPCGNBR, CPPRNBR, CPSEQNBR)
             select pids.cgId, pids.id, pids.seq from #pids pids
+
+            update p
+            set p.published = 2
+            from product p
+            left join CGPRREL cgp on cgp.CPPRNBR = p.productId
+            where p.published in (1,3) and marketPrice = 0
 
             drop table #categories
             drop table #pids

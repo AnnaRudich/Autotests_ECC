@@ -418,8 +418,9 @@ public class ClaimTests extends BaseTest {
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
-        claimItem.setCustomerDemand(10000.00);
-        claimItem.setNewPriceSP(12000.00);
+        double lowestPrice = productInfo.getLowestPrice();
+        claimItem.setCustomerDemand(lowestPrice * 1.5);
+        claimItem.setNewPriceSP(lowestPrice * 1.5);
 
         loginAndCreateClaim(user, claim)
                 .openSid()

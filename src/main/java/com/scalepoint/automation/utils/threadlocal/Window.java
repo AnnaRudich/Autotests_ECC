@@ -11,8 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Set;
 
-import static com.codeborne.selenide.Selenide.$;
-
 @SuppressWarnings("ConstantConditions")
 public class Window {
 

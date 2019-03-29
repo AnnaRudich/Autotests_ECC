@@ -4,14 +4,13 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -50,22 +49,22 @@ public class ProductDetailsPage extends Page {
 
     public class Asserts {
         public Asserts assertMarketPriceSupplierVisible(){
-            assertTrue(Wait.visible(marketPriceSupplier), "Market price supplier must be shown");
+            assertTrue(Wait.forCondition1s(driver-> marketPriceSupplier.isDisplayed()), "Market price supplier must be shown");
             return this;
         }
 
         public Asserts assetMarketPriceSupplierInvisible(){
-            assertTrue(driver.findElements(By.id("market_price_supplier")).isEmpty(), "Market price supplier must be hidden");
+            assertFalse(Wait.checkIsDisplayed(marketPriceSupplier), "Market price supplier must be hidden");
             return this;
         }
 
         public Asserts assertMarketPriceVisible(){
-            assertTrue(Wait.visible(marketPriceValue), "Market price must be shown");
+            assertTrue(Wait.forCondition1s(driver-> marketPriceValue.isDisplayed()), "Market price must be shown");
             return this;
         }
 
         public Asserts assertMarketPriceInvisible(){
-            assertTrue(driver.findElements(By.id("market_price")).isEmpty(), "Market price must be hidden");
+            assertFalse(Wait.checkIsDisplayed(marketPriceValue), "Market price must be hidden");
             return this;
         }
     }

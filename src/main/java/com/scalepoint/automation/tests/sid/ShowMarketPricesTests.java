@@ -30,7 +30,7 @@ public class ShowMarketPricesTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .chooseCategory(claimItem.getCategoryGroupBorn())
-                .doAssert(TextSearchPage.Asserts::assertMarketPriceInvisible)
+                .doAssert(TextSearchPage.Asserts::assertMarketPriceSortingInvisible)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
                 .doAssert(productDetails -> {
@@ -77,7 +77,6 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price supplier displays on Product Details page
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
-    @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -86,6 +85,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceAscendant)
                 .sortMarketPricesDescending()
                 .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceDescendant)
+                .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
                 .doAssert(productDetails->{
                     productDetails.assertMarketPriceVisible();

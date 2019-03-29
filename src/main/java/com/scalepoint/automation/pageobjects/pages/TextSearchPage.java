@@ -151,7 +151,7 @@ public class TextSearchPage extends Page {
         return sort(sortByOrderable, descendingOrderable);
     }
 
-    private TextSearchPage sort(WebElement sortLink, Image sortIconToWait) {
+    private TextSearchPage sort(WebElement sortLink, WebElement sortIconToWait) {
         int totalAttempts = 10;
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
@@ -411,8 +411,8 @@ public class TextSearchPage extends Page {
             return this;
         }
 
-        public Asserts assertMarketPriceInvisible() {
-            Assert.assertTrue(driver.findElements(By.id("sortMarketPriceImg")).isEmpty(), "Market price still visible");
+        public Asserts assertMarketPriceSortingInvisible() {
+            Assert.assertFalse(Wait.checkIsDisplayed(ascendantMarketPrice), "Market price sorting still visible");
             return this;
         }
 

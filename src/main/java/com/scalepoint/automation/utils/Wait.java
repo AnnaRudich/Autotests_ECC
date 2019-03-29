@@ -179,6 +179,19 @@ public class Wait {
         }
     }
 
+    public static <T> T forCondition1s(Function<WebDriver, T> condition) {
+        Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        try {
+            FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
+                    .withTimeout(Duration.ofSeconds(1))
+                    .pollingEvery(Duration.ofMillis(100))
+                    .ignoring(StaleElementReferenceException.class);
+            return wait.until(condition);
+        } finally {
+            Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
+        }
+    }
+
     public static <T> T forConditionLong(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
         FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
                 .withTimeout(Duration.ofSeconds(timeoutSeconds))
@@ -221,6 +234,18 @@ public class Wait {
     public static WebElement waitForVisible(WebElement element) {
         wrap(visibilityOf(element));
         return element;
+    }
+
+    public static boolean checkIsDisplayed(WebElement element) {
+        long start = System.currentTimeMillis();
+        try {
+            return forCondition1s(d -> element.isDisplayed());
+        } catch (NoSuchElementException e) {
+            log.info("Element [{}] is not displayed", element.toString());
+            return false;
+        } finally {
+            log.info("checkIsDisplayed: {} ms.", (System.currentTimeMillis() - start));
+        }
     }
 
     public static <E extends TypifiedElement> void waitForInvisible(E element) {
