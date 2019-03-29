@@ -129,12 +129,14 @@ public class OrderDetailsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make product order using shop product search")
     public void charlie540_ordersPageWhenWeWithdrawMoney(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
+
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryGroupBorn())
                 .setSubCategory(claimItem.getCategoryBornBabyudstyr())
-                .setNewPrice(10000.00)
+                .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
@@ -145,8 +147,6 @@ public class OrderDetailsTests extends BaseTest {
                 .openReplacementWizard()
                 .goToShop()
                 .toProductSearchPage();
-
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         int productIndex = 0;
         ShopProductSearchPage searchForProductPage = searchPage

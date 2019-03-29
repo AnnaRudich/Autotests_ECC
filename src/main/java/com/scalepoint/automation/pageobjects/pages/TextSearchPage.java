@@ -352,7 +352,7 @@ public class TextSearchPage extends Page {
 
     public TextSearchPage waitForResultsLoad() {
         try {
-            waitForDisplayed(fieldSetDisabled, 10);
+            waitForDisplayed(fieldSetDisabled);
         } catch (Exception e) {
             logger.info(e.getMessage());
         }

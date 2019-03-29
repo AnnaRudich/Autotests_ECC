@@ -92,10 +92,6 @@ public class Wait {
         return webElements.size() == 1;
     }
 
-    public static Boolean invisible(WebElement element) {
-        return wrapShort(ExpectedConditions.invisibilityOfAllElements(Lists.newArrayList(element)));
-    }
-
     public static Boolean isElementNotPresent(By locator) {
         return $$(locator).filter(Condition.visible).size() == 0;
     }
@@ -112,12 +108,8 @@ public class Wait {
         return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-    public static WebElement waitForDisplayed(By locator, int timeoutInSeconds) {
-        return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator), timeoutInSeconds);
-    }
-
-    public static WebElement waitForStaleElement(final By locator) {
-        return wrap((WebDriver d) -> {
+    public static void waitForStaleElement(final By locator) {
+        wrap((WebDriver d) -> {
             try {
                 return d.findElement(locator);
             } catch (StaleElementReferenceException ex) {
@@ -142,18 +134,11 @@ public class Wait {
         });
     }
 
-    public static WebElement waitForElementContainsText(WebElement element, String text) {
-        return wrapShort((WebDriver d) -> {
-            try {
-                if (!element.getText().contains(text)) {
-                    return null;
-                }
-                return element;
-            } catch (Exception ex) {
-                log.error(ex.getMessage());
-                return null;
-            }
-        });
+    public static void waitForElementContainsText(WebElement element, String text) {
+        Boolean contains = wrapShort((WebDriver d) -> element.getText().contains(text));
+        if (!contains) {
+            throw new IllegalStateException("Elements doesn't contain: " + text);
+        }
     }
 
     public static void waitElementDisappeared(By element) {
@@ -162,7 +147,7 @@ public class Wait {
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {
-        return wrap(condition);
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
     }
 
     public static <T> T forConditionShort(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
@@ -202,10 +187,6 @@ public class Wait {
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
         return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
-    }
-
-    private static <T> T wrap(Function<WebDriver, T> condition) {
-        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
     }
 
     private static <T> T wrap(ExpectedCondition<T> expectedCondition) {
@@ -294,12 +275,8 @@ public class Wait {
         });
     }
 
-    private static <V> V wrapShort(ExpectedCondition<V> expectedCondition, int timeOutInSeconds) {
-        return new WebDriverWait(Browser.driver(), timeOutInSeconds, 1000).until(expectedCondition);
-    }
-
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return wrapShort(expectedCondition, 60);
+        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT, 1000).until(expectedCondition);
     }
 
     public static void waitForElementWithPageReload(By locator) {
