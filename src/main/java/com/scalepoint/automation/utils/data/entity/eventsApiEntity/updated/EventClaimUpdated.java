@@ -1,11 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -28,46 +23,34 @@ import java.util.Map;
 public class EventClaimUpdated extends EventClaim {
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("eventType")
     private String eventType;
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("payloadVersion")
     private String payloadVersion;
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("correlationId")
     private String correlationId;
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("timestamp")
     private String timestamp;
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("case")
     private Case _case;
     @JsonProperty("changedBy")
     private ChangedBy changedBy;
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("changes")
     private List<Changes> changes = null;
@@ -75,9 +58,7 @@ public class EventClaimUpdated extends EventClaim {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("eventType")
     public String getEventType() {
@@ -85,9 +66,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("eventType")
     public void setEventType(String eventType) {
@@ -95,9 +74,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("payloadVersion")
     public String getPayloadVersion() {
@@ -105,9 +82,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("payloadVersion")
     public void setPayloadVersion(String payloadVersion) {
@@ -115,9 +90,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("correlationId")
     public String getCorrelationId() {
@@ -125,9 +98,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("correlationId")
     public void setCorrelationId(String correlationId) {
@@ -135,9 +106,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("timestamp")
     public String getTimestamp() {
@@ -145,9 +114,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("timestamp")
     public void setTimestamp(String timestamp) {
@@ -155,9 +122,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("case")
     public Case getCase() {
@@ -165,9 +130,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("case")
     public void setCase(Case _case) {
@@ -185,9 +148,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("changes")
     public List<Changes> getChanges() {
@@ -195,9 +156,7 @@ public class EventClaimUpdated extends EventClaim {
     }
 
     /**
-     *
      * (Required)
-     *
      */
     @JsonProperty("changes")
     public void setChanges(List<Changes> changes) {

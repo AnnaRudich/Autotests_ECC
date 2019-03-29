@@ -8,8 +8,7 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "InsertSettlementItem")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InsertSettlementItem")
-public class InsertSettlementItem
-{
+public class InsertSettlementItem {
     @XmlAttribute
     private String caseId;
 
@@ -19,29 +18,24 @@ public class InsertSettlementItem
     @XmlTransient
     public Integer eccItemId;
 
-    public String getCaseId ()
-    {
+    public String getCaseId() {
         return caseId;
     }
 
-    public void setCaseId (String caseId)
-    {
+    public void setCaseId(String caseId) {
         this.caseId = caseId;
     }
 
-    public SettlementItem getSettlementItem ()
-    {
+    public SettlementItem getSettlementItem() {
         return SettlementItem;
     }
 
-    public void setSettlementItem (SettlementItem SettlementItem)
-    {
+    public void setSettlementItem(SettlementItem SettlementItem) {
         this.SettlementItem = SettlementItem;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [caseId = "+caseId+", SettlementItem = "+SettlementItem+"]";
+    public String toString() {
+        return "ClassPojo [caseId = " + caseId + ", SettlementItem = " + SettlementItem + "]";
     }
 }

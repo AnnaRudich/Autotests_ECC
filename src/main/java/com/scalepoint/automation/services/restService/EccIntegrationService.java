@@ -8,9 +8,7 @@ import io.restassured.response.ValidatableResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.CREATE_AND_OPEN_CLAIM;
-import static com.scalepoint.automation.services.restService.Common.BasePath.CREATE_CLAIM;
-import static com.scalepoint.automation.services.restService.Common.BasePath.OPEN_CLAIM;
+import static com.scalepoint.automation.services.restService.Common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
@@ -19,7 +17,7 @@ public class EccIntegrationService extends BaseService {
 
     private ValidatableResponse response;
 
-    public ValidatableResponse getResponse(){
+    public ValidatableResponse getResponse() {
         return response;
     }
 
@@ -35,8 +33,8 @@ public class EccIntegrationService extends BaseService {
         return this;
     }
 
-    private Map<String,String> getClaimParams(EccIntegration eccIntegration){
-        Map<String,String> claimParams = new HashMap<>();
+    private Map<String, String> getClaimParams(EccIntegration eccIntegration) {
+        Map<String, String> claimParams = new HashMap<>();
         claimParams.put("firstName", eccIntegration.getClaimant().getFirstName());
         claimParams.put("lastName", eccIntegration.getClaimant().getLastName());
         claimParams.put("addressLine1", eccIntegration.getClaimant().getAddress1());
@@ -62,7 +60,7 @@ public class EccIntegrationService extends BaseService {
         return this;
     }
 
-    public EccIntegrationService openCaseAndRedirect(){
+    public EccIntegrationService openCaseAndRedirect() {
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
                 .redirects().follow(false)

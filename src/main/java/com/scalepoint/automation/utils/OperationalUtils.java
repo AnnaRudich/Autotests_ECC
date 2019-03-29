@@ -17,10 +17,8 @@ public class OperationalUtils {
         String value = clearString(s);
         Locale locale = Locale.GERMAN;
 
-        switch (currentLocale) {
-            case "gb":
-            case "ch":
-                locale = Locale.ENGLISH;
+        if ("gb".equals(currentLocale) || "ch".equals(currentLocale)) {
+            locale = Locale.ENGLISH;
         }
 
         NumberFormat formatter = NumberFormat.getInstance(locale);
@@ -36,8 +34,7 @@ public class OperationalUtils {
         return NumberFormat.getNumberInstance(locale).format(value);
     }
 
-    public static String clearString(String s) {
-        //return s.replaceAll("[^\\d\\.]*", "");
+    private static String clearString(String s) {
         return s.replaceAll("[^0-9.,]+", "");
     }
 

@@ -90,7 +90,7 @@ public class UsersPage extends AdminBasePage {
         WebElement item;
         try {
             item = find(byUserLoginXpath, user.getLogin());
-        } catch (TimeoutException e){
+        } catch (TimeoutException e) {
             logger.error(e.getMessage());
             makeUserSearchByName(user.getLogin());
             item = find(byUserLoginXpath, user.getLogin());

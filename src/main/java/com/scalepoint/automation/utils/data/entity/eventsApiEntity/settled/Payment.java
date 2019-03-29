@@ -1,12 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -14,13 +9,13 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "uuid",
-    "dueDate",
-    "total",
-    "currencyCode",
-    "payerParty",
-    "payeeParty",
-    "paymentMeans"
+        "uuid",
+        "dueDate",
+        "total",
+        "currencyCode",
+        "payerParty",
+        "payeeParty",
+        "paymentMeans"
 })
 public class Payment {
 
@@ -34,7 +29,6 @@ public class Payment {
     private Double total;
     /**
      * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
-     * 
      */
     @JsonProperty(value = "currencyCode", required = true)
     private String currencyCode;
@@ -76,7 +70,6 @@ public class Payment {
     /**
      * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
      * (Required)
-     * 
      */
     public String getCurrencyCode() {
         return currencyCode;
@@ -85,7 +78,6 @@ public class Payment {
     /**
      * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
      * (Required)
-     * 
      */
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;

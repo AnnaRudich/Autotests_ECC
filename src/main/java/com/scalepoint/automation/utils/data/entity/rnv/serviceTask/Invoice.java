@@ -18,10 +18,8 @@ public class Invoice {
     private BigDecimal vat;
     private BigDecimal totalAmount;
 
-    public Invoice(){}
-
-
-
+    public Invoice() {
+    }
 
 
     @XmlAttribute(required = true)

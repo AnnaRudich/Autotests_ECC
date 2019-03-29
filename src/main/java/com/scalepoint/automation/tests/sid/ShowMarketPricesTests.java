@@ -60,7 +60,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setValuation(Valuation.MARKET_PRICE)
-                .doAssert(sid->{
+                .doAssert(sid -> {
                     sid.assertMarketPriceVisible();
                     sid.assertMarketPriceSupplierInvisible();
                 });
@@ -87,7 +87,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceDescendant)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
-                .doAssert(productDetails->{
+                .doAssert(productDetails -> {
                     productDetails.assertMarketPriceVisible();
                     productDetails.assertMarketPriceSupplierVisible();
                 })
@@ -112,7 +112,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 .chooseCategory(claimItem.getExistingCat3_Telefoni())
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
-                .doAssert(productDetails->{
+                .doAssert(productDetails -> {
                     productDetails.assertMarketPriceVisible();
                     productDetails.assertMarketPriceSupplierVisible();
                 })

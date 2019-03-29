@@ -113,16 +113,16 @@ public class NewCustomerPage extends Page {
         return this;
     }
 
-    public NewCustomerPage selectDamageDate(LocalDate date){
+    public NewCustomerPage selectDamageDate(LocalDate date) {
         damageDate.click();
         waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
         waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0,3).toLowerCase()+"']")).click();
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='"+date.getYear()+"']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
         clickElementUsingJS($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']")));
         waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='"+date.getDayOfMonth()+"']")).click();
+        $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='" + date.getDayOfMonth() + "']")).click();
         return this;
     }
 

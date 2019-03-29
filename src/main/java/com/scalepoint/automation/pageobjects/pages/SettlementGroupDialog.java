@@ -10,7 +10,6 @@ import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -59,49 +58,49 @@ public class SettlementGroupDialog extends BaseDialog {
     private By closeGroup = By.xpath("//*[contains(@id, 'group-close-button-btnInnerEl')]");
 
 
-    public SettlementGroupDialog enterGroupName(String name){
+    public SettlementGroupDialog enterGroupName(String name) {
         groupName.setValue(name);
         return this;
     }
 
-    public SettlementGroupDialog chooseType(GroupTypes type){
+    public SettlementGroupDialog chooseType(GroupTypes type) {
         type.getRadioButton().click();
         return this;
     }
 
-    public SettlementGroupDialog enterNewPrice(Double newPrice){
+    public SettlementGroupDialog enterNewPrice(Double newPrice) {
         this.newPrice.setValue(OperationalUtils.toStringWithComma(newPrice));
         return this;
     }
 
-    public SettlementGroupDialog enterCustomerDemand(Double customerDemand){
+    public SettlementGroupDialog enterCustomerDemand(Double customerDemand) {
         this.customerDemand.setValue(OperationalUtils.toStringWithComma(customerDemand));
         return this;
     }
 
-    public SettlementGroupDialog enterValuation(Double valuation){
+    public SettlementGroupDialog enterValuation(Double valuation) {
         this.valuation.setValue(OperationalUtils.toStringWithComma(valuation));
         return this;
     }
 
-    public SettlementGroupDialog enterNote(String note){
+    public SettlementGroupDialog enterNote(String note) {
         this.note.sendKeys(note);
         return this;
     }
 
-    public SettlementGroupDialog selectFirstReason(){
+    public SettlementGroupDialog selectFirstReason() {
         reason.click();
         List<WebElement> options = driver.findElements(By.xpath("//li[@class='x-boundlist-item']"));
         options.get(1).click();
         return this;
     }
 
-    public SettlementGroupDialog clickSave(){
+    public SettlementGroupDialog clickSave() {
         $(saveGroup).click();
         return this;
     }
 
-    public SettlementPage saveGroup(){
+    public SettlementPage saveGroup() {
         $(saveGroup).click();
         waitForAjaxCompleted();
         return BaseClaimPage.at(SettlementPage.class);
@@ -117,17 +116,17 @@ public class SettlementGroupDialog extends BaseDialog {
         return this;
     }
 
-    public enum GroupTypes{
+    public enum GroupTypes {
         VALUATION($(By.xpath("//*[contains(@id, 'valuation-group-type-radio-displayEl')]"))),
         OVERVIEW($(By.xpath("//*[contains(@id, 'overview-group-type-radio-displayEl')]")));
 
         private WebElement element;
 
-        GroupTypes(WebElement element){
+        GroupTypes(WebElement element) {
             this.element = element;
         }
 
-        public WebElement getRadioButton(){
+        public WebElement getRadioButton() {
             return element;
         }
     }
@@ -139,67 +138,67 @@ public class SettlementGroupDialog extends BaseDialog {
 
     public class Asserts {
 
-        public Asserts assertAverageAgeIs(String age){
+        public Asserts assertAverageAgeIs(String age) {
             assertThat(averageAge.getText()).isEqualToIgnoringCase(age);
             return this;
         }
 
-        public Asserts assertIsOverviewChecked(){
+        public Asserts assertIsOverviewChecked() {
             assertThat(GroupTypes.OVERVIEW.getRadioButton().findElement(By.xpath("./../input")).getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsValuationChecked(){
+        public Asserts assertIsValuationChecked() {
             assertThat(GroupTypes.VALUATION.getRadioButton().findElement(By.xpath("./../input")).getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsNewPriceFiledDisabled(){
+        public Asserts assertIsNewPriceFiledDisabled() {
             assertThat(newPrice.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsCustomerDemandFiledDisabled(){
+        public Asserts assertIsCustomerDemandFiledDisabled() {
             assertThat(customerDemand.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsReasonFiledDisabled(){
+        public Asserts assertIsReasonFiledDisabled() {
             assertThat(reason.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsValuationFiledDisabled(){
+        public Asserts assertIsValuationFiledDisabled() {
             assertThat(valuation.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsNewPriceFiledEnabled(){
+        public Asserts assertIsNewPriceFiledEnabled() {
             assertThat(newPrice.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
-        public Asserts assertIsCustomerDemandFiledEnabled(){
+        public Asserts assertIsCustomerDemandFiledEnabled() {
             assertThat(customerDemand.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
-        public Asserts assertIsReasonFiledEnabled(){
+        public Asserts assertIsReasonFiledEnabled() {
             assertThat(reason.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
-        public Asserts assertIsValuationFiledEnabled(){
+        public Asserts assertIsValuationFiledEnabled() {
             assertThat(valuation.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
-        public Asserts assertIsIncludeInClaimChecked(){
+        public Asserts assertIsIncludeInClaimChecked() {
             assertThat(includeInClaim.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
         }
 
-        public Asserts assertIsShowLineAmountInMailChecked(){
+        public Asserts assertIsShowLineAmountInMailChecked() {
             assertThat(showLineAmountsInMail.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
             return this;
         }

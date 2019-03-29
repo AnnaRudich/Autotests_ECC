@@ -86,6 +86,7 @@ public class ClaimLineNotesPage extends BaseClaimPage implements RequiresJavascr
         assertFunc.accept(new Asserts());
         return ClaimLineNotesPage.this;
     }
+
     public class Asserts {
         public Asserts assertNoteIsCopied(String originalNoteText) {
             String textFromClipboard = noteTextArea.getText();

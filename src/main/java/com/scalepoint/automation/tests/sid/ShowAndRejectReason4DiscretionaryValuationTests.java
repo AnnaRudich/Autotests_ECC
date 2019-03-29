@@ -10,19 +10,11 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.DepreciationType;
-import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NOT_SELECTED;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.PRICE_500;
@@ -183,7 +175,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Verify the reason's representation for different valuations.
      * THEN: Selected reason is displayed for all valuation types with enable state except of the voucher valuation
      */
-    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false, isDefault = true)
+    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")

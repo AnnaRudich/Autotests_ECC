@@ -17,7 +17,6 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaym
 public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3Case2Base {
 
 
-
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeWithMailSendingCaseSettledEventV3Case2_4(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         close(user, item1, item2, item3, CLOSE_WITH_MAIL);
@@ -68,7 +67,7 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {800.0,INSURANCE_COMPANY, CLAIMANT}
+                        {800.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -168,7 +167,6 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
     }
 
 
-
     public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
         /*
@@ -208,7 +206,7 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {800.0,INSURANCE_COMPANY, SCALEPOINT}
+                        {800.0, INSURANCE_COMPANY, SCALEPOINT}
                 }
         );
 

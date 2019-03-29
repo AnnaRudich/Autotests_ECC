@@ -19,7 +19,7 @@ public class SidMarkDocumentationTests extends BaseTest {
 
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(dataProvider = "testDataProvider", description = "Is sufficient documentation checkbox checked")
-    public void charlie_547_sufficientDocumentationCheckboxShouldBeChecked(User user, Claim claim, GenericItem genericItem){
+    public void charlie_547_sufficientDocumentationCheckboxShouldBeChecked(User user, Claim claim, GenericItem genericItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(
@@ -47,7 +47,7 @@ public class SidMarkDocumentationTests extends BaseTest {
 
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(dataProvider = "testDataProvider", description = "Is sufficient documentation checkbox checked")
-    public void charlie_547_sufficientDocumentationCheckboxShouldBeUnchecked(User user, Claim claim, ClaimItem claimItem){
+    public void charlie_547_sufficientDocumentationCheckboxShouldBeUnchecked(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(
@@ -55,10 +55,10 @@ public class SidMarkDocumentationTests extends BaseTest {
                 )
                 .uncheckedDocumentation()
                 .setDescription(claimItem.getTextFieldSP())
-                .fill( fill ->
-                    fill.withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                            .withNewPrice(claimItem.getNewPriceSP())
+                .fill(fill ->
+                        fill.withCategory(claimItem.getCategoryGroupBorn())
+                                .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                                .withNewPrice(claimItem.getNewPriceSP())
                 )
                 .closeSidWithOk()
                 .editFirstClaimLine()

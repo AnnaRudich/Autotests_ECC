@@ -1,21 +1,17 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "approvedBy",
-    "summary",
-    "revisionToken"
+        "approvedBy",
+        "summary",
+        "revisionToken"
 })
 public class Settlement {
 
@@ -45,9 +41,13 @@ public class Settlement {
         this.summary = summary;
     }
 
-    public String getRevisionToken() { return revisionToken; }
+    public String getRevisionToken() {
+        return revisionToken;
+    }
 
-    public void setRevisionToken(String revisionToken) { this.revisionToken = revisionToken; }
+    public void setRevisionToken(String revisionToken) {
+        this.revisionToken = revisionToken;
+    }
 
     @Override
     public String toString() {

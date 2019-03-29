@@ -110,7 +110,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             Wait.waitForAjaxCompleted();
             try {
                 return voucherNameInput.isDisplayed();
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error(e.getMessage());
                 return false;
             }
@@ -154,7 +154,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
                 return this;
             }
 
-             public Asserts assertFaceValueStep(Integer faceValueStep) {
+            public Asserts assertFaceValueStep(Integer faceValueStep) {
                 Assert.assertEquals(stepAmountInput.getText(), faceValueStep.toString());
                 return this;
             }
@@ -504,6 +504,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             }
 
         }
+
         public EditCategoryMappingsDialog openEditMappingsDialog() {
             clickUsingJsIfSeleniumClickReturnError(editMappingsBtn);
             return BaseDialog.at(EditCategoryMappingsDialog.class);

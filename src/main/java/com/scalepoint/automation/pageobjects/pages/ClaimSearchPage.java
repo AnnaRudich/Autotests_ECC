@@ -177,14 +177,14 @@ public class ClaimSearchPage extends Page {
         }
 
         public Asserts isClaimState(ClaimStatus state) {
-            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(()-> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber()))
+            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber()))
                     .getClaimState())
                     .isEqualToIgnoringCase(state.getText());
             return this;
         }
 
         public Asserts isClaimCompany(String companyName) {
-            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(()-> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber())).getCompany())
+            assertThat(claimRows.stream().filter(claimRow -> claimRow.getClaimNumber().equals(this.claim.getClaimNumber())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find claim with number " + this.claim.getClaimNumber())).getCompany())
                     .isEqualToIgnoringCase(companyName);
             return this;
         }

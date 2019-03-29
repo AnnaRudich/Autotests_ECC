@@ -33,8 +33,8 @@ public class ClaimMenu extends Module {
         forCondition(ExpectedConditions.elementToBeClickable(By.id("signOutButton")));
         $(By.id("signOutButton")).click();
         acceptLogoutAlert();
-        int i=0;
-        while(!isOn(LoginPage.class) && i<3){
+        int i = 0;
+        while (!isOn(LoginPage.class) && i < 3) {
             i++;
             logger.info("Trying logout, attempt: " + i);
             $(By.id("signOutButton")).click();
@@ -44,7 +44,7 @@ public class ClaimMenu extends Module {
     }
 
     private void acceptLogoutAlert() {
-        if(Window.get().isAlertPresent()) {
+        if (Window.get().isAlertPresent()) {
             try {
                 Window.get().acceptAlert();
             } catch (Exception e) {

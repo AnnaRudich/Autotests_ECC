@@ -48,7 +48,7 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
     private WebElement goToShopButton;
 
-//    @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
+    //    @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
     private By selectAllItemsCheckbox = By.xpath("//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span");
 
     @FindBy(xpath = "//span[contains(text(), 'OK')]/ancestor::a")

@@ -1,10 +1,6 @@
 package com.scalepoint.automation.tests.api.unifiedpayments.v1;
 
-import com.scalepoint.automation.services.restService.EccIntegrationService;
-import com.scalepoint.automation.services.restService.EccSettlementSummaryService;
-import com.scalepoint.automation.services.restService.OwnRiskService;
-import com.scalepoint.automation.services.restService.ReopenClaimService;
-import com.scalepoint.automation.services.restService.SettlementClaimService;
+import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
@@ -18,9 +14,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginUser;
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -31,7 +25,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     private EccSettlementSummaryService eccSettlementSummaryService;
 
     @BeforeMethod
-    private void prepareClaimRequest(){
+    private void prepareClaimRequest() {
         claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant("lb");
         claimRequest.setCompany("lb");
@@ -81,7 +75,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         EventClaimSettled eventClaimSettledBeforeReopen = eventDatabaseApi.getEventClaimSettled(claimRequest);
 
         assertThat(eventClaimSettledBeforeReopen.getTotal()).isEqualTo(eccSettlementSummaryService.getSubtotalCashPayoutValue());
-        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,1);
+        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest, 1);
 
         new ReopenClaimService()
                 .reopenClaim();
@@ -90,7 +84,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         settlementClaimService
                 .close(claimRequest, CLOSE_WITH_MAIL);
 
-        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,2);
+        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest, 2);
     }
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
@@ -136,10 +130,10 @@ public class SendingToEventApiTests extends BaseApiTest {
 
         assertThat(eventClaimSettledAfterCanceled.getPayments().get(0).getPayeeParty()).isEqualToComparingFieldByField(eventClaimSettledAfterClose.getPayments().get(0).getPayerParty());
         assertThat(eventClaimSettledAfterClose.getPayments().get(0).getPayeeParty()).isEqualToComparingFieldByField(eventClaimSettledAfterCanceled.getPayments().get(0).getPayerParty());
-        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest,2);
+        eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest, 2);
     }
 
-    private SettlementClaimService createClaimWithItem(User user, InsertSettlementItem item){
+    private SettlementClaimService createClaimWithItem(User user, InsertSettlementItem item) {
         settlementClaimService =
                 loginAndOpenClaimWithItems(user, claimRequest, item).closeCase();
         eccSettlementSummaryService = new EccSettlementSummaryService()

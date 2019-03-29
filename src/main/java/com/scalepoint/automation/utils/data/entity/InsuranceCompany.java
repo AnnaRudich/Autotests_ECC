@@ -55,7 +55,7 @@ public class InsuranceCompany {
     @XmlElement
     private String sendTimeTo;
 
-    public String getFtTrygHolding(){
+    public String getFtTrygHolding() {
         return ftTrygHolding;
     }
 

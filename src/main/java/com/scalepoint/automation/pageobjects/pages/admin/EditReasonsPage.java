@@ -28,6 +28,7 @@ public class EditReasonsPage extends AdminBasePage {
         REJECT("Reject choice");
 
         private String text;
+
         ReasonType(String text) {
             this.text = text;
         }
@@ -119,7 +120,7 @@ public class EditReasonsPage extends AdminBasePage {
             String id = reasonInput.getAttribute("id");
             this.rowNumber = Integer.valueOf(id.substring(id.indexOf(prefix) + prefix.length()));
             this.readonly = reasonInput.getAttribute("readOnly") != null;
-            this.disabled = driver.findElement(By.xpath("//input[@id='"+rowNumber+"_isActive']")).getAttribute("value").equals("0");
+            this.disabled = driver.findElement(By.xpath("//input[@id='" + rowNumber + "_isActive']")).getAttribute("value").equals("0");
 
             this.disableButton = driver.findElement(By.id(rowNumber + "_changeStatusBtn"));
             this.deleteButton = driver.findElement(By.id(rowNumber + "_deleteBtn"));

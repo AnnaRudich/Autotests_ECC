@@ -39,8 +39,8 @@ public class ExtCheckboxColumn extends ExtElement {
                         "textFieldName = arguments[2]," +
                         "checkboxFieldName = arguments[3]," +
                         "record = store.findRecord(textFieldName, text);" +
-                        "record.set(checkboxFieldName, "+enable+");" +
-                        "cmp.fireEvent('checkchangedEvent', cmp.getColumns()["+columnIndex+"], store.indexOf(record), true);";
+                        "record.set(checkboxFieldName, " + enable + ");" +
+                        "cmp.fireEvent('checkchangedEvent', cmp.getColumns()[" + columnIndex + "], store.indexOf(record), true);";
         try {
             ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
         } catch (Exception e) {

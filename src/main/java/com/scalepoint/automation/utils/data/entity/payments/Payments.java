@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for payments complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="payments">
  *   &lt;complexContent>
@@ -22,14 +22,12 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "payments", propOrder = {
-    "masterCard",
-    "dankort",
-    "rabobank"
+        "masterCard",
+        "dankort",
+        "rabobank"
 })
 @XmlRootElement
 public class Payments {
@@ -43,11 +41,9 @@ public class Payments {
 
     /**
      * Gets the value of the masterCard property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MasterCard }
-     *     
+     *
+     * @return possible object is
+     * {@link MasterCard }
      */
     public MasterCard getMasterCard() {
         return masterCard;
@@ -55,11 +51,9 @@ public class Payments {
 
     /**
      * Sets the value of the masterCard property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MasterCard }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link MasterCard }
      */
     public void setMasterCard(MasterCard value) {
         this.masterCard = value;
@@ -67,11 +61,9 @@ public class Payments {
 
     /**
      * Gets the value of the dankort property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Dankort }
-     *     
+     *
+     * @return possible object is
+     * {@link Dankort }
      */
     public Dankort getDankort() {
         return dankort;
@@ -79,11 +71,9 @@ public class Payments {
 
     /**
      * Sets the value of the dankort property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Dankort }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Dankort }
      */
     public void setDankort(Dankort value) {
         this.dankort = value;
@@ -91,11 +81,9 @@ public class Payments {
 
     /**
      * Gets the value of the rabobank property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Rabobank }
-     *     
+     *
+     * @return possible object is
+     * {@link Rabobank }
      */
     public Rabobank getRabobank() {
         return rabobank;
@@ -103,11 +91,9 @@ public class Payments {
 
     /**
      * Sets the value of the rabobank property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Rabobank }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Rabobank }
      */
     public void setRabobank(Rabobank value) {
         this.rabobank = value;

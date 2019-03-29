@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class ExtRadioGroup extends ExtElement implements Actions{
+public class ExtRadioGroup extends ExtElement implements Actions {
 
     protected Logger logger = LogManager.getLogger(ExtRadioGroup.class);
 

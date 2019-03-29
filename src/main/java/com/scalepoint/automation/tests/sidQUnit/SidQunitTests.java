@@ -51,7 +51,7 @@ public class SidQunitTests extends BaseTest {
         return "\nFAILED for " + test + ": " + results.stream().filter(findFailed()).map(this::getErrorMessage).collect(Collectors.joining(" | "));
     }
 
-    private String getErrorMessage(WebElement element){
+    private String getErrorMessage(WebElement element) {
         return element.findElement(By.className("module-name")).getText() + " -> " +
                 element.findElements(By.className("fail")).stream()
                         .map(e -> e.findElement(By.className("test-message")).getText()).collect(Collectors.joining(","));
@@ -59,7 +59,7 @@ public class SidQunitTests extends BaseTest {
 
     @DataProvider(name = "qunitTests")
     public static Object[][] provide() {
-        return new Object[][] {
+        return new Object[][]{
                 {"voucher-adapter-test.jsp"},
                 {"settlement-panel-adapter-test.jsp"},
                 {"settlement-item-adapter-test.jsp"},

@@ -1,12 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -14,11 +9,11 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "street",
-    "street2",
-    "city",
-    "postalCode",
-    "countryCode"
+        "street",
+        "street2",
+        "city",
+        "postalCode",
+        "countryCode"
 })
 public class Address {
 
@@ -32,7 +27,6 @@ public class Address {
     private String postalCode;
     /**
      * ISO 3166-1 alpha 2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-     * 
      */
     @JsonProperty("countryCode")
     private String countryCode;
@@ -73,7 +67,6 @@ public class Address {
 
     /**
      * ISO 3166-1 alpha 2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-     * 
      */
     public String getCountryCode() {
         return countryCode;
@@ -81,7 +74,6 @@ public class Address {
 
     /**
      * ISO 3166-1 alpha 2 (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-     * 
      */
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;

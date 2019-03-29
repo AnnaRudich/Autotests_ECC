@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration
 public class EventApiDatabaseConfig {
 
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL + "}")
     private String eventApiDbUrl;
 
     @Bean(name = "eventApiDb")

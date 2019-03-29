@@ -9,7 +9,7 @@ public class ServiceTasksExport {
 
     private List<ServiceTaskExport> serviceTasks;
 
-    @XmlElement(name="serviceTask")
+    @XmlElement(name = "serviceTask")
     public List<ServiceTaskExport> getServiceTasks() {
         return serviceTasks;
     }

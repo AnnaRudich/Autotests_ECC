@@ -51,14 +51,14 @@ public class UsersManager {
         return companyMethodArguments;
     }
 
-    private synchronized static boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
+    private static synchronized boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
         String users = companyMethodArguments.entrySet().stream().map(e -> (e.getKey().companyCode + ":" + (e.getValue() != null ? e.getValue().getLogin() : "?"))).collect(Collectors.joining(", "));
         logger.info("Requested: {}", users);
 
-        int requestedBasicUsersCount = (int)companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
+        int requestedBasicUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
         boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
 
-        int requestedExceptionalUsersCount = (int)companyMethodArguments.keySet().stream().filter(companyCode -> !usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
+        int requestedExceptionalUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> !usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
         long count = companyMethodArguments.keySet()
                 .stream()
                 .filter(companyMethodArgument -> {
@@ -70,8 +70,8 @@ public class UsersManager {
                     return notBasicUser;
                 })
                 .count();
-        logger.info("Found exceptional users: "+count);
-        boolean exceptionalUsersAvailable = count==requestedExceptionalUsersCount;
+        logger.info("Found exceptional users: {}", count);
+        boolean exceptionalUsersAvailable = count == requestedExceptionalUsersCount;
 
         logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
 
@@ -111,20 +111,6 @@ public class UsersManager {
             return index;
         }
 
-        public CompanyMethodArgument setIndex(int index) {
-            this.index = index;
-            return this;
-        }
-
-        public CompanyCode getCompanyCode() {
-            return companyCode;
-        }
-
-        public CompanyMethodArgument setCompanyCode(CompanyCode companyCode) {
-            this.companyCode = companyCode;
-            return this;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -160,7 +146,7 @@ public class UsersManager {
             return taken;
         } catch (Exception e) {
             logger.error("Can't take user for {} cause {}", companyCode.name(), e.toString());
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

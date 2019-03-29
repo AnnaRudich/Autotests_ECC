@@ -14,7 +14,8 @@ public class Valuations {
     private BigDecimal repairEstimate;
     private BigDecimal repairPrice;
 
-    public Valuations(){}
+    public Valuations() {
+    }
 
 
     @XmlAttribute

@@ -12,9 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 
 public class AddGenericItemDialog extends BaseDialog {
 
@@ -49,7 +47,7 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     private AddGenericItemDialog selectCategory(String categoryGroup, String category) {
-        this.category.select(categoryGroup +" - "+category);
+        this.category.select(categoryGroup + " - " + category);
         Wait.waitForAjaxCompleted();
         return this;
     }
@@ -60,10 +58,10 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
-        this.category.select(categoryGroup +" - "+category);
+        this.category.select(categoryGroup + " - " + category);
         Wait.waitForAjaxCompleted();
         try {
-            WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '"+itemName+"']"));
+            WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '" + itemName + "']"));
             if (element != null && element.isDisplayed()) {
                 return true;
             }

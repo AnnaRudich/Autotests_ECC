@@ -471,7 +471,6 @@ public class ServiceAgreement {
     }
 
 
-
     public String getRnvSupplier() {
         return rnvSupplier;
     }

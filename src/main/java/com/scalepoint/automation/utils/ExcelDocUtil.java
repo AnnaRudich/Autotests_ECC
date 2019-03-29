@@ -78,9 +78,9 @@ public class ExcelDocUtil {
     }
 
     public void executeMacros(String macrosName) {
-            logger.info("Run macro");
-            activexComponent.setProperty("DisplayAlerts", false);
-            Dispatch.call(activexComponent, "Run", macrosName);
+        logger.info("Run macro");
+        activexComponent.setProperty("DisplayAlerts", false);
+        Dispatch.call(activexComponent, "Run", macrosName);
     }
 
     public void closeAndDeleteFile(String fileLocation) {

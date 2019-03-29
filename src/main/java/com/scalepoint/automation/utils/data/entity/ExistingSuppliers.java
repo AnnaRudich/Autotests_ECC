@@ -8,7 +8,7 @@ import java.util.List;
 @XmlType(name = "exisitingSuppliers", propOrder = {
         "simpleSuppliers"
 })
-@XmlRootElement(name="exisitingSuppliers")
+@XmlRootElement(name = "exisitingSuppliers")
 public class ExistingSuppliers {
 
     @XmlElement(name = "simpleSupplier")

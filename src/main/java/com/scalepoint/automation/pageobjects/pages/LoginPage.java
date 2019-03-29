@@ -47,10 +47,10 @@ public class LoginPage extends Page {
     }
 
     @Override
-    public Boolean areWeAt(){
+    public Boolean areWeAt() {
         try {
             return username.isDisplayed() && password.isDisplayed() && loginButton.isDisplayed();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -76,7 +76,7 @@ public class LoginPage extends Page {
 
         boolean loginError = isLoginErrorPresent();
         if (loginError) {
-            throw new LoginInvalidException();
+            throw new LoginInvalidException(userLogin + ":" + userPassword + " are invalid!");
         }
     }
 

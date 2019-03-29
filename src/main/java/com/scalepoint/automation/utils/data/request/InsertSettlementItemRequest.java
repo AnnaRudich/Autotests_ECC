@@ -15,19 +15,16 @@ public class InsertSettlementItemRequest {
     @XmlElement(name = "InsertSettlementItem")
     private InsertSettlementItem insertSettlementItem;
 
-    public InsertSettlementItem getInsertSettlementItem ()
-    {
+    public InsertSettlementItem getInsertSettlementItem() {
         return insertSettlementItem;
     }
 
-    public void setInsertSettlementItem (InsertSettlementItem InsertSettlementItem)
-    {
+    public void setInsertSettlementItem(InsertSettlementItem InsertSettlementItem) {
         this.insertSettlementItem = InsertSettlementItem;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [insertSettlementItem = "+ insertSettlementItem +"]";
+    public String toString() {
+        return "ClassPojo [insertSettlementItem = " + insertSettlementItem + "]";
     }
 }

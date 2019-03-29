@@ -400,7 +400,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             Wait.waitForAjaxCompleted();
             try {
                 return this.name.isDisplayed() && driver.findElements(By.name("name")).isEmpty();
-            }catch (Exception e){
+            } catch (Exception e) {
                 logger.error(e.getMessage());
                 return false;
             }

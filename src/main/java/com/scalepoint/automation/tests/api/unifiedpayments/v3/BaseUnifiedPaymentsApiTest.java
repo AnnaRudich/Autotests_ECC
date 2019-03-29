@@ -9,7 +9,6 @@ import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.Valuation;
 
-
 import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -22,7 +21,6 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     SettlementClaimService settlementClaimService;
     EccSettlementSummaryService eccSettlementSummaryService;
     ClaimSettlementItemsService claimSettlementItemsService;
-
 
 
     public enum PartyReference {
@@ -61,9 +59,11 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         CASH_COMPENSATION("cashCompensation");
 
         private String value;
+
         ExpenseType(String s) {
             value = s;
         }
+
         public String getValue() {
             return value;
         }
@@ -77,9 +77,11 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         CREDIT_NOTE("creditNote");
 
         private String value;
+
         ObligationType(String s) {
             value = s;
         }
+
         public String getValue() {
             return value;
         }
@@ -158,7 +160,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 3);
     }
 
-    SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items){
+    SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items) {
         settlementClaimService =
                 loginAndOpenClaimWithItems(user, claimRequest, items).closeCase();
         eccSettlementSummaryService = new EccSettlementSummaryService()
@@ -174,8 +176,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
             if ("NEW_PRICE".equals(valuation.getValuationType())) {
                 valuation.setActive("true");
                 valuation.getPrice()[0].setAmount(price + "");
-            }
-            else{
+            } else {
                 valuation.setActive("false");
             }
         }

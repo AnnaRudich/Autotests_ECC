@@ -28,22 +28,22 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
     private Integer userIdByClaimToken;
 
     @BeforeMethod
-    public void setUpForEccIntegrationsTest(){
+    public void setUpForEccIntegrationsTest() {
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.getExtraModifiers().add(new ExtraModifier().withType("cwaServiceId").withValue("1234"));
         claimToken = createCwaClaimAndGetClaimToken(claimRequest);
-        userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken.replace("c.",""));
+        userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken.replace("c.", ""));
     }
 
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider")
-    public void selfServiceImport(User user, ClaimItem claimItem){
+    public void selfServiceImport(User user, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken)
                 .requestSelfService(Constants.DEFAULT_PASSWORD);
 
         assertThat(databaseApi.getCwaTaskLogsForClaimId(userIdByClaimToken).stream().anyMatch((CwaTaskLog cwa) ->
-            cwa.getTaskType().equals(TaskType.SELF_SERVICE_OTHER) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
+                cwa.getTaskType().equals(TaskType.SELF_SERVICE_OTHER) && cwa.getTaskStatus().equals(EventType.TASK_CREATED)
         )).isTrue();
 
         settlementPage

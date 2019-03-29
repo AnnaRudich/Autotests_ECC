@@ -153,35 +153,35 @@ public class ClaimItem {
     @XmlElement
     private String categoryGroup2WithNotElectronicVoucher;
 
-    public String getExistingCat4(){
+    public String getExistingCat4() {
         return existingCat4;
     }
 
-    public String getExistingSubCat4(){
+    public String getExistingSubCat4() {
         return existingSubCat4;
     }
 
-    public String getTrygCategory1(){
+    public String getTrygCategory1() {
         return trygCategory1;
     }
 
-    public String getTrygCat1(){
+    public String getTrygCat1() {
         return trygCat1;
     }
 
-    public String getTrygSubCat1(){
+    public String getTrygSubCat1() {
         return trygSubCat1;
     }
 
-    public String getTrygCategory(){
+    public String getTrygCategory() {
         return trygCategory;
     }
 
-    public String getTrygSubCategory(){
+    public String getTrygSubCategory() {
         return trygSubCategory;
     }
 
-    public Double getTrygNewPrice(){
+    public Double getTrygNewPrice() {
         return trygNewPrice;
     }
 

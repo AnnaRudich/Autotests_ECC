@@ -10,8 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Price")
-public class Price
-{
+public class Price {
     @XmlAttribute
     private String amount;
     @XmlAttribute
@@ -19,39 +18,32 @@ public class Price
     @XmlAttribute
     private String netAmount;
 
-    public String getAmount ()
-    {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount (String amount)
-    {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getNetAmount ()
-    {
+    public String getNetAmount() {
         return netAmount;
     }
 
-    public void setNetAmount (String netAmount)
-    {
+    public void setNetAmount(String netAmount) {
         this.netAmount = netAmount;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [amount = "+amount+", name = "+name+", netAmount = "+netAmount+"]";
+    public String toString() {
+        return "ClassPojo [amount = " + amount + ", name = " + name + ", netAmount = " + netAmount + "]";
     }
 }

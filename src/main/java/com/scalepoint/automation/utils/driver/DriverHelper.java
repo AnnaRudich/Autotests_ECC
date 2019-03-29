@@ -12,17 +12,17 @@ public class DriverHelper {
         Class aClass = method.getDeclaringClass();
         DriverType driverType = null;
 
-        if (method.getAnnotation(RunOn.class) != null){
+        if (method.getAnnotation(RunOn.class) != null) {
             driverType = method.getAnnotation(RunOn.class).value();
 
         } else if (driverType == null) {
             Annotation[] annotations = aClass.getAnnotations();
-            for (Annotation annotation: annotations){
-                if(annotation instanceof RunOn){
+            for (Annotation annotation : annotations) {
+                if (annotation instanceof RunOn) {
                     driverType = ((RunOn) annotation).value();
                 }
             }
-            if (driverType == null){
+            if (driverType == null) {
                 driverType = DriverType.findByProfile(browserMode);
             }
         }

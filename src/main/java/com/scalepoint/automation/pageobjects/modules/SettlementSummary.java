@@ -103,7 +103,7 @@ public class SettlementSummary extends Module {
         return this;
     }
 
-    public SettlementSummary checkStatusFromAudit(String status){
+    public SettlementSummary checkStatusFromAudit(String status) {
         ExpectedConditions.textToBePresentInElement(auditStatus, status);
         return this;
     }

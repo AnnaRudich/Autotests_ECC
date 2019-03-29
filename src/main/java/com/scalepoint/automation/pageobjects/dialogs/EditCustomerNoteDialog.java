@@ -23,7 +23,7 @@ public class EditCustomerNoteDialog extends BaseDialog {
 
     public NotesPage addCustomerNote(String note) {
         ((JavascriptExecutor) driver).executeScript("populateRichTextEditorWithText('noteContainer', '" + note + "');");
-         driver.switchTo().defaultContent();
+        driver.switchTo().defaultContent();
         ok.click();
         return Page.at(NotesPage.class);
     }

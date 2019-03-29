@@ -8,13 +8,13 @@ import org.apache.http.HttpStatus;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
-public class EccSettlementSummaryService extends BaseService{
+public class EccSettlementSummaryService extends BaseService {
 
     private final String SUBTOTAL_CASH_PAYOUT_VALUE = "subtotalCashPayoutValue";
 
     private ValidatableResponse response;
 
-    public EccSettlementSummaryService getSummaryTotals(){
+    public EccSettlementSummaryService getSummaryTotals() {
         response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
@@ -23,7 +23,7 @@ public class EccSettlementSummaryService extends BaseService{
         return this;
     }
 
-    public Double getSubtotalCashPayoutValue(){
+    public Double getSubtotalCashPayoutValue() {
         return response.extract().jsonPath().getDouble(SUBTOTAL_CASH_PAYOUT_VALUE);
     }
 }

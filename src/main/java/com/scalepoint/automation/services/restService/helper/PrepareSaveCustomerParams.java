@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class PrepareSaveCustomerParams {
 
-    private Map<String,String> saveCustomerParams = new HashMap<>();
+    private Map<String, String> saveCustomerParams = new HashMap<>();
 
     public Map<String, String> getSaveCustomerParams() {
         return saveCustomerParams;
@@ -23,17 +23,17 @@ public class PrepareSaveCustomerParams {
         this.saveCustomerParams = saveCustomerParams;
     }
 
-    public PrepareSaveCustomerParams prepareSaveCustomerParams(Object object, Data data){
+    public PrepareSaveCustomerParams prepareSaveCustomerParams(Object object, Data data) {
         getFilledSaveCustomerParams(data);
-        if(object.getClass() == ClaimRequest.class) {
+        if (object.getClass() == ClaimRequest.class) {
             setParamsBaseOnClaimRequest((ClaimRequest) object);
-        }else if(object.getClass() == EccIntegration.class){
+        } else if (object.getClass() == EccIntegration.class) {
             setParamsBaseOnEccIntegration((EccIntegration) object);
         }
         return this;
     }
 
-    private Map<String, String> getFilledSaveCustomerParams(Data data){
+    private Map<String, String> getFilledSaveCustomerParams(Data data) {
         saveCustomerParams.put("last_name", "");
         saveCustomerParams.put("first_name", "");
         saveCustomerParams.put("replacement", "");
@@ -54,7 +54,7 @@ public class PrepareSaveCustomerParams {
         return saveCustomerParams;
     }
 
-    private void setParamsBaseOnClaimRequest(ClaimRequest claimRequest){
+    private void setParamsBaseOnClaimRequest(ClaimRequest claimRequest) {
         saveCustomerParams.put("policy_number", claimRequest.getCaseNumber());
         saveCustomerParams.put("cellPhoneNumber", claimRequest.getCustomer().getMobile());
         saveCustomerParams.put("phone", claimRequest.getCustomer().getMobile());
@@ -66,7 +66,7 @@ public class PrepareSaveCustomerParams {
         saveCustomerParams.put("city", claimRequest.getCustomer().getAddress().getCity());
     }
 
-    private void setParamsBaseOnEccIntegration(EccIntegration eccIntegration){
+    private void setParamsBaseOnEccIntegration(EccIntegration eccIntegration) {
         saveCustomerParams.put("policy_number", eccIntegration.getClaim().getClaimNumber());
         saveCustomerParams.put("cellPhoneNumber", eccIntegration.getClaimant().getPhone());
         saveCustomerParams.put("phone", eccIntegration.getClaimant().getPhone());

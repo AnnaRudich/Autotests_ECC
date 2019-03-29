@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration
 public class BeansConfiguration {
 
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_PROTOCOL+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_PROTOCOL + "}")
     private String protocol;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_LOCALE + "}")
     private String locale;
@@ -33,15 +33,15 @@ public class BeansConfiguration {
     private String eccRnvContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_SOLR_URL + "}")
     private String solrBaseUrl;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_URL+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_URL + "}")
     private String dbUrl;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL + "}")
     private String eventApiDbUrl;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE + "}")
     private String hubRemoteUrl;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE_ZALENIUM+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE_ZALENIUM + "}")
     private String hubRemoteZaleniumUrl;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_LOCAL_ZALENIUM+ "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_LOCAL_ZALENIUM + "}")
     private String hubLocalZaleniumUrl;
 
 

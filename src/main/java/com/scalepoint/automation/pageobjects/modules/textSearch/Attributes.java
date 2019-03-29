@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 
 public enum Attributes {
     SMARTPHONE_NEJ("Smartphone", new YesNoAttributeAction(), "Nej", "og kun denne"),
-    NFC_NEJ("NFC (Near Field Communication)", new YesNoAttributeAction(), "Nej" ),
-    DUAL_KAMERA_NEJ("Dual kamera (bag)", new YesNoAttributeAction(),"Nej","og kun denne"),
+    NFC_NEJ("NFC (Near Field Communication)", new YesNoAttributeAction(), "Nej"),
+    DUAL_KAMERA_NEJ("Dual kamera (bag)", new YesNoAttributeAction(), "Nej", "og kun denne"),
     GPS_NEJ("GPS", new YesNoAttributeAction(), "Nej", "og kun denne");
 
     private String name;

@@ -2,12 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -27,15 +22,9 @@ import org.testng.annotations.Test;
 
 import java.time.Year;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -85,8 +74,9 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
                 .toMailsPage()
-                .doAssert(mail ->  mail.isMailExist(CUSTOMER_WELCOME));
+                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim externally. " +
@@ -110,10 +100,11 @@ public class ClaimTests extends BaseTest {
                 .saveClaim()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
+
     @FeatureToggleSetting(type = FeatureIds.NEW_SETTLE_WITHOUT_MAIL_BUTTON)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")
-            @Test(dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-3332 Be able to settle a claim without sending an e-mail to customer. " +
                     "The new close method in history")
     public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
@@ -124,9 +115,9 @@ public class ClaimTests extends BaseTest {
                 .completeWithoutEmail()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
-              .openRecentClaim().toEmptyMailsPage()
-              .doAssert(MailsPage.Asserts::noMailsOnThePage);
-}
+                .openRecentClaim().toEmptyMailsPage()
+                .doAssert(MailsPage.Asserts::noMailsOnThePage);
+    }
 
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
@@ -172,7 +163,7 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
         login(getSystemUser());
-                new InsCompaniesPage().enableAuditForIc(user.getCompanyName());
+        new InsCompaniesPage().enableAuditForIc(user.getCompanyName());
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
@@ -193,7 +184,7 @@ public class ClaimTests extends BaseTest {
         login(user)
                 .openActiveRecentClaim()
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
-                new SettlementSummary().ensureAuditInfoPanelVisible()
+        new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("Approved");//"APPROVED" does not work. Change later.
     }
 
@@ -345,7 +336,7 @@ public class ClaimTests extends BaseTest {
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
 
-            to(MyPage.class).openActiveRecentClaim()
+        to(MyPage.class).openActiveRecentClaim()
                 .toMailsPage()
 
                 .doAssert(mail -> {
@@ -444,8 +435,8 @@ public class ClaimTests extends BaseTest {
                     mail.isMailExist(REPLACEMENT_WITH_MAIL);
                 });
 
-                Page.to(MyPage.class)
-                        .doAssert(MyPage.Asserts::assertClaimCompleted);
+        Page.to(MyPage.class)
+                .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
 
     @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_SID)
@@ -469,7 +460,7 @@ public class ClaimTests extends BaseTest {
         String noteText = new Long(System.currentTimeMillis()).toString();
 
         loginAndCreateClaim(user, claim)
-                .addLines(claimItem,"item1")
+                .addLines(claimItem, "item1")
                 .getToolBarMenu()
                 .openClaimLineNotes()
                 .toClaimLineNotesPage()

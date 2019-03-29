@@ -6,9 +6,6 @@ import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
-
-import java.util.function.Consumer;
 
 import static org.testng.Assert.assertTrue;
 

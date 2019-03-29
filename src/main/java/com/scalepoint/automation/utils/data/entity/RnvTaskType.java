@@ -35,7 +35,8 @@ public class RnvTaskType {
     }
 
     public String getMatchService() {
-        return matchService;    }
+        return matchService;
+    }
 
 
 }

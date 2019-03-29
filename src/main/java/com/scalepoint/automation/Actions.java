@@ -1,6 +1,5 @@
 package com.scalepoint.automation;
 
-import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -15,7 +14,6 @@ import org.openqa.selenium.support.ui.FluentWait;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -76,8 +74,8 @@ public interface Actions {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView();", element);
     }
 
-    default  void scrollToElement(WebElement element){
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);",element);
+    default void scrollToElement(WebElement element) {
+        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     default String getCookies() {
@@ -211,6 +209,7 @@ public interface Actions {
             return false;
         }
     }
+
     default void clickJS(WebElement element) {
         Wait.forCondition(ExpectedConditions.elementToBeClickable(element));
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
@@ -241,12 +240,13 @@ public interface Actions {
         }
         return Wait.waitForDisplayed(By.xpath(xpath));
     }
+
     /**
      * this method decrements element index to translate java enumeration to human readable one
      */
     default WebElement find(String xpath, int param) {
-            String decrementedParam = Integer.toString(--param);
-            xpath = xpath.replace("$", decrementedParam);
+        String decrementedParam = Integer.toString(--param);
+        xpath = xpath.replace("$", decrementedParam);
         return Wait.waitForDisplayed(By.xpath(xpath));
     }
 
@@ -254,10 +254,10 @@ public interface Actions {
         waitForVisible(element);
         logger.info("SetValue {} --> {}", getElementIdentifier(element), value);
         JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
-        for(int i=0; i<3; i++){
-            if(element.getText().equals(value)){
-               break;
-            }else {
+        for (int i = 0; i < 3; i++) {
+            if (element.getText().equals(value)) {
+                break;
+            } else {
                 executor.executeScript("arguments[0].value=arguments[1];", element, value);
             }
         }
@@ -276,34 +276,34 @@ public interface Actions {
         return StringUtils.isBlank(value) ? "unknown" : value;
     }
 
-    default void clickElementUsingJS(WebElement element){
+    default void clickElementUsingJS(WebElement element) {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
     }
 
     default void clickUsingJsIfSeleniumClickReturnError(WebElement element) {
         try {
             element.click();
-        }catch (Exception e){
+        } catch (Exception e) {
             clickElementUsingJS(element);
         }
     }
 
-    default void doubleClickElementUsingJS(WebElement element){
+    default void doubleClickElementUsingJS(WebElement element) {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
     }
 
     default void doubleClickUsingJsIfSeleniumClickReturnError(WebElement element) {
         try {
             doubleClick(element);
-        }catch (Exception e){
+        } catch (Exception e) {
             doubleClickElementUsingJS(element);
         }
     }
 
-    default void replaceAmpInUrl(){
+    default void replaceAmpInUrl() {
         String currentUrl = Browser.driver().getCurrentUrl();
-        if(currentUrl.contains("&amp;")){
-            Browser.driver().get(currentUrl.replace("&amp;","&"));
+        if (currentUrl.contains("&amp;")) {
+            Browser.driver().get(currentUrl.replace("&amp;", "&"));
         }
     }
 }

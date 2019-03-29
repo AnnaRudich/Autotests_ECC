@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 
 public class OwnRiskService extends BaseService {
 
-    public OwnRiskService setSelfRiskForClaim(String selfRisk){
+    public OwnRiskService setSelfRiskForClaim(String selfRisk) {
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())

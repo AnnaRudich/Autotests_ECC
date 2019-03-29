@@ -45,8 +45,8 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     protected String browserMode;
 
     @BeforeMethod
-    public void setUpData(Method method){
-        Thread.currentThread().setName("Thread "+method.getName());
+    public void setUpData(Method method) {
+        Thread.currentThread().setName("Thread " + method.getName());
         ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
         ServiceData.init(databaseApi);
@@ -59,12 +59,12 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
         ThreadContext.clearMap();
     }
 
-    protected CaseSettlementDataService getSettlementData(ClaimRequest claimRequest){
+    protected CaseSettlementDataService getSettlementData(ClaimRequest claimRequest) {
         return new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumber(claimRequest.getCaseNumber()), claimRequest.getTenant());
     }
 
-    protected CaseSettlementDataService getSettlementDataForSettledClaims(ClaimRequest claimRequest){
+    protected CaseSettlementDataService getSettlementDataForSettledClaims(ClaimRequest claimRequest) {
         return new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(claimRequest.getCaseNumber()), claimRequest.getTenant());
     }

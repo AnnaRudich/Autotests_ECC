@@ -33,7 +33,7 @@ public class RecommendedItemsTests extends BaseTest {
      * THEN: Search returns P1 with PP1 is located
      * THEN: Search returns P2 with RP2 is located
      * THEN: Search returns P3 with PP3 is located
-     *
+     * <p>
      * ecc3278_productPricesInShopWelcome
      */
 
@@ -43,17 +43,17 @@ public class RecommendedItemsTests extends BaseTest {
 
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim).toTextSearchPage();
 
-        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(()->SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE)), textSearchPage, null);
+        ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE)), textSearchPage, null);
         ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE)), textSearchPage, null);
 
-        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE,PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_MARKET_PRICE)), textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
+        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE)), textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
 
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
                 .completeWithEmailAndLoginToShop(claim);
 
-        shopWelcomePage.doAssert(welcomePage->{
+        shopWelcomePage.doAssert(welcomePage -> {
             welcomePage.assertItemWithPricePresent(productInvoiceGtMarketCash.name, productInvoiceGtMarketCash.lowestPrice);
             welcomePage.assertItemWithPricePresent(productInvoiceEqualMarketCash.name, productInvoiceEqualMarketCash.lowestPrice);
             welcomePage.assertItemWithPricePresent(productInvoiceLtMarketCash.name, productInvoiceLtMarketCash.lowestPrice);
@@ -83,16 +83,16 @@ public class RecommendedItemsTests extends BaseTest {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
 
-        ProductInfo productInvoiceHigherMarket = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
+        ProductInfo productInvoiceHigherMarket = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
         ProductInfo productInvoiceEqualMarket = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
-        ProductInfo productInvoiceLowerMarket = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
+        ProductInfo productInvoiceLowerMarket = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         ShopWelcomePage shopWelcomePage = settlementPage
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
                 .completeWithEmailAndLoginToShop(claim);
 
-        shopWelcomePage.doAssert(welcomePage->{
+        shopWelcomePage.doAssert(welcomePage -> {
             welcomePage.assertItemNotPresent(productInvoiceHigherMarket.getModel());
             welcomePage.assertItemNotPresent(productInvoiceEqualMarket.getModel());
             welcomePage.assertItemNotPresent(productInvoiceLowerMarket.getModel());
@@ -117,7 +117,7 @@ public class RecommendedItemsTests extends BaseTest {
         Double lowestPrice = productInfo.getLowestPrice();
         String name = settlementDialog.getDescriptionText();
         settlementDialog.selectOtherCategoryIfNotChosen();
-        if (valuation !=null) {
+        if (valuation != null) {
             settlementDialog.setValuation(valuation);
         }
         settlementDialog.closeSidWithAdd();

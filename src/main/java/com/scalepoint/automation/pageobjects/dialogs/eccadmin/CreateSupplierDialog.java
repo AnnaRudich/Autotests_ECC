@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
-public class CreateSupplierDialog  extends BaseDialog {
+public class CreateSupplierDialog extends BaseDialog {
 
     @FindBy(name = "name")
     private WebElement supplierName;

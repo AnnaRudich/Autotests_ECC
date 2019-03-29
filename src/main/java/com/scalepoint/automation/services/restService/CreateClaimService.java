@@ -16,11 +16,11 @@ public class CreateClaimService extends BaseService {
     private Token token;
     private Response response;
 
-    public CreateClaimService(Token token){
+    public CreateClaimService(Token token) {
         this.token = token;
     }
 
-    public Response getResponse(){
+    public Response getResponse() {
         return this.response;
     }
 
@@ -29,7 +29,7 @@ public class CreateClaimService extends BaseService {
         return this;
     }
 
-    public CreateClaimService addClaim(ClaimRequest claimRequest){
+    public CreateClaimService addClaim(ClaimRequest claimRequest) {
         this.response = given().baseUri(getEccUrl()).basePath(UNIFIED_INTEGRATION).log().all()
                 .body(claimRequest)
                 .header(token.getAuthorizationHeader())
@@ -41,7 +41,7 @@ public class CreateClaimService extends BaseService {
         return this;
     }
 
-    public CreateClaimService openClaim(){
+    public CreateClaimService openClaim() {
         setUserIdByClaimToken();
 
         given().log().all().baseUri(getEccUrl()).queryParam("token", data.getClaimToken())
@@ -52,7 +52,7 @@ public class CreateClaimService extends BaseService {
         return this;
     }
 
-    public ClaimSettlementItemsService claimLines(){
+    public ClaimSettlementItemsService claimLines() {
         return new ClaimSettlementItemsService();
     }
 

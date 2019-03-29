@@ -76,7 +76,7 @@ public class CatalogPricesTests extends BaseTest {
 
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
-                   // asserts.assertCatalogPriceInvisible(); need to be clarified; see related Jira
+                    // asserts.assertCatalogPriceInvisible(); need to be clarified; see related Jira
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER);
                     asserts.assertVoucherFaceValueIs(productInfo.getSupplierShopPrice());
                 });

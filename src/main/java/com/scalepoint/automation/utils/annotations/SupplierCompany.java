@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER})
 public @interface SupplierCompany {
     CompanyCode value() default CompanyCode.SCALEPOINT;
+
     boolean areWithVouchers() default true;
 }

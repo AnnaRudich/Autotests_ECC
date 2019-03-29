@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 
-public class ServiceTaskExport extends ServiceTask{
+public class ServiceTaskExport extends ServiceTask {
 
     private Claimant claimant;
     private ClaimExport claim;

@@ -1,14 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -16,14 +9,14 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "paymentMeansCode",
-    "paymentChannelCode",
-    "payerFinancialAccount",
-    "payeeFinancialAccount",
-    "paymentId",
-    "instructionId",
-    "creditAccount",
-    "financialAccount"
+        "paymentMeansCode",
+        "paymentChannelCode",
+        "payerFinancialAccount",
+        "payeeFinancialAccount",
+        "paymentId",
+        "instructionId",
+        "creditAccount",
+        "financialAccount"
 })
 public class PaymentMeans {
 
@@ -37,13 +30,11 @@ public class PaymentMeans {
     private FinancialAccount payeeFinancialAccount;
     /**
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
-     * 
      */
     @JsonProperty("paymentId")
     private String paymentId;
     /**
      * Is used to specify an OCR reference from a payment form using the PaymentID 04, 15, 71 or 75. The number of digits depends on which PaymentID is being used.
-     * 
      */
     @JsonProperty("instructionId")
     private String instructionId;
@@ -56,29 +47,36 @@ public class PaymentMeans {
         return paymentMeansCode;
     }
 
-    public void setPaymentMeansCode(PaymentMeans.PaymentMeansCode paymentMeansCode) { this.paymentMeansCode = paymentMeansCode; }
+    public void setPaymentMeansCode(PaymentMeans.PaymentMeansCode paymentMeansCode) {
+        this.paymentMeansCode = paymentMeansCode;
+    }
 
     public PaymentMeans.PaymentChannelCode getPaymentChannelCode() {
         return paymentChannelCode;
     }
 
-    public void setPaymentChannelCode(PaymentMeans.PaymentChannelCode paymentChannelCode) { this.paymentChannelCode = paymentChannelCode; }
+    public void setPaymentChannelCode(PaymentMeans.PaymentChannelCode paymentChannelCode) {
+        this.paymentChannelCode = paymentChannelCode;
+    }
 
     public FinancialAccount getPayerFinancialAccount() {
         return payerFinancialAccount;
     }
 
-    public void setPayerFinancialAccount(FinancialAccount payerFinancialAccount) { this.payerFinancialAccount = payerFinancialAccount; }
+    public void setPayerFinancialAccount(FinancialAccount payerFinancialAccount) {
+        this.payerFinancialAccount = payerFinancialAccount;
+    }
 
     public FinancialAccount getPayeeFinancialAccount() {
         return payeeFinancialAccount;
     }
 
-    public void setPayeeFinancialAccount(FinancialAccount payeeFinancialAccount) { this.payeeFinancialAccount = payeeFinancialAccount; }
+    public void setPayeeFinancialAccount(FinancialAccount payeeFinancialAccount) {
+        this.payeeFinancialAccount = payeeFinancialAccount;
+    }
 
     /**
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
-     * 
      */
     public String getPaymentId() {
         return paymentId;
@@ -86,7 +84,6 @@ public class PaymentMeans {
 
     /**
      * Is used to specify the form category on joint info transfer form payment information (Danish abbreviation FIK), and Giro payment forms
-     * 
      */
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
@@ -94,7 +91,6 @@ public class PaymentMeans {
 
     /**
      * Is used to specify an OCR reference from a payment form using the PaymentID 04, 15, 71 or 75. The number of digits depends on which PaymentID is being used.
-     * 
      */
     public String getInstructionId() {
         return instructionId;
@@ -102,7 +98,6 @@ public class PaymentMeans {
 
     /**
      * Is used to specify an OCR reference from a payment form using the PaymentID 04, 15, 71 or 75. The number of digits depends on which PaymentID is being used.
-     * 
      */
     public void setInstructionId(String instructionId) {
         this.instructionId = instructionId;
@@ -144,7 +139,7 @@ public class PaymentMeans {
         private final static Map<String, PaymentMeans.PaymentChannelCode> CONSTANTS = new HashMap<String, PaymentMeans.PaymentChannelCode>();
 
         static {
-            for (PaymentMeans.PaymentChannelCode c: values()) {
+            for (PaymentMeans.PaymentChannelCode c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }
@@ -187,7 +182,7 @@ public class PaymentMeans {
         private final static Map<String, PaymentMeans.PaymentMeansCode> CONSTANTS = new HashMap<String, PaymentMeans.PaymentMeansCode>();
 
         static {
-            for (PaymentMeans.PaymentMeansCode c: values()) {
+            for (PaymentMeans.PaymentMeansCode c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }

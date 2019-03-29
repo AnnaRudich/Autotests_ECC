@@ -1,18 +1,13 @@
 package com.scalepoint.automation.utils.data.request;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 /**
  * Created by bza on 6/28/2017.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Valuation")
-public class Valuation
-{
+public class Valuation {
     @XmlAttribute
     private String id;
     @XmlAttribute
@@ -36,119 +31,96 @@ public class Valuation
     @XmlAttribute
     private String preDepreciation;
 
-    public String getId ()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId (String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getHidden ()
-    {
+    public String getHidden() {
         return hidden;
     }
 
-    public void setHidden (String hidden)
-    {
+    public void setHidden(String hidden) {
         this.hidden = hidden;
     }
 
-    public String getBaseValuation ()
-    {
+    public String getBaseValuation() {
         return baseValuation;
     }
 
-    public void setBaseValuation (String baseValuation)
-    {
+    public void setBaseValuation(String baseValuation) {
         this.baseValuation = baseValuation;
     }
 
-    public Price[] getPrice ()
-    {
+    public Price[] getPrice() {
         return Price;
     }
 
-    public void setPrice (Price[] Price)
-    {
+    public void setPrice(Price[] Price) {
         this.Price = Price;
     }
 
-    public String getDirty ()
-    {
+    public String getDirty() {
         return dirty;
     }
 
-    public void setDirty (String dirty)
-    {
+    public void setDirty(String dirty) {
         this.dirty = dirty;
     }
 
-    public String getValuationType ()
-    {
+    public String getValuationType() {
         return valuationType;
     }
 
-    public void setValuationType (String valuationType)
-    {
+    public void setValuationType(String valuationType) {
         this.valuationType = valuationType;
     }
 
-    public String getActive ()
-    {
+    public String getActive() {
         return active;
     }
 
-    public void setActive (String active)
-    {
+    public void setActive(String active) {
         this.active = active;
     }
 
-    public String getPriceAfterAllDeductions ()
-    {
+    public String getPriceAfterAllDeductions() {
         return priceAfterAllDeductions;
     }
 
-    public void setPriceAfterAllDeductions (String priceAfterAllDeductions)
-    {
+    public void setPriceAfterAllDeductions(String priceAfterAllDeductions) {
         this.priceAfterAllDeductions = priceAfterAllDeductions;
     }
 
-    public VoucherReplacement getVoucherReplacement ()
-    {
+    public VoucherReplacement getVoucherReplacement() {
         return VoucherReplacement;
     }
 
-    public void setVoucherReplacement (VoucherReplacement VoucherReplacement)
-    {
+    public void setVoucherReplacement(VoucherReplacement VoucherReplacement) {
         this.VoucherReplacement = VoucherReplacement;
     }
 
-    public String getQuantity ()
-    {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity (String quantity)
-    {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
-    public String getPreDepreciation ()
-    {
+    public String getPreDepreciation() {
         return preDepreciation;
     }
 
-    public void setPreDepreciation (String preDepreciation)
-    {
+    public void setPreDepreciation(String preDepreciation) {
         this.preDepreciation = preDepreciation;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [id = "+id+", hidden = "+hidden+", baseValuation = "+baseValuation+", Price = "+Price+", dirty = "+dirty+", valuationType = "+valuationType+", active = "+active+", priceAfterAllDeductions = "+priceAfterAllDeductions+", VoucherReplacement = "+VoucherReplacement+", quantity = "+quantity+", preDepreciation = "+preDepreciation+"]";
+    public String toString() {
+        return "ClassPojo [id = " + id + ", hidden = " + hidden + ", baseValuation = " + baseValuation + ", Price = " + Price + ", dirty = " + dirty + ", valuationType = " + valuationType + ", active = " + active + ", priceAfterAllDeductions = " + priceAfterAllDeductions + ", VoucherReplacement = " + VoucherReplacement + ", quantity = " + quantity + ", preDepreciation = " + preDepreciation + "]";
     }
 }

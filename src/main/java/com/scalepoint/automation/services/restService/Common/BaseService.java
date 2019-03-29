@@ -10,10 +10,7 @@ import io.restassured.RestAssured;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-
 import static com.scalepoint.automation.utils.Configuration.getEccAdminUrl;
-import static java.util.Arrays.asList;
 
 /**
  * Created by bza on 6/29/2017.
@@ -23,26 +20,26 @@ public class BaseService {
     protected Logger logger = LogManager.getLogger(getClass());
     protected Data data;
 
-    public Data getData(){
+    public Data getData() {
         return data;
     }
 
-    public BaseService(){
+    public BaseService() {
         this.data = ServiceData.getData();
-        if(getEccAdminUrl().contains("localhost")) {
+        if (getEccAdminUrl().contains("localhost")) {
             RestAssured.port = 80;
         }
     }
 
-    public String getClaimTokenWithoutPrefix(){
+    public String getClaimTokenWithoutPrefix() {
         return data.getClaimToken().replace("c.", "");
     }
 
-    public void setUserIdByClaimToken(){
+    public void setUserIdByClaimToken() {
         data.setUserId(data.getDatabaseApi().getUserIdByClaimToken(getClaimTokenWithoutPrefix()));
     }
 
-    public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items){
+    public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items) {
         return new LoginProcessService()
                 .login(user)
                 .createClaim(new OauthTestAccountsApi().sendRequest().getToken())
@@ -52,7 +49,7 @@ public class BaseService {
                 .addLines(items);
     }
 
-    public static LoginProcessService loginUser(User user){
+    public static LoginProcessService loginUser(User user) {
         return new LoginProcessService()
                 .login(user);
     }

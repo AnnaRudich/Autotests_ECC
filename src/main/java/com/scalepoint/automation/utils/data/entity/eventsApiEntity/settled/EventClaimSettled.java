@@ -1,12 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -16,16 +11,16 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "eventType",
-    "payloadVersion",
-    "correlationId",
-    "timestamp",
-    "case",
-    "settlement",
-    "parties",
-    "expenses",
-    "payments",
-    "obligations"
+        "eventType",
+        "payloadVersion",
+        "correlationId",
+        "timestamp",
+        "case",
+        "settlement",
+        "parties",
+        "expenses",
+        "payments",
+        "obligations"
 })
 public class EventClaimSettled extends EventClaim {
 
@@ -126,13 +121,17 @@ public class EventClaimSettled extends EventClaim {
         this.expenses = expenses;
     }
 
-    public List<Payment> getPayments() { return payments; }
+    public List<Payment> getPayments() {
+        return payments;
+    }
 
     public void setPayments(List<Payment> payments) {
         this.payments = payments;
     }
 
-    public List<Obligation> getObligations() { return obligations; }
+    public List<Obligation> getObligations() {
+        return obligations;
+    }
 
     public void setObligations(List<Obligation> obligations) {
         this.obligations = obligations;
@@ -148,7 +147,7 @@ public class EventClaimSettled extends EventClaim {
         return this.additionalProperties;
     }
 
-    public Double getTotal(){
+    public Double getTotal() {
         return getPayments().get(0).getTotal();
     }
 

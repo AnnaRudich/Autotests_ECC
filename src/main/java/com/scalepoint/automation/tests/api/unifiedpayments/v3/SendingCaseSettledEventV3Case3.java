@@ -19,12 +19,11 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaym
 public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
 
 
-
     @BeforeMethod
-    private void setUp(Object[] testArgs){
+    private void setUp(Object[] testArgs) {
         initClaimRequest();
 
-        User user = (User)testArgs[0];
+        User user = (User) testArgs[0];
         InsertSettlementItem item1 = (InsertSettlementItem) testArgs[1];
         InsertSettlementItem item2 = (InsertSettlementItem) testArgs[2];
         InsertSettlementItem item3 = (InsertSettlementItem) testArgs[3];
@@ -75,7 +74,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {2700.0,INSURANCE_COMPANY, CLAIMANT}
+                        {2700.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -158,7 +157,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {2700.0,INSURANCE_COMPANY, SCALEPOINT}
+                        {2700.0, INSURANCE_COMPANY, SCALEPOINT}
                 }
         );
 

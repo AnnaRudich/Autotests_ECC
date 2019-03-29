@@ -23,7 +23,7 @@ public class CompleteClaimExternally extends BaseTest {
                 .fillClaimForm(claim)
                 .completeExternally(claim)
                 .doAssert(myPage ->
-                    myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
+                        myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
                 .toMailsPage()
@@ -42,7 +42,7 @@ public class CompleteClaimExternally extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .completeClaimWithoutMail(claim)
                 .doAssert(myPage ->
-                    myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
+                        myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
                 .toMailsPage()

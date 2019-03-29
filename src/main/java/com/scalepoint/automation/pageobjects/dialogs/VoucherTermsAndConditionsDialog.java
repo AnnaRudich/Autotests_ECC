@@ -28,11 +28,11 @@ public class VoucherTermsAndConditionsDialog extends BaseDialog {
         return this;
     }
 
-    public String getTermsAndConditions(){
+    public String getTermsAndConditions() {
         return termsAndConditions.getText();
     }
 
-    public void close(){
+    public void close() {
         close.click();
     }
 

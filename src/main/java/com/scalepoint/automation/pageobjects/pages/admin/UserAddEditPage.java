@@ -203,9 +203,9 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public UsersPage selectSaveOption() {
-        try{
+        try {
             clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             logger.error(e.getMessage());
             clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
         }

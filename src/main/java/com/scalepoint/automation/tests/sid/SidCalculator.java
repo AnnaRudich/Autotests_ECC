@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 class SidCalculator {
 
     static PriceValuation calculatePriceValuation(Double price, Integer depreciationPercentage) {
-        double depreciation = price * (double)depreciationPercentage / 100;
+        double depreciation = price * (double) depreciationPercentage / 100;
         double cashCompensation = price - depreciation;
         return new PriceValuation(cashCompensation, depreciation);
     }
@@ -13,23 +13,23 @@ class SidCalculator {
     static VoucherValuationWithDepreciation calculateVoucherValuation(Double price, Integer voucherDiscount, Integer depreciationPercentage) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
         double cashCompensationOfVoucher = price - discountedAmountByVoucher;
-        double depreciatedAmount = (cashCompensationOfVoucher*depreciationPercentage)/100;
-        double cashCompensationWithDepreciation = cashCompensationOfVoucher - (cashCompensationOfVoucher*depreciationPercentage)/100;
+        double depreciatedAmount = (cashCompensationOfVoucher * depreciationPercentage) / 100;
+        double cashCompensationWithDepreciation = cashCompensationOfVoucher - (cashCompensationOfVoucher * depreciationPercentage) / 100;
 
         return new VoucherValuationWithDepreciation(cashCompensationOfVoucher, discountedAmountByVoucher, cashCompensationWithDepreciation, depreciatedAmount);
     }
 
     static VoucherValuation calculateVoucherValuationWithDiscountDistribution(Double price, Integer voucherDiscount, Integer companyDiscount) {
         double discountedAmountByVoucher = price * voucherDiscount / 100;
-        double cashValue = price - (discountedAmountByVoucher * companyDiscount/voucherDiscount);
-        double faceValue = BigDecimal.valueOf(cashValue/((100.0-voucherDiscount)/100.0)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double cashValue = price - (discountedAmountByVoucher * companyDiscount / voucherDiscount);
+        double faceValue = BigDecimal.valueOf(cashValue / ((100.0 - voucherDiscount) / 100.0)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         return new VoucherValuation(cashValue, faceValue);
     }
 
     static ValuationWithReduction calculatePriceValuationWithReduction(double price, Integer depreciationPercentage, Integer reductionPercentage) {
         double depreciation = price * depreciationPercentage / 100;
         double cashCompensation = price - depreciation;
-        double reduction = price * reductionPercentage/100;
+        double reduction = price * reductionPercentage / 100;
         double cashCompensationWithReduction = price - reduction;
 
         return new ValuationWithReduction(cashCompensation, depreciation, cashCompensationWithReduction, reduction);

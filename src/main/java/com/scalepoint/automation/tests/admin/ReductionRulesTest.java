@@ -2,13 +2,11 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
-import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.RRLinesFields;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -679,14 +677,14 @@ public class ReductionRulesTest extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
-    public void charlie_497_verifyCreateDiscretionaryRule(ReductionRule rule){
+    public void charlie_497_verifyCreateDiscretionaryRule(ReductionRule rule) {
         toNewReductionRulePage()
                 .fillSimpleDiscretionaryRRAndSave(rule)
                 .assertRuleDisplayed(rule);
     }
 
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
-    public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(ReductionRule rule){
+    public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(ReductionRule rule) {
         toNewReductionRulePage()
                 .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
                 .assertRuleDisplayed(rule);

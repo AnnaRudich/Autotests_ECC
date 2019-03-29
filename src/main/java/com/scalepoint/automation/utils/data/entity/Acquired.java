@@ -23,12 +23,11 @@ public class Acquired {
     private String gift;
 
 
-
     public String getAcquiredNew() {
         return acquiredNew;
     }
 
-    public String getUsed(){
+    public String getUsed() {
         return used;
     }
 

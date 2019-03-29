@@ -11,7 +11,6 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -19,7 +18,6 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -159,7 +157,7 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public  MyPage completeWithoutEmail() {
+    public MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
         return at(MyPage.class);
     }

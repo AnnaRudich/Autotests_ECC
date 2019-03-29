@@ -23,16 +23,16 @@ public class CaseSettlementDataService extends BaseService {
         return response;
     }
 
-    public CaseSettlementDataService(Token token){
+    public CaseSettlementDataService(Token token) {
         this.token = token;
     }
 
-    public CaseSettlementDataService getSettlementData(String revisionToken){
+    public CaseSettlementDataService getSettlementData(String revisionToken) {
         getSettlementData(revisionToken, "scalepoint");
         return this;
     }
 
-    public CaseSettlementDataService getSettlementData(String revisionToken, String tenant){
+    public CaseSettlementDataService getSettlementData(String revisionToken, String tenant) {
         this.response = given().baseUri(getEccUrl()).log().all()
                 .header(token.getAuthorizationHeader())
                 .pathParam("revisionToken", revisionToken)
@@ -42,7 +42,7 @@ public class CaseSettlementDataService extends BaseService {
         return this;
     }
 
-    public Double getSubTotal(){
+    public Double getSubTotal() {
         return response.statusCode(HttpStatus.SC_OK).extract().jsonPath().getDouble(SETTLEMENT_DATA_SUBTOTAL_VALUE);
     }
 

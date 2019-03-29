@@ -9,11 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
-import com.scalepoint.automation.services.externalapi.AuthenticationApi;
-import com.scalepoint.automation.services.externalapi.ClaimApi;
-import com.scalepoint.automation.services.externalapi.DatabaseApi;
-import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
-import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
+import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
@@ -22,6 +18,7 @@ import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -58,7 +55,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -84,7 +81,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
-        Thread.currentThread().setName("Thread "+method.getName());
+        Thread.currentThread().setName("Thread " + method.getName());
         ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
@@ -109,8 +106,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
             Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
-            TimeUnit.SECONDS.sleep(1);
-        }catch (Exception e) {
+            Wait.wait(1);
+        } catch (Exception e) {
             log.info(e.getMessage());
         }
         Browser.quit();
@@ -122,11 +119,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @DataProvider(name = "testDataProvider")
     public static Object[][] provide(Method method) {
-        Thread.currentThread().setName("Thread "+method.getName());
+        Thread.currentThread().setName("Thread " + method.getName());
         Object[][] params = new Object[1][];
         try {
             params[0] = TestDataActions.getTestDataParameters(method).toArray();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             LogManager.getLogger(BaseTest.class).error(ex);
         }
         return params;
@@ -146,33 +143,23 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return Page.at(SettlementPage.class);
     }
 
-    protected ClaimApi createClaimIgnoringExceptions(User user, Claim claim){
-        ClaimApi claimApi = new ClaimApi(user);
-        try {
-            claimApi.createClaim(claim, null);
-        }catch (Exception ex){
-            log.error(ex.getMessage());
-        }
-        return claimApi;
-    }
-
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
     }
 
-    protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest){
+    protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
         Token token = new OauthTestAccountsApi().sendRequest().getToken();
         return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
-    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest){
+    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
         Token token = new OauthTestAccountsApi().sendRequest().getToken();
         return new CreateClaimService(token).addClaim(claimRequest);
     }
 
-    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken){
+    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
         login(user, null);
-        Browser.open(getEccUrl()+ "Integration/Open?token=" + claimToken);
+        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
         return new SettlementPage();
     }
 
@@ -198,7 +185,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 .toSuppliersPage();
     }
 
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled){
+    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
         return openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
     }
 
@@ -219,7 +206,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return new EccIntegrationService().createClaim(eccIntegration);
     }
 
-    public XpriceInfo getXpricesForConditions(DatabaseApi.PriceConditions... priceConditions){
+    public XpriceInfo getXpricesForConditions(DatabaseApi.PriceConditions... priceConditions) {
         return databaseApi.findProduct(priceConditions);
     }
 }

@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for masterCard complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="masterCard">
  *   &lt;complexContent>
@@ -27,16 +27,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "masterCard", propOrder = {
-    "cardNumber",
-    "expMonth",
-    "expYear",
-    "cardHolderName",
-    "cvc"
+        "cardNumber",
+        "expMonth",
+        "expYear",
+        "cardHolderName",
+        "cvc"
 })
 public class MasterCard {
 
@@ -53,11 +51,9 @@ public class MasterCard {
 
     /**
      * Gets the value of the cardNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCardNumber() {
         return cardNumber;
@@ -65,11 +61,9 @@ public class MasterCard {
 
     /**
      * Sets the value of the cardNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCardNumber(String value) {
         this.cardNumber = value;
@@ -77,11 +71,9 @@ public class MasterCard {
 
     /**
      * Gets the value of the expMonth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getExpMonth() {
         return expMonth;
@@ -89,11 +81,9 @@ public class MasterCard {
 
     /**
      * Sets the value of the expMonth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExpMonth(String value) {
         this.expMonth = value;
@@ -101,11 +91,9 @@ public class MasterCard {
 
     /**
      * Gets the value of the expYear property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getExpYear() {
         return expYear;
@@ -113,11 +101,9 @@ public class MasterCard {
 
     /**
      * Sets the value of the expYear property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExpYear(String value) {
         this.expYear = value;
@@ -125,11 +111,9 @@ public class MasterCard {
 
     /**
      * Gets the value of the cardHolderName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCardHolderName() {
         return cardHolderName;
@@ -137,11 +121,9 @@ public class MasterCard {
 
     /**
      * Sets the value of the cardHolderName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCardHolderName(String value) {
         this.cardHolderName = value;
@@ -149,11 +131,9 @@ public class MasterCard {
 
     /**
      * Gets the value of the cvc property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCvc() {
         return cvc;
@@ -161,11 +141,9 @@ public class MasterCard {
 
     /**
      * Sets the value of the cvc property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCvc(String value) {
         this.cvc = value;

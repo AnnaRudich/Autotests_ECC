@@ -9,12 +9,12 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.*;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.COMPENSATION;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.DEPRECIATION;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaymentsAssertUtils.*;
 
 public class SendingCaseSettledEventV3Case2_3 extends SendingCaseSettledEventV3Case2Base {
-
 
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
@@ -80,7 +80,6 @@ public class SendingCaseSettledEventV3Case2_3 extends SendingCaseSettledEventV3C
     }
 
 
-
     public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, SettlementClaimService.CloseCaseReason closeCaseReason) {
         //GIVEN
         /*
@@ -111,22 +110,22 @@ public class SendingCaseSettledEventV3Case2_3 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CREDIT_NOTE, 1000.0, CLAIMANT, INSURANCE_COMPANY}
+                        {ExpenseType.CREDIT_NOTE, 1000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {2250.0, SCALEPOINT, INSURANCE_COMPANY}
+                        {2250.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 1250.0, CLAIMANT, SCALEPOINT},
-                    {DEPRECIATION, 1250.0, SCALEPOINT, INSURANCE_COMPANY},
-                    {COMPENSATION, 1000.0, CLAIMANT, SCALEPOINT},
-                    {COMPENSATION, 1000.0, SCALEPOINT, INSURANCE_COMPANY}
+                        {DEPRECIATION, 1250.0, CLAIMANT, SCALEPOINT},
+                        {DEPRECIATION, 1250.0, SCALEPOINT, INSURANCE_COMPANY},
+                        {COMPENSATION, 1000.0, CLAIMANT, SCALEPOINT},
+                        {COMPENSATION, 1000.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 

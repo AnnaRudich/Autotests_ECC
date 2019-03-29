@@ -52,7 +52,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
 
     public RnvCommunicationPage assertLatestMessageContains(String textMessage) {
         if (!latestMessageText.getText().contains(textMessage)) {
-            throw new AssertionError("Latest message doesn't contain: "+textMessage);
+            throw new AssertionError("Latest message doesn't contain: " + textMessage);
         }
         return this;
     }
@@ -65,7 +65,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
         find(By.cssSelector("span#button-close-chat-attachment-btnInnerEl")).click();
     }
 
-    public RnvCommunicationPage doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType)  {
+    public RnvCommunicationPage doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType) {
         try {
             downloadTemplate(user, serviceAgreement.getSaveTemplateTo());
             ExcelDocUtil doc = new ExcelDocUtil();

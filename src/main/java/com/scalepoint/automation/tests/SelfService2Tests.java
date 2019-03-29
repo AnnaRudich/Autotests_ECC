@@ -40,15 +40,15 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
+            description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
     public void Charlie735_addLineWithDocumentation(User user, Claim claim, Acquired acquired) {
 
         loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .savePoint(SettlementPage.class)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription(IPHONE)
                 .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
@@ -72,28 +72,28 @@ public class SelfService2Tests extends BaseTest {
 
                 .sendResponseToEcc()
                 //add confirmation page
-            .backToSavePoint(SettlementPage.class)
-            .doAssert(asserts -> asserts.assertItemIsPresent(description))
-            .findClaimLine(description)
-            .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
-            //assert Acquired in not implemented on Settlement page
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description))
+                .findClaimLine(description)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
+        //assert Acquired in not implemented on Settlement page
     }
 
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @Test(dataProvider = "testDataProvider", description = "SelfService2 password reset, login and logout")
     public void selfService2LogInWithNewPassword(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .toCompleteClaimPage()
-            .fillClaimForm(claim)
-            .completeWithEmail(claim)
-            .openRecentClaim()
-            .newSelfServicePassword()
-            .apply(SelfServicePasswordDialog.class, p -> newPasswordToSelfService = p.getNewPasswordToSelfService())
-            .closeSelfServicePasswordDialog()
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .newSelfServicePassword()
+                .apply(SelfServicePasswordDialog.class, p -> newPasswordToSelfService = p.getNewPasswordToSelfService())
+                .closeSelfServicePasswordDialog()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
                 .login(newPasswordToSelfService)
                 .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed)
                 .savePoint(SelfService2Page.class)
@@ -111,15 +111,15 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
 
     @Test(dataProvider = "testDataProvider",
-          description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
+            description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
     public void Charlie735_addLine_ageAsSingleValue_notes(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
-            .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-            .savePoint(SettlementPage.class)
-            .toMailsPage()
-            .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-            .findSelfServiceNewLinkAndOpenIt()
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription("sony")
                 .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
@@ -131,10 +131,10 @@ public class SelfService2Tests extends BaseTest {
                 .addClaimNote(CLAIM_NOTE)
                 .saveItem()
                 .sendResponseToEcc()
-            .backToSavePoint(SettlementPage.class)
-            .doAssert(asserts -> asserts.assertItemIsPresent(description))
-            .doAssert(asserts -> asserts.assertItemNoteIsPresent(ITEM_CUSTOMER_NOTE))
-            .toNotesPage()
-            .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description))
+                .doAssert(asserts -> asserts.assertItemNoteIsPresent(ITEM_CUSTOMER_NOTE))
+                .toNotesPage()
+                .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
     }
 }

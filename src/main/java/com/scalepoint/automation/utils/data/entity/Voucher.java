@@ -117,7 +117,7 @@ public class Voucher {
     @XmlElement
     private String voucherTerm;
 
-    public String getTrygVoucher(){
+    public String getTrygVoucher() {
         return trygVoucher;
     }
 

@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 public abstract class Page implements Actions {
 
     private static Map<Class, String> pageAnnotationToBaseUrl = new HashMap<>();
+
     static {
         pageAnnotationToBaseUrl.put(EccPage.class, Configuration.getEccUrl());
         pageAnnotationToBaseUrl.put(EccAdminPage.class, Configuration.getEccAdminUrl());
@@ -44,7 +45,7 @@ public abstract class Page implements Actions {
 
     protected abstract Page ensureWeAreOnPage();
 
-    protected Boolean areWeAt(){
+    protected Boolean areWeAt() {
         return false;
     }
 

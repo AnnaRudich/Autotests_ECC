@@ -43,12 +43,11 @@ public class ProductInfo {
     private boolean voucherOnlyInShop;
 
 
-
     private double invoicePrice;
     private Double supplierShopPrice;
     private String supplierName;
 
-    public void setXprices(XpriceInfo xpriceInfo){
+    public void setXprices(XpriceInfo xpriceInfo) {
         setSupplierName(xpriceInfo.getSupplierName());
         setInvoicePrice(xpriceInfo.getInvoicePrice());
         setSupplierShopPrice(xpriceInfo.getSupplierShopPrice());

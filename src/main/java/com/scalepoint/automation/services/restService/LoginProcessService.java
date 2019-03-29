@@ -27,7 +27,7 @@ public class LoginProcessService extends BaseService {
         this.response = response;
     }
 
-    public LoginProcessService login(User user){
+    public LoginProcessService login(User user) {
 
         Response loginProcessResponse = given().baseUri(getEccAdminUrl())
                 .redirects().follow(false)
@@ -63,11 +63,11 @@ public class LoginProcessService extends BaseService {
         return this;
     }
 
-    public CreateClaimService createClaim(Token token){
+    public CreateClaimService createClaim(Token token) {
         return new CreateClaimService(token);
     }
 
-    private String getLocationHeader(Response response){
+    private String getLocationHeader(Response response) {
         return response.getHeader("Location");
     }
 }

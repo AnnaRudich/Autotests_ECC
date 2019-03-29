@@ -4,11 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtElement;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
+import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -21,21 +17,12 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.CheckBox;
-import ru.yandex.qatools.htmlelements.element.Link;
-import ru.yandex.qatools.htmlelements.element.Table;
-import ru.yandex.qatools.htmlelements.element.TextBlock;
+import ru.yandex.qatools.htmlelements.element.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,14 +39,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
-import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertEqualsNoOrder;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static com.scalepoint.automation.utils.Wait.*;
+import static org.testng.Assert.*;
 
 
 public class SettlementDialog extends BaseDialog {
@@ -1359,7 +1340,7 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertCashCompensationIsDepreciated(int percentage, Valuation valuation) {
             ValuationRow valuationRow = parseValuationRow(valuation);
-            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice() * (1 - (Double.valueOf(percentage) / 100)));
+            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice() * (1 - ((double) percentage / 100)));
             return this;
         }
 
@@ -1395,7 +1376,7 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertIsVoucherDiscountApplied(Double newPrice) {
             ValuationRow valuationRow = parseValuationRow(Valuation.VOUCHER);
-            assertTrue(valuationRow.getCashCompensation() == newPrice - (newPrice * getVoucherPercentage() / 100));
+            assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;
         }
 
@@ -1412,17 +1393,17 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertAutomaticDepreciationLabelColor() {
             boolean isLabelInRedColor = automaticDepreciationLabel.getAttribute("style").contains("color: red;");
-            assertTrue(automaticDepreciation.isSelected() == !isLabelInRedColor);
+            assertEquals(automaticDepreciation.isSelected(), !isLabelInRedColor);
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked() {
-            assertTrue(sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true"));
+            assertEquals("true", sufficientDocumentation.getAttribute(ARIA_CHECKED));
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsUnchecked() {
-            assertTrue(sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("false"));
+            assertEquals("false", sufficientDocumentation.getAttribute(ARIA_CHECKED));
             return this;
         }
 

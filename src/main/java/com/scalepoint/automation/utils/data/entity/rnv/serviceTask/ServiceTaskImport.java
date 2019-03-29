@@ -6,8 +6,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 import java.util.List;
+
 @XmlRootElement(name = "serviceTask")
-public class ServiceTaskImport extends ServiceTask{
+public class ServiceTaskImport extends ServiceTask {
     private ServicePartnerImport servicePartner;
     private List<ServiceLineImport> serviceLines;
     private InvoiceImport invoice;
@@ -16,7 +17,7 @@ public class ServiceTaskImport extends ServiceTask{
     private BigDecimal updateClaimSelfRisk;
     private String updateClaimSelfRiskReason;
 
-    public ServiceTaskImport(){
+    public ServiceTaskImport() {
     }
 
     @XmlElement(nillable = true)
@@ -28,8 +29,8 @@ public class ServiceTaskImport extends ServiceTask{
         this.servicePartner = servicePartner;
     }
 
-    @XmlElementWrapper(name="serviceLines")
-    @XmlElement(name="serviceLine")
+    @XmlElementWrapper(name = "serviceLines")
+    @XmlElement(name = "serviceLine")
     public List<ServiceLineImport> getServiceLines() {
         return serviceLines;
     }

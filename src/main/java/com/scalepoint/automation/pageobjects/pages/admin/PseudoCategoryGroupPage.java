@@ -46,13 +46,13 @@ public class PseudoCategoryGroupPage extends AdminBasePage {
         return true;
     }
 
-    public PseudoCategoryGroupAddEditPage editGroup(String pseudoCategory){
+    public PseudoCategoryGroupAddEditPage editGroup(String pseudoCategory) {
         pseudoCategoryGroupList.selectByVisibleText(pseudoCategory);
         edit.click();
         return at(PseudoCategoryGroupAddEditPage.class);
     }
 
-    public PseudoCategoryGroupAddEditPage toAddGroupPage(){
+    public PseudoCategoryGroupAddEditPage toAddGroupPage() {
         add.click();
         return at(PseudoCategoryGroupAddEditPage.class);
     }

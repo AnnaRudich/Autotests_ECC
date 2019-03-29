@@ -7,21 +7,17 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.testng.annotations.BeforeMethod;
 
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ExpenseType.CASH_COMPENSATION;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.COMPENSATION;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.DEDUCTIBLE;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.DEPRECIATION;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.CLAIMANT;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.INSURANCE_COMPANY;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.*;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaymentsAssertUtils.*;
 
 public class SendingCaseSettledEventV3Case2Base extends BaseUnifiedPaymentsApiTest {
 
     @BeforeMethod
-    void setUp(Object[] testArgs){
+    void setUp(Object[] testArgs) {
         initClaimRequest();
 
-        User user = (User)testArgs[0];
+        User user = (User) testArgs[0];
         InsertSettlementItem item1 = (InsertSettlementItem) testArgs[1];
         InsertSettlementItem item2 = (InsertSettlementItem) testArgs[2];
 
@@ -49,7 +45,7 @@ public class SendingCaseSettledEventV3Case2Base extends BaseUnifiedPaymentsApiTe
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {3400.0,INSURANCE_COMPANY, CLAIMANT}
+                        {3400.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -63,7 +59,6 @@ public class SendingCaseSettledEventV3Case2Base extends BaseUnifiedPaymentsApiTe
 
         assertThatCloseCaseEventWasCreated();
     }
-
 
 
     void makeFirstSettlementAndAssert(SettlementClaimService.CloseCaseReason closeCaseReason) {
@@ -84,7 +79,7 @@ public class SendingCaseSettledEventV3Case2Base extends BaseUnifiedPaymentsApiTe
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                        {3400.0,INSURANCE_COMPANY, SCALEPOINT}
+                        {3400.0, INSURANCE_COMPANY, SCALEPOINT}
                 }
         );
 

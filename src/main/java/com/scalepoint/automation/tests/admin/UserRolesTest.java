@@ -55,7 +55,7 @@ public class UserRolesTest extends BaseTest {
                 .openUserForEditing(user.getLogin())
                 .clearFields()
                 .update(newUser)
-                .doAssert(usersPage->usersPage.assertUserExists(newUser));
+                .doAssert(usersPage -> usersPage.assertUserExists(newUser));
     }
 
     /**
@@ -68,7 +68,7 @@ public class UserRolesTest extends BaseTest {
         login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
                 .createUser(user, ALL_ROLES)
-                .doAssert(usersPage->usersPage.assertUserExists(user));
+                .doAssert(usersPage -> usersPage.assertUserExists(user));
     }
 
     /**
@@ -83,7 +83,7 @@ public class UserRolesTest extends BaseTest {
                 .toUserCreatePage()
                 .createUser(user, CLAIMSHANDLER, SUPPLYMANAGER)
                 .filterByIC(user.getCompany())
-                .doAssert(usersPage->usersPage.assertUserExists(user));
+                .doAssert(usersPage -> usersPage.assertUserExists(user));
     }
 
     /**
@@ -169,7 +169,7 @@ public class UserRolesTest extends BaseTest {
                 .toUsersPage()
                 .toUserCreatePage()
                 .createNewSPAdminNewRole(user, role)
-                .doAssert(usersPage->usersPage.assertUserExists(user));
+                .doAssert(usersPage -> usersPage.assertUserExists(user));
     }
 
 }

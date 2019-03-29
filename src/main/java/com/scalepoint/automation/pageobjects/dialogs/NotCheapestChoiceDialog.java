@@ -65,7 +65,7 @@ public class NotCheapestChoiceDialog extends BaseDialog {
 
     public class Asserts {
         public Asserts assertMinimalValuationIsSuggested(Double expectedAmount) {
-            OperationalUtils.assertEqualsDouble(getAmount(), expectedAmount, "Must be suggested expectedAmount: "+expectedAmount);
+            OperationalUtils.assertEqualsDouble(getAmount(), expectedAmount, "Must be suggested expectedAmount: " + expectedAmount);
             return this;
         }
 

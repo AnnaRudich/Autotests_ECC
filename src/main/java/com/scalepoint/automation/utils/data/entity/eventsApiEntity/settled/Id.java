@@ -1,14 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -16,8 +9,8 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "schemeId",
-    "value"
+        "schemeId",
+        "value"
 })
 public class Id {
 
@@ -68,7 +61,7 @@ public class Id {
         private final static Map<String, Id.SchemeId> CONSTANTS = new HashMap<String, Id.SchemeId>();
 
         static {
-            for (Id.SchemeId c: values()) {
+            for (Id.SchemeId c : values()) {
                 CONSTANTS.put(c.value, c);
             }
         }

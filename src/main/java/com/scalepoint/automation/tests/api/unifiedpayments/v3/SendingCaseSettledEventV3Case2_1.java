@@ -10,15 +10,12 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ExpenseType.CASH_COMPENSATION;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.COMPENSATION;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.CLAIMANT;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.INSURANCE_COMPANY;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.DEPRECIATION;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaymentsAssertUtils.*;
 
 public class SendingCaseSettledEventV3Case2_1 extends SendingCaseSettledEventV3Case2Base {
-
 
 
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
@@ -61,27 +58,26 @@ public class SendingCaseSettledEventV3Case2_1 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {800.0, INSURANCE_COMPANY, CLAIMANT}
+                        {800.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 800.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 800.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertThatSecondCloseCaseEventWasCreated();
 
     }
-
 
 
     public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
@@ -113,21 +109,21 @@ public class SendingCaseSettledEventV3Case2_1 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 1000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {800.0, INSURANCE_COMPANY, SCALEPOINT}
+                        {800.0, INSURANCE_COMPANY, SCALEPOINT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 800.0, SCALEPOINT, CLAIMANT},
-                    {COMPENSATION, 800.0, INSURANCE_COMPANY, SCALEPOINT}
+                        {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 800.0, SCALEPOINT, CLAIMANT},
+                        {COMPENSATION, 800.0, INSURANCE_COMPANY, SCALEPOINT}
                 }
         );
 

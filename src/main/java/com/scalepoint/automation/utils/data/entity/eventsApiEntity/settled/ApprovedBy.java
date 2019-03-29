@@ -1,12 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -14,19 +9,17 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "email",
-    "name",
-    "username",
-    "type"
+        "email",
+        "name",
+        "username",
+        "type"
 })
 public class ApprovedBy {
 
     @JsonProperty("email")
     private String email;
     /**
-     * 
      * (Required)
-     * 
      */
     @JsonProperty(value = "name", required = true)
     private String name;
@@ -37,7 +30,6 @@ public class ApprovedBy {
     /**
      * 'user', 'automatic' etc.
      * (Required)
-     * 
      */
     @JsonProperty(value = "type", required = true)
     private String type;
@@ -61,10 +53,14 @@ public class ApprovedBy {
     }
 
     @JsonProperty("username")
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return username;
+    }
 
     @JsonProperty("username")
-    public void setUsername(String username) { this.username = username; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getType() {
         return type;

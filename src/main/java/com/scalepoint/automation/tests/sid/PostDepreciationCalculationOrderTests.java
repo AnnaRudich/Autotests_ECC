@@ -18,7 +18,8 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-539")
 @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)

@@ -1,11 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -25,7 +20,7 @@ import java.util.Map;
         "expenseType"
 })
 
-public class Expense{
+public class Expense {
 
     @JsonProperty(value = "$id", required = true)
     private String $id;
@@ -40,7 +35,6 @@ public class Expense{
     private Double total;
     /**
      * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
-     *
      */
     @JsonProperty(value = "currencyCode", required = true)
     private String currencyCode;
@@ -58,58 +52,100 @@ public class Expense{
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
-    public String get$id() { return $id; }
+    public String get$id() {
+        return $id;
+    }
 
-    public void set$id(String $id) { this.$id = $id; }
+    public void set$id(String $id) {
+        this.$id = $id;
+    }
 
-    public String getUuid() { return uuid; }
+    public String getUuid() {
+        return uuid;
+    }
 
-    public void setUuid(String uuid) { this.uuid = uuid; }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-    public String getDueDate() { return dueDate; }
+    public String getDueDate() {
+        return dueDate;
+    }
 
-    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
 
-    public String getIssueDate() { return issueDate; }
+    public String getIssueDate() {
+        return issueDate;
+    }
 
-    public void setIssueDate(String issueDate) { this.issueDate = issueDate; }
+    public void setIssueDate(String issueDate) {
+        this.issueDate = issueDate;
+    }
 
-    public Double getTotal() { return total; }
+    public Double getTotal() {
+        return total;
+    }
 
-    public void setTotal(Double total) { this.total = total; }
+    public void setTotal(Double total) {
+        this.total = total;
+    }
 
-    public String getCurrencyCode() { return currencyCode; }
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
 
-    public void setCurrencyCode(String currencyCode) { this.currencyCode = currencyCode; }
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
-    public Boolean getAdministrative() { return administrative; }
+    public Boolean getAdministrative() {
+        return administrative;
+    }
 
-    public void setAdministrative(Boolean administrative) { this.administrative = administrative; }
+    public void setAdministrative(Boolean administrative) {
+        this.administrative = administrative;
+    }
 
-    public PartyRef getPayerParty() { return payerParty; }
+    public PartyRef getPayerParty() {
+        return payerParty;
+    }
 
-    public void setPayerParty(PartyRef payerParty) { this.payerParty = payerParty; }
+    public void setPayerParty(PartyRef payerParty) {
+        this.payerParty = payerParty;
+    }
 
-    public PartyRef getPayeeParty() { return payeeParty; }
+    public PartyRef getPayeeParty() {
+        return payeeParty;
+    }
 
-    public void setPayeeParty(PartyRef payeeParty) { this.payeeParty = payeeParty; }
+    public void setPayeeParty(PartyRef payeeParty) {
+        this.payeeParty = payeeParty;
+    }
 
-    public String getExpenseType() { return expenseType; }
+    public String getExpenseType() {
+        return expenseType;
+    }
 
-    public void setExpenseType(String expenseType) { this.expenseType = expenseType; }
+    public void setExpenseType(String expenseType) {
+        this.expenseType = expenseType;
+    }
 
     @Override
-    public String toString() { return ToStringBuilder.reflectionToString( this); }
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
     @JsonAnyGetter
-    public Map<String, Object> getAdditionalProprties() { return this.additionalProperties; }
+    public Map<String, Object> getAdditionalProprties() {
+        return this.additionalProperties;
+    }
 
     @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) { this.additionalProperties.put(name, value); }
-
-
-
-
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 
 }

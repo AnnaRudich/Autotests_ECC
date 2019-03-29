@@ -11,7 +11,7 @@ import static io.restassured.RestAssured.given;
 public class ManualReductionService extends BaseService {
 
 
-    public ManualReductionService setManualReductionForClaim(String amount){
+    public ManualReductionService setManualReductionForClaim(String amount) {
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())

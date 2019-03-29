@@ -25,23 +25,23 @@ public class DiscretionaryReason {
     @XmlElement
     private String discretionaryReasonScalepoint;
 
-    public String getDiscretionaryReason1(){
+    public String getDiscretionaryReason1() {
         return discretionaryReason1;
     }
 
-    public String getDiscretionaryReason2(){
+    public String getDiscretionaryReason2() {
         return discretionaryReason2;
     }
 
-    public String getDiscretionaryReason3(){
+    public String getDiscretionaryReason3() {
         return discretionaryReason3;
     }
 
-    public String getDiscretionaryReason4(){
+    public String getDiscretionaryReason4() {
         return discretionaryReason4;
     }
 
-    public String getDiscretionaryReason5(){
+    public String getDiscretionaryReason5() {
         return discretionaryReason5;
     }
 

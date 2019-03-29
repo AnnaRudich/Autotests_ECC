@@ -87,7 +87,7 @@ public class AdminPage extends AdminBasePage {
         return at(PseudoCategoryGroupPage.class);
     }
 
-    public EditReasonsPage toEditReasonsPage(){
+    public EditReasonsPage toEditReasonsPage() {
         editReasons.click();
         return at(EditReasonsPage.class);
     }

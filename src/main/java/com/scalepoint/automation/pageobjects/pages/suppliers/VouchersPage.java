@@ -25,9 +25,9 @@ import static org.testng.Assert.assertTrue;
 @EccAdminPage
 public class VouchersPage extends BaseEccAdminNavigation {
 
-    @FindBy(xpath=".//a[contains(@href, 'logout')]")
+    @FindBy(xpath = ".//a[contains(@href, 'logout')]")
     private Link signOutLink;
-    @FindBy(xpath=".//a[contains(@href, 'toME.action')]")
+    @FindBy(xpath = ".//a[contains(@href, 'toME.action')]")
     private Link toMeLink;
     @FindBy(xpath = "//button[contains(@class,'open-selected-supplier-btn')]")
     private WebElement openSelectedButton;
@@ -95,7 +95,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
     public void makeVouchersSearch(String query) {
         find(By.xpath("//input[contains(@name,'searchfield')]")).click();
         vouchersSearchField.clear();
-        logger.info("Search for voucher "+query);
+        logger.info("Search for voucher " + query);
         vouchersSearchField.sendKeys(query);
         vouchersSearchField.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompleted();
@@ -168,12 +168,12 @@ public class VouchersPage extends BaseEccAdminNavigation {
         openFirstVoucher();
     }
 
-    public LoginPage signOut(){
+    public LoginPage signOut() {
         signOutLink.click();
         return at(LoginPage.class);
     }
 
-    private boolean isToMeLinkDisplayed(){
+    private boolean isToMeLinkDisplayed() {
         try {
             return toMeLink.isDisplayed();
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class VouchersPage extends BaseEccAdminNavigation {
         }
     }
 
-    private boolean isTickDisplayed(String query, String XpathLocator){
+    private boolean isTickDisplayed(String query, String XpathLocator) {
         makeVouchersSearch(query);
         return $(By.xpath(XpathLocator)).getAttribute("class").contains("tick");
     }
@@ -218,27 +218,27 @@ public class VouchersPage extends BaseEccAdminNavigation {
             return this;
         }
 
-        public Asserts assertsIsExclusiveColumnDisplayed(){
+        public Asserts assertsIsExclusiveColumnDisplayed() {
             assertTrue(isExclusiveColumnDisplayed());
             return this;
         }
 
-        public Asserts assertsIsExclusiveColumnNotDisplayed(){
+        public Asserts assertsIsExclusiveColumnNotDisplayed() {
             assertFalse(isExclusiveColumnDisplayed());
             return this;
         }
 
-        public Asserts assertsIsExclusiveTickForVoucherDisplayed(String voucherName){
+        public Asserts assertsIsExclusiveTickForVoucherDisplayed(String voucherName) {
             assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
             return this;
         }
 
-        public Asserts assertsIsActiveTickForVoucherDisplayed(String voucherName){
+        public Asserts assertsIsActiveTickForVoucherDisplayed(String voucherName) {
             assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
             return this;
         }
 
-        public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName){
+        public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName) {
             assertFalse(isTickDisplayed(voucherName, byActiveXpath));
             return this;
         }

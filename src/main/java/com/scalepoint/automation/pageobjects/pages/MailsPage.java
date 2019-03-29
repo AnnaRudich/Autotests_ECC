@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static org.testng.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 @EccPage
 public class MailsPage extends BaseClaimPage {
@@ -203,17 +204,17 @@ public class MailsPage extends BaseClaimPage {
 
     public class Asserts {
 
-        public void isMailExist(MailType mailType){
-            assertTrue(parseMails().findMailByType(mailType) != null);
+        public void isMailExist(MailType mailType) {
+            assertNotNull(parseMails().findMailByType(mailType));
         }
 
-        public void noMailsOnThePage(){
+        public void noMailsOnThePage() {
             assertTrue(parseMails().getMails().isEmpty());
         }
 
-        public void isMailExist(MailType mailType, String subject){
+        public void isMailExist(MailType mailType, String subject) {
             String latestMailSubject = getLatestMail(mailType).getSubject();
-            assertThat(latestMailSubject.equals(subject)).as("expected mail subject: "+ subject + "but was: " + latestMailSubject).isTrue();
+            assertThat(latestMailSubject.equals(subject)).as("expected mail subject: " + subject + "but was: " + latestMailSubject).isTrue();
         }
     }
 }

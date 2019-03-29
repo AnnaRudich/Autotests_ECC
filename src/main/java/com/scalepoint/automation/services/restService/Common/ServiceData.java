@@ -8,12 +8,12 @@ public class ServiceData {
 
     protected Data serviceData;
 
-    public static void init(DatabaseApi databaseApi){
+    public static void init(DatabaseApi databaseApi) {
         holder.set(new Data());
         holder.get().setDatabaseApi(databaseApi);
     }
 
-    public static Data getData(){
+    public static Data getData() {
         return holder.get();
     }
 }

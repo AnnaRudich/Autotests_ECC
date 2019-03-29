@@ -3,16 +3,13 @@ package com.scalepoint.automation.utils;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 
-import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.ADMIN;
-import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
-import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.SUPPLYMANAGER;
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
 
 public class Constants {
 
     public static final String TEXT_LINE = "AutomatedTest-ClaimLine";
     public static final String DEFAULT_PASSWORD = "12341234";
 
-    public static final String APRIL = "Apr";
     public static final String JANUARY = "Jan";
 
     public static final Double PRICE_2400 = 2400.00;

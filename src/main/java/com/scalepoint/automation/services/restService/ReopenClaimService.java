@@ -2,7 +2,6 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BasePath;
 import com.scalepoint.automation.services.restService.Common.BaseService;
-import com.scalepoint.automation.services.restService.Common.Data;
 import org.apache.http.HttpStatus;
 
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
@@ -10,7 +9,7 @@ import static io.restassured.RestAssured.given;
 
 public class ReopenClaimService extends BaseService {
 
-    public ReopenClaimService reopenClaim(){
+    public ReopenClaimService reopenClaim() {
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())

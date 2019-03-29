@@ -20,18 +20,18 @@ public class SettlementClaimService extends BaseService {
     private Response response;
     private PrepareSaveCustomerParams prepareSaveCustomerParams;
 
-    public SettlementClaimService(){
+    public SettlementClaimService() {
         this.prepareSaveCustomerParams = new PrepareSaveCustomerParams();
     }
 
-    public Response getResponse(){
+    public Response getResponse() {
         return this.response;
     }
 
-    private SettlementClaimService saveCustomer(Object object, CloseCaseReason closeCaseReason){
-        Map<String,String> params = prepareSaveCustomerParams.prepareSaveCustomerParams(object, data).getSaveCustomerParams();
+    private SettlementClaimService saveCustomer(Object object, CloseCaseReason closeCaseReason) {
+        Map<String, String> params = prepareSaveCustomerParams.prepareSaveCustomerParams(object, data).getSaveCustomerParams();
 
-        if(closeCaseReason.equals(REPLACEMENT)){
+        if (closeCaseReason.equals(REPLACEMENT)) {
             params.put("claim_number", ((ClaimRequest) object).getCaseNumber());
             params.put("replacement", "true");
         }
@@ -40,8 +40,8 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    private SettlementClaimService saveCustomer(Map<String,String> formParams, String path){
-        formParams.put("url", "/webapp/ScalePoint/dk"+ path.replace("{userId}", data.getUserId().toString()));
+    private SettlementClaimService saveCustomer(Map<String, String> formParams, String path) {
+        formParams.put("url", "/webapp/ScalePoint/dk" + path.replace("{userId}", data.getUserId().toString()));
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
@@ -58,15 +58,14 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    public SettlementClaimService close(Object claimRequest, CloseCaseReason reason ){
+    public SettlementClaimService close(Object claimRequest, CloseCaseReason reason) {
         //make request to save customer with NULL claim_number in order to be redirected to enter_base_info.jsp
         //in order to set session attribute SESSION_CUSTOMER_SAVED
         //For this we need ft FUNC_DISALLOW_DUPLICATE_CLAIMS_NUMBER to be enabled
         saveCustomer(claimRequest, reason);
-        if(reason.equals(REPLACEMENT)){
+        if (reason.equals(REPLACEMENT)) {
             new ReplacementService().makeReplacement(claimRequest);
-        }
-        else{
+        } else {
             this.response = given().baseUri(getEccUrl()).log().all()
                     .sessionId(data.getEccSessionId())
                     .pathParam("userId", data.getUserId())
@@ -77,7 +76,7 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    public SettlementClaimService cancel(Object claimRequest){
+    public SettlementClaimService cancel(Object claimRequest) {
         saveCustomer(prepareSaveCustomerParams.prepareSaveCustomerParams(claimRequest, data).getSaveCustomerParams(), CANCEL_CLAIM);
 
         this.response = given().baseUri(getEccUrl()).log().all()
@@ -89,7 +88,7 @@ public class SettlementClaimService extends BaseService {
         return this;
     }
 
-    public enum CloseCaseReason{
+    public enum CloseCaseReason {
 
         CLOSE_EXTERNAL(BasePath.CLOSE_EXTERNAL),
         CLOSE_WITH_MAIL(BasePath.CLOSE_WITH_MAIL),
@@ -98,7 +97,7 @@ public class SettlementClaimService extends BaseService {
 
         private String path;
 
-        CloseCaseReason(String path){
+        CloseCaseReason(String path) {
             this.path = path;
         }
 

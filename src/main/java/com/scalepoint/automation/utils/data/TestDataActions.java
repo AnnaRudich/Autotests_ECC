@@ -32,12 +32,10 @@ public class TestDataActions {
                     User user = indexToUser.get(i);
                     CurrentUser.setUser(user);
                     instances.add(user);
-                }
-                else if(parameterType.equals(SimpleSupplier.class)){
+                } else if (parameterType.equals(SimpleSupplier.class)) {
                     Annotation[] annotations = method.getParameterAnnotations()[i];
                     instances.add(getTestDataForExistingSuppliers(annotations));
-                }
-                else {
+                } else {
                     try {
                         instances.add(TestData.Data.getInstance(parameterType));
                     } catch (Exception e) {
@@ -54,7 +52,7 @@ public class TestDataActions {
 
     private static Object getTestDataForExistingSuppliers(Annotation[] annotations) {
         ExistingSuppliers existingSuppliers = (ExistingSuppliers) TestData.Data.getInstance(ExistingSuppliers.class);
-        if(annotations.length > 0) {
+        if (annotations.length > 0) {
             Annotation annotation = annotations[0];
             if (annotation.annotationType().equals(SupplierCompany.class)) {
                 SupplierCompany supplierCompany = (SupplierCompany) annotation;
@@ -63,9 +61,9 @@ public class TestDataActions {
                         .filter(sup -> sup.getInsuranceCompany().equals(supplierCompany.value().name()))
                         .collect(Collectors.toList());
 
-                if(supplierCompany.areWithVouchers()) {
+                if (supplierCompany.areWithVouchers()) {
                     return simpleSuppliers.stream().filter(SimpleSupplier::isWithVouchers).findAny().orElseThrow(NoSuchElementException::new);
-                }else{
+                } else {
                     return simpleSuppliers.stream().filter(sup -> !sup.isWithVouchers()).findAny().orElseThrow(NoSuchElementException::new);
                 }
             }
@@ -74,7 +72,7 @@ public class TestDataActions {
     }
 
     private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {
-        Map<UsersManager.CompanyMethodArgument, User>companyCodes = new HashMap<>();
+        Map<UsersManager.CompanyMethodArgument, User> companyCodes = new HashMap<>();
         Class<?>[] parameterTypes = method.getParameterTypes();
         for (int i = 0; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];

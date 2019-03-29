@@ -2,12 +2,12 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class BankImport extends Bank{
+public class BankImport extends Bank {
 
     private String bankName;
     private String fikNumber;
 
-    public BankImport(){
+    public BankImport() {
     }
 
     @XmlAttribute

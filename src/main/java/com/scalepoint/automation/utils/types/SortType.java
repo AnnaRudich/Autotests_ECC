@@ -1,8 +1,8 @@
 package com.scalepoint.automation.utils.types;
 
 public enum SortType {
-    ASC ("ascending"),
-    DESC ("descending");
+    ASC("ascending"),
+    DESC("descending");
 
     private String extJsValue;
 

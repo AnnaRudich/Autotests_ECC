@@ -45,7 +45,7 @@ public class SettlementSummaryTests extends BaseTest {
                 })
                 .closeSidWithOk()
                 .getSettlementSummary()
-                .doAssert(summary->{
+                .doAssert(summary -> {
                     summary.assertClaimSumValueIs(voucherValuation.getCashCompensationWithDepreciation());
                 });
     }
@@ -88,11 +88,10 @@ public class SettlementSummaryTests extends BaseTest {
                 .openSidForFirstProduct()
                 .closeSidWithOk()
                 .getSettlementSummary()
-                .doAssert(summary->{
+                .doAssert(summary -> {
                     summary.assertClaimSumValueIs(totalPrice);
                 });
     }
-
 
 
 }

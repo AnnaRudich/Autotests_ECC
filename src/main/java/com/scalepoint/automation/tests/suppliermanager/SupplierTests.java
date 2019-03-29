@@ -15,7 +15,6 @@ import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.Supplier;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-521")

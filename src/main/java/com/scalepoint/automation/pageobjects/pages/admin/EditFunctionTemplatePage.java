@@ -75,7 +75,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
         return clearTextFromNewLines(firstSelectedOption.getText()).equalsIgnoreCase(text);
     }
 
-    private String clearTextFromNewLines(String text){
+    private String clearTextFromNewLines(String text) {
         List<String> lines = Arrays.stream(text.split("\\r?\\n")).map(t -> t.trim()).collect(Collectors.toList());
         return StringUtils.join(lines, " ").trim();
     }

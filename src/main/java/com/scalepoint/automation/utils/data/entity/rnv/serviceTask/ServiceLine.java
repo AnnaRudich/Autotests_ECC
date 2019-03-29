@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "serviceLine")
-public class ServiceLine{
+public class ServiceLine {
 
     private Integer lineIndex;
     private String lineGUID;

@@ -95,7 +95,6 @@ public class SelfServiceTest extends BaseTest {
     }
 
 
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Delete line")
@@ -132,7 +131,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-    public void charlie504_submitLine_autoImport(User user, Claim claim){
+    public void charlie504_submitLine_autoImport(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -193,7 +192,6 @@ public class SelfServiceTest extends BaseTest {
         System.out.println(lineDescription);
 
         new SelfServicePage().selectCloseOption();
-
 
 
         login(user)
@@ -260,8 +258,8 @@ public class SelfServiceTest extends BaseTest {
         login(user)
                 .openActiveRecentClaim()
                 .parseFirstClaimLine()
-        .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
-   }
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
+    }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @Test(dataProvider = "testDataProvider",
@@ -279,7 +277,7 @@ public class SelfServiceTest extends BaseTest {
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
 
-                .addDescription("test",1)
+                .addDescription("test", 1)
                 .addRandomCategory()
                 .addRandomPurchaseDate(1)
                 .addRandomAcquired(1)
@@ -293,9 +291,9 @@ public class SelfServiceTest extends BaseTest {
                 .openActiveRecentClaim()
                 .toNotesPage()
 
-        .doAssert(NotesPage-> {
-            NotesPage.assertInternalNotePresent("test customer comment");
-        });
+                .doAssert(NotesPage -> {
+                    NotesPage.assertInternalNotePresent("test customer comment");
+                });
     }
 
     //TODO
@@ -324,7 +322,7 @@ public class SelfServiceTest extends BaseTest {
                 .addCustomerNote("customer note");
 
         String lineDescription = new SelfServicePage().getDescriptionText(1);
-        
+
         new SelfServicePage().selectSubmitOption();
 
         login(user)

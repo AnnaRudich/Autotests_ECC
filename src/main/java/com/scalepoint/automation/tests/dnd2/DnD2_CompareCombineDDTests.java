@@ -20,17 +20,8 @@ import org.testng.annotations.Test;
 import java.time.Year;
 import java.util.Objects;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.MARKET_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.USED_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_EQUALS_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 /**
  * The class represents smoke tests set for D&D2 functionality
@@ -46,7 +37,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
-    public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim){
+    public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
@@ -67,7 +58,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
-    public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim){
+    public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
@@ -86,7 +77,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 });
     }
 
-    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled=false, isDefault = true)
+    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if new price, customer demand are discounted")
     public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem) {
@@ -112,7 +103,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @RequiredSetting(type=FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND)
+    @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND)
     @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if customer demand is not discounted. FT Do not depreciate CD is on")
     public void charlie586_addManually_DoNotDepreciateCustomerDemandIsOn(User user, Claim claim, ClaimItem claimItem) {
 
@@ -135,19 +126,19 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is lower than voucher discount correct item is selected")
-    public void charlie586_addManuallyWithVoucherAndDepreciationLowerThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem){
+    public void charlie586_addManuallyWithVoucherAndDepreciationLowerThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()));
         SettlementPage settlementPage = settlementDialog.setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP())
-                .setDepreciation(settlementDialog.getVoucherPercentage()/2)
+                .setDepreciation(settlementDialog.getVoucherPercentage() / 2)
                 .closeSidWithOk();
-                Objects.requireNonNull(Browser.driver()).navigate().refresh();
-                settlementPage.parseFirstClaimLine()
-                        .editLine()
+        Objects.requireNonNull(Browser.driver()).navigate().refresh();
+        settlementPage.parseFirstClaimLine()
+                .editLine()
                 .doAssert(asserts -> {
-                    asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage()/2, NEW_PRICE);
+                    asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage() / 2, NEW_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
                 })
                 .parseValuationRow(VOUCHER)
@@ -157,13 +148,13 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is bigger than voucher discount correct item is selected")
-    public void charlie586_addManuallyWithVoucherAndDepreciationHigherThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem){
+    public void charlie586_addManuallyWithVoucherAndDepreciationHigherThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP());
-        int depreciationPercentage = settlementDialog.getVoucherPercentage()*2;
+        int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
         settlementDialog.setDepreciation(depreciationPercentage)
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
@@ -176,13 +167,13 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @Test(dataProvider = "testDataProvider", description = "Add item manually with comparision of dd disabled, check if both are depreciated and lower price is selected")
-    public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem){
+    public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP());
-        int depreciationPercentage = settlementDialog.getVoucherPercentage()*2;
+        int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
         settlementDialog.setDepreciation(depreciationPercentage)
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
@@ -215,7 +206,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
         login(user)
                 .openActiveRecentClaim();
-                new SettlementSummary().ensureAuditInfoPanelVisible()
+        new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");
     }
 }

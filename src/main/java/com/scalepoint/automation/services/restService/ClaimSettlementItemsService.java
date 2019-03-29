@@ -3,7 +3,6 @@ package com.scalepoint.automation.services.restService;
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
-import com.scalepoint.automation.utils.data.request.Valuation;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
@@ -11,7 +10,6 @@ import java.util.Arrays;
 
 import static com.scalepoint.automation.services.restService.Common.BasePath.INSERT_SETTLEMENT_ITEM;
 import static com.scalepoint.automation.services.restService.Common.BasePath.REMOVE_SETTLEMENT_ITEM;
-import static com.scalepoint.automation.services.restService.Common.BasePath.UPDATE_SETTLEMENT_ITEM;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
@@ -22,22 +20,22 @@ public class ClaimSettlementItemsService extends BaseService {
 
     private Response response;
 
-    public Response getResponse(){
+    public Response getResponse() {
         return this.response;
     }
 
 
-    public ClaimSettlementItemsService addLines(InsertSettlementItem... items){
+    public ClaimSettlementItemsService addLines(InsertSettlementItem... items) {
         Arrays.stream(items).forEach(i -> addLine(i));
         return this;
     }
 
-    public ClaimSettlementItemsService removeLines(InsertSettlementItem... items){
+    public ClaimSettlementItemsService removeLines(InsertSettlementItem... items) {
         Arrays.stream(items).filter(i -> i.eccItemId != null).forEach(i -> removeLine(i.eccItemId));
         return this;
     }
 
-    public ClaimSettlementItemsService editLines(InsertSettlementItem... items){
+    public ClaimSettlementItemsService editLines(InsertSettlementItem... items) {
         Arrays.stream(items).filter(i -> i.eccItemId != null).forEach(i -> {
             removeLine(i.eccItemId);
             addLine(i);
@@ -47,7 +45,7 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
-    private ClaimSettlementItemsService addLine(InsertSettlementItem item){
+    private ClaimSettlementItemsService addLine(InsertSettlementItem item) {
         item.setCaseId(data.getUserId().toString());
         item.getSettlementItem().getClaim().setClaimToken(getClaimTokenWithoutPrefix());
 
@@ -67,7 +65,7 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
-    private ClaimSettlementItemsService removeLine(Integer id){
+    private ClaimSettlementItemsService removeLine(Integer id) {
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
@@ -81,7 +79,7 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
-    public SettlementClaimService closeCase(){
+    public SettlementClaimService closeCase() {
         return new SettlementClaimService();
     }
 }

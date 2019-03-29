@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for user complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="user">
  *   &lt;simpleContent>
@@ -24,8 +24,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "user", propOrder = {
@@ -60,11 +58,9 @@ public class User {
 
     /**
      * Gets the value of the login property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLogin() {
         return login;
@@ -72,11 +68,9 @@ public class User {
 
     /**
      * Sets the value of the login property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLogin(String value) {
         this.login = value;
@@ -84,11 +78,9 @@ public class User {
 
     /**
      * Gets the value of the password property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPassword() {
         return password;
@@ -96,11 +88,9 @@ public class User {
 
     /**
      * Sets the value of the password property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPassword(String value) {
         this.password = value;
@@ -108,11 +98,9 @@ public class User {
 
     /**
      * Gets the value of the companyCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCompanyCode() {
         return companyCode;
@@ -120,11 +108,9 @@ public class User {
 
     /**
      * Sets the value of the companyCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCompanyCode(String value) {
         this.companyCode = value;
@@ -148,11 +134,9 @@ public class User {
 
     /**
      * Gets the value of the basic property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public boolean isBasic() {
         return basic;
@@ -160,11 +144,9 @@ public class User {
 
     /**
      * Sets the value of the basic property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBasic(boolean value) {
         this.basic = value;

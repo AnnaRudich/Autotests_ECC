@@ -13,11 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +33,11 @@ public class DatabaseApi {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public XpriceInfo findProduct(PriceConditions... priceConditions){
-       return jdbcTemplate.queryForObject(
+    public XpriceInfo findProduct(PriceConditions... priceConditions) {
+        return jdbcTemplate.queryForObject(
                 "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
-                         Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")),new XpriceInfoMapper());
+                        Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")), new XpriceInfoMapper());
     }
 
     private Integer insertRnvTemplateFile(Integer insCompanyId) {
@@ -62,7 +58,7 @@ public class DatabaseApi {
                 return ps;
             }, generatedKeyHolder);
 
-           return generatedKeyHolder.getKey().intValue();
+            return generatedKeyHolder.getKey().intValue();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -80,20 +76,20 @@ public class DatabaseApi {
         return key.intValue();
     }
 
-    public Integer getUserIdByClaimToken(String claimToken){
+    public Integer getUserIdByClaimToken(String claimToken) {
         return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where UserToken = ?", Integer.class, claimToken);
     }
 
-    public Integer getUserIdByClaimNumber(String claimNumber){
+    public Integer getUserIdByClaimNumber(String claimNumber) {
         try {
             return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where ClaimNumber = ?", Integer.class, claimNumber);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
             return null;
         }
     }
 
-    public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId){
+    public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId) {
         return this.jdbcTemplate.query(
                 "select claimId, taskType, taskId, taskStatus, taskPayload from CwaTaskLog where claimId = ?",
                 new CwaTaskLogMapper(),
@@ -102,24 +98,24 @@ public class DatabaseApi {
     }
 
     String delete = " DELETE FROM ReductionRuleConfiguration " +
-    " WHERE PseudoCategory = (SELECT PG.DefaultPseudoCatId FROM PSEUDOCAT_Group as PG " +
+            " WHERE PseudoCategory = (SELECT PG.DefaultPseudoCatId FROM PSEUDOCAT_Group as PG " +
             "WHERE PG.groupTextId = (SELECT TPG.TextId FROM Text_PSEUDOCAT_Group as TPG WHERE TPG.GroupName = ?))" +
-    " AND InsuranceCompany = (SELECT IC.ICRFNBR FROM INSCOMP as IC WHERE IC.CompanyCode = ?)" +
-    " AND Policy = ?";
+            " AND InsuranceCompany = (SELECT IC.ICRFNBR FROM INSCOMP as IC WHERE IC.CompanyCode = ?)" +
+            " AND Policy = ?";
 
-    public void removeAssignment(Assignment assignment){
+    public void removeAssignment(Assignment assignment) {
         this.jdbcTemplate.update(delete, assignment.getPseudoCategory(), assignment.getCompany(), assignment.getPolicy());
     }
 
-    public String getSettlementRevisionTokenByClaimNumber(String claimNumber){
+    public String getSettlementRevisionTokenByClaimNumber(String claimNumber) {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ?", String.class, claimNumber);
     }
 
-    public String getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(String claimNumber){
+    public String getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(String claimNumber) {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'S'", String.class, claimNumber);
     }
 
-    public String getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(String claimNumber){
+    public String getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(String claimNumber) {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'X'", String.class, claimNumber);
     }
 
@@ -128,8 +124,8 @@ public class DatabaseApi {
         public CwaTaskLog mapRow(ResultSet rs, int rowNum) throws SQLException {
             CwaTaskLog cwaTaskLog = new CwaTaskLog();
             cwaTaskLog.setClaimId(rs.getInt("claimId"));
-            cwaTaskLog.setTaskType( TaskType.valueOf(rs.getString("taskType")));
-            cwaTaskLog.setTaskStatus( EventType.valueOf(rs.getString("taskStatus")));
+            cwaTaskLog.setTaskType(TaskType.valueOf(rs.getString("taskType")));
+            cwaTaskLog.setTaskStatus(EventType.valueOf(rs.getString("taskStatus")));
             cwaTaskLog.setTaskId(rs.getString("taskId"));
             cwaTaskLog.setTaskPayload(rs.getString("taskPayload"));
             return cwaTaskLog;
@@ -170,11 +166,12 @@ public class DatabaseApi {
 
 
         private String condition;
-        PriceConditions(String condition){
+
+        PriceConditions(String condition) {
             this.condition = condition;
         }
 
-        public String getCondition(){
+        public String getCondition() {
             return condition;
         }
     }

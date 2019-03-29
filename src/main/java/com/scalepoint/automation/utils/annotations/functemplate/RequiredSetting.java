@@ -12,7 +12,9 @@ public @interface RequiredSetting {
     String UNDEFINED = "undefined";
 
     FTSetting type();
+
     String value() default UNDEFINED;
+
     boolean enabled() default true;
 
     /**

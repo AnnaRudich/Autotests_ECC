@@ -47,13 +47,12 @@ public class JavascriptHelper {
 
     public static boolean isImagePresent(WebElement imageElement) {
         Object result = ((JavascriptExecutor) Browser.driver()).executeScript(
-                "return arguments[0].complete && "+
-                        "typeof arguments[0].naturalWidth != \"undefined\" && "+
+                "return arguments[0].complete && " +
+                        "typeof arguments[0].naturalWidth != \"undefined\" && " +
                         "arguments[0].naturalWidth > 0", imageElement);
         boolean loaded = false;
         if (result instanceof Boolean) {
             loaded = (Boolean) result;
-            System.out.println(loaded);
         }
         return loaded;
     }

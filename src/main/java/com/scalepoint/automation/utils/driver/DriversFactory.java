@@ -50,7 +50,7 @@ public enum DriversFactory {
         protected WebDriver getDriverInstance(DesiredCapabilities capabilities) throws MalformedURLException {
             WebDriver driver = new RemoteWebDriver(new URL(Configuration.getHubRemote()), getOptionsForIE().merge(capabilities));
             setTimeouts(driver);
-            ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
+            ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
             return driver;
         }
 
@@ -81,7 +81,7 @@ public enum DriversFactory {
         protected WebDriver getDriverInstance(DesiredCapabilities capabilities) throws MalformedURLException {
             WebDriver driver = new RemoteWebDriver(new URL(Configuration.getHubRemote()), getFireFoxCapabilities().merge(capabilities));
             driver = new Augmenter().augment(driver);
-            ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
+            ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
             return driver;
         }
     },
@@ -125,13 +125,13 @@ public enum DriversFactory {
 
     private static Logger log = LogManager.getLogger(DriversFactory.class);
 
-    private static WebDriver getChromeRemote(String hubUrl, DesiredCapabilities capabilities){
+    private static WebDriver getChromeRemote(String hubUrl, DesiredCapabilities capabilities) {
         WebDriver driver = null;
         try {
             ChromeOptions desiredCapabilitiesForChrome = getDesiredCapabilitiesForChrome();
             desiredCapabilitiesForChrome.setBinary("C:\\Users\\ecc_auto\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe");
             driver = new RemoteWebDriver(new URL(hubUrl), desiredCapabilitiesForChrome.merge(capabilities));
-            ((RemoteWebDriver)driver).setFileDetector(new LocalFileDetector());
+            ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
             setTimeouts(driver);
         } catch (MalformedURLException e) {
             log.error(e.getMessage());
@@ -180,7 +180,7 @@ public enum DriversFactory {
         return options.merge(capabilities);
     }
 
-    private static FirefoxOptions getFireFoxCapabilities(){
+    private static FirefoxOptions getFireFoxCapabilities() {
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.acceptInsecureCerts();
         desiredCapabilities.setJavascriptEnabled(true);

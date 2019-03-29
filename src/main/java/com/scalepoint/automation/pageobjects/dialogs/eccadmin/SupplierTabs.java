@@ -31,7 +31,7 @@ interface SupplierTabs {
     }
 
     default <T extends BaseDialog & SupplierTabs> T selectTab(Class<T> tabClass, String tabName) {
-        $(By.xpath("//div[contains(@class,'SupplierWindow')]//span[contains(text(),'"+tabName+"')]//..")).click();
+        $(By.xpath("//div[contains(@class,'SupplierWindow')]//span[contains(text(),'" + tabName + "')]//..")).click();
         return BaseDialog.at(tabClass);
     }
 

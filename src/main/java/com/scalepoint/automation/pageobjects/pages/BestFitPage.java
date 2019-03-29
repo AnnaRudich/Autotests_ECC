@@ -3,12 +3,9 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Selenide.$;
 import static org.testng.Assert.assertTrue;
 
 @EccPage

@@ -9,10 +9,10 @@ public class ServiceLinesImport {
 
     private List<ServiceLineImport> serviceLinesImportList;
 
-    public ServiceLinesImport(){
+    public ServiceLinesImport() {
     }
 
-    @XmlElement(name="serviceLine")
+    @XmlElement(name = "serviceLine")
     public List<ServiceLineImport> getServiceTasks() {
         return serviceLinesImportList;
     }

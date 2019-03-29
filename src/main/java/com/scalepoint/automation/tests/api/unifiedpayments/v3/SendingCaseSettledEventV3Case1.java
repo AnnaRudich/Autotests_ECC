@@ -3,31 +3,27 @@ package com.scalepoint.automation.tests.api.unifiedpayments.v3;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.*;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ExpenseType.CASH_COMPENSATION;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.ObligationType.*;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.CLAIMANT;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.INSURANCE_COMPANY;
-import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.SCALEPOINT;
+import static com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest.PartyReference.*;
 import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaymentsAssertUtils.*;
 
 
 public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
 
-
     @BeforeMethod
-    private void setUp(Object[] testArgs){
+    private void setUp(Object[] testArgs) {
         initClaimRequest();
 
-        User user = (User)testArgs[0];
+        User user = (User) testArgs[0];
         InsertSettlementItem item1 = (InsertSettlementItem) testArgs[1];
         InsertSettlementItem item2 = (InsertSettlementItem) testArgs[2];
         InsertSettlementItem item3 = (InsertSettlementItem) testArgs[3];
@@ -75,23 +71,23 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {1100.0,INSURANCE_COMPANY, CLAIMANT}
+                        {1100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
-                    {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
-                    {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 1100.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
+                        {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
+                        {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 1100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -116,22 +112,22 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
+                        {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {1100.0, CLAIMANT, INSURANCE_COMPANY}
+                        {1100.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                    {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                    {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                    {COMPENSATION, 1100.0, CLAIMANT, INSURANCE_COMPANY}
+                        {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {COMPENSATION, 1100.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
@@ -162,23 +158,23 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 2100.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {1100.0,INSURANCE_COMPANY, SCALEPOINT}
+                        {1100.0, INSURANCE_COMPANY, SCALEPOINT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
-                    {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
-                    {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 1100.0, INSURANCE_COMPANY, SCALEPOINT},
-                    {COMPENSATION, 1100.0, SCALEPOINT, CLAIMANT}
+                        {DEPRECIATION, 700.0, CLAIMANT, CLAIMANT},
+                        {DEDUCTIBLE, 250.0, CLAIMANT, CLAIMANT},
+                        {MANUAL_REDUCTION, 50.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 1100.0, INSURANCE_COMPANY, SCALEPOINT},
+                        {COMPENSATION, 1100.0, SCALEPOINT, CLAIMANT}
                 }
         );
 
@@ -204,23 +200,23 @@ public class SendingCaseSettledEventV3Case1 extends BaseUnifiedPaymentsApiTest {
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
+                        {ExpenseType.CREDIT_NOTE, 2000.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {1100.0,SCALEPOINT, INSURANCE_COMPANY}
+                        {1100.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                    {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                    {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
-                    {COMPENSATION, 1100.0, CLAIMANT, SCALEPOINT},
-                    {COMPENSATION, 1100.0, SCALEPOINT, INSURANCE_COMPANY}
+                        {DEPRECIATION, 700.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {DEDUCTIBLE, 150.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {MANUAL_REDUCTION, 50.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
+                        {COMPENSATION, 1100.0, CLAIMANT, SCALEPOINT},
+                        {COMPENSATION, 1100.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );
 

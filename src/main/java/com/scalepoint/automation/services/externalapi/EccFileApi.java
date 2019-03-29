@@ -29,7 +29,7 @@ public class EccFileApi extends AuthenticationApi {
             in = entity.getContent();
             fos = new FileOutputStream(new File(localPath));
             IOUtils.copy(in, fos);
-            log.info("File was downloaded to: "+ localPath);
+            log.info("File was downloaded to: " + localPath);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         } finally {

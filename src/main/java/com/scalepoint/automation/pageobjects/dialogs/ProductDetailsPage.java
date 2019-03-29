@@ -37,7 +37,7 @@ public class ProductDetailsPage extends Page {
         return "webshop/jsp/matching_engine/product_details_popup.jsp";
     }
 
-    public TextSearchPage closeProductDetails(){
+    public TextSearchPage closeProductDetails() {
         closeDialog(closeWindow);
         return at(TextSearchPage.class);
     }
@@ -48,22 +48,22 @@ public class ProductDetailsPage extends Page {
     }
 
     public class Asserts {
-        public Asserts assertMarketPriceSupplierVisible(){
-            assertTrue(Wait.forCondition1s(driver-> marketPriceSupplier.isDisplayed()), "Market price supplier must be shown");
+        public Asserts assertMarketPriceSupplierVisible() {
+            assertTrue(Wait.forCondition1s(driver -> marketPriceSupplier.isDisplayed()), "Market price supplier must be shown");
             return this;
         }
 
-        public Asserts assetMarketPriceSupplierInvisible(){
+        public Asserts assetMarketPriceSupplierInvisible() {
             assertFalse(Wait.checkIsDisplayed(marketPriceSupplier), "Market price supplier must be hidden");
             return this;
         }
 
-        public Asserts assertMarketPriceVisible(){
-            assertTrue(Wait.forCondition1s(driver-> marketPriceValue.isDisplayed()), "Market price must be shown");
+        public Asserts assertMarketPriceVisible() {
+            assertTrue(Wait.forCondition1s(driver -> marketPriceValue.isDisplayed()), "Market price must be shown");
             return this;
         }
 
-        public Asserts assertMarketPriceInvisible(){
+        public Asserts assertMarketPriceInvisible() {
             assertFalse(Wait.checkIsDisplayed(marketPriceValue), "Market price must be hidden");
             return this;
         }

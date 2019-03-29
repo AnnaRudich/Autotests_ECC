@@ -23,8 +23,7 @@ public class ClaimedItems {
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [ClaimedItem = "+claimedItems+"]";
+    public String toString() {
+        return "ClassPojo [ClaimedItem = " + claimedItems + "]";
     }
 }

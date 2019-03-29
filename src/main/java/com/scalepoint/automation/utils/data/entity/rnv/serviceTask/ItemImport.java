@@ -2,14 +2,15 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class ItemImport extends Item{
+public class ItemImport extends Item {
 
     private String servicePartnerNote;
     private boolean totalDamage;
 
-    public ItemImport(){}
+    public ItemImport() {
+    }
 
-    public ItemImport(ServiceLineExport serviceLineExport){
+    public ItemImport(ServiceLineExport serviceLineExport) {
 
         ItemImport itemImport = new ItemImport();
         ItemExport itemExport = serviceLineExport.getItem();

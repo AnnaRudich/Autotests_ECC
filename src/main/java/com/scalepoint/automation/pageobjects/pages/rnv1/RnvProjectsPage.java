@@ -174,7 +174,7 @@ public class RnvProjectsPage extends Page {
         return this;
     }
 
-    private String getAuditInfoPanelText(){
+    private String getAuditInfoPanelText() {
         return auditInfoPanelHeader.getText();
     }
 
@@ -184,7 +184,7 @@ public class RnvProjectsPage extends Page {
 
     public class Assertion {
 
-        public Assertion assertAuditResponseText(AuditResultEvaluationStatus auditResponse){
+        public Assertion assertAuditResponseText(AuditResultEvaluationStatus auditResponse) {
             String actualAuditResponse = getAuditInfoPanelText();
             assertThat(actualAuditResponse)
                     .as("Expected Audit response is:" + auditResponse.getResponse() + "but actual was:" + actualAuditResponse)
@@ -295,8 +295,8 @@ public class RnvProjectsPage extends Page {
     }
 
     public enum ButtonPresence {
-        SHOWN (true),
-        HIDDEN (false);
+        SHOWN(true),
+        HIDDEN(false);
 
         boolean presence;
 
@@ -321,7 +321,7 @@ public class RnvProjectsPage extends Page {
             this.response = response;
         }
 
-        String getResponse(){
+        String getResponse() {
             return response;
         }
     }

@@ -56,24 +56,12 @@ public class Window {
             return true;
         }
 
-        public void openDialogWithJavascriptHelper(WebElement openButton) {
-            openDialog(openButton);
-            JavascriptHelper.initializeCommonFunctions();
-        }
-
         public void acceptAlert() {
             try {
                 driver.switchTo().alert().accept();
                 waitForModalWindowDisappear();
             } catch (Exception ignored) {
             }
-        }
-
-        public void closeDialog() {
-            Set<String> windowHandles = driver.getWindowHandles();
-            driver.close();
-            waitForCloseModalWindow(windowHandles);
-            switchToLast();
         }
 
         public void closeDialog(WebElement closeButton) {

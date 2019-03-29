@@ -18,7 +18,6 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaym
 public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3Case2Base {
 
 
-
     @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeWithMailSendingCaseSettledEventV3Case2_5(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         close(user, item1, item2, item3, CLOSE_WITH_MAIL);
@@ -62,21 +61,21 @@ public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3C
 
         assertExpenses(event.getExpenses(), new Object[][]
                 {
-                    {CASH_COMPENSATION, 2000.0, INSURANCE_COMPANY, CLAIMANT}
+                        {CASH_COMPENSATION, 2000.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertPayments(event.getPayments(), new Object[][]
                 {
-                    {1300.0, INSURANCE_COMPANY, CLAIMANT}
+                        {1300.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
         assertObligations(event.getObligations(), new Object[][]
                 {
-                    {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
-                    {MANUAL_REDUCTION, 500.0, CLAIMANT, CLAIMANT},
-                    {COMPENSATION, 1300.0, INSURANCE_COMPANY, CLAIMANT}
+                        {DEPRECIATION, 200.0, CLAIMANT, CLAIMANT},
+                        {MANUAL_REDUCTION, 500.0, CLAIMANT, CLAIMANT},
+                        {COMPENSATION, 1300.0, INSURANCE_COMPANY, CLAIMANT}
                 }
         );
 
@@ -119,14 +118,13 @@ public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3C
                         {DEPRECIATION, 200.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
                         {DEDUCTIBLE, 250.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
                         {MANUAL_REDUCTION, 500.0, CLAIMANT, INSURANCE_COMPANY},
-                        {COMPENSATION, 550.0, CLAIMANT, INSURANCE_COMPANY }
+                        {COMPENSATION, 550.0, CLAIMANT, INSURANCE_COMPANY}
                 }
         );
 
         assertThatThirdCloseCaseEventWasCreated();
 
     }
-
 
 
     public void close(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3, SettlementClaimService.CloseCaseReason closeCaseReason) {
@@ -220,7 +218,7 @@ public class SendingCaseSettledEventV3Case2_5 extends SendingCaseSettledEventV3C
                         {DEDUCTIBLE, 250.0, INSURANCE_COMPANY, INSURANCE_COMPANY},
                         {MANUAL_REDUCTION, 500.0, CLAIMANT, SCALEPOINT},
                         {MANUAL_REDUCTION, 500.0, SCALEPOINT, INSURANCE_COMPANY},
-                        {COMPENSATION, 550.0, CLAIMANT, SCALEPOINT },
+                        {COMPENSATION, 550.0, CLAIMANT, SCALEPOINT},
                         {COMPENSATION, 550.0, SCALEPOINT, INSURANCE_COMPANY}
                 }
         );

@@ -23,9 +23,7 @@ import java.math.BigDecimal;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPAIR_AND_VALUATION;
-import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.APPROVE;
-import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.MANUAL;
-import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.REJECT;
+import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.*;
 
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
 public class IntelligentRepair2 extends BaseTest {

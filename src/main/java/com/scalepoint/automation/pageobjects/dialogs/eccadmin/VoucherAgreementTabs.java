@@ -40,7 +40,7 @@ interface VoucherAgreementTabs {
     }
 
     default <T extends BaseDialog & VoucherAgreementTabs> T selectTab(Class<T> tabClass, String tabName) {
-        SelenideElement element = $(By.xpath("//div[contains(@class,'editSupplierVoucherWindow')]//span[contains(normalize-space(text()),'"+tabName+"')]"));
+        SelenideElement element = $(By.xpath("//div[contains(@class,'editSupplierVoucherWindow')]//span[contains(normalize-space(text()),'" + tabName + "')]"));
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
         return at(tabClass);
     }

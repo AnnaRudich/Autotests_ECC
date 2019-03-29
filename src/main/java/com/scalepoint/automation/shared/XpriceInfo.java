@@ -54,7 +54,7 @@ public class XpriceInfo {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "XPriceInfo{" +
                 "productKey=" + productKey +
                 ", productId=" + productId +

@@ -15,9 +15,10 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
+
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
-    public class ReplacementDialogTests extends BaseTest{
+public class ReplacementDialogTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @Test(dataProvider = "testDataProvider",
@@ -38,10 +39,10 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
                 .openReplacementWizard()
                 .editVoucherFaceValue(newVoucherFaceValue)
 
-        .doAssert(replacementDialog -> {
-            replacementDialog.assertVoucherFaceValueIs(newVoucherFaceValue);
-            replacementDialog.assertItemPriceValueIs(newVoucherFaceValue*(100-voucherDiscount)/100);
-        });
+                .doAssert(replacementDialog -> {
+                    replacementDialog.assertVoucherFaceValueIs(newVoucherFaceValue);
+                    replacementDialog.assertItemPriceValueIs(newVoucherFaceValue * (100 - voucherDiscount) / 100);
+                });
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-592")
@@ -59,7 +60,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()
 
-        .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
+                .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-601")
@@ -88,7 +89,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
-    @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME, enabled = false)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_FROM_ME, enabled = false)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-592 ReplacementButton can be invisible")
@@ -101,7 +102,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
-    @RequiredSetting(type= FTSetting.USE_REPLACEMENT_FROM_ME)
+    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_FROM_ME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-592 Replacement through the shop is disabled")

@@ -21,7 +21,7 @@ import static com.scalepoint.automation.utils.data.entity.eventsApiEntity.update
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.*;
+import static org.awaitility.Awaitility.with;
 
 
 @SuppressWarnings("unchecked")
@@ -49,7 +49,7 @@ public class EventDatabaseApi {
     }
 
     public EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest, int eventIndex) {
-        return (EventClaimUpdated)getEventClaim(CLAIM_UPDATED, claimRequest, eventIndex);
+        return (EventClaimUpdated) getEventClaim(CLAIM_UPDATED, claimRequest, eventIndex);
     }
 
 
@@ -57,8 +57,8 @@ public class EventDatabaseApi {
         boolean notFound = true;
         int i = 0;
         EventClaim eventClaim = null;
-        while(i<20 && notFound){
-            logger.info("Looking for {}th event with type: {}, and case_number: {}", eventIndex+1, eventType.getType(), claimRequest.getCaseNumber());
+        while (i < 20 && notFound) {
+            logger.info("Looking for {}th event with type: {}, and case_number: {}", eventIndex + 1, eventType.getType(), claimRequest.getCaseNumber());
             try {
                 i++;
                 final List<EventClaim> events = getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber());
@@ -68,23 +68,23 @@ public class EventDatabaseApi {
                 }
                 eventClaim = events.get(eventIndex);
                 notFound = false;
-            } catch (NoSuchElementException ex){
+            } catch (NoSuchElementException ex) {
                 logger.info("No found element in events database");
-            } catch (InterruptedException ex){
+            } catch (InterruptedException ex) {
                 logger.error(ex);
             }
         }
 
-        if (eventClaim == null){
+        if (eventClaim == null) {
             logger.error("Please look into Events API DB, event might not have been managed to be created in time. Look into DB for {}th event({}) for case number {} of {}",
-                    eventIndex+1, eventType.getType(), claimRequest.getCaseNumber(), claimRequest.getCompany());
+                    eventIndex + 1, eventType.getType(), claimRequest.getCaseNumber(), claimRequest.getCompany());
         }
 
         return eventClaim;
     }
 
 
-    private List<String> getEventPayloadsForType(EventType type, String company, String caseNumber){
+    private List<String> getEventPayloadsForType(EventType type, String company, String caseNumber) {
         String query = String.format("select Payload from dk_outbound_queue_%s where Type = ? and JSON_VALUE(Payload, '$.case.number')= ? order by id asc", company);
         logger.info("Query: {}", query);
         final List<String> list = jdbcTemplate.queryForList(query, String.class, type.getType(), caseNumber);
@@ -93,7 +93,7 @@ public class EventDatabaseApi {
     }
 
     private List<EventClaim> getEventsForType(EventType type, List<String> payloadList) {
-        return payloadList.stream().map(json ->  {
+        return payloadList.stream().map(json -> {
             try {
                 logger.info("PayLoad: {}", json);
                 final EventClaim event = (EventClaim) new ObjectMapper().readValue(json, type.getClazz());
@@ -119,7 +119,7 @@ public class EventDatabaseApi {
         private String type;
         private Class clazz;
 
-        EventType(String type, Class clazz){
+        EventType(String type, Class clazz) {
             this.type = type;
             this.clazz = clazz;
         }
@@ -144,7 +144,7 @@ public class EventDatabaseApi {
     }
 
 
-    public void assertThatCaseSettledEventWasCreated(ClaimRequest claimRequest){
+    public void assertThatCaseSettledEventWasCreated(ClaimRequest claimRequest) {
         assertThat(getEventClaimSettled(claimRequest).getCase().getNumber())
                 .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was created in event-api")
                 .isEqualTo(claimRequest.getCaseNumber());
@@ -171,7 +171,7 @@ public class EventDatabaseApi {
     private List getEventsUpdatedList(ClaimRequest claimRequest) {
         return getEventsForType(CLAIM_UPDATED, claimRequest.getCompany(), claimRequest.getCaseNumber())
                 .stream()
-                .filter(event -> hasProperty((EventClaimUpdated)event, CASE_CLOSED))
+                .filter(event -> hasProperty((EventClaimUpdated) event, CASE_CLOSED))
                 .collect(toList());
     }
 

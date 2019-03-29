@@ -13,7 +13,7 @@ public class Data {
     private Integer userId;
     private static DatabaseApi databaseApi;
 
-    public Data(){
+    public Data() {
     }
 
     public String getEccSessionId() {

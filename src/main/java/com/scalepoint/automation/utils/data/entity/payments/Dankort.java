@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for dankort complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="dankort">
  *   &lt;complexContent>
@@ -26,15 +26,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "dankort", propOrder = {
-    "number",
-    "expMonth",
-    "expYear",
-    "cvc"
+        "number",
+        "expMonth",
+        "expYear",
+        "cvc"
 })
 public class Dankort {
 
@@ -49,11 +47,9 @@ public class Dankort {
 
     /**
      * Gets the value of the number property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getNumber() {
         return number;
@@ -61,11 +57,9 @@ public class Dankort {
 
     /**
      * Sets the value of the number property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNumber(String value) {
         this.number = value;
@@ -73,11 +67,9 @@ public class Dankort {
 
     /**
      * Gets the value of the expMonth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getExpMonth() {
         return expMonth;
@@ -85,11 +77,9 @@ public class Dankort {
 
     /**
      * Sets the value of the expMonth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExpMonth(String value) {
         this.expMonth = value;
@@ -97,11 +87,9 @@ public class Dankort {
 
     /**
      * Gets the value of the expYear property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getExpYear() {
         return expYear;
@@ -109,11 +97,9 @@ public class Dankort {
 
     /**
      * Sets the value of the expYear property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExpYear(String value) {
         this.expYear = value;
@@ -121,11 +107,9 @@ public class Dankort {
 
     /**
      * Gets the value of the cvc property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCvc() {
         return cvc;
@@ -133,11 +117,9 @@ public class Dankort {
 
     /**
      * Sets the value of the cvc property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCvc(String value) {
         this.cvc = value;

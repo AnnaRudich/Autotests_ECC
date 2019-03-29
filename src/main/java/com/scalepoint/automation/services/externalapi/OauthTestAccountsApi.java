@@ -9,11 +9,11 @@ public class OauthTestAccountsApi {
 
     private Token token;
 
-    public OauthTestAccountsApi sendRequest(){
+    public OauthTestAccountsApi sendRequest() {
         return sendRequest(Scope.CASE_INTEGRATION);
     }
 
-    public OauthTestAccountsApi sendRequest(Scope scope){
+    public OauthTestAccountsApi sendRequest(Scope scope) {
         this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
                 .formParam("grant_type", "client_credentials")
                 .formParam("client_id", "test_integration_all_tenants")
@@ -25,11 +25,11 @@ public class OauthTestAccountsApi {
         return this;
     }
 
-    public Token getToken(){
+    public Token getToken() {
         return this.token;
     }
 
-    public OauthTestAccountsApi setToken(Token token){
+    public OauthTestAccountsApi setToken(Token token) {
         this.token = token;
         return this;
     }
@@ -42,7 +42,7 @@ public class OauthTestAccountsApi {
 
         private String scope;
 
-        Scope(String scope){
+        Scope(String scope) {
             this.scope = scope;
         }
 

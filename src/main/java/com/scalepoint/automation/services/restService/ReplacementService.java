@@ -13,16 +13,16 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 
 
-public class ReplacementService extends BaseService{
+public class ReplacementService extends BaseService {
 
-    private Map<String,String> formParams = new HashMap<>();
+    private Map<String, String> formParams = new HashMap<>();
     private PrepareSaveCustomerParams prepareSaveCustomerParams;
 
-    public ReplacementService(){
+    public ReplacementService() {
         this.prepareSaveCustomerParams = new PrepareSaveCustomerParams();
     }
 
-    public Map<String,String> getFormParams(String itemId){
+    public Map<String, String> getFormParams(String itemId) {
         formParams.put("userId", data.getUserId().toString());
         formParams.put("select_all", "on");
         formParams.put("replaceType", "product");
@@ -38,9 +38,9 @@ public class ReplacementService extends BaseService{
         return formParams;
     }
 
-    public ReplacementService makeReplacement(Object claimRequest){
+    public ReplacementService makeReplacement(Object claimRequest) {
 
-        String itemId = String.valueOf(SolrApi.findProduct(getData().getDatabaseApi().findProduct(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE,INVOICE_PRICE_LOWER_THAN_10)).getId());
+        String itemId = String.valueOf(SolrApi.findProduct(getData().getDatabaseApi().findProduct(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_10)).getId());
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())

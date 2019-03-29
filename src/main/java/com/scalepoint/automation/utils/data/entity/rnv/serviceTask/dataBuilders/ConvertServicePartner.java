@@ -2,12 +2,11 @@ package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders
 
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServicePartnerExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServicePartnerImport;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.BankBuilder;
 
 public class ConvertServicePartner {
 
 
-    public static ServicePartnerImport convertServicePartner(ServicePartnerExport servicePartnerExport){
+    public static ServicePartnerImport convertServicePartner(ServicePartnerExport servicePartnerExport) {
         ServicePartnerImport servicePartnerImport = new ServicePartnerImport();
 
         servicePartnerImport.setBank(new BankBuilder().build());

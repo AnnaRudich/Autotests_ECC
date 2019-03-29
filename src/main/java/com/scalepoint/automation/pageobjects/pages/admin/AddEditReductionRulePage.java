@@ -216,7 +216,7 @@ public class AddEditReductionRulePage extends AdminBasePage {
     }
 
     public ReductionRulesPage fillSimpleDiscretionaryRRWithRoundingsAndSave(ReductionRule rr) {
-        return  fillDiscretionaryRRAndSave(rr, "5", rr.getAgeFrom1(), rr.getAgeTo1(), rr.getClaimReduction1(),
+        return fillDiscretionaryRRAndSave(rr, "5", rr.getAgeFrom1(), rr.getAgeTo1(), rr.getClaimReduction1(),
                 rr.getPriceRangeFrom1(), rr.getPriceRangeTo1(), null, null);
     }
 
@@ -227,9 +227,9 @@ public class AddEditReductionRulePage extends AdminBasePage {
         publishRR();
         selectDiscretionaryRuleOption();
         descriptionFirstField.sendKeys(rr.getDescription1());
-        if(Strings.isNullOrEmpty(roundbase)){
+        if (Strings.isNullOrEmpty(roundbase)) {
             this.useRounding.deselect();
-        }else{
+        } else {
             this.useRounding.select();
             this.roundbase.sendKeys(roundbase);
         }
@@ -238,10 +238,10 @@ public class AddEditReductionRulePage extends AdminBasePage {
         clReductiontoFirstField.sendKeys(claimReduction);
         priceFromFirstField.sendKeys(priceRangeFrom);
         priceToFirstField.sendKeys(priceRangeTo);
-        if(!Strings.isNullOrEmpty(documentationValue)) {
+        if (!Strings.isNullOrEmpty(documentationValue)) {
             selectDocumentationDropValue(0, documentationValue);
         }
-        if(!Strings.isNullOrEmpty(ratingDropValue)) {
+        if (!Strings.isNullOrEmpty(ratingDropValue)) {
             selectRatingDropValue(0, ratingDropValue);
         }
         return save();

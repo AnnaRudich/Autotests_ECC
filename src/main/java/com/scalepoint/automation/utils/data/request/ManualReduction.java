@@ -14,8 +14,10 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @NoArgsConstructor
 public class ManualReduction {
 
-    @NonNull private long caseId;
-    @NonNull private String manualReductionAmount;
+    @NonNull
+    private long caseId;
+    @NonNull
+    private String manualReductionAmount;
     private boolean manualReductionFlag = true;
     private String manualReductionText = "Manual Reduction";
 }

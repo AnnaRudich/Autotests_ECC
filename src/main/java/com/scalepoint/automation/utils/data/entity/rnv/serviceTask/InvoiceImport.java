@@ -7,8 +7,9 @@ import java.util.List;
 public class InvoiceImport extends Invoice {
 
     private List<InvoiceLine> invoiceLines;
-    @XmlElementWrapper(name="invoiceLines")
-    @XmlElement(name="invoiceLine")
+
+    @XmlElementWrapper(name = "invoiceLines")
+    @XmlElement(name = "invoiceLine")
     public List<InvoiceLine> getInvoiceLines() {
         return invoiceLines;
     }

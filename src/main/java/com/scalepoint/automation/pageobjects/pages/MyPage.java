@@ -69,7 +69,7 @@ public class MyPage extends Page {
         return Page.at(NewCustomerPage.class);
     }
 
-    public EditPreferencesPage openEditPreferences(){
+    public EditPreferencesPage openEditPreferences() {
         editPreferences.click();
         return Page.at(EditPreferencesPage.class);
     }

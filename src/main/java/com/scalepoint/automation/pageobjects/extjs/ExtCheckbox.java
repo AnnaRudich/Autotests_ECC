@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class ExtCheckbox extends ExtElement implements Actions{
+public class ExtCheckbox extends ExtElement implements Actions {
 
     public static final String INPUT = "input";
     public static final String ARIA_CHECKED = "aria-checked";

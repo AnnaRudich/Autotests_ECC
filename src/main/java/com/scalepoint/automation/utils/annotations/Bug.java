@@ -9,11 +9,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface Bug {
     String bug();
+
     /**
      * The optional reason why the operations is ignored.
      */
     String value() default "";
 
     boolean alwaysRun() default false;
+
     boolean enabled() default false;
 }

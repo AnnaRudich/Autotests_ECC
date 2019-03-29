@@ -54,5 +54,5 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
         }
     }
 
-    
+
 }

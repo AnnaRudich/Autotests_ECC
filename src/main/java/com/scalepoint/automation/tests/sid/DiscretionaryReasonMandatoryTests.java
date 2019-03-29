@@ -110,12 +110,12 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
     }
 
     /*
-    * WHEN: Enable the Make "Discretionary reason" mandatory to fill option in FT
-    * AND: Add the item with discretionary depreciation = 0%
-    * AND: Select depreciable valuation
-    * AND: click OK button
-    * THEN: the field is disabled; the dialog is closed
-    */
+     * WHEN: Enable the Make "Discretionary reason" mandatory to fill option in FT
+     * AND: Add the item with discretionary depreciation = 0%
+     * AND: Select depreciable valuation
+     * AND: click OK button
+     * THEN: the field is disabled; the dialog is closed
+     */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation=0%")
     public void charlie_508_5_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,

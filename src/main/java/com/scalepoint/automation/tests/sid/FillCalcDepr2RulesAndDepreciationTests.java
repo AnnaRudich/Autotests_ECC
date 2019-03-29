@@ -53,7 +53,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .parseValuationRow(NEW_PRICE)
-                .doAssert(sid-> sid.assertDepreciationPercentageIs(41))
+                .doAssert(sid -> sid.assertDepreciationPercentageIs(41))
                 .enterAgeYears("6")
                 .automaticDepreciation(true)
                 .parseValuationRow(NEW_PRICE)

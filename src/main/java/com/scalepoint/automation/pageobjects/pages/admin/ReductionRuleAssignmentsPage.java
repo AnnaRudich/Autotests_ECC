@@ -59,7 +59,7 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
         return this;
     }
 
-    public Assignment parseLine(WebElement assignmentLine){
+    public Assignment parseLine(WebElement assignmentLine) {
         Assignment assignment = new Assignment();
         assignment.setCompany(assignmentLine.findElement(By.xpath("./td[1]")).getText());
         assignment.setPseudoCategory(assignmentLine.findElement(By.xpath("./td[2]")).getText());
@@ -75,7 +75,7 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     public class Asserts {
         public ReductionRuleAssignmentsPage.Asserts assertIsFirstLineAssignmentAdded(Assignment assignment) {
             Assignment parsedAssigment = parseLine(firstAssigment);
-            assertThat(parsedAssigment).isEqualToComparingOnlyGivenFields(assignment,"company", "policy");
+            assertThat(parsedAssigment).isEqualToComparingOnlyGivenFields(assignment, "company", "policy");
             assertThat(parsedAssigment.getPseudoCategory()).contains(assignment.getPseudoCategory());
             return this;
         }

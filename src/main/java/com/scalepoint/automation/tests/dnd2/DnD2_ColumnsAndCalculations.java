@@ -11,19 +11,18 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
-import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-514")
-public class DnD2_ColumnsAndCalculations extends BaseTest{
+public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     private int depreciationValue = 20;
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when no depreciation and no voucher is added to claim line")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceWhenNoVoucherIsUsedAndDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceWhenNoVoucherIsUsedAndDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withDepreciation(0)
@@ -32,15 +31,15 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
-                        asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice());
-                        asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice());
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice());
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice());
                 });
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher is added to claim line but no depreciation")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusVoucherValueWhenDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusVoucherValueWhenDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withDepreciation(0)
@@ -51,15 +50,15 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         settlementDialog.closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * percentage/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * percentage/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * percentage / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * percentage / 100));
                 });
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withCategory(claimItem.getCategoryGroupBorn())
@@ -74,15 +73,15 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * depreciationValue/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * depreciationValue/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
                 });
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAdded(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAdded(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withDepreciation(depreciationValue)
@@ -92,15 +91,15 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * depreciationValue/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * depreciationValue/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
                 });
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line and red rule is discretionary type")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAddedAndRedRuleIsDiscretionaryType(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAddedAndRedRuleIsDiscretionaryType(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withDepreciation(depreciationValue)
@@ -109,8 +108,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * depreciationValue/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()-(claimItem.getTrygNewPrice() * depreciationValue/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
                 });
     }
 
@@ -120,7 +119,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLineAndRedRuleIsDiscretionaryType(
-            @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, DiscretionaryReason discretionaryReason){
+            @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, DiscretionaryReason discretionaryReason) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
@@ -129,25 +128,25 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                 .enableAge()
                 .setDiscountAndDepreciation(true)
                 .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonScalepoint());
-                double voucherPercentage = settlementDialog.getVoucherPercentage();
-                double depreciationPercentage = settlementDialog.getDepreciationPercentage();
-                SettlementPage settlementPage = settlementDialog.closeSidWithOk();
+        double voucherPercentage = settlementDialog.getVoucherPercentage();
+        double depreciationPercentage = settlementDialog.getDepreciationPercentage();
+        SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
-                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
-                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
+                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
                 });
         settlementPage.getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
                 });
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "convert for claim line without voucher and depreciation and no reduction rule")
-    public void charlie514_claimLineWithoutVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_claimLineWithoutVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
@@ -169,7 +168,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "convert for claim line with voucher and no depreciation and reduction rule")
-    public void charlie514_claimLineWithVoucherAndNoDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_claimLineWithVoucherAndNoDepreciationAmount(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withCategory(claimItem.getCategoryGroupBorn())
@@ -179,19 +178,20 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
-                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
-                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
+                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
+                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
                 });
         settlementPage.getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
                 });
     }
+
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "convert for claim line with voucher and depreciation and no reduction rule")
-    public void charlie514_claimLineWithVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_claimLineWithVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withCategory(claimItem.getCategoryGroupBorn())
@@ -199,16 +199,16 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
-                        .closeSidWithOk();
+                .closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
                     asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice());
-                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice()*(1- (double) depreciationValue /100));
+                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice() * (1 - (double) depreciationValue / 100));
                 });
         settlementPage.getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()*(1- (double) depreciationValue /100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1- (double) depreciationValue /100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() * (1 - (double) depreciationValue / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() * (1 - (double) depreciationValue / 100));
                 });
     }
 
@@ -216,7 +216,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
-    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem){
+    public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withCategory(claimItem.getCategoryGroupBorn())
@@ -229,13 +229,13 @@ public class DnD2_ColumnsAndCalculations extends BaseTest{
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
-                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100));
-                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
+                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
                 });
         settlementPage.getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice()*(1-voucherPercentage/100)*(1-depreciationPercentage/100));
+                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
                 });
     }
 }

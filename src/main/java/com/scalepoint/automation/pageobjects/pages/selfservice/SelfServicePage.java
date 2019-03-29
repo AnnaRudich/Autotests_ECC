@@ -15,16 +15,10 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.refresh;
+import static com.codeborne.selenide.Selenide.*;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static com.scalepoint.automation.utils.Wait.*;
+import static org.testng.Assert.*;
 
 public class SelfServicePage extends Page {
 
@@ -301,32 +295,32 @@ public class SelfServicePage extends Page {
         }
 
         public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
-            assertFalse(getPurchaseDate(lineNumber).equals(" "), "Purchase Date should not be empty");
+            assertNotEquals(" ", getPurchaseDate(lineNumber), "Purchase Date should not be empty");
             return this;
         }
 
         public Asserts assertNewPriceIsNotEmpty(int lineNumber) {
-            assertFalse(getNewPrice(lineNumber).equals(" "), "Purchase Price should not be empty");
+            assertNotEquals(" ", getNewPrice(lineNumber), "Purchase Price should not be empty");
             return this;
         }
 
         public Asserts assertPurchasePriceIsNotEmpty(int lineNumber) {
-            assertFalse(getPurchasePrice(lineNumber).equals(" "), "Purchase Price should not be empty");
+            assertNotEquals(" ", getPurchasePrice(lineNumber), "Purchase Price should not be empty");
             return this;
         }
 
         public Asserts assertDescriptionIsNotEmpty(int lineNumber) {
-            assertFalse(getDescriptionText(lineNumber).equals(" "), "Description should not be empty");
+            assertNotEquals(" ", getDescriptionText(lineNumber), "Description should not be empty");
             return this;
         }
 
         public Asserts assertCategoryIsNotEmpty(int lineNumber) {
-            assertFalse(getCategoryText(lineNumber).equals(" "), "Category should not be empty");
+            assertNotEquals(" ", getCategoryText(lineNumber), "Category should not be empty");
             return this;
         }
 
         public Asserts assertCustomerDemandIsNotEmpty(int lineNumber) {
-            assertFalse(getCustomerDemandPrice(lineNumber).equals(" "), "Customer demand should not be empty");
+            assertNotEquals(" ", getCustomerDemandPrice(lineNumber), "Customer demand should not be empty");
             return this;
         }
 

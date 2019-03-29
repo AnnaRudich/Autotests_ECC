@@ -1,12 +1,7 @@
 
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest;
 import lombok.ToString;
 
@@ -16,13 +11,12 @@ import java.util.Map;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "$ref"
+        "$ref"
 })
 public class PartyRef {
 
     /**
      * Reference id to object. Defined in object by $id.
-     * 
      */
     @JsonProperty("$ref")
     private String $ref;
@@ -31,7 +25,6 @@ public class PartyRef {
 
     /**
      * Reference id to object. Defined in object by $id.
-     * 
      */
     public String get$ref() {
         return $ref;
@@ -39,7 +32,6 @@ public class PartyRef {
 
     /**
      * Reference id to object. Defined in object by $id.
-     * 
      */
     public void set$ref(String $ref) {
         this.$ref = $ref;
@@ -47,7 +39,7 @@ public class PartyRef {
 
     @Override
     public String toString() {
-        return BaseUnifiedPaymentsApiTest.PartyReference.getByValue(Integer.parseInt($ref.replaceAll("\\D+",""))).name();
+        return BaseUnifiedPaymentsApiTest.PartyReference.getByValue(Integer.parseInt($ref.replaceAll("\\D+", ""))).name();
     }
 
     @JsonAnyGetter

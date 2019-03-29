@@ -10,24 +10,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Valuations")
-public class Valuations
-{
+public class Valuations {
     @XmlElement(name = "Valuation")
     private Valuation[] Valuation;
 
-    public Valuation[] getValuation ()
-    {
+    public Valuation[] getValuation() {
         return Valuation;
     }
 
-    public void setValuation (Valuation[] Valuation)
-    {
+    public void setValuation(Valuation[] Valuation) {
         this.Valuation = Valuation;
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [Valuation = "+Valuation+"]";
+    public String toString() {
+        return "ClassPojo [Valuation = " + Valuation + "]";
     }
 }

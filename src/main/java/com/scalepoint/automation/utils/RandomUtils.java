@@ -18,11 +18,5 @@ public class RandomUtils {
         Random random = new Random();
         return random.nextInt(upperLimit);
     }
-
-    public static int randomSmallInt() {
-        Random random = new Random();
-        return random.nextInt(1000);
-    }
-
 }
 

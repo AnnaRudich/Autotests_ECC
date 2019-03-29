@@ -21,9 +21,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.visible;
-import static com.scalepoint.automation.utils.Wait.waitForInvisible;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -89,22 +87,22 @@ public class CustomerDetailsPage extends BaseClaimPage {
         return at(SettlementPage.class);
     }
 
-    public SelfServicePasswordDialog newSelfServicePassword(){
+    public SelfServicePasswordDialog newSelfServicePassword() {
         newPasswordButton.click();
         return BaseDialog.at(SelfServicePasswordDialog.class);
     }
 
-    public CustomerDetailsPage selectDamageDate(LocalDate date){
+    public CustomerDetailsPage selectDamageDate(LocalDate date) {
         $(By.xpath("//a[@href='javascript:EditDamageDate()']")).click();
         $(By.id("damageDate-inputEl")).click();
         waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
         waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='"+date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0,3).toLowerCase()+"']")).click();
-        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='"+date.getYear()+"']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
+        $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
         clickUsingJsIfSeleniumClickReturnError($(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]")).shouldBe(Condition.visible));
         waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
-        $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='"+date.getDayOfMonth()+"']")).click();
+        $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='" + date.getDayOfMonth() + "']")).click();
         waitForInvisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//div[contains(@id, 'toolbar')]//div[@class='x-box-inner']//a")).click();
         waitForInvisible($(By.id("damageDate-inputEl")));
