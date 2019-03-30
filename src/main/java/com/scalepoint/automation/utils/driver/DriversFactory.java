@@ -155,6 +155,7 @@ public enum DriversFactory {
         options.addArguments("allow-http-screen-capture");
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
+        options.setProxy(null);
         capabilities.setCapability("nativeEvents", false);
         capabilities.setJavascriptEnabled(true);
         return options.merge(capabilities);
