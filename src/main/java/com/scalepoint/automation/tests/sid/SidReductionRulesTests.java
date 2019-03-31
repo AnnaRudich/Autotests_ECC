@@ -44,10 +44,10 @@ public class SidReductionRulesTests extends BaseTest {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
-                .setNewPrice(Constants.PRICE_2400)
-                .setCustomerDemand(Constants.PRICE_100_000)
                 .setCategory(claimItem.getExistingCat3_Telefoni())
                 .setSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .setNewPrice(Constants.PRICE_2400)
+                .setCustomerDemand(Constants.PRICE_100_000)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .enableAge("2")
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
