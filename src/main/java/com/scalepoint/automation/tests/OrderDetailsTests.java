@@ -12,6 +12,7 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.OrderDetails;
+import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.Assert;
@@ -360,14 +361,15 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
-    public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem) {
+    public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryGroupBorn())
                 .setSubCategory(claimItem.getCategoryBornBabyudstyr())
                 .setNewPrice(900.00)
-                .setDescription(claimItem.getTextFieldSP());
+                .setDescription(claimItem.getTextFieldSP())
+                .fillVoucher(voucher.getExistingVoucherForDistances());
 
         Double activeValuation = dialog.getCashCompensationValue();
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)
