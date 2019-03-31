@@ -56,6 +56,8 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
+    @FindBy(id = "edit-policy-cancel-button-btnInnerEl")
+    private WebElement cancelPolicy;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
@@ -64,9 +66,6 @@ public class SettlementPage extends BaseClaimPage {
     private By groupButton = By.xpath("//span[contains(@style,'groupIcon.png')]");
     private By deleteGroupButton = By.xpath("//span[contains(@style,'ungroupIcon.png')]");
     private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
-
-    private String cancelPolicy = "#edit-policy-cancel-button-btnInnerEl";
-
 
     private String sendNotToRepairLineIconByDescriptionXpath =
             "//span[contains(text(), '$1')]/ancestor::tr/td[contains(@class, 'repairValuationColumn')]//img[contains(@src, 'view.png')]";
@@ -173,8 +172,9 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementDialog openSid() {
-        if ($(cancelPolicy).isDisplayed()) {
-            $(cancelPolicy).click();
+        boolean displayedPolicy = Wait.checkIsDisplayed(cancelPolicy);
+        if (displayedPolicy) {
+            cancelPolicy.click();
         }
         return functionalMenu.addManually();
     }

@@ -5,4 +5,7 @@
             <class name="com.scalepoint.automation.tests.sidQUnit.SidQunitTests"/>
         </classes>
     </test>
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
 </suite>

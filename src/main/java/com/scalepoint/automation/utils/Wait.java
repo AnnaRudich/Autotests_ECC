@@ -142,8 +142,7 @@ public class Wait {
     }
 
     public static void waitElementDisappeared(By element) {
-        getWebDriverWaitWithDefaultTimeoutAndPooling()
-                .until(ExpectedConditions.invisibilityOfElementLocated(element));
+        forConditionShort(ExpectedConditions.invisibilityOfElementLocated(element), 5, 100);
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {
