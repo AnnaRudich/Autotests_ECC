@@ -17,7 +17,6 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
 
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
 public class ReplacementDialogTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")

@@ -34,7 +34,6 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Verify Order page default")
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, OrderDetails orderDetails) {
@@ -72,7 +71,6 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
@@ -125,7 +123,6 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make product order using shop product search")
@@ -191,7 +188,6 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  350
      * Tilbageværende erstatning :  0,00
      */
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Credit card")
     public void charlie540_ordersPageWhenWeUseCreditCard(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
@@ -226,7 +222,6 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
 
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Bank transfer")
     public void charlie540_ordersPageWhenWeUseBankTransfer(User user, Claim claim, OrderDetails orderDetails) {
@@ -275,7 +270,6 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0.00
      * Tilbageværende erstatning :  949.00
      */
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
@@ -311,7 +305,6 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingValue() - price, 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is equal to " + price);
     }
 
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
@@ -357,7 +350,6 @@ public class OrderDetailsTests extends BaseTest {
      * complete order using Credit card
      */
 
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
