@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.entity;
 
 import com.scalepoint.automation.utils.RandomUtils;
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@Data
 public class GenericItem {
 
     private String name = RandomUtils.randomName("GenericItem");
@@ -18,29 +20,4 @@ public class GenericItem {
     private String category;
 
     private String price = "100";
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public GenericItem setPrice(String price) {
-        this.price = price;
-        return this;
-    }
 }

@@ -116,7 +116,7 @@ public class AddShopDialog extends BaseDialog {
         postalCodeField.sendKeys(shop.getPostalCode());
         cityField.sendKeys(shop.getShopCity());
         phoneField.sendKeys(shop.getPhone());
-        eVoucherNotificationEmails.sendKeys(shop.geteVoucherEmail());
+        eVoucherNotificationEmails.sendKeys(shop.getEvoucherEmail());
     }
 
 }

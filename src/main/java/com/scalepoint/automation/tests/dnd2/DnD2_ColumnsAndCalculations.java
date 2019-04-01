@@ -10,7 +10,7 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -119,7 +119,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLineAndRedRuleIsDiscretionaryType(
-            @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, DiscretionaryReason discretionaryReason) {
+            @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
@@ -127,7 +127,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                         .withSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType()))
                 .enableAge()
                 .setDiscountAndDepreciation(true)
-                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReasonScalepoint());
+                .selectDiscretionaryReason(translations.getDiscretionaryReason().getFairValue());
         double voucherPercentage = settlementDialog.getVoucherPercentage();
         double depreciationPercentage = settlementDialog.getDepreciationPercentage();
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();

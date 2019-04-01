@@ -11,8 +11,8 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Acquired;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,6 +34,11 @@ public class SelfService2Tests extends BaseTest {
         newPasswordToSelfService = null;
     }
 
+    @Test(dataProvider = "testDataProvider")
+    public void test(Translations translations) {
+        System.out.println(translations);
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -41,7 +46,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
-    public void Charlie735_addLineWithDocumentation(User user, Claim claim, Acquired acquired) {
+    public void Charlie735_addLineWithDocumentation(User user, Claim claim, Translations translations) {
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -61,7 +66,7 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemsListSizeIs(1))
 
                 .startEditItem()
-                .selectAcquired(acquired.getAcquiredNew())
+                .selectAcquired(translations.getAcquired().getAcquiredNew())
                 .finishEditItem()
 
                 .deleteItem()

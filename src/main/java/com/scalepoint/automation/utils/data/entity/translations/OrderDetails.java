@@ -1,4 +1,6 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.translations;
+
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@Data
 public class OrderDetails {
     @XmlElement
     private String indemnity;
@@ -21,32 +24,11 @@ public class OrderDetails {
     @XmlElement
     private String totalText;
 
-
     public String getIndemnity(String companyName) {
         return substituteParams(indemnity, companyName);
     }
 
-    public String getOrderedItems() {
-        return orderedItems;
-    }
-
-    public String getWithdrawalls() {
-        return withdrawalls;
-    }
-
     private String substituteParams(String message, String companyName) {
         return message.replace("{companyName}", companyName);
-    }
-
-    public String getDeposits() {
-        return deposits;
-    }
-
-    public String getRemainingIdemnity() {
-        return remainingIdemnity;
-    }
-
-    public String getTotalText() {
-        return totalText;
     }
 }

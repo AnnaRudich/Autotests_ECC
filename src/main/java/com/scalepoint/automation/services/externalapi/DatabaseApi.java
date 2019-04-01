@@ -2,7 +2,7 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
-import com.scalepoint.automation.utils.data.entity.CwaTaskLog;
+import com.scalepoint.automation.shared.CwaTaskLog;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
 import org.apache.commons.io.IOUtils;

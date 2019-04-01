@@ -9,12 +9,10 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.OrderDetails;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
+import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,11 +34,13 @@ public class OrderDetailsTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Verify Order page default")
-    public void charlie540_ordersPageIsEmpty(User user, Claim claim, OrderDetails orderDetails) {
+    public void charlie540_ordersPageIsEmpty(User user, Claim claim, Translations translations) {
         String companyName = user.getCompanyName();
 
         OrderDetailsPage ordersPage = loginAndCreateClaim(user, claim).
                 toOrdersDetailsPage();
+
+        OrderDetails orderDetails = translations.getOrderDetails();
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(companyName));
@@ -74,7 +74,10 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
-    public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+    public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, Translations translations) {
+
+        OrderDetails orderDetails = translations.getOrderDetails();
+        
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -126,7 +129,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make product order using shop product search")
-    public void charlie540_ordersPageWhenWeWithdrawMoney(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+    public void charlie540_ordersPageWhenWeWithdrawMoney(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
@@ -157,6 +160,7 @@ public class OrderDetailsTests extends BaseTest {
 
         double withdrawValue = activeValuation - productPrice;
 
+        OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
 
@@ -190,7 +194,7 @@ public class OrderDetailsTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Credit card")
-    public void charlie540_ordersPageWhenWeUseCreditCard(User user, Claim claim, Payments payments, OrderDetails orderDetails) {
+    public void charlie540_ordersPageWhenWeUseCreditCard(User user, Claim claim, Payments payments, Translations translations) {
         ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -204,6 +208,7 @@ public class OrderDetailsTests extends BaseTest {
                 .checkoutWithCreditCard(payments.getDankort())
                 .toOrdersDetailsPage();
 
+        OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
 
@@ -224,7 +229,7 @@ public class OrderDetailsTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Bank transfer")
-    public void charlie540_ordersPageWhenWeUseBankTransfer(User user, Claim claim, OrderDetails orderDetails) {
+    public void charlie540_ordersPageWhenWeUseBankTransfer(User user, Claim claim, Translations translations) {
         ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -238,6 +243,7 @@ public class OrderDetailsTests extends BaseTest {
                 .checkoutWithBankTransfer()
                 .toOrdersDetailsPage();
 
+        OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
 
@@ -275,7 +281,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
-    public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+    public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductNameAndCategory(claimItem.getSetDialogTextMatch(), claimItem.getExistingSubCat3_Mobiltelefoner())
@@ -292,6 +298,7 @@ public class OrderDetailsTests extends BaseTest {
                 .toOrdersDetailsPage()
                 .cancelItem();
 
+        OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
         Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
@@ -310,7 +317,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
-    public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, OrderDetails orderDetails) {
+    public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductNameAndCategory(claimItem.getSetDialogTextMatch(), claimItem.getExistingSubCat3_Mobiltelefoner())
@@ -330,6 +337,7 @@ public class OrderDetailsTests extends BaseTest {
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
+        OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
         Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
@@ -353,7 +361,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
-    public void shopSmokeE2E(User user, Claim claim, OrderDetails orderDetails, Payments payments, ClaimItem claimItem, Voucher voucher) {
+    public void shopSmokeE2E(User user, Claim claim, Translations translations, Payments payments, ClaimItem claimItem, Voucher voucher) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -378,6 +386,7 @@ public class OrderDetailsTests extends BaseTest {
                 .checkoutWithCreditCard(payments.getDankort())
                 .toOrdersDetailsPage();
 
+        OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(Math.abs(ordersPage.getIdemnityValue() - activeValuation), 0.0, "Idemnity value " + ordersPage.getIdemnityValue() + " must be equal to cashValue " + activeValuation + " of the voucher");
 

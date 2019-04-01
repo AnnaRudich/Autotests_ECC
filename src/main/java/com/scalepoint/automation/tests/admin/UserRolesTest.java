@@ -8,8 +8,8 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
@@ -142,8 +142,8 @@ public class UserRolesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to create new role with all enabled options. The RR is displayed in Roles list")
-    public void charlie551_createNewRoleAllOptionsEnabled(Roles role) {
-        String roleName = role.getRoleName();
+    public void charlie551_createNewRoleAllOptionsEnabled(Translations translations) {
+        String roleName = translations.getRoles().getRoleName();
         login(getSystemUser(), RolesPage.class)
                 .toAddRolePage()
                 .createNewRoleAllRolesEnabled(roleName)
@@ -160,15 +160,15 @@ public class UserRolesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to select new role for user creation. The new role is displayed on Add user page")
-    public void charlie551_newRoleIsAvailableUserCreation(SystemUser user, Roles role) throws Exception {
-        String roleName = role.getRoleName();
+    public void charlie551_newRoleIsAvailableUserCreation(SystemUser user, Translations translations) {
+        String roleName = translations.getRoles().getRoleName();
         login(getSystemUser(), RolesPage.class)
                 .toAddRolePage()
                 .createNewRoleAllRolesEnabled(roleName)
                 .to(AdminPage.class)
                 .toUsersPage()
                 .toUserCreatePage()
-                .createNewSPAdminNewRole(user, role)
+                .createNewSPAdminNewRole(user, roleName)
                 .doAssert(usersPage -> usersPage.assertUserExists(user));
     }
 

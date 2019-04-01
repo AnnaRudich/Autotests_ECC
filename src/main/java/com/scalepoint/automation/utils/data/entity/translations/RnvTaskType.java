@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.translations;
 
 import lombok.Data;
 
@@ -7,20 +7,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by bza on 6/22/2017.
- */
-
-@XmlRootElement
+@XmlRootElement(name = "rnvtasktype")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
-public class Assignment {
+public class RnvTaskType {
 
     @XmlElement
-    private String company;
-    @XmlElement
-    private String pseudoCategory;
-    @XmlElement
-    private String policy;
+    private String repair;
 
 }

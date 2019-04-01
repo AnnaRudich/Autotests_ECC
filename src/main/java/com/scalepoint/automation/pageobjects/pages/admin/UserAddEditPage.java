@@ -5,7 +5,6 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.Roles;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -363,12 +362,12 @@ public class UserAddEditPage extends AdminBasePage {
     /**
      * This method disable  It manager role and clicks new Role
      */
-    public void selectNewRoleSPUser(SystemUser user, Roles roles) {
+    public void selectNewRoleSPUser(String roleName) {
         if (itManCheckBox.isSelected()) {
             itManCheckBox.click();
         }
-        WebElement option = find(byRolesXpath, roles.getRoleName());
-        if (option.getText().equals(roles.getRoleName())) {
+        WebElement option = find(byRolesXpath, roleName);
+        if (option.getText().equals(roleName)) {
             scrollTo(option);
             existingRolesBox.get(existingRolesBox.size() - 1).click();
         }
@@ -383,7 +382,7 @@ public class UserAddEditPage extends AdminBasePage {
         return getAlertTextAndAccept().split(" ")[1];
     }
 
-    public UsersPage createNewSPAdminNewRole(SystemUser user, Roles roles) {
+    public UsersPage createNewSPAdminNewRole(SystemUser user, String roleName) {
         WebElement option = find(byCompanyXpath, user.getCompany());
         if (option.getText().trim().equals(user.getCompany())) {
             option.click();
@@ -395,7 +394,7 @@ public class UserAddEditPage extends AdminBasePage {
         }
 
         fillUserGeneralData(user);
-        selectNewRoleSPUser(user, roles);
+        selectNewRoleSPUser(roleName);
         return selectSaveOption();
     }
 

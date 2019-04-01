@@ -69,52 +69,16 @@ public class TestData {
         return (Claim) getData(Data.CLAIM);
     }
 
-    public static Roles getRoles() {
-        return (Roles) getData(Data.ROLES);
-    }
-
     public static ClaimItem getClaimItem() {
         return (ClaimItem) getData(Data.CLAIMITEM);
-    }
-
-    public static TextSearch getTextSearch() {
-        return (TextSearch) getData(Data.TEXTSEARCH);
-    }
-
-    public static Mail getMails() {
-        return (Mail) getData(Data.MAILS);
-    }
-
-    public static Errors getErrors() {
-        return (Errors) getData(Data.ERRORS);
-    }
-
-    public static Notifications getNotifications() {
-        return (Notifications) getData(Data.NOTIFICATIONS);
     }
 
     public static GenericItem getGenericItem() {
         return (GenericItem) getData(Data.GENERICITEM);
     }
 
-    public static DepreciationType getDepreciationType() {
-        return (DepreciationType) getData(Data.DEPRECIATIONTYPE);
-    }
-
-    public static RRLinesFields getRRLinesFields() {
-        return (RRLinesFields) getData(Data.RRLINEFIELDS);
-    }
-
     public static ServiceAgreement getServiceAgreement() {
         return (ServiceAgreement) getData(Data.SERVAGREEMENT);
-    }
-
-    public static OrderDetails getOrderDetails() {
-        return (OrderDetails) getData(Data.ORDERDETAILS);
-    }
-
-    public static PriceRule getPriceRule() {
-        return (PriceRule) getData(Data.PRICERULE);
     }
 
     public static ClaimLineGroup getClaimLineGroup() {
@@ -129,8 +93,8 @@ public class TestData {
         return (Payments) getData(Data.PAYMENTS);
     }
 
-    public static DiscretionaryReason getDiscretionaryReason() {
-        return (DiscretionaryReason) getData(Data.DISCRETIONARYREASON);
+    public static Translations getTranslations() {
+        return (Translations) getData(Data.TRANSLATIONS);
     }
 
     public static ClaimRequest getClaimRequest() {
@@ -145,16 +109,8 @@ public class TestData {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
     }
 
-    public static Acquired getAcquired() {
-        return (Acquired) getData(Data.ACQUIRED);
-    }
-
     public static EccIntegration getEccIntegration() {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
-    }
-
-    public static RnvTaskType getRnvTaskType() {
-        return (RnvTaskType) getData(Data.RNVTASKTYPE);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -162,10 +118,6 @@ public class TestData {
         Map<ClaimStatus, String> statusPerText = new HashMap<>();
         ((ClaimStatuses) getData(Data.CLAIM_STATUS)).getClaimStatuses().forEach(state -> statusPerText.put(ClaimStatus.findByStatus(state.getStatus()), state.getName()));
         return statusPerText;
-    }
-
-    public static PasswordsVerification getPasswordRules() {
-        return (PasswordsVerification) getData(Data.PASSWORDVERIFICATION);
     }
 
     private static <T> T getData(Data data) {
@@ -243,31 +195,19 @@ public class TestData {
         CATEGORIES("Category.xml", Category.class),
         INSURANCECOMPANY("InsuranceCompany.xml", InsuranceCompany.class),
         REDUCTIONRULE("ReductionRule.xml", ReductionRule.class),
-        ROLES("Roles.xml", Roles.class),
         CLAIM("Claim.xml", Claim.class),
         CLAIMITEM("ClaimItem.xml", ClaimItem.class),
-        TEXTSEARCH("TextSearch.xml", TextSearch.class),
-        MAILS("Mail.xml", Mail.class),
-        ERRORS("Errors.xml", Errors.class),
-        NOTIFICATIONS("Notifications.xml", Notifications.class),
         GENERICITEM("GenericItem.xml", GenericItem.class),
-        PASSWORDVERIFICATION("PasswordsVerification.xml", PasswordsVerification.class),
-        DEPRECIATIONTYPE("DepreciationType.xml", DepreciationType.class),
-        RRLINEFIELDS("RRLinesFields.xml", RRLinesFields.class),
         SERVAGREEMENT("ServiceAgreement.xml", ServiceAgreement.class),
-        ORDERDETAILS("OrderDetails.xml", OrderDetails.class),
-        PRICERULE("PriceRule.xml", PriceRule.class),
         CLGROUP("ClaimLineGroup.xml", ClaimLineGroup.class),
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
-        DISCRETIONARYREASON("DiscretionaryReason.xml", DiscretionaryReason.class),
         CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
-        ACQUIRED("Acquired.xml", Acquired.class),
-        RNVTASKTYPE("RnVTaskType.xml", RnvTaskType.class);
+        TRANSLATIONS("Translations.xml", Translations.class);
 
         private String fileName;
         private JAXBContext context;

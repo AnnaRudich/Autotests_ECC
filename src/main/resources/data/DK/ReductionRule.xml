@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <reductionRule>
-    <description1>Description1</description1>
     <ageFrom1>0</ageFrom1>
     <ageTo1>4</ageTo1>
     <ageFrom2>5</ageFrom2>
     <ageTo2>7</ageTo2>
     <claimReduction1>11</claimReduction1>
-    <claimReduction2>12</claimReduction2>
     <policyRangeFrom1>1000</policyRangeFrom1>
     <policyRangeFrom2>4000</policyRangeFrom2>
     <policyRangeTo1>3000</policyRangeTo1>
@@ -17,5 +15,4 @@
     <priceRangeFrom2>4000</priceRangeFrom2>
     <priceRangeTo1>3000</priceRangeTo1>
     <priceRangeTo2>7000</priceRangeTo2>
-    <policyAssignment></policyAssignment>
 </reductionRule>

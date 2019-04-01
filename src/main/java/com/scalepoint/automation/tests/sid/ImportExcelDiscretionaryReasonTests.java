@@ -8,7 +8,7 @@ import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.DiscretionaryReason;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -52,15 +52,17 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel and adding manually discretionary valuation" +
             " Selected reason 1 is still applicable for the converted item")
     public void charlie508_2_ImportEcxelAddManuallyDiscrValuation(@UserCompany(TRYGFORSIKRING) User trygUser,
-                                                                  Claim claim, DiscretionaryReason discretionaryReason) {
+                                                                  Claim claim, Translations translations) {
         String claimLineDescription = "APPLE iphone 1";
+        String maxCoverageReason = translations.getDiscretionaryReason().getMaxCoverage();
+
         loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
                 .editLine()
                 .setDiscretionaryPrice(400.00)
                 .setValuation(DISCRETIONARY)
-                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
+                .selectDiscretionaryReason(maxCoverageReason)
                 .closeSidWithOk()
                 .findClaimLine(claimLineDescription)
                 .selectLine()
@@ -68,7 +70,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .toProductMatchPage()
                 .openSidForFirstProduct()
                 .setValuation(DISCRETIONARY)
-                .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
+                .doAssert(row -> row.assertDiscretionaryReasonEqualTo(maxCoverageReason));
 
     }
 
@@ -84,8 +86,9 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel and adding manually discretionary depreciation" +
             " Selected reason 1 is still applicable for the converted item")
     public void charlie508_3_ImportEcxelAddManuallyDiscrDepreciation(@UserCompany(TRYGFORSIKRING) User trygUser,
-                                                                     Claim claim, DiscretionaryReason discretionaryReason) {
+                                                                     Claim claim, Translations translations) {
         String claimLineDescription = "APPLE iphone 2";
+        String maxCoverageReason = translations.getDiscretionaryReason().getMaxCoverage();
 
         loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
@@ -94,7 +97,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .setDepreciation(10)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .setValuation(NEW_PRICE)
-                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason2())
+                .selectDiscretionaryReason(maxCoverageReason)
                 .closeSidWithOk()
                 .findClaimLine(claimLineDescription)
                 .selectLine()
@@ -103,7 +106,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setValuation(NEW_PRICE)
-                .doAssert(row -> row.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason2()));
+                .doAssert(row -> row.assertDiscretionaryReasonEqualTo(maxCoverageReason));
     }
 
 }

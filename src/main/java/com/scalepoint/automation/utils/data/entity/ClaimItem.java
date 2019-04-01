@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.entity;
 
 import com.scalepoint.automation.utils.RandomUtils;
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,6 +12,7 @@ import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@Data
 public class ClaimItem {
 
     private String textFieldSP = RandomUtils.randomName("ClaimItem");

@@ -41,18 +41,10 @@ public class Claim {
     //private String fullNameWithTitle = getTitle()+" " +getFirstName() + " " +getLastName();
     @XmlElement
     private String statusSaved;
-    @XmlElement
-    private String statusCancelled;
     @XmlElement(name = "statusClosedEx")
     private String statusClosedExternally;
     @XmlElement
-    private String accessMailSSText;
-    @XmlElement
     private String statusCompleted;
-    @XmlElement
-    private String oldClaimDate;
-    @XmlElement
-    private String companyName;
     @XmlElement
     private String policyTypeTrygUser;
     @XmlElement

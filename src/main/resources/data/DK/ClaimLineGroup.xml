@@ -1,10 +1,7 @@
 <?xml version="1.0"?>
 <claimLineGroup>
-    <defaultGroupName>Øvrige</defaultGroupName>
-    <customerDemand>111</customerDemand>
-    <newPrice>222</newPrice>
-    <valuation>333</valuation>
-    <filePath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</filePath>
+
+    <excelWithGroupsFilePath>C:\ExcelImport\ClaimSheetDK2003_withGrouping.xls</excelWithGroupsFilePath>
 
     <excelLineGroups>DEFAULT</excelLineGroups>
     <excelLineGroups>Test_Group_Overview111</excelLineGroups>

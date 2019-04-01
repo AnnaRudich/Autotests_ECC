@@ -5,8 +5,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.Assignment;
-import com.scalepoint.automation.utils.data.entity.RRLinesFields;
+import com.scalepoint.automation.utils.data.entity.translations.RRLinesFields;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -31,8 +32,10 @@ public class ReductionRulesTest extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629, 635  Extend reduction rules lines with PriceRange fields + Documentation and ClaimantRating")
-    public void ecc4007_verifyRRLineFields(RRLinesFields ruleFields) {
+    public void ecc4007_verifyRRLineFields(Translations translations) {
         AddEditReductionRulePage editPage = toNewReductionRulePage();
+
+        RRLinesFields ruleFields = translations.getRrLinesFields();
 
         assertEquals(editPage.getDescriptionColumnHeader(), ruleFields.getDescription());
         assertEquals(editPage.getAgeFromColumnHeader(), ruleFields.getAgeFrom());

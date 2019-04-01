@@ -12,7 +12,7 @@ import java.util.List;
 public class ExistingSuppliers {
 
     @XmlElement(name = "simpleSupplier")
-    protected List<SimpleSupplier> simpleSuppliers;
+    private List<SimpleSupplier> simpleSuppliers;
 
     public List<SimpleSupplier> getSuppliers() {
         if (simpleSuppliers == null) {

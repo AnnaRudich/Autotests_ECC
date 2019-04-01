@@ -8,7 +8,8 @@ import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.TextSearch;
+import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -48,24 +49,27 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
-    public void charlie510_selectBrandAndModel(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
+    public void charlie510_selectBrandAndModel(User user, Claim claim, ClaimItem claimItem, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
+
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductNameAndCategory(SAMSUNG_GALAXY_S_7, claimItem.getExistingSubCat3_Mobiltelefoner())
                 .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
                 .selectBrand(textSearch.getBrandSamsung())
-                .selectModel(textSearch.getModel1())
+                .selectModel(textSearch.getModelGalaxyS7())
                 .doAssert(
                         asserts -> {
-                            asserts.assertSearchResultsContainsSearchModel(textSearch.getModel1());
+                            asserts.assertSearchResultsContainsSearchModel(textSearch.getModelGalaxyS7());
                             asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrandSamsung());
                         });
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
-    public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
+    public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         int index = 0;
         Attributes[] attributes = {DUAL_KAMERA_NEJ, NFC_NEJ};
+        TextSearch textSearch = translations.getTextSearch();
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -82,13 +86,14 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
-    public void charlie510_selectCategory(User user, Claim claim, TextSearch textSearch) {
+    public void charlie510_selectCategory(User user, Claim claim, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(textSearch.getGroup1())
-                .chooseCategory(textSearch.getSubgroup1())
+                .chooseCategory(textSearch.getGroupChildren())
+                .chooseCategory(textSearch.getSubgroupChildrenEquipment())
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroupChildrenEquipment())
                 );
     }
 
@@ -105,7 +110,8 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
-    public void charlie516_checkSortingByPopularity(User user, Claim claim, ClaimItem claimItem, TextSearch textSearch) {
+    public void charlie516_checkSortingByPopularity(User user, Claim claim, ClaimItem claimItem, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
         String product = SAMSUNG_GALAXY_S_7;
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -129,7 +135,7 @@ public class TextSearchTests extends BaseTest {
                         asserts -> asserts.assertPopularityInCorrectOrder(SortOrder.ASCENDING));
 
         /* selecting model we have only one result shown so we can check only icon presence*/
-        tsp.selectModel(textSearch.getModel1())
+        tsp.selectModel(textSearch.getModelGalaxyS7())
                 .waitForResultsLoad()
                 .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
 
@@ -155,7 +161,8 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
-    public void charlie510_checkDidYouMean(User user, Claim claim, TextSearch textSearch) {
+    public void charlie510_checkDidYouMean(User user, Claim claim, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(textSearch.getBrokenQuery1())
@@ -171,7 +178,8 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
-    public void charlie510_checkDidYouMeanWithSpecialCharacters(User user, Claim claim, TextSearch textSearch) {
+    public void charlie510_checkDidYouMeanWithSpecialCharacters(User user, Claim claim, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(textSearch.getBrokenQueryWithSpecialSymbols1())
@@ -190,38 +198,40 @@ public class TextSearchTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check category selection")
-    public void charlie520_checkIfCorrectCategoryWasSelected(User user, Claim claim, TextSearch textSearch) {
+    public void charlie520_checkIfCorrectCategoryWasSelected(User user, Claim claim, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductName(textSearch.getSubgroup3())
+                .searchByProductName(textSearch.getSubgroupVideocamera())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup3())
-                ).searchByProductName(textSearch.getSubgroup2())
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroupVideocamera())
+                ).searchByProductName(textSearch.getSubgroupCameraLenses())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroupCameraLenses())
                 );
 
     }
 
     @Test(dataProvider = "testDataProvider", description = "Check manual category selection")
-    public void charlie520_checkIfManuallySelectedCategoryIsNotDiscardedAfterQuery(User user, Claim claim, TextSearch textSearch) {
+    public void charlie520_checkIfManuallySelectedCategoryIsNotDiscardedAfterQuery(User user, Claim claim, Translations translations) {
+        TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(textSearch.getGroup1())
-                .chooseCategory(textSearch.getSubgroup1())
+                .chooseCategory(textSearch.getGroupChildren())
+                .chooseCategory(textSearch.getSubgroupChildrenEquipment())
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup1())
-                ).searchByProductName(textSearch.getSubgroup2())
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroupChildrenEquipment())
+                ).searchByProductName(textSearch.getSubgroupCameraLenses())
                 .waitForResultsLoad()
                 .doAssert(
                         TextSearchPage.Asserts::assertSearchResultsCategoryIsEmpty
                 ).snapCategory()
                 .waitForResultsLoad()
                 .doAssert(
-                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroup2())
+                        asserts -> asserts.assertSearchResultsContainsSearchCategory(textSearch.getSubgroupCameraLenses())
                 );
     }
 }

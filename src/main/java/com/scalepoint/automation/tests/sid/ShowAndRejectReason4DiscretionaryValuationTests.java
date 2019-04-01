@@ -180,8 +180,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")
     public void charlie_508_8_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem,
-                                                            DiscretionaryReason discretionaryReason) {
-        String reasonText = discretionaryReason.getDiscretionaryReason2();
+                                                            Translations translations) {
+        String reasonText = translations.getDiscretionaryReason().getMaxCoverage();
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
@@ -226,17 +226,14 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             " with discretionary deducted by rule")
     public void charlie_508_9_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                             Claim claim,
-                                                            ClaimItem claimItem,
-                                                            DepreciationType depreciationType) {
+                                                            ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCategory(claimItem.getTrygCategory1())
-                            .withNewPrice(PRICE_500)
-                            .withAge(1, 4)
-                            .withDepreciation(20, SettlementDialog.DepreciationType.DISCRETIONARY)
-                            .withValuation(NEW_PRICE);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCategory(claimItem.getTrygCategory1())
+                        .withNewPrice(PRICE_500)
+                        .withAge(1, 4)
+                        .withDepreciation(20, SettlementDialog.DepreciationType.DISCRETIONARY)
+                        .withValuation(NEW_PRICE))
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonEnabled);
     }
 
@@ -251,17 +248,14 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             " with discretionary deducted by rule")
     public void charlie_508_10_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
-                                                             ClaimItem claimItem,
-                                                             DepreciationType depreciationType) {
+                                                             ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCategory(claimItem.getTrygCategory1())
-                            .withNewPrice(PRICE_500)
-                            .withAge(1, 4)
-                            .withDepreciation(SettlementDialog.DepreciationType.POLICY)
-                            .withValuation(NEW_PRICE);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCategory(claimItem.getTrygCategory1())
+                        .withNewPrice(PRICE_500)
+                        .withAge(1, 4)
+                        .withDepreciation(SettlementDialog.DepreciationType.POLICY)
+                        .withValuation(NEW_PRICE))
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);
     }
 
@@ -277,18 +271,15 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             " with policy deducted by the rules")
     public void charlie_508_11_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
-                                                             ClaimItem claimItem,
-                                                             DepreciationType depreciationType) {
+                                                             ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withCategory(claimItem.getTrygCategory1())
-                            .withNewPrice(10.00)
-                            .withAge(3, 0)
-                            .withValuation(NEW_PRICE)
-                            .withReductionRule(20)
-                            .withDepreciation(SettlementDialog.DepreciationType.POLICY);
-                })
+                .openSidAndFill(sid -> sid
+                        .withCategory(claimItem.getTrygCategory1())
+                        .withNewPrice(10.00)
+                        .withAge(3, 0)
+                        .withValuation(NEW_PRICE)
+                        .withReductionRule(20)
+                        .withDepreciation(SettlementDialog.DepreciationType.POLICY))
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);
     }
 
@@ -308,7 +299,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_12_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
-                                                                 DiscretionaryReason discretionaryReason) {
+                                                                 Translations translations) {
+        String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToLackOfDocumentation();
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
@@ -321,9 +313,9 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                             .withNewPrice(3000.00)
                             .withDepreciation(5, SettlementDialog.DepreciationType.DISCRETIONARY)
                             .withValuation(DISCRETIONARY)
-                            .withDiscretionaryReason(discretionaryReason.getDiscretionaryReason6());
+                            .withDiscretionaryReason(reasonText);
                 })
-                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason6()))
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .setValuation(VOUCHER)
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
@@ -345,7 +337,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
             "Customer demand price is matched with discretionary rule.FT=ON")
     public void charlie_508_13_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim, ClaimItem claimItem,
-                                                                 DiscretionaryReason discretionaryReason) {
+                                                                 Translations translations) {
+        String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToConsumption();
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
@@ -356,14 +349,14 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                             .withDiscountAndDepreciation(false)
                             .withDepreciation(5, SettlementDialog.DepreciationType.DISCRETIONARY)
                             .withValuation(CUSTOMER_DEMAND)
-                            .withDiscretionaryReason(discretionaryReason.getDiscretionaryReason7());
+                            .withDiscretionaryReason(reasonText);
                 })
-                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason7()))
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(sid -> {
                     sid.assertDiscretionaryPresent();
-                    sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason7());
+                    sid.assertTooltipPresent(reasonText);
                 });
     }
 
@@ -383,7 +376,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_14_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
-                                                                 DiscretionaryReason discretionaryReason) {
+                                                                 Translations translations) {
+        String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToConsumption();
         createClaimAndFillSid(user, claim, claimItem)
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), 1000.00)
@@ -391,13 +385,13 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(false)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
-                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason7())
-                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason7()))
+                .selectDiscretionaryReason(reasonText)
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(sid -> {
                     sid.assertDiscretionaryPresent();
-                    sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason7());
+                    sid.assertTooltipPresent(reasonText);
                 });
     }
 
@@ -416,7 +410,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_15_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
-                                                                 DiscretionaryReason discretionaryReason) {
+                                                                 Translations translations) {
+        String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToConsumption();
         createClaimAndFillSid(user, claim, claimItem)
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), 1000.00)
@@ -424,13 +419,13 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(true)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
-                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason7())
-                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason7()))
+                .selectDiscretionaryReason(reasonText)
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(sid -> {
                     sid.assertDiscretionaryPresent();
-                    sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason7());
+                    sid.assertTooltipPresent(reasonText);
                 });
     }
 
@@ -453,7 +448,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_16_verifyDiscretionaryReasonIconFTONandOFF(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                        Claim claim,
                                                                        ClaimItem claimItem,
-                                                                       DiscretionaryReason discretionaryReason) {
+                                                                       Translations translations) {
+        String reasonText = translations.getDiscretionaryReason().getEstimatedCompensationDueToLackOfDocumentation();
         createClaimAndFillSid(user, claim, claimItem)
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -463,13 +459,13 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(false)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
-                .selectDiscretionaryReason(discretionaryReason.getDiscretionaryReason6())
-                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(discretionaryReason.getDiscretionaryReason6()))
+                .selectDiscretionaryReason(reasonText)
+                .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(sid -> {
                     sid.assertDiscretionaryPresent();
-                    sid.assertTooltipPresent(discretionaryReason.getDiscretionaryReason6());
+                    sid.assertTooltipPresent(reasonText);
                 })
                 .selectLine()
                 .saveClaim(claim)
@@ -490,7 +486,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .findClaimLine(TEXT_LINE)
                 .doAssert(claimLine -> {
                     claimLine.assertDiscretionaryPresent();
-                    claimLine.assertTooltipPresent(discretionaryReason.getDiscretionaryReason6());
+                    claimLine.assertTooltipPresent(reasonText);
                 })
                 .editLine()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonInvisible);

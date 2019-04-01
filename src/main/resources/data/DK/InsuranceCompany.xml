@@ -3,18 +3,11 @@
     <zipCode>123 123</zipCode>
     <companyCommonMail>ecc_auto@scalepoint.com</companyCommonMail>
     <functionTemplate>Default</functionTemplate>
-    <ftIC>LB</ftIC>
-    <ftTryg>Tryg</ftTryg>
     <ftTrygHolding>Tryg Holding</ftTrygHolding>
-    <ftAlka>Alka</ftAlka>
-    <ftLB>LB</ftLB>
     <icCulture>da-DK</icCulture>
     <guiTemplate>tryg</guiTemplate>
-    <claimNotificationMail>IC Common Mail Inbox</claimNotificationMail>
     <contactNumber>00447788998877</contactNumber>
     <officeHours>8a.m. - 4p.m.</officeHours>
-    <spFTName>Default</spFTName>
-    <dkCompanyDepartment>Ålborg - B/E</dkCompanyDepartment>
     <sendTimeFrom>00:00</sendTimeFrom>
     <sendTimeTo>20:30</sendTimeTo>
 </insuranceCompany>

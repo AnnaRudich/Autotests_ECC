@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<rnvtasktype>
-    <valuation>Vurdering</valuation>
-    <repair>Reparation</repair>
-    <repairEstimate>Reparationsestimate</repairEstimate>
-    <matchService>Match Service</matchService>
-</rnvtasktype>

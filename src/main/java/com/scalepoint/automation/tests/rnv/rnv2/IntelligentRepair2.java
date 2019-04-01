@@ -14,8 +14,8 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.RnvTaskType;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -29,7 +29,7 @@ import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.A
 public class IntelligentRepair2 extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
-    public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -44,7 +44,7 @@ public class IntelligentRepair2 extends BaseTest {
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, rnvTaskType.getRepair())
+                .changeTask(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
                 .sendRnV(agreement)
                 .findClaimLine(lineDescription)
@@ -67,7 +67,7 @@ public class IntelligentRepair2 extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Reject")
-    public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -82,7 +82,7 @@ public class IntelligentRepair2 extends BaseTest {
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, rnvTaskType.getRepair())
+                .changeTask(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
                 .sendRnV(agreement)
                 .findClaimLine(lineDescription)
@@ -99,7 +99,7 @@ public class IntelligentRepair2 extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Manual")
-    public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, RnvTaskType rnvTaskType) {
+    public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -114,7 +114,7 @@ public class IntelligentRepair2 extends BaseTest {
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, rnvTaskType.getRepair())
+                .changeTask(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
                 .sendRnV(agreement)
                 .findClaimLine(lineDescription)

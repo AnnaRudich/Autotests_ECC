@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.translations;
 
 
 import javax.xml.bind.annotation.XmlAccessType;

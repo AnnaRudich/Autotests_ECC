@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<translations>
+
+    <acquiredType>
+        <new>New</new>
+        <used>Used</used>
+        <heritage>Heritage</heritage>
+        <gift>Gift</gift>
+    </acquiredType>
+
+    <depreciationType>
+        <policyType>Policebestemt</policyType>
+        <discretionaryType>Skønsmæssig</discretionaryType>
+    </depreciationType>
+
+    <discretionaryReason>
+        <estimatedCompensationDueToAgeAndUseFairValue>Skønnet erstatning grundet alder og brug / dagsværdi</estimatedCompensationDueToAgeAndUseFairValue>
+        <maxCoverage>Max dækning</maxCoverage>
+        <estimatedCompensationDueToLackOfDocumentation>Skønnet erstatning grundet manglende dokumentation</estimatedCompensationDueToLackOfDocumentation>
+        <estimatedCompensationDueToConsumption>Skønnet erstatning grundet forbrug</estimatedCompensationDueToConsumption>
+        <fairValue>fair value</fairValue>
+    </discretionaryReason>
+
+    <rrLinesFields>
+        <description>Description</description>
+        <ageFrom>Age from</ageFrom>
+        <ageTo>Age to</ageTo>
+        <newItem>New Item</newItem>
+        <priceFrom>Price from</priceFrom>
+        <priceTo>Price to</priceTo>
+        <documentation>Documentation</documentation>
+        <claimantRating>Claimant rating</claimantRating>
+        <claimReduction>Claim Reduction</claimReduction>
+        <cashReduction>Cash Reduction</cashReduction>
+    </rrLinesFields>
+
+    <orderDetails>
+        <totalText>Total</totalText>
+        <indemnity>{companyName} har betalt til Scalepoint (Erstatning) :</indemnity>
+        <orderedItems>Scalepoint har betalt til leverandør (Varekøb) :</orderedItems>
+        <withdrawalls>Scalepoint har betalt til kunde (Udbetalinger) :</withdrawalls>
+        <deposits>Kunde har betalt til Scalepoint (Indbetalinger) :</deposits>
+        <remainingIdemnity>Tilbageværende erstatning :</remainingIdemnity>
+    </orderDetails>
+
+    <textSearch>
+        <brokenQuery1>samsunh</brokenQuery1>
+        <brokenQueryWithSpecialSymbols1>samsung samsung &amp;*()_+[]{}:'"|\,. ?</brokenQueryWithSpecialSymbols1>
+        <modelGalaxyS7>Galaxy S7 Edge 32GB Hvid</modelGalaxyS7>
+        <groupChildren>Børn</groupChildren>
+        <subgroupChildrenEquipment>Baby Udstyr</subgroupChildrenEquipment>
+        <subgroupCameraLenses>Kameraobjektiver</subgroupCameraLenses>
+        <subgroupVideocamera>Videokameraer</subgroupVideocamera>
+        <attribute>Socket</attribute>
+        <brandSamsung>Samsung</brandSamsung>
+    </textSearch>
+
+    <rnvtasktype>
+        <repair>Reparation</repair>
+    </rnvtasktype>
+
+    <roles>
+        <itManager>IT Management</itManager>
+    </roles>
+
+</translations>

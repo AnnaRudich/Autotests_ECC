@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.shared;
 
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
