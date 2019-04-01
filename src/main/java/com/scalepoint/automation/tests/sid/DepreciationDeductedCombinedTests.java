@@ -49,7 +49,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     public void ecc3288_1_verifyDndD2AndFTRelationCombineDnDOFF(User user, Claim claim, ClaimItem claimItem) {
         Double expectedCashValue = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationOfVoucher();
         Double expectedNewPrice = Constants.PRICE_2400;
@@ -57,7 +56,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
-    @RequiredSetting(type = FTSetting.USE_NEW_REPLACEMENT_DIALOG)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON(User user, Claim claim, ClaimItem claimItem) {
         Double expectedNewPrice = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationOfVoucher();
