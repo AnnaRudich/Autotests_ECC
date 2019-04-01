@@ -18,7 +18,7 @@
         <maxCoverage>Max dækning</maxCoverage>
         <estimatedCompensationDueToLackOfDocumentation>Skønnet erstatning grundet manglende dokumentation</estimatedCompensationDueToLackOfDocumentation>
         <estimatedCompensationDueToConsumption>Skønnet erstatning grundet forbrug</estimatedCompensationDueToConsumption>
-        <fairValue>fair value</fairValue>
+        <fairValue>Dagsværdi</fairValue>
     </discretionaryReason>
 
     <rrLinesFields>
