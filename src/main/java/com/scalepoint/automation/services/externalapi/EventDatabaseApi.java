@@ -44,16 +44,12 @@ public class EventDatabaseApi {
 
     }
 
-    public EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest) {
-        return getEventClaimUpdated(claimRequest, 0);
-    }
-
-    public EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest, int eventIndex) {
+    private EventClaimUpdated getEventClaimUpdated(ClaimRequest claimRequest, int eventIndex) {
         return (EventClaimUpdated) getEventClaim(CLAIM_UPDATED, claimRequest, eventIndex);
     }
 
 
-    public EventClaim getEventClaim(EventType eventType, ClaimRequest claimRequest, int eventIndex) {
+    private EventClaim getEventClaim(EventType eventType, ClaimRequest claimRequest, int eventIndex) {
         boolean notFound = true;
         int i = 0;
         EventClaim eventClaim = null;

@@ -17,11 +17,7 @@ import static com.scalepoint.automation.utils.Http.post;
 
 public class SupplierApi extends AuthenticationApi {
 
-    public static final String SUPPLIER_LIST = Configuration.getEccAdminUrl() + "supplier/list.json";
-
-    public SupplierApi(User user) {
-        super(user);
-    }
+    private static final String SUPPLIER_LIST = Configuration.getEccAdminUrl() + "supplier/list.json";
 
     public SupplierApi(Executor executor) {
         super(executor);
@@ -42,28 +38,6 @@ public class SupplierApi extends AuthenticationApi {
             JsonNode root = m.readTree(response.returnContent().asStream());
             JsonNode items = root.path("data").path("items");
             JsonNode item = items.path(2);
-            return item.path("id").asText();
-        } catch (IOException e) {
-            log.error("Can't retrieve Suppliers: " + e.getMessage(), e);
-            throw new ServerApiException(e);
-        }
-    }
-
-    public String getSupplierId(String supplierName) {
-        List<NameValuePair> params = Http.ParamsBuilder.create().
-                add("search", supplierName).
-                add("page", "1").
-                add("start", "0").
-                add("limit", "1000").
-                add("sort", "name").
-                add("direction", "ASC").get();
-
-        try {
-            Response response = post(SUPPLIER_LIST, params, executor);
-            ObjectMapper m = new ObjectMapper();
-            JsonNode root = m.readTree(response.returnContent().asStream());
-            JsonNode items = root.path("data").path("items");
-            JsonNode item = items.path(0);
             return item.path("id").asText();
         } catch (IOException e) {
             log.error("Can't retrieve Suppliers: " + e.getMessage(), e);

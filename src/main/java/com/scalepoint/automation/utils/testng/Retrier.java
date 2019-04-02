@@ -36,7 +36,7 @@ public class Retrier implements IRetryAnalyzer {
      */
     @Override
     public boolean retry(ITestResult result) {
-        Boolean shouldRerun = count.getAndDecrement() > 0;
+        boolean shouldRerun = count.getAndDecrement() > 0;
         logger.warn("Failed times " + (retryTimes - count.intValue()));
         return shouldRerun;
     }

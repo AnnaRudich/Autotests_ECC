@@ -61,6 +61,4 @@ public class IP1Api {
         }
         return url;
     }
-
-
 }

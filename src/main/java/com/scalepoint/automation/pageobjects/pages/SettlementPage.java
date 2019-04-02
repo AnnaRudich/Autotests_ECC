@@ -180,8 +180,11 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementPage openSid(String description, String category, String subcategory, Double newPrice) {
-        return openSid()
-                .fill(description, category, subcategory, newPrice)
+        return openSidAndFill(formFiller -> formFiller
+                .withText(description)
+                .withCategory(category)
+                .withSubCategory(subcategory)
+                .withNewPrice(newPrice))
                 .closeSidWithOk();
     }
 

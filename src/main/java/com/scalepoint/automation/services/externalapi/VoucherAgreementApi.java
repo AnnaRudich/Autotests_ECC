@@ -23,14 +23,9 @@ import static com.scalepoint.automation.utils.Http.post;
 public class VoucherAgreementApi extends AuthenticationApi {
 
     private static final String URL_ADD_VOUCHER = Configuration.getEccAdminUrl() + "voucher/addVoucher.json?supplierId=";
-    private static final String URL_LIST = Configuration.getEccAdminUrl() + "voucher/listAll.json";
 
     public VoucherAgreementApi(User user) {
         super(user);
-    }
-
-    public VoucherAgreementApi(Executor executor) {
-        super(executor);
     }
 
     public AssignedCategory createVoucher(Voucher voucher) {
@@ -47,31 +42,6 @@ public class VoucherAgreementApi extends AuthenticationApi {
 
         return new AssignedCategory(categories[0].trim(), categories[1].trim());
     }
-
-    public String getVoucherIdByName(String name) {
-        List<NameValuePair> params = Http.ParamsBuilder.create().
-                add("sort", "voucherName").
-                add("direction", "ASC").
-                add("start", "0").
-                add("limit", "500").get();
-
-        String id = "";
-        try {
-            Content content = post(URL_LIST, params, executor).returnContent();
-            HashMap<String, Object> result = new ObjectMapper().readValue(content.toString(), HashMap.class);
-            HashMap<String, Object> data = (HashMap<String, Object>) result.get("data");
-            ArrayList<HashMap<String, Object>> items = (ArrayList) data.get("items");
-            for (HashMap<String, Object> hashMap : items) {
-                if (hashMap.get("voucherName").equals(name))
-                    id = String.valueOf(hashMap.get("voucherId"));
-            }
-        } catch (IOException e) {
-            log.error("Can't driver voucher by id", e);
-            throw new ServerApiException(e);
-        }
-        return id;
-    }
-
 
     private String createNewVoucherAgreement(String supplierId, Voucher voucher) {
         List<NameValuePair> params = Http.ParamsBuilder.create().
@@ -104,7 +74,7 @@ public class VoucherAgreementApi extends AuthenticationApi {
         private String category;
         private String subCategory;
 
-        public AssignedCategory(String category, String subCategory) {
+        AssignedCategory(String category, String subCategory) {
             this.category = category;
             this.subCategory = subCategory;
         }

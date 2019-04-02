@@ -15,7 +15,7 @@ public class DriverHelper {
         if (method.getAnnotation(RunOn.class) != null) {
             driverType = method.getAnnotation(RunOn.class).value();
 
-        } else if (driverType == null) {
+        } else {
             Annotation[] annotations = aClass.getAnnotations();
             for (Annotation annotation : annotations) {
                 if (annotation instanceof RunOn) {

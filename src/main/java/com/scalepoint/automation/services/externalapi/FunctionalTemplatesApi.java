@@ -30,10 +30,6 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
         super(user);
     }
 
-    public FunctionalTemplatesApi(Executor executor) {
-        super(executor);
-    }
-
     public FTSettings.ComparingResult findDifferences(Integer functionalTemplateId, FtOperation... operations) {
         try {
             Content content = post(Page.getUrl(EditFunctionTemplatePage.class, functionalTemplateId), executor).returnContent();

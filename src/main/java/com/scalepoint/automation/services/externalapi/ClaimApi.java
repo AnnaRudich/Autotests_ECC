@@ -21,18 +21,9 @@ public class ClaimApi extends AuthenticationApi {
 
     private static final int ATTEMPTS_LIMIT = 1;
     private static final String URL_CREATE_CUSTOMER = Configuration.getEccUrl() + "CreateUser";
-    private Header headerLocation;
-
-    public Header getHeaderLocation() {
-        return headerLocation;
-    }
 
     public ClaimApi(User user) {
         super(user);
-    }
-
-    public ClaimApi(Executor executor) {
-        super(executor);
     }
 
     public void createClaim(Claim claim, String policyType) {
@@ -54,7 +45,7 @@ public class ClaimApi extends AuthenticationApi {
             HttpResponse createUserResponse = post(URL_CREATE_CUSTOMER, clientParams, executor).returnResponse();
             ensure302Code(createUserResponse.getStatusLine().getStatusCode());
 
-            headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
+            Header headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
                     createUserResponse.getHeaders("Location")[0] :
                     new BasicHeader("Location", "error=1");
 

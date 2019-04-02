@@ -24,15 +24,6 @@ public class PseudoCategoryApi extends AuthenticationApi {
     private static final String URL_ASSIGN_CATEGORY = Configuration.getEccAdminUrl() + "category/allCategories.json?voucherId=";
     private static final String URL_ALL_CATEGORIES = Configuration.getEccAdminUrl() + "category/allCategories.json?voucherId=";
 
-    private static final String URL_ALL_CATEGORIES_PAGE = Configuration.getEccUrl() + "webshop/jsp/toAdminPage/pseudo_categories.jsp";
-    private static final String URL_EDIT_CATEGORY_PAGE = Configuration.getEccUrl() + "webshop/jsp/toAdminPage/pseudo_category_edit.jsp?pcrfnbr=-1";
-    private static final String URL_CREATE_CATEGORY_GROUP = Configuration.getEccUrl() + "SavePseudoCategoryGroup";
-    private static final String URL_CREATE_CATEGORY = Configuration.getEccUrl() + "SavePseudoCategory";
-
-    public PseudoCategoryApi(User user) {
-        super(user);
-    }
-
     public PseudoCategoryApi(Executor executor) {
         super(executor);
     }
@@ -59,69 +50,6 @@ public class PseudoCategoryApi extends AuthenticationApi {
             post(URL_ASSIGN_CATEGORY + voucherId, params, executor);
         } catch (IOException e) {
             log.error("Can't map Category to Voucher", e);
-            throw new ServerApiException(e);
-        }
-    }
-
-    public void assignPseudoCategoryToVoucherAgreementName(String voucherName, String... categories) {
-        VoucherAgreementApi voucherAgreementApi = new VoucherAgreementApi(executor);
-        String voucherId = voucherAgreementApi.getVoucherIdByName(voucherName);
-        assignPseudoCategoryToVoucherAgreement(voucherId, categories);
-    }
-
-    public String createPseudoCategoryAndReturnId(Category category) {
-        try {
-            createPseudoCategory(category);
-            Content categoryContent = get(URL_ALL_CATEGORIES_PAGE, executor).returnContent();
-            String categoryCont = categoryContent.toString();
-            String contentByCat = categoryCont.split("\">" + category.getCategoryName())[0];
-            String[] psNumSplit = contentByCat.split("<option value=\"");
-            return psNumSplit[psNumSplit.length - 1].replaceAll("[^\\d]", "");
-        } catch (IOException e) {
-            log.error("Can't create Pseudo Category", e);
-            throw new ServerApiException(e);
-        }
-    }
-
-    public void createPseudoCategory(Category category) {
-        try {
-
-            Content content = get(URL_EDIT_CATEGORY_PAGE, executor).returnContent();
-            String cont = content.toString();
-            String[] contSplit = cont.split(category.getGroupName())[0].split("<option value=");
-            String groupId = contSplit[contSplit.length - 1].replaceAll("[\"<>]", "");
-
-            List<NameValuePair> params = ParamsBuilder.create().
-                    add("pcrfnbr", "-1").
-                    add("pseudocatgroupid", "-1").
-                    add("fromPCGPage", "0").
-                    add("multistringlanguagechooser", "1030").
-                    add("pcname_1030", category.getCategoryName()).
-                    add("pcPublished", "On").
-                    add("pccgnbr", "-1").
-                    add("PseudoCatGroupId", groupId).get();
-
-            int statusCode = post(URL_CREATE_CATEGORY, params, executor).returnResponse().getStatusLine().getStatusCode();
-            ensure302Code(statusCode);
-            log.info("PS category was created. Name is: " + category.getCategoryName());
-        } catch (IOException e) {
-            throw new ServerApiException(e);
-        }
-    }
-
-    public void createPseudoCategoryGroup(Category category) {
-        List<NameValuePair> params = ParamsBuilder.create().
-                add("pseudocatgroupid", "-1").
-                add("defaultpseudocat", "-1").
-                add("multistringlanguagechooser", "1030").
-                add("pcgroupname_1030", category.getGroupName()).
-                add("pcgEnabled", "ON").get();
-
-        try {
-            ensure302Code(post(URL_CREATE_CATEGORY_GROUP, params, executor).returnResponse().getStatusLine().getStatusCode());
-            log.info("Pseudocategory group was created. Name: " + category.getGroupName());
-        } catch (IOException e) {
-            log.error("Can't create Pseudo Category Group", e);
             throw new ServerApiException(e);
         }
     }

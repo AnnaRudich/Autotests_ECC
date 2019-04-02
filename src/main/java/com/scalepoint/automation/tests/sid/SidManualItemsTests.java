@@ -286,7 +286,6 @@ public class SidManualItemsTests extends BaseTest {
                 .setReviewed(true)
                 .includeInClaim(false)
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE)
-                .waitASecond()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertTotalAmountIs(Constants.PRICE_2400));
     }

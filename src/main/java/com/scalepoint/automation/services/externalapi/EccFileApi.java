@@ -17,10 +17,6 @@ public class EccFileApi extends AuthenticationApi {
         super(user);
     }
 
-    public EccFileApi(Executor executor) {
-        super(executor);
-    }
-
     public void downloadFile(String href, String localPath) {
         InputStream in = null;
         FileOutputStream fos = null;

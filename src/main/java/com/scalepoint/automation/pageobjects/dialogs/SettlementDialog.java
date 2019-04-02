@@ -45,6 +45,8 @@ import static org.testng.Assert.*;
 
 public class SettlementDialog extends BaseDialog {
 
+    private static final int DELAY = 200;
+
     private static final By OK_BUTTON = By.id("ok-button");
     private static final By ADD_BUTTON = By.id("add-button");
     private static final By CANCEL_BUTTON = By.id("cancel-button");
@@ -241,7 +243,7 @@ public class SettlementDialog extends BaseDialog {
 
     public static class FormFiller {
 
-        static final int DELAY = 200;
+
         private SettlementDialog sid;
 
         public FormFiller(SettlementDialog settlementDialog) {
@@ -250,105 +252,88 @@ public class SettlementDialog extends BaseDialog {
 
         public FormFiller withText(String text) {
             sid.setDescription(text);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withCategory(String category) {
             sid.setCategory(category);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withCategory(VoucherAgreementApi.AssignedCategory category) {
             sid.setCategory(category);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withSubCategory(String subcategory) {
             sid.setSubCategory(subcategory);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withSubCategoryFromTheListByIndex(int index) {
-            sid.subCategory.select(index);
-            Wait.waitMillis(DELAY);
+            sid.setSubCategoryByIndex(index);
             return this;
         }
 
         public FormFiller withNewPrice(Double newPrice) {
             sid.setNewPrice(newPrice);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withCustomerDemandPrice(Double customerDemandPrice) {
             sid.setCustomerDemand(customerDemandPrice);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withVoucher(String voucher) {
             sid.fillVoucher(voucher);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDepreciation(int depreciation, DepreciationType depreciationType) {
             sid.setDepreciation(depreciation);
             sid.setDepreciationType(depreciationType);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDepreciation(int depreciation) {
             sid.setDepreciation(depreciation);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDepreciation(DepreciationType depreciationType) {
             sid.setDepreciationType(depreciationType);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withReductionRule(Integer reductionRuleValue) {
             sid.applyReductionRuleByValue(reductionRuleValue);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDiscretionaryPrice(double discretionaryPrice) {
             sid.setDiscretionaryPrice(discretionaryPrice);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withAge(int years, int month) {
             sid.enableAge(Integer.toString(years))
                     .selectMonth(Integer.toString(month));
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withAgeDisabled() {
             sid.disableAge();
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withValuation(Valuation valuation) {
             sid.setValuation(valuation);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
         public FormFiller withDiscountAndDepreciation(boolean enabled) {
             sid.setDiscountAndDepreciation(enabled);
-            Wait.waitMillis(DELAY);
             return this;
         }
 
@@ -383,25 +368,39 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setBaseData(ClaimItem claimItem) {
-        return setDescription(claimItem.getTextFieldSP()).
-                setCategory(claimItem.getCategoryGroupBorn()).
-                setSubCategory(claimItem.getCategoryBornBabyudstyr()).
-                setCustomerDemand(claimItem.getCustomerDemand()).
-                setNewPrice(claimItem.getNewPriceSP());
+        return fill(formFiller -> {
+            formFiller.withText(claimItem.getTextFieldSP())
+                    .withCategory(claimItem.getCategoryGroupBorn())
+                    .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                    .withCustomerDemandPrice(claimItem.getCustomerDemand())
+                    .withNewPrice(claimItem.getNewPriceSP());
+        });
     }
 
     public SettlementDialog fill(String description, String category, String subcategory, Double newPrice) {
-        return setDescription(description).
-                setNewPrice(newPrice).
-                setCategory(category).
-                setSubCategory(subcategory);
+        return fill(formFiller -> {
+            formFiller.withText(description)
+                    .withCategory(category)
+                    .withSubCategory(subcategory)
+                    .withNewPrice(newPrice);
+        });
     }
 
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
         input.enter(value);
         simulateBlurEvent(input);
+        waitForJavascriptRecalculation();
         return this;
+    }
+
+    private void waitForJavascriptRecalculation() {
+        Wait.waitMillis(DELAY);
+    }
+
+    public void setSubCategoryByIndex(int index) {
+        subCategory.select(index);
+        waitForJavascriptRecalculation();
     }
 
     public SettlementDialog uncheckedDocumentation() {
@@ -409,6 +408,7 @@ public class SettlementDialog extends BaseDialog {
             forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
             clickUsingJsIfSeleniumClickReturnError(sufficientDocumentation);
         }
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -445,11 +445,13 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setCategory(String categoryName) {
         category.select(categoryName);
+        waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog setSubCategory(String subCategoryName) {
         subCategory.select(subCategoryName);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -466,17 +468,7 @@ public class SettlementDialog extends BaseDialog {
             Wait.waitUntilVisible(availableVoucher);
             availableVoucher.select(voucherName);
         }
-        return this;
-    }
-
-    /*we can't control SID recalculation/redraw, so just wait*/
-    public SettlementDialog waitASecond() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            logger.info(e.getMessage());
-            Thread.currentThread().interrupt();
-        }
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -488,6 +480,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog enableAge(String years) {
         enableAge();
         enterAgeYears(years);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -497,11 +490,13 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog selectMonth(String monthName) {
         ageMonth.select(monthName);
+        waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog disableAge() {
         age.select(0);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -588,6 +583,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
         waitForVisible(combineDiscountDepreciation);
         combineDiscountDepreciation.set(state);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -595,6 +591,7 @@ public class SettlementDialog extends BaseDialog {
         Wait.waitForLoaded();
         Wait.waitForEnabled(includeInClaim);
         includeInClaim.set(state);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -695,7 +692,7 @@ public class SettlementDialog extends BaseDialog {
             }
             return true;
         });
-
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -744,6 +741,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog selectDiscretionaryReason(String visibleText) {
         waitForVisible(discretionaryReason);
         discretionaryReason.select(visibleText);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -753,12 +751,14 @@ public class SettlementDialog extends BaseDialog {
         $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
         new Actions(driver).click(driver.findElement(By.xpath("//span[text()='" + visibleText + "']"))).build().perform();
         new Events().fireEvent($(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)), "focus", "keydown", "keypress", "input", "keyup", "change");
+        waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog setDepreciationType(DepreciationType depreciation) {
         waitForVisible(depreciationTypeComboBox);
         depreciationTypeComboBox.select(depreciation.index);
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -970,7 +970,7 @@ public class SettlementDialog extends BaseDialog {
                     clickUsingJsIfSeleniumClickReturnError(webElement);
                 }
             }
-            waitASecond();
+            waitForJavascriptRecalculation();
             return this;
         }
 
