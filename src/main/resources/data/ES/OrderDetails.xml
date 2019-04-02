@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<orderDetails>
-    <totalText>Liquidación</totalText>
-    <indemnity>Scalepoint valora el siniestro (Indemnización) :</indemnity>
-    <orderedItems>Scalepoint paga al Proveedor (Artículos pedidos) :</orderedItems>
-    <withdrawalls>Scalepoint paga al Cliente (Reembolso) :</withdrawalls>
-    <deposits>El Cliente paga a Scalepoint (Compra adicional) :</deposits>
-    <remainingIdemnity>Indemnización pendiente :</remainingIdemnity>
-</orderDetails>

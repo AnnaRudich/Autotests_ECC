@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<orderDetails>
-    <totalText>Total</totalText>
-    <indemnity>(Kontant ersättning) :</indemnity>
-    <orderedItems>(Beställda artiklar) :</orderedItems>
-    <withdrawalls>(Betalt till kund) :</withdrawalls>
-    <deposits>(Mottagna betalningar från kund) :</deposits>
-    <remainingIdemnity>Kvarvarande kontant ersättning :</remainingIdemnity>
-</orderDetails>

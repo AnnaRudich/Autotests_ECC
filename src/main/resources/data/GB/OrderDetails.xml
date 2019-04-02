@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<orderDetails>
-    <totalText>Total</totalText>
-    <indemnity>Scalepoint paid to Scalepoint (Indemnity) :</indemnity>
-    <orderedItems>Scalepoint paid to supplier (Ordered Items) :</orderedItems>
-    <withdrawalls>Scalepoint paid to customer (Withdrawals) :</withdrawalls>
-    <deposits>Customer paid to Scalepoint (Deposits) :</deposits>
-    <remainingIdemnity>Remaining indemnity :</remainingIdemnity>
-</orderDetails>

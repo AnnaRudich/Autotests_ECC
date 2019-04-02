@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<notifications>
-    <mappingsImport>were imported successfully</mappingsImport>
-    <externalPricesImport>prices imported successfully! Your changes will take effect after the next pricerunner
-        import.
-    </externalPricesImport>
-    <extendedDataSummaryText>On import, extended data for</extendedDataSummaryText>
-</notifications>
