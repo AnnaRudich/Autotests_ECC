@@ -156,12 +156,13 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
     private void takeScreenshot(Method method, ITestResult iTestResult) {
+        String fileName = getFileName(method);
         if (!iTestResult.isSuccess()) {
             try {
-                takeScreenshot(getFileName(method));
+                takeScreenshot(fileName);
             } catch (Exception e) {
-                logger.error("Can't make sreenshot with ashot for {} cause {}", method.getName(), e.getMessage());
-                Selenide.screenshot(getFileName(method));
+                logger.error("Can't make screenshot with ashot for {} cause {}", method.getName(), e.getMessage());
+                Selenide.screenshot(fileName);
             }
         }
     }
@@ -177,9 +178,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private String getFileName(Method method) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss");
-        return "node_" + gridNode.replace("http://", "").replace(":", "")
-                + "_" + Browser.getDriverType()
-                + "_" + method.getName() + "_" + sdf.format(new Date());
+        return method.getName() + "_" + sdf.format(new Date()) + "_node_" + gridNode.replace("http://", "").replace(":", "")
+                + "_" + Browser.getDriverType();
     }
 
 
