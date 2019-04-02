@@ -67,11 +67,11 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(sidForm -> {
                     sidForm.withText(Constants.TEXT_LINE)
+                            .withCategory(claimItem.getCategoryGroupBorn())
+                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                             .withVoucher(claimItem.getExistingVoucher_10());
                 });
 
