@@ -233,13 +233,13 @@ public class Wait {
     }
 
     public static void waitForInvisible(final WebElement element) {
-        wrap(d -> {
+        forConditionShort(d -> {
             try {
                 return !element.isDisplayed();
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 return true;
             }
-        });
+        }, TIME_OUT_IN_SECONDS, 200);
     }
 
     public static void waitUntilVisible(WebElement element) {

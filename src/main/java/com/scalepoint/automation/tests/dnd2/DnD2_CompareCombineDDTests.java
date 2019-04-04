@@ -168,11 +168,12 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @Test(dataProvider = "testDataProvider", description = "Add item manually with comparision of dd disabled, check if both are depreciated and lower price is selected")
     public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem) {
-
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
-                .setNewPrice(claimItem.getTrygNewPrice())
-                .setDescription(claimItem.getTextFieldSP());
+                .openSidAndFill(
+                        cat -> cat.withCategory(claimItem.getCategoryGroupBorn())
+                                .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                                .withNewPrice(claimItem.getTrygNewPrice())
+                );
         int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
         settlementDialog.setDepreciation(depreciationPercentage)
                 .doAssert(asserts -> {

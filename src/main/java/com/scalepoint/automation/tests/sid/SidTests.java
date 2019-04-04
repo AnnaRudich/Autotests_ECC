@@ -248,9 +248,9 @@ public class SidTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withNewPrice(PRICE_2400)
                             .withCategory(claimItem.getCategoryGroupBorn())
                             .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withNewPrice(PRICE_2400)
                             .withVoucher(voucherName);
                 })
                 .openVoucherTermAndConditions()
