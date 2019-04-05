@@ -200,9 +200,9 @@ public class SettlementPage extends BaseClaimPage {
         for (String lineDescription : lineDescriptions) {
             openSidAndFillWithCustomDescription(sid -> sid
                     .withText(lineDescription)
-                    .withNewPrice(PRICE_2400)
                     .withCategory(claimItem.getCategoryGroupBorn())
                     .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                    .withNewPrice(PRICE_2400)
                     .withAge(AGE_YEAR, AGE_MONTH)
                     .withVoucher(claimItem.getExistingVoucher_10()))
                     .closeSidWithOk();
