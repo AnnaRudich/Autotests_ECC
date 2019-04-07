@@ -734,7 +734,11 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private boolean isDiscretionaryReasonVisible() {
-        return (discretionaryReason.exists());
+        try {
+            return Wait.forConditionShort(driver -> discretionaryReason.isDisplayed(), 1, 200);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean isDiscretionaryReasonEnabled() {
