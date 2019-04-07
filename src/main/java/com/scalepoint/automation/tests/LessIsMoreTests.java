@@ -39,7 +39,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 });
 
         settlementPage.findClaimLine(groupDescription)
@@ -64,7 +64,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 });
 
         settlementPage.findClaimLine(groupDescription)
@@ -107,7 +107,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 });
 
         settlementPage.findClaimLine(groupDescription)
@@ -149,7 +149,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 });
 
         settlementPage.findClaimLine(lineDescriptions[0])
@@ -175,7 +175,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 })
                 .findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
@@ -200,7 +200,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 })
                 .findClaimLine(lineDescriptions[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsCrossedOut);
@@ -217,7 +217,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(lineDescriptions[0], lineDescriptions[1], claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(lineDescriptions[0], lineDescriptions[1], claimItem.getCategoryOther().getGroupName());
                 });
 
         settlementPage.selectLinesByDescriptions(groupDescription)
@@ -250,7 +250,7 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription + "#1", groupDescription + "#2", claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription + "#1", groupDescription + "#2", claimItem.getCategoryOther().getGroupName());
                 });
 
         settlementPage.moveLineFromGroupToGroup(lineDescriptions[0], groupDescription + "#2")
@@ -272,10 +272,10 @@ public class LessIsMoreTests extends BaseTest {
                 .saveGroup()
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
-                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getExistingCatWithoutVoucherAndSubCategory());
+                    asserts.assertSettlementContainsLinesWithDescriptions(groupDescription, claimItem.getCategoryOther().getGroupName());
                 });
 
-        settlementPage.findClaimLine(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+        settlementPage.findClaimLine(claimItem.getCategoryOther().getGroupName())
                 .editGroup()
                 .enterGroupName(groupDescription + "#newDefault")
                 .saveGroup()

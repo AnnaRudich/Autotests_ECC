@@ -3,31 +3,68 @@
     <newPriceSP>2400</newPriceSP>
     <purchasePriceSP>500</purchasePriceSP>
     <ssDescriptionSP>APPLE</ssDescriptionSP>
-    <existingCatWithoutVoucherAndSubCategory>Øvrige</existingCatWithoutVoucherAndSubCategory>
     <existingGroupWithPolicyDepreciationTypeAndReductionRule>test_category_group</existingGroupWithPolicyDepreciationTypeAndReductionRule>
     <existingGroupWithDiscretionaryDepreciationTypeAndReductionRule>test_category_group_1</existingGroupWithDiscretionaryDepreciationTypeAndReductionRule>
     <existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy>Memorycard &amp; Batteri</existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy>
     <existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType>Videokameratilbehør</existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType>
-    <existingGroupFotoAndVideo>Foto &amp; Video</existingGroupFotoAndVideo>
-    <existingCat1>Børn</existingCat1>
-    <existingCat2>Smykker</existingCat2>
-    <existingCat3>Telefoni</existingCat3>
-    <existingCat4>Tøj &amp; Sko</existingCat4>
-    <categoryGroup1WithNotElectronicVoucher>Personlig Pleje</categoryGroup1WithNotElectronicVoucher>
-    <categoryGroup2WithNotElectronicVoucher>Punge, Tasker &amp; Kufferter</categoryGroup2WithNotElectronicVoucher>
-    <alkaCategory>Smykker, Ure &amp; Tilbehør</alkaCategory>
-    <alkaSubCategory>Luksusure</alkaSubCategory>
-    <alkaCategoryUnpublishedPolicy>Briller, Linser &amp; Hørelse</alkaCategoryUnpublishedPolicy>
-    <trygCategory>Cykler &amp; Tilbehør</trygCategory>
-    <trygCategory1>Musik, Film &amp; Spil</trygCategory1>
-    <alkaSubCategoryUnpublishedPolicy>Høreapparater</alkaSubCategoryUnpublishedPolicy>
-    <trygSubCategory>Cykler</trygSubCategory>
-    <trygCat1>Personlig Pleje</trygCat1>
-    <trygSubCat1>Medicin</trygSubCat1>
-    <existingSubCat1>Babyudstyr</existingSubCat1>
-    <existingSubCat2>Smykker</existingSubCat2>
-    <existingSubCat3>Mobiltelefoner</existingSubCat3>
-    <existingSubCat4>Sko</existingSubCat4>
+
+    <categoryBabyItems>
+        <groupName>Børn</groupName>
+        <categoryName>Babyudstyr</categoryName>
+    </categoryBabyItems>
+
+    <categoryVideoCamera>
+        <groupName>Foto &amp; Video</groupName>
+        <categoryName>Videokamera</categoryName>
+    </categoryVideoCamera>
+
+    <categoryMobilePhones>
+        <groupName>Telefoni</groupName>
+        <categoryName>Mobiltelefoner</categoryName>
+    </categoryMobilePhones>
+
+    <categoryShoes>
+        <groupName>Tøj &amp; Sko</groupName>
+        <categoryName>Sko</categoryName>
+    </categoryShoes>
+
+    <categoryLuxuryWatches>
+        <groupName>Smykker, Ure &amp; Tilbehør</groupName>
+        <categoryName>Luksusure</categoryName>
+    </categoryLuxuryWatches>
+
+    <categoryJewelry>
+        <groupName>Smykker, Ure &amp; Tilbehør</groupName>
+        <categoryName>Smykker</categoryName>
+    </categoryJewelry>
+
+    <categoryPersonalMedicine>
+        <groupName>Personlig Pleje</groupName>
+        <categoryName>Medicin</categoryName>
+    </categoryPersonalMedicine>
+
+    <categoryBicycles>
+        <groupName>Cykler &amp; Tilbehør</groupName>
+        <categoryName>Cykler</categoryName>
+    </categoryBicycles>
+
+    <categoryOther>
+        <groupName>Øvrige</groupName>
+    </categoryOther>
+
+    <categoryMusic>
+        <groupName>Musik, Film &amp; Spil</groupName>
+    </categoryMusic>
+
+    <categoryPurses>
+        <groupName>Punge, Tasker &amp; Kufferter</groupName>
+    </categoryPurses>
+
+    <categoryHearingAids>
+        <groupName>Briller, Linser &amp; Hørelse</groupName>
+        <categoryName>Høreapparater</categoryName>
+    </categoryHearingAids>
+
     <existingVoucher1>Autotest-SpVoucher</existingVoucher1>
     <existingVoucher2>BabySam A/S</existingVoucher2>
     <existingVoucher3>Autotest-SpVoucher</existingVoucher3>

@@ -83,9 +83,10 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
-                .setNewPrice(claimItem.getTrygNewPrice())
-                .setCustomerDemand(claimItem.getCustomerDemand())
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems())
+                        .withNewPrice(claimItem.getTrygNewPrice())
+                        .withCustomerDemandPrice(claimItem.getCustomerDemand())
+                )
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeUsedPrice())
                 .addValuationPrice(claimItem.getUsedPrice())
@@ -110,7 +111,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         Double initialCustomerDemand = claimItem.getCustomerDemand();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setCustomerDemand(initialCustomerDemand)
                 .setDescription(claimItem.getTextFieldSP())
@@ -129,7 +130,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void charlie586_addManuallyWithVoucherAndDepreciationLowerThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()));
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems()));
         SettlementPage settlementPage = settlementDialog.setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(settlementDialog.getVoucherPercentage() / 2)
@@ -151,7 +152,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void charlie586_addManuallyWithVoucherAndDepreciationHigherThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP());
         int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
@@ -170,8 +171,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(
-                        cat -> cat.withCategory(claimItem.getCategoryGroupBorn())
-                                .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        cat -> cat.withCategory(claimItem.getCategoryBabyItems())
                                 .withNewPrice(claimItem.getTrygNewPrice())
                 );
         int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
@@ -189,7 +189,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
-    public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim) {
+    public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
@@ -197,8 +197,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescriptionWithOutSuggestions("test_product")
-                .selectCategory("Foto & Video")
-                .selectSubCategory("Videokamera")
+                .selectCategory(claimItem.getCategoryVideoCamera())
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth("Apr")
                 .addNewPrice(Constants.PRICE_500)

@@ -23,8 +23,6 @@ public class ClaimItem {
     @XmlElement
     private String ssDescriptionSP;
     @XmlElement
-    private String existingCatWithoutVoucherAndSubCategory;
-    @XmlElement
     private String existingGroupWithPolicyDepreciationTypeAndReductionRule;
     @XmlElement
     private String existingGroupWithDiscretionaryDepreciationTypeAndReductionRule;
@@ -32,14 +30,7 @@ public class ClaimItem {
     private String existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy;
     @XmlElement
     private String existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType;
-    @XmlElement
-    private String existingGroupFotoAndVideo;
-    @XmlElement
-    private String existingCat1;
-    @XmlElement
-    private String existingCat2;
-    @XmlElement
-    private String existingSubCat1;
+
     @XmlElement
     private String existingVoucher1;
     @XmlElement
@@ -79,8 +70,6 @@ public class ClaimItem {
     @XmlElement
     private String depAmount2;
     @XmlElement
-    private String existingSubCat2;
-    @XmlElement
     private String month;
     @XmlElement
     private String integrationCategory;
@@ -109,21 +98,9 @@ public class ClaimItem {
     @XmlElement
     private Double bigCustomDemandPrice;
     @XmlElement
-    private String existingCat3;
-    @XmlElement
-    private String existingSubCat3;
-    @XmlElement
     private Integer reductionRule;
     @XmlElement
-    private String alkaCategory;
-    @XmlElement
-    private String alkaSubCategory;
-    @XmlElement
     private Integer alkaUserReductionRule;
-    @XmlElement
-    private String alkaCategoryUnpublishedPolicy;
-    @XmlElement
-    private String alkaSubCategoryUnpublishedPolicy;
     @XmlElement
     private Integer alkaUserReductionRule40;
     @XmlElement
@@ -133,55 +110,45 @@ public class ClaimItem {
     @XmlElement
     private String brandLinkVoucher4;
     @XmlElement
-    private String trygCategory;
-    @XmlElement
-    private String trygSubCategory;
-    @XmlElement
     private Double trygNewPrice;
     @XmlElement
-    private String trygCat1;
-    @XmlElement
-    private String trygSubCat1;
-    @XmlElement
-    private String trygCategory1;
-    @XmlElement
-    private String existingCat4;
-    @XmlElement
-    private String existingSubCat4;
-    @XmlElement
     private String matchedText;
-    @XmlElement
-    private String categoryGroup1WithNotElectronicVoucher;
-    @XmlElement
-    private String categoryGroup2WithNotElectronicVoucher;
 
-    public String getExistingCat4() {
-        return existingCat4;
-    }
+    @XmlElement(name = "categoryBabyItems")
+    private PseudoCategory categoryBabyItems;
 
-    public String getExistingSubCat4() {
-        return existingSubCat4;
-    }
+    @XmlElement(name = "categoryVideoCamera")
+    private PseudoCategory categoryVideoCamera;
 
-    public String getTrygCategory1() {
-        return trygCategory1;
-    }
+    @XmlElement(name = "categoryMobilePhones")
+    private PseudoCategory categoryMobilePhones;
 
-    public String getTrygCat1() {
-        return trygCat1;
-    }
+    @XmlElement(name = "categoryShoes")
+    private PseudoCategory categoryShoes;
 
-    public String getTrygSubCat1() {
-        return trygSubCat1;
-    }
+    @XmlElement(name = "categoryJewelry")
+    private PseudoCategory categoryJewelry;
 
-    public String getTrygCategory() {
-        return trygCategory;
-    }
+    @XmlElement(name = "categoryPersonalMedicine")
+    private PseudoCategory categoryPersonalMedicine;
 
-    public String getTrygSubCategory() {
-        return trygSubCategory;
-    }
+    @XmlElement(name = "categoryBicycles")
+    private PseudoCategory categoryBicycles;
+
+    @XmlElement(name = "categoryMusic")
+    private PseudoCategory categoryMusic;
+
+    @XmlElement(name = "categoryOther")
+    private PseudoCategory categoryOther;
+
+    @XmlElement(name = "categoryPurses")
+    private PseudoCategory categoryPurses;
+
+    @XmlElement(name = "categoryLuxuryWatches")
+    private PseudoCategory categoryLuxuryWatches;
+
+    @XmlElement(name = "categoryHearingAids")
+    private PseudoCategory categoryHearingAids;
 
     public Double getTrygNewPrice() {
         return trygNewPrice;
@@ -189,14 +156,6 @@ public class ClaimItem {
 
     public String getTextFieldSP() {
         return textFieldSP;
-    }
-
-    public String getCategoryGroupBorn() {
-        return existingCat1;
-    }
-
-    public String getExistingCatWithoutVoucherAndSubCategory() {
-        return existingCatWithoutVoucherAndSubCategory;
     }
 
     public String getExistingGroupWithPolicyDepreciationTypeAndReductionRule() {
@@ -214,18 +173,6 @@ public class ClaimItem {
 
     public String getExistingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType() {
         return existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType;
-    }
-
-    public String getExistingGroupFotoAndVideo() {
-        return existingGroupFotoAndVideo;
-    }
-
-    public String getCategoryBornBabyudstyr() {
-        return existingSubCat1;
-    }
-
-    public String getExistingSubCat2() {
-        return existingSubCat2;
     }
 
     public String getExistingVoucher_10() {
@@ -288,36 +235,12 @@ public class ClaimItem {
         return valuationTypeRepair;
     }
 
-    public String getExistingCat3_Telefoni() {
-        return existingCat3;
-    }
-
-    public String getExistingSubCat3_Mobiltelefoner() {
-        return existingSubCat3;
-    }
-
     public Integer getReductionRule_30() {
         return reductionRule;
     }
 
-    public String getAlkaCategory() {
-        return alkaCategory;
-    }
-
-    public String getAlkaSubCategory() {
-        return alkaSubCategory;
-    }
-
     public Integer getAlkaUserReductionRule_25() {
         return alkaUserReductionRule;
-    }
-
-    public String getAlkaCategoryUnpublishedPolicy() {
-        return alkaCategoryUnpublishedPolicy;
-    }
-
-    public String getAlkaSubCategoryUnpublishedPolicy() {
-        return alkaSubCategoryUnpublishedPolicy;
     }
 
     public Integer getAlkaUserReductionRule40() {
@@ -338,22 +261,6 @@ public class ClaimItem {
 
     public Double getNewPriceSP() {
         return newPriceSP;
-    }
-
-    public String getCategoryGroup1WithNotElectronicVoucher() {
-        return categoryGroup1WithNotElectronicVoucher;
-    }
-
-    public String getCategoryGroup2WithNotElectronicVoucher() {
-        return categoryGroup2WithNotElectronicVoucher;
-    }
-
-    public void setNewPriceSP(Double newPriceSP) {
-        this.newPriceSP = newPriceSP;
-    }
-
-    public void setCustomerDemand(Double customerDemand) {
-        this.customerDemand = customerDemand;
     }
 
     @Override

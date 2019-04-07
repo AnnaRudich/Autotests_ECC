@@ -109,8 +109,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
 
         IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().toSettlementPage().openSid()
                 .setDescription(claimItem.getTextFieldSP())
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(Constants.PRICE_2400)
                 .closeSidWithOk()
                 .saveClaim(claim);
@@ -129,8 +128,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(Constants.PRICE_2400)
                 .closeSidWithOk()
                 .toCustomerDetails()

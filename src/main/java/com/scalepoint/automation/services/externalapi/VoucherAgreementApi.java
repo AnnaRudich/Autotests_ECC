@@ -7,14 +7,11 @@ import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Http;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.fluent.Content;
-import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.post;
@@ -28,7 +25,7 @@ public class VoucherAgreementApi extends AuthenticationApi {
         super(user);
     }
 
-    public AssignedCategory createVoucher(Voucher voucher) {
+    public PseudoCategory createVoucher(Voucher voucher) {
         SupplierApi supplierApi = new SupplierApi(executor);
         PseudoCategoryApi pseudoCategoryApi = new PseudoCategoryApi(executor);
 
@@ -40,7 +37,7 @@ public class VoucherAgreementApi extends AuthenticationApi {
         String[] categories = category.getName().split("(?<=.)(?=(- +\\p{Lu}))");
         categories[1] = categories[1].replaceFirst("-", "");
 
-        return new AssignedCategory(categories[0].trim(), categories[1].trim());
+        return new PseudoCategory(categories[0].trim(), categories[1].trim());
     }
 
     private String createNewVoucherAgreement(String supplierId, Voucher voucher) {
@@ -67,24 +64,6 @@ public class VoucherAgreementApi extends AuthenticationApi {
         } catch (IOException e) {
             log.error("Can't create New Voucher Agreement", e);
             throw new ServerApiException(e);
-        }
-    }
-
-    public static class AssignedCategory {
-        private String category;
-        private String subCategory;
-
-        AssignedCategory(String category, String subCategory) {
-            this.category = category;
-            this.subCategory = subCategory;
-        }
-
-        public String getCategory() {
-            return category;
-        }
-
-        public String getSubCategory() {
-            return subCategory;
         }
     }
 }

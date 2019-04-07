@@ -81,8 +81,7 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(900.00)
                 .setDescription(claimItem.getTextFieldSP());
 
@@ -135,8 +134,7 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
@@ -284,8 +282,8 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductNameAndCategory(claimItem.getSetDialogTextMatch(), claimItem.getExistingSubCat3_Mobiltelefoner())
-                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .searchByProductName(claimItem.getSetDialogTextMatch())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
@@ -320,8 +318,8 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductNameAndCategory(claimItem.getSetDialogTextMatch(), claimItem.getExistingSubCat3_Mobiltelefoner())
-                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .searchByProductName(claimItem.getSetDialogTextMatch())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct();
         Double price = settlementDialog.getCashCompensationValue();
@@ -365,8 +363,7 @@ public class OrderDetailsTests extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(900.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .fillVoucher(voucher.getExistingVoucherForDistances());

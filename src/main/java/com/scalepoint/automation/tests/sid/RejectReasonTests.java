@@ -42,12 +42,11 @@ public class RejectReasonTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if reject reason dropdown is disabled if there is 0 or 1 reason available for IC")
     public void charlie_549_checkIsRejectReasonDropdownDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> sid
+                .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
                         .withDepreciation(DEPRECIATION_10)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                )
                 .rejectClaim()
                 .doAssert(SettlementDialog.Asserts::assertRejectReasonDisabled)
                 .closeSidWithOk()
@@ -92,11 +91,9 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> sid
+                .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                         .withAge(2, 2))
                 .rejectClaim()
                 .selectRejectReason(reason)
@@ -139,8 +136,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -177,8 +173,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -228,8 +223,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -258,8 +252,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -305,8 +298,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -335,8 +327,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -373,8 +364,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -402,8 +392,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -429,11 +418,9 @@ public class RejectReasonTests extends BaseTest {
                 .logout();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> sid
+                .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())
@@ -466,8 +453,7 @@ public class RejectReasonTests extends BaseTest {
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        .withCategory(claimItem.getCategoryBabyItems())
                         .withAge(0, 6))
                 .openAddValuationForm()
                 .addValuationType(claimItem.getValuationTypeDiscretionary())

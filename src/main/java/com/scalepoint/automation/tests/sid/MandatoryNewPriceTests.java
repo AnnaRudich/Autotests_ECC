@@ -29,8 +29,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryBabyItems())
                             .withDiscretionaryPrice(48.00);
                 })
                 .closeSidWithOk();
@@ -43,8 +42,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                 .openSidAndFill(sid -> {
                     sid
                             .withCustomerDemandPrice(Constants.PRICE_500)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryBabyItems())
                             .withDiscretionaryPrice(48.00);
                 })
                 .tryToCloseSidWithOkButExpectDialog(RequiredValuationIsNeededDialog.class);
@@ -55,7 +53,7 @@ public class MandatoryNewPriceTests extends BaseTest {
     public void charlie625WhenRequiredValuationIsSetToNewPriceAndCatalogItemHasMarketPriceSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setCustomerDemand(Constants.PRICE_500)
@@ -70,8 +68,7 @@ public class MandatoryNewPriceTests extends BaseTest {
                     sid
                             .withCustomerDemandPrice(Constants.PRICE_500)
                             .withNewPrice(Constants.PRICE_2400)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryBabyItems())
                             .withDiscretionaryPrice(48.00);
                 })
                 .closeSidWithOk();

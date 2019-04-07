@@ -79,8 +79,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getAlkaCategory())
-                .setSubCategory(claimItem.getAlkaSubCategory())
+                .setCategory(claimItem.getCategoryLuxuryWatches())
                 .enableAge(reductionRule.getAgeFrom2())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
@@ -130,8 +129,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getAlkaCategory())
-                .setSubCategory(claimItem.getAlkaSubCategory())
+                .setCategory(claimItem.getCategoryLuxuryWatches())
                 .enableAge(reductionRule.getAgeFrom2())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
@@ -180,8 +178,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getAlkaCategoryUnpublishedPolicy())
-                .setSubCategory(claimItem.getAlkaSubCategoryUnpublishedPolicy())
+                .setCategory(claimItem.getCategoryHearingAids())
                 .enableAge(reductionRule.getAgeFrom2())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
@@ -225,8 +222,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getExistingCat3_Telefoni())
-                .setSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .setCategory(claimItem.getCategoryMobilePhones())
                 .enableAge(reductionRule.getAgeFrom2())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 
@@ -276,8 +272,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getExistingCat3_Telefoni())
-                .setSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .setCategory(claimItem.getCategoryMobilePhones())
                 .enableAge(reductionRule.getAgeFrom2())
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE);
 

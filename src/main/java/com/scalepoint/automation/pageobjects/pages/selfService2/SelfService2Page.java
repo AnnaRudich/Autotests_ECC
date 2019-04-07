@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestData;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -142,9 +143,12 @@ public class SelfService2Page extends Page {
         }
     }
 
-    public SelfService2Page selectCategory(String categoryGroupName) {
-        trySelectItem(categoryCombo, categoryGroupName);
+    public SelfService2Page selectCategory(PseudoCategory pseudoCategory) {
+        trySelectItem(categoryCombo, pseudoCategory.getGroupName());
         waitForValidationMark(categoryCombo);
+
+        trySelectItem(subCategoryCombo, pseudoCategory.getCategoryName());
+        waitForValidationMark(subCategoryCombo);
         return this;
     }
 

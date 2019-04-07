@@ -13,6 +13,7 @@ import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
@@ -275,6 +276,14 @@ public class TextSearchPage extends Page {
         waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
         List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
         forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + _category)))).click();
+        waitForResultsLoad();
+        return this;
+    }
+
+    public TextSearchPage chooseCategory(PseudoCategory pseudoCategory) {
+        waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
+        List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
+        forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(pseudoCategory.getGroupName())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + pseudoCategory.getGroupName())))).click();
         waitForResultsLoad();
         return this;
     }

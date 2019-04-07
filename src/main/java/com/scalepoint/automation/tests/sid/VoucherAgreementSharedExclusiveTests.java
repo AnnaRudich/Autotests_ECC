@@ -13,6 +13,7 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Supplier;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-548")
@@ -41,7 +42,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
                                                        ClaimItem claimItem) {
 
         String voucherName = voucher.getVoucherGeneratedName();
-        createVoucherAgreement(trygParentUser, supplier, voucher, claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr());
+        createVoucherAgreement(trygParentUser, supplier, voucher, claimItem.getCategoryBabyItems());
 
         loginAndCheckVoucherPresence(trygChildUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
         loginAndCheckVoucherPresence(trygParentUser, TestData.getClaim(), claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
@@ -72,7 +73,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
                                                          ClaimItem claimItem) {
 
         String voucherName = voucher.getVoucherGeneratedName();
-        createVoucherAgreement(scalepointUser, supplier, voucher, claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr());
+        createVoucherAgreement(scalepointUser, supplier, voucher, claimItem.getCategoryBabyItems());
 
         loginAndCheckVoucherPresence(trygUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
 
@@ -90,13 +91,13 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
 
     }
 
-    private void createVoucherAgreement(User user, Supplier supplier, Voucher voucher, String categoryGroup, String category) {
+    private void createVoucherAgreement(User user, Supplier supplier, Voucher voucher, PseudoCategory pseudoCategory) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
         SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier),
                 SharedEccAdminFlows.VoucherAgreementData
                         .newBuilder(voucher, 10)
-                        .mapToCategory(categoryGroup, category)
+                        .mapToCategory(pseudoCategory)
                         .build())
                 .saveSupplier()
                 .logout();
@@ -104,7 +105,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
 
     private void loginAndCheckVoucherPresence(User userToLogin, Claim claim, ClaimItem claimItem, String policy, String voucherName, boolean mustBePresent) {
         loginAndCreateClaim(userToLogin, claim, policy)
-                .openSidAndFill(sid -> sid.withCategory(claimItem.getCategoryGroupBorn()).withSubCategory(claimItem.getCategoryBornBabyudstyr()))
+                .openSidAndFill(sid -> sid.withCategory(claimItem.getCategoryBabyItems()))
                 .doAssert(sid -> {
                     if (mustBePresent) {
                         sid.assertVoucherListed(voucherName);

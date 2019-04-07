@@ -13,6 +13,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-557")
@@ -97,7 +98,7 @@ public class SidShowVoucherDetails extends BaseTest {
     }
 
     private void checkBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        VoucherAgreementApi.AssignedCategory assignedCategory = new VoucherAgreementApi(user).createVoucher(voucher);
+        PseudoCategory assignedCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
         loginAndCreateClaim(user, claim).openSid()
                 .setDescription(claimItem.getTextFieldSP())
@@ -131,7 +132,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
                 .setDepreciation(Constants.DEPRECIATION_10)
-                .setCategory(claimItem.getCategoryGroupBorn()).setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .fillVoucher(claimItem.getExistingVoucher2());
 
         VoucherTermsAndConditionsDialog voucherTermsAndConditionsDialog = settlementDialog.openVoucherTermAndConditions();
@@ -169,8 +170,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
                 .setDepreciation(Constants.DEPRECIATION_10)
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .fillVoucher(claimItem.getExistingVoucher2())
                 .doAssert(sid -> sid.assertBrandTextIs(voucher.getBrandLink()))
                 .cancel();
@@ -197,8 +197,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .fillVoucher(claimItem.getExistingVoucher2());
 
         EditVoucherValuationDialog editVoucherValuationDialog = settlementDialog
@@ -226,8 +225,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
                 .setDepreciation(Constants.DEPRECIATION_10)
-                .setCategory(claimItem.getCategoryGroupBorn())
-                .setSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .setCategory(claimItem.getCategoryBabyItems())
                 .fillVoucher(claimItem.getExistingVoucher2())
                 .doAssert(sid -> sid.assertBrandTextIs(claimItem.getExistingVoucher2()))
                 .fillVoucher(claimItem.getExistingVoucher4())

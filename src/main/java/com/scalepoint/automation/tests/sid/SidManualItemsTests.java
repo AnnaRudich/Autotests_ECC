@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
-import com.scalepoint.automation.services.externalapi.VoucherAgreementApi.AssignedCategory;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
@@ -18,6 +17,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -59,15 +59,17 @@ public class SidManualItemsTests extends BaseTest {
 
         String currentUrl = Browser.driver().getCurrentUrl();
 
+        String categoryGroup = claimItem.getCategoryBabyItems().getGroupName();
+
         List<String> allSubCategories = Page.to(PseudoCategoryGroupPage.class)
-                .editGroup(claimItem.getCategoryGroupBorn())
+                .editGroup(categoryGroup)
                 .getAllPseudoCategories();
 
         Browser.driver().get(currentUrl);
 
         Page.at(SettlementPage.class)
                 .openSid()
-                .setCategory(claimItem.getCategoryGroupBorn())
+                .setCategory(categoryGroup)
                 .doAssert(sid -> sid.assertSubCategoriesListEqualTo(allSubCategories));
     }
 
@@ -115,24 +117,23 @@ public class SidManualItemsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
     public void ecc3144_5_manualDepreciation(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
+        PseudoCategory pseudoCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
         SettlementDialog dialog = loginAndCreateClaim(user, claim)
-                .openSid()
-                .setDescription(claimItem.getTextFieldSP())
-                .setCustomerDemand(Constants.PRICE_500)
-                .setCategory(categoryInfo)
-                .fillVoucher(voucher.getVoucherGeneratedName())
-                .setDepreciation(Constants.DEPRECIATION_10)
-                .setValuation(CUSTOMER_DEMAND);
+                .openSidAndFill(pseudoCategory, sid -> {
+                    sid.withText(claimItem.getTextFieldSP())
+                            .withCustomerDemandPrice(Constants.PRICE_500)
+                            .withVoucher(voucher.getVoucherGeneratedName())
+                            .withDepreciation(Constants.DEPRECIATION_10)
+                            .withValuation(CUSTOMER_DEMAND);
+                });
 
         PriceValuation expectedCalculations = SidCalculator.calculatePriceValuation(Constants.PRICE_500, Constants.DEPRECIATION_10);
 
-        dialog
-                .doAssert(sid -> {
-                    sid.assertCashValueIs(expectedCalculations.getCashValue());
-                    sid.assertDepreciationAmountIs(expectedCalculations.getDepreciation());
-                }).parseValuationRow(CUSTOMER_DEMAND)
+        dialog.doAssert(sid -> {
+            sid.assertCashValueIs(expectedCalculations.getCashValue());
+            sid.assertDepreciationAmountIs(expectedCalculations.getDepreciation());
+        }).parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> {
                     valuationRow.assertCashCompensationIs(expectedCalculations.getCashValue());
                     valuationRow.assertDepreciationPercentageIs(10);
@@ -150,7 +151,7 @@ public class SidManualItemsTests extends BaseTest {
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setNewPrice(Constants.PRICE_500)
-                .setCategory(claimItem.getExistingGroupFotoAndVideo())
+                .setCategory(claimItem.getCategoryVideoCamera().getGroupName())
                 .setSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
                 .fillVoucher(voucher.getVoucherGeneratedName())
                 .automaticDepreciation(false)
@@ -179,7 +180,7 @@ public class SidManualItemsTests extends BaseTest {
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setNewPrice(Constants.PRICE_500)
-                .setCategory(claimItem.getExistingGroupFotoAndVideo())
+                .setCategory(claimItem.getCategoryVideoCamera().getGroupName())
                 .setSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
                 .fillVoucher(voucher.getVoucherGeneratedName())
                 .automaticDepreciation(false)
@@ -188,7 +189,7 @@ public class SidManualItemsTests extends BaseTest {
                 .setValuation(NEW_PRICE)
                 .setDepreciation(15)
                 .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
-                .setCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory())
+                .setCategory(claimItem.getCategoryOther())
                 .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
                 .setCategory(claimItem.getExistingGroupWithDiscretionaryDepreciationTypeAndReductionRule())
                 .doAssert(sid -> sid.assertDepreciationPercentageIs("15"))
@@ -210,6 +211,8 @@ public class SidManualItemsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to Save all results entered")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_6_SaveAllEnteredResults(User user, Claim claim, ClaimItem claimItem) {
+        PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
+
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -217,8 +220,7 @@ public class SidManualItemsTests extends BaseTest {
                 .findClaimLine(claimItem.getTextFieldSP()).editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
-                    claimLine.assertCategoryTextIs(claimItem.getCategoryGroupBorn());
-                    claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
+                    claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
@@ -239,6 +241,8 @@ public class SidManualItemsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     public void ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
+        PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
+
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -247,8 +251,7 @@ public class SidManualItemsTests extends BaseTest {
                 .editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
-                    claimLine.assertCategoryTextIs(claimItem.getCategoryGroupBorn());
-                    claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
+                    claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
@@ -260,8 +263,7 @@ public class SidManualItemsTests extends BaseTest {
                 .editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
-                    claimLine.assertCategoryTextIs(claimItem.getCategoryGroupBorn());
-                    claimLine.assertSubCategoryTextIs(claimItem.getCategoryBornBabyudstyr());
+                    claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(claimItem.getCustomerDemand()))

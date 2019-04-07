@@ -132,10 +132,8 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
 
     private SettlementDialog createClaimAndFillSid(User user, Claim claim, ClaimItem claimItem) {
         return loginAndCreateClaim(user, claim)
-                .openSidAndFill(sidForm -> {
-                    sidForm.withCategory(claimItem.getExistingCat4())
-                            .withSubCategory(claimItem.getExistingSubCat4())
-                            .withCustomerDemandPrice(1000.00)
+                .openSidAndFill(claimItem.getCategoryShoes(), sidForm -> {
+                    sidForm.withCustomerDemandPrice(1000.00)
                             .withNewPrice(100.00)
                             .withAge(0, 6);
                 });

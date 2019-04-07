@@ -26,10 +26,10 @@ public class ShowScalepointSupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-589 FT 'Show Scalepoint Supplier' is OFF, Scalepoint Supplier name is not displayed in the SID")
     @RequiredSetting(type = FTSetting.SHOW_SCALEPOINT_SUPPLIER, enabled = false)
-    public void charlie_589_1_showScalepointSupplierNameDisabled(User user, Claim claim, ClaimItem claimItem) throws Exception {
+    public void charlie_589_1_showScalepointSupplierNameDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .doAssert(SettlementDialog.Asserts::assertScalepointSupplierNotVisible);
@@ -44,10 +44,10 @@ public class ShowScalepointSupplierTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_SCALEPOINT_SUPPLIER)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-589 FT 'Show Scalepoint Supplier' is ON, Scalepoint Supplier name is displayed in the SID")
-    public void charlie_589_2_showScalepointSupplierNameEnabled(User user, Claim claim, ClaimItem claimItem) throws Exception {
+    public void charlie_589_2_showScalepointSupplierNameEnabled(User user, Claim claim, ClaimItem claimItem) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst();
         ProductInfo product = SolrApi.findProduct(textSearchPage.getFirstProductId());
 

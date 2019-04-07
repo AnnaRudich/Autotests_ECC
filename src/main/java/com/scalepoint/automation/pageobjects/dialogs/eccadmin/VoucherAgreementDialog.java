@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioButton;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -487,19 +488,19 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
 
         public class Asserts {
 
-            public Asserts assertCategoryMapped(String categoryGroup, String category) {
-                Assert.assertTrue(isCategoryMapped(categoryGroup, category));
+            public Asserts assertCategoryMapped(PseudoCategory pseudoCategory) {
+                Assert.assertTrue(isCategoryMapped(pseudoCategory));
                 return this;
             }
 
 
-            public Asserts assertCategoryNotMapped(String categoryGroup, String category) {
-                Assert.assertFalse(isCategoryMapped(categoryGroup, category));
+            public Asserts assertCategoryNotMapped(PseudoCategory pseudoCategory) {
+                Assert.assertFalse(isCategoryMapped(pseudoCategory));
                 return this;
             }
 
-            private boolean isCategoryMapped(String categoryGroup, String category) {
-                String expectedCategory = EditCategoryMappingsDialog.formatCategoryOption(categoryGroup, category);
+            private boolean isCategoryMapped(PseudoCategory pseudoCategory) {
+                String expectedCategory = EditCategoryMappingsDialog.formatCategoryOption(pseudoCategory.getGroupName(), pseudoCategory.getCategoryName());
                 return $(By.xpath("//div[@id='categoriesVoucherTabId']//div[text()='" + expectedCategory + "']")).isDisplayed();
             }
 
@@ -510,14 +511,14 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             return BaseDialog.at(EditCategoryMappingsDialog.class);
         }
 
-        public CategoriesTab mapToCategory(String categoryGroup, String categoryName) {
+        public CategoriesTab mapToCategory(PseudoCategory pseudoCategory) {
             return openEditMappingsDialog()
-                    .mapCategory(categoryGroup, categoryName);
+                    .mapCategory(pseudoCategory);
         }
 
-        public CategoriesTab removeMapping(String categoryGroup, String categoryName) {
+        public CategoriesTab removeMapping(PseudoCategory pseudoCategory) {
             return openEditMappingsDialog()
-                    .removeMapping(categoryGroup, categoryName);
+                    .removeMapping(pseudoCategory);
         }
     }
 

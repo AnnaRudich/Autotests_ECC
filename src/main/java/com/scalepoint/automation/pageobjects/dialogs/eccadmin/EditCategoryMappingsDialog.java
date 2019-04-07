@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,16 +26,16 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         return this;
     }
 
-    public VoucherAgreementDialog.CategoriesTab mapCategory(String categoryName, String subcategoryName) {
-        return clickOnCategoryAndSave(categoryName, subcategoryName, unmappedCategories);
+    public VoucherAgreementDialog.CategoriesTab mapCategory(PseudoCategory pseudoCategory) {
+        return clickOnCategoryAndSave(pseudoCategory, unmappedCategories);
     }
 
-    public VoucherAgreementDialog.CategoriesTab removeMapping(String categoryName, String subcategoryName) {
-        return clickOnCategoryAndSave(categoryName, subcategoryName, mappedCategories);
+    public VoucherAgreementDialog.CategoriesTab removeMapping(PseudoCategory pseudoCategory) {
+        return clickOnCategoryAndSave(pseudoCategory, mappedCategories);
     }
 
-    private VoucherAgreementDialog.CategoriesTab clickOnCategoryAndSave(String categoryName, String subcategoryName, List<WebElement> categories) {
-        String optionToFind = formatCategoryOption(categoryName, subcategoryName);
+    private VoucherAgreementDialog.CategoriesTab clickOnCategoryAndSave(PseudoCategory pseudoCategory, List<WebElement> categories) {
+        String optionToFind = formatCategoryOption(pseudoCategory.getGroupName(), pseudoCategory.getCategoryName());
         for (WebElement unmappedCategory : categories) {
             String option = unmappedCategory.getText();
             if (option.equals(optionToFind)) {

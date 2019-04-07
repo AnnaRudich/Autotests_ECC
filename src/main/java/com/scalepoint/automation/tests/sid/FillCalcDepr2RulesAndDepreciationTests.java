@@ -82,8 +82,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
-                .setCategory(claimItem.getTrygCat1())
-                .setSubCategory(claimItem.getTrygSubCat1())
+                .setCategory(claimItem.getCategoryPersonalMedicine())
                 .automaticDepreciation(true)
                 .parseValuationRow(NEW_PRICE)
                 .makeActive()
@@ -120,8 +119,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 setDescription(claimItem.getTextFieldSP()).
                 setCustomerDemand(Constants.PRICE_100_000).
                 setNewPrice(claimItem.getTrygNewPrice()).
-                setCategory(claimItem.getTrygCategory()).
-                setSubCategory(claimItem.getTrygSubCategory()).
+                setCategory(claimItem.getCategoryBicycles()).
                 automaticDepreciation(true).
                 enableAge().
                 enterAgeYears("5").

@@ -37,8 +37,7 @@ public class SettlementSummaryTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
                             .withVoucher(voucher.getExistingVoucher_10());
@@ -76,8 +75,7 @@ public class SettlementSummaryTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
                             .withVoucher(voucher.getExistingVoucher_10());

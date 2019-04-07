@@ -54,8 +54,8 @@ public class TextSearchTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductNameAndCategory(SAMSUNG_GALAXY_S_7, claimItem.getExistingSubCat3_Mobiltelefoner())
-                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .searchByProductName(SAMSUNG_GALAXY_S_7)
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .selectBrand(textSearch.getBrandSamsung())
                 .selectModel(textSearch.getModelGalaxyS7())
                 .doAssert(
@@ -73,8 +73,8 @@ public class TextSearchTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductNameAndCategory(SAMSUNG_GALAXY_S_7, claimItem.getExistingSubCat3_Mobiltelefoner())
-                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .searchByProductName(SAMSUNG_GALAXY_S_7)
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .selectBrand(textSearch.getBrandSamsung())
                 .openAttributesMenu()
                 .selectAttribute(attributes)
@@ -115,8 +115,8 @@ public class TextSearchTests extends BaseTest {
         String product = SAMSUNG_GALAXY_S_7;
         TextSearchPage tsp = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductNameAndCategory(product, claimItem.getExistingSubCat3_Mobiltelefoner())
-                .chooseCategory(claimItem.getExistingSubCat3_Mobiltelefoner());
+                .searchByProductName(product)
+                .chooseCategory(claimItem.getCategoryMobilePhones());
 
         tsp.sortPopularityDescending()
                 .waitForResultsLoad()
@@ -140,7 +140,7 @@ public class TextSearchTests extends BaseTest {
                 .doAssert(TextSearchPage.Asserts::assertAscendingPopularityChosen);
 
         /* new search should reset popularity sort so no icons will be present */
-        tsp.searchByProductNameAndCategory(product, claimItem.getExistingSubCat3_Mobiltelefoner())
+        tsp.searchByProductName(product)
                 .waitForResultsLoad()
                 .doAssert(
                         TextSearchPage.Asserts::assertNoPopularitySortChosen);

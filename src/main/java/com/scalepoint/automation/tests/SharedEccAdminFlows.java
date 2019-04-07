@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDi
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.utils.data.entity.Supplier;
 import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang.StringUtils;
 
 public class SharedEccAdminFlows implements Actions {
@@ -39,9 +40,9 @@ public class SharedEccAdminFlows implements Actions {
                 })
                 .createVoucherAgreement();
 
-        if (StringUtils.isNotBlank(voucherAgreementData.categoryGroup)) {
+        if (voucherAgreementData.hasPseudoCategory()) {
             generalTab.selectCategoriesTab()
-                    .mapToCategory(voucherAgreementData.categoryGroup, voucherAgreementData.categoryName);
+                    .mapToCategory(voucherAgreementData.pseudoCategory);
         }
 
         if (StringUtils.isNotBlank(voucherAgreementData.termsAndConditions)) {
@@ -56,13 +57,16 @@ public class SharedEccAdminFlows implements Actions {
     public static class VoucherAgreementData {
         private Voucher voucherGeneralData;
         private int discount;
-        private String categoryGroup;
-        private String categoryName;
+        private PseudoCategory pseudoCategory;
         private String termsAndConditions;
 
         VoucherAgreementData(Voucher voucherGeneralData, int discount) {
             this.voucherGeneralData = voucherGeneralData;
             this.discount = discount;
+        }
+
+        public boolean hasPseudoCategory() {
+            return pseudoCategory != null;
         }
 
         public static VoucherAgreementBuilder newBuilder(Voucher voucherGeneralData, int discount) {
@@ -76,9 +80,8 @@ public class SharedEccAdminFlows implements Actions {
                 return this;
             }
 
-            public VoucherAgreementBuilder mapToCategory(String categoryGroup, String categoryName) {
-                VoucherAgreementData.this.categoryGroup = categoryGroup;
-                VoucherAgreementData.this.categoryName = categoryName;
+            public VoucherAgreementBuilder mapToCategory(PseudoCategory pseudoCategory) {
+                VoucherAgreementData.this.pseudoCategory = pseudoCategory;
                 return this;
             }
 

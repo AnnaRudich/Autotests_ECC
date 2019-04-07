@@ -13,6 +13,7 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
@@ -44,18 +45,16 @@ public class DeprecationDeductedTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION, enabled = false)
     public void ecc3288_1_displayVoucherValueWithDeprecationDeductedOFF(User user, Claim claim, Voucher voucher) {
 
-        VoucherAgreementApi.AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
+        PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
         VoucherValuationWithDepreciation expectedCalculation = SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
 
         Double expectedCashValue = expectedCalculation.getCashCompensationOfVoucher();
         Double expectedFaceValue = Constants.PRICE_2400;
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
 
-        String category = categoryInfo.getCategory();
-        String subCategory = categoryInfo.getSubCategory();
         String voucherName = voucher.getVoucherGeneratedName();
 
-        verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, category, subCategory, voucherName);
+        verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, categoryInfo, voucherName);
     }
 
     /**
@@ -84,22 +83,18 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
         Double expectedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
 
-        String category = claimItem.getCategoryGroupBorn();
-        String subcategory = claimItem.getCategoryBornBabyudstyr();
         String voucherName = claimItem.getExistingVoucher_10();
 
-        verify(user, claim, expectedCashValue, expectedFaceValue, expectedCashValue, category, subcategory, voucherName);
+        verify(user, claim, expectedCashValue, expectedFaceValue, expectedCashValue, claimItem.getCategoryBabyItems(), voucherName);
     }
 
     private void verify(User user, Claim claim, Double expectedVoucherCashValue, Double expectedVoucherFaceValue, Double customerCashValue,
-                        String category, String subCategory, String voucherNameSP) {
+                       PseudoCategory pseudoCategory, String voucherNameSP) {
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sidForm -> {
+                .openSidAndFill(pseudoCategory, sidForm -> {
                     sidForm.withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
-                            .withCategory(category)
-                            .withSubCategory(subCategory)
                             .withVoucher(voucherNameSP);
                 })
                 .closeSidWithOk()

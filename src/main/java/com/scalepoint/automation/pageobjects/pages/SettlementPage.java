@@ -6,15 +6,18 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
+import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.*;
@@ -179,11 +182,11 @@ public class SettlementPage extends BaseClaimPage {
         return functionalMenu.addManually();
     }
 
-    public SettlementPage openSid(String description, String category, String subcategory, Double newPrice) {
+    public SettlementPage openSid(String description, PseudoCategory pseudoCategory, Double newPrice) {
         return openSidAndFill(formFiller -> formFiller
                 .withText(description)
-                .withCategory(category)
-                .withSubCategory(subcategory)
+                .withCategory(pseudoCategory.getGroupName())
+                .withSubCategory(pseudoCategory.getCategoryName())
                 .withNewPrice(newPrice))
                 .closeSidWithOk();
     }
@@ -192,16 +195,25 @@ public class SettlementPage extends BaseClaimPage {
         return openSid().setDescription(Constants.TEXT_LINE).fill(fillfunc);
     }
 
+    public SettlementDialog openSidAndFill(PseudoCategory pseudoCategory, Consumer<SettlementDialog.FormFiller> fillfunc) {
+        return openSid()
+                .setDescription(Constants.TEXT_LINE)
+                .setCategory(pseudoCategory.getGroupName())
+                .setSubCategory(pseudoCategory.getCategoryName())
+                .fill(fillfunc);
+    }
+
     public SettlementDialog openSidAndFillWithCustomDescription(Consumer<SettlementDialog.FormFiller> fillfunc) {
         return openSid().fill(fillfunc);
     }
 
     public SettlementPage addLines(ClaimItem claimItem, String... lineDescriptions) {
+        PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
         for (String lineDescription : lineDescriptions) {
             openSidAndFillWithCustomDescription(sid -> sid
                     .withText(lineDescription)
-                    .withCategory(claimItem.getCategoryGroupBorn())
-                    .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                    .withCategory(pseudoCategory.getGroupName())
+                    .withSubCategory(pseudoCategory.getCategoryName())
                     .withNewPrice(PRICE_2400)
                     .withAge(AGE_YEAR, AGE_MONTH)
                     .withVoucher(claimItem.getExistingVoucher_10()))

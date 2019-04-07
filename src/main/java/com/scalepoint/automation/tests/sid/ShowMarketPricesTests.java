@@ -29,7 +29,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getCategoryGroupBorn())
+                .chooseCategory(claimItem.getCategoryBabyItems())
                 .doAssert(TextSearchPage.Asserts::assertMarketPriceSortingInvisible)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
@@ -56,7 +56,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setValuation(Valuation.MARKET_PRICE)
@@ -80,7 +80,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortMarketPricesAscending()
                 .doAssert(TextSearchPage.Asserts::assertSortingMarketPriceAscendant)
                 .sortMarketPricesDescending()
@@ -109,7 +109,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_5_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()
                 .doAssert(productDetails -> {

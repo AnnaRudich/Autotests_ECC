@@ -15,6 +15,7 @@ import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
@@ -45,7 +46,7 @@ public class VoucherAgreementTests extends BaseTest {
                 })
                 .createVoucherAgreement()
                 .selectCategoriesTab()
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .selectCoverageTab()
                 .setBrands(brand)
                 .setTags(tag)
@@ -56,12 +57,8 @@ public class VoucherAgreementTests extends BaseTest {
                 .signOut();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> sid
-                        .withText("item1")
-                        .withNewPrice(PRICE_2400)
-                        .withCategory(claimItem.getCategoryGroupBorn())
-                        .withSubCategory(claimItem.getCategoryBornBabyudstyr())
-                        .withVoucher(voucher.getVoucherGeneratedName()))
+                .openSidAndFill(claimItem.getCategoryBabyItems(),
+                        sid -> sid.withNewPrice(PRICE_2400).withVoucher(voucher.getVoucherGeneratedName()))
                 .openEditDiscountDistributionForVoucher()
                 .doAssert(asserts -> {
                     asserts.assertBrandsTextIs(brand);
@@ -285,13 +282,13 @@ public class VoucherAgreementTests extends BaseTest {
                 })
                 .createVoucherAgreement()
                 .selectCategoriesTab()
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .saveVoucherAgreement()
                 .editVoucherAgreement(voucher.getVoucherGeneratedName())
                 .selectCategoriesTab()
-                .doAssert(tab -> tab.assertCategoryMapped(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr()))
-                .removeMapping(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
-                .doAssert(tab -> tab.assertCategoryNotMapped(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr()));
+                .doAssert(tab -> tab.assertCategoryMapped(claimItem.getCategoryBabyItems()))
+                .removeMapping(claimItem.getCategoryBabyItems())
+                .doAssert(tab -> tab.assertCategoryNotMapped(claimItem.getCategoryBabyItems()));
     }
 
 
@@ -310,7 +307,7 @@ public class VoucherAgreementTests extends BaseTest {
 
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(scalepointUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.NOT_VISIBLE)
                 .build();
@@ -331,7 +328,7 @@ public class VoucherAgreementTests extends BaseTest {
                                                                     Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(childUser, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(parentUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
@@ -352,7 +349,7 @@ public class VoucherAgreementTests extends BaseTest {
                                                                     Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(parentUser, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(childUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
@@ -371,7 +368,7 @@ public class VoucherAgreementTests extends BaseTest {
     public void ecc3038_joinLeftSPVoucherActiveStatus(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(futureUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
@@ -416,7 +413,7 @@ public class VoucherAgreementTests extends BaseTest {
     public void ecc3038_voucherLeftByIC1ActiveIC2(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser1, User futureUser2, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(futureUser1)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
@@ -465,7 +462,7 @@ public class VoucherAgreementTests extends BaseTest {
     public void ecc3038_inactiveSPVoucherNotAvailableIC(@UserCompany(CompanyCode.SCALEPOINT) User scalepointUser, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(scalepointUser, supplier)
                 .withVoucherInactive(voucher.getVoucherGeneratedName(), 10)
-                .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(futureUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.NOT_VISIBLE)
                 .build();
@@ -479,8 +476,7 @@ public class VoucherAgreementTests extends BaseTest {
         private String voucherName;
         private Integer discount;
         private boolean voucherActive = true;
-        private String categoryGroup;
-        private String categoryName;
+        private PseudoCategory pseudoCategory;
         private User creator;
         private User anotherUser;
         private VoucherAgreementState voucherAgreementState;
@@ -503,6 +499,10 @@ public class VoucherAgreementTests extends BaseTest {
             return new VoucherAgreementData(creator, supplier).new VoucherAgreementBuilder();
         }
 
+        public boolean hasPseudoCategory() {
+            return pseudoCategory != null;
+        }
+
         public class VoucherAgreementBuilder {
 
             VoucherAgreementData.VoucherAgreementBuilder withVoucherActive(String voucherName, Integer discount) {
@@ -518,9 +518,8 @@ public class VoucherAgreementTests extends BaseTest {
                 return this;
             }
 
-            VoucherAgreementData.VoucherAgreementBuilder mapToCategory(String categoryGroup, String categoryName) {
-                VoucherAgreementData.this.categoryGroup = categoryGroup;
-                VoucherAgreementData.this.categoryName = categoryName;
+            VoucherAgreementData.VoucherAgreementBuilder mapToCategory(PseudoCategory pseudoCategory) {
+                VoucherAgreementData.this.pseudoCategory = pseudoCategory;
                 return this;
             }
 
@@ -572,9 +571,9 @@ public class VoucherAgreementTests extends BaseTest {
         }
 
         /* assign groups if needs */
-        if (StringUtils.isNoneBlank(voucherAgreementData.categoryGroup)) {
+        if (voucherAgreementData.hasPseudoCategory()) {
             voucherAgreementGeneralTab.selectCategoriesTab()
-                    .mapToCategory(voucherAgreementData.categoryGroup, voucherAgreementData.categoryName)
+                    .mapToCategory(voucherAgreementData.pseudoCategory)
                     .selectGeneralTab();
         }
 

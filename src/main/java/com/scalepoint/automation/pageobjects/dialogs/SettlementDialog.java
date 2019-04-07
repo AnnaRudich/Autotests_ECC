@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -260,8 +261,9 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public FormFiller withCategory(VoucherAgreementApi.AssignedCategory category) {
-            sid.setCategory(category);
+        public FormFiller withCategory(PseudoCategory category) {
+            sid.setCategory(category.getGroupName());
+            sid.setSubCategory(category.getCategoryName());
             return this;
         }
 
@@ -370,8 +372,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setBaseData(ClaimItem claimItem) {
         return fill(formFiller -> {
             formFiller.withText(claimItem.getTextFieldSP())
-                    .withCategory(claimItem.getCategoryGroupBorn())
-                    .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                    .withCategory(claimItem.getCategoryBabyItems())
                     .withCustomerDemandPrice(claimItem.getCustomerDemand())
                     .withNewPrice(claimItem.getNewPriceSP());
         });
@@ -450,14 +451,17 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setSubCategory(String subCategoryName) {
+        if (subCategoryName == null) {
+            return this;
+        }
         subCategory.select(subCategoryName);
         waitForJavascriptRecalculation();
         return this;
     }
 
-    public SettlementDialog setCategory(VoucherAgreementApi.AssignedCategory categoryInfo) {
-        setCategory(categoryInfo.getCategory());
-        setSubCategory(categoryInfo.getSubCategory());
+    public SettlementDialog setCategory(PseudoCategory categoryInfo) {
+        setCategory(categoryInfo.getGroupName());
+        setSubCategory(categoryInfo.getCategoryName());
         return this;
     }
 
@@ -1087,6 +1091,12 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertCategoryTextIs(String expectedCategory) {
             assertEquals(getCategoryText(), expectedCategory, "The Category is not Saved");
+            return this;
+        }
+
+        public Asserts assertCategoriesTextIs(PseudoCategory expectedCategory) {
+            assertEquals(getCategoryText(), expectedCategory.getGroupName(), "The category group is not Saved");
+            assertEquals(getSubCategoryText(), expectedCategory.getCategoryName(), "The Subcategory is not Saved");
             return this;
         }
 

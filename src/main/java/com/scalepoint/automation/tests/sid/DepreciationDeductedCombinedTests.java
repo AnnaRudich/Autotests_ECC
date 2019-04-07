@@ -65,10 +65,8 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
 
     private void verify(User user, Claim claim, ClaimItem claimItem, double expectedNewPrice, double expectedCashValue, boolean setDiscountAndDepreciation) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSidAndFill(sidForm -> {
+                .openSidAndFill(claimItem.getCategoryBabyItems(), sidForm -> {
                     sidForm.withText(Constants.TEXT_LINE)
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)

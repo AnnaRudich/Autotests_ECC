@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
-import com.scalepoint.automation.services.externalapi.VoucherAgreementApi.AssignedCategory;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
@@ -16,6 +15,7 @@ import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG;
@@ -28,7 +28,7 @@ public class SidTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialog")
     public void ecc3025_selectVoucherExistingCatAddDialog(User user, Claim claim, Voucher voucher) {
-        AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
+        PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(categoryInfo)
@@ -47,19 +47,18 @@ public class SidTests extends BaseTest {
             " - depreciation percent if voucher selected in Add settlement dialog")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, Voucher voucher) {
-        AssignedCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
+        PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
         SidCalculator.VoucherValuationWithDepreciation expectedCalculations =
                 SidCalculator.calculateVoucherValuation(PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);
         Double calculatedCashValue = expectedCalculations.getCashCompensationWithDepreciation();
         Double calculatedDepreciationValue = expectedCalculations.getDepreciatedAmount();
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
+                .openSidAndFill(categoryInfo, sid -> {
                     sid
                             .withCustomerDemandPrice(PRICE_100_000)
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withCategory(categoryInfo)
                             .withVoucher(voucher.getVoucherGeneratedName());
                 })
                 .doAssert(sid -> {
@@ -77,14 +76,13 @@ public class SidTests extends BaseTest {
      * THAN the distance is equal to predefined value
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
-    public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem item, Voucher voucher) {
+    public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucherForDistances();
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryBabyItems())
                             .withCustomerDemandPrice(1000.00)
                             .withNewPrice(100.00)
                             .withVoucher(existingVoucher);
@@ -121,15 +119,14 @@ public class SidTests extends BaseTest {
      * THAN it's possible to find shop with distance as predefined value
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
-    public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem item, Voucher voucher) {
+    public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
         String existingVoucherShopName = "Test shop " + existingVoucher;
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryBabyItems())
                             .withNewPrice(100.00)
                             .withVoucher(existingVoucher);
                 })
@@ -239,7 +236,7 @@ public class SidTests extends BaseTest {
         SupplierDialog.GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier);
         SharedEccAdminFlows.createVoucherAgreement(generalTab,
                 SharedEccAdminFlows.VoucherAgreementData.newBuilder(voucher, discount)
-                        .mapToCategory(claimItem.getCategoryGroupBorn(), claimItem.getCategoryBornBabyudstyr())
+                        .mapToCategory(claimItem.getCategoryBabyItems())
                         .withTermsAndConditions(conditionsText)
                         .build())
                 .saveSupplier()
@@ -248,8 +245,7 @@ public class SidTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
-                            .withCategory(claimItem.getCategoryGroupBorn())
-                            .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                            .withCategory(claimItem.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withVoucher(voucherName);
                 })
@@ -311,8 +307,7 @@ public class SidTests extends BaseTest {
                     sid
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryBabyItems())
                             .withVoucher(item.getExistingVoucher_10());
                 })
                 .doAssert(sid -> {
@@ -324,10 +319,8 @@ public class SidTests extends BaseTest {
 
     private void testDiscountDistributionUpdate(User user, Claim claim, ClaimItem item, String existingVoucher, int customerDiscount, SidCalculator.VoucherValuation voucherValuation, boolean dialogMode) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
+                .openSidAndFill(item.getCategoryBabyItems(), sid -> {
                     sid
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
                             .withNewPrice(PRICE_2400)
                             .withVoucher(existingVoucher);
                 });

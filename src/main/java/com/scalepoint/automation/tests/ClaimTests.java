@@ -309,8 +309,7 @@ public class ClaimTests extends BaseTest {
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)
-                .selectCategory(claimItem.getExistingCat3_Telefoni())
-                .selectSubCategory(claimItem.getExistingSubCat3_Mobiltelefoner())
+                .selectCategory(claimItem.getCategoryMobilePhones())
                 .saveItem()
                 .sendResponseToEcc();
 
@@ -358,7 +357,7 @@ public class ClaimTests extends BaseTest {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .searchByProductNameAndCategory(claimLineDescription, claimItem.getExistingSubCat3_Mobiltelefoner())
+                .searchByProductName(claimLineDescription)
                 .sortOrderableFirst()
                 .match(claimLineDescription)
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));

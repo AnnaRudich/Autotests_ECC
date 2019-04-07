@@ -56,8 +56,7 @@ public class SidMarkDocumentationTests extends BaseTest {
                 .uncheckedDocumentation()
                 .setDescription(claimItem.getTextFieldSP())
                 .fill(fill ->
-                        fill.withCategory(claimItem.getCategoryGroupBorn())
-                                .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                        fill.withCategory(claimItem.getCategoryBabyItems())
                                 .withNewPrice(claimItem.getNewPriceSP())
                 )
                 .closeSidWithOk()

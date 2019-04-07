@@ -159,8 +159,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
     private SettlementDialog.FormFiller prepareBaseFiller(ClaimItem claimItem, double purchasePrice, SettlementDialog.FormFiller sid) {
         return sid
-                .withCategory(claimItem.getCategoryGroupBorn())
-                .withSubCategory(claimItem.getCategoryBornBabyudstyr())
+                .withCategory(claimItem.getCategoryBabyItems())
                 .withNewPrice(purchasePrice);
     }
 }

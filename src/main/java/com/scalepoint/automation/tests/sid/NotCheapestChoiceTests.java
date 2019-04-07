@@ -104,7 +104,7 @@ public class NotCheapestChoiceTests extends BaseTest {
     public void charlie530MinimalValuationIsSuggestedInCaseOfItemFromCatalog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getExistingCat3_Telefoni())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setNewPrice(1.00)
@@ -162,8 +162,7 @@ public class NotCheapestChoiceTests extends BaseTest {
         return sid
                 .withCustomerDemandPrice(1.00)
                 .withNewPrice(48.00)
-                .withCategory(claimItem.getCategoryGroupBorn())
-                .withSubCategory(claimItem.getCategoryBornBabyudstyr());
+                .withCategory(claimItem.getCategoryBabyItems());
     }
 
 }

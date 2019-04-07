@@ -30,8 +30,7 @@ public class ReplacementDialogTests extends BaseTest {
                 .openSidAndFill(sid -> {
                     sid
                             .withNewPrice(Constants.PRICE_2400)
-                            .withCategory(item.getCategoryGroupBorn())
-                            .withSubCategory(item.getCategoryBornBabyudstyr())
+                            .withCategory(item.getCategoryBabyItems())
                             .withVoucher(item.getExistingVoucher_10());
                 });
         new SettlementDialog().closeSidWithOk().toCompleteClaimPage().fillClaimForm(claim)
@@ -53,7 +52,7 @@ public class ReplacementDialogTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(newPrice)
-                        .withCategory(claimItem.getExistingCatWithoutVoucherAndSubCategory()))
+                        .withCategory(claimItem.getCategoryOther()))
                 .setValuation(SettlementDialog.Valuation.NEW_PRICE)
                 .closeSidWithOk();
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
@@ -69,8 +68,7 @@ public class ReplacementDialogTests extends BaseTest {
     public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
-                .addLinesForChosenCategories
-                        (claimItem.getCategoryGroup2WithNotElectronicVoucher(), claimItem.getCategoryGroup1WithNotElectronicVoucher());
+                .addLinesForChosenCategories(claimItem.getCategoryPersonalMedicine().getGroupName(), claimItem.getCategoryPurses().getGroupName());
 
 
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
