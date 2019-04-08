@@ -100,9 +100,10 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAddedAndRedRuleIsDiscretionaryType(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
+                        .withCategory(claimItem.getExistingGroupWithDiscretionaryDepreciationTypeAndReductionRule())
                         .withDepreciation(depreciationValue)
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withCategory(claimItem.getExistingGroupWithDiscretionaryDepreciationTypeAndReductionRule()))
+                )
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
