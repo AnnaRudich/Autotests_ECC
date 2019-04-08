@@ -424,6 +424,7 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setDescriptionAndWaitForCategoriesToAutoSelect(String descriptionText) {
         SettlementDialog settlementDialog = setDescription(descriptionText);
+        Wait.waitForAjaxCompleted();
         Wait.waitForDisplayed(By.id("pseudocategory-combobox-inputEl"));
         return settlementDialog;
     }

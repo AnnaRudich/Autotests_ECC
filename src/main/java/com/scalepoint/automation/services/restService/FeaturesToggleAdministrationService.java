@@ -43,8 +43,8 @@ public class FeaturesToggleAdministrationService extends BaseService {
     }
 
     public enum ActionsOnToggle {
-        enable(true),
-        disable(false);
+        ENABLE(true),
+        DISABLE(false);
 
         private Boolean enableParameterValue;
 
@@ -54,6 +54,10 @@ public class FeaturesToggleAdministrationService extends BaseService {
 
         public Boolean getEnableParameterValue() {
             return enableParameterValue;
+        }
+
+        public static ActionsOnToggle of(boolean enable) {
+            return enable ? ENABLE : DISABLE;
         }
     }
 }

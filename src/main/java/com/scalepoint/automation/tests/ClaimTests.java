@@ -16,6 +16,7 @@ import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
@@ -445,8 +446,9 @@ public class ClaimTests extends BaseTest {
                 .openSid()
                 .setDescriptionAndWaitForCategoriesToAutoSelect("iphone")
                 .doAssert(claimLine -> {
-                    claimLine.assertCategoryTextIs("Telefoni");
-                    claimLine.assertSubCategoryTextIs("Mobiltelefoner");
+                    PseudoCategory categoryMobilePhones = claimItem.getCategoryMobilePhones();
+                    claimLine.assertCategoryTextIs(categoryMobilePhones.getGroupName());
+                    claimLine.assertSubCategoryTextIs(categoryMobilePhones.getCategoryName());
                 });
     }
 
@@ -454,7 +456,7 @@ public class ClaimTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
     @Test(dataProvider = "testDataProvider")
     public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
-        String noteText = new Long(System.currentTimeMillis()).toString();
+        String noteText = Long.toString(System.currentTimeMillis());
 
         loginAndCreateClaim(user, claim)
                 .addLines(claimItem, "item1")

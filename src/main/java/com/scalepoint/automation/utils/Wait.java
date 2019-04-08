@@ -86,7 +86,7 @@ public class Wait {
 
     private static void longIfLong(long start, String method) {
         long diff = System.currentTimeMillis() - start;
-        if (diff > 1000) {
+        if (diff > 3000) {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
             StringBuilder from = new StringBuilder();
             for (int i = stackTrace.length - 1; i >= 0; i--) {

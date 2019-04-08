@@ -145,13 +145,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         }
 
         FeatureIds toggleSettingType = toggleSetting.type();
-        ActionsOnToggle expectedActionOnToggle;
-
-        if (!featureTogglesDefaultState.get((toggleSettingType))) {
-            expectedActionOnToggle = ActionsOnToggle.enable;
-        } else expectedActionOnToggle = ActionsOnToggle.disable;
-
-        featuresToggleAdminApi.updateToggle(expectedActionOnToggle, toggleSettingType);
+        Boolean initialState = featureTogglesDefaultState.get(toggleSettingType);
+        featuresToggleAdminApi.updateToggle(ActionsOnToggle.of(initialState), toggleSettingType);
     }
 
     @SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "ResultOfMethodCallIgnored"})
@@ -197,17 +192,12 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             return;
         }
 
-        Boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
-        Boolean toggleExpectedState = toggleSetting.enabled();
+        boolean toggleActualState = featureToggleService.getToggleStatus(toggleSetting.type().name());
+        boolean toggleExpectedState = toggleSetting.enabled();
 
-        if (!toggleActualState.equals(toggleExpectedState)) {
+        if (toggleActualState != toggleExpectedState) {
             featureTogglesDefaultState.put(toggleSetting.type(), toggleActualState);
-
-            if (toggleSetting.enabled()) {
-                featureToggleService.updateToggle(ActionsOnToggle.enable, toggleSetting.type());
-            } else {
-                featureToggleService.updateToggle(ActionsOnToggle.disable, toggleSetting.type());
-            }
+            featureToggleService.updateToggle(ActionsOnToggle.of(toggleExpectedState), toggleSetting.type());
         }
     }
 
