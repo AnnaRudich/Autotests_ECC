@@ -43,17 +43,6 @@ public class Wait {
                 !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }
 
-    //TODO remove when https://jira.scalepoint.com/browse/CONTENTS-4484 is done
-    public static void waitForXhrAjaxCompleted() {
-        getWebDriverWaitWithDefaultTimeoutAndPooling().until(new ExpectedCondition<Boolean>() {
-            @Nullable
-            @Override
-            public Boolean apply(@Nullable WebDriver wrapWait) {
-                return (Boolean) ((JavascriptExecutor) wrapWait).executeScript("var searchReq = getXmlHttpRequestObject(); return (searchReq.readyState == 4 || searchReq.readyState == 0);");
-            }
-        });
-    }
-
     public static void waitForSpinnerToDisappear() {
         long start = System.currentTimeMillis();
         forConditionShort(new Function<WebDriver, Object>() {
