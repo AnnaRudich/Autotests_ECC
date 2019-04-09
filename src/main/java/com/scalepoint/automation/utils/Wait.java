@@ -77,7 +77,7 @@ public class Wait {
     public static Boolean visible(WebElement element) {
         long start = System.currentTimeMillis();
         try {
-            List<WebElement> webElements = forCondition1s(visibilityOfAllElements(Lists.newArrayList(element)));
+            List<WebElement> webElements = wrapShort(visibilityOfAllElements(Lists.newArrayList(element)));
             return webElements.size() == 1;
         } finally {
             longIfLong(start, "visible");
@@ -114,7 +114,7 @@ public class Wait {
     public static Boolean invisibleOfElement(By locator) {
         long start = System.currentTimeMillis();
         try {
-            return forCondition1s(ExpectedConditions.invisibilityOfElementLocated(locator));
+            return wrapShort(ExpectedConditions.invisibilityOfElementLocated(locator));
         } finally {
             longIfLong(start, "invisibleOfElement");
         }
@@ -123,7 +123,7 @@ public class Wait {
     public static WebElement waitForEnabled(By locator) {
         long start = System.currentTimeMillis();
         try {
-            return forCondition1s(ExpectedConditions.elementToBeClickable(locator));
+            return wrapShort(ExpectedConditions.elementToBeClickable(locator));
         } finally {
             longIfLong(start, "waitForEnabled");
         }
@@ -132,7 +132,7 @@ public class Wait {
     public static WebElement waitForDisplayed(By locator) {
         long start = System.currentTimeMillis();
         try {
-            return forCondition1s(ExpectedConditions.visibilityOfElementLocated(locator));
+            return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
         } finally {
             longIfLong(start, "waitForDisplayed");
         }
@@ -157,7 +157,7 @@ public class Wait {
     public static List<WebElement> waitForStaleElements(final By locator) {
         long start = System.currentTimeMillis();
         try {
-            return forCondition1s((WebDriver d) -> {
+            return wrapShort((WebDriver d) -> {
                 try {
                     List<WebElement> elements = d.findElements(locator);
                     if (elements.isEmpty()) {
@@ -177,7 +177,7 @@ public class Wait {
     public static void waitForElementContainsText(WebElement element, String text) {
         long start = System.currentTimeMillis();
         try {
-            Boolean contains = forCondition1s((WebDriver d) -> element.getText().contains(text));
+            Boolean contains = wrapShort((WebDriver d) -> element.getText().contains(text));
             if (!contains) {
                 throw new IllegalStateException("Elements doesn't contain: " + text);
             }
@@ -387,9 +387,9 @@ public class Wait {
         }
     }
 
-//    private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-//        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT, 1000).until(expectedCondition);
-//    }
+    private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
+        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT, 1000).until(expectedCondition);
+    }
 
     public static void waitForElementWithPageReload(By locator) {
         FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver()).withTimeout(1, TimeUnit.MINUTES)
