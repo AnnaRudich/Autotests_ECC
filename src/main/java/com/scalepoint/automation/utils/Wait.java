@@ -235,6 +235,7 @@ public class Wait {
     }
 
     public static <T> T forConditionLong(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
+        Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
         long start = System.currentTimeMillis();
         try {
             FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
@@ -243,6 +244,7 @@ public class Wait {
                     .ignoring(StaleElementReferenceException.class);
             return wait.until(condition);
         } finally {
+            Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
             logIfLong(start, "forConditionLong");
         }
     }
