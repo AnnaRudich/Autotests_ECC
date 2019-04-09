@@ -175,7 +175,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementDialog openSid() {
-        boolean displayedPolicy = Wait.checkIsDisplayed(cancelPolicy);
+        boolean displayedPolicy = Wait.forCondition1s(d -> cancelPolicy.isDisplayed());
         if (displayedPolicy) {
             cancelPolicy.click();
         }
