@@ -80,11 +80,11 @@ public class Wait {
             List<WebElement> webElements = wrapShort(visibilityOfAllElements(Lists.newArrayList(element)));
             return webElements.size() == 1;
         } finally {
-            longIfLong(start, "visible");
+            logIfLong(start, "visible");
         }
     }
 
-    private static void longIfLong(long start, String method) {
+    private static void logIfLong(long start, String method) {
         long diff = System.currentTimeMillis() - start;
         if (diff > 5000) {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
@@ -107,7 +107,7 @@ public class Wait {
         try {
             return $$(locator).filter(Condition.visible).size() == 0;
         } finally {
-            longIfLong(start, "isElementNotPresent");
+            logIfLong(start, "isElementNotPresent");
         }
     }
 
@@ -116,7 +116,7 @@ public class Wait {
         try {
             return wrapShort(ExpectedConditions.invisibilityOfElementLocated(locator));
         } finally {
-            longIfLong(start, "invisibleOfElement");
+            logIfLong(start, "invisibleOfElement");
         }
     }
 
@@ -125,7 +125,7 @@ public class Wait {
         try {
             return wrapShort(ExpectedConditions.elementToBeClickable(locator));
         } finally {
-            longIfLong(start, "waitForEnabled");
+            logIfLong(start, "waitForEnabled");
         }
     }
 
@@ -134,7 +134,7 @@ public class Wait {
         try {
             return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
         } finally {
-            longIfLong(start, "waitForDisplayed");
+            logIfLong(start, "waitForDisplayed");
         }
     }
 
@@ -150,7 +150,7 @@ public class Wait {
                 }
             });
         } finally {
-            longIfLong(start, "waitForStaleElement");
+            logIfLong(start, "waitForStaleElement");
         }
     }
 
@@ -170,7 +170,7 @@ public class Wait {
                 }
             });
         } finally {
-            longIfLong(start, "waitForStaleElements");
+            logIfLong(start, "waitForStaleElements");
         }
     }
 
@@ -182,7 +182,7 @@ public class Wait {
                 throw new IllegalStateException("Elements doesn't contain: " + text);
             }
         } finally {
-            longIfLong(start, "waitForStaleElements");
+            logIfLong(start, "waitForStaleElements");
         }
     }
 
@@ -191,7 +191,7 @@ public class Wait {
         try {
             forConditionShort(ExpectedConditions.invisibilityOfElementLocated(element), 5, 100);
         } finally {
-            longIfLong(start, "waitElementDisappeared");
+            logIfLong(start, "waitElementDisappeared");
         }
     }
 
@@ -200,7 +200,7 @@ public class Wait {
         try {
             return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
         } finally {
-            longIfLong(start, "forCondition");
+            logIfLong(start, "forCondition");
         }
     }
 
@@ -215,7 +215,7 @@ public class Wait {
             return wait.until(condition);
         } finally {
             Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
-            longIfLong(start, "forConditionShort");
+            logIfLong(start, "forConditionShort");
         }
     }
 
@@ -230,7 +230,7 @@ public class Wait {
             return wait.until(condition);
         } finally {
             Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
-            longIfLong(start, "forCondition1s");
+            logIfLong(start, "forCondition1s");
         }
     }
 
@@ -243,7 +243,7 @@ public class Wait {
                     .ignoring(StaleElementReferenceException.class);
             return wait.until(condition);
         } finally {
-            longIfLong(start, "forConditionLong");
+            logIfLong(start, "forConditionLong");
         }
     }
 
@@ -252,7 +252,7 @@ public class Wait {
         try {
             return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
         } finally {
-            longIfLong(start, "forConditionLong");
+            logIfLong(start, "forConditionLong");
         }
     }
 
@@ -261,7 +261,7 @@ public class Wait {
         try {
             return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(expectedCondition);
         } finally {
-            longIfLong(start, "wrap");
+            logIfLong(start, "wrap");
         }
     }
 
@@ -271,7 +271,7 @@ public class Wait {
             waitForVisible(element.getRootElement());
             return element;
         } finally {
-            longIfLong(start, "waitForVisible ExtElement");
+            logIfLong(start, "waitForVisible ExtElement");
         }
     }
 
@@ -281,7 +281,7 @@ public class Wait {
             wrap(visibilityOfAllElements(elements));
             return elements;
         } finally {
-            longIfLong(start, "waitForAllElementsVisible");
+            logIfLong(start, "waitForAllElementsVisible");
         }
     }
 
@@ -291,7 +291,7 @@ public class Wait {
             waitForVisible(element.getWrappedElement());
             return element;
         } finally {
-            longIfLong(start, "waitForVisible TypifiedElement");
+            logIfLong(start, "waitForVisible TypifiedElement");
         }
     }
 
@@ -305,7 +305,7 @@ public class Wait {
             wrap(visibilityOf(element));
             return element;
         } finally {
-            longIfLong(start, "waitForVisible");
+            logIfLong(start, "waitForVisible");
         }
     }
 
@@ -317,7 +317,7 @@ public class Wait {
             log.info("Element [{}] is not displayed", element.toString());
             return false;
         } finally {
-            longIfLong(start, "checkIsDisplayed");
+            logIfLong(start, "checkIsDisplayed");
         }
     }
 
@@ -336,7 +336,7 @@ public class Wait {
                 }
             }, TIME_OUT_IN_SECONDS, 200);
         } finally {
-            longIfLong(start, "waitForInvisible");
+            logIfLong(start, "waitForInvisible");
         }
     }
 
@@ -351,7 +351,7 @@ public class Wait {
                 }
             });
         } finally {
-            longIfLong(start, "waitUntilVisible");
+            logIfLong(start, "waitUntilVisible");
         }
     }
 
@@ -366,7 +366,7 @@ public class Wait {
             wrap(d -> element.isEnabled());
             return element;
         } finally {
-            longIfLong(start, "waitForEnabled");
+            logIfLong(start, "waitForEnabled");
         }
     }
 
@@ -383,7 +383,7 @@ public class Wait {
                 }
             });
         } finally {
-            longIfLong(start, "waitForLoaded");
+            logIfLong(start, "waitForLoaded");
         }
     }
 
