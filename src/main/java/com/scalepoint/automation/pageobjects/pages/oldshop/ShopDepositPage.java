@@ -2,11 +2,13 @@ package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @EccPage
+@ClaimSpecificPage
 public class ShopDepositPage extends Page {
 
     @FindBy(xpath = "//div[@class='checkout_button'][1]/a")
