@@ -813,8 +813,8 @@ public class SettlementDialog extends BaseDialog {
 
     private boolean waitForReasonInvalidAttribute(String xpath) {
         try {
-            waitForDisplayed(By.xpath(xpath));
-        } catch (TimeoutException e) {
+            Wait.forConditionShort(d -> Browser.driver().findElement(By.xpath(xpath)).isDisplayed(), 5, 500);
+        } catch (NoSuchElementException e) {
             logger.info(e.getMessage());
             return true;
         }
