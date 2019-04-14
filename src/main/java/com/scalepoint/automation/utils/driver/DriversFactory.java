@@ -150,7 +150,7 @@ public enum DriversFactory {
         options.addArguments("operations-type");
         options.addArguments("start-maximized");
         options.addArguments("--disable-popup-blocking");
-        options.addArguments("-incognito");
+//        options.addArguments("-incognito");
         options.addArguments("--disable-web-security");
         options.addArguments("allow-http-screen-capture");
         options.addArguments("allow-running-insecure-content");

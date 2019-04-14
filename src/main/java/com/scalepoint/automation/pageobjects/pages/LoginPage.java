@@ -49,7 +49,7 @@ public class LoginPage extends Page {
     @Override
     public Boolean areWeAt() {
         try {
-            return username.isDisplayed() && password.isDisplayed() && loginButton.isDisplayed();
+            return loginButton.isDisplayed();
         } catch (Exception ex) {
             return false;
         }
