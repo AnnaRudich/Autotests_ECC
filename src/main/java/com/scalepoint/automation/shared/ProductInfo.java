@@ -33,7 +33,7 @@ public class ProductInfo {
     @Field("orderable")
     private boolean orderable;
 
-    @Field("product_key")
+    @Field("price_product_sku_1")
     private String sku;
 
     @Field("price_lowest_1")
