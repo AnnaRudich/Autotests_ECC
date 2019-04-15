@@ -57,11 +57,8 @@ public class ShopWelcomePage extends ShopFlow {
     }
 
     private Double getProductFaceValue() {
-        if (Configuration.isDK()) {
-            return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[2]);
-        } else {
-            return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[3]);
-        }
+        int priceIndex = Configuration.isDK() ? 2 : 3;
+        return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[priceIndex]);
     }
 
     private Double getProductCashValue() {
