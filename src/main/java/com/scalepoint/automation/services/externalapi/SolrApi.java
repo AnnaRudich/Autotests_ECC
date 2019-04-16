@@ -23,7 +23,6 @@ import org.openqa.selenium.WebDriver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -97,7 +96,7 @@ public class SolrApi {
     }
 
     public static void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimState) {
-        Wait.forConditionLong((Function<WebDriver, Object>) webDriver -> {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
             SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
             if (solrClaim != null) {
                 boolean equal = solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
@@ -111,7 +110,7 @@ public class SolrApi {
     }
 
     public static void waitForClaimAppearedInIndexById(Claim claim) {
-        Wait.forConditionLong((Function<WebDriver, Object>) webDriver -> {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
             SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
             if (solrClaim == null) {
                 commitClaims();
@@ -121,7 +120,7 @@ public class SolrApi {
     }
 
     public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
-        Wait.forConditionLong((Function<WebDriver, Object>) webDriver -> {
+        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
             SolrClaim solrClaim = SolrApi.findClaimByClaimNumber(claim.getClaimNumber());
             if (solrClaim == null) {
                 commitClaims();

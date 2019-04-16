@@ -157,6 +157,7 @@ public enum DriversFactory {
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
 
+//        options.addArguments("--headless");
 //        options.addArguments("--no-sandbox");
 //        options.addArguments("--disable-extensions");
 //        options.addArguments("--disable-browser-side-navigation");

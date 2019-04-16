@@ -6,14 +6,12 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
-import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -450,7 +448,7 @@ public class SettlementPage extends BaseClaimPage {
 
             this.age = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
 
-            List<WebElement> purchasePriceElements = Wait.forConditionShort(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")), 3, 1000);
+            List<WebElement> purchasePriceElements = Wait.forCondition(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")), 3);
             if (!purchasePriceElements.isEmpty()) {
                 String text = purchasePriceElements.get(0).getText();
                 if (StringUtils.isNotBlank(text)) {
@@ -462,7 +460,7 @@ public class SettlementPage extends BaseClaimPage {
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
 
-            List<WebElement> purchaseAmountElements = Wait.forConditionShort(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")), 3, 1000);
+            List<WebElement> purchaseAmountElements = Wait.forCondition(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")), 3);
             if (!purchaseAmountElements.isEmpty()) {
                 String text = purchaseAmountElements.get(0).getText();
                 if (StringUtils.isNotBlank(text)) {

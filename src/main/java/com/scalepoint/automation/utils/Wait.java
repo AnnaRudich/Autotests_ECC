@@ -43,13 +43,13 @@ public class Wait {
     }
 
     public static void waitForSpinnerToDisappear() {
-        forConditionShort(new Function<WebDriver, Object>() {
+        forCondition1s(new Function<WebDriver, Object>() {
             @Nullable
             @Override
             public Object apply(@Nullable WebDriver webDriver) {
                 return webDriver.findElements(By.xpath("//div[contains(@class, 'loader')]")).isEmpty();
             }
-        }, 1, 100);
+        });
     }
 
 
@@ -189,7 +189,7 @@ public class Wait {
     public static void waitElementDisappeared(By element) {
         long start = System.currentTimeMillis();
         try {
-            forConditionShort(ExpectedConditions.invisibilityOfElementLocated(element), 5, 100);
+            forCondition(ExpectedConditions.invisibilityOfElementLocated(element), 5);
         } finally {
             logIfLong(start, "waitElementDisappeared");
         }
@@ -204,18 +204,23 @@ public class Wait {
         }
     }
 
-    public static <T> T forConditionShort(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
+    public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs, Class<? extends Throwable>... ignoringExceptionType) {
         long start = System.currentTimeMillis();
         Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
         try {
-            FluentWait<WebDriver> wait = new FluentWait<WebDriver>(Browser.driver())
+            FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
                     .withTimeout(Duration.ofSeconds(timeoutSeconds))
                     .pollingEvery(Duration.ofMillis(pollMs))
                     .ignoring(StaleElementReferenceException.class);
+            if (ignoringExceptionType != null && ignoringExceptionType.length > 0) {
+                for (Class<? extends Throwable> aClass : ignoringExceptionType) {
+                    wait = wait.ignoring(aClass);
+                }
+            }
             return wait.until(condition);
         } finally {
             Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
-            logIfLong(start, "forConditionShort");
+            logIfLong(start, "forCondition");
         }
     }
 
@@ -234,28 +239,8 @@ public class Wait {
         }
     }
 
-    public static <T> T forConditionLong(Function<WebDriver, T> condition, long timeoutSeconds, long pollMs) {
-        Browser.driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-        long start = System.currentTimeMillis();
-        try {
-            FluentWait<WebDriver> wait = new FluentWait<>(Browser.driver())
-                    .withTimeout(Duration.ofSeconds(timeoutSeconds))
-                    .pollingEvery(Duration.ofMillis(pollMs))
-                    .ignoring(StaleElementReferenceException.class);
-            return wait.until(condition);
-        } finally {
-            Browser.driver().manage().timeouts().implicitlyWait(DriversFactory.Timeout.DEFAULT_IMPLICIT_WAIT, TimeUnit.SECONDS);
-            logIfLong(start, "forConditionLong");
-        }
-    }
-
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
-        long start = System.currentTimeMillis();
-        try {
-            return new WebDriverWait(Browser.driver(), timeoutSeconds, POLL_IN_MS).ignoring(StaleElementReferenceException.class).until(condition);
-        } finally {
-            logIfLong(start, "forConditionLong");
-        }
+        return forCondition(condition, timeoutSeconds, 100);
     }
 
     private static <T> T wrap(ExpectedCondition<T> expectedCondition) {
@@ -330,7 +315,7 @@ public class Wait {
     public static void waitForInvisible(final WebElement element) {
         long start = System.currentTimeMillis();
         try {
-            forConditionShort(d -> {
+            forCondition(d -> {
                 try {
                     return !element.isDisplayed();
                 } catch (NoSuchElementException | StaleElementReferenceException e) {

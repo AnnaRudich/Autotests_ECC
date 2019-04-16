@@ -60,10 +60,7 @@ public abstract class Page implements Actions {
             return;
         }
 
-        int totalTimeoutInSeconds = 20;
-        int pollingMs = 1000;
-
-        Wait.forConditionLong(webDriver -> {
+        Wait.forCondition(webDriver -> {
             try {
                 String currentUrl = driver.getCurrentUrl();
 
@@ -83,7 +80,7 @@ public abstract class Page implements Actions {
                 closeAlert();
             }
             return false;
-        }, totalTimeoutInSeconds, pollingMs);
+        }, 20);
     }
 
     public static <T extends Page> T to(Class<T> pageClass) {

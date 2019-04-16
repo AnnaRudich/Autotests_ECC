@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -123,14 +122,14 @@ public class SelfService2Page extends Page {
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
-        WebElement selectItemElement = forCondition(ExpectedConditions
+        WebElement selectItemElement = Wait.forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
         waitForVisible(selectItemElement);
         scrollToElement(selectItemElement);
         waitForVisible(selectItemElement);
         clickUsingJsIfSeleniumClickReturnError(selectItemElement);
         waitForVisible(selectElement);
-        forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
+        Wait.forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }
 
     private void trySelectItem(WebElement element, String text) {

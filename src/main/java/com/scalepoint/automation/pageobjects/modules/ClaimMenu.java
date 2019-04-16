@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.pageobjects.pages.Page.isOn;
-import static com.scalepoint.automation.utils.Wait.forCondition;
 
 public class ClaimMenu extends Module {
     /**
@@ -30,7 +29,7 @@ public class ClaimMenu extends Module {
     }
 
     public LoginPage logout() {
-        forCondition(ExpectedConditions.elementToBeClickable(By.id("signOutButton")));
+        Wait.forCondition(ExpectedConditions.elementToBeClickable(By.id("signOutButton")));
         $(By.id("signOutButton")).click();
         acceptLogoutAlert();
         int i = 0;
