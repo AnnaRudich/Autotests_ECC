@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods">
+<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="none">
 
-    <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
+    <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true" thread-count="1">
         <packages>
             <package name="com.scalepoint.automation.tests.suppliermanager"/>
             <package name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
