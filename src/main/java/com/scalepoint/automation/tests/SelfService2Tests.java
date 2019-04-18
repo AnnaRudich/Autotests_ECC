@@ -9,11 +9,14 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -139,5 +142,32 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemNoteIsPresent(ITEM_CUSTOMER_NOTE))
                 .toNotesPage()
                 .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
+    }
+
+    @RunOn(DriverType.CHROME)
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @Test(dataProvider = "testDataProvider",
+            description = "IR1 flow")
+    public void IR1(User user, Claim claim, Translations translations) {
+
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription(IPHONE)
+                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
+                .selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+
+                .setLossType(LossType.DAMAGED)
+                .isRepaired(SelfService2Page.IsRepaired.TRUE)
+                .addNewPrice(Constants.PRICE_500);
+
     }
 }
