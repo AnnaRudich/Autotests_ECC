@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.UpdateCategoriesDialog;
 import com.scalepoint.automation.pageobjects.pages.ClaimLineNotesPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import org.openqa.selenium.WebElement;
@@ -56,6 +58,10 @@ public class ToolBarMenu extends Module {
     @FindBy(xpath = "//span[contains(@style, 'sendToRepairIcon')]/ancestor::a")
     private WebElement sendToRnVButton;
 
+    @FindBy(xpath = "//span[contains(@style, 'updateCategory')]/ancestor::a")
+    private Button updateCategory;
+    
+
     public TextSearchPage toProductMatchPage() {
         productMatch.click();
         return at(TextSearchPage.class);
@@ -84,8 +90,18 @@ public class ToolBarMenu extends Module {
         return this;
     }
 
+    public ToolBarMenu openUpdateCategoriesDialog() {
+        updateCategory.click();
+        return this;
+    }
+
     public ClaimLineNotesPage toClaimLineNotesPage() {
         waitForAjaxCompleted();
         return at(ClaimLineNotesPage.class);
+    }
+
+    public UpdateCategoriesDialog toUpdateCategoriesDialog() {
+        waitForAjaxCompleted();
+        return BaseDialog.at(UpdateCategoriesDialog.class);
     }
 }
