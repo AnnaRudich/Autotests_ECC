@@ -47,5 +47,34 @@ public class RnVSmokeTest extends BaseTest {
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
+
+    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void messagesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+
+        String lineDescription = RandomUtils.randomName("RnVLine");
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .reopenClaim()
+                .openSid()
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .closeSidWithOk()
+                .findClaimLine(lineDescription)
+                .selectLine()
+                .sendToRnV()
+                .nextRnVstep()
+                .sendRnV(agreement);
+
+        final String testMessage = "Test message";
+        new ClaimNavigationMenu()
+                .toRepairValuationProjectsPage()
+                .toCommunicationTab()
+                .sendTextMailToSePa(testMessage)
+                .assertLatestMessageContains(testMessage);
+    }
 }
 
