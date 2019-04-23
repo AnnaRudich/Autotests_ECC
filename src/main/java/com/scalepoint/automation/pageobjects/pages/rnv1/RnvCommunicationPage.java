@@ -31,7 +31,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
     @FindBy(css = "textarea[name = 'replyMsgTextArea']")
     private WebElement mailTextField;
 
-    @FindBy(css = "span#button-rely-btnInnerEl")
+    @FindBy(id = "button-rely")
     private WebElement sendBtn;
 
     @Override
