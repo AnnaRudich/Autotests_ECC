@@ -7,6 +7,7 @@ import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
@@ -22,8 +23,7 @@ public class BulkUpdateCategoryTests extends BaseTest {
     @RunOn(DriverType.CHROME)
     public void testBulkUpdateCategories(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         final String itemDescriptions[] = {"item1", "item2"};
-        final String categoryText = "Telefoni";
-        final String subcategoryText = "Mobiltelefoner";
+        PseudoCategory mobilePhonesCategory = claimItem.getCategoryMobilePhones();
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addLines(claimItem, itemDescriptions[0], itemDescriptions[1])
@@ -31,12 +31,12 @@ public class BulkUpdateCategoryTests extends BaseTest {
                 .selectAll()
                 .openUpdateCategoriesDialog()
                 .toUpdateCategoriesDialog()
-                .selectCategory(categoryText)
-                .selectSubcategory(subcategoryText)
+                .selectCategory(mobilePhonesCategory.getGroupName())
+                .selectSubcategory(mobilePhonesCategory.getCategoryName())
                 .closeUpdateCategoriesDialog();
 
         List<SettlementPage.ClaimLine> claimLines = settlementPage.getLinesByDescription(itemDescriptions);
-        Assert.assertEquals(claimLines.get(0).getCategory(), categoryText + " - " + subcategoryText);
-        Assert.assertEquals(claimLines.get(1).getCategory(), categoryText + " - " + subcategoryText);
+        Assert.assertEquals(claimLines.get(0).getCategory(), mobilePhonesCategory.getGroupName() + " - " + mobilePhonesCategory.getCategoryName());
+        Assert.assertEquals(claimLines.get(1).getCategory(), mobilePhonesCategory.getGroupName() + " - " + mobilePhonesCategory.getCategoryName());
     }
 }
