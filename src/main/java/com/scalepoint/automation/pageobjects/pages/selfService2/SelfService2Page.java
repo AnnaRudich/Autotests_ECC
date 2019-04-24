@@ -115,6 +115,14 @@ public class SelfService2Page extends Page {
         return this;
     }
 
+    public SelfService2Page addRepairPrice(Double repairPrice){
+        SelenideElement repairPriceField = $("#repair-price-text");
+
+        repairPriceField.setValue(repairPrice.toString());
+        waitForValidationMark(repairPriceField);
+        return this;
+    }
+
     public SelfService2Page addPurchasePrice(Double purchasePrice) {
         SelenideElement purchasePriceField = $("#purchase-price-text");
 

@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
+import com.scalepoint.automation.services.externalapi.IP1Api;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
@@ -152,8 +153,8 @@ public class SelfService2Tests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "IR1 flow")
     public void IR1(User user, Claim claim, Translations translations) {
-
-        loginAndCreateClaim(user, claim)
+        claim.setDamageDate("");
+        IP1Api.doGetIntegration(user, claim, false)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -167,7 +168,15 @@ public class SelfService2Tests extends BaseTest {
 
                 .setLossType(LossType.DAMAGED)
                 .isRepaired(SelfService2Page.IsRepaired.TRUE)
-                .addNewPrice(Constants.PRICE_500);
+                .addRepairPrice(Constants.PRICE_100)
+                .addPurchasePrice(Constants.PRICE_100)
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
 
+                .sendResponseToEcc()
+
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description));
     }
 }
