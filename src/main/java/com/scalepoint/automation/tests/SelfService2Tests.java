@@ -5,7 +5,6 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
-import com.scalepoint.automation.services.externalapi.IP1Api;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
@@ -26,6 +25,7 @@ import org.testng.annotations.Test;
 public class SelfService2Tests extends BaseTest {
 
     private static final String IPHONE = "iPhone";
+    private static final String HERRE = "Herre";
     private static final String CLAIM_NOTE = "Claim Note";
     private static final String ITEM_CUSTOMER_NOTE = "Item Customer Note";
 
@@ -153,15 +153,19 @@ public class SelfService2Tests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "IR1 flow")
     public void IR1(User user, Claim claim, Translations translations) {
-        claim.setDamageDate("");
-        IP1Api.doGetIntegration(user, claim, false)
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .reopenClaim()
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
-                .addDescription(IPHONE)
+                .addDescription(HERRE)
                 .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
                 .selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
