@@ -20,7 +20,6 @@ import org.openqa.selenium.support.ui.FluentWait;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public interface Actions {
@@ -60,7 +59,7 @@ public interface Actions {
 
     default String getAlertTextAndAccept() {
         try {
-            forCondition(ExpectedConditions.alertIsPresent());
+            Wait.forCondition(ExpectedConditions.alertIsPresent());
             Alert alert = Browser.driver().switchTo().alert();
             String text = alert.getText();
             alert.accept();
@@ -146,8 +145,8 @@ public interface Actions {
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
         clickUsingJsIfSeleniumClickReturnError(element);
         try {
-            Wait.waitForDisplayed(byWaitForElement);
-        } catch (org.openqa.selenium.TimeoutException e) {
+            Wait.forCondition(d -> Browser.driver().findElement(byWaitForElement).isDisplayed(), 60, 1, NoSuchElementException.class);
+        } catch (TimeoutException e) {
             clickUsingJsIfSeleniumClickReturnError(element);
         }
     }

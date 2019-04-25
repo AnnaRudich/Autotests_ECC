@@ -5,7 +5,9 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,6 +21,7 @@ import java.util.function.Consumer;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 
 @EccPage
+@ClaimSpecificPage
 public class ShopWelcomePage extends ShopFlow {
 
     @FindBy(xpath = "//div[@class='product_grid']/table/tbody/tr[3]/td[1]")
@@ -54,11 +57,8 @@ public class ShopWelcomePage extends ShopFlow {
     }
 
     private Double getProductFaceValue() {
-        if (Configuration.isDK()) {
-            return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[2]);
-        } else {
-            return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[3]);
-        }
+        int priceIndex = Configuration.isDK() ? 2 : 3;
+        return OperationalUtils.getDoubleValue(productFaceValue.getText().split(" ")[priceIndex]);
     }
 
     private Double getProductCashValue() {
@@ -66,9 +66,7 @@ public class ShopWelcomePage extends ShopFlow {
     }
 
     public ShopProductSearchPage toProductSearchPage() {
-        Wait.waitForStaleElement(By.xpath("//a[@id='menu_id_2']"));
-        clickAndWaitForStable(By.xpath("//a[@id='menu_id_2']"), By.xpath("//input[@id='TextSearch_text']"));
-        return at(ShopProductSearchPage.class);
+        return to(ShopProductSearchPage.class);
     }
 
     public ShopWelcomePage addFirstRecommendedItemToCart() {

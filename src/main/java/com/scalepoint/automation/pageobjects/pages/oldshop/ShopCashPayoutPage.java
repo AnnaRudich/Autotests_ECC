@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import ru.yandex.qatools.htmlelements.element.Radio;
 import java.util.Random;
 
 @EccPage
+@ClaimSpecificPage
 public class ShopCashPayoutPage extends Page {
 
     @FindBy(xpath = ".//a[contains(@onclick, 'CashPayout')]")

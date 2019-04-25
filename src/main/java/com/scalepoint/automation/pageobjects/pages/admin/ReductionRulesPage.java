@@ -58,7 +58,7 @@ public class ReductionRulesPage extends AdminBasePage {
 
     public boolean isRuleDisplayed(ReductionRule rr) {
         try {
-            return Wait.forConditionShort(webDriver -> !Browser.driver().findElements(By.xpath(".//*[@id='ruleItemsList']/option[text() = '" + rr.getRrName() + "']")).isEmpty(), 3, 1000);
+            return Wait.forCondition(webDriver -> !Browser.driver().findElements(By.xpath(".//*[@id='ruleItemsList']/option[text() = '" + rr.getRrName() + "']")).isEmpty(), 3);
         } catch (Exception e) {
             return false;
         }

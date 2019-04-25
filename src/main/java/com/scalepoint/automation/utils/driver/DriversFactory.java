@@ -23,6 +23,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -150,11 +151,25 @@ public enum DriversFactory {
         options.addArguments("operations-type");
         options.addArguments("start-maximized");
         options.addArguments("--disable-popup-blocking");
-        options.addArguments("-incognito");
+//        options.addArguments("-incognito");
         options.addArguments("--disable-web-security");
         options.addArguments("allow-http-screen-capture");
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
+
+//        options.addArguments("--headless");
+//        options.addArguments("--no-sandbox");
+//        options.addArguments("--disable-extensions");
+//        options.addArguments("--disable-browser-side-navigation");
+//        options.addArguments("--disable-gpu");
+//        options.setPageLoadStrategy(PageLoadStrategy.NONE);
+
+        /*disabling Chrome is being controlled by automated test software*/
+        options.setExperimentalOption("useAutomationExtension", false);
+        options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+
+
+
         options.setProxy(null);
         capabilities.setCapability("nativeEvents", false);
         capabilities.setJavascriptEnabled(true);

@@ -49,7 +49,7 @@ public class LoginPage extends Page {
     @Override
     public Boolean areWeAt() {
         try {
-            return username.isDisplayed() && password.isDisplayed() && loginButton.isDisplayed();
+            return loginButton.isDisplayed();
         } catch (Exception ex) {
             return false;
         }
@@ -82,14 +82,14 @@ public class LoginPage extends Page {
 
     private boolean isLoginErrorPresent() {
         try {
-            Wait.forConditionShort((Function<WebDriver, Object>) webDriver -> {
+            Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
                 try {
                     driver.findElement(By.id("loginError"));
                     return true;
                 } catch (Exception e) {
                     return false;
                 }
-            }, 5, 1000);
+            }, 5);
             return true;
         } catch (Exception e) {
             return false;

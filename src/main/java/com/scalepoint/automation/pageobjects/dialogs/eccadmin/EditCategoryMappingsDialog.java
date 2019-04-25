@@ -45,7 +45,7 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         }
         doubleClickUsingJsIfSeleniumClickReturnError(saveMappings);
         Wait.waitElementDisappeared(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]"));
-
+        Wait.waitForAjaxCompleted();
         return at(VoucherAgreementDialog.CategoriesTab.class);
     }
 

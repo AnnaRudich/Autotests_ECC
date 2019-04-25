@@ -8,7 +8,6 @@ import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
-import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -736,7 +735,7 @@ public class SettlementDialog extends BaseDialog {
 
     private boolean isDiscretionaryReasonVisible() {
         try {
-            return Wait.forConditionShort(driver -> discretionaryReason.isDisplayed(), 1, 200);
+            return Wait.forCondition1s(driver -> discretionaryReason.isDisplayed());
         } catch (Exception e) {
             return false;
         }
@@ -813,8 +812,8 @@ public class SettlementDialog extends BaseDialog {
 
     private boolean waitForReasonInvalidAttribute(String xpath) {
         try {
-            waitForDisplayed(By.xpath(xpath));
-        } catch (TimeoutException e) {
+            Wait.forCondition(d -> Browser.driver().findElement(By.xpath(xpath)).isDisplayed(), 5);
+        } catch (NoSuchElementException e) {
             logger.info(e.getMessage());
             return true;
         }

@@ -184,6 +184,7 @@ public class CompleteClaimPage extends Page {
     }
 
     public ReplacementDialog openReplacementWizard() {
+        Wait.waitForAjaxCompleted();
         replace.click();
         return BaseDialog.at(ReplacementDialog.class);
     }
