@@ -3,13 +3,11 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -20,7 +18,6 @@ public class BulkUpdateCategoryTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4524")
     @Test(dataProvider = "testDataProvider")
-    @RunOn(DriverType.CHROME)
     public void testBulkUpdateCategories(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         final String itemDescriptions[] = {"item1", "item2"};
         PseudoCategory mobilePhonesCategory = claimItem.getCategoryMobilePhones();
