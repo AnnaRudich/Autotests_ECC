@@ -17,6 +17,7 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -144,11 +145,7 @@ public interface Actions {
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
         clickUsingJsIfSeleniumClickReturnError(element);
-        try {
-            Wait.forCondition(d -> Browser.driver().findElement(byWaitForElement).isDisplayed(), 60, 1, NoSuchElementException.class);
-        } catch (TimeoutException e) {
-            clickUsingJsIfSeleniumClickReturnError(element);
-        }
+        Wait.forCondition(d -> Browser.driver().findElement(byWaitForElement).isDisplayed(), 60, 1, NoSuchElementException.class);
     }
 
     default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {

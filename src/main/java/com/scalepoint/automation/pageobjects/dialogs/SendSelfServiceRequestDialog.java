@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -30,6 +31,9 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
     private Button ok;
+
+    @FindBy(id = "newPasswordCheckbox-displayEl")
+    private WebElement newPasswordCheckbox;
 
     @Override
     public SendSelfServiceRequestDialog ensureWeAreAt() {
@@ -74,6 +78,11 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     public SendSelfServiceRequestDialog enableAutoClose() {
         closeAutomatically.set(true);
+        return this;
+    }
+
+    public SendSelfServiceRequestDialog enableNewPassword(){
+        newPasswordCheckbox.click();
         return this;
     }
 

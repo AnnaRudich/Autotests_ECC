@@ -152,14 +152,14 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider",
             description = "IR1 flow")
-    public void IR1(User user, Claim claim, Translations translations) {
+    public void IR1(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim)
                 .openRecentClaim()
                 .reopenClaim()
-                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .requestSelfServiceWithEnabledNewPassword(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
