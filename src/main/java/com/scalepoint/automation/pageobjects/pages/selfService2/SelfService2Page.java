@@ -325,35 +325,17 @@ public class SelfService2Page extends Page {
         return at(SelfService2Page.class);
     }
 
-    public SelfService2Page isRepaired(IsRepaired isRepaired) {
+    public SelfService2Page isRepaired(Boolean isRepaired) {
         List<WebElement> isRepairedRadioGroup = driver.findElements(By.name("repairIsRepairedRadioGroup"));
         for (WebElement isRepairedRadio : isRepairedRadioGroup) {
-            if (isRepairedRadio.getAttribute("value").equals(isRepaired.getIsRepairedAsString())) {
+            if (isRepairedRadio.getAttribute("value").equals(String.valueOf(isRepaired))) {
                 System.out.println(isRepairedRadio.getText());
                 isRepairedRadio.click();
                 break;
             } else {
-                logger.info("there is no " + isRepaired.getIsRepairedAsString() + " radio");
+                logger.info("there is no " + isRepaired + " radio");
             }
         }
         return at(SelfService2Page.class);
-    }
-
-
-    public enum IsRepaired {
-        TRUE("true"),
-        FALSE("false");
-
-        private String isRepairedString;
-
-        IsRepaired(String isRepaired) {
-            isRepairedString = isRepaired;
-        }
-
-        public String getIsRepairedAsString() {
-            return isRepairedString;
-        }
-
-
     }
 }

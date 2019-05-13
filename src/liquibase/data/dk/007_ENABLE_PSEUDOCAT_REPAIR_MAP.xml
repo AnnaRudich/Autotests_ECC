@@ -11,17 +11,17 @@
 
         <sql>
 
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE50'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE51'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE52'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE53'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE54'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE55'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE56'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE57'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE58'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE59'
-            EXEC autotests_map_service_agreement @agreementName, 'FUTURE60'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE50'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE51'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE52'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE53'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE54'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE55'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE56'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE57'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE58'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE59'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE60'
 
         </sql>
     </changeSet>

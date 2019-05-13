@@ -145,8 +145,8 @@ public class SelfService2Tests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE, enabled = false)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService")
     public void submitRepairLine(User user, Claim claim) {
@@ -168,11 +168,9 @@ public class SelfService2Tests extends BaseTest {
                 .selectPurchaseMonth("Jan")
 
                 .setLossType(LossType.DAMAGED)
-                .isRepaired(SelfService2Page.IsRepaired.TRUE)
+                .isRepaired(true)
                 .addRepairPrice(Constants.PRICE_100)
-                .addPurchasePrice(Constants.PRICE_100)
                 .addNewPrice(Constants.PRICE_500)
-                .addCustomerDemandPrice(Constants.PRICE_50)
                 .saveItem()
 
                 .sendResponseToEcc()
