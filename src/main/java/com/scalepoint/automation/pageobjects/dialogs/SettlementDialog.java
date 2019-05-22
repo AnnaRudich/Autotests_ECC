@@ -517,7 +517,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementPage addOneMoreManualLine() {
-        return closeSidWithOk(SettlementPage.class, ADD_BUTTON);
+        return closeSid(SettlementPage.class, ADD_BUTTON, false);
     }
 
     public SettlementPage closeSidWithOk() {
