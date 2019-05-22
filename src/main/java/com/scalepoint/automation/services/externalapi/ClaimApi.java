@@ -4,12 +4,10 @@ import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.fluent.Executor;
 import org.apache.http.message.BasicHeader;
 
 import java.util.List;
@@ -61,11 +59,6 @@ public class ClaimApi extends AuthenticationApi {
             claim.setClaimId(claimId);
 
             SolrApi.waitForClaimAppearedInIndexById(claim);
-
-            String redirectTo = headerLocation.getValue() + "settlement.jsp";
-
-            log.info("Go to " + redirectTo);
-            Browser.driver().get(redirectTo);
         } catch (Exception e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {

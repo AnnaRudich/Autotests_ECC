@@ -57,7 +57,6 @@ import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
@@ -141,7 +140,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         ClaimApi claimApi = new ClaimApi(user);
         claimApi.createClaim(claim, policyType);
 
-        return Page.at(SettlementPage.class);
+        return redirectToSettlementPage(user);
+    }
+
+    protected static void createClaim(User user, Claim claim, String policyType){
+
+        ClaimApi claimApi = new ClaimApi(user);
+        claimApi.createClaim(claim, policyType);
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
@@ -195,6 +200,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 .to(EditReasonsPage.class)
                 .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
                 .assertEditReasonsFormVisible();
+    }
+    protected SettlementPage redirectToSettlementPage(User user){
+
+        return login(user)
+                .to(SettlementPage.class);
     }
 
     public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {

@@ -23,7 +23,12 @@ import org.openqa.selenium.WebDriver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 
 public class SolrApi {
@@ -110,13 +115,16 @@ public class SolrApi {
     }
 
     public static void waitForClaimAppearedInIndexById(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
-            SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
-            if (solrClaim == null) {
-                commitClaims();
-            }
-            return solrClaim;
-        }, SolrApi.HARD_COMMIT_TIME, POLL_MS);
+        await()
+                .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                .timeout(SolrApi.HARD_COMMIT_TIME, TimeUnit.SECONDS)
+                .until(() -> {
+                    SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
+                    if (solrClaim == null) {
+                        commitClaims();
+                    }
+                    return solrClaim;
+                }, is(notNullValue()));
     }
 
     public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
