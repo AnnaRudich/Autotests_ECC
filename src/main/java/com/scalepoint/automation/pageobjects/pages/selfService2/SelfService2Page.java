@@ -191,7 +191,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page addDocumentation() {
-        SelenideElement uploadDocBtn = $(By.xpath("//label[contains(@data-for, 'attachment')]/following-sibling::input"));
+        SelenideElement uploadDocBtn = $(By.xpath("//input[contains(@data-for, 'attachment')]"));
         enterToHiddenUploadFileFieldSS(uploadDocBtn, TestData.getAttachmentFiles().getJpgFile2Loc());
         return this;
     }
