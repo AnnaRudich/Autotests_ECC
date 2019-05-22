@@ -234,7 +234,6 @@ public class EditReasonTests extends BaseTest {
                 .doAssert(sid -> sid.assertDiscretionaryReasonValuePresent(reason));
     }
 
-
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
         loginAndCreateClaim(trygUser, claim)
                 .openSid()
