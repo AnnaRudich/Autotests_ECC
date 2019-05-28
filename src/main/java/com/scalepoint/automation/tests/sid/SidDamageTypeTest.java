@@ -86,6 +86,13 @@ public class SidDamageTypeTest extends BaseTest {
                 .enableDamage()
                 .doAssert(claimLine -> {
                     claimLine.assertDamageTypeDisabled();
+                })
+                .closeSidWithOk()
+                .findClaimLine(claimItem.getTextFieldSP()).editLine()
+                .doAssert(claimLine -> {
+                    claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
+                    claimLine.assertCategoriesTextIs(claimItem.getCategoryShoes());
+                    claimLine.assertCashValueIs(claimItem.getCustomerDemand());
                 });
     }
 
