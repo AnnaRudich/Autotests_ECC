@@ -63,7 +63,6 @@ public class SettlementPage extends BaseClaimPage {
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
     private WebElement selectAllClaims;
 
-
     private By groupButton = By.xpath("//span[contains(@style,'groupIcon.png')]");
     private By deleteGroupButton = By.xpath("//span[contains(@style,'ungroupIcon.png')]");
     private By rejectButton = By.xpath("//span[contains(@style,'rejectIcon.png')]");
@@ -139,6 +138,13 @@ public class SettlementPage extends BaseClaimPage {
         return claimOperationsMenu.requestSelfService()
                 .fill(claim, password)
                 .enableAutoClose()
+                .send();
+    }
+
+    public SettlementPage requestSelfServiceWithEnabledNewPassword(Claim claim, String password) {
+        return claimOperationsMenu.requestSelfService()
+                .enableNewPassword()
+                .fill(claim, password)
                 .send();
     }
 

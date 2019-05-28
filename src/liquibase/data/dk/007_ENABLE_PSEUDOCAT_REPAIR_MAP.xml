@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="aru" runOnChange="true">
+
+        <comment>Enable_pseudoCategoryRepairMap</comment>
+
+        <sql>
+
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE50'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE51'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE52'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE53'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE54'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE55'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE56'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE57'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE58'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE59'
+            EXEC autotests_enable_pseudoCategoryRepairMap 'FUTURE60'
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

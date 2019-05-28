@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -22,6 +23,7 @@ import org.testng.annotations.Test;
 public class SelfService2Tests extends BaseTest {
 
     private static final String IPHONE = "iPhone";
+    private static final String HERRE = "Herre";
     private static final String CLAIM_NOTE = "Claim Note";
     private static final String ITEM_CUSTOMER_NOTE = "Item Customer Note";
 
@@ -139,5 +141,41 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemNoteIsPresent(ITEM_CUSTOMER_NOTE))
                 .toNotesPage()
                 .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
+    }
+
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE, enabled = false)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService")
+    public void submitRepairLine(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .reopenClaim()
+                .requestSelfServiceWithEnabledNewPassword(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription(HERRE)
+                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
+                .selectPurchaseYear("2017")
+                .selectPurchaseMonth("Jan")
+
+                .setLossType(LossType.DAMAGED)
+                .isRepaired(true)
+                .addRepairPrice(Constants.PRICE_100)
+                .addNewPrice(Constants.PRICE_500)
+                .saveItem()
+
+                .sendResponseToEcc()
+
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description));
     }
 }

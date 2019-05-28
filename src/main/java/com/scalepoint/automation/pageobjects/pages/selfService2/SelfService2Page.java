@@ -7,12 +7,14 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -50,6 +52,10 @@ public class SelfService2Page extends Page {
 
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
+
+
+    @FindBy(name = "RepairLossTypeRadioGroup")
+    private List<WebElement> lossTypeRadioGroup;
 
     By logOutButtonXpath = By.xpath(".//div[@class='log-out']//input[@value='Log ud']");
 
@@ -105,6 +111,14 @@ public class SelfService2Page extends Page {
 
         customerDemandField.setValue(customerDemandPrice.toString());
         waitForValidationMark(customerDemandField);
+        return this;
+    }
+
+    public SelfService2Page addRepairPrice(Double repairPrice){
+        SelenideElement repairPriceField = $("#repair-price-text");
+
+        repairPriceField.setValue(repairPrice.toString());
+        waitForValidationMark(repairPriceField);
         return this;
     }
 
@@ -296,5 +310,32 @@ public class SelfService2Page extends Page {
             assertTrue(driver.findElements(By.xpath("//input[@type='submit']")).isEmpty(), "logout button should not be displayed");
             return this;
         }
+    }
+
+
+    public SelfService2Page setLossType(LossType lossType) {
+
+        for (WebElement lossTypeRadio : lossTypeRadioGroup) {
+            if (lossTypeRadio.getAttribute("value").equals(lossType.name())) {
+                lossTypeRadio.click();
+            } else {
+                logger.info("there is no " + lossType.name() + "radio");
+            }
+        }
+        return at(SelfService2Page.class);
+    }
+
+    public SelfService2Page isRepaired(Boolean isRepaired) {
+        List<WebElement> isRepairedRadioGroup = driver.findElements(By.name("repairIsRepairedRadioGroup"));
+        for (WebElement isRepairedRadio : isRepairedRadioGroup) {
+            if (isRepairedRadio.getAttribute("value").equals(String.valueOf(isRepaired))) {
+                System.out.println(isRepairedRadio.getText());
+                isRepairedRadio.click();
+                break;
+            } else {
+                logger.info("there is no " + isRepaired + " radio");
+            }
+        }
+        return at(SelfService2Page.class);
     }
 }
