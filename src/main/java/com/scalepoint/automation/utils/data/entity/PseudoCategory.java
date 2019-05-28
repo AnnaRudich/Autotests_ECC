@@ -1,7 +1,9 @@
 package com.scalepoint.automation.utils.data.entity;
 
-import jdk.nashorn.internal.objects.annotations.Constructor;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
