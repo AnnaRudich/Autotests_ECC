@@ -113,6 +113,8 @@ public class ClaimItem {
     private Double trygNewPrice;
     @XmlElement
     private String matchedText;
+    @XmlElement
+    private String damageTypeValidationError;
 
     @XmlElement(name = "categoryBabyItems")
     private PseudoCategory categoryBabyItems;
