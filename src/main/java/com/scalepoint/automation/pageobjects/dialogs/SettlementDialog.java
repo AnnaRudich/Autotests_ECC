@@ -41,6 +41,7 @@ import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubl
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class SettlementDialog extends BaseDialog {
@@ -513,6 +514,10 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setReviewed(boolean state) {
         reviewed.set(state);
         return this;
+    }
+
+    public SettlementPage addOneMoreManualLine() {
+        return closeSid(SettlementPage.class, ADD_BUTTON, false);
     }
 
     public SettlementPage closeSidWithOk() {
@@ -1421,8 +1426,10 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertThereIsNoAddButton(){
+            assertThat($(ADD_BUTTON).is(Condition.hidden)).isTrue().as("Add button should be visible");
+            return this;
+        }
     }
-
-
 }
 

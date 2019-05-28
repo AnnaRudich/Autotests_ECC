@@ -7,17 +7,19 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -615,4 +617,61 @@ public class SidManualItemsTests extends BaseTest {
                 });
     }
 
+    @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM, enabled = true)
+    @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
+    @Test(dataProvider = "testDataProvider",
+            description = "possible to add one manual line when SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM FeatureToggle is ON")
+    public void addOneManualLineWhenMultipleAddIsOn(User user, Claim claim, ClaimItem claimItem){
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+
+                .closeSidWithOk()
+                .doAssert(sid->{
+                    sid.assertItemIsPresent(claimItem.getTextFieldSP());
+                });
+
+        new SettlementSummary().doAssert(asserts -> asserts.assertSubtotalSumValueIs(claimItem.getNewPriceSP()));
+
+        new SettlementPage()
+                .openSid()
+                .setBaseData(claimItem)
+                .setValuation(NEW_PRICE)
+                .closeSidWithOk();
+    }
+
+    @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM)
+    @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
+    @Test(dataProvider = "testDataProvider",
+            description = "possible to add one manual line when SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM FeatureToggle is ON")
+    public void E2E_addButtonOnNewManualItem(User user, Claim claim, ClaimItem claimItem1, ClaimItem claimItem2){
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem1)
+                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+
+                .addOneMoreManualLine()
+                .doAssert(sid->{
+                    sid.assertItemIsPresent(claimItem1.getTextFieldSP());
+                });
+
+        new SettlementSummary().doAssert(asserts -> asserts.assertSubtotalSumValueIs(claimItem1.getNewPriceSP()));
+
+        new SettlementDialog().ensureWeAreAt()
+
+                .setBaseData(claimItem2)
+                .setValuation(NEW_PRICE)
+                .closeSidWithOk()
+                .doAssert(sid->{
+                    sid.assertItemIsPresent(claimItem2.getTextFieldSP());
+                });
+
+        new SettlementSummary().doAssert(asserts -> asserts.assertSubtotalSumValueIs(claimItem2.getNewPriceSP()+claimItem1.getNewPriceSP()));
+
+        new SettlementPage().editFirstClaimLine()
+        .doAssert(SettlementDialog.Asserts::assertThereIsNoAddButton);
+    }
 }
