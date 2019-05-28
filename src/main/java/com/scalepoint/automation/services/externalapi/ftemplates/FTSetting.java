@@ -73,7 +73,9 @@ public enum FTSetting {
     DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER("input[name='ftpaymentflag'][value='16384']", CHECKBOX),
     DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER("input[name='ftpaymentflag'][value='32768']", CHECKBOX),
 
-    CPR_NUMBER_ON_REPLACEMENT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX);
+    CPR_NUMBER_ON_REPLACEMENT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX),
+
+    SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;

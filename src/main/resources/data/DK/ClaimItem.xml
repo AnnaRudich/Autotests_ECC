@@ -16,6 +16,12 @@
     <categoryVideoCamera>
         <groupName>Foto &amp; Video</groupName>
         <categoryName>Videokamera</categoryName>
+        <damageTypes>
+            <damageType>Væskeskade</damageType>
+            <damageType>Kortslutning</damageType>
+            <damageType>Tabt/itu/flækket</damageType>
+            <damageType>Brandskade</damageType>
+        </damageTypes>
     </categoryVideoCamera>
 
     <categoryMobilePhones>
@@ -106,4 +112,5 @@
     <alkaUserReductionRule40>40</alkaUserReductionRule40>
     <yes>Ja</yes>
     <no>Nej</no>
+    <damageTypeValidationError>Udfyldelse af årsag er obligatorisk</damageTypeValidationError>
 </claimItem>

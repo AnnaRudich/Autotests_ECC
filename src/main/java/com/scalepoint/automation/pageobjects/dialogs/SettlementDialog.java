@@ -40,6 +40,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
 import static com.scalepoint.automation.utils.Wait.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.*;
 
 
@@ -170,6 +171,12 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "reject-reason-combobox")
     private ExtComboBox rejectReason;
 
+    @FindBy(id = "damage-type-combobox")
+    private ExtComboBox damageType;
+
+    @FindBy(id = "damage-type-combobox-trigger-picker")
+    private WebElement damageTypePicker;
+
     @FindBy(id = "discretionary-reason-combobox")
     private ExtComboBox discretionaryReason;
 
@@ -187,6 +194,9 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(id = "reject-checkbox-displayEl")
     private CheckBox rejectCheckbox;
+
+    @FindBy(id = "damage-checkbox-displayEl")
+    private CheckBox damageCheckbox;
 
     public enum ValuationGridColumn {
         CHECK_COLUMN("active-valuation-checkcolumn"),
@@ -658,6 +668,11 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog enableDamage() {
+        damageCheckbox.select();
+        return this;
+    }
+
     public EditVoucherValuationDialog openVoucherValuationCard() {
         $(voucherValuationCard).click();
         return BaseDialog.at(EditVoucherValuationDialog.class);
@@ -723,8 +738,21 @@ public class SettlementDialog extends BaseDialog {
         return rejectReason.exists();
     }
 
+    private boolean isDamageTypeVisible() {
+        return damageType.exists();
+    }
+
     private boolean isRejectReasonEnabled() {
         return $(rejectReason).isEnabled();
+    }
+
+    private boolean isDamageTypeEnabled() {
+        return damageType.isEnabled();
+    }
+
+    private String getDamageTypeValidationErrorMessage(){
+        SelenideElement selenideElement = $("#damage-type-combobox-ariaErrorEl");
+        return selenideElement.getText();
     }
 
     private boolean isRejectReasonDisabled(String visibleText) {
@@ -763,6 +791,25 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+    public SettlementDialog clickDamageTypePicker(){
+        damageTypePicker.click();
+        return this;
+    }
+
+    public SettlementDialog selectDamageType(String visibleText){
+        waitForEnabled(damageType);
+        clickDamageTypePicker();
+        SelenideElement element = $(By.xpath(String.format("//ul[@id='damage-type-combobox-picker-listEl']/li[text()='%s']", visibleText)));
+        element.click();
+        waitForJavascriptRecalculation();
+        return this;
+    }
+
+    public SettlementDialog viewDamageTypeValidationErrorMessage(){
+        new Actions(driver).moveToElement($("#damage-type-combobox-inputEl")).build().perform();
+        return this;
+    }
+
     public SettlementDialog setDepreciationType(DepreciationType depreciation) {
         waitForVisible(depreciationTypeComboBox);
         depreciationTypeComboBox.select(depreciation.index);
@@ -797,6 +844,10 @@ public class SettlementDialog extends BaseDialog {
 
     private String getRejectReasonText() {
         return rejectReason.getValue();
+    }
+
+    private String getDamageTypeText() {
+        return damageType.getValue();
     }
 
     private boolean isDiscretionaryReasonHasRedBorder() {
@@ -1262,9 +1313,22 @@ public class SettlementDialog extends BaseDialog {
             assertFalse(isRejectReasonEnabled(), "Reject Reason must be disabled");
             return this;
         }
+        public Asserts assertDamageTypeDisabled() {
+            assertThat(isDamageTypeEnabled())
+                    .as("Damage Type must be disabled")
+                    .isFalse();
+            return this;
+        }
 
         public Asserts assertRejectReasonVisible() {
             assertTrue(isRejectReasonVisible(), "Reject Reason must be visible");
+            return this;
+        }
+
+        public Asserts assertDamageTypeVisible() {
+            assertThat(isDamageTypeVisible())
+                    .as("Damage type must be visible")
+                    .isTrue();
             return this;
         }
 
@@ -1290,6 +1354,13 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertRejectReasonEnabled() {
             assertTrue(isRejectReasonEnabled(), "Reject Reason must be enabled");
+            return this;
+        }
+
+        public Asserts assertDamageTypeEnabled() {
+            assertThat(isDamageTypeEnabled())
+                    .as("DamageType must be enabled")
+                    .isTrue();
             return this;
         }
 
@@ -1320,6 +1391,13 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertRejectReasonEqualTo(String reason) {
             assertEquals(getRejectReasonText(), reason, "Wrong reason selected");
+            return this;
+        }
+
+        public Asserts assertDamageTypeEqualTo(String reason) {
+            assertThat(getDamageTypeText())
+                    .as("Wrong damage type selected")
+                    .isEqualTo(reason);
             return this;
         }
 
@@ -1421,6 +1499,27 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertHasDamageTypeValidationError(String errorMessage){
+            assertThat(getDamageTypeValidationErrorMessage())
+                    .as(String.format("Validation error message should contain following text: %s", errorMessage))
+                    .isEqualTo(errorMessage);
+            return this;
+        }
+
+        public Asserts assertDamageTypesRelevantForCategory(List<String> damageTypes){
+            ElementsCollection elements = $$("#damage-type-combobox-picker-listEl>li");
+            assertThat(elements.size())
+                    .as("Damage types should contain only damage types relevant for current category")
+                    .isEqualTo(damageTypes.size());
+            elements
+                    .stream()
+                    .parallel()
+                    .forEach(element -> assertThat(damageTypes.stream()
+                            .filter(d -> d.equals(element.getText())).count())
+                            .as(String.format("Damage type: %s is not relevant for this category", element.getText()))
+                            .isEqualTo(1));
+            return this;
+        }
     }
 
 
