@@ -56,7 +56,7 @@
     <matchService>Match Service</matchService>
     <repairEstimate>Reparationsestimat</repairEstimate>
     <!-->Task Statuses<-->
-    <sent>Opgave(r) er sendt. Luk dette vindue for at vende tilbage til ECC.</sent>
+    <sent>Sendt!</sent>
     <waitingStatus>Afventer svar fra servicepartner</waitingStatus>
     <cancelledStatus>Annulleret</cancelledStatus>
     <feedbackReceivedStatus>Svar modtaget</feedbackReceivedStatus>
