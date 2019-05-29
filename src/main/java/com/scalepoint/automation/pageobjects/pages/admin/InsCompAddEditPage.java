@@ -28,6 +28,9 @@ public class InsCompAddEditPage extends AdminBasePage {
     @FindBy(name = "tenant")
     private WebElement tenant;
 
+    @FindBy(name = "omTenantAlias")
+    private WebElement omTenantAlias;
+
     @FindBy(name = "unifiedCompanyCode")
     private WebElement unifiedCompanyCode;
 
@@ -92,6 +95,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public InsCompaniesPage createCompany(InsuranceCompany insuranceCompany) {
         companyIDField.sendKeys(insuranceCompany.getIcID());
         tenant.sendKeys(insuranceCompany.getIcCode());
+        omTenantAlias.sendKeys(insuranceCompany.getIcCode());
         companyCodeField.sendKeys(insuranceCompany.getIcCode().toUpperCase());
         unifiedCompanyCode.sendKeys(insuranceCompany.getIcCode().toUpperCase());
 
