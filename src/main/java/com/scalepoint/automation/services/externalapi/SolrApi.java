@@ -101,17 +101,22 @@ public class SolrApi {
     }
 
     public static void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimState) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
-            SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
-            if (solrClaim != null) {
-                boolean equal = solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
-                if (!equal) {
-                    commitClaims();
-                }
-                return equal;
-            }
-            return null;
-        }, SolrApi.HARD_COMMIT_TIME, POLL_MS);
+        await()
+                .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                .timeout(SolrApi.HARD_COMMIT_TIME, TimeUnit.SECONDS)
+                .until(() -> {
+                    SolrClaim solrClaim = SolrApi.findClaimById(claim.getClaimId());
+                    if (solrClaim != null) {
+                        logger.info("Claims status: {}", solrClaim.getClaimStatus());
+                        boolean equal = solrClaim.getClaimStatus().equalsIgnoreCase(claimState.getStatus());
+                        if (!equal) {
+                            commitClaims();
+                        }
+                        return equal;
+                    }
+                    return null;
+                }, is(notNullValue()));
+
     }
 
     public static void waitForClaimAppearedInIndexById(Claim claim) {
@@ -128,13 +133,16 @@ public class SolrApi {
     }
 
     public static void waitForClaimAppearedInIndexByClaimNumber(Claim claim) {
-        Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
-            SolrClaim solrClaim = SolrApi.findClaimByClaimNumber(claim.getClaimNumber());
-            if (solrClaim == null) {
-                commitClaims();
-            }
-            return solrClaim;
-        }, SolrApi.HARD_COMMIT_TIME, POLL_MS);
+        await()
+                .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                .timeout(SolrApi.HARD_COMMIT_TIME, TimeUnit.SECONDS)
+                .until(() -> {
+                    SolrClaim solrClaim = SolrApi.findClaimByClaimNumber(claim.getClaimNumber());
+                    if (solrClaim == null) {
+                        commitClaims();
+                    }
+                    return solrClaim;
+                }, is(notNullValue()));
         SolrClaim claimByClaimNumber = findClaimByClaimNumber(claim.getClaimNumber());
         claim.setClaimId(Long.toString(claimByClaimNumber.getId()));
     }
