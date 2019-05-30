@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -101,15 +102,13 @@ public class SettlementPage extends BaseClaimPage {
 
     public ClaimLine findClaimLine(String description) {
         By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table | .//*[@id='settlementTreeGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
-        Wait.waitForDisplayed(claimLineXpath);
-        Table table = new Table(driver.findElement(claimLineXpath));
+        Table table = new Table($(claimLineXpath));
         return new ClaimLine(table);
     }
 
     public ClaimLine parseFirstClaimLine() {
         By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//tr[1]/ancestor::table[1] | .//*[@id='settlementTreeGrid-body']//table//tr[1]/ancestor::table[1]");
-        Wait.waitForDisplayed(claimLineXpath);
-        Table table = new Table(driver.findElement(claimLineXpath));
+        Table table = new Table($(claimLineXpath));
         return new ClaimLine(table);
     }
 
@@ -441,20 +440,20 @@ public class SettlementPage extends BaseClaimPage {
 
         public ClaimLine(Table claimLine) {
             this.claimLine = claimLine;
-            List<WebElement> elements = claimLine.findElements(By.xpath(".//*[@data-columnid='voucherImageColumn']//img[@title]"));
+            ElementsCollection elements = $(claimLine).findAll("[data-columnid='voucherImageColumn'] img[title]");
             if (elements.size() > 0) {
                 this.tooltip = elements.get(0).getAttribute("title");
             }
-            this.descriptionElement = claimLine.findElement(By.xpath(".//*[@data-columnid='descriptionColumn']//span"));
+            this.descriptionElement = $(claimLine).find("[data-columnid='descriptionColumn'] span");
             this.description = descriptionElement.getText();
             this.actualColor = descriptionElement.getAttribute("style");
             this.computedColor = descriptionElement.getCssValue("color");
-            this.category = claimLine.findElement(By.xpath(".//*[@data-columnid='categoryGroupColumn']")).getText();
-            this.quantity = Integer.valueOf(claimLine.findElement(By.xpath(".//*[@data-columnid='quantityColumn']")).getText());
+            this.category = $(claimLine).find("[data-columnid='categoryGroupColumn']").getText();
+            this.quantity = Integer.valueOf($(claimLine).find("[data-columnid='quantityColumn']").getText());
 
-            this.age = claimLine.findElement(By.xpath(".//*[@data-columnid='settlementAgeColumn']")).getText();
+            this.age = $(claimLine).find("[data-columnid='settlementAgeColumn']").getText();
 
-            List<WebElement> purchasePriceElements = Wait.forCondition(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='totalPurchasePriceColumn']")), 3);
+            ElementsCollection purchasePriceElements = $(claimLine).findAll("[data-columnid='totalPurchasePriceColumn']");
             if (!purchasePriceElements.isEmpty()) {
                 String text = purchasePriceElements.get(0).getText();
                 if (StringUtils.isNotBlank(text)) {
@@ -462,11 +461,11 @@ public class SettlementPage extends BaseClaimPage {
                 }
             }
 
-            String depreciationText = claimLine.findElement(By.xpath(".//*[@data-columnid='depreciationColumn']")).getText().replace("%", "");
+            String depreciationText = $(claimLine).find("[data-columnid='depreciationColumn']").getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
-            replacementPrice = OperationalUtils.getDoubleValue(claimLine.findElement(By.xpath(".//*[@data-columnid='replacementAmountColumn']")).getText());
+            replacementPrice = OperationalUtils.getDoubleValue($(claimLine).find("[data-columnid='replacementAmountColumn']").getText());
 
-            List<WebElement> purchaseAmountElements = Wait.forCondition(webDriver -> claimLine.findElements(By.xpath(".//*[@data-columnid='voucherPurchaseAmountValueColumn']")), 3);
+            ElementsCollection purchaseAmountElements = $(claimLine).findAll("[data-columnid='voucherPurchaseAmountValueColumn']");
             if (!purchaseAmountElements.isEmpty()) {
                 String text = purchaseAmountElements.get(0).getText();
                 if (StringUtils.isNotBlank(text)) {

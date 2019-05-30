@@ -15,7 +15,6 @@ import java.util.List;
 
 public class BulkUpdateCategoryTests extends BaseTest {
 
-
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4524")
     @Test(dataProvider = "testDataProvider")
     public void testBulkUpdateCategories(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
