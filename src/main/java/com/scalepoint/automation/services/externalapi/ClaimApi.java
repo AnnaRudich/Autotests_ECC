@@ -59,7 +59,7 @@ public class ClaimApi extends AuthenticationApi {
             claim.setClaimId(claimId);
 
             SolrApi.waitForClaimAppearedInIndexById(claim);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error("Can't create claim", e);
             if (attempt < ATTEMPTS_LIMIT) {
                 createClaim(claim, ++attempt, policyType);
