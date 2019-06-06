@@ -1,12 +1,10 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.google.common.base.Function;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +16,6 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -115,7 +112,7 @@ public class SolrApi {
                         return equal;
                     }
                     return null;
-                }, is(notNullValue()));
+                }, is(true));
 
     }
 
