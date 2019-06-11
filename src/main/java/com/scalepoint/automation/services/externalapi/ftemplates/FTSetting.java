@@ -65,8 +65,10 @@ public enum FTSetting {
     REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION("select[name=RequiredValuationId]", SELECT),
     ENABLE_3RD_VALUATION_FIELD("input[name=ftfunctionflag4][value='4096']", CHECKBOX),
 
+    //Repair & Valuation settings
     ENABLE_REPAIR_VALUATION_AUTO_SETTLING("input[name=ftAutoApprovalFlag][value='1']", CHECKBOX),
     ENABLE_COLLECTING_SELFRISK_BY_IC("input[name=ftCollectSelfRisk][value='1']", CHECKBOX),
+    ENABLE_DAMAGE_TYPE("input[name=ftfunctionflag5][value='1073741824']", CHECKBOX),
 
     PAYOUT_TO_CHEQUE_CLAIMSHANDLER("input[name=ftpaymentflag][value='1']", CHECKBOX),
 

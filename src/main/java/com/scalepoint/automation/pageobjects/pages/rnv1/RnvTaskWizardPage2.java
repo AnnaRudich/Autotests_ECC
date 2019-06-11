@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 @RVPage
@@ -16,7 +17,7 @@ public class RnvTaskWizardPage2 extends Page {
 
     @FindBy(css = "span[id*='button-next'] span span")
     private WebElement nextBtn;
-    @FindBy(css = "span[id*='button-send'] span span")
+    @FindBy(css = "#button-send")
     private WebElement sendBtn;
     @FindBy(css = "span[id*='button-back'] span span")
     private WebElement backBtn;
@@ -68,7 +69,7 @@ public class RnvTaskWizardPage2 extends Page {
     public SettlementPage sendRnV(ServiceAgreement serviceAgreement) {
         String sendText = serviceAgreement.getSentText();
         clickAndWaitForDisplaying(sendBtn, By.xpath("//div[contains(text(), '" + sendText + "')]"));
-        driver.findElement(By.cssSelector("a.tasks-statuses-close-button")).click();
+        $("a.tasks-statuses-close-button").click();
         return at(SettlementPage.class);
     }
 

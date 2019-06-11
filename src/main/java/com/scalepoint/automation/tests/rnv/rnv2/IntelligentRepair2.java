@@ -26,8 +26,9 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
 import static com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage.AuditResultEvaluationStatus.*;
 
 @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
+@RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class IntelligentRepair2 extends BaseTest {
-
+    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING)
     @Test(dataProvider = "testDataProvider", description = "IntelligentRepair2. Audit Approved")
     public void feedback_Approved(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");

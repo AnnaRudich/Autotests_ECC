@@ -8,6 +8,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Selenide.$;
+
 @RVPage
 public class RnvTaskWizardPage1 extends Page {
 
@@ -28,7 +30,7 @@ public class RnvTaskWizardPage1 extends Page {
     @FindBy(css = "input[name='city']")
     private WebElement cityField;
 
-    @FindBy(css = "span[id*='button-next'] span span")
+    @FindBy(css = "#button-next")
     private WebElement nextBtn;
     @FindBy(css = "span[id*='button-send'] span span")
     private WebElement sendBtn;
@@ -89,12 +91,12 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
     public RnvTaskWizardPage1 changeTask(String claimLineDescription, String taskType) {
-        Wait.waitForVisible(postalCodeField).click();
+        $(postalCodeField).click();
         Wait.waitForAjaxCompleted();
         String xpathTask = taskTypeFieldByCLNameXpath.replace("$1", claimLineDescription);
         clickAndWaitForDisplaying(By.xpath(xpathTask), By.cssSelector("ul.x-list-plain"));
         String xpathTaskType = tasksXpath.replace("$1", taskType);
-        driver.findElement(By.xpath(xpathTaskType)).click();
+        $(By.xpath(xpathTaskType)).click();
         return this;
     }
 

@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages.rnv1;
 
-import com.google.common.base.Function;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.EccFileApi;
@@ -10,11 +9,11 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import javax.annotation.Nullable;
+import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
+import static com.codeborne.selenide.Selenide.$;
 
 @EccPage
 public class RnvCommunicationPage extends BaseClaimPage {
@@ -51,9 +50,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
     }
 
     public RnvCommunicationPage assertLatestMessageContains(String textMessage) {
-        if (!latestMessageText.getText().contains(textMessage)) {
-            throw new AssertionError("Latest message doesn't contain: " + textMessage);
-        }
+        $(latestMessageText).shouldHave(exactTextCaseSensitive(textMessage));
         return this;
     }
 
@@ -78,15 +75,9 @@ public class RnvCommunicationPage extends BaseClaimPage {
 
 
     public RnvCommunicationPage sendTextMailToSePa(String textMsg) {
-        sendKeys(mailTextField, textMsg);
-        sendBtn.click();
-        Wait.forCondition(new Function<WebDriver, Object>() {
-            @Nullable
-            @Override
-            public Object apply(@Nullable WebDriver webDriver) {
-                return latestMessageText.getText().contains(textMsg);
-            }
-        });
+        $(mailTextField).sendKeys(textMsg);
+        $(sendBtn).click();
+        $(latestMessageText).waitUntil(exactTextCaseSensitive(textMsg), 60000);
         return this;
     }
 }

@@ -1,26 +1,21 @@
 package com.scalepoint.automation;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public interface Actions {
@@ -145,7 +140,7 @@ public interface Actions {
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
         clickUsingJsIfSeleniumClickReturnError(element);
-        Wait.forCondition(d -> Browser.driver().findElement(byWaitForElement).isDisplayed(), 60, 1, NoSuchElementException.class);
+        $(byWaitForElement).waitUntil(Condition.visible, 60000);
     }
 
     default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {

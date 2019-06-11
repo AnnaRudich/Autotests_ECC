@@ -13,7 +13,7 @@ import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-
+@RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class RnVSmokeTest extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
