@@ -303,24 +303,24 @@ public class RnvTaskWizardPage1 extends Page {
 
 
 
-    class ServiceLinesListColumns {
+    class ServiceLinesHeaders {
 
-        List<String> columnHeadersTexts = new ArrayList<>();
-        List<WebElement> columnHeaders = new ArrayList<>();
+        List<String> columnNames = new ArrayList<>();
+        List<WebElement> columnHeaderElements = new ArrayList<>();
 
-        public ServiceLinesListColumns(){
-            this.columnHeaders = getColumnHeaders();
-            this.columnHeadersTexts = getHeadersTexts(columnHeaders);
+        public ServiceLinesHeaders(){
+            this.columnHeaderElements = getColumnHeaderElements();
+            this.columnNames = getHeadersTexts(columnHeaderElements);
         }
 
         public List<String> getHeadersTexts(List<WebElement> tableHeadersElements){
             for(WebElement tableHeaderElement: tableHeadersElements){
-                columnHeadersTexts.add(tableHeaderElement.getText());
+                columnNames.add(tableHeaderElement.getText());
             }
-            return columnHeadersTexts;
+            return columnNames;
         }
 
-        public List<WebElement> getColumnHeaders(){
+        public List<WebElement> getColumnHeaderElements(){
             WebElement tableElement = driver.findElement(By.cssSelector("#serviceLineListId"));
             return tableElement.findElements
                     (By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
@@ -329,44 +329,44 @@ public class RnvTaskWizardPage1 extends Page {
 
     class ServiceLinesRows {
 
-        List<WebElement> tableCellElements;
-        List<String> tableCellTexts;
-        Map<String,WebElement> serviceLines;
-
+        List<Map<String, WebElement>> serviceLinesList = new ArrayList<>();
 
         public ServiceLinesRows(){
-            this.tableCellElements = getTableCellElements();
-            this.tableCellTexts = getTableCellTexts(tableCellElements);
-            this.serviceLines = convertLines(tableCellTexts, tableCellElements);
+            List<String> columnHeadersTexts = new ServiceLinesHeaders().columnNames;
+            this.serviceLinesList = collectLinesData(columnHeadersTexts);
         }
 
-        private List<WebElement> getTableCellElements(){
-            WebElement tableElement = driver.findElement(By.cssSelector("#serviceLineListId-body"));
-            return tableElement.findElements
-                    (By.xpath("//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))]"));
+        private List<WebElement> getRows(){
+            return  driver.findElements(By.cssSelector("//div[contains(@id, 'serviceLineListId-body')]//tr"));
         }
 
-        private List<String> getTableCellTexts(List<WebElement> tableCellElements){
-            for(WebElement tableCellsElement: tableCellElements){
-                tableCellTexts.add(tableCellsElement.getText());
-            }return tableCellTexts;
+        private List<Map<String, WebElement>> collectLinesData(List<String> columnNames){
+            List<Map<String, WebElement>> serviceLines = new ArrayList<>();
+            List<WebElement> rows = getRows();
+            for(WebElement row: rows){
+                List<WebElement> rowCells =
+                        row.findElements(By.xpath("//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))]"));
+                serviceLines.add(mapCellsToHeaders(columnNames, rowCells));
+            } return serviceLines;
         }
 
-
-        private   Map<String,WebElement>  convertLines(List<String> columns, List<WebElement> rows){
+        private Map<String,WebElement> mapCellsToHeaders(List<String> columnNames, List<WebElement> rowCells){
             Map<String, WebElement> lines = new HashMap<>();
-            for (int i = 0; i< columns.size(); i++){
-                lines.put(columns.get(i), rows.get(i));
+            for (int i = 0; i< columnNames.size(); i++){
+                lines.put(columnNames.get(i), rowCells.get(i));
             }return lines;
         }
 
-        public String getCellValue(String lineDescription){
-            serviceLines.get("Beskrivelse").
-            return;
+        private List<String> getCellValue(String lineDescription, String columnName){
+            for(WebElement tableCellsElement: rowCells){
+                rowCellTexts.add(tableCellsElement.getText());
+            }return rowCellTexts;
         }
 
         public void selectCell(String columnName, String lineDescription){
-            tableCellElements.get(cellIndex).click();
+            rowCells.get(cellIndex).click();
         }
+
+        //method to select a value from drop-down. Should it be here?
     }
 }
