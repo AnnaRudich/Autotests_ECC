@@ -8,6 +8,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static com.codeborne.selenide.Selenide.$;
 
 @RVPage
@@ -294,5 +299,74 @@ public class RnvTaskWizardPage1 extends Page {
         selectAgrForBulkUpdate(agreementName);
         selectUpdate();
         return this;
+    }
+
+
+
+    class ServiceLinesListColumns {
+
+        List<String> columnHeadersTexts = new ArrayList<>();
+        List<WebElement> columnHeaders = new ArrayList<>();
+
+        public ServiceLinesListColumns(){
+            this.columnHeaders = getColumnHeaders();
+            this.columnHeadersTexts = getHeadersTexts(columnHeaders);
+        }
+
+        public List<String> getHeadersTexts(List<WebElement> tableHeadersElements){
+            for(WebElement tableHeaderElement: tableHeadersElements){
+                columnHeadersTexts.add(tableHeaderElement.getText());
+            }
+            return columnHeadersTexts;
+        }
+
+        public List<WebElement> getColumnHeaders(){
+            WebElement tableElement = driver.findElement(By.cssSelector("#serviceLineListId"));
+            return tableElement.findElements
+                    (By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
+        }
+    }
+
+    class ServiceLinesRows {
+
+        List<WebElement> tableCellElements;
+        List<String> tableCellTexts;
+        Map<String,WebElement> serviceLines;
+
+
+        public ServiceLinesRows(){
+            this.tableCellElements = getTableCellElements();
+            this.tableCellTexts = getTableCellTexts(tableCellElements);
+            this.serviceLines = convertLines(tableCellTexts, tableCellElements);
+        }
+
+        private List<WebElement> getTableCellElements(){
+            WebElement tableElement = driver.findElement(By.cssSelector("#serviceLineListId-body"));
+            return tableElement.findElements
+                    (By.xpath("//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))]"));
+        }
+
+        private List<String> getTableCellTexts(List<WebElement> tableCellElements){
+            for(WebElement tableCellsElement: tableCellElements){
+                tableCellTexts.add(tableCellsElement.getText());
+            }return tableCellTexts;
+        }
+
+
+        private   Map<String,WebElement>  convertLines(List<String> columns, List<WebElement> rows){
+            Map<String, WebElement> lines = new HashMap<>();
+            for (int i = 0; i< columns.size(); i++){
+                lines.put(columns.get(i), rows.get(i));
+            }return lines;
+        }
+
+        public String getCellValue(String lineDescription){
+            serviceLines.get("Beskrivelse").
+            return;
+        }
+
+        public void selectCell(String columnName, String lineDescription){
+            tableCellElements.get(cellIndex).click();
+        }
     }
 }
