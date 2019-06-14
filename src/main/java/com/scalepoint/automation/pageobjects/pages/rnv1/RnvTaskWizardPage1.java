@@ -302,7 +302,6 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
 
-
     class ServiceLinesHeaders {
 
         List<String> columnNames = new ArrayList<>();
@@ -310,10 +309,10 @@ public class RnvTaskWizardPage1 extends Page {
 
         public ServiceLinesHeaders(){
             this.columnHeaderElements = getColumnHeaderElements();
-            this.columnNames = getHeadersTexts(columnHeaderElements);
+            this.columnNames = getColumnNames(columnHeaderElements);
         }
 
-        public List<String> getHeadersTexts(List<WebElement> tableHeadersElements){
+        public List<String> getColumnNames(List<WebElement> tableHeadersElements){
             for(WebElement tableHeaderElement: tableHeadersElements){
                 columnNames.add(tableHeaderElement.getText());
             }
@@ -329,7 +328,7 @@ public class RnvTaskWizardPage1 extends Page {
 
     class ServiceLinesRows {
 
-        List<Map<String, WebElement>> serviceLinesList = new ArrayList<>();
+        List<Map<String, WebElement>> serviceLinesList;
 
         public ServiceLinesRows(){
             List<String> columnHeadersTexts = new ServiceLinesHeaders().columnNames;
@@ -367,6 +366,6 @@ public class RnvTaskWizardPage1 extends Page {
             rowCells.get(cellIndex).click();
         }
 
-        //method to select a value from drop-down. Should it be here?
+        //method to select a value from drop-down. Should it be here? SET VALUE?
     }
 }
