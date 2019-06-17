@@ -99,7 +99,8 @@ public class RnVSmokeTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
-                .changeTask(lineDescription, translations.getRnvTaskType().getRepair())
+                .selectRnVTypeForLine(lineDescription, translations.getRnvTaskType().getRepair())
+                //.changeTask(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
                 .sendRnV(agreement)
 

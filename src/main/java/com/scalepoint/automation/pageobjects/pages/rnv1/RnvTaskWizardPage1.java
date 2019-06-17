@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.rnv1;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
@@ -13,7 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 @RVPage
 public class RnvTaskWizardPage1 extends Page {
@@ -170,6 +174,13 @@ public class RnvTaskWizardPage1 extends Page {
         find(By.xpath(clCheckbox)).click();
     }
 
+    public RnvTaskWizardPage1 selectRnVTypeForLine(String description, String RnVType){
+        new ServiceLinesRows().getRowByDescription(description).get("Opgavetype").click();
+        ElementsCollection rnvTypes = $$(By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li"));
+        rnvTypes.findBy(text(RnVType)).click();
+        return this;
+    }
+
     public void clickActions() {
         actionMenu.click();
     }
@@ -305,24 +316,24 @@ public class RnvTaskWizardPage1 extends Page {
     class ServiceLinesHeaders {
 
         List<String> columnNames;
-        List<WebElement> columnHeaderElements;
+        ElementsCollection columnHeaderElements;
 
         public ServiceLinesHeaders(){
             this.columnHeaderElements = getColumnHeaderElements();
             this.columnNames = getColumnNames(columnHeaderElements);
         }
 
-        public List<String> getColumnNames(List<WebElement> tableHeadersElements){
+        public List<String> getColumnNames(ElementsCollection tableHeadersElements){
             for(WebElement tableHeaderElement: tableHeadersElements){
-                columnNames.add(tableHeaderElement.getText());
+                this.columnNames.add(tableHeaderElement.getText());
             }
-            return columnNames;
+            return this.columnNames;
         }
 
-        public List<WebElement> getColumnHeaderElements(){
-            WebElement tableElement = driver.findElement(By.cssSelector("#serviceLineListId"));
-            return tableElement.findElements
-                    (By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
+        public ElementsCollection getColumnHeaderElements(){
+            SelenideElement tableElement = $(By.cssSelector("#serviceLineListId"));
+            System.out.println($$(By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]")).get(0).getText());
+            return tableElement.$$(By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
         }
     }
 
@@ -356,14 +367,30 @@ public class RnvTaskWizardPage1 extends Page {
             }return lines;
         }
 
-        private List<String> getCellValue(String lineDescription, String columnName){
-            for(WebElement tableCellsElement: rowCells){
-                rowCellTexts.add(tableCellsElement.getText());
-            }return rowCellTexts;
+        private Map<String, WebElement> getRowByDescription(String lineDescription) {
+
+            Map<String, WebElement> row = new HashMap<>();
+
+            for (int i = 0; i < serviceLinesList.size(); i++) {
+                if (serviceLinesList.get(i).get("Beskrivelse").getText().equals(lineDescription)) {
+                    row = serviceLinesList.get(i);
+                }
+            } return row;
         }
 
+
+       public String getCellValue(int lineIndex, String columnName){
+            return serviceLinesList.get(lineIndex).get(columnName).getText();
+        }
+
+        public String getCellValue(String lineDescription, String columnName) {
+            Map<String, WebElement> row = getRowByDescription(lineDescription);
+            return row.get(columnName).getText();
+        }
+
+
         public void selectCell(String columnName, String lineDescription){
-            rowCells.get(cellIndex).click();
+            getRowByDescription(lineDescription).get(columnName).click();
         }
 
         //method to select a value from drop-down. Should it be here? SET VALUE?
