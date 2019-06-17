@@ -63,7 +63,7 @@ public class SidDamageTypeTest extends BaseTest {
                 .closeSidWithOk()
                 .findClaimLine(SONY_HDR_CX450).editLine()
                 .doAssert(claimLine -> {
-                    claimLine.assertDescriptionIs(SONY_HDR_CX450);
+                    claimLine.assertDescriptionContains(SONY_HDR_CX450);
                     claimLine.assertCategoriesTextIs(claimItem.getCategoryVideoCamera());
                     claimLine.assertDamageTypeVisible();
                     claimLine.assertDamageTypeEqualTo(damageType);

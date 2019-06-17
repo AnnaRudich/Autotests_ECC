@@ -1148,6 +1148,13 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertDescriptionContains(String expectedDescription) {
+            assertThat(expectedDescription)
+                    .as(String.format("The description should contatins: %s", expectedDescription))
+                    .contains(expectedDescription);
+            return this;
+        }
+
         public Asserts assertCategoryTextIs(String expectedCategory) {
             assertEquals(getCategoryText(), expectedCategory, "The Category is not Saved");
             return this;
