@@ -304,8 +304,8 @@ public class RnvTaskWizardPage1 extends Page {
 
     class ServiceLinesHeaders {
 
-        List<String> columnNames = new ArrayList<>();
-        List<WebElement> columnHeaderElements = new ArrayList<>();
+        List<String> columnNames;
+        List<WebElement> columnHeaderElements;
 
         public ServiceLinesHeaders(){
             this.columnHeaderElements = getColumnHeaderElements();
