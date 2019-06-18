@@ -755,8 +755,10 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private String getDamageTypeValidationErrorMessage(){
-        SelenideElement selenideElement = $("#damage-type-combobox-ariaErrorEl");
-        return selenideElement.getText();
+        return $("#damage-type-combobox-inputEl")
+                .attr("data-errorqtip")
+                .replaceAll("<.*?>", "")
+                .trim();
     }
 
     private boolean isRejectReasonDisabled(String visibleText) {
