@@ -22,6 +22,7 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
+import java.util.Arrays;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -61,6 +62,7 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
@@ -115,7 +117,9 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
                 .openRecentClaim().toEmptyMailsPage()
-                .doAssert(MailsPage.Asserts::noMailsOnThePage);
+                .doAssert(mail -> {
+                    mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
+                });
     }
 
 
