@@ -332,44 +332,43 @@ public class RnvTaskWizardPage1 extends Page {
 
         public ElementsCollection getColumnHeaderElements(){
             SelenideElement tableElement = $(By.cssSelector("#serviceLineListId"));
-            System.out.println($$(By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]")).get(0).getText());
             return tableElement.$$(By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
         }
     }
 
     class ServiceLinesRows {
 
-        List<Map<String, WebElement>> serviceLinesList;
+        List<Map<String, SelenideElement>> serviceLinesList;
 
         public ServiceLinesRows(){
             List<String> columnHeadersTexts = new ServiceLinesHeaders().columnNames;
             this.serviceLinesList = collectLinesData(columnHeadersTexts);
         }
 
-        private List<WebElement> getRows(){
-            return  driver.findElements(By.cssSelector("//div[contains(@id, 'serviceLineListId-body')]//tr"));
+        private ElementsCollection getRows(){
+            return  $$(By.cssSelector("//div[contains(@id, 'serviceLineListId-body')]//tr"));
         }
 
-        private List<Map<String, WebElement>> collectLinesData(List<String> columnNames){
-            List<Map<String, WebElement>> serviceLines = new ArrayList<>();
-            List<WebElement> rows = getRows();
-            for(WebElement row: rows){
-                List<WebElement> rowCells =
-                        row.findElements(By.xpath("//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))]"));
+        private List<Map<String, SelenideElement>> collectLinesData(List<String> columnNames){
+            List<Map<String, SelenideElement>> serviceLines = new ArrayList<>();
+           ElementsCollection rows = getRows();
+            for(SelenideElement row: rows){
+                ElementsCollection rowCells =
+                        row.$$(By.xpath("//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))]"));
                 serviceLines.add(mapCellsToHeaders(columnNames, rowCells));
             } return serviceLines;
         }
 
-        private Map<String,WebElement> mapCellsToHeaders(List<String> columnNames, List<WebElement> rowCells){
-            Map<String, WebElement> lines = new HashMap<>();
+        private Map<String,SelenideElement> mapCellsToHeaders(List<String> columnNames, ElementsCollection rowCells){
+            Map<String, SelenideElement> lines = new HashMap<>();
             for (int i = 0; i< columnNames.size(); i++){
                 lines.put(columnNames.get(i), rowCells.get(i));
             }return lines;
         }
 
-        private Map<String, WebElement> getRowByDescription(String lineDescription) {
+        private Map<String, SelenideElement> getRowByDescription(String lineDescription) {
 
-            Map<String, WebElement> row = new HashMap<>();
+            Map<String, SelenideElement> row = new HashMap<>();
 
             for (int i = 0; i < serviceLinesList.size(); i++) {
                 if (serviceLinesList.get(i).get("Beskrivelse").getText().equals(lineDescription)) {
@@ -384,7 +383,7 @@ public class RnvTaskWizardPage1 extends Page {
         }
 
         public String getCellValue(String lineDescription, String columnName) {
-            Map<String, WebElement> row = getRowByDescription(lineDescription);
+            Map<String,SelenideElement> row = getRowByDescription(lineDescription);
             return row.get(columnName).getText();
         }
 
