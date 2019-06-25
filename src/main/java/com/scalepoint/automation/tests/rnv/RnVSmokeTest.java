@@ -100,6 +100,7 @@ public class RnVSmokeTest extends BaseTest {
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
+                .selectDamageType(lineDescription, "damageType1")
                 .nextRnVstep()
                 .sendRnV(agreement)
 

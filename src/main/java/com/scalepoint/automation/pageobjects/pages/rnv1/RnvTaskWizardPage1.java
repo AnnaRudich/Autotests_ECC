@@ -181,6 +181,13 @@ public class RnvTaskWizardPage1 extends Page {
         return this;
     }
 
+    public RnvTaskWizardPage1 selectDamageType(String lineDescription, String damageType){
+        SelenideElement column = new ServiceLinesRows().getRowByDescription(lineDescription).get("Skadetype");
+        column.click();
+        column.findAll(By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li")).findBy(text(damageType)).click();
+        return this;
+    }
+
 
 
     public void clickActions() {
