@@ -175,11 +175,13 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
     public RnvTaskWizardPage1 selectRnvType(String lineDescription, String rnvType){
-        new ServiceLinesRows().getRowByDescription(lineDescription).get("Opgavetype").click();
-        ElementsCollection rnvTypesList = $$(By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li"));
-        rnvTypesList.findBy(text(rnvType)).click();
+        SelenideElement column = new ServiceLinesRows().getRowByDescription(lineDescription).get("Opgavetype");
+        column.click();
+        column.findAll(By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li")).findBy(text(rnvType)).click();
         return this;
     }
+
+
 
     public RnvTaskWizardPage1 selectDamageType(String lineDescription, String damageType){
         SelenideElement column = new ServiceLinesRows().getRowByDescription(lineDescription).get("Skadetype");
