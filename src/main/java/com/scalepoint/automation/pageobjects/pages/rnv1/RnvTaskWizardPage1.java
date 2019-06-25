@@ -174,12 +174,14 @@ public class RnvTaskWizardPage1 extends Page {
         find(By.xpath(clCheckbox)).click();
     }
 
-    public RnvTaskWizardPage1 selectRnVTypeForLine(String description, String RnVType){
-        new ServiceLinesRows().getRowByDescription(description).get("Opgavetype").click();
-        ElementsCollection rnvTypes = $$(By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li"));
-        rnvTypes.findBy(text(RnVType)).click();
+    public RnvTaskWizardPage1 selectRnvType(String lineDescription, String rnvType){
+        new ServiceLinesRows().getRowByDescription(lineDescription).get("Opgavetype").click();
+        ElementsCollection rnvTypesList = $$(By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li"));
+        rnvTypesList.findBy(text(rnvType)).click();
         return this;
     }
+
+
 
     public void clickActions() {
         actionMenu.click();
@@ -324,15 +326,16 @@ public class RnvTaskWizardPage1 extends Page {
         }
 
         public List<String> getColumnNames(ElementsCollection tableHeadersElements){
+
+            List<String> columnNames = new ArrayList<>();
             for(WebElement tableHeaderElement: tableHeadersElements){
-                this.columnNames.add(tableHeaderElement.getText());
+                columnNames.add(tableHeaderElement.getText());
             }
-            return this.columnNames;
+            return columnNames;
         }
 
         public ElementsCollection getColumnHeaderElements(){
-            SelenideElement tableElement = $(By.cssSelector("#serviceLineListId"));
-            return tableElement.$$(By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
+            return $$(By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]"));
         }
     }
 
@@ -345,16 +348,14 @@ public class RnvTaskWizardPage1 extends Page {
             this.serviceLinesList = collectLinesData(columnHeadersTexts);
         }
 
-        private ElementsCollection getRows(){
-            return  $$(By.cssSelector("//div[contains(@id, 'serviceLineListId-body')]//tr"));
-        }
-
         private List<Map<String, SelenideElement>> collectLinesData(List<String> columnNames){
             List<Map<String, SelenideElement>> serviceLines = new ArrayList<>();
-           ElementsCollection rows = getRows();
+
+           ElementsCollection rows = $$(By.xpath("//div[contains(@id, 'serviceLineListId-body')]//tr"));
+
             for(SelenideElement row: rows){
                 ElementsCollection rowCells =
-                        row.$$(By.xpath("//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))]"));
+                        row.findAll(By.xpath("(//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))])[position()>1]"));
                 serviceLines.add(mapCellsToHeaders(columnNames, rowCells));
             } return serviceLines;
         }
