@@ -2,23 +2,16 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -29,6 +22,7 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
+import java.util.Arrays;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -68,6 +62,7 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
@@ -106,8 +101,6 @@ public class ClaimTests extends BaseTest {
                 .saveClaim()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
-@RunOn(DriverType.CHROME)
-    @FeatureToggleSetting(type = FeatureIds.NEW_SETTLE_WITHOUT_MAIL_BUTTON)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")
     @Test(dataProvider = "testDataProvider",
@@ -122,7 +115,9 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
                 .openRecentClaim().toEmptyMailsPage()
-                .doAssert(MailsPage.Asserts::noMailsOnThePage);
+                .doAssert(mail -> {
+                    mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
+                });
     }
 
 
@@ -442,7 +437,6 @@ public class ClaimTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
 
-    @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_SID)
     @Test(dataProvider = "testDataProvider",
             description = "CONTENTS-173 - after setting description the category and " +
                     "pseudo-category in SID is auto selected")
@@ -457,7 +451,6 @@ public class ClaimTests extends BaseTest {
                 });
     }
 
-    @FeatureToggleSetting(type = FeatureIds.COPY_NOTE_BUTTON)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
     @Test(dataProvider = "testDataProvider")
     public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {

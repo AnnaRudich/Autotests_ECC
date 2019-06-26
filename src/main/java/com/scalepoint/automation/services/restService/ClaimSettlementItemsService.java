@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import static com.scalepoint.automation.services.restService.Common.BasePath.INSERT_SETTLEMENT_ITEM;
 import static com.scalepoint.automation.services.restService.Common.BasePath.REMOVE_SETTLEMENT_ITEM;
@@ -26,7 +27,9 @@ public class ClaimSettlementItemsService extends BaseService {
 
 
     public ClaimSettlementItemsService addLines(InsertSettlementItem... items) {
-        Arrays.stream(items).forEach(i -> addLine(i));
+        Arrays.stream(items)
+                .forEach(i ->
+                        addLine(i));
         return this;
     }
 
@@ -47,7 +50,7 @@ public class ClaimSettlementItemsService extends BaseService {
 
     private ClaimSettlementItemsService addLine(InsertSettlementItem item) {
         item.setCaseId(data.getUserId().toString());
-        item.getSettlementItem().getClaim().setClaimToken(getClaimTokenWithoutPrefix());
+        item.getSettlementItem().getClaim().setClaimToken(UUID.randomUUID().toString());
 
         this.response = given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())

@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -215,6 +216,17 @@ public class MailsPage extends BaseClaimPage {
         public void isMailExist(MailType mailType, String subject) {
             String latestMailSubject = getLatestMail(mailType).getSubject();
             assertThat(latestMailSubject.equals(subject)).as("expected mail subject: " + subject + "but was: " + latestMailSubject).isTrue();
+        }
+
+        public void noOtherMailsOnThePage(List<MailType> expectedMails){
+            List<MailType> mails =parseMails().getMails().stream().map(mail -> mail.getMailType()).collect(Collectors.toList());
+            assertThat(mails.containsAll(expectedMails))
+                    .as(String.format("Following mails should be sent: %s, but were: %s", expectedMails, mails))
+                    .isTrue();
+            mails.removeAll(expectedMails);
+            assertThat(mails.isEmpty())
+                    .as("Following mails should not be sent %s", mails)
+                    .isTrue();
         }
     }
 }

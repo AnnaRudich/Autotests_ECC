@@ -19,7 +19,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class RnVSmokeTest extends BaseTest {
-    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
@@ -52,7 +51,6 @@ public class RnVSmokeTest extends BaseTest {
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void messagesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 

@@ -755,8 +755,10 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private String getDamageTypeValidationErrorMessage(){
-        SelenideElement selenideElement = $("#damage-type-combobox-ariaErrorEl");
-        return selenideElement.getText();
+        return $("#damage-type-combobox-inputEl")
+                .attr("data-errorqtip")
+                .replaceAll("<.*?>", "")
+                .trim();
     }
 
     private boolean isRejectReasonDisabled(String visibleText) {
@@ -1145,6 +1147,13 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertDescriptionIs(String expectedDescription) {
             assertEquals(getDescriptionText(), expectedDescription, "The Description is not saved");
+            return this;
+        }
+
+        public Asserts assertDescriptionContains(String expectedDescription) {
+            assertThat(expectedDescription)
+                    .as(String.format("The description should contatins: %s", expectedDescription))
+                    .contains(expectedDescription);
             return this;
         }
 
