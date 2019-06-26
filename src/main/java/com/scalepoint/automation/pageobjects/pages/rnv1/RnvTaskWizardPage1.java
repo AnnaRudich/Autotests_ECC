@@ -191,7 +191,6 @@ public class RnvTaskWizardPage1 extends Page {
     }
 
 
-
     public void clickActions() {
         actionMenu.click();
     }

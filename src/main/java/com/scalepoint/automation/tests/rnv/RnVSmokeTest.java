@@ -15,6 +15,8 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
+
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class RnVSmokeTest extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
@@ -81,7 +83,8 @@ public class RnVSmokeTest extends BaseTest {
 
     @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
+    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
+   // @RequiredSetting(type = FTSetting.ENABLE_REPAIR_VALUATION_AUTO_SETTLING, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_damageType(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
@@ -95,12 +98,14 @@ public class RnVSmokeTest extends BaseTest {
                 .reopenClaim()
                 .openSid()
                 .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .enableDamage()
+                .selectDamageType("damageType1")
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
-                .selectDamageType(lineDescription, "damageType1")
+                .selectDamageType(lineDescription, "damageType2")
                 .nextRnVstep()
                 .sendRnV(agreement)
 
