@@ -47,6 +47,10 @@
     <categoryPersonalMedicine>
         <groupName>Personlig Pleje</groupName>
         <categoryName>Medicin</categoryName>
+        <damageTypes>
+            <damageType>damageType1</damageType>
+            <damageType>damageType2</damageType>
+        </damageTypes>
     </categoryPersonalMedicine>
 
     <categoryBicycles>

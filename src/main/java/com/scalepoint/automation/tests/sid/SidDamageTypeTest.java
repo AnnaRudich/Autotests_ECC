@@ -2,23 +2,26 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
 
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
+@RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
 public class SidDamageTypeTest extends BaseTest {
 
     private static final String SONY_HDR_CX450 = "Sony HDR-CX450";
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @Test(dataProvider = "testDataProvider",
             description = "Verify is possible to add damage type in manual registration")
     public void damageTypeManualItemTest(User user, Claim claim, ClaimItem claimItem) {
@@ -46,7 +49,6 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @Test(dataProvider = "testDataProvider",
             description = "Verify is possible to add damage type in registration from catalog")
     public void damageTypeCatalogRegistrationTest(User user, Claim claim, ClaimItem claimItem) {
@@ -71,7 +73,6 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @Test(dataProvider = "testDataProvider",
             description = "Verify damage type is grayed out if no reason(s) under the category under admin")
     public void damageTypeIfNoReasonUnderCategoryTest(User user, Claim claim, ClaimItem claimItem) {
@@ -97,7 +98,6 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @Test(dataProvider = "testDataProvider",
             description = "Verify damage type is required if the item is damaged and the category has reasons")
     public void damageTypeRequiredTest(User user, Claim claim, ClaimItem claimItem) {
@@ -115,7 +115,6 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @Test(dataProvider = "testDataProvider",
             description = "Verify combo with damage types should contain only damage types relevant for current category")
     public void damageTypeRelevantForCategoryTest(User user, Claim claim, ClaimItem claimItem) {
@@ -131,6 +130,38 @@ public class SidDamageTypeTest extends BaseTest {
                 .clickDamageTypePicker()
                 .doAssert(claimLine -> {
                     claimLine.assertDamageTypesRelevantForCategory(claimItem.getCategoryVideoCamera().getDamageTypes());
+                });
+    }
+
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
+    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
+    @Test(dataProvider = "testDataProvider", description = "damageType is actualized in SID when it was changed in RnV wizard")
+    public void damageTypeEditedInRnv(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+
+        String lineDescription = RandomUtils.randomName("RnVLine");
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .reopenClaim()
+                .openSid()
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .enableDamage()
+                .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
+                .closeSidWithOk()
+                .findClaimLine(lineDescription)
+                .selectLine()
+                .sendToRnV()
+                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
+                .selectDamageType(lineDescription, claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1))
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .findClaimLine(lineDescription)
+                .editLine()
+                .doAssert(claimLine -> {
+                    claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
                 });
     }
 }
