@@ -63,42 +63,14 @@ public class RnvTaskWizardPage1 extends Page {
         column.findAll(dropDownListSelector).findBy(text(valueToSelect)).click();
     }
 
-    class ServiceLinesHeaders {
-
-        List<String> columnNames;
-        ElementsCollection columnHeaderElements;
-
-        ServiceLinesHeaders() {
-            this.columnHeaderElements = getColumnHeaderElements();
-            this.columnNames = getColumnNames(columnHeaderElements);
-        }
-
-        List<String> getColumnNames(ElementsCollection tableHeadersElements) {
-
-            List<String> columnNames = new ArrayList<>();
-            for (WebElement tableHeaderElement : tableHeadersElements) {
-                columnNames.add(tableHeaderElement.getText());
-            }
-            return columnNames;
-        }
-
-
-        ElementsCollection getColumnHeaderElements() {
-            By columnHeadersSelector = By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]");
-            return $$(columnHeadersSelector).excludeWith(Condition.not(visible));
-        }
-    }
-
-
     class ServiceLinesRows {
         List<Map<String, SelenideElement>> serviceLinesList;
 
         ServiceLinesRows() {
-            List<String> columnHeadersTexts = new ServiceLinesHeaders().columnNames;
-            this.serviceLinesList = collectLinesData(columnHeadersTexts);
+            this.serviceLinesList = collectLinesData();
         }
 
-        private List<Map<String, SelenideElement>> collectLinesData(List<String> columnNames) {
+        private List<Map<String, SelenideElement>> collectLinesData() {
             List<Map<String, SelenideElement>> serviceLines = new ArrayList<>();
 
             ElementsCollection rows = $$(By.xpath("//div[contains(@id, 'serviceLineListId-body')]//tr"));
@@ -107,9 +79,20 @@ public class RnvTaskWizardPage1 extends Page {
             for (SelenideElement row : rows) {
                 ElementsCollection rowCells =
                         row.findAll(oneRowCellsSelector);
-                serviceLines.add(mapCellsToHeaders(columnNames, rowCells));
+                serviceLines.add(mapCellsToHeaders(getColumnNames(), rowCells));
             }
             return serviceLines;
+        }
+
+        List<String> getColumnNames() {
+            By columnHeadersSelector = By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]");
+            ElementsCollection tableHeadersElements = $$(columnHeadersSelector).excludeWith(Condition.not(visible));
+
+            List<String> columnNames = new ArrayList<>();
+            for (WebElement tableHeaderElement : tableHeadersElements) {
+                columnNames.add(tableHeaderElement.getText());
+            }
+            return columnNames;
         }
 
         private Map<String, SelenideElement> mapCellsToHeaders(List<String> columnNames, ElementsCollection rowCells) {
@@ -120,7 +103,7 @@ public class RnvTaskWizardPage1 extends Page {
             return lines;
         }
 
-        private Map<String, SelenideElement> getRowByDescription(String lineDescription) {
+        Map<String, SelenideElement> getRowByDescription(String lineDescription) {
 
             Map<String, SelenideElement> row = new HashMap<>();
 
@@ -133,3 +116,4 @@ public class RnvTaskWizardPage1 extends Page {
         }
     }
 }
+

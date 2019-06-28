@@ -134,7 +134,6 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @Test(dataProvider = "testDataProvider", description = "damageType is actualized in SID when it was changed in RnV wizard")
     public void damageTypeEditedInRnv(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
 
