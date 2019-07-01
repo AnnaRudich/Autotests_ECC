@@ -1407,10 +1407,10 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertDamageTypeEqualTo(String reason) {
+        public Asserts assertDamageTypeEqualTo(String damageType) {
             assertThat(getDamageTypeText())
                     .as("Wrong damage type selected")
-                    .isEqualTo(reason);
+                    .isEqualTo(damageType);
             return this;
         }
 
