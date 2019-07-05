@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.pageobjects.pages.*;
-import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
+import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -61,9 +61,9 @@ public class ClaimNavigationMenu extends Module {
         clickUsingJsIfSeleniumClickReturnError(imports);
     }
 
-    public RnvProjectsPage toRepairValuationProjectsPage() {
+    public ProjectsPage toRepairValuationProjectsPage() {
         clickUsingJsIfSeleniumClickReturnError(repairValuation);
-        return at(RnvProjectsPage.class);
+        return at(ProjectsPage.class);
     }
 
     public void ClickSettlementSummary() {

@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
-import com.scalepoint.automation.pageobjects.pages.rnv1.RnvTaskWizardPage1;
+import com.scalepoint.automation.pageobjects.pages.rnv.TaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
@@ -324,9 +324,9 @@ public class SettlementPage extends BaseClaimPage {
         }
     }
 
-    public RnvTaskWizardPage1 sendToRnV() {
+    public TaskWizardPage1 sendToRnV() {
         toolBarMenu.sendToRepairAndValuation();
-        return at(RnvTaskWizardPage1.class);
+        return at(TaskWizardPage1.class);
     }
 
 

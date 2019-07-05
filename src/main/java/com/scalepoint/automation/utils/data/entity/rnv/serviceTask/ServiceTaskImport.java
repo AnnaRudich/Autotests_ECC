@@ -40,7 +40,7 @@ public class ServiceTaskImport extends ServiceTask {
     }
 
 
-    @XmlElement(nillable = true)
+    @XmlElement
     public InvoiceImport getInvoice() {
         return invoice;
     }
@@ -49,7 +49,7 @@ public class ServiceTaskImport extends ServiceTask {
         this.invoice = invoice;
     }
 
-    @XmlAttribute(required = false)
+    @XmlAttribute
     public BigDecimal getTakenSelfRisk() {
         return takenSelfRisk;
     }
@@ -58,7 +58,7 @@ public class ServiceTaskImport extends ServiceTask {
         this.takenSelfRisk = takenSelfRisk;
     }
 
-    @XmlAttribute(required = false)
+    @XmlAttribute
     public BigDecimal getUpdateClaimSelfRisk() {
         return updateClaimSelfRisk;
     }
@@ -67,7 +67,7 @@ public class ServiceTaskImport extends ServiceTask {
         this.updateClaimSelfRisk = updateClaimSelfRisk;
     }
 
-    @XmlAttribute(required = false)
+    @XmlAttribute
     public String getUpdateClaimSelfRiskReason() {
         return updateClaimSelfRiskReason;
     }

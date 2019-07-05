@@ -37,19 +37,30 @@ public class ServiceTaskImportBuilder {
     }
 
 
-    public ServiceTaskImport buildDefault() {
+    public ServiceTaskImport buildDefaultWithInvoice() {
+        buildDefaultWithoutInvoice();
+        this.serviceTaskImport.setInvoice(new InvoiceBuilder().build());
+        this.serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
+        return this.serviceTaskImport;
+    }
+
+    public ServiceTaskImport buildDefaultWithoutInvoice(){
         this.serviceTaskImport = new ServiceTaskImport();
         this.serviceTaskImport.setServiceLines(convertServiceLines(this.serviceTaskExport.getServiceLines()));
         this.serviceTaskImport.setServicePartner(convertServicePartner(this.serviceTaskExport.getServicePartner()));
-        this.serviceTaskImport.setInvoice(new InvoiceBuilder().build());
-        this.serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
         this.serviceTaskImport.setGUID(this.serviceTaskExport.getGUID());
         this.serviceTaskImport.setCreatedDate(this.serviceTaskExport.getCreatedDate());
         return this.serviceTaskImport;
     }
 
-    public ServiceTaskImport buildWithRepairPrice(BigDecimal repairPrice) {
-        buildDefault();
+    public ServiceTaskImport buildDefaultWithoutInvoiceWithRepairPrice(BigDecimal repairPrice){
+        buildDefaultWithoutInvoice();
+        this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
+        return this.serviceTaskImport;
+    }
+
+    public ServiceTaskImport buildDefaultWithInvoiceWithRepairPrice(BigDecimal repairPrice) {
+        buildDefaultWithInvoice();
         this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
         return this.serviceTaskImport;
     }
