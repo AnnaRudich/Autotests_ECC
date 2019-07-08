@@ -29,10 +29,10 @@ public class CommunicationDesignerTests extends BaseTest {
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
-                .forEach(m -> log.info(String.format("Registerd stub: %s",m.getRequest())));
+                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for completed claim")
+    @Test(dataProvider = "testDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email")
     public void SelfServiceCustomerWelcomeTest(@UserCompany(FUTURE60) User user, Claim claim) {
         CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
                 .useOutputManagement(true)
