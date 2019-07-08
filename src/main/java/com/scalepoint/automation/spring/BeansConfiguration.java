@@ -1,5 +1,7 @@
 package com.scalepoint.automation.spring;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.client.WireMockBuilder;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.data.TestData;
@@ -84,5 +86,17 @@ public class BeansConfiguration {
     @Bean
     public DatabaseApi databaseApi() {
         return new DatabaseApi(jdbcTemplate(dataSource()));
+    }
+
+    @Bean
+    public WireMock wireMock(@Value("${wiremock.host}") String host,
+                             @Value("${wiremock.urlPathPrefix}") String urlPathPrefix,
+                             @Value("${wiremock.port}") String port){
+        return new WireMockBuilder()
+                .https()
+                .host(host)
+                .urlPathPrefix(urlPathPrefix)
+                .port(new Integer(port))
+                .build();
     }
 }

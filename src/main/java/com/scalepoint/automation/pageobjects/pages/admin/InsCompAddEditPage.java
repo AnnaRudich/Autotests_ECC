@@ -1,8 +1,11 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
+import lombok.Builder;
+import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -10,6 +13,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
@@ -155,5 +159,32 @@ public class InsCompAddEditPage extends AdminBasePage {
         if (option.getText().equals(insuranceCompany.getIcName())) {
             option.click();
         }
+    }
+
+    public InsCompAddEditPage setCommunicationDesignerSection(CommunicationDesigner communicationDesigner){
+
+        $("#chkUseOutputManagement").setSelected(communicationDesigner.useOutputManagement);
+        $("[name=OM_SelfServiceCustomerWelcome]").setSelected(communicationDesigner.omSelfServiceCustomerWelcome);
+        $("[name=OM_CustomerWelcome]").setSelected(communicationDesigner.omCustomerWelcome);
+        $("[name=OM_CustomerWelcome_uCommerceEmployee]").setSelected(communicationDesigner.omCustomerWelcomeUcommerceEmployee);
+        $("[name=OM_CustomerWelcomeWithOutstanding]").setSelected(communicationDesigner.omCustomerWelcomeWithOutstanding);
+        $("[name=OM_CustomerWelcomeRejectionMail]").setSelected(communicationDesigner.omCustomerWelcomeRejectionMail);
+        $("[name=OM_NotificationToClaimant]").setSelected(communicationDesigner.omNotificationToClaimant);
+        $("[name=OM_ReminderMail]").setSelected(communicationDesigner.omReminderMail);
+        return this;
+    }
+
+    @Data
+    @Builder
+    public static class CommunicationDesigner{
+
+        boolean useOutputManagement;
+        boolean omSelfServiceCustomerWelcome;
+        boolean omCustomerWelcome;
+        boolean omCustomerWelcomeUcommerceEmployee;
+        boolean omCustomerWelcomeWithOutstanding;
+        boolean omCustomerWelcomeRejectionMail;
+        boolean omNotificationToClaimant;
+        boolean omReminderMail;
     }
 }

@@ -1,0 +1,558 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "templateId": {
+      "type": "integer"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "claim": {
+          "type": "object",
+          "properties": {
+            "claimNumber": {
+              "type": "string"
+            },
+            "policyType": {
+              "type": "null"
+            },
+            "policyNumber": {
+              "type": "string"
+            },
+            "tradeUp": {
+              "type": "null"
+            },
+            "status": {
+              "type": "null"
+            },
+            "reimbursementDate": {
+              "type": "string"
+            },
+            "reimbursementExpiration": {
+              "type": "null"
+            },
+            "showReimbursementPayoutInfo": {
+              "type": "boolean"
+            },
+            "autoCancelDate": {
+              "type": "null"
+            },
+            "autoCancelDays": {
+              "type": "integer"
+            },
+            "loginDays": {
+              "type": "integer"
+            },
+            "autoApproveEnable": {
+              "type": "boolean"
+            },
+            "enableDnDComparison": {
+              "type": "boolean"
+            },
+            "insuranceCompany": {
+              "type": "object",
+              "properties": {
+                "companyName": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "address1": {
+                  "type": "string"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "zipcode": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "stateCode": {
+                  "type": "null"
+                },
+                "state": {
+                  "type": "null"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "companyCode": {
+                  "type": "string"
+                },
+                "customerRequestEmail": {
+                  "type": "string"
+                },
+                "customerRequestPhone": {
+                  "type": "null"
+                },
+                "spContactNo": {
+                  "type": "string"
+                },
+                "contactNo": {
+                  "type": "string"
+                },
+                "officeHours": {
+                  "type": "null"
+                },
+                "showCustomerInfo": {
+                  "type": "boolean"
+                },
+                "accountNumber": {
+                  "type": "null"
+                },
+                "registrationNumber": {
+                  "type": "null"
+                },
+                "clearingNumber": {
+                  "type": "null"
+                },
+                "ibanTextNumber": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "companyName",
+                "id",
+                "address1",
+                "address2",
+                "zipcode",
+                "city",
+                "stateCode",
+                "state",
+                "phone",
+                "url",
+                "companyCode",
+                "customerRequestEmail",
+                "customerRequestPhone",
+                "spContactNo",
+                "contactNo",
+                "officeHours",
+                "showCustomerInfo",
+                "accountNumber",
+                "registrationNumber",
+                "clearingNumber",
+                "ibanTextNumber"
+              ]
+            },
+            "claimHandler": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "userName": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "null"
+                },
+                "address1": {
+                  "type": "string"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "zipCode": {
+                  "type": "string"
+                },
+                "mobilePhone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "forcePersonalSignature": {
+                  "type": "string"
+                },
+                "insuranceCompany": {
+                  "type": "null"
+                },
+                "departmentInformation": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "id",
+                "userName",
+                "firstName",
+                "lastName",
+                "phone",
+                "address1",
+                "address2",
+                "city",
+                "zipCode",
+                "mobilePhone",
+                "email",
+                "forcePersonalSignature",
+                "insuranceCompany",
+                "departmentInformation"
+              ]
+            },
+            "claimant": {
+              "type": "object",
+              "properties": {
+                "accountInfo": {
+                  "type": "null"
+                },
+                "salutation": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "fullName": {
+                  "type": "null"
+                },
+                "company": {
+                  "type": "null"
+                },
+                "address1": {
+                  "type": "null"
+                },
+                "address2": {
+                  "type": "null"
+                },
+                "zipCode": {
+                  "type": "null"
+                },
+                "city": {
+                  "type": "null"
+                },
+                "stateCode": {
+                  "type": "null"
+                },
+                "state": {
+                  "type": "null"
+                },
+                "phone": {
+                  "type": "null"
+                },
+                "cellPhoneNumber": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "login": {
+                  "type": "string"
+                },
+                "culture": {
+                  "type": "string"
+                },
+                "scalepointCustomerNumber": {
+                  "type": "string"
+                },
+                "isPasswordSentViaSms": {
+                  "type": "string"
+                },
+                "conditionsLink": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "accountInfo",
+                "salutation",
+                "firstName",
+                "lastName",
+                "fullName",
+                "company",
+                "address1",
+                "address2",
+                "zipCode",
+                "city",
+                "stateCode",
+                "state",
+                "phone",
+                "cellPhoneNumber",
+                "email",
+                "login",
+                "culture",
+                "scalepointCustomerNumber",
+                "isPasswordSentViaSms",
+                "conditionsLink"
+              ]
+            },
+            "notes": {
+              "type": "object",
+              "properties": {
+                "customerNote": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "customerNote"
+              ]
+            },
+            "rvTask": {
+              "type": "null"
+            },
+            "settlement": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {}
+                },
+                "summary": {
+                  "type": "null"
+                },
+                "discretionaryAndRejectReasonsFootNotes": {
+                  "type": "array",
+                  "items": {}
+                },
+                "showSettlementTable": {
+                  "type": "boolean"
+                },
+                "collectedBySP": {
+                  "type": "null"
+                },
+                "collectedByIC": {
+                  "type": "null"
+                },
+                "ownRisk": {
+                  "type": "null"
+                },
+                "indemnity": {
+                  "type": "null"
+                },
+                "indemnityWithoutRepair": {
+                  "type": "null"
+                },
+                "createdDate": {
+                  "type": "null"
+                },
+                "dateToday": {
+                  "type": "null"
+                },
+                "subTotal": {
+                  "type": "null"
+                },
+                "cashSubTotal": {
+                  "type": "null"
+                },
+                "replacementSubTotal": {
+                  "type": "null"
+                },
+                "replacementIndemnity": {
+                  "type": "null"
+                },
+                "totalRepairPrice": {
+                  "type": "null"
+                },
+                "cashCompensation": {
+                  "type": "null"
+                },
+                "manualReductionText": {
+                  "type": "null"
+                },
+                "manualReductionAmount": {
+                  "type": "null"
+                },
+                "showDiscretionaryFirst": {
+                  "type": "boolean"
+                },
+                "groupsMustBeIncludedInMail": {
+                  "type": "boolean"
+                },
+                "cashCompensationOrFaceValueIndemnity": {
+                  "type": "null"
+                },
+                "rejected": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "items",
+                "summary",
+                "discretionaryAndRejectReasonsFootNotes",
+                "showSettlementTable",
+                "collectedBySP",
+                "collectedByIC",
+                "ownRisk",
+                "indemnity",
+                "indemnityWithoutRepair",
+                "createdDate",
+                "dateToday",
+                "subTotal",
+                "cashSubTotal",
+                "replacementSubTotal",
+                "replacementIndemnity",
+                "totalRepairPrice",
+                "cashCompensation",
+                "manualReductionText",
+                "manualReductionAmount",
+                "showDiscretionaryFirst",
+                "groupsMustBeIncludedInMail",
+                "cashCompensationOrFaceValueIndemnity",
+                "rejected"
+              ]
+            }
+          },
+          "required": [
+            "claimNumber",
+            "policyType",
+            "policyNumber",
+            "tradeUp",
+            "status",
+            "reimbursementDate",
+            "reimbursementExpiration",
+            "showReimbursementPayoutInfo",
+            "autoCancelDate",
+            "autoCancelDays",
+            "loginDays",
+            "autoApproveEnable",
+            "enableDnDComparison",
+            "insuranceCompany",
+            "claimHandler",
+            "claimant",
+            "notes",
+            "rvTask",
+            "settlement"
+          ]
+        },
+        "scalepoint": {
+          "type": "object",
+          "properties": {
+            "companyName": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "address1": {
+              "type": "string"
+            },
+            "address2": {
+              "type": "null"
+            },
+            "zipcode": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "stateCode": {
+              "type": "null"
+            },
+            "state": {
+              "type": "null"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "companyCode": {
+              "type": "string"
+            },
+            "customerRequestEmail": {
+              "type": "string"
+            },
+            "customerRequestPhone": {
+              "type": "null"
+            },
+            "spContactNo": {
+              "type": "string"
+            },
+            "contactNo": {
+              "type": "string"
+            },
+            "officeHours": {
+              "type": "string"
+            },
+            "showCustomerInfo": {
+              "type": "boolean"
+            },
+            "accountNumber": {
+              "type": "string"
+            },
+            "registrationNumber": {
+              "type": "string"
+            },
+            "clearingNumber": {
+              "type": "string"
+            },
+            "ibanTextNumber": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "companyName",
+            "id",
+            "address1",
+            "address2",
+            "zipcode",
+            "city",
+            "stateCode",
+            "state",
+            "phone",
+            "url",
+            "companyCode",
+            "customerRequestEmail",
+            "customerRequestPhone",
+            "spContactNo",
+            "contactNo",
+            "officeHours",
+            "showCustomerInfo",
+            "accountNumber",
+            "registrationNumber",
+            "clearingNumber",
+            "ibanTextNumber"
+          ]
+        },
+        "selfServiceLoginURL": {
+          "type": "string"
+        },
+        "shopLoginURL": {
+          "type": "string"
+        },
+        "firstWelcomeMail": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "claim",
+        "scalepoint",
+        "selfServiceLoginURL",
+        "shopLoginURL",
+        "firstWelcomeMail"
+      ]
+    },
+    "wrapWithLayout": {
+      "type": "boolean"
+    },
+    "companyAlias": {
+      "type": "string"
+    },
+    "languageIsoCode": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "templateId",
+    "data",
+    "wrapWithLayout",
+    "companyAlias",
+    "languageIsoCode"
+  ]
+}
