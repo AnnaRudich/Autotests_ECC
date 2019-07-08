@@ -62,6 +62,8 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
 	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email) VALUES (@departmentId, NULL, @ICNAME, 1, @ICCOMMAIL)
 	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email) VALUES (NEWID(), @departmentId, @ICNAME+' Department', 1, @ICCOMMAIL)
 
+	UPDATE [Text_InsComp] SET LocalizedName = @ICNAME WHERE [TextId] = @icTextId
+
 	DECLARE @ftExists BIT = 1
 
 	DECLARE @scalepointId int = (SELECT [ICRFNBR] FROM [INSCOMP] where CompanyCode = 'SCALEPOINT')

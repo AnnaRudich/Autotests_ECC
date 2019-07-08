@@ -1,0 +1,20 @@
+{
+    "tenantKey": "scalepoint",
+    "templates": [
+        {
+            "name": "SelfServiceCustomerWelcome",
+            "id": 4820,
+            "languages": [
+                "da-dk"
+            ],
+            "ancestors": {
+                "4821": "ECC",
+                "4820": "SelfServiceCustomerWelcome"
+            },
+            "path": "4821,4820",
+            "models": [
+                "ECC"
+            ]
+        }
+    ]
+}

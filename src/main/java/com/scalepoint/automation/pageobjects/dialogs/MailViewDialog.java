@@ -6,10 +6,15 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService
 import com.scalepoint.automation.pageobjects.pages.selfservice.LoginSelfServicePage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
+import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class MailViewDialog extends BaseDialog {
@@ -50,4 +55,25 @@ public class MailViewDialog extends BaseDialog {
         return loginToShopLink.getWrappedElement().getAttribute("href");
     }
 
+    public MailViewDialog doAssert(Consumer<Asserts> assertFunc) {
+        assertFunc.accept(new MailViewDialog.Asserts());
+        return MailViewDialog.this;
+    }
+
+    public class Asserts {
+
+        public void isSelfServiceLinkVisible() {
+
+            assertThat($(selfServiceLink).exists())
+                    .isTrue();
+        }
+
+        public void isTextVisible(String text) {
+
+            assertThat($("div[id|=panel][id$=innerCt]")
+                    .find(By.xpath(String.format("//*[contains(text(), '%s')]", text)))
+                    .exists())
+                    .isTrue();
+        }
+    }
 }

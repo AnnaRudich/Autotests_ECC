@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -73,6 +74,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected DatabaseApi databaseApi;
+
+    @Autowired
+    protected WireMock wireMock;
 
     @Value("${driver.type}")
     protected String browserMode;

@@ -12,7 +12,8 @@
     <user login="autotest-future57" password="12341234" companyCode="FUTURE57" companyName="Future57" companyId="57" ftId="57" basic="true"/>
     <user login="autotest-future58" password="12341234" companyCode="FUTURE58" companyName="Future58" companyId="58" ftId="58" basic="true"/>
     <user login="autotest-future59" password="12341234" companyCode="FUTURE59" companyName="Future59" companyId="59" ftId="59" basic="true"/>
-    <user login="autotest-future60" password="12341234" companyCode="FUTURE60" companyName="Future60" companyId="60" ftId="60" basic="true"/>
+<!--    User for OM testing-->
+    <user login="autotest-future60" password="12341234" companyCode="FUTURE60" companyName="Future60" companyId="60" ftId="60"/>
 
     <user login="autotest-sp"       password="12341234" companyCode="SCALEPOINT"     companyName="Scalepoint" companyId="7"     ftId="1"/>
     <user login="autotest-lb"       password="12341234" companyCode="LB"             companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052"/>
