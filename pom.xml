@@ -144,7 +144,7 @@
         <htmlelements.version>1.18</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
         <java.version>1.8</java.version>
-        <jackson.version>2.7.0</jackson.version>
+        <jackson.version>2.6.0</jackson.version>
         <jsoup.version>1.9.2</jsoup.version>
         <jaxb.version>2.2.12</jaxb.version>
         <qatools.properties.version>2.0.RC3</qatools.properties.version>
@@ -480,13 +480,13 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>3.0.3</version>
+            <version>4.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>3.0.3</version>
+            <version>4.0.0</version>
         </dependency>
 
         <dependency>
