@@ -48,8 +48,9 @@ public class RnVSmokeTest extends BaseTest {
                 .assertTaskHasFeedbackReceivedStatus(agreement);
     }
 
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void messagesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    public void messagesTest(User user, Claim claim, ServiceAgreement agreement) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
 

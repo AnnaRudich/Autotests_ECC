@@ -44,7 +44,8 @@ public class InvoiceTab {
         }
         //lastColumnShouldAlwaysHaveEmptyText
         List<String> getColumnNames(){
-            By columnHeadersSelector = By.xpath("(//div[1][contains(@class, 'x-grid-header')]/div[contains(@id, 'headercontainer')])[2]//span[@class='x-column-header-text']");
+            By columnHeadersSelector =
+                    By.xpath("(//div[1][contains(@class, 'x-grid-header')]/div[contains(@id, 'headercontainer')])[2]//span[@class='x-column-header-text']");
             ElementsCollection tableHeadersElements = $$(columnHeadersSelector);
             List<String> columnNames = new ArrayList<>();
             for(WebElement tableHeaderElement: tableHeadersElements){
