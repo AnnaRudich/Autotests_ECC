@@ -38,8 +38,8 @@ public class InvoiceTab extends BaseClaimPage {
 
     public class Asserts {
         public InvoiceTab.Asserts assertThereIsNoInvoiceGrid() {
-            assertThat($(By.xpath("//div[@id = 'grid-invoice']//table/tbody")).is(not(visible))).as("There should be no invoice lines").isTrue();
-            //invoiceGrid.shouldNotBe(visible);
+            assertThat($(By.xpath("//div[@id = 'grid-invoice']//table/tbody")).is(not(visible)))
+                    .as("There should be no invoice lines").isTrue();
             return this;
         }
     }

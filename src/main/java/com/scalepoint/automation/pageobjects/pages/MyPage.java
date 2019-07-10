@@ -56,7 +56,6 @@ public class MyPage extends Page {
 
     public CustomerDetailsPage openRecentClaim() {
         $("#RecentCustomer0").click();
-        //recentCustomer.click();
         return at(CustomerDetailsPage.class);
     }
 
