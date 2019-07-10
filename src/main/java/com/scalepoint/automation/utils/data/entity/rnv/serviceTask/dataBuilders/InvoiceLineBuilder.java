@@ -16,10 +16,10 @@ public class InvoiceLineBuilder {
         this.invoiceLine.setDescription("InvoiceLine" + RandomUtils.randomInt());
         this.invoiceLine.setQuantity(BigDecimal.valueOf(1));
         this.invoiceLine.setUnits("1");
-        this.invoiceLine.setUnitVatAmount(BigDecimal.valueOf(Constants.PRICE_10));
-        this.invoiceLine.setUnitPrice(BigDecimal.valueOf(Constants.PRICE_50));
-        this.invoiceLine.setUnitNetAmount(BigDecimal.valueOf(40));
-        this.invoiceLine.setLineTotal(BigDecimal.valueOf(40));
+        this.invoiceLine.setUnitVatAmount(BigDecimal.valueOf(Constants.VAT_AMOUNT_200));
+        this.invoiceLine.setUnitPrice(BigDecimal.valueOf(Constants.PRICE_500));
+        this.invoiceLine.setUnitNetAmount(BigDecimal.valueOf(Constants.PRICE_500 - Constants.VAT_AMOUNT_200));
+        this.invoiceLine.setLineTotal(BigDecimal.valueOf(Constants.PRICE_500 - Constants.VAT_AMOUNT_200));
     }
 
     public InvoiceLineBuilder withUnits(String units) {

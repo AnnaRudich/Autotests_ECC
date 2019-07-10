@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.EccFileApi;
 import com.scalepoint.automation.utils.ExcelDocUtil;
 import com.scalepoint.automation.utils.Wait;
@@ -34,10 +33,10 @@ public class CommunicationTab extends BaseClaimPage {
     private WebElement sendBtn;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected CommunicationTab ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(sendBtn);
-        return null;
+        return this;
     }
 
     @Override

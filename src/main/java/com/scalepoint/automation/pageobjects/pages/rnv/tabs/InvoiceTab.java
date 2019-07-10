@@ -1,67 +1,46 @@
 package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.InvoiceDialog;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
-public class InvoiceTab {
+public class InvoiceTab extends BaseClaimPage {
 
-    public InvoiceDialog openInvoiceDialogForLineWithIndex(int index){
-        new InvoiceLines().getRowByIndex(index).get("Handlinger").find(By.xpath("//img[contains(@data-qtip, 'Vis faktura')])")).click();
-        return  BaseDialog.at(InvoiceDialog.class);
+    @Override
+    protected InvoiceTab ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        return this;
     }
 
+    @Override
+    protected String getRelativeUrl() {
+        return "webshop/jsp/matching_engine/projects.jsp";
+    }
 
-    class InvoiceLines{
-        List<Map<String, SelenideElement>> invoiceLines;
+    public InvoiceDialog openInvoiceDialogForLineWithIndex(int index){
+        $$(By.xpath("//img[contains(@data-qtip, 'Vis faktura')]")).get(index).click();
+        return BaseDialog.at(InvoiceDialog.class);
+    }
 
-        InvoiceLines(){
-            this.invoiceLines = collectLinesData();
-        }
+    public InvoiceTab doAssert(Consumer<InvoiceTab.Asserts> assertFunc) {
+        assertFunc.accept(new InvoiceTab.Asserts());
+        return InvoiceTab.this;
+    }
 
-        private List<Map<String, SelenideElement>> collectLinesData(){
-            List<Map<String, SelenideElement>> invoiceLines = new ArrayList<>();
-
-            ElementsCollection rows = $$(By.xpath("//div[@id ='grid-invoice-body']//tr[@role='row']"));
-
-            By cellsSelector = By.xpath("//td[@role = 'gridcell']");
-
-            for(SelenideElement row: rows){
-                ElementsCollection rowCells = row.findAll(cellsSelector);
-                invoiceLines.add(mapCellsToHeaders(getColumnNames(), rowCells));
-            }
-            return invoiceLines;
-        }
-        //lastColumnShouldAlwaysHaveEmptyText
-        List<String> getColumnNames(){
-            By columnHeadersSelector =
-                    By.xpath("(//div[1][contains(@class, 'x-grid-header')]/div[contains(@id, 'headercontainer')])[2]//span[@class='x-column-header-text']");
-            ElementsCollection tableHeadersElements = $$(columnHeadersSelector);
-            List<String> columnNames = new ArrayList<>();
-            for(WebElement tableHeaderElement: tableHeadersElements){
-                columnNames.add(tableHeaderElement.getText());
-            } return columnNames;
-        }
-
-        private Map<String, SelenideElement> mapCellsToHeaders(List<String> columnNames, ElementsCollection rowCells){
-            Map<String, SelenideElement> lines = new HashMap<>();
-            for(int i = 0; i < columnNames.size(); i++){
-                lines.put(columnNames.get(i), rowCells.get(i));
-            }return lines;
-        }
-
-        Map<String, SelenideElement> getRowByIndex(int index){
-            return invoiceLines.get(index);
+    public class Asserts {
+        public InvoiceTab.Asserts assertThereIsNoInvoiceGrid() {
+            assertThat($(By.xpath("//div[@id = 'grid-invoice']//table/tbody")).is(not(visible))).as("There should be no invoice lines").isTrue();
+            //invoiceGrid.shouldNotBe(visible);
+            return this;
         }
     }
 }

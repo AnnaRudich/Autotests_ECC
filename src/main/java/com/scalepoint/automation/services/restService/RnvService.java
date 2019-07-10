@@ -44,7 +44,7 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithRepairPrice(BigDecimal repairPrice, Claim claim) {
+    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim) {
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }

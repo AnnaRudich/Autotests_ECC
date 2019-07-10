@@ -1,8 +1,10 @@
 package com.scalepoint.automation.pageobjects.pages.rnv;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
+import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import org.openqa.selenium.By;
@@ -15,20 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class ProjectsPage extends Page {
-    @FindBy(xpath = "//span[contains(text(),'Kommunikation')]")
-    private WebElement communicationTab;
 
-    //Overwiev tab
     private String byTaskStatusAgrXpath = "//div[contains(@id,'project_view_id')]//tr[1]//tr[1]/td/div[contains(text(), '$1')]/ancestor::tr[1]/td[5]/div";
 
     @FindBy(css = "table[class*='x-grid-with-row-lines'] tr:first-of-type tr div.x-grid-row-expander")
     private WebElement firstTaskExpander;
-
-    @FindBy(css = "a#button-overview-reject span span span:first-of-type")
-    private WebElement rejectTaskBtn;
-
-    @FindBy(css = "div.x-column-header-checkbox span")
-    private WebElement selectAllLinesCheckbox;
 
     @FindBy(css = ".x-panel-header span span")
     private WebElement auditInfoPanelHeader;
@@ -49,8 +42,15 @@ public class ProjectsPage extends Page {
     }
 
     public CommunicationTab toCommunicationTab() {
-       clickAndWaitForDisplaying(communicationTab, By.cssSelector("td#combo-communication-task-inputCell"));
+        $(By.xpath("//span[contains(text(),'Kommunikation')]")).click();
+        acceptAlert();
+        $(By.cssSelector("td#combo-communication-task-inputCell")).shouldBe(Condition.visible);
         return at(CommunicationTab.class);
+    }
+
+    public InvoiceTab toInvoiceTab(){
+        $(By.xpath("//span[contains(text(),'Faktura') and contains(@class, 'x-tab-inner')]")).click();
+        return at(InvoiceTab.class);
     }
 
     public EvaluateTaskDialog openEvaluateTaskDialog(){

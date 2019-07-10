@@ -31,25 +31,19 @@ public class EvaluateTaskDialog extends BaseDialog {
     }
 
     public class Asserts {
-        public EvaluateTaskDialog.Asserts assertThereIsNoInvoiceLines() {
-
-           return this;
-        }
 
         public EvaluateTaskDialog.Asserts assertRepairPriceForTheTaskWithIndexIs(int taskIndex, Double expectedRepairPrice){
-
             Double actualRepairPrice = new Double($(By.xpath("//td[@id = 'repairPrice0']/div/span[1]")).getText());
-
-            assertThat(actualRepairPrice).isEqualTo(expectedRepairPrice)
-                    .as("Repair price should be: " + expectedRepairPrice + "but was: " + actualRepairPrice);
+            assertThat(actualRepairPrice).as("Repair price should be: " + expectedRepairPrice + "but was: " + actualRepairPrice)
+                    .isEqualTo(expectedRepairPrice);
 
             return this;
         }
 
         public EvaluateTaskDialog.Asserts assertTotalIs(Double totalExpectedValue){
            Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
-            assertThat(totalActualValue).isEqualTo(totalExpectedValue)
-                    .as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue);
+            assertThat(totalActualValue).as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
+                    .isEqualTo(totalExpectedValue);
             return this;
         }
     }
