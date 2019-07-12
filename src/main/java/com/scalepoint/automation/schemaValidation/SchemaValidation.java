@@ -16,7 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SchemaValidation {
 
-    JsonSchema templateGenerate;
+    JsonSchema templateGenerateManual;
+    JsonSchema templateGenerateAutomatic;
     WireMock wireMock;
 
     public SchemaValidation(WireMock wireMock){
@@ -24,9 +25,12 @@ public class SchemaValidation {
         this.wireMock = wireMock;
 
         try {
-            templateGenerate = JsonSchemaFactory
+            templateGenerateManual = JsonSchemaFactory
                     .byDefault()
-                    .getJsonSchema(JsonUtils.getJSONfromResources("schema/outputManagement/templateGenerateSchema.json"));
+                    .getJsonSchema(JsonUtils.getJSONfromResources("schema/outputManagement/templateGenerateSchemaManual.json"));
+            templateGenerateAutomatic= JsonSchemaFactory
+                    .byDefault()
+                    .getJsonSchema(JsonUtils.getJSONfromResources("schema/outputManagement/templateGenerateSchemaAutomatic.json"));
         } catch (ProcessingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -34,7 +38,7 @@ public class SchemaValidation {
         }
     }
 
-    public void validateTemplateGenerateSchema(String claimNumber){
+    public void validateTemplateGenerateSchema(String claimNumber, JsonSchema jsonSchema){
 
 
         String json = wireMock.find(postRequestedFor(urlPathEqualTo(CommunicationDesignerStubs.TEMPLATES_GENERATE)))
@@ -54,12 +58,22 @@ public class SchemaValidation {
         ProcessingReport report;
 
         try {
-            report = templateGenerate.validate(JsonUtils.stringToJsonNode(json));
+            report = jsonSchema.validate(JsonUtils.stringToJsonNode(json));
         } catch (ProcessingException e) {
             throw new RuntimeException(e);
         }
         assertThat(report.isSuccess())
                 .as(String.format("Template generate schema validation: %s", report))
                 .isTrue();
+    }
+
+    public void validateTemplateGenerateSchemaManual(String claimNumber){
+
+        validateTemplateGenerateSchema(claimNumber, templateGenerateManual);
+    }
+
+    public void validateTemplateGenerateSchemaAutomatic(String claimNumber){
+
+        validateTemplateGenerateSchema(claimNumber, templateGenerateAutomatic);
     }
 }

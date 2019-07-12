@@ -1,0 +1,609 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "templateId": {
+      "type": "integer"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "claim": {
+          "type": "object",
+          "properties": {
+            "claimNumber": {
+              "type": "string"
+            },
+            "policyType": {
+              "type": "null"
+            },
+            "policyNumber": {
+              "type": "null"
+            },
+            "tradeUp": {
+              "type": "null"
+            },
+            "status": {
+              "type": "null"
+            },
+            "reimbursementDate": {
+              "type": "null"
+            },
+            "reimbursementExpiration": {
+              "type": "null"
+            },
+            "showReimbursementPayoutInfo": {
+              "type": "boolean"
+            },
+            "autoCancelDate": {
+              "type": "null"
+            },
+            "autoCancelDays": {
+              "type": "integer"
+            },
+            "loginDays": {
+              "type": "integer"
+            },
+            "autoApproveEnable": {
+              "type": "boolean"
+            },
+            "enableDnDComparison": {
+              "type": "boolean"
+            },
+            "insuranceCompany": {
+              "type": "null"
+            },
+            "claimHandler": {
+              "type": "null"
+            },
+            "claimant": {
+              "type": "null"
+            },
+            "notes": {
+              "type": "null"
+            },
+            "rvTask": {
+              "type": "null"
+            },
+            "settlement": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "claimNumber",
+            "policyType",
+            "policyNumber",
+            "tradeUp",
+            "status",
+            "reimbursementDate",
+            "reimbursementExpiration",
+            "showReimbursementPayoutInfo",
+            "autoCancelDate",
+            "autoCancelDays",
+            "loginDays",
+            "autoApproveEnable",
+            "enableDnDComparison",
+            "insuranceCompany",
+            "claimHandler",
+            "claimant",
+            "notes",
+            "rvTask",
+            "settlement"
+          ]
+        },
+        "scalepoint": {
+          "type": "object",
+          "properties": {
+            "companyName": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "address1": {
+              "type": "string"
+            },
+            "address2": {
+              "type": "null"
+            },
+            "zipcode": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "stateCode": {
+              "type": "null"
+            },
+            "state": {
+              "type": "null"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "companyCode": {
+              "type": "string"
+            },
+            "customerRequestEmail": {
+              "type": "string"
+            },
+            "customerRequestPhone": {
+              "type": "null"
+            },
+            "spContactNo": {
+              "type": "string"
+            },
+            "contactNo": {
+              "type": "string"
+            },
+            "officeHours": {
+              "type": "string"
+            },
+            "email": {
+              "type": "null"
+            },
+            "showCustomerInfo": {
+              "type": "boolean"
+            },
+            "autocancelEnable": {
+              "type": "boolean"
+            },
+            "accountNumber": {
+              "type": "string"
+            },
+            "registrationNumber": {
+              "type": "string"
+            },
+            "clearingNumber": {
+              "type": "string"
+            },
+            "ibanTextNumber": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "companyName",
+            "id",
+            "address1",
+            "address2",
+            "zipcode",
+            "city",
+            "stateCode",
+            "state",
+            "phone",
+            "url",
+            "companyCode",
+            "customerRequestEmail",
+            "customerRequestPhone",
+            "spContactNo",
+            "contactNo",
+            "officeHours",
+            "email",
+            "showCustomerInfo",
+            "autocancelEnable",
+            "accountNumber",
+            "registrationNumber",
+            "clearingNumber",
+            "ibanTextNumber"
+          ]
+        },
+        "fnol": {
+          "type": "object",
+          "properties": {
+            "lossId": {
+              "type": "integer"
+            },
+            "companyId": {
+              "type": "integer"
+            },
+            "token": {
+              "type": "string"
+            },
+            "companyCode": {
+              "type": "string"
+            },
+            "event": {
+              "type": "null"
+            },
+            "externalReference": {
+              "type": "null"
+            },
+            "customerNote": {
+              "type": "null"
+            },
+            "date": {
+              "type": "string"
+            },
+            "customer": {
+              "type": "object",
+              "properties": {
+                "accountInfo": {
+                  "type": "null"
+                },
+                "salutation": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "middleName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "fullName": {
+                  "type": "null"
+                },
+                "company": {
+                  "type": "null"
+                },
+                "address1": {
+                  "type": "null"
+                },
+                "address2": {
+                  "type": "null"
+                },
+                "zipCode": {
+                  "type": "null"
+                },
+                "city": {
+                  "type": "null"
+                },
+                "stateCode": {
+                  "type": "null"
+                },
+                "state": {
+                  "type": "null"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "cellPhoneNumber": {
+                  "type": "null"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "login": {
+                  "type": "null"
+                },
+                "culture": {
+                  "type": "null"
+                },
+                "scalepointCustomerNumber": {
+                  "type": "null"
+                },
+                "isPasswordSentViaSms": {
+                  "type": "null"
+                },
+                "conditionsLink": {
+                  "type": "null"
+                },
+                "loginUrl": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "accountInfo",
+                "salutation",
+                "firstName",
+                "middleName",
+                "lastName",
+                "fullName",
+                "company",
+                "address1",
+                "address2",
+                "zipCode",
+                "city",
+                "stateCode",
+                "state",
+                "phone",
+                "cellPhoneNumber",
+                "email",
+                "login",
+                "culture",
+                "scalepointCustomerNumber",
+                "isPasswordSentViaSms",
+                "conditionsLink",
+                "loginUrl"
+              ]
+            },
+            "claimsHandler": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "userName": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "null"
+                },
+                "address1": {
+                  "type": "null"
+                },
+                "address2": {
+                  "type": "null"
+                },
+                "city": {
+                  "type": "null"
+                },
+                "zipCode": {
+                  "type": "null"
+                },
+                "mobilePhone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "forcePersonalSignature": {
+                  "type": "string"
+                },
+                "insuranceCompany": {
+                  "type": "null"
+                },
+                "departmentInformation": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "id",
+                "userName",
+                "firstName",
+                "lastName",
+                "phone",
+                "address1",
+                "address2",
+                "city",
+                "zipCode",
+                "mobilePhone",
+                "email",
+                "forcePersonalSignature",
+                "insuranceCompany",
+                "departmentInformation"
+              ]
+            },
+            "insuranceCompany": {
+              "type": "object",
+              "properties": {
+                "companyName": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "address1": {
+                  "type": "string"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "zipcode": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "stateCode": {
+                  "type": "null"
+                },
+                "state": {
+                  "type": "null"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "null"
+                },
+                "companyCode": {
+                  "type": "string"
+                },
+                "customerRequestEmail": {
+                  "type": "null"
+                },
+                "customerRequestPhone": {
+                  "type": "null"
+                },
+                "spContactNo": {
+                  "type": "null"
+                },
+                "contactNo": {
+                  "type": "string"
+                },
+                "officeHours": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "showCustomerInfo": {
+                  "type": "boolean"
+                },
+                "autocancelEnable": {
+                  "type": "boolean"
+                },
+                "accountNumber": {
+                  "type": "null"
+                },
+                "registrationNumber": {
+                  "type": "null"
+                },
+                "clearingNumber": {
+                  "type": "null"
+                },
+                "ibanTextNumber": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "companyName",
+                "id",
+                "address1",
+                "address2",
+                "zipcode",
+                "city",
+                "stateCode",
+                "state",
+                "phone",
+                "url",
+                "companyCode",
+                "customerRequestEmail",
+                "customerRequestPhone",
+                "spContactNo",
+                "contactNo",
+                "officeHours",
+                "email",
+                "showCustomerInfo",
+                "autocancelEnable",
+                "accountNumber",
+                "registrationNumber",
+                "clearingNumber",
+                "ibanTextNumber"
+              ]
+            },
+            "lossItems": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "claimLineId": {
+                      "type": "null"
+                    },
+                    "categoryGroupId": {
+                      "type": "integer"
+                    },
+                    "categoryId": {
+                      "type": "integer"
+                    },
+                    "variantId": {
+                      "type": "null"
+                    },
+                    "age": {
+                      "type": "integer"
+                    },
+                    "lineId": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "categoryName": {
+                      "type": "string"
+                    },
+                    "categoryGroupName": {
+                      "type": "string"
+                    },
+                    "acquired": {
+                      "type": "null"
+                    },
+                    "brand": {
+                      "type": "null"
+                    },
+                    "model": {
+                      "type": "null"
+                    },
+                    "purchaseDate": {
+                      "type": "null"
+                    },
+                    "valuations": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "null"
+                        },
+                        "amount": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "amount"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "claimLineId",
+                    "categoryGroupId",
+                    "categoryId",
+                    "variantId",
+                    "age",
+                    "lineId",
+                    "description",
+                    "categoryName",
+                    "categoryGroupName",
+                    "acquired",
+                    "brand",
+                    "model",
+                    "purchaseDate",
+                    "valuations"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "lossId",
+            "companyId",
+            "token",
+            "companyCode",
+            "event",
+            "externalReference",
+            "customerNote",
+            "date",
+            "customer",
+            "claimsHandler",
+            "insuranceCompany",
+            "lossItems"
+          ]
+        },
+        "selfServiceLoginURL": {
+          "type": "null"
+        },
+        "shopLoginURL": {
+          "type": "null"
+        },
+        "firstWelcomeMail": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "claim",
+        "scalepoint",
+        "fnol",
+        "selfServiceLoginURL",
+        "shopLoginURL",
+        "firstWelcomeMail"
+      ]
+    },
+    "wrapWithLayout": {
+      "type": "boolean"
+    },
+    "companyAlias": {
+      "type": "string"
+    },
+    "languageIsoCode": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "templateId",
+    "data",
+    "wrapWithLayout",
+    "companyAlias",
+    "languageIsoCode"
+  ]
+}
