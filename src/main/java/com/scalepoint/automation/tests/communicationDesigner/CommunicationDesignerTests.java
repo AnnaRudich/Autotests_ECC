@@ -65,10 +65,10 @@ public class CommunicationDesignerTests extends BaseTest {
                 });
 
         new SchemaValidation(wireMock)
-                .validateTemplateGenerateSchema(claim.getClaimNumber());
+                .validateTemplateGenerateSchemaManual(claim.getClaimNumber());
     }
 
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "Use communication designer to prepare Itemization Submit Loss Items email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -81,27 +81,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
         CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
                 .useOutputManagement(true)
-                .omCustomerWelcome(true)
-                .omCustomerWelcomeUcommerceEmployee(true)
-                .omCustomerWelcomeWithOutstanding(true)
-                .omCustomerWelcomeRejectionMail(true)
-                .omNotificationToClaimant(true)
-                .omReminderMail(true)
-                .omBlockedAccount(true)
-                .omItemizationReminderLossItems(true)
                 .omItemizationSubmitLossItems(true)
-                .omItemizationSaveLossItems(true)
-                .omSettlementNotification(true)
-                .omSettlementNotificationClosedExternal(true)
-                .omSettlementPreview(true)
-                .omOrderConfirmation(true)
-                .omOrderConfirmationEmployee(true)
-                .omOrderConfirmation_uCommerceEmployee(true)
-                .omInvoiceToIC(true)
-                .omPayoutNotification(true)
-                .omProcuraApprovalRequest(true)
-                .omProcuraDecisionNotification(true)
-                .omItemizationCustomerMail(true)
                 .build();
 
         login(user)
@@ -151,6 +131,13 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(mail -> {
                     mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);
                     mail.isMailExist(ITEMIZATION_CONFIRMATION_IC_MAIL);
-                });
+                })
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible("[ItemizationSubmitLossItems]")
+                );
+
+        new SchemaValidation(wireMock)
+                .validateTemplateGenerateSchemaAutomatic(claim.getClaimNumber());
     }
 }
