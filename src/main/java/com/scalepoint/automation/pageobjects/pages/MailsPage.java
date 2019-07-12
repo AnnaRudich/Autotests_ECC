@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 @EccPage
 public class MailsPage extends BaseClaimPage {
@@ -206,14 +204,19 @@ public class MailsPage extends BaseClaimPage {
     public class Asserts {
 
         public void isMailExist(MailType mailType) {
-            assertNotNull(parseMails().findMailByType(mailType));
+            assertThat(parseMails().findMailByType(mailType))
+                    .as("the following mail should be present: " + mailType, parseMails().findMailByType(mailType))
+                    .isNotNull();
         }
 
         public void noMailsOnThePage() {
-            assertTrue(parseMails().getMails().isEmpty());
+            assertThat(parseMails().getMails().isEmpty())
+                    .as("there should be no mails on Mails page")
+                    .isTrue();
         }
 
         public void isMailExist(MailType mailType, String subject) {
+            isMailExist(mailType);
             String latestMailSubject = getLatestMail(mailType).getSubject();
             assertThat(latestMailSubject.equals(subject)).as("expected mail subject: " + subject + "but was: " + latestMailSubject).isTrue();
         }

@@ -33,20 +33,23 @@ public class RnvService extends BaseService {
     }
 
 
-    public void sendDefaultFeedback(Claim claim) {
-
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefault();
-
-        given().log().all()
-                .multiPart("securityToken", supplierSecurityToken)
-                .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
-                .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
+    public void sendDefaultFeedbackWithInvoice(Claim claim) {
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefaultWithInvoice();
+        sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithRepairPrice(BigDecimal repairPrice, Claim claim) {
+    public void sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal repairPrice,Claim claim){
 
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildWithRepairPrice(repairPrice);
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefaultWithoutInvoiceWithRepairPrice(repairPrice);
+        sendFeedback(serviceTaskImport);
+    }
 
+    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim) {
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefaultWithInvoiceWithRepairPrice(repairPrice);
+        sendFeedback(serviceTaskImport);
+    }
+
+    private void sendFeedback(ServiceTaskImport serviceTaskImport){
         given().log().all()
                 .multiPart("securityToken", supplierSecurityToken)
                 .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))

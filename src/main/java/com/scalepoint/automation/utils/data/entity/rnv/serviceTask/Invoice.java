@@ -22,7 +22,7 @@ public class Invoice {
     }
 
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public String getInvoiceType() {
         return invoiceType;
     }
@@ -31,7 +31,7 @@ public class Invoice {
         this.invoiceType = invoiceType;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public String getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -40,7 +40,7 @@ public class Invoice {
         this.invoiceNumber = invoiceNumber;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public String getInvoiceDate() {
         return invoiceDate;
     }
@@ -49,7 +49,7 @@ public class Invoice {
         this.invoiceDate = invoiceDate;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public String getPaymentDueDate() {
         return paymentDueDate;
     }
@@ -85,7 +85,7 @@ public class Invoice {
         this.dateOfValuation = dateOfValuation;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getNetAmount() {
         return netAmount;
     }
@@ -94,7 +94,7 @@ public class Invoice {
         this.netAmount = netAmount;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getVat() {
         return vat;
     }
@@ -103,7 +103,7 @@ public class Invoice {
         this.vat = vat;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }

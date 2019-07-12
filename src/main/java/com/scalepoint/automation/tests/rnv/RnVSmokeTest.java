@@ -12,7 +12,8 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 public class RnVSmokeTest extends BaseTest {
-      @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -36,7 +37,7 @@ public class RnVSmokeTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        new RnvService().sendDefaultFeedback(claim);
+        new RnvService().sendDefaultFeedbackWithInvoice(claim);
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
@@ -45,7 +46,7 @@ public class RnVSmokeTest extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void messagesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    public void messagesTest(User user, Claim claim, ServiceAgreement agreement) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
 

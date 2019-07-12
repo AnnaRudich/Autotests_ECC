@@ -1,7 +1,6 @@
-package com.scalepoint.automation.pageobjects.pages.rnv1;
+package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.externalapi.EccFileApi;
 import com.scalepoint.automation.utils.ExcelDocUtil;
 import com.scalepoint.automation.utils.Wait;
@@ -16,7 +15,7 @@ import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Selenide.$;
 
 @EccPage
-public class RnvCommunicationPage extends BaseClaimPage {
+public class CommunicationTab extends BaseClaimPage {
 
     @FindBy(css = "input[name='taskSelect']")
     private WebElement taskDropdownField;
@@ -34,10 +33,10 @@ public class RnvCommunicationPage extends BaseClaimPage {
     private WebElement sendBtn;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected CommunicationTab ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(sendBtn);
-        return null;
+        return this;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
         return isDisplayed(By.cssSelector("div[class='bubble sent']"));
     }
 
-    public RnvCommunicationPage assertLatestMessageContains(String textMessage) {
+    public CommunicationTab assertLatestMessageContains(String textMessage) {
         $(latestMessageText).shouldHave(exactTextCaseSensitive(textMessage));
         return this;
     }
@@ -62,7 +61,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
         find(By.cssSelector("span#button-close-chat-attachment-btnInnerEl")).click();
     }
 
-    public RnvCommunicationPage doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType) {
+    public CommunicationTab doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType) {
         try {
             downloadTemplate(user, serviceAgreement.getSaveTemplateTo());
             ExcelDocUtil doc = new ExcelDocUtil();
@@ -74,7 +73,7 @@ public class RnvCommunicationPage extends BaseClaimPage {
     }
 
 
-    public RnvCommunicationPage sendTextMailToSePa(String textMsg) {
+    public CommunicationTab sendTextMailToSePa(String textMsg) {
         $(mailTextField).sendKeys(textMsg);
         $(sendBtn).click();
         $(latestMessageText).waitUntil(exactTextCaseSensitive(textMsg), 60000);

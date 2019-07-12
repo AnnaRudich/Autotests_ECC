@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
-import com.scalepoint.automation.pageobjects.pages.rnv1.RnvProjectsPage;
+import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 
 public abstract class BaseClaimPage extends Page {
 
@@ -36,7 +36,7 @@ public abstract class BaseClaimPage extends Page {
         return at(AdminPage.class);
     }
 
-    public RnvProjectsPage toRepairValuationProjectsPage() {
+    public ProjectsPage toRepairValuationProjectsPage() {
         return claimNavigationMenu.toRepairValuationProjectsPage();
     }
 

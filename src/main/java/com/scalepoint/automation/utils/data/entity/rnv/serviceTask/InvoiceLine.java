@@ -12,7 +12,7 @@ public class InvoiceLine {
     private BigDecimal quantity;
     private BigDecimal lineTotal;
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public String getDescription() {
         return description;
     }
@@ -30,7 +30,7 @@ public class InvoiceLine {
         this.units = units;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getUnitNetAmount() {
         return unitNetAmount;
     }
@@ -39,7 +39,7 @@ public class InvoiceLine {
         this.unitNetAmount = unitNetAmount;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getUnitVatAmount() {
         return unitVatAmount;
     }
@@ -48,7 +48,7 @@ public class InvoiceLine {
         this.unitVatAmount = unitVatAmount;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -57,7 +57,7 @@ public class InvoiceLine {
         this.unitPrice = unitPrice;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getQuantity() {
         return quantity;
     }
@@ -66,7 +66,7 @@ public class InvoiceLine {
         this.quantity = quantity;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public BigDecimal getLineTotal() {
         return lineTotal;
     }

@@ -1,4 +1,4 @@
-package com.scalepoint.automation.pageobjects.pages.rnv1;
+package com.scalepoint.automation.pageobjects.pages.rnv;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import static com.codeborne.selenide.Selenide.$;
 
 @RVPage
-public class RnvTaskWizardPage2 extends Page {
+public class TaskWizardPage2 extends Page {
 
 
     @FindBy(css = "#button-send")

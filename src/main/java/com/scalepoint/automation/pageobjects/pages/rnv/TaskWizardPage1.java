@@ -1,4 +1,4 @@
-package com.scalepoint.automation.pageobjects.pages.rnv1;
+package com.scalepoint.automation.pageobjects.pages.rnv;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
@@ -20,7 +20,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
 
 @RVPage
-public class RnvTaskWizardPage1 extends Page {
+public class TaskWizardPage1 extends Page {
 
     @FindBy(css = "input[name='name']")
     private WebElement nameField;
@@ -41,44 +41,44 @@ public class RnvTaskWizardPage1 extends Page {
         return "/?orderToken";
     }
 
-    public RnvTaskWizardPage2 nextRnVstep() {
+    public TaskWizardPage2 nextRnVstep() {
         clickAndWaitForDisplaying(nextBtn, By.cssSelector("span[id*='second-step_header']"));
-        return at(RnvTaskWizardPage2.class);
+        return at(TaskWizardPage2.class);
     }
 
-    public RnvTaskWizardPage1 selectRnvType(String lineDescription, String rnvType) {
+    public TaskWizardPage1 selectRnvType(String lineDescription, String rnvType) {
         selectValueFromDropdown(lineDescription, "Opgavetype", rnvType);
         return this;
     }
 
-    public RnvTaskWizardPage1 selectDamageType(String lineDescription, String damageType) {
+    public TaskWizardPage1 selectDamageType(String lineDescription, String damageType) {
         selectValueFromDropdown(lineDescription, "Skadetype", damageType);
         return this;
     }
 
     private void selectValueFromDropdown(String lineDescription, String columnName, String valueToSelect) {
         By dropDownListSelector = By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li");
-        SelenideElement column = new ServiceLinesRows().getRowByDescription(lineDescription).get(columnName);
+        SelenideElement column = new ServiceLines().getRowByDescription(lineDescription).get(columnName);
         column.click();
         column.findAll(dropDownListSelector).findBy(text(valueToSelect)).click();
     }
 
-    class ServiceLinesRows {
-        List<Map<String, SelenideElement>> serviceLinesList;
+    class ServiceLines {
+        List<Map<String, SelenideElement>> serviceLines;
 
-        ServiceLinesRows() {
-            this.serviceLinesList = collectLinesData();
+        ServiceLines() {
+            this.serviceLines = collectLinesData();
         }
 
         private List<Map<String, SelenideElement>> collectLinesData() {
             List<Map<String, SelenideElement>> serviceLines = new ArrayList<>();
 
             ElementsCollection rows = $$(By.xpath("//div[contains(@id, 'serviceLineListId-body')]//tr"));
-            By oneRowCellsSelector = By.xpath("(//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))])[position()>1]");
+            By cellsSelector = By.xpath("(//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))])[position()>1]");
 
             for (SelenideElement row : rows) {
                 ElementsCollection rowCells =
-                        row.findAll(oneRowCellsSelector);
+                        row.findAll(cellsSelector);
                 serviceLines.add(mapCellsToHeaders(getColumnNames(), rowCells));
             }
             return serviceLines;
@@ -107,9 +107,9 @@ public class RnvTaskWizardPage1 extends Page {
 
             Map<String, SelenideElement> row = new HashMap<>();
 
-            for (int i = 0; i < serviceLinesList.size(); i++) {
-                if (serviceLinesList.get(i).get("Beskrivelse").getText().equals(lineDescription)) {
-                    row = serviceLinesList.get(i);
+            for (Map<String, SelenideElement> serviceLine : serviceLines) {
+                if (serviceLine.get("Beskrivelse").getText().equals(lineDescription)) {
+                    row = serviceLine;
                 }
             }
             return row;
