@@ -258,6 +258,12 @@ public class SelfService2Page extends Page {
         return this;
     }
 
+    public SaveConfirmationPage saveResponse() {
+        $(save).shouldBe(Condition.enabled).click();
+        waitForUrl("self-service/dk/save-confirmation");
+        return Page.at(SaveConfirmationPage.class);
+    }
+
     public String getProductMatchDescription() {
         String s = $$(By.xpath("//div[contains(@class,'product-match-description')]")).get(1).getAttribute("title");
         System.out.println(s);

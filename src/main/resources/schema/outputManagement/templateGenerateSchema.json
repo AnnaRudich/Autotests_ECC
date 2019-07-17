@@ -18,7 +18,7 @@
               "type": "null"
             },
             "policyNumber": {
-              "type": "string"
+              "type": ["string","null"]
             },
             "tradeUp": {
               "type": "null"
@@ -27,7 +27,7 @@
               "type": "null"
             },
             "reimbursementDate": {
-              "type": "string"
+              "type": ["string","null"]
             },
             "reimbursementExpiration": {
               "type": "null"
@@ -51,7 +51,7 @@
               "type": "boolean"
             },
             "insuranceCompany": {
-              "type": "object",
+              "type": ["object", "null"],
               "properties": {
                 "companyName": {
                   "type": "string"
@@ -142,7 +142,7 @@
               ]
             },
             "claimHandler": {
-              "type": "object",
+              "type": ["object", "null"],
               "properties": {
                 "id": {
                   "type": "string"
@@ -205,7 +205,7 @@
               ]
             },
             "claimant": {
-              "type": "object",
+              "type": ["object", "null"],
               "properties": {
                 "accountInfo": {
                   "type": "null"
@@ -292,7 +292,7 @@
               ]
             },
             "notes": {
-              "type": "object",
+              "type": ["object", "null"],
               "properties": {
                 "customerNote": {
                   "type": "null"
@@ -306,7 +306,7 @@
               "type": "null"
             },
             "settlement": {
-              "type": "object",
+              "type": ["object","null"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -521,10 +521,10 @@
           ]
         },
         "selfServiceLoginURL": {
-          "type": "string"
+          "type": ["string","null"]
         },
         "shopLoginURL": {
-          "type": "string"
+          "type": ["string","null"]
         },
         "firstWelcomeMail": {
           "type": "boolean"

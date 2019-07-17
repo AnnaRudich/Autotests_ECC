@@ -1,10 +1,8 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.schemaValidation.SchemaValidation;
@@ -65,23 +63,23 @@ public class CommunicationDesignerTests extends BaseTest {
                 });
 
         new SchemaValidation(wireMock)
-                .validateTemplateGenerateSchemaManual(claim.getClaimNumber());
+                .validateTemplateGenerateSchema(claim.getClaimNumber());
     }
 
     @Test(dataProvider = "testDataProvider",
-            description = "Use communication designer to prepare Itemization Submit Loss Items email")
+            description = "Use communication designer to prepare Itemization Submit And Save Loss Items email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
-    @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
-    @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
-    @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
-    public void itemizationSubmitLossItemsTest(@UserCompany(FUTURE60) User user, Claim claim, ClaimItem claimItem) {
+    public void itemizationSubmitAndSaveLossItemsTest(@UserCompany(FUTURE60) User user, Claim claim, ClaimItem claimItem) {
+
+        final String ITEMIZATION_SUBMIT_LOSS_ITEMS = "[ItemizationSubmitLossItems]";
+        final String ITEMIZATION_SAVE_LOSS_ITEMS = "[ItemizationSaveLossItems]";
 
         CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
                 .useOutputManagement(true)
                 .omItemizationSubmitLossItems(true)
+                .omItemizationSaveLossItems(true)
                 .build();
 
         login(user)
@@ -102,29 +100,10 @@ public class CommunicationDesignerTests extends BaseTest {
                 .selectPurchaseMonth(JANUARY)
                 .selectCategory(claimItem.getCategoryMobilePhones())
                 .saveItem()
+                .saveResponse()
+                .continueRegistration()
+                .login(Constants.DEFAULT_PASSWORD)
                 .sendResponseToEcc();
-
-        SettlementDialog settlementDialog = login(user)
-                .openActiveRecentClaim()
-                .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView)
-                .findClaimLine(claimLineDescription)
-                .selectLine()
-                .getToolBarMenu()
-                .toProductMatchPage()
-                .sortOrderableFirst()
-                .match(claimLineDescription)
-                .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
-
-        String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
-
-        settlementDialog.closeSidWithOk(SettlementPage.class)
-                .doAssert(asserts -> asserts.assertItemIsPresent(description))
-                .parseFirstClaimLine()
-                .doAssert(asserts -> {
-                    asserts.assertPurchasePriceIs(price);
-                    asserts.assertProductDetailsIconIsDisplayed();
-                });
 
         to(MyPage.class).openActiveRecentClaim()
                 .toMailsPage()
@@ -132,12 +111,17 @@ public class CommunicationDesignerTests extends BaseTest {
                     mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);
                     mail.isMailExist(ITEMIZATION_CONFIRMATION_IC_MAIL);
                 })
-                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL)
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SUBMIT_LOSS_ITEMS)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible("[ItemizationSubmitLossItems]")
+                        mailViewDialog.isTextVisible(ITEMIZATION_SUBMIT_LOSS_ITEMS)
+                )
+                .cancel()
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SAVE_LOSS_ITEMS)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ITEMIZATION_SAVE_LOSS_ITEMS)
                 );
 
         new SchemaValidation(wireMock)
-                .validateTemplateGenerateSchemaAutomatic(claim.getClaimNumber());
+                .validateTemplateGenerateSchema(claim.getClaimNumber());
     }
 }

@@ -93,6 +93,10 @@ public class MailsPage extends BaseClaimPage {
         return parseMails().findMailByType(mailType).viewMail();
     }
 
+    public MailViewDialog viewMail(MailType mailType, String mailSubject) {
+        return parseMails().findMailsByTypeAndSubject(mailType, mailSubject).viewMail();
+    }
+
     public Mail getLatestMail(MailType mailType) {
         return parseMails().findMailByType(mailType);
     }
@@ -124,6 +128,15 @@ public class MailsPage extends BaseClaimPage {
             }
             log.error("-------------------------------");
             return null;
+        }
+
+        public Mail findMailsByTypeAndSubject(MailType mailType, String mailSubject) {
+            return mails
+                    .stream()
+                    .filter(mail -> mailType.equals(mail.getMailType()))
+                    .filter(mail -> mailSubject.equals(mail.getSubject()))
+                    .findFirst()
+                    .get();
         }
     }
 
