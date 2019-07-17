@@ -15,11 +15,13 @@ import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -29,8 +31,9 @@ import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.Audit
 
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class IntelligentRepair2 extends BaseTest {
-    @Test(dataProvider = "testDataProvider", description = "Feedback(with invoice) evaluation status: Approved")
-    public void feedbackWithInvoice_Approved(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+
+    @Test(dataProvider = "testDataProvider", description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
+    public void feedbackWithInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -53,7 +56,11 @@ public class IntelligentRepair2 extends BaseTest {
 
         new RnvService().sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim);
 
-        Page.to(MyPage.class).openRecentClaim().toMailsPage()
+        Page.to(MyPage.class)
+
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
+
+                .openRecentClaim().toMailsPage()
 
                 .doAssert(mail -> {
                     mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt");
@@ -78,9 +85,9 @@ public class IntelligentRepair2 extends BaseTest {
                 .openInvoiceDialogForLineWithIndex(0)
                 .doAssert(InvoiceDialog.Asserts::assertThereIsInvoiceLinesList);
     }
-
-    @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved")
-    public void feedbackWithoutInvoice_Approved(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+@RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
+    public void feedbackNoInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
@@ -101,14 +108,19 @@ public class IntelligentRepair2 extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        new RnvService().sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim);
+        new RnvService().sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim);
+
+        Page.to(MyPage.class)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
+                .openRecentClaim().toMailsPage();
 
         new CustomerDetailsPage().toRepairValuationProjectsPage()
                 .openEvaluateTaskDialog()
                 .doAssert(evaluateTask -> {
-                    evaluateTask.assertRepairPriceForTheTaskWithIndexIs(1, 100.00);
+                    evaluateTask.assertRepairPriceForTheTaskWithIndexIs(1, 50.00);
                     evaluateTask.assertTotalIs(0.00);
                 });
+
         new EvaluateTaskDialog()
                 .closeDialog()
 
@@ -119,6 +131,7 @@ public class IntelligentRepair2 extends BaseTest {
 
         new ProjectsPage().toInvoiceTab()
                 .doAssert(InvoiceTab.Asserts::assertThereIsNoInvoiceGrid);
+
     }
 
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Reject")
