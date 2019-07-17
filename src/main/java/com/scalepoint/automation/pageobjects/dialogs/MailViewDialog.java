@@ -1,12 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
+import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfservice.LoginSelfServicePage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -25,9 +27,17 @@ public class MailViewDialog extends BaseDialog {
     @FindBy(xpath = "//a[contains(@href,'LoginToShop?login')]")
     private Link loginToShopLink;
 
+    @FindBy(id = "show-mail-window-cancel-button-btnInnerEl")
+    private WebElement cancelButton;
+
     @Override
     public MailViewDialog ensureWeAreAt() {
         return this;
+    }
+
+    public MailsPage cancel(){
+        $(cancelButton).click();
+        return Page.at(MailsPage.class);
     }
 
     public LoginSelfServicePage findSelfServiceLinkAndOpenIt() {

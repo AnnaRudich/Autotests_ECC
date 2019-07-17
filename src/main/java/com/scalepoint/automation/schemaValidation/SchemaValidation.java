@@ -9,6 +9,8 @@ import com.scalepoint.automation.stubs.CommunicationDesignerStubs;
 import com.scalepoint.automation.utils.JsonUtils;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -16,8 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SchemaValidation {
 
-    JsonSchema templateGenerateManual;
-    JsonSchema templateGenerateAutomatic;
+    JsonSchema templateGenerate;
     WireMock wireMock;
 
     public SchemaValidation(WireMock wireMock){
@@ -25,12 +26,9 @@ public class SchemaValidation {
         this.wireMock = wireMock;
 
         try {
-            templateGenerateManual = JsonSchemaFactory
+            templateGenerate = JsonSchemaFactory
                     .byDefault()
-                    .getJsonSchema(JsonUtils.getJSONfromResources("schema/outputManagement/templateGenerateSchemaManual.json"));
-            templateGenerateAutomatic= JsonSchemaFactory
-                    .byDefault()
-                    .getJsonSchema(JsonUtils.getJSONfromResources("schema/outputManagement/templateGenerateSchemaAutomatic.json"));
+                    .getJsonSchema(JsonUtils.getJSONfromResources("schema/outputManagement/templateGenerateSchema.json"));
         } catch (ProcessingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -38,10 +36,8 @@ public class SchemaValidation {
         }
     }
 
-    public void validateTemplateGenerateSchema(String claimNumber, JsonSchema jsonSchema){
-
-
-        String json = wireMock.find(postRequestedFor(urlPathEqualTo(CommunicationDesignerStubs.TEMPLATES_GENERATE)))
+    public void validateTemplateGenerateSchema(String claimNumber){
+        List jsonBodies = wireMock.find(postRequestedFor(urlPathEqualTo(CommunicationDesignerStubs.TEMPLATES_GENERATE)))
                 .stream()
                 .filter(loggedRequest ->
                         JsonUtils.stringToJsonNode(loggedRequest.getBodyAsString())
@@ -51,29 +47,19 @@ public class SchemaValidation {
                                 .asText()
                                 .equals(claimNumber)
                 )
-                .findFirst()
-                .get()
-                .getBodyAsString();
+                .map(loggedRequest -> loggedRequest.getBodyAsString())
+                .collect(Collectors.toList());
 
-        ProcessingReport report;
-
-        try {
-            report = jsonSchema.validate(JsonUtils.stringToJsonNode(json));
-        } catch (ProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        assertThat(report.isSuccess())
-                .as(String.format("Template generate schema validation: %s", report))
-                .isTrue();
-    }
-
-    public void validateTemplateGenerateSchemaManual(String claimNumber){
-
-        validateTemplateGenerateSchema(claimNumber, templateGenerateManual);
-    }
-
-    public void validateTemplateGenerateSchemaAutomatic(String claimNumber){
-
-        validateTemplateGenerateSchema(claimNumber, templateGenerateAutomatic);
+        jsonBodies.stream().forEach(body -> {
+            ProcessingReport report;
+            try {
+                report = templateGenerate.validate(JsonUtils.stringToJsonNode((String) body));
+            } catch (ProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            assertThat(report.isSuccess())
+                    .as(String.format("Template generate schema validation: %s", report))
+                    .isTrue();
+        });
     }
 }
