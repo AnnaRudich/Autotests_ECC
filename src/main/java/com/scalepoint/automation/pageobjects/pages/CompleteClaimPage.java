@@ -153,7 +153,7 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithEmail(Claim claim) {
         compWthMailButton.click();
-        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
+       // SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
 
