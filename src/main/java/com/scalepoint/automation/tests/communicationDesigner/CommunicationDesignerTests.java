@@ -124,4 +124,67 @@ public class CommunicationDesignerTests extends BaseTest {
         new SchemaValidation(wireMock)
                 .validateTemplateGenerateSchema(claim.getClaimNumber());
     }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Use communication designer to prepare CustomerWelcomeRejectionMail")
+    public void customerWelcomeRejectionMail(@UserCompany(FUTURE60) User user, Claim claim) {
+
+        final String CUSTOMER_WELCOME_REJECTION = "[CustomerWelcomeRejectionMail]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omCustomerWelcomeRejectionMail(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption();
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_REJECTION)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME_REJECTION)
+                );
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Use communication designer to prepare CustomerWelcome")
+    public void customerWelcomeMail(@UserCompany(FUTURE60) User user, Claim claim, ClaimItem claimItem) {
+
+        final String CUSTOMER_WELCOME = "[CustomerWelcome]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omCustomerWelcome(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption();
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
+                );
+    }
 }
