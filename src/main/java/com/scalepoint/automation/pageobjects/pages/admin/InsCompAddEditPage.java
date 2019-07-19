@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -175,17 +174,17 @@ public class InsCompAddEditPage extends AdminBasePage {
         $("[name=OM_ItemizationReminderLossItems]").setSelected(communicationDesigner.omItemizationReminderLossItems);
         $("[name=OM_ItemizationSubmitLossItems]").setSelected(communicationDesigner.omItemizationSubmitLossItems);
         $("[name=OM_ItemizationSaveLossItems]").setSelected(communicationDesigner.omItemizationSaveLossItems);
-        $("[name=OM_SettlementNotification]").setSelected(communicationDesigner.omSettlementNotification);
-        $("[name=OM_SettlementNotificationClosedExternal]").setSelected(communicationDesigner.omSettlementNotificationClosedExternal);
-        $("[name=OM_SettlementPreview]").setSelected(communicationDesigner.omSettlementPreview);
-        $("[name=OM_OrderConfirmation]").setSelected(communicationDesigner.omOrderConfirmation);
-        $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
-        $("[name=OM_OrderConfirmation_uCommerceEmployee]").setSelected(communicationDesigner.omOrderConfirmation_uCommerceEmployee);
-        $("[name=OM_InvoiceToIC]").setSelected(communicationDesigner.omInvoiceToIC);
-        $("[name=OM_PayoutNotification]").setSelected(communicationDesigner.omPayoutNotification);
-        $("[name=OM_ProcuraApprovalRequest]").setSelected(communicationDesigner.omProcuraApprovalRequest);
-        $("[name=OM_ProcuraDecisionNotification]").setSelected(communicationDesigner.omProcuraDecisionNotification);
-        $("[name=OM_ItemizationCustomerMail]").setSelected(communicationDesigner.omItemizationCustomerMail);
+//        $("[name=OM_SettlementNotification]").setSelected(communicationDesigner.omSettlementNotification);
+//        $("[name=OM_SettlementNotificationClosedExternal]").setSelected(communicationDesigner.omSettlementNotificationClosedExternal);
+//        $("[name=OM_SettlementPreview]").setSelected(communicationDesigner.omSettlementPreview);
+//        $("[name=OM_OrderConfirmation]").setSelected(communicationDesigner.omOrderConfirmation);
+//        $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
+//        $("[name=OM_OrderConfirmation_uCommerceEmployee]").setSelected(communicationDesigner.omOrderConfirmation_uCommerceEmployee);
+//        $("[name=OM_InvoiceToIC]").setSelected(communicationDesigner.omInvoiceToIC);
+//        $("[name=OM_PayoutNotification]").setSelected(communicationDesigner.omPayoutNotification);
+//        $("[name=OM_ProcuraApprovalRequest]").setSelected(communicationDesigner.omProcuraApprovalRequest);
+//        $("[name=OM_ProcuraDecisionNotification]").setSelected(communicationDesigner.omProcuraDecisionNotification);
+//        $("[name=OM_ItemizationCustomerMail]").setSelected(communicationDesigner.omItemizationCustomerMail);
 
         return this;
     }
@@ -206,16 +205,16 @@ public class InsCompAddEditPage extends AdminBasePage {
         boolean omItemizationReminderLossItems;
         boolean omItemizationSubmitLossItems;
         boolean omItemizationSaveLossItems;
-        boolean omSettlementNotification;
-        boolean omSettlementNotificationClosedExternal;
-        boolean omSettlementPreview;
-        boolean omOrderConfirmation;
-        boolean omOrderConfirmationEmployee;
-        boolean omOrderConfirmation_uCommerceEmployee;
-        boolean omInvoiceToIC;
-        boolean omPayoutNotification;
-        boolean omProcuraApprovalRequest;
-        boolean omProcuraDecisionNotification;
-        boolean omItemizationCustomerMail;
+//        boolean omSettlementNotification;
+//        boolean omSettlementNotificationClosedExternal;
+//        boolean omSettlementPreview;
+//        boolean omOrderConfirmation;
+//        boolean omOrderConfirmationEmployee;
+//        boolean omOrderConfirmation_uCommerceEmployee;
+//        boolean omInvoiceToIC;
+//        boolean omPayoutNotification;
+//        boolean omProcuraApprovalRequest;
+//        boolean omProcuraDecisionNotification;
+//        boolean omItemizationCustomerMail;
     }
 }
