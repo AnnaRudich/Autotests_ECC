@@ -3,22 +3,28 @@ package com.scalepoint.automation.pageobjects.pages.selfservice;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestData;
+import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
 import static com.scalepoint.automation.utils.Wait.*;
-import static org.testng.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 public class SelfServicePage extends Page {
 
@@ -44,25 +50,10 @@ public class SelfServicePage extends Page {
         return "webshop/jsp/shop/self_service.jsp";
     }
 
-
-    public SelenideElement findTheFieldInSsGrid(String fieldName, int lineNumber) {
-        ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
-        return selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'" + fieldName + "')]/div"));
-    }
-
-    public SelenideElement findField(String fieldName) {
-        return $(By.xpath(".//div[contains(@class,'" + fieldName + "')and not(contains(@class, 'sample-text'))]/div"));
-    }
-
-    public void setValueToTheInput(String text) {
-        $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text).pressEnter();
-    }
-
     public SelfServicePage reloadPage() {
         refresh();
         return this;
     }
-
 
     public void selectSubmitOption() {
         $(By.xpath("//a[contains(@onclick, 'submitSelfServiceLines()')]")).click();
@@ -112,101 +103,11 @@ public class SelfServicePage extends Page {
     /**
      * The method adds text in the description field, waits for suggestion, selects firs suggestion by clicking DOWN and Enter
      */
-    public SelfServicePage addDescriptionSelectFirstSuggestion(String text) {
-        findField("descriptionColumn").sendKeys(text);
-        findField("descriptionColumn").sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
-        return this;
-    }
-
-    public SelfServicePage addRandomCategory() {
-        findField("categoryColumn").click();
-        findField("categoryColumn").sendKeys(Keys.ARROW_DOWN);
-
-        List<SelenideElement> categoryGroupList = $$(By.xpath("//div[contains(@id, 'cg_item')]"));
-        getRandomElement(categoryGroupList).click();
-        pressKeys(Keys.ENTER);
-        return this;
-    }
-
-    /**
-     * The method selects random year and random month for Purchase date. The date is not shown, but it presents in DOM.
-     */
-    public SelfServicePage addRandomPurchaseDate(int lineNumber) {
-        findTheFieldInSsGrid("purchaseDate", lineNumber).click();
-        $(By.xpath("//img[contains(@class, 'x-form-date-trigger')]")).click();
-
-        List<SelenideElement> monthList = $$(By.xpath("//*[contains(@class,'date-mp-month')]/a"));
-        getRandomElement(monthList).click();
-        List<SelenideElement> yearList = $$(By.xpath("//*[contains(@class,'date-mp-year')]/a"));
-        getRandomElement(yearList).click();
-
-        $(By.xpath("//button[@class='x-date-mp-ok']")).click();
-        return this;
-    }
 
     //looks like has to be moved to other class
-    public SelenideElement getRandomElement(List<SelenideElement> list) {
+    public SelenideElement getRandomElement(ElementsCollection list) {
         int index = new Random().nextInt(list.size() - 1);
         return list.get(index);
-    }
-
-    public SelfServicePage addRandomAcquired(int lineNumber) {
-        SelenideElement acquiredArrowTrigger = $$(By.xpath("//*[contains(@class, 'arrow-trigger')]")).get(1);
-
-        findTheFieldInSsGrid("acquired", lineNumber).click();
-        acquiredArrowTrigger.click();
-        acquiredArrowTrigger.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
-        return this;
-    }
-
-    /**
-     * The method adds Description. The field should be in focus
-     */
-    public SelfServicePage addDescription(String text, int lineNumber) {
-        $(By.xpath("//input[contains(@class,'form-focus')]")).setValue(text);
-        unfocusField();
-        return this;
-    }
-
-    /**
-     * The method selects specified year and month for Purchase date
-     */
-    public SelfServicePage addPurchaseDate(String year, int month) {
-        waitForDisplayed(By.xpath("//td[contains(@class, 'purchaseDate')]"));
-        clickAndWaitForStable(calendarImage, By.xpath("//img[contains(@class, 'x-form-date-trigger')]"));
-        find("//td[@class='x-date-mp-month']/a[@month='$']", month).click();
-        find("//td[@class='x-date-mp-year']/a[contains(text(),'$1')]", year).click();
-        clickAndWaitForStable(calendarOKOption, By.xpath("//*[contains(@class,'cell-selected')]"));
-        unfocusField();
-        return this;
-    }
-
-    public SelfServicePage addNewPrice(String text, int lineNumber) {
-        findTheFieldInSsGrid("newPrice", lineNumber).click();
-        findField("newPrice").pressEnter();
-        setValueToTheInput(text);
-        return this;
-    }
-
-    public SelfServicePage addPurchasePrice(String text, int lineNumber) {
-        findTheFieldInSsGrid("purchasePrice", lineNumber).click();
-        findField("purchasePrice").pressEnter();
-        setValueToTheInput(text);
-        return this;
-    }
-
-    public SelfServicePage addCustomerDemandPrice(String text, int lineNumber) {
-        findTheFieldInSsGrid("customerDemand", lineNumber).click();
-        findField("customerDemand").pressEnter();
-        setValueToTheInput(text);
-        return this;
-    }
-
-    public SelfServicePage addCustomerComment(String commentText) {
-        $(By.id("customer_comment")).click();
-        $(By.id("customer_comment")).sendKeys(commentText);
-        unfocusField();
-        return this;
     }
 
     public SelfServicePage addCustomerNote(String noteText) {
@@ -214,21 +115,6 @@ public class SelfServicePage extends Page {
         clickJS($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
         $("#cutomer_note").sendKeys(noteText);
         $(By.xpath(".//button[.='OK']")).click();
-        return this;
-    }
-
-    public SelfServicePage uploadDocumentation(int lineNumber, boolean hasDocumentation) {
-        SelenideElement documentationArrowTrigger = $$(By.xpath("//img[contains(@class, 'arrow-trigger')]")).get(2);
-
-        findTheFieldInSsGrid("documentation", lineNumber).click();
-        documentationArrowTrigger.click();
-
-        if (hasDocumentation) {
-            $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Ja']")).click();
-            uploadDocument(TestData.getClaimItem().getFileLoc());
-        } else {
-            $(By.xpath("//div[contains(@class, 'list-inner')]//div[.='Nej']")).click();
-        }
         return this;
     }
 
@@ -247,36 +133,9 @@ public class SelfServicePage extends Page {
         waitForDisplayed(By.xpath("//div[contains(text(),'100 %')]"));
     }
 
-    public String getDescriptionText(int lineNumber) {
-        return findTheFieldInSsGrid("descriptionColumn", lineNumber).getText();
-    }
+    public SelfServiceGrid getSelfServiceGrid(){
 
-    public String getPurchasePrice(int lineNumber) {
-        return findTheFieldInSsGrid("purchasePrice", lineNumber).getText();
-    }
-
-    public String getPurchaseDate(int lineNumber) {
-        return findTheFieldInSsGrid("purchaseDate", lineNumber).getText();
-    }
-
-    public String getNewPrice(int lineNumber) {
-        return findTheFieldInSsGrid("newPrice", lineNumber).getText();
-    }
-
-    public String getCategoryText(int lineNumber) {
-        return findTheFieldInSsGrid("categoryColumn", lineNumber).getText();
-    }
-
-    public String getCustomerDemandPrice(int lineNumber) {
-        return findTheFieldInSsGrid("customerDemand", lineNumber).getText();
-    }
-
-    public SelfServicePage deleteLine() {
-        SelenideElement deleteButton = $(By.xpath(".//div[contains(@class,'delete-icon')]/a"));
-
-        clickJS(deleteButton);
-        waitForAjaxCompleted();
-        return this;
+        return new SelfServiceGrid();
     }
 
 
@@ -287,65 +146,286 @@ public class SelfServicePage extends Page {
 
     public class Asserts {
 
-        public Asserts assertLineIsDeleted() {
-            refresh();
-            ElementsCollection ssLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
-            assertEquals(ssLines.size(), 2, "Line was not deleted");
-            return this;
-        }
-
-        public Asserts assertPurchaseDateIsNotEmpty(int lineNumber) {
-            assertNotEquals(" ", getPurchaseDate(lineNumber), "Purchase Date should not be empty");
-            return this;
-        }
-
-        public Asserts assertNewPriceIsNotEmpty(int lineNumber) {
-            assertNotEquals(" ", getNewPrice(lineNumber), "Purchase Price should not be empty");
-            return this;
-        }
-
-        public Asserts assertPurchasePriceIsNotEmpty(int lineNumber) {
-            assertNotEquals(" ", getPurchasePrice(lineNumber), "Purchase Price should not be empty");
-            return this;
-        }
-
-        public Asserts assertDescriptionIsNotEmpty(int lineNumber) {
-            assertNotEquals(" ", getDescriptionText(lineNumber), "Description should not be empty");
-            return this;
-        }
-
-        public Asserts assertCategoryIsNotEmpty(int lineNumber) {
-            assertNotEquals(" ", getCategoryText(lineNumber), "Category should not be empty");
-            return this;
-        }
-
-        public Asserts assertCustomerDemandIsNotEmpty(int lineNumber) {
-            assertNotEquals(" ", getCustomerDemandPrice(lineNumber), "Customer demand should not be empty");
-            return this;
-        }
-
-        public Asserts assertCategoryIsMarkedAsRequired(int lineNumber) {
-            ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
-            selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'categoryColumn')]")).shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
-            return this;
-        }
-
-        public Asserts assertDocumentationIsMarkedAsRequired(int lineNumber) {
-            ElementsCollection selfServiceLines = $$(By.xpath(".//*[@id='selfService_grid']//div[contains(@class,'x-grid3-body')]//div[contains(@class,'x-grid3-row')]"));
-            selfServiceLines.get(lineNumber).$(By.xpath(".//div[contains(@class,'documentation')]")).shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
-            return this;
-        }
-
         public Asserts assertRequiredFieldsAlertIsPresent() {
             assertTrue(isAlertPresent());
             acceptAlert();
             return this;
         }
+    }
 
-        public Asserts assertAttachIconIsPresent() {
-            assertTrue($(By.xpath(".//div[contains(@class, 'fileName')]//a/img[contains(@src, 'attach_icon.png')]")).isDisplayed(), "Attach icon should be displayed");
+    public class SelfServiceGrid {
+        @Getter
+        public List<SelfServiceGridRow> rows;
+        SelenideElement customerComment = $("#customer_comment");
+
+        SelfServiceGrid() {
+            this.rows = $("#selfService_grid")
+                    .findAll("[class*='scroller'] table[class*='row']")
+                    .stream()
+                    .map(SelfServiceGridRow::new)
+                    .collect(Collectors.toList());
+        }
+
+        public SelfServiceGrid addCustomerComment(String commentText) {
+            customerComment.click();
+            customerComment.sendKeys(commentText);
             return this;
         }
+
+        public SelfServiceGrid doAssert(Consumer<SelfServiceGrid.Asserts> assertFunc) {
+            assertFunc.accept(new SelfServiceGrid.Asserts());
+            return this;
+        }
+
+        public class Asserts {
+
+            public Asserts assertRowsSize(int size) {
+                assertThat(rows.size())
+                        .isEqualTo(size);
+                return this;
+            }
+        }
+
+        public SelfServicePage selfServicePage(){
+            return SelfServicePage.this;
+        }
+
+        public class SelfServiceGridRow {
+
+            final long WAIT_FOR_VISIBILITY = 6000;
+            SelenideElement row;
+            SelenideElement category;
+            SelenideElement acquired;
+            SelenideElement purchaseDate;
+            SelenideElement purchasePrice;
+            SelenideElement newPrice;
+            SelenideElement customerDemand;
+            SelenideElement documentation;
+            SelenideElement description;
+            SelenideElement fileName;
+
+            SelfServiceGridRow(SelenideElement row) {
+                this.row = row;
+                category = row.find("[class*=categoryColumn] div div");
+                acquired = row.find("[class*=acquired] div div");
+                purchaseDate = row.find("[class*=purchaseDate] div div");
+                purchasePrice = row.find("[class*=purchasePrice] div div");
+                newPrice = row.find("[class*=newPrice] div div");
+                customerDemand = row.find("[class*=customerDemand] div div");
+                documentation = row.find("[class*=documentation] div div");
+                description = row.find("[class*=description] div div");
+                fileName = row.find("[class*=fileName] div");
+            }
+
+            public SelfServiceGridRow addDescription(String text) {
+                $("#selfService_grid input")
+                        .waitUntil(visible, WAIT_FOR_VISIBILITY)
+                        .setValue(text);
+                unfocusField();
+                return this;
+            }
+
+            public SelfServiceGridRow addDescriptionSelectFirstSuggestion(String text) {
+                $("#selfService_grid input")
+                        .waitUntil(visible, WAIT_FOR_VISIBILITY)
+                        .setValue(text);
+                ElementsCollection listItems = chooseDisplayed(".x-layer.x-combo-list")
+                        .findAll(".x-combo-list-item");
+                listItems.get(0).click();
+                return this;
+            }
+
+            public SelfServiceGridRow selectRandomCategory() {
+                category.click();
+                SelenideElement comboList = $("#categorySelectorPanel + div").shouldBe(hidden);
+                int attempts = 2;
+                do {
+                    try {
+                        Wait.waitMillis(500);
+                        $("input#cs_category_group + img[class*='arrow']")
+                                .click();
+                        comboList.shouldBe(visible);
+                        break;
+                    }catch (ElementShould e) {
+                        if(attempts-- > 0){
+                            continue;
+                        }else {
+                            throw e;
+                        }
+                    }
+                }while(true);
+                ElementsCollection cgItems = $$("[id*=cg_item]");
+                getRandomElement(cgItems)
+                        .click();
+                return this;
+            }
+
+            public SelfServiceGridRow selectRandomAcquired(){
+                acquired.click();
+                chooseDisplayed("input+img")
+                        .click();
+                ElementsCollection listItems = chooseDisplayed(".x-layer.x-combo-list")
+                        .findAll(".x-combo-list-item");
+                getRandomElement(listItems)
+                        .click();
+                return this;
+            }
+
+            public SelfServiceGridRow selectRandomPurchaseDate() {
+                purchaseDate.click();
+                chooseDisplayed("input+img")
+                        .click();
+                ElementsCollection monthList = $$("[class*='date-mp-month'] a");
+                getRandomElement(monthList).click();
+                ElementsCollection yearList = $$("[class*='date-mp-year'] a");
+                getRandomElement(yearList).click();
+                $("button.x-date-mp-ok").click();
+                return this;
+            }
+
+            public SelfServiceGridRow addPurchasePrice(String text) {
+                purchasePrice.click();
+                chooseDisplayed("input")
+                        .setValue(text)
+                        .pressEnter();
+                return this;
+            }
+
+            public SelfServiceGridRow addNewPrice(String text) {
+                newPrice.click();
+                chooseDisplayed("input")
+                        .setValue(text)
+                        .pressEnter();
+                return this;
+            }
+
+            public SelfServiceGridRow addCustomerDemandPrice(String text) {
+                customerDemand.click();
+                chooseDisplayed("input")
+                        .setValue(text)
+                        .pressEnter();
+                return this;
+            }
+
+            public SelfServiceGrid deleteRow(){
+                row.find("[class*=delete-icon] a").click();
+                Wait.waitMillis(500);
+                return new SelfServiceGrid();
+            }
+
+            public String getDescription(){
+                return description.getText();
+            }
+
+            public SelfServiceGridRow uploadDocumentation(boolean hasDocumentation) {
+                documentation.click();
+                chooseDisplayed("input+img")
+                        .click();
+                ElementsCollection listItems = chooseDisplayed(".x-layer.x-combo-list")
+                        .findAll(".x-combo-list-item");
+                if (hasDocumentation) {
+                    listItems.stream()
+                            .filter(element -> element.getText().equals("Ja"))
+                            .findFirst()
+                            .get()
+                            .click();
+                    uploadDocument(TestData.getClaimItem().getFileLoc());
+                } else {
+                    listItems.stream().filter(element -> element.getText()
+                            .equals("Nej")).findFirst()
+                            .get()
+                            .click();
+                }
+                return this;
+            }
+
+            public SelfServiceGridRow doAssert(Consumer<SelfServiceGridRow.Asserts> assertFunc) {
+                assertFunc.accept(new SelfServiceGridRow.Asserts());
+                return this;
+            }
+
+            public class Asserts {
+
+                public Asserts assertPurchaseDateIsNotEmpty() {
+                    assertThat(purchaseDate.getText())
+                            .as("Purchase Date should not be empty")
+                            .isNotEqualTo(" ");
+                    return this;
+                }
+
+                public Asserts assertNewPriceIsNotEmpty() {
+                    assertThat(newPrice.getText())
+                            .as("Purchase Price should not be empty")
+                            .isNotEqualTo(" ");
+                    return this;
+                }
+
+                public Asserts assertCategoryIsNotEmpty() {
+                    assertThat(category.getText())
+                            .as("Purchase Price should not be empty")
+                            .isNotEqualTo(" ");
+                    return this;
+                }
+
+                public Asserts assertPurchasePriceIsNotEmpty() {
+                    assertThat(purchasePrice.getText())
+                            .as("Purchase Price should not be empty")
+                            .isNotEqualTo(" ");
+                    return this;
+                }
+
+                public Asserts assertDescriptionIsNotEmpty() {
+                    assertThat(description.getText())
+                            .as("Customer demand should not be empty")
+                            .isNotEqualTo(" ");
+                    return this;
+                }
+
+                public Asserts assertCustomerDemandIsNotEmpty() {
+                    assertThat(customerDemand.getText())
+                            .as("Customer demand should not be empty")
+                            .isNotEqualTo(" ");
+                    return this;
+                }
+
+                public Asserts assertDocumentationIsMarkedAsRequired() {
+                    row.find("[class*=documentation] div").shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
+                    return this;
+                }
+
+                public Asserts assertCategoryIsMarkedAsRequired() {
+                    row.find("[class*=categoryColumn] div").shouldHave(Condition.cssClass("x-grid3-cell-error-box"));
+                    return this;
+                }
+
+                public Asserts assertAttachIconIsPresent() {
+                    assertThat(fileName.find("img").isDisplayed())
+                            .as("Attach icon should be displayed")
+                            .isTrue();
+                    return this;
+                }
+            }
+
+            public SelfServiceGrid selfServiceGrid(){
+                return new SelfServiceGrid();
+            }
+        }
+    }
+
+    public SelenideElement chooseDisplayed(String locator){
+        int attempts = 2;
+        do {
+            try {
+                Wait.waitMillis(500);
+                return $$(locator).stream().filter(element -> element.isDisplayed()).findFirst().get();
+            }catch (NoSuchElementException e) {
+                if(attempts-- >0){
+                    continue;
+                }else {
+                    throw e;
+                }
+            }
+        }while (true);
     }
 }
 
