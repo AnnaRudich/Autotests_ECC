@@ -70,6 +70,9 @@ public class ReplacementDialog extends BaseDialog {
     private By selectItemCheckboxByXpath = By.xpath("//td[contains(@class,'grid-cell-row-checker')]");
     private By goToShopButtonByXpath = By.xpath("//span[@id='replacement-button-shop-btnEl']");
     private By closeButtonByXpath = By.xpath("//div[contains(@class,'x-message-box')]//div[contains(@id,'messagebox')]//span[contains(@id,'button')][1]");
+    private By bankSection = By.xpath("(//div[@id ='bankSection']//input[contains(@id, 'radiofield')])[1]");
+    private By regNumberInput = By.xpath("//label[contains(text(), 'Reg. nummer:')]/ancestor::tr//input[@type='text']");
+    private By accountNumberInput = By.xpath("//label[contains(text(), 'Kontonummer:')]/ancestor::tr//input[@type='text']");
 
 
     public void closeReplacementDialog() {
@@ -103,15 +106,24 @@ public class ReplacementDialog extends BaseDialog {
         return Page.at(CustomerDetailsPage.class);
     }
 
+    private ReplacementDialog selectBankSectionAndFill(String regNumber, String accountNumber){
+        $(bankSection).click();
+        $(regNumberInput).setValue(regNumber);
+        $(accountNumberInput).setValue(accountNumber);
+        return this;
+    }
+
     public CustomerDetailsPage completeClaimUsingCashPayout(){
         payCompleteAmountRadio.click();
         $(nextButtonByXpath).click();
-        $(By.xpath("(//div[@id ='bankSection']//input[contains(@id, 'radiofield')])[1]")).click();
-        $(By.xpath("//label[contains(text(), 'Reg. nummer:')]/ancestor::tr//input[@type='text']")).setValue("1");
-        $(By.xpath("//label[contains(text(), 'Kontonummer:')]/ancestor::tr//input[@type='text']")).setValue("12345678890");
+        selectBankSectionAndFill("1","12345678890");
         $(finishButtonByXpath).click();
         waitForLoaded();
-        acceptAlert();
+        acceptReplacementAlert();
+        return Page.at(CustomerDetailsPage.class);
+    }
+
+    private CustomerDetailsPage acceptReplacementAlert(){
         $(By.xpath("//span[contains(text(), 'OK')]//following-sibling::span")).click();
         return Page.at(CustomerDetailsPage.class);
     }
