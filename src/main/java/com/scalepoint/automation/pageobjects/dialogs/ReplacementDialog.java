@@ -95,25 +95,13 @@ public class ReplacementDialog extends BaseDialog {
         return this;
     }
 
-    public CustomerDetailsPage completeClaimUsingCompPayment() {
-        payCompleteAmountRadio.click();
-        //only sequential double click activates Next button
-        payCompleteAmountRadio.click();
-        $(nextButtonByXpath).click();
-        sendChequeButton.click();
-        $(finishButtonByXpath).click();
-        $(closeButtonByXpath).click();
-        return Page.at(CustomerDetailsPage.class);
-    }
-
-    private ReplacementDialog selectBankSectionAndFill(String regNumber, String accountNumber){
+    private void selectBankSectionAndFill(String regNumber, String accountNumber){
         $(bankSection).click();
         $(regNumberInput).setValue(regNumber);
         $(accountNumberInput).setValue(accountNumber);
-        return this;
     }
 
-    public CustomerDetailsPage completeClaimUsingCashPayout(){
+    public CustomerDetailsPage completeClaimUsingCashPayoutToBankAccount(){
         payCompleteAmountRadio.click();
         $(nextButtonByXpath).click();
         selectBankSectionAndFill("1","12345678890");
@@ -123,9 +111,8 @@ public class ReplacementDialog extends BaseDialog {
         return Page.at(CustomerDetailsPage.class);
     }
 
-    private CustomerDetailsPage acceptReplacementAlert(){
+    private void acceptReplacementAlert(){
         $(By.xpath("//span[contains(text(), 'OK')]//following-sibling::span")).click();
-        return Page.at(CustomerDetailsPage.class);
     }
 
     public ShopWelcomePage goToShop() {

@@ -380,7 +380,7 @@ public class ClaimTests extends BaseTest {
      * THEN: C1 status is "Completed"
      */
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_2632_completeClaimUsingReplacementWizard(User user, Claim claim, ClaimItem claimItem) {
@@ -391,7 +391,7 @@ public class ClaimTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard()
-                .completeClaimUsingCompPayment()
+                .completeClaimUsingCashPayoutToBankAccount()
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
