@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 
 import java.util.function.Consumer;
 
@@ -21,6 +22,13 @@ public class EvaluateTaskDialog extends BaseDialog {
 
     public ProjectsPage closeDialog(){
         $(By.xpath("//img[contains(@class, 'x-tool-close')]")).click();
+        return on(ProjectsPage.class);
+    }
+
+    public ProjectsPage acceptFeedback(){
+        $(By.xpath("//span[contains(text(), 'Godkend opgave')]/following-sibling::span")).click();
+        pressKeys(Keys.ENTER);
+        Wait.waitForLoaded();
         return on(ProjectsPage.class);
     }
 
