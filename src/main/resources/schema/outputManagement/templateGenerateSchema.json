@@ -15,22 +15,22 @@
               "type": "string"
             },
             "policyType": {
-              "type": "null"
+              "type": ["string","null"]
             },
             "policyNumber": {
               "type": ["string","null"]
             },
             "tradeUp": {
-              "type": "null"
+              "type": ["string","null"]
             },
             "status": {
-              "type": "null"
+              "type": ["string","null"]
             },
             "reimbursementDate": {
               "type": ["string","null"]
             },
             "reimbursementExpiration": {
-              "type": "null"
+              "type": ["string","null"]
             },
             "showReimbursementPayoutInfo": {
               "type": "boolean"
@@ -208,7 +208,7 @@
               "type": ["object", "null"],
               "properties": {
                 "accountInfo": {
-                  "type": "null"
+                  "type": ["object","null"]
                 },
                 "salutation": {
                   "type": "string"
@@ -226,16 +226,16 @@
                   "type": "null"
                 },
                 "address1": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "address2": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "zipCode": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "city": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "stateCode": {
                   "type": "null"
@@ -244,7 +244,7 @@
                   "type": "null"
                 },
                 "phone": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "cellPhoneNumber": {
                   "type": "string"
@@ -313,7 +313,7 @@
                   "items": {}
                 },
                 "summary": {
-                  "type": "null"
+                  "type": ["object","null"]
                 },
                 "discretionaryAndRejectReasonsFootNotes": {
                   "type": "array",
@@ -323,49 +323,49 @@
                   "type": "boolean"
                 },
                 "collectedBySP": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "collectedByIC": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "ownRisk": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "indemnity": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "indemnityWithoutRepair": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "createdDate": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "dateToday": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "subTotal": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "cashSubTotal": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "replacementSubTotal": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "replacementIndemnity": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "totalRepairPrice": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "cashCompensation": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "manualReductionText": {
                   "type": "null"
                 },
                 "manualReductionAmount": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "showDiscretionaryFirst": {
                   "type": "boolean"
@@ -374,7 +374,7 @@
                   "type": "boolean"
                 },
                 "cashCompensationOrFaceValueIndemnity": {
-                  "type": "null"
+                  "type": ["string","null"]
                 },
                 "rejected": {
                   "type": "boolean"
@@ -384,7 +384,6 @@
                 "items",
                 "summary",
                 "discretionaryAndRejectReasonsFootNotes",
-                "showSettlementTable",
                 "collectedBySP",
                 "collectedByIC",
                 "ownRisk",
