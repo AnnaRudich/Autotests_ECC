@@ -5,6 +5,8 @@ import com.codeborne.selenide.Selenide;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage;
+import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
@@ -15,6 +17,7 @@ import com.scalepoint.automation.services.restService.FeaturesToggleAdministrati
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
+import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -111,6 +114,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     logger.info("Left tests: {}", left);
 
                     RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
+                    cleanUpCDTemplates(iInvokedMethod, iTestResult);
                     if (rollbackContext == null || rollbackContext.getOperations().isEmpty()) {
                         logger.info("No ft settings found to rollback");
                         return;
@@ -133,6 +137,21 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     logger.error(e.getMessage(), e);
                 }
             }
+        }
+    }
+
+    public void cleanUpCDTemplates(IInvokedMethod iInvokedMethod, ITestResult iTestResult){
+        boolean cleanUp = iInvokedMethod
+                .getTestMethod()
+                .getConstructorOrMethod()
+                .getMethod()
+                .getDeclaredAnnotation(CommunicationDesignerCleanUp.class)
+                .equals(null);
+        if(!cleanUp) {
+            User user = findMethodParameter(iTestResult, User.class).get();
+            Page.to(InsCompAddEditPage.class, user.getCompanyId())
+                    .setCommunicationDesignerSection(CommunicationDesigner.builder().build())
+                    .selectSaveOption();
         }
     }
 
