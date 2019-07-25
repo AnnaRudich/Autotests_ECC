@@ -145,9 +145,8 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                 .getTestMethod()
                 .getConstructorOrMethod()
                 .getMethod()
-                .getDeclaredAnnotation(CommunicationDesignerCleanUp.class)
-                .equals(null);
-        if(!cleanUp) {
+                .getDeclaredAnnotation(CommunicationDesignerCleanUp.class) != null;
+        if(cleanUp) {
             User user = findMethodParameter(iTestResult, User.class).get();
             Page.to(InsCompAddEditPage.class, user.getCompanyId())
                     .setCommunicationDesignerSection(CommunicationDesigner.builder().build())
