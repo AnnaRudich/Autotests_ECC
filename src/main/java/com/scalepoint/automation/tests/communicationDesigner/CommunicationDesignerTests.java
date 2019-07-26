@@ -1,25 +1,35 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.Year;
 import java.util.Arrays;
 
@@ -216,6 +226,71 @@ public class CommunicationDesignerTests extends BaseTest {
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
+                );
+
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
+    }
+@RunOn(DriverType.CHROME)
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
+    public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+        String lineDescription = RandomUtils.randomName("RnVLine");
+
+        final String CUSTOMER_WELCOME_WITH_OUTSTANDING = "[CustomerWelcomeWithOutstanding]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omCustomerWelcomeWithOutstanding(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption();
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .openSid()
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .closeSidWithOk()
+                .findClaimLine(lineDescription)
+                .selectLine()
+                .sendToRnV()
+                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .findClaimLine(lineDescription)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+
+        new RnvService().sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim);
+
+        new ClaimNavigationMenu()
+                .toRepairValuationProjectsPage()
+                .openEvaluateTaskDialog()
+                .acceptFeedback();
+
+        new ClaimNavigationMenu()
+                .toSettlementPage()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
+                .reopenClaim();
+        new SettlementSummary()
+                .editSelfRisk("2000")
+                .toCompleteClaimPage()
+                .completeWithEmail(claim)
+
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_WITH_OUTSTANDING)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME_WITH_OUTSTANDING)
                 );
 
         communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())

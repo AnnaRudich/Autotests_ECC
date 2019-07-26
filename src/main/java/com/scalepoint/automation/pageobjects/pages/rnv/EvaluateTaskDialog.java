@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 
 import java.util.function.Consumer;
 
@@ -24,6 +25,13 @@ public class EvaluateTaskDialog extends BaseDialog {
         return on(ProjectsPage.class);
     }
 
+    public ProjectsPage acceptFeedback(){
+        $(By.xpath("//span[contains(text(), 'Godkend opgave')]/following-sibling::span")).click();
+        pressKeys(Keys.ENTER);
+        Wait.waitForLoaded();
+        return on(ProjectsPage.class);
+    }
+
 
     public EvaluateTaskDialog doAssert(Consumer<EvaluateTaskDialog.Asserts> assertFunc) {
         assertFunc.accept(new EvaluateTaskDialog.Asserts());
@@ -41,7 +49,7 @@ public class EvaluateTaskDialog extends BaseDialog {
         }
 
         public EvaluateTaskDialog.Asserts assertTotalIs(Double totalExpectedValue){
-           Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
+            Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
             assertThat(totalActualValue).as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
                     .isEqualTo(totalExpectedValue);
             return this;

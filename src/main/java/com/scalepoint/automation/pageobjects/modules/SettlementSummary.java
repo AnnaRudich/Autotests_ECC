@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,10 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
+import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementSummary extends Module {
@@ -106,6 +110,15 @@ public class SettlementSummary extends Module {
     public SettlementSummary checkStatusFromAudit(String status) {
         ExpectedConditions.textToBePresentInElement(auditStatus, status);
         return this;
+    }
+
+    public SettlementPage editSelfRisk(String newValue){
+        expand();
+        $(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).click();
+        $(By.xpath("//input[@role='textbox']")).setValue(newValue);
+        $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
+        waitForLoaded();
+        return at(SettlementPage.class);
     }
 
     public SettlementSummary doAssert(Consumer<Asserts> assertFunc) {

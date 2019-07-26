@@ -380,11 +380,10 @@ public class ClaimTests extends BaseTest {
      * THEN: C1 status is "Completed"
      */
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(enabled = false, dataProvider = "testDataProvider",
-            description = "CHARLIE-544, ECC-2632 It's possible to complete simple claim with replacement wizard for SP user. " +
+    @Test(dataProvider = "testDataProvider",
+            description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
-    @RequiredSetting(type = FTSetting.PAYOUT_TO_CHEQUE_CLAIMSHANDLER)
-    public void charlie544_2632_completeSPSimpleClaimWizard(User user, Claim claim, ClaimItem claimItem) {
+    public void charlie544_2632_completeClaimUsingReplacementWizard(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -392,7 +391,7 @@ public class ClaimTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard()
-                .completeClaimUsingCompPayment()
+                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
