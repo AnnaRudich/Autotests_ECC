@@ -69,8 +69,6 @@ public enum FTSetting {
     ENABLE_COLLECTING_SELFRISK_BY_IC("input[name=ftCollectSelfRisk][value='1']", CHECKBOX),
     ENABLE_DAMAGE_TYPE("input[name=ftfunctionflag5][value='1073741824']", CHECKBOX),
 
-    PAYOUT_TO_CHEQUE_CLAIMSHANDLER("input[name=ftpaymentflag][value='1']", CHECKBOX),
-
     DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER("input[name='ftpaymentflag'][value='16384']", CHECKBOX),
     DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER("input[name='ftpaymentflag'][value='32768']", CHECKBOX),
 
