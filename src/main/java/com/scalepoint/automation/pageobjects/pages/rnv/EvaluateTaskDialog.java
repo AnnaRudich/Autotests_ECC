@@ -49,7 +49,7 @@ public class EvaluateTaskDialog extends BaseDialog {
         }
 
         public EvaluateTaskDialog.Asserts assertTotalIs(Double totalExpectedValue){
-           Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
+            Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
             assertThat(totalActualValue).as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
                     .isEqualTo(totalExpectedValue);
             return this;

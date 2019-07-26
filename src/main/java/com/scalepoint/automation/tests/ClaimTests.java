@@ -391,7 +391,7 @@ public class ClaimTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard()
-                .completeClaimUsingCashPayoutToBankAccount()
+                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
     }

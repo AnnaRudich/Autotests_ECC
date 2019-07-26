@@ -18,9 +18,7 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.waitForLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForSpinnerToDisappear;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReplacementDialog extends BaseDialog {
@@ -101,10 +99,10 @@ public class ReplacementDialog extends BaseDialog {
         $(accountNumberInput).setValue(accountNumber);
     }
 
-    public CustomerDetailsPage completeClaimUsingCashPayoutToBankAccount(){
+    public CustomerDetailsPage completeClaimUsingCashPayoutToBankAccount(String regNumber, String accountNumber){
         payCompleteAmountRadio.click();
         $(nextButtonByXpath).click();
-        selectBankSectionAndFill("1","12345678890");
+        selectBankSectionAndFill(regNumber, accountNumber);
         $(finishButtonByXpath).click();
         waitForLoaded();
         acceptReplacementAlert();

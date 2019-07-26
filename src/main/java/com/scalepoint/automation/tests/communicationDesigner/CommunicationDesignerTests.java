@@ -241,7 +241,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard()
-                .completeClaimUsingCashPayoutToBankAccount()
+                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .reopenClaim();
         new SettlementSummary()
                 .editSelfRisk("2000")
