@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
+@RequiredParameters("icrfnbr=%s")
 public class InsCompAddEditPage extends AdminBasePage {
 
     @FindBy(name = "id")

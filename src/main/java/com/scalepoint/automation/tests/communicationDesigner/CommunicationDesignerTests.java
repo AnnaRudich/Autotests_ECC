@@ -8,49 +8,70 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
-import com.scalepoint.automation.schemaValidation.SchemaValidation;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
-import com.scalepoint.automation.stubs.CommunicationDesignerStubs;
+import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.Arrays;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.usersmanagement.CompanyCode.FUTURE60;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerTests extends BaseTest {
 
+    CommunicationDesignerMock communicationDesignerMock;
+
     @BeforeClass
-    public void startWireMock() throws IOException {
+    public void startWireMock(){
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
-        CommunicationDesignerStubs.templatesQueryStub();
-        CommunicationDesignerStubs.templatesGenerateStub();
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+        communicationDesignerMock = new CommunicationDesignerMock(wireMock);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email")
-    public void SelfServiceCustomerWelcomeTest(@UserCompany(FUTURE60) User user, Claim claim) {
+    @DataProvider(name = "stubDataProvider")
+    public Object[][] stubDataProvider(Method method) throws IOException {
+        Object[][] params = provide(method);
+
+        User user = (User) Arrays
+                .stream(params[0])
+                .filter(param -> param.getClass()
+                        .equals(User.class))
+                .findFirst()
+                .get();
+
+        communicationDesignerMock.addStub(user.getCompanyName().toLowerCase());
+
+        return params;
+    }
+
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email")
+    public void SelfServiceCustomerWelcomeTest(User user, Claim claim) {
         CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
                 .useOutputManagement(true)
                 .omSelfServiceCustomerWelcome(true)
@@ -70,16 +91,19 @@ public class CommunicationDesignerTests extends BaseTest {
                     mailViewDialog.isTextVisible("[SelfServiceCustomerWelcome]");
                 });
 
-        new SchemaValidation(wireMock)
-                .validateTemplateGenerateSchema(claim.getClaimNumber());
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    public void itemizationSubmitAndSaveLossItemsTest(@UserCompany(FUTURE60) User user, Claim claim, ClaimItem claimItem) {
+    public void itemizationSubmitAndSaveLossItemsTest(User user, Claim claim, ClaimItem claimItem) {
 
         final String ITEMIZATION_SUBMIT_LOSS_ITEMS = "[ItemizationSubmitLossItems]";
         final String ITEMIZATION_SAVE_LOSS_ITEMS = "[ItemizationSaveLossItems]";
@@ -129,13 +153,16 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(ITEMIZATION_SAVE_LOSS_ITEMS)
                 );
 
-        new SchemaValidation(wireMock)
-                .validateTemplateGenerateSchema(claim.getClaimNumber());
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcomeRejectionMail")
-    public void customerWelcomeRejectionMail(@UserCompany(FUTURE60) User user, Claim claim) {
+    public void customerWelcomeRejectionMail(User user, Claim claim) {
 
         final String CUSTOMER_WELCOME_REJECTION = "[CustomerWelcomeRejectionMail]";
 
@@ -161,11 +188,17 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME_REJECTION)
                 );
+
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
     }
 
-    @Test(dataProvider = "testDataProvider",
-            description = "Use communication designer to prepare CustomerWelcome mail")
-    public void customerWelcomeMail(@UserCompany(FUTURE60) User user, Claim claim, ClaimItem claimItem) {
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare CustomerWelcome")
+    public void customerWelcomeMail(User user, Claim claim, ClaimItem claimItem) {
 
         final String CUSTOMER_WELCOME = "[CustomerWelcome]";
 
@@ -194,10 +227,15 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
                 );
-    }
 
-    @Test(dataProvider = "testDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
-    public void customerWelcomeWithOutstanding(@UserCompany(FUTURE60) User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
+    }
+@RunOn(DriverType.CHROME)
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
+    public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
         final String CUSTOMER_WELCOME_WITH_OUTSTANDING = "[CustomerWelcomeWithOutstanding]";
@@ -255,6 +293,9 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME_WITH_OUTSTANDING)
                 );
 
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
     }
 }
-
