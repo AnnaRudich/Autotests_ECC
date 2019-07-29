@@ -233,7 +233,8 @@ public class CommunicationDesignerTests extends BaseTest {
                         schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
                         ));
     }
-@RunOn(DriverType.CHROME)
+
+    @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
     public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
         String lineDescription = RandomUtils.randomName("RnVLine");
