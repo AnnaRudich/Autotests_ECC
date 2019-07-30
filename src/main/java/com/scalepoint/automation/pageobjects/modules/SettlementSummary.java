@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -77,7 +76,6 @@ public class SettlementSummary extends Module {
 
     private void expand() {
         clickUsingJsIfSeleniumClickReturnError(expand);
-        Wait.waitForDisplayed(By.id("finishCaseBtn"));
     }
 
     private String getClaimSumValue() {
