@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
 import org.openqa.selenium.By;
@@ -13,7 +12,8 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
