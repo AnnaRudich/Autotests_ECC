@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.utils.Constants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,8 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
@@ -82,6 +85,7 @@ public class SettlementSummary extends Module {
         if (!claimSumValue.isDisplayed()) {
             expand();
         }
+        $(claimSumValue).waitUntil(not(exactText("")), Constants.WAIT_UNTIL_MS);
         return claimSumValue.getText();
     }
 

@@ -26,6 +26,7 @@ public class Constants {
 
     public static final Integer DEPRECIATION_10 = 10;
     public static final Integer VOUCHER_DISCOUNT_10 = 10;
+    public static final int WAIT_UNTIL_MS = 6000;
 
     private static final String SUPPLIER_FOR_VOUCHERAGREEMENTS = "AutotestSupplier-$CompanyId-ForVaTests";
 
