@@ -52,7 +52,7 @@ public class FraudAlertTest extends BaseTest {
         new EventApiService().scheduleSubscription("3");
     }
 
-    private String excelImportPath = "C:\\Users\\bna\\IdeaProjects\\automatedtest\\src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls";
+    private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
 
     @Test(dataProvider = "testDataProvider", description = "Add")
     public void manualClaimHandlingAddNoFraud(@UserCompany(TOPDANMARK)User user, ClaimRequest claimRequest, ClaimItem claimItem, Claim claim) throws IOException {
