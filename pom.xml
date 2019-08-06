@@ -290,6 +290,13 @@
 
     <dependencies>
 
+
+        <dependency>
+            <groupId>com.scalepoint</groupId>
+            <artifactId>test-client-certs</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>ru.qatools.commons</groupId>
             <artifactId>properties</artifactId>

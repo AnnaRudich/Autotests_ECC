@@ -283,6 +283,12 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
+    public SettlementPage delete() {
+        $(By.xpath("//span[contains(@style,'deleteIcon.png')]")).click();
+        $(By.xpath("//span[text() = 'Ja']")).click();
+        return this;
+    }
+
     public SettlementPage selectLinesByIndex(int... lines) {
         try {
             selectLines(lines, claimLineDescription);

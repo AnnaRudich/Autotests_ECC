@@ -85,7 +85,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtInput customerDemand;
 
     @FindBy(id = "new-price-textfield-inputEl")
-    private ExtInput newPrice;
+    private WebElement newPrice;
 
     @FindBy(id = "depreciation-textfield-inputEl")
     private ExtInput depreciationPercentage;
@@ -398,6 +398,7 @@ public class SettlementDialog extends BaseDialog {
 
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
+        input.clear();
         input.enter(value);
         simulateBlurEvent(input);
         waitForJavascriptRecalculation();
@@ -439,7 +440,12 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setNewPrice(Double amount) {
-        return setExtInputValue(newPrice, OperationalUtils.format(amount));
+        SelenideElement element = $(newPrice).waitUntil(Condition.visible, 6000);
+        element.clear();
+        element.setValue(OperationalUtils.format(amount))
+                .pressTab();
+        waitForJavascriptRecalculation();
+        return this;
     }
 
     public SettlementDialog setDiscretionaryPrice(Double amount) {

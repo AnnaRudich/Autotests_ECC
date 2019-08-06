@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public class FunctionalMenu extends Module {
 
     @FindBy(xpath = "//span[contains(@style,'findInCatalogIcon.png')]/ancestor::a")
@@ -41,7 +43,7 @@ public class FunctionalMenu extends Module {
 
     public ImportLossInformationDialog openImportExcelDialog() {
         logger.info("Main: {}", driver.getWindowHandle());
-        driver.findElement(By.id("excelImportBtn")).click();
+        $("#excelImportBtn").click();
         return BaseDialog.at(ImportLossInformationDialog.class);
     }
 }

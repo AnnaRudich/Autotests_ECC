@@ -1,6 +1,6 @@
 {
-  "tenant": "scalepoint",
-  "company": "scalepoint",
+  "tenant": "topdanmark",
+  "company": "topdanmark",
   "country": "dk",
   "caseType": "contentClaim",
   "itemizationCaseReference": "",
@@ -21,6 +21,7 @@
       "city": "city"
     }
   },
+  "checkForFraud": "true",
   "extraModifiers": [
     {
       "type": "postItemizationCompletedUrl",

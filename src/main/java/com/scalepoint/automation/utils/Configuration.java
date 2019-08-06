@@ -11,6 +11,7 @@ public class Configuration {
     public static final String KEY_CONTEXT_ECC_ADMIN = "context.ecc.admin";
     public static final String KEY_CONTEXT_ECC_RNV = "context.ecc.rnv";
     public static final String KEY_SERVER_URL = "url.base.server";
+    public static final String KEY_ENVIRONMENT_URL = "url.environment";
     public static final String KEY_ECC_SOLR_URL = "url.solr.base";
     public static final String KEY_ECC_DB_URL = "url";
     public static final String KEY_EVENT_API_DB_URL = "eventApiDbUrl";
@@ -31,6 +32,7 @@ public class Configuration {
     private static String protocol;
     private static Locale locale;
     private static String serverUrl;
+    private static String environmentUrl;
     private static String eccContext;
     private static String eccAdminContext;
     private static String eccRnvContext;
@@ -65,6 +67,10 @@ public class Configuration {
 
     public static String getServerUrl() {
         return serverUrl;
+    }
+
+    public static String getEnvironmentUrl() {
+        return environmentUrl;
     }
 
     public static String getEccContext() {
@@ -139,6 +145,12 @@ public class Configuration {
     public Configuration setServerUrl(String serverUrl) {
         Assert.notNull(serverUrl, errorMessage(KEY_SERVER_URL));
         Configuration.serverUrl = getHttpServerUrl(serverUrl);
+        return this;
+    }
+
+    public Configuration setEnvironmentUrl(String environmentUrl) {
+        Assert.notNull(environmentUrl, errorMessage(KEY_ENVIRONMENT_URL));
+        Configuration.environmentUrl = getHttpServerUrl(environmentUrl);
         return this;
     }
 
