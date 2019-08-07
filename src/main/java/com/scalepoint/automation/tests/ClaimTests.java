@@ -379,6 +379,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with wizard
      * THEN: C1 status is "Completed"
      */
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +

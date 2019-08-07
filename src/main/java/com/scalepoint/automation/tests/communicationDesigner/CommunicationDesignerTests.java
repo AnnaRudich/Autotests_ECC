@@ -297,4 +297,52 @@ public class CommunicationDesignerTests extends BaseTest {
                         schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
                         ));
     }
+
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+    @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare split replacement mails")
+    public void splitReplacement(User user, Claim claim, ClaimItem claimItem) {
+
+        final String CUSTOMER_WELCOME = "[CustomerWelcome]";
+        final String ORDER_CONFIRMATION = "[OrderConfirmation]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omCustomerWelcome(true)
+                .omOrderConfirmation(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption();
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard()
+                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
+                .to(MyPage.class)
+                .doAssert(MyPage.Asserts::assertClaimCompleted)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
+                )
+                .cancel()
+                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, ORDER_CONFIRMATION)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
+    }
 }
