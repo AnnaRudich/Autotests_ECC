@@ -7,17 +7,17 @@ GO
 
 
 CREATE PROCEDURE [dbo].[autotests_enable_fraud_alert]
-@NAME nvarchar(254)
-
+@name nvarchar(254),
+@eventsConfiguration NVARCHAR(256) = {"validationEngineEventsEnabled":false,"selfServiceEventsEnabled":false,"unifiedPaymentEventsEnabled":false,"reopenEventsEnabled":false,"rvEventsEnabled":false,"invoiceEventsEnabled":false,"fraudEventsEnabled":true}'
 AS
 	SET NOCOUNT ON
 
 	UPDATE [INSCOMP]
-	SET [useFraudCheck] = 1
+	SET [eventsConfiguration] = @eventsConfiguration
     WHERE [ICNAME] = @NAME
 
     UPDATE [INSCOMP_Audit]
-    SET [useFraudCheck] = 1
+    SET [eventsConfiguration] = @eventsConfiguration
     WHERE [ICNAME] = @NAME
 
 	SET NOCOUNT OFF
