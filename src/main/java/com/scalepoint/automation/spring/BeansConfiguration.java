@@ -2,8 +2,7 @@ package com.scalepoint.automation.spring;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.client.WireMockBuilder;
-import com.mongodb.Mongo;
-import com.mongodb.client.MongoClients;
+import com.mongodb.MongoClient;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -99,7 +98,7 @@ public class BeansConfiguration {
 
     @Bean
     public MongoDbFactory mongoDbFactory(){
-        return new SimpleMongoDbFactory((Mongo) MongoClients.create(mongoDbConnectionString), "voucherPrediction");
+        return new SimpleMongoDbFactory(new MongoClient(mongoDbConnectionString), "voucherPrediction");
     }
 
     @Bean
