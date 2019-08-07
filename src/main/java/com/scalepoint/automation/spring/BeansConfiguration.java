@@ -2,7 +2,10 @@ package com.scalepoint.automation.spring;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.client.WireMockBuilder;
+import com.mongodb.Mongo;
+import com.mongodb.client.MongoClients;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
+import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -13,6 +16,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -39,6 +45,8 @@ public class BeansConfiguration {
     private String dbUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_DB_URL + "}")
     private String eventApiDbUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_MONGO_DB_CONNECTION_STRING + "}")
+    private String mongoDbConnectionString;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE + "}")
     private String hubRemoteUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE_ZALENIUM + "}")
@@ -87,6 +95,23 @@ public class BeansConfiguration {
     public DatabaseApi databaseApi() {
         return new DatabaseApi(jdbcTemplate(dataSource()));
     }
+
+
+    @Bean
+    public MongoDbFactory mongoDbFactory(){
+        return new SimpleMongoDbFactory((Mongo) MongoClients.create(mongoDbConnectionString), "voucherPrediction");
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate(){
+        return new MongoTemplate(mongoDbFactory());
+    }
+
+    @Bean
+    public MongoDbApi mongoDbApi(){
+        return new MongoDbApi(mongoTemplate());
+    }
+
 
     @Bean
     public WireMock wireMock(@Value("${wiremock.host}") String host,
