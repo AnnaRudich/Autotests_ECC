@@ -63,8 +63,7 @@ public class FraudAlertTest extends BaseTest {
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
-                .closeSidWithOk()
-                .completeClaimWithoutMail(claim);
+                .closeSidWithOk();
 
         fraudAlertStubs
                 .waitForClaimUpdatedEvent(token, "0");
@@ -189,7 +188,7 @@ public class FraudAlertTest extends BaseTest {
                 .uploadDocumentation(false)
                 .selfServiceGrid()
                 .selfServicePage()
-                .selectSubmitOption();;
+                .selectSubmitOption();
 
         fraudAlertStubs
                 .waitForClaimUpdatedEvent(token, "0");
@@ -221,8 +220,7 @@ public class FraudAlertTest extends BaseTest {
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
-                .closeSidWithOk()
-                .completeClaimWithoutMail(claim);
+                .closeSidWithOk();
 
         fraudAlertStubs
                 .waitForClaimUpdatedEvent(token, "0");
