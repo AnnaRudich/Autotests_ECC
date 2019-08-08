@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.utils.data.entity.PredictedVoucher;
+import com.scalepoint.automation.utils.data.entity.MongoPredicted;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,13 +19,13 @@ public class MongoDbApi{
         this.mongoTemplate = template;
     }
 
-    public List<PredictedVoucher> getPredictedVoucherNameBy(String claimNumber, String claimLineDescription){
+    public List<MongoPredicted> getPredictedVoucherNameBy(String claimNumber, String claimLineDescription){
 
           Query query = new Query();
         query.addCriteria(Criteria.where("claimNumber").is(claimNumber));
         query.addCriteria(Criteria.where("request.claimLineDescription").is(claimLineDescription));
-        query.fields().include("predictedVoucher.voucherName");
-        return mongoTemplate.find(query, PredictedVoucher.class, "VoucherPrediction");
+        //query.fields().include("predictedVoucher.voucherName");
+        return mongoTemplate.find(query, MongoPredicted.class, "VoucherPrediction");
     }
 }
 

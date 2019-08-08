@@ -27,12 +27,12 @@ public class VoucherPredictionTest extends BaseTest {
                 })
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
-                .editLine();
-                System.out.println(mongoDbApi.getPredictedVoucherNameBy(claim.getClaimNumber(), lineDescription));
-//                .doAssert(sid -> {
-//                    sid.assertVoucherIsSelected(mongoDbApi.getPredictedVoucherNameBy(claim.getClaimNumber(), lineDescription).get(0).getVoucherName());
-//                    sid.assertMarketPriceVisible();
-//                });
-
+                .editLine()
+                //System.out.println(mongoDbApi.getPredictedVoucherNameBy(claim.getClaimNumber(), lineDescription));
+                .doAssert(sid -> {
+                    sid.assertVoucherIsSelected(mongoDbApi.getPredictedVoucherNameBy(claim.getClaimNumber(), lineDescription)
+                            .get(0).getPredictedVoucher().getVoucherName());
+                    sid.assertMarketPriceVisible();
+                });
     }
 }

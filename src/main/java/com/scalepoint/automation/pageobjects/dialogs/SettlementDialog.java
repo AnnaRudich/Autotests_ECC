@@ -920,8 +920,16 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public String getVoucherName(){
-        return $("#vouchers-combobox-inputEl").getAttribute("value");
-    }
+
+        Pattern PATTERN = Pattern.compile("(?<voucherName>.*)\\((?<distance>[a-z0-9]*)\\s*km-(?<percentage>\\d*)%\\)");
+        String voucherName = $("#vouchers-combobox-inputEl").getAttribute("value");
+
+        Matcher m = PATTERN.matcher(voucherName);
+
+        if (m.find())
+            voucherName = m.group("voucherName").trim();
+        return voucherName;
+        }
 
     public List<VoucherDropdownElement> parseVoucherDropdown() {
         List<String> comboBoxOptions = voucher.getComboBoxOptions();
@@ -1205,10 +1213,13 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertVoucherIsSelected(String voucherName){
             logger.info("assertPredictedVoucherIsDisplayed");
+
             String actualSelectedVoucher = getVoucherName();
 
+
             assertThat(actualSelectedVoucher.contains(voucherName))
-                    .as("voucher selected should be" + voucherName + "but was" + actualSelectedVoucher).isTrue();
+                    .as("voucher selected should be " + voucherName + " but was " + actualSelectedVoucher).isTrue();
+            System.out.println("HURRAAAY!!!!!");
             return this;
         }
 

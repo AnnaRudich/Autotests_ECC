@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PredictedVoucher implements Serializable {
+public class MongoPredicted implements Serializable {
 
-    private String voucherName;
+    private PredictedVoucher predictedVoucher;
 }
