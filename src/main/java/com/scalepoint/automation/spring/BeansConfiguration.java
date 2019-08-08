@@ -3,6 +3,7 @@ package com.scalepoint.automation.spring;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.client.WireMockBuilder;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -46,6 +47,8 @@ public class BeansConfiguration {
     private String eventApiDbUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_MONGO_DB_CONNECTION_STRING + "}")
     private String mongoDbConnectionString;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.MONGO_VOUCHER_PREDICTION_COLLECTION_NAME + "}")
+    private String mongoVoucherPredictionCollectionName;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE + "}")
     private String hubRemoteUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_REMOTE_ZALENIUM + "}")
@@ -96,14 +99,42 @@ public class BeansConfiguration {
     }
 
 
+    //@Bean
+//    public MongoDbFactory mongoDbFactory(){
+//        String databaseName = "voucherPrediction";
+//        String collectionName = "VoucherPrediction";
+//        String userName = "ecc";
+//        String password = "NAl4EPRDtlT(8k8#";
+//
+//        MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(userName, databaseName, password.toCharArray());
+//
+//        ServerAddress serverAddress = new ServerAddress("mongodb://ecc-tools.spcph.local", 27017);
+//
+//        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+//                .applyConnectionString(new ConnectionString(mongoDbConnectionString)).credential(mongoCredential).build();
+//
+//      MongoClient mongoClient = new MongoClient(serverAddress, Collections.singletonList(mongoCredential));
+//    //MongoClient create(ConnectionString connectionString)
+//
+//
+//        //SimpleMongoDbFactory(MongoClient mongoClient, String databaseName)
+//        //MongoClient(ServerAddress addr, List<MongoCredential> credentialsList)
+//
+//        return new SimpleMongoDbFactory(mongoClient, databaseName);
+//    }
+
     @Bean
     public MongoDbFactory mongoDbFactory(){
-        return new SimpleMongoDbFactory(new MongoClient(mongoDbConnectionString), "voucherPrediction");
+        MongoClientURI mongoClientURI = new MongoClientURI(mongoDbConnectionString);
+        MongoClient mongoClient = new MongoClient(mongoClientURI);
+        String databaseName = "voucherPrediction";
+
+        return new SimpleMongoDbFactory(mongoClient, databaseName);
     }
 
     @Bean
     public MongoTemplate mongoTemplate(){
-        return new MongoTemplate(mongoDbFactory());
+       return new MongoTemplate(mongoDbFactory());
     }
 
     @Bean

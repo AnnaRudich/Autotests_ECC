@@ -919,6 +919,10 @@ public class SettlementDialog extends BaseDialog {
         return voucherPercentage;
     }
 
+    public String getVoucherName(){
+        return $("#vouchers-combobox-inputEl").getAttribute("value");
+    }
+
     public List<VoucherDropdownElement> parseVoucherDropdown() {
         List<String> comboBoxOptions = voucher.getComboBoxOptions();
         return comboBoxOptions.stream().map(VoucherDropdownElement::new).collect(Collectors.toList());
@@ -1196,6 +1200,15 @@ public class SettlementDialog extends BaseDialog {
                 logger.info("Found: " + i);
                 return i.contains(voucherTitle);
             }), "Voucher " + voucherTitle + " must not be present");
+            return this;
+        }
+
+        public Asserts assertVoucherIsSelected(String voucherName){
+            logger.info("assertPredictedVoucherIsDisplayed");
+            String actualSelectedVoucher = getVoucherName();
+
+            assertThat(actualSelectedVoucher.contains(voucherName))
+                    .as("voucher selected should be" + voucherName + "but was" + actualSelectedVoucher).isTrue();
             return this;
         }
 

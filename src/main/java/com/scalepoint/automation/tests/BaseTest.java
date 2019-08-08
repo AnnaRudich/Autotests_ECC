@@ -225,10 +225,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     public XpriceInfo getXpricesForConditions(DatabaseApi.PriceConditions... priceConditions) {
         return databaseApi.findProduct(priceConditions);
     }
-
-    public String getPredictedVoucherBy(String claimNumber, String claimLineDescription){
-        return mongoDbApi.getPredictedVoucherNameBy(claimNumber, claimLineDescription).get(0);
-    }
 }
 
 
