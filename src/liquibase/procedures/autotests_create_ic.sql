@@ -56,13 +56,11 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
 	SET IDENTITY_INSERT [Text] ON
 	INSERT INTO [Text] (TextId, TextType) values (@icTextId, 11)
 	SET IDENTITY_INSERT [Text] OFF
-	INSERT INTO [Text_InsComp] ([TextId], [LCID], [ContactNo], [OfficeHours]) VALUES (@icTextId, @icCulture, '0844 391 4086', 'no opening hours')
+	INSERT INTO [Text_InsComp] ([TextId], [LCID], [ContactNo], [OfficeHours], [LocalizedName]) VALUES (@icTextId, @icCulture, '0844 391 4086', 'no opening hours', @ICNAME)
 
 	DECLARE @departmentId UNIQUEIDENTIFIER = NEWID()
 	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email) VALUES (@departmentId, NULL, @ICNAME, 1, @ICCOMMAIL)
 	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email) VALUES (NEWID(), @departmentId, @ICNAME+' Department', 1, @ICCOMMAIL)
-
-	UPDATE [Text_InsComp] SET LocalizedName = @ICNAME WHERE [TextId] = @icTextId
 
 	DECLARE @ftExists BIT = 1
 
@@ -298,7 +296,9 @@ INSERT INTO [INSCOMP]
        ,[eventAPIEnabled]
        ,[auditAllowAutoComplete]
        ,[auditButtonEnabled]
-       ,[auditAllowValidateRV])
+       ,[auditAllowValidateRV]
+       ,[omTenantAlias]
+       ,[omCompanyAlias])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -336,7 +336,9 @@ INSERT INTO [INSCOMP]
            ,@icEventAPIEnabled
            ,@icAuditAllowAutoComplete
            ,@auditButtonEnabled
-           ,@auditAllowValidateRV)
+           ,@auditAllowValidateRV
+           ,lower(@ICNAME)
+           ,lower(@ICNAME))
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
