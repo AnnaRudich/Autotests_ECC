@@ -25,7 +25,7 @@ public class VoucherPredictionTest extends BaseTest {
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .editLine()
-                .doAssert(sid -> sid.assertVoucherIsSelected(mongoDbApi.getPredictedVouchersNameBy(claim.getClaimNumber(), lineDescription)
+                .doAssert(sid -> sid.assertVoucherIsSelected(mongoDbApi.getVoucherPredictedObjectsBy(claim.getClaimNumber(), lineDescription)
                         .get(0).getPredictedVoucher().getVoucherName()));
     }
 }

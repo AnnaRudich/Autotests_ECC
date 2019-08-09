@@ -98,31 +98,6 @@ public class BeansConfiguration {
         return new DatabaseApi(jdbcTemplate(dataSource()));
     }
 
-
-    //@Bean
-//    public MongoDbFactory mongoDbFactory(){
-//        String databaseName = "voucherPrediction";
-//        String collectionName = "VoucherPrediction";
-//        String userName = "ecc";
-//        String password = "NAl4EPRDtlT(8k8#";
-//
-//        MongoCredential mongoCredential = MongoCredential.createScramSha1Credential(userName, databaseName, password.toCharArray());
-//
-//        ServerAddress serverAddress = new ServerAddress("mongodb://ecc-tools.spcph.local", 27017);
-//
-//        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-//                .applyConnectionString(new ConnectionString(mongoDbConnectionString)).credential(mongoCredential).build();
-//
-//      MongoClient mongoClient = new MongoClient(serverAddress, Collections.singletonList(mongoCredential));
-//    //MongoClient create(ConnectionString connectionString)
-//
-//
-//        //SimpleMongoDbFactory(MongoClient mongoClient, String databaseName)
-//        //MongoClient(ServerAddress addr, List<MongoCredential> credentialsList)
-//
-//        return new SimpleMongoDbFactory(mongoClient, databaseName);
-//    }
-
     @Bean
     public MongoDbFactory mongoDbFactory(){
         MongoClientURI mongoClientURI = new MongoClientURI(mongoDbConnectionString);
