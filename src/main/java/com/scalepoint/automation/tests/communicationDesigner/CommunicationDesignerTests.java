@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
@@ -8,8 +9,10 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
+import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
+import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
@@ -21,6 +24,7 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -34,6 +38,7 @@ import java.util.Arrays;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerTests extends BaseTest {
@@ -337,6 +342,111 @@ public class CommunicationDesignerTests extends BaseTest {
                 )
                 .cancel()
                 .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, ORDER_CONFIRMATION)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
+    }
+
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+    @Test(dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare order confirmation mails")
+    public void orderConfirmationWhenWeUseCreditCard(User user, Claim claim, ClaimItem claimItem, Payments payments) {
+
+        final String ORDER_CONFIRMATION = "[OrderConfirmation]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omOrderConfirmation(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption();
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
+                .findLoginToShopLinkAndOpenIt()
+                .enterPassword(Constants.DEFAULT_PASSWORD)
+                .login()
+                .toProductSearchPage()
+                .addProductToCart(0)
+                .checkoutWithCreditCardMail(payments.getDankort());
+
+        login(user)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, ORDER_CONFIRMATION)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+
+        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
+                        ));
+    }
+
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+    @Test(dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare order confirmation mails")
+    public void test(User user, Claim claim, ClaimItem claimItem) {
+
+        final String ORDER_CONFIRMATION = "[OrderConfirmation]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omOrderConfirmation(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption();
+
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(productInfo.getInvoicePrice() + 1000)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim)
+                .completeWithEmail(claim)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
+                .findLoginToShopLinkAndOpenIt()
+                .enterPassword(Constants.DEFAULT_PASSWORD)
+                .login()
+                .toProductSearchPage()
+                .searchForProduct(productInfo.getModel())
+                .addProductToCart(0)
+                .checkoutProductWithdrawalMail();
+
+        login(user)
+                .openRecentClaim()
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, ORDER_CONFIRMATION)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
 

@@ -25,4 +25,9 @@ public class DibsAccept extends Page {
         continueOption.click();
         return at(CustomerDetailsPage.class);
     }
+
+    public OrderConfirmationPage accept(){
+        continueOption.click();
+        return at(OrderConfirmationPage.class);
+    }
 }

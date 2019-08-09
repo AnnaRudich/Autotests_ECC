@@ -44,6 +44,11 @@ public class ShopOrderVerificationPage extends Page {
         return at(CustomerDetailsPage.class);
     }
 
+    public OrderConfirmationPage selectPlaceMyOrderOptionMail() {
+        placeMyOrderButton.click();
+        return at(OrderConfirmationPage.class);
+    }
+
     public DibsPayType toDIBSPage() {
         placeMyOrderButton.click();
         return at(DibsPayType.class);
