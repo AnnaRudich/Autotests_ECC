@@ -10,8 +10,7 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.utils.Constants.PRICE_100;
 
 public class VoucherPredictionTest extends BaseTest {
-//@RunOn(DriverType.CHROME)
-@RequiredSetting(type= FTSetting.ENABLE_VOUCHER_PREDICTION)
+    @RequiredSetting(type = FTSetting.ENABLE_VOUCHER_PREDICTION)
     @Test(dataProvider = "testDataProvider",
             description = "MIKE-41 - call Improved voucher match service is SID, manual line")
     public void mike41_improvedVoucherMatchForManualLines(User user, Claim claim, ClaimItem claimItem) {
@@ -19,20 +18,14 @@ public class VoucherPredictionTest extends BaseTest {
         String lineDescription = "claimLine1";
 
         loginAndCreateClaim(user, claim)
-                .openSidAndFill(sid -> {
-                    sid
-                            .withText(lineDescription)
-                            .withCategory(claimItem.getCategoryBicycles())
-                            .withNewPrice(PRICE_100);
-                })
+                .openSidAndFill(sid -> sid
+                        .withText(lineDescription)
+                        .withCategory(claimItem.getCategoryBicycles())
+                        .withNewPrice(PRICE_100))
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .editLine()
-                //System.out.println(mongoDbApi.getPredictedVoucherNameBy(claim.getClaimNumber(), lineDescription));
-                .doAssert(sid -> {
-                    sid.assertVoucherIsSelected(mongoDbApi.getPredictedVoucherNameBy(claim.getClaimNumber(), lineDescription)
-                            .get(0).getPredictedVoucher().getVoucherName());
-                    sid.assertMarketPriceVisible();
-                });
+                .doAssert(sid -> sid.assertVoucherIsSelected(mongoDbApi.getPredictedVouchersNameBy(claim.getClaimNumber(), lineDescription)
+                        .get(0).getPredictedVoucher().getVoucherName()));
     }
 }

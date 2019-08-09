@@ -4,10 +4,11 @@ import com.scalepoint.automation.utils.data.entity.MongoPredicted;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 public class MongoDbApi{
 
@@ -19,12 +20,11 @@ public class MongoDbApi{
         this.mongoTemplate = template;
     }
 
-    public List<MongoPredicted> getPredictedVoucherNameBy(String claimNumber, String claimLineDescription){
-
-          Query query = new Query();
-        query.addCriteria(Criteria.where("claimNumber").is(claimNumber));
-        query.addCriteria(Criteria.where("request.claimLineDescription").is(claimLineDescription));
-        //query.fields().include("predictedVoucher.voucherName");
+    public List<MongoPredicted> getPredictedVouchersNameBy(String claimNumber, String claimLineDescription){
+        logger.info("querying Mongo db");
+        Query query = new Query();
+        query.addCriteria(where("claimNumber").is(claimNumber));
+        query.addCriteria(where("request.claimLineDescription").is(claimLineDescription));
         return mongoTemplate.find(query, MongoPredicted.class, "VoucherPrediction");
     }
 }
