@@ -47,6 +47,8 @@ public class User {
     protected boolean basic;
     @XmlAttribute(name = "system")
     protected boolean system;
+    @XmlAttribute(name = "fraudAlert")
+    protected boolean fraudAlert;
 
     public User() {
     }
@@ -156,8 +158,16 @@ public class User {
         return system;
     }
 
+    public boolean isFraudAlert() {
+        return fraudAlert;
+    }
+
     public void setSystem(boolean system) {
         this.system = system;
+    }
+
+    public void setFraudAlert(boolean fraudAlert) {
+        this.fraudAlert = fraudAlert;
     }
 
     public String getCompanyName() {

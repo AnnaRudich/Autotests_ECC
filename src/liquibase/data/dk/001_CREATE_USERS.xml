@@ -56,6 +56,10 @@
             EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark', @chUserRights
             EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark1', @chUserRights
             EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark2', @chUserRights
+            EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark3', @chUserRights
+            EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark4', @chUserRights
+            EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark5', @chUserRights
+            EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark6', @chUserRights
         </sql>
 
         <sql>
