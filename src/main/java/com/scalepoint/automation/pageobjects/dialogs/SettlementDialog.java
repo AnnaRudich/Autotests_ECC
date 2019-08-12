@@ -362,6 +362,9 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
+
+    static final Pattern PATTERN = Pattern.compile("(?<voucherName>.*)\\((?<distance>[a-z0-9]*)\\s*km-(?<percentage>\\d*)%\\)");
+
     @Override
     protected boolean areWeAt() {
         Wait.waitForAjaxCompleted();
@@ -919,6 +922,14 @@ public class SettlementDialog extends BaseDialog {
         return voucherPercentage;
     }
 
+    public String getVoucherName(){
+        String voucherName = $("#vouchers-combobox-inputEl").getAttribute("value");
+        Matcher m = PATTERN.matcher(voucherName);
+        if (m.find())
+            voucherName = m.group("voucherName").trim();
+        return voucherName;
+        }
+
     public List<VoucherDropdownElement> parseVoucherDropdown() {
         List<String> comboBoxOptions = voucher.getComboBoxOptions();
         return comboBoxOptions.stream().map(VoucherDropdownElement::new).collect(Collectors.toList());
@@ -968,7 +979,6 @@ public class SettlementDialog extends BaseDialog {
         private int distance;
         private int percentage;
 
-        static final Pattern PATTERN = Pattern.compile("(?<voucherName>.*)\\((?<distance>[a-z0-9]*)\\s*km-(?<percentage>\\d*)%\\)");
 
         VoucherDropdownElement(String text) {
             Matcher m = PATTERN.matcher(text);
@@ -1196,6 +1206,14 @@ public class SettlementDialog extends BaseDialog {
                 logger.info("Found: " + i);
                 return i.contains(voucherTitle);
             }), "Voucher " + voucherTitle + " must not be present");
+            return this;
+        }
+
+        public Asserts assertVoucherIsSelected(String voucherName){
+            logger.info("assertPredictedVoucherIsDisplayed");
+            String actualSelectedVoucher = getVoucherName();
+            assertThat(actualSelectedVoucher.equals(voucherName))
+                    .as("voucher selected should be " + voucherName + " but was " + actualSelectedVoucher).isTrue();
             return this;
         }
 
