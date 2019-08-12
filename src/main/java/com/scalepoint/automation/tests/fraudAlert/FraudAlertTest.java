@@ -12,20 +12,19 @@ import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,8 +53,23 @@ public class FraudAlertTest extends BaseTest {
 
     private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
 
-    @Test(dataProvider = "testDataProvider", description = "Add")
-    public void manualClaimHandlingAddNoFraud(@UserCompany(TOPDANMARK)User user, ClaimRequest claimRequest, ClaimItem claimItem, Claim claim) throws IOException {
+    @DataProvider(name = "fraudAlertDataProvider")
+    public static Object[][] fraudAlertDataProvider(Method method) {
+
+        Object[][] testDataProvider = provide(method);
+
+        for (int i = 0; i < testDataProvider[0].length; i++) {
+            if (testDataProvider[0][i].getClass().equals(ClaimRequest.class)) {
+
+                testDataProvider[0][i] = TestData.getClaimRequestFraudAlert();
+            }
+        }
+        return testDataProvider;
+    }
+
+
+    @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
+    public void manualClaimHandlingAddNoFraud(@UserCompany(TOPDANMARK)User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -87,7 +101,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(claimItem.getNewPriceSP());
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Edit")
+    @Test(dataProvider = "fraudAlertDataProvider", description = "Edit")
     public void manualClaimHandlingEditNoFraud(@UserCompany(TOPDANMARK)User user, Claim claim, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -125,7 +139,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(claimItem.getNewPriceSP());
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Remove")
+    @Test(dataProvider = "fraudAlertDataProvider", description = "Remove")
     public void manualClaimHandlingRemoveNoFraud(@UserCompany(TOPDANMARK)User user, Claim claim, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -157,7 +171,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(items.size()).isEqualTo(0);
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(dataProvider = "fraudAlertDataProvider",
             description = "SelfService")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
@@ -211,7 +225,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2500.0);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Add")
+    @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
     public void manualClaimHandlingAddFraud(@UserCompany(TOPDANMARK)User user, ClaimRequest claimRequest, ClaimItem claimItem, Claim claim) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -244,7 +258,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(claimItem.getNewPriceSP());
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Edit")
+    @Test(dataProvider = "fraudAlertDataProvider", description = "Edit")
     public void manualClaimHandlingEditFraud(@UserCompany(TOPDANMARK)User user, Claim claim, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -282,7 +296,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(claimItem.getNewPriceSP());
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Remove")
+    @Test(dataProvider = "fraudAlertDataProvider", description = "Remove")
     public void manualClaimHandlingRemoveFraud(@UserCompany(TOPDANMARK)User user, Claim claim, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -314,7 +328,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(items.size()).isEqualTo(0);
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(dataProvider = "fraudAlertDataProvider",
             description = "SelfService")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
@@ -370,7 +384,7 @@ public class FraudAlertTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
+    @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
     public void importExcelNoFraud(@UserCompany(TOPDANMARK)User user,
                                    Claim claim, ClaimRequest claimRequest) throws IOException {
@@ -400,7 +414,7 @@ public class FraudAlertTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
+    @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
     public void importExcelFraud(@UserCompany(TOPDANMARK)User user,
                                  Claim claim, ClaimRequest claimRequest) throws IOException {
@@ -426,18 +440,5 @@ public class FraudAlertTest extends BaseTest {
         List<Item> items = caseData.getLoss().getContent().getItems();
 
         assertThat(items.size()).isEqualTo(50);
-    }
-
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Create claim using unified integration")
-    public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest, InsertSettlementItem settlementItem) {
-        claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-
-        String token = createCwaClaim(claimRequest)
-                .getClaimTokenWithoutPrefix();
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
-                .toCustomerDetails()
-                .doAssert(
-                        asserts -> asserts.assertDamageDateIs(LocalDate.now().minusDays(2L))
-                );
     }
 }

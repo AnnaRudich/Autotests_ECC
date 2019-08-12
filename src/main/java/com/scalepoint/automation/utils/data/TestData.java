@@ -101,6 +101,10 @@ public class TestData {
         return (ClaimRequest) getData(Data.CWA_CLAIM);
     }
 
+    public static ClaimRequest getClaimRequestFraudAlert() {
+        return (ClaimRequest) getData(Data.FRAUD_ALERT_CLAIM);
+    }
+
     public static Assignment getAssignment() {
         return (Assignment) getData(Data.ASSIGNMENT);
     }
@@ -203,6 +207,7 @@ public class TestData {
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
         CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
+        FRAUD_ALERT_CLAIM("Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
