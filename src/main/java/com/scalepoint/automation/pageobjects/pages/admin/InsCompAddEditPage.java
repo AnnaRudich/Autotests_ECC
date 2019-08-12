@@ -176,9 +176,9 @@ public class InsCompAddEditPage extends AdminBasePage {
 //        $("[name=OM_SettlementNotification]").setSelected(communicationDesigner.omSettlementNotification);
 //        $("[name=OM_SettlementNotificationClosedExternal]").setSelected(communicationDesigner.omSettlementNotificationClosedExternal);
 //        $("[name=OM_SettlementPreview]").setSelected(communicationDesigner.omSettlementPreview);
-//        $("[name=OM_OrderConfirmation]").setSelected(communicationDesigner.omOrderConfirmation);
-//        $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
-//        $("[name=OM_OrderConfirmation_uCommerceEmployee]").setSelected(communicationDesigner.omOrderConfirmation_uCommerceEmployee);
+        $("[name=OM_OrderConfirmation]").setSelected(communicationDesigner.omOrderConfirmation);
+        $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
+        $("[name=OM_OrderConfirmation_uCommerceEmployee]").setSelected(communicationDesigner.omOrderConfirmation_uCommerceEmployee);
 //        $("[name=OM_InvoiceToIC]").setSelected(communicationDesigner.omInvoiceToIC);
 //        $("[name=OM_PayoutNotification]").setSelected(communicationDesigner.omPayoutNotification);
 //        $("[name=OM_ProcuraApprovalRequest]").setSelected(communicationDesigner.omProcuraApprovalRequest);
@@ -207,9 +207,9 @@ public class InsCompAddEditPage extends AdminBasePage {
 //        boolean omSettlementNotification;
 //        boolean omSettlementNotificationClosedExternal;
 //        boolean omSettlementPreview;
-//        boolean omOrderConfirmation;
-//        boolean omOrderConfirmationEmployee;
-//        boolean omOrderConfirmation_uCommerceEmployee;
+        boolean omOrderConfirmation;
+        boolean omOrderConfirmationEmployee;
+        boolean omOrderConfirmation_uCommerceEmployee;
 //        boolean omInvoiceToIC;
 //        boolean omPayoutNotification;
 //        boolean omProcuraApprovalRequest;

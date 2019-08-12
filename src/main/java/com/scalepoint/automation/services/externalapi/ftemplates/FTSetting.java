@@ -37,6 +37,7 @@ public enum FTSetting {
     ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT("input[name=ftfunctionflag3][value='1048576']", CHECKBOX),
     ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD("input[name=ftfunctionflag3][value='8388608']", CHECKBOX),
     DO_NOT_DEPRECIATE_CUSTOMER_DEMAND("input[name=ftfunctionflag][value='4']", CHECKBOX),
+    ENABLE_VOUCHER_PREDICTION("input[name=ftfunctionflag3][value='4096']", CHECKBOX),
 
     //Settings for Self Service
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='1']", CHECKBOX),
@@ -74,7 +75,8 @@ public enum FTSetting {
 
     CPR_NUMBER_ON_REPLACEMENT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX),
 
-    SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX);
+    SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX),
+    SPLIT_REPLACEMENT_EMAIL("input[name='ftfunctionflag'][value='16384']", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;

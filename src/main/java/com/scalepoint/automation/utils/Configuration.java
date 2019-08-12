@@ -15,6 +15,8 @@ public class Configuration {
     public static final String KEY_ECC_SOLR_URL = "url.solr.base";
     public static final String KEY_ECC_DB_URL = "url";
     public static final String KEY_EVENT_API_DB_URL = "eventApiDbUrl";
+    public static final String KEY_MONGO_DB_CONNECTION_STRING = "mongoDbConnectionString";
+    public static final String MONGO_VOUCHER_PREDICTION_COLLECTION_NAME = "mongoVoucherPredictionCollectionName";
 
     public static final String KEY_HUB_REMOTE = "hub.remote";
     public static final String KEY_HUB_REMOTE_ZALENIUM = "hub.remote.zalenium";

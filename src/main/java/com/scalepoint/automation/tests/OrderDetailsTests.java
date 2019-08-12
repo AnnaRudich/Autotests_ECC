@@ -77,7 +77,7 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, Translations translations) {
 
         OrderDetails orderDetails = translations.getOrderDetails();
-        
+
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
@@ -125,6 +125,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
+
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Make product order using shop product search")
@@ -153,7 +154,7 @@ public class OrderDetailsTests extends BaseTest {
         double productPrice = searchPage.getProductPrice(productIndex);
         OrderDetailsPage ordersPage = searchForProductPage
                 .addProductToCart(productIndex)
-                .checkoutProductWithdrawal()
+                .checkoutProductWithdrawalWizard()
                 .toOrdersDetailsPage();
 
         double withdrawValue = activeValuation - productPrice;
@@ -190,6 +191,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  350
      * Tilbageværende erstatning :  0,00
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Credit card")
     public void charlie540_ordersPageWhenWeUseCreditCard(User user, Claim claim, Payments payments, Translations translations) {
@@ -203,7 +205,7 @@ public class OrderDetailsTests extends BaseTest {
         Double productPrice = shopProductSearchPage.getProductPrice(0);
         OrderDetailsPage ordersPage = shopProductSearchPage
                 .addProductToCart(0)
-                .checkoutWithCreditCard(payments.getDankort())
+                .checkoutWithCreditCardWizard(payments.getDankort())
                 .toOrdersDetailsPage();
 
         OrderDetails orderDetails = translations.getOrderDetails();
@@ -380,7 +382,7 @@ public class OrderDetailsTests extends BaseTest {
         Double productPrice = searchPage.getProductPrice(0);
         OrderDetailsPage ordersPage = searchPage
                 .addProductToCart(0)
-                .checkoutWithCreditCard(payments.getDankort())
+                .checkoutWithCreditCardWizard(payments.getDankort())
                 .toOrdersDetailsPage();
 
         OrderDetails orderDetails = translations.getOrderDetails();

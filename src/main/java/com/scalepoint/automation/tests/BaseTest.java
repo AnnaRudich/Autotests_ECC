@@ -43,8 +43,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -62,11 +61,10 @@ import java.util.Objects;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
-@IntegrationTest
 @Listeners({InvokedMethodListener.class, SuiteListener.class, OrderRandomizer.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
@@ -74,6 +72,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected DatabaseApi databaseApi;
+
+    @Autowired
+    protected MongoDbApi mongoDbApi;
 
     @Autowired
     protected WireMock wireMock;
