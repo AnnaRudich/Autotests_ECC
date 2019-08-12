@@ -16,13 +16,22 @@ public abstract class ShopFlow extends Page {
                 selectPlaceMyOrderOption();
     }
 
-    public CustomerDetailsPage checkoutProductWithdrawal() {
+    public CustomerDetailsPage checkoutProductWithdrawalWizard() {
+        return submitWithdrawalWizard().
+                selectPlaceMyOrderOption();
+    }
+
+    public OrderConfirmationPage checkoutProductWithdrawalMail() {
+        return submitWithdrawalWizard().
+                selectPlaceMyOrderOptionMail();
+    }
+
+    public ShopOrderVerificationPage submitWithdrawalWizard(){
         return getAccountBox().
                 toShoppingCart().
                 toCashPayoutPage().
                 withdrawMoney().
-                selectAgreeOption().
-                selectPlaceMyOrderOption();
+                selectAgreeOption();
     }
 
     public CustomerDetailsPage checkoutWithBankTransfer() {
@@ -34,7 +43,17 @@ public abstract class ShopFlow extends Page {
                 selectPlaceMyOrderOption();
     }
 
-    public CustomerDetailsPage checkoutWithCreditCard(Dankort dankort) {
+    public CustomerDetailsPage checkoutWithCreditCardWizard(Dankort dankort) {
+        return submitWithCreditCard(dankort).
+                acceptAndBackToEcc();
+    }
+
+    public OrderConfirmationPage checkoutWithCreditCardMail(Dankort dankort){
+        return submitWithCreditCard(dankort)
+                .accept();
+    }
+
+    public DibsAccept submitWithCreditCard(Dankort dankort){
         return getAccountBox().
                 toShoppingCart().
                 toDepositPage().
@@ -42,8 +61,7 @@ public abstract class ShopFlow extends Page {
                 selectAgreeOption().
                 toDIBSPage().
                 selectDankortOption().
-                submitCardData(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc()).
-                acceptAndBackToEcc();
+                submitCardData(dankort.getNumber(), dankort.getExpMonth(), dankort.getExpYear(), dankort.getCvc());
     }
 
     protected abstract AccountBox getAccountBox();

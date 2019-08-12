@@ -75,7 +75,8 @@ public enum FTSetting {
 
     CPR_NUMBER_ON_REPLACEMENT_REQUIRED("input[name='ftpaymentflag'][value='1048576']", CHECKBOX),
 
-    SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX);
+    SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX),
+    SPLIT_REPLACEMENT_EMAIL("input[name='ftfunctionflag'][value='16384']", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;
