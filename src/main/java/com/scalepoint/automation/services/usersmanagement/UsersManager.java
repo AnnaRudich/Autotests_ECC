@@ -161,12 +161,12 @@ public class UsersManager {
 
             User taken;
 
-            if(!companyMethodArgument.getFraudAlert()) {
-
-                taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
-            }else {
+            if(companyMethodArgument.getFraudAlert()) {
 
                 taken = fraudAlertUsersQueue.take();
+            }else {
+
+                taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
             }
             logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
             return taken;
