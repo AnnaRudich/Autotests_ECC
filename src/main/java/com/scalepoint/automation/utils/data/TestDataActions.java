@@ -3,7 +3,6 @@ package com.scalepoint.automation.utils.data;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.FraudAlert;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.ExistingSuppliers;
@@ -79,24 +78,14 @@ public class TestDataActions {
             Class<?> parameterType = parameterTypes[i];
             if (parameterType.equals(User.class)) {
                 CompanyCode companyCode = CompanyCode.FUTURE50;
-                boolean isFraudAlert = false;
                 Annotation[] annotations = method.getParameterAnnotations()[i];
                 if (annotations.length > 0) {
-
-                    Optional userCompany = Arrays.stream(annotations)
-                            .filter(a -> a.annotationType().equals(UserCompany.class))
-                            .findFirst();
-                    if (userCompany.isPresent()) {
-                        companyCode = ((UserCompany) userCompany.get()).value();
-                    }
-                    Optional fraudAlert = Arrays.stream(annotations)
-                            .filter(a -> a.annotationType().equals(FraudAlert.class))
-                            .findFirst();
-                    if(fraudAlert.isPresent()){
-                        isFraudAlert = true;
+                    Annotation annotation = annotations[0];
+                    if (annotation.annotationType().equals(UserCompany.class)) {
+                        companyCode = ((UserCompany) annotation).value();
                     }
                 }
-                companyCodes.put(UsersManager.CompanyMethodArgument.create(i, companyCode, isFraudAlert), null);
+                companyCodes.put(UsersManager.CompanyMethodArgument.create(i, companyCode), null);
             }
         }
         return companyCodes;

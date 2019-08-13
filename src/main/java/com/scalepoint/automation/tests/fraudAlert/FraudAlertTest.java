@@ -10,7 +10,6 @@ import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.FraudAlert;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
@@ -68,7 +67,7 @@ public class FraudAlertTest extends BaseTest {
 
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
-    public void manualClaimHandlingAddNoFraud(@FraudAlert User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
+    public void manualClaimHandlingAddNoFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -95,7 +94,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Edit")
-    public void manualClaimHandlingEditNoFraud(@FraudAlert User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingEditNoFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -127,7 +126,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Remove")
-    public void manualClaimHandlingRemoveNoFraud(@FraudAlert User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingRemoveNoFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -159,7 +158,7 @@ public class FraudAlertTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-    public void selfServiceAddNoFraud(@FraudAlert User user, Claim claim, ClaimRequest claimRequest) throws IOException {
+    public void selfServiceAddNoFraud(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -200,7 +199,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
-    public void manualClaimHandlingAddFraud(@FraudAlert User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
+    public void manualClaimHandlingAddFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -227,7 +226,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Edit")
-    public void manualClaimHandlingEditFraud(@FraudAlert User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingEditFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -259,7 +258,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Remove")
-    public void manualClaimHandlingRemoveFraud(@FraudAlert User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingRemoveFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -291,7 +290,7 @@ public class FraudAlertTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-    public void selfServiceAddFraud(@UserCompany(TOPDANMARK)@FraudAlert User user, Claim claim, ClaimRequest claimRequest) throws IOException {
+    public void selfServiceAddFraud(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -335,7 +334,7 @@ public class FraudAlertTest extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
-    public void importExcelNoFraud(@FraudAlert User user,
+    public void importExcelNoFraud(@UserCompany(TOPDANMARK) User user,
                                    ClaimRequest claimRequest) throws IOException {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -358,7 +357,7 @@ public class FraudAlertTest extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
-    public void importExcelFraud(@FraudAlert User user,
+    public void importExcelFraud(@UserCompany(TOPDANMARK) User user,
                                  ClaimRequest claimRequest) throws IOException {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);

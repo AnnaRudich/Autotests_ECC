@@ -17,7 +17,6 @@ public class UsersManager {
     private static Logger logger = LogManager.getLogger(UsersManager.class);
 
     private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
-    private static BlockingQueue<User> fraudAlertUsersQueue = new LinkedBlockingQueue<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
     private static User systemUser;
 
@@ -32,11 +31,7 @@ public class UsersManager {
             }
             if (user.isBasic()) {
                 basicUsersQueue.add(user);
-            }
-            if (user.isFraudAlert()) {
-                fraudAlertUsersQueue.add(user);
-            }
-            else {
+            } else {
                 exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompanyCode()),
                         new ArrayBlockingQueue<>(1, true, Collections.singleton(user)));
             }
@@ -63,9 +58,6 @@ public class UsersManager {
         int requestedBasicUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
         boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
 
-        int requestedFraudAlertUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isFraudAlert()).count();
-        boolean fraudAlertUsersAvailable = fraudAlertUsersQueue.size() >= requestedFraudAlertUsersCount;
-
         int requestedExceptionalUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> !usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
         long count = companyMethodArguments.keySet()
                 .stream()
@@ -81,10 +73,10 @@ public class UsersManager {
         logger.info("Found exceptional users: {}", count);
         boolean exceptionalUsersAvailable = count == requestedExceptionalUsersCount;
 
-        logger.info("Basic users available: {} Exceptional Users Available: {} Fraud Alert users available: {}", basicUsersAvailable, exceptionalUsersAvailable, fraudAlertUsersAvailable);
+        logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
 
-        if (basicUsersAvailable && exceptionalUsersAvailable && fraudAlertUsersAvailable) {
-            companyMethodArguments.replaceAll((companyMethodArgument, user) -> takeUser(companyMethodArgument));
+        if (basicUsersAvailable && exceptionalUsersAvailable) {
+            companyMethodArguments.replaceAll((companyMethodArgument, user) -> takeUser(companyMethodArgument.companyCode));
             return true;
         } else {
             return false;
@@ -96,16 +88,14 @@ public class UsersManager {
         private int index;
         private CompanyCode companyCode;
         private User user;
-        private boolean fraudAlert;
 
-        private CompanyMethodArgument(int index, CompanyCode companyCode, boolean fraudAlert) {
+        private CompanyMethodArgument(int index, CompanyCode companyCode) {
             this.index = index;
             this.companyCode = companyCode;
-            this.fraudAlert = fraudAlert;
         }
 
-        public static CompanyMethodArgument create(int index, CompanyCode companyCode, boolean fraudAlert) {
-            return new CompanyMethodArgument(index, companyCode, fraudAlert);
+        public static CompanyMethodArgument create(int index, CompanyCode companyCode) {
+            return new CompanyMethodArgument(index, companyCode);
         }
 
         public CompanyMethodArgument setUser(User user) {
@@ -115,10 +105,6 @@ public class UsersManager {
 
         public User getUser() {
             return user;
-        }
-
-        public boolean getFraudAlert() {
-            return fraudAlert;
         }
 
         public int getIndex() {
@@ -153,21 +139,9 @@ public class UsersManager {
     }
 
 
-    private static User takeUser(CompanyMethodArgument companyMethodArgument) {
-
-        CompanyCode companyCode = companyMethodArgument.companyCode;
-
+    private static User takeUser(CompanyCode companyCode) {
         try {
-
-            User taken;
-
-            if(companyMethodArgument.getFraudAlert()) {
-
-                taken = fraudAlertUsersQueue.take();
-            }else {
-
-                taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
-            }
+            User taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
             logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
             return taken;
         } catch (Exception e) {
@@ -178,15 +152,10 @@ public class UsersManager {
 
     public static void releaseUser(User user) {
         logger.info("Returned: {}", user.getLogin());
-
         if (user.isBasic()) {
             basicUsersQueue.add(user);
         } else {
-            if(user.isFraudAlert()){
-                fraudAlertUsersQueue.add(user);
-            }else {
-                exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
-            }
+            exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
         }
     }
 
