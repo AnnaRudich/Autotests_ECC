@@ -92,6 +92,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant("topdanmark");
         claimRequest.setCompany("topdanmark");
+        claimRequest.setCheckForFraud(false);
     }
 
 
