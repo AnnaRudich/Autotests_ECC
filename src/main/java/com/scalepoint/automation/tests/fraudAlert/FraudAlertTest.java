@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.fraudAlert;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.scalepoint.automation.model.Item;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -16,6 +15,7 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Item;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -46,7 +46,7 @@ public class FraudAlertTest extends BaseTest {
                 .getMappings()
                 .stream()
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-        new EventApiService().scheduleSubscription("3");
+        new EventApiService().scheduleSubscription("4");
     }
 
     private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
@@ -78,7 +78,7 @@ public class FraudAlertTest extends BaseTest {
                 .closeSidWithOk();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "0");
+                .waitForClaimUpdatedEvents(token, 1);
 
         Item item = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -110,7 +110,7 @@ public class FraudAlertTest extends BaseTest {
                 .closeSidWithOk();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "1");
+                .waitForClaimUpdatedEvents(token, 2);
 
         Item item = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -139,7 +139,7 @@ public class FraudAlertTest extends BaseTest {
                 .delete();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "1");
+                .waitForClaimUpdatedEvents(token, 2);
 
         List<Item> items = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -184,7 +184,7 @@ public class FraudAlertTest extends BaseTest {
                 .selectSubmitOption();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "0");
+                .waitForClaimUpdatedEvents(token, 2);
 
         Item item = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -210,7 +210,7 @@ public class FraudAlertTest extends BaseTest {
                 .closeSidWithOk();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "0");
+                .waitForClaimUpdatedEvents(token, 1);
 
         Item item = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -242,7 +242,7 @@ public class FraudAlertTest extends BaseTest {
                 .closeSidWithOk();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "1");
+                .waitForClaimUpdatedEvents(token, 1);
 
         Item item = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -271,7 +271,7 @@ public class FraudAlertTest extends BaseTest {
                 .delete();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "1");
+                .waitForClaimUpdatedEvents(token, 1);
 
         List<Item> items = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -316,7 +316,7 @@ public class FraudAlertTest extends BaseTest {
                 .selectSubmitOption();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "0");
+                .waitForClaimUpdatedEvents(token, 1);
 
         Item item = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -342,7 +342,7 @@ public class FraudAlertTest extends BaseTest {
                 .importExcelFile(excelImportPath);
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "0");
+                .waitForClaimUpdatedEvents(token, 1);
 
         List<Item> items = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)
@@ -365,7 +365,7 @@ public class FraudAlertTest extends BaseTest {
                 .importExcelFile(excelImportPath);
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvent(token, "0");
+                .waitForClaimUpdatedEvents(token, 1);
 
         List<Item> items = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token)

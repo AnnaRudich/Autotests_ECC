@@ -1,9 +1,9 @@
 package com.scalepoint.automation.services.restService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scalepoint.automation.model.CaseData;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -72,7 +72,7 @@ public class UnifiedIntegrationService{
 //                .response();
 //    }
 
-    public CaseData getCaseEndpointByToken(String country, String tenant, String caseToken) throws IOException {
+    public Case getCaseEndpointByToken(String country, String tenant, String caseToken) throws IOException {
 
         log.info(Configuration.getEnvironmentUrl());
         String response = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH).log().all()
@@ -92,7 +92,7 @@ public class UnifiedIntegrationService{
                 .getBody()
                 .print();
 
-        return new ObjectMapper().readValue(response, CaseData.class);
+        return new ObjectMapper().readValue(response, Case.class);
     }
 
     public Response getCaseEndpointByCaseNumber(String country, String tenant, String caseType, String caseNumber) {

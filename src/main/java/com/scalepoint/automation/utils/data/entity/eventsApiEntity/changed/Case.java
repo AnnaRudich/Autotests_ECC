@@ -1,9 +1,9 @@
-package com.scalepoint.automation.model;
+package com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed;
 
 import lombok.Data;
 
 @Data
-public class CaseData {
+public class Case {
     String token;
     String tenant;
     String country;

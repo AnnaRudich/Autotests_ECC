@@ -1,6 +1,5 @@
-package com.scalepoint.automation.model;
+package com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.List;
 public class Item {
     String category;
     String subCategory;
+    String subCategoryToken;
     String description;
     String itemId;
     Long uiItemId;

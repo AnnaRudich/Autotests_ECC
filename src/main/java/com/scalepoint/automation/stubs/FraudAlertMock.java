@@ -7,19 +7,24 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.utils.JsonUtils;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 public class FraudAlertMock {
+
+    protected Logger log = LogManager.getLogger(FraudAlertMock.class);
 
     private static WireMock wireMock;
     private static Map<String, FraudAlertStubs> stubs = new HashMap<>();
@@ -75,26 +80,33 @@ public class FraudAlertMock {
             return this;
         }
 
-        public JsonNode waitForClaimUpdatedEvent(String token, String eventId) {
-            return await()
+        public List<JsonNode> waitForClaimUpdatedEvents(String token, int count) {
+            await()
                     .pollInterval(POLL_INTERVAL, TimeUnit.SECONDS)
                     .timeout(TIMEOUT, TimeUnit.SECONDS)
-                    .until(() -> {
-                        try {
-                            return wireMock.find(postRequestedFor(urlPathEqualTo(ROUTE_CLAIM_UPDATED)))
-                                    .stream()
-                                    .map(loggedRequest -> JsonUtils.stringToJsonNode(loggedRequest.getBodyAsString()))
-                                    .filter(jsonNode -> jsonNode.path("case").path("token").textValue().equals(token))
-                                    .filter(jsonNode -> jsonNode
-                                            .path("eventId")
-                                            .asText()
-                                            .equals(eventId))
-                                    .findFirst()
-                                    .get();
-                        } catch (NoSuchElementException e) {
-                            return null;
-                        }
-                    }, is(not(nullValue())));
+                    .until(() -> getClaimEventsByToken(token)
+                            .size(),
+                            equalTo(count));
+
+            return getClaimEventsByToken(token);
+        }
+
+        public List<JsonNode> getClaimEventsByToken(String token){
+
+            return wireMock.find(postRequestedFor(urlPathEqualTo(ROUTE_CLAIM_UPDATED)))
+                    .stream()
+                    .map(loggedRequest -> JsonUtils.stringToJsonNode(loggedRequest.getBodyAsString()))
+                    .filter(jsonNode ->
+                            jsonNode.path("case").path("token").textValue().equals(token))
+                    .collect(Collectors.toList());
+        }
+
+        public FraudAlertStubs printAllUnmatchedRequests(){
+            wireMock
+                    .findAllUnmatchedRequests()
+                    .stream()
+                    .forEach(loggedRequest -> log.info(loggedRequest.getBodyAsString()));
+            return this;
         }
         public FraudAlertStubs doValidation(Consumer<SchemaValidation> schemaValidationFunc) {
             schemaValidationFunc.accept(new SchemaValidation());
