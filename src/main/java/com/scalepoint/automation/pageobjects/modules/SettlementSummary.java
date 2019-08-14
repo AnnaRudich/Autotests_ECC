@@ -93,6 +93,7 @@ public class SettlementSummary extends Module {
         if (!subtotalValue.isDisplayed()) {
             expand();
         }
+        $(subtotalValue).waitUntil(not(exactText("")), Constants.WAIT_UNTIL_MS);
         return subtotalValue.getText();
     }
 
