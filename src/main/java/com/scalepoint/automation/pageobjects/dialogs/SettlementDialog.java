@@ -927,7 +927,6 @@ public class SettlementDialog extends BaseDialog {
         Matcher m = PATTERN.matcher(voucherName);
         if (m.find())
             voucherName = m.group("voucherName").trim();
-
         return voucherName;
         }
 
