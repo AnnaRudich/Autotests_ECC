@@ -927,6 +927,7 @@ public class SettlementDialog extends BaseDialog {
         Matcher m = PATTERN.matcher(voucherName);
         if (m.find())
             voucherName = m.group("voucherName").trim();
+
         return voucherName;
         }
 
@@ -1212,7 +1213,10 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertVoucherIsSelected(String voucherName){
             logger.info("assertPredictedVoucherIsDisplayed");
             String actualSelectedVoucher = getVoucherName();
-            assertThat(actualSelectedVoucher.equals(voucherName))
+            if(actualSelectedVoucher.equals("")) {
+                logger.error("actual voucher name is null");
+            }else
+                assertThat(actualSelectedVoucher.equals(voucherName))
                     .as("voucher selected should be " + voucherName + " but was " + actualSelectedVoucher).isTrue();
             return this;
         }
