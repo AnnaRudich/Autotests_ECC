@@ -35,6 +35,7 @@ public class VoucherPredictionTest extends BaseTest {
                 .doAssert(sid -> sid.assertVoucherIsSelected(mongoDbApi.getVoucherPredictedObjectsBy(claim.getClaimNumber(), lineDescription)
                         .get(0).getPredictedVoucher().getVoucherName()));
     }
+
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider",
