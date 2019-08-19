@@ -116,14 +116,14 @@ public class SettlementSummary extends Module {
         if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
             expand();
         }
-        return fraudStatus.getText().equals("Possible fraud is detected");
+        return fraudStatus.getText().equals("Possible ooo is detected");
     }
 
     private boolean isNotFradulent(){
         if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
             expand();
         }
-        return fraudStatus.getText().equals("No fraud was detected");
+        return fraudStatus.getText().equals("No ooo was detected");
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
