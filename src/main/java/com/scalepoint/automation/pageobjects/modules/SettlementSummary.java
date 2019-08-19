@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
 import org.openqa.selenium.By;
@@ -52,6 +53,12 @@ public class SettlementSummary extends Module {
     @FindBy(id = "auditInfoPanel")
     private WebElement auditInfoPanel;
 
+    @FindBy(css = "[id^=fraudStatus] [role=textbox]")
+    private WebElement fraudStatus;
+
+    @FindBy(id = "settlementSummaryTotalsPanel")
+    private WebElement settlementSummaryTotalsPanel;
+
     public void cancel() {
         clickUsingJsIfSeleniumClickReturnError(cancel);
     }
@@ -78,7 +85,9 @@ public class SettlementSummary extends Module {
     }
 
     private void expand() {
-        clickUsingJsIfSeleniumClickReturnError(expand);
+
+        $(expand).waitUntil(Condition.visible, 6000).click();
+        $(settlementSummaryTotalsPanel).waitUntil(Condition.visible, 6000);
     }
 
     private String getClaimSumValue() {
@@ -101,6 +110,20 @@ public class SettlementSummary extends Module {
             expand();
         }
         return completeClaim.isEnabled();
+    }
+
+    private boolean isFradulent(){
+        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
+            expand();
+        }
+        return fraudStatus.getText().equals("Possible fraud is detected");
+    }
+
+    private boolean isNotFradulent(){
+        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
+            expand();
+        }
+        return fraudStatus.getText().equals("No fraud was detected");
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
@@ -141,6 +164,16 @@ public class SettlementSummary extends Module {
 
         public Asserts assertCompleteClaimEnabled() {
             Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
+            return this;
+        }
+
+        public Asserts assertFraudulent(){
+            Assert.assertTrue(isFradulent(), "Claim is not fraudulent");
+            return this;
+        }
+
+        public Asserts assertNotFraudulent(){
+            Assert.assertTrue(isNotFradulent(), "Claim is fraudulent");
             return this;
         }
 

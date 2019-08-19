@@ -444,7 +444,8 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setNewPrice(Double amount) {
         SelenideElement element = $(newPrice).waitUntil(Condition.visible, 6000);
-        element.clear();
+        element.doubleClick();
+        element.sendKeys(Keys.DELETE);
         element.setValue(OperationalUtils.format(amount))
                 .pressTab();
         waitForJavascriptRecalculation();
@@ -934,7 +935,7 @@ public class SettlementDialog extends BaseDialog {
         if (m.find())
             voucherName = m.group("voucherName").trim();
         return voucherName;
-        }
+    }
 
     public List<VoucherDropdownElement> parseVoucherDropdown() {
         List<String> comboBoxOptions = voucher.getComboBoxOptions();

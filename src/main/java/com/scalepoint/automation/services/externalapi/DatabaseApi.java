@@ -1,27 +1,30 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.scalepoint.automation.shared.CwaTaskLog;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
-import com.scalepoint.automation.shared.CwaTaskLog;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import java.sql.*;
-import java.util.HashMap;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+
 @SuppressWarnings("SqlDialectInspection")
 public class DatabaseApi {
+
+    private static final int POLL_MS = 1000;
+    private static final int STATUS_CHANGE_TIMEOUT = 120;
 
     private static Logger logger = LogManager.getLogger(DatabaseApi.class);
     private JdbcTemplate jdbcTemplate;
@@ -78,6 +81,14 @@ public class DatabaseApi {
 
     public String getSettlementRevisionTokenByClaimNumberAndClaimStatusCancelled(String claimNumber) {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'X'", String.class, claimNumber);
+    }
+
+    public int waitForFraudStatusChange(int status, String claimNumber){
+        return  await()
+                .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                .timeout(STATUS_CHANGE_TIMEOUT, TimeUnit.SECONDS)
+                .until(() -> jdbcTemplate.queryForObject("SELECT [fraudStatus]\n" +
+                        "  FROM [QA05_ECC_DK].[dbo].[User] WHERE [ClaimNumber] = ?", int.class, claimNumber), equalTo(status));
     }
 
     private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {

@@ -26,6 +26,18 @@ public class OauthTestAccountsApi {
         return this;
     }
 
+    public OauthTestAccountsApi sendRequest(Scope scope, String clientId, String clientSecret) {
+        this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
+                .formParam("grant_type", "client_credentials")
+                .formParam("client_id", clientId)
+                .formParam("client_secret", clientSecret)
+                .formParam("scope", scope.getScope())
+                .when()
+                .post()
+                .then().log().all().statusCode(HttpStatus.SC_OK).extract().as(Token.class);
+        return this;
+    }
+
     public Token getToken() {
         return this.token;
     }
