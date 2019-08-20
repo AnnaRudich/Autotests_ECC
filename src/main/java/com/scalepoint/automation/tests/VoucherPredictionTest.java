@@ -16,10 +16,11 @@ import java.time.Year;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 import static com.scalepoint.automation.utils.Constants.PRICE_100;
 
+@RequiredSetting(type = FTSetting.ENABLE_VOUCHER_PREDICTION)
 public class VoucherPredictionTest extends BaseTest {
 
     private static final String lineDescription = "claimLine1";
-    @RequiredSetting(type = FTSetting.ENABLE_VOUCHER_PREDICTION)
+
     @Test(dataProvider = "testDataProvider",
             description = "MIKE-41 - call Improved voucher match service is SID, manual line")
     public void mike41_improvedVoucherMatchForManualLines(User user, Claim claim, ClaimItem claimItem) {
