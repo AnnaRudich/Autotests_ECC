@@ -13,6 +13,7 @@ import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -20,6 +21,7 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -641,7 +643,7 @@ public class SidManualItemsTests extends BaseTest {
                 .setValuation(NEW_PRICE)
                 .closeSidWithOk();
     }
-
+    @RunOn(DriverType.CHROME)
     @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM)
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
     @Test(dataProvider = "testDataProvider",
@@ -658,8 +660,6 @@ public class SidManualItemsTests extends BaseTest {
                     sid.assertItemIsPresent(claimItem1.getTextFieldSP());
                 });
 
-        new SettlementSummary().doAssert(asserts -> asserts.assertSubtotalSumValueIs(claimItem1.getNewPriceSP()));
-
         new SettlementDialog().ensureWeAreAt()
 
                 .setBaseData(claimItem2)
@@ -672,6 +672,6 @@ public class SidManualItemsTests extends BaseTest {
         new SettlementSummary().doAssert(asserts -> asserts.assertSubtotalSumValueIs(claimItem2.getNewPriceSP()+claimItem1.getNewPriceSP()));
 
         new SettlementPage().editFirstClaimLine()
-        .doAssert(SettlementDialog.Asserts::assertThereIsNoAddButton);
+                .doAssert(SettlementDialog.Asserts::assertThereIsNoAddButton);
     }
 }

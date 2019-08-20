@@ -154,7 +154,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Create claim using unified integration")
-            public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest) {
+    public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest) {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
                 .toCustomerDetails()
