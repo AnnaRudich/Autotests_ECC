@@ -214,7 +214,7 @@ public class FraudAlertTest extends BaseTest {
                 .selectSubmitOption();
 
         fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 2);
+                .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token);
