@@ -113,6 +113,10 @@ public class TestData {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
     }
 
+    public static InsertSettlementItem getInsertSettlementItemWithoutVoucher() {
+        return (InsertSettlementItem) getData(Data.CLAIM_ITEM_WITHOUT_VOUCHER);
+    }
+
     public static EccIntegration getEccIntegration() {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
@@ -210,6 +214,7 @@ public class TestData {
         FRAUD_ALERT_CLAIM("Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
+        CLAIM_ITEM_WITHOUT_VOUCHER("Claim/ClaimItemWithoutVoucher.xml", InsertSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
         TRANSLATIONS("Translations.xml", Translations.class);
