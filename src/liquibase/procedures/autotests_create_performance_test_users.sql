@@ -17,7 +17,7 @@ AS
 
 	DECLARE @a int = 0
 	DECLARE @username NVARCHAR(256)
-	WHILE @a < 100
+	WHILE @a < @amount
 	BEGIN
 	    SET @a = @a + 1
 	    SET @username = concat(@name, @a)
