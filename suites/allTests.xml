@@ -13,6 +13,7 @@
                 <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
                 <exclude name="com.scalepoint.automation.tests.selfservice"/>
                 <exclude name="com.scalepoint.automation.tests.sidQUnit"/>
+                <exclude name="com.scalepoint.automation.tests.fraudAlert"/>
             </package>
         </packages>
         <classes>
