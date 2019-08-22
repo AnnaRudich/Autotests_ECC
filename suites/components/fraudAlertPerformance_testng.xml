@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Fraud Alert" configfailurepolicy="continue" parallel="methods" data-provider-thread-count="100">
+    <test verbose="1" name="Fraud Alert" enabled="true" preserve-order="true" >
+        <classes>
+            <class name="com.scalepoint.automation.tests.fraudAlertPerformance.FraudAlertPerformanceTest" />
+        </classes>
+    </test>
+</suite>

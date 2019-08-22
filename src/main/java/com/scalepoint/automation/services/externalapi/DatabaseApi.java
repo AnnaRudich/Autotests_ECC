@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.equalTo;
 @SuppressWarnings("SqlDialectInspection")
 public class DatabaseApi {
 
-    private static final int POLL_MS = 1000;
+    private static final int POLL_MS = 10;
     private static final int STATUS_CHANGE_TIMEOUT = 120;
 
     private static Logger logger = LogManager.getLogger(DatabaseApi.class);

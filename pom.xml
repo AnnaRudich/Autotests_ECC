@@ -144,7 +144,7 @@
         <htmlelements.version>1.18</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
         <java.version>1.8</java.version>
-        <jackson.version>2.6.0</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.9.2</jsoup.version>
         <jaxb.version>2.2.12</jaxb.version>
         <qatools.properties.version>2.0.RC3</qatools.properties.version>
@@ -558,6 +558,12 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.9.9</version>
         </dependency>
 
     </dependencies>
