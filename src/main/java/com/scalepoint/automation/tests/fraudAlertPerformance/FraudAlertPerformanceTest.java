@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.fraudAlert;
+package com.scalepoint.automation.tests.fraudAlertPerformance;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.externalapi.EventApiService;
