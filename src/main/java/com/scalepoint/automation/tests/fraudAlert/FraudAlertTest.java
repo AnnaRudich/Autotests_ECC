@@ -10,6 +10,7 @@ import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
@@ -18,7 +19,9 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Item;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -80,7 +83,7 @@ public class FraudAlertTest extends BaseTest {
                 .disableAge()
                 .closeSidWithOk();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -97,7 +100,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(claimItem.getCustomerDemand());
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(claimItem.getNewPriceSP());
 
-        new EventApiService().sendFraudStatus(caseChanged, "FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
 
         settlementPage
@@ -121,7 +124,7 @@ public class FraudAlertTest extends BaseTest {
                 .disableAge()
                 .closeSidWithOk();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -138,7 +141,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(claimItem.getCustomerDemand());
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2000.0);
 
-        new EventApiService().sendFraudStatus(caseChanged, "NOT_FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(1), "NOT_FRAUDULENT");
         databaseApi.waitForFraudStatusChange(2, claimRequest.getCaseNumber());
 
         settlementPage
@@ -159,7 +162,7 @@ public class FraudAlertTest extends BaseTest {
                 .selectLinesByDescriptions(claimItem.getTextFieldSP())
                 .delete();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -172,7 +175,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(items.size()).isEqualTo(0);
 
-        new EventApiService().sendFraudStatus(caseChanged, "NOT_FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(1), "NOT_FRAUDULENT");
         databaseApi.waitForFraudStatusChange(2, claimRequest.getCaseNumber());
 
         settlementPage
@@ -213,7 +216,7 @@ public class FraudAlertTest extends BaseTest {
                 .selfServicePage()
                 .selectSubmitOption();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -229,7 +232,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(2000.0);
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2500.0);
 
-        new EventApiService().sendFraudStatus(caseChanged, "NOT_FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "NOT_FRAUDULENT");
         databaseApi.waitForFraudStatusChange(2, claimRequest.getCaseNumber());
 
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
@@ -248,7 +251,7 @@ public class FraudAlertTest extends BaseTest {
                 .disableAge()
                 .closeSidWithOk();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -264,7 +267,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(claimItem.getCustomerDemand());
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(claimItem.getNewPriceSP());
 
-        new EventApiService().sendFraudStatus(caseChanged, "NOT_FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "NOT_FRAUDULENT");
         databaseApi.waitForFraudStatusChange(2, claimRequest.getCaseNumber());
 
         settlementPage
@@ -288,7 +291,7 @@ public class FraudAlertTest extends BaseTest {
                 .disableAge()
                 .closeSidWithOk();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -305,7 +308,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(claimItem.getCustomerDemand());
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2000.0);
 
-        new EventApiService().sendFraudStatus(caseChanged, "FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(1), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
 
         settlementPage
@@ -326,7 +329,7 @@ public class FraudAlertTest extends BaseTest {
                 .selectLinesByDescriptions(claimItem.getTextFieldSP())
                 .delete();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -339,7 +342,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(items.size()).isEqualTo(0);
 
-        new EventApiService().sendFraudStatus(caseChanged, "FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
 
         settlementPage
@@ -380,7 +383,7 @@ public class FraudAlertTest extends BaseTest {
                 .selfServicePage()
                 .selectSubmitOption();
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -396,7 +399,7 @@ public class FraudAlertTest extends BaseTest {
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(2000.0);
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2500.0);
 
-        new EventApiService().sendFraudStatus(caseChanged, "FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
 
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
@@ -415,7 +418,7 @@ public class FraudAlertTest extends BaseTest {
         SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .importExcelFile(excelImportPath);
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -428,7 +431,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(items.size()).isEqualTo(50);
 
-        new EventApiService().sendFraudStatus(caseChanged, "NOT_FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "NOT_FRAUDULENT");
         databaseApi.waitForFraudStatusChange(2, claimRequest.getCaseNumber());
 
         settlementPage
@@ -447,7 +450,7 @@ public class FraudAlertTest extends BaseTest {
         SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .importExcelFile(excelImportPath);
 
-        fraudAlertStubs
+        List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
@@ -460,7 +463,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(items.size()).isEqualTo(50);
 
-        new EventApiService().sendFraudStatus(caseChanged, "FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
 
         settlementPage

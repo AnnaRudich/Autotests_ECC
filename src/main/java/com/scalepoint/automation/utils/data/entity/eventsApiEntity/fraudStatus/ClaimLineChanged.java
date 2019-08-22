@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class FraudStatus {
-
+public class ClaimLineChanged {
     String eventId;
     String eventType;
     String payloadVersion;
+    String correlationId;
     String timestamp;
     @JsonProperty("case")
-    CaseFraudStatus caseFraudStatus;
-    String status;
+    CaseClaimLineChanged caseClaimLineChanged;
 }

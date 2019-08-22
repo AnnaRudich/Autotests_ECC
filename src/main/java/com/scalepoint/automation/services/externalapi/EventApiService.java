@@ -1,7 +1,9 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.CaseClaimLineChanged;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.CaseFraudStatus;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.FraudStatus;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
@@ -37,22 +39,24 @@ public class EventApiService{
                 .all();
     }
 
-    public void sendFraudStatus(Case caseChanged, String status){
+    public void sendFraudStatus(ClaimLineChanged claimLineChanged, String status){
         Token token = new OauthTestAccountsApi()
                 .sendRequest(OauthTestAccountsApi.Scope.EVENTS, "topdanmark_dk_integration", "fT8nw3fMVWryIFTmjUqcWgSmb9wki4YNRcoBAG53uZQ")
                 .getToken();
-        com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.Case fraudStatusCase = new com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.Case();
-        fraudStatusCase.setCaseType(caseChanged.getCaseType());
-        fraudStatusCase.setNumber(caseChanged.getCaseNumber());
-        fraudStatusCase.setToken(caseChanged.getToken());
-        fraudStatusCase.setUuid(UUID.randomUUID().toString());
+
+        CaseClaimLineChanged caseClaimLineChanged = claimLineChanged.getCaseClaimLineChanged();
+        CaseFraudStatus caseFraudStatus = new CaseFraudStatus();
+        caseFraudStatus.setCaseType(caseClaimLineChanged.getCaseType());
+        caseFraudStatus.setNumber(caseClaimLineChanged.getNumber());
+        caseFraudStatus.setToken(caseClaimLineChanged.getToken());
+        caseFraudStatus.setUuid(UUID.randomUUID().toString());
 
         FraudStatus fraudStatus= new FraudStatus();
+        fraudStatus.setEventId(claimLineChanged.getEventId());
         fraudStatus.setEventType("fraud_status");
         fraudStatus.setPayloadVersion("1.0.0");
         fraudStatus.setStatus(status);
-        fraudStatus.setCaseChanged(fraudStatusCase);
-        fraudStatus.setUuid(String.valueOf(UUID.randomUUID()));
+        fraudStatus.setCaseFraudStatus(caseFraudStatus);
         fraudStatus.setTimestamp(LocalDateTime.now().toInstant(ZoneOffset.UTC).toString());
         log.info(Configuration.getEnvironmentUrl());
         given().baseUri("http://ecc-qa05.spcph.local:86").basePath("/api/events/").log().all()

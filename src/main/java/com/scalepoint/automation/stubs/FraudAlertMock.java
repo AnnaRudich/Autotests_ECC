@@ -1,11 +1,12 @@
 package com.scalepoint.automation.stubs;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
 import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.utils.JsonUtils;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,7 +81,7 @@ public class FraudAlertMock {
             return this;
         }
 
-        public List<JsonNode> waitForClaimUpdatedEvents(String token, int count) {
+        public List<ClaimLineChanged> waitForClaimUpdatedEvents(String token, int count) {
             await()
                     .pollInterval(POLL_INTERVAL, TimeUnit.SECONDS)
                     .timeout(TIMEOUT, TimeUnit.SECONDS)
@@ -91,13 +92,20 @@ public class FraudAlertMock {
             return getClaimEventsByToken(token);
         }
 
-        public List<JsonNode> getClaimEventsByToken(String token){
+        public List<ClaimLineChanged> getClaimEventsByToken(String token){
 
             return wireMock.find(postRequestedFor(urlPathEqualTo(ROUTE_CLAIM_UPDATED)))
                     .stream()
-                    .map(loggedRequest -> JsonUtils.stringToJsonNode(loggedRequest.getBodyAsString()))
-                    .filter(jsonNode ->
-                            jsonNode.path("case").path("token").textValue().equals(token))
+                    .map(loggedRequest -> {
+                        try {
+                            return new ObjectMapper().readValue(loggedRequest.getBodyAsString(), ClaimLineChanged.class);
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .filter(claimLineChanged ->
+                            claimLineChanged.getCaseClaimLineChanged().getToken().equals(token))
                     .collect(Collectors.toList());
         }
 
