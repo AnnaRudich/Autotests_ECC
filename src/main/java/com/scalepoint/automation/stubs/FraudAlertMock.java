@@ -52,7 +52,7 @@ public class FraudAlertMock {
         private static final String CONTENT_TYPE = "application/json";
         public static final String ROUTE_CLAIM_UPDATED = "/fraudAlert";
         public static final String TOKEN_ENDPOINT = "/token";
-        public static final int POLL_INTERVAL = 1;
+        public static final int POLL_INTERVAL = 10;
         public static final int TIMEOUT = 60;
 
         @Getter
@@ -82,10 +82,10 @@ public class FraudAlertMock {
 
         public List<JsonNode> waitForClaimUpdatedEvents(String token, int count) {
             await()
-                    .pollInterval(POLL_INTERVAL, TimeUnit.SECONDS)
+                    .pollInterval(POLL_INTERVAL, TimeUnit.MILLISECONDS)
                     .timeout(TIMEOUT, TimeUnit.SECONDS)
                     .until(() -> getClaimEventsByToken(token)
-                            .size(),
+                                    .size(),
                             equalTo(count));
 
             return getClaimEventsByToken(token);

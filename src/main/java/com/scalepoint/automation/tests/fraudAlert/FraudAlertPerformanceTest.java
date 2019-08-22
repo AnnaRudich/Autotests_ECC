@@ -20,6 +20,9 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +50,9 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
-        ClaimSettlementItemsService claimSettlementItemsService = BaseService.loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem());
 
+        ClaimSettlementItemsService claimSettlementItemsService = BaseService.loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem());
+        LocalDateTime start = LocalDateTime.now();
         String token = claimSettlementItemsService.getData().getClaimToken();
                 fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
@@ -58,6 +62,10 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
 
         new EventApiService().sendFraudStatus(caseChanged, "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
+        LocalDateTime end = LocalDateTime.now();
+
+        long duration = Duration.between(end, start).getSeconds();
+        log.info("Duration: {}", duration);
     }
 
     @Test(enabled = false)
@@ -79,16 +87,11 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                 .loginAndOpenClaimWithItems(user, TestData.getClaimRequestFraudAlert(), insertSettlementItem)
                 .removeLines(insertSettlementItem);
     }
-    @Test(enabled = false)
-    public void test(User user){
-
-        System.out.println("--------------" + user.getLogin());
-    }
 
     @DataProvider(name = "usersDataProvider", parallel = true)
     public static Object[][] usersDataProvider(Method method) {
 
-        int size = 4;
+        int size = 10;
 
         Object[][] objects = new Object[size][1];
 
