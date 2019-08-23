@@ -130,7 +130,7 @@ public enum DriversFactory {
         WebDriver driver = null;
         try {
             ChromeOptions desiredCapabilitiesForChrome = getDesiredCapabilitiesForChrome();
-            desiredCapabilitiesForChrome.setBinary("C:\\Users\\ecc_auto\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe");
+            desiredCapabilitiesForChrome.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
             driver = new RemoteWebDriver(new URL(hubUrl), desiredCapabilitiesForChrome.merge(capabilities));
             ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
             setTimeouts(driver);
