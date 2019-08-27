@@ -1217,7 +1217,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertVoucherIsSelected(String voucherName){
-            logger.info("assertPredictedVoucherIsDisplayed");
+            assertVoucherCardIsShown();
             String actualSelectedVoucher = getVoucherName();
             assertThat(actualSelectedVoucher.equals(voucherName))
                     .as("voucher selected should be " + voucherName + " but was " + actualSelectedVoucher).isTrue();
@@ -1441,6 +1441,12 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertBrandTextIs(String brandLink) {
             assertEquals($(brand).getText(), brandLink, "Wrong Brand is Displayed");
+            return this;
+        }
+
+        public Asserts assertVoucherCardIsShown() {
+            SelenideElement voucherCard = $("#status_voucher_replacement_card");
+            assertThat(voucherCard.is(Condition.visible)).as("voucher card is not displayed").isTrue();
             return this;
         }
 

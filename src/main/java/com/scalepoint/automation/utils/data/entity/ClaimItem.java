@@ -36,6 +36,8 @@ public class ClaimItem {
     @XmlElement
     private String excelPath1;
     @XmlElement
+    private String excelPathVoucherPrediction;
+    @XmlElement
     private String excelWithGroupingPath;
     @XmlElement
     private String xlsDescr1;
@@ -183,6 +185,10 @@ public class ClaimItem {
 
     public String getExcelPath1() {
         return getResourcePath(excelPath1);
+    }
+
+    public String getExcelPathVoucherPrediction(){
+        return getResourcePath(excelPathVoucherPrediction);
     }
 
     public String getXlsDescr1() {
