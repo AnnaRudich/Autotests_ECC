@@ -1,6 +1,7 @@
 package com.scalepoint.automation.services.externalapi.ftoggle;
 
 public enum FeatureIds {
+    AUTOCAT_IN_EXCEL_IMPORT,
     DB_BLOCKING,
     AUTOCAT_IN_SID,
     EVOUCHER_BACKEND_SYNCHRONOUS_CALLS,
