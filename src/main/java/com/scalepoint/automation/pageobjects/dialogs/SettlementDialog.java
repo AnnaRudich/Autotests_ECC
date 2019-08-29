@@ -480,7 +480,15 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog fillVoucher(String voucherName) {
         if (voucher.isDisplayed()) {
-            voucher.select(voucherName);
+            $("#vouchers-combobox-trigger-picker")
+                    .hover()
+                    .click();
+            $$("#vouchers-combobox-picker-listEl li")
+                    .stream()
+                    .filter(element -> element.text().contains(voucherName))
+                    .findFirst()
+                    .get()
+                    .click();
         } else {
             Wait.waitUntilVisible(availableVoucher);
             availableVoucher.select(voucherName);
@@ -928,7 +936,7 @@ public class SettlementDialog extends BaseDialog {
         if (m.find())
             voucherName = m.group("voucherName").trim();
         return voucherName;
-        }
+    }
 
     public List<VoucherDropdownElement> parseVoucherDropdown() {
         List<String> comboBoxOptions = voucher.getComboBoxOptions();
