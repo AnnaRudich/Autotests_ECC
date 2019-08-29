@@ -13,16 +13,22 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.data.entity.*;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.Supplier;
+import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
 import java.util.Objects;
 
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.*;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.EMAIL_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PERSONAL_CODE_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PHONE_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.USE_PORTAL_REQUIRED;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
@@ -30,7 +36,7 @@ public class VoucherAgreementTests extends BaseTest {
 
     private static final String AUTOTEST_SUPPLIER_VA_TESTS = "Autotest-Supplier-VA-Tests";
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "Create voucher with brands and tags and later use it in sid")
     public void charlie550_createVoucherWithBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         String brand = "brand_test";
@@ -268,7 +274,7 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_initialCategoryAdding
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to remove assigned category for new voucher")
     public void ecc3038_removeAssignedCategory(User user, Voucher voucher, ClaimItem claimItem) {
         loginToEccAdmin(user)
@@ -363,7 +369,7 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_leaveSPVoucherInactiveStatus
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to join left Shared Voucher for IC SM. Voucher gets status active")
     public void ecc3038_joinLeftSPVoucherActiveStatus(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
@@ -408,7 +414,7 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC2 user navigates to Supply Management
      * THEN: V1 statues is "Yes"
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 Voucher left by IC1 is active for IC2")
     public void ecc3038_voucherLeftByIC1ActiveIC2(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser1, User futureUser2, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
@@ -439,7 +445,7 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC1 User creates voucher V1 for S1
      * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialog
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialog")
     public void ecc3038_ic1VoucherNotAvailableIC2(User futureUser1, User futureUser2, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser1, AUTOTEST_SUPPLIER_VA_TESTS)
