@@ -44,12 +44,12 @@ interface SupplierTabs {
     }
 
     default SuppliersPage closeSupplier() {
-        $(By.className(" edit-supplier-close-btn")).click();
+        $(By.className("edit-supplier-close-btn")).click();
         return Page.at(SuppliersPage.class);
     }
 
     default SuppliersPage cancelSupplier() {
-        $(By.className(" edit-supplier-cancel-btn")).click();
+        $(By.className("edit-supplier-cancel-btn")).click();
         return Page.at(SuppliersPage.class);
     }
 

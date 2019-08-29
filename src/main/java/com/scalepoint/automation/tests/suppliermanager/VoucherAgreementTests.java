@@ -15,9 +15,7 @@ import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
 import java.util.Objects;
@@ -58,7 +56,8 @@ public class VoucherAgreementTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(),
-                        sid -> sid.withNewPrice(PRICE_2400).withVoucher(voucher.getVoucherGeneratedName()))
+                        sid -> sid.withNewPrice(PRICE_2400)
+                                .withVoucher(voucher.getVoucherGeneratedName()))
                 .openEditDiscountDistributionForVoucher()
                 .doAssert(asserts -> {
                     asserts.assertBrandsTextIs(brand);
@@ -268,6 +267,7 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_initialCategoryAdding
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to remove assigned category for new voucher")
     public void ecc3038_removeAssignedCategory(User user, Voucher voucher, ClaimItem claimItem) {
@@ -439,7 +439,7 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC1 User creates voucher V1 for S1
      * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialog
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialog")
     public void ecc3038_ic1VoucherNotAvailableIC2(User futureUser1, User futureUser2, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser1, AUTOTEST_SUPPLIER_VA_TESTS)

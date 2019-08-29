@@ -4,7 +4,11 @@ import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.modules.*;
+import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
+import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
+import com.scalepoint.automation.pageobjects.modules.MainMenu;
+import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.modules.ToolBarMenu;
 import com.scalepoint.automation.pageobjects.pages.rnv.TaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
@@ -19,7 +23,12 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.ScriptTimeoutException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -33,9 +42,14 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Constants.*;
+import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
+import static com.scalepoint.automation.utils.Constants.AGE_YEAR;
+import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.invisibleOfElement;
+import static com.scalepoint.automation.utils.Wait.visible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -359,8 +373,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementPage moveLineFromGroupToGroup(String claimLineDescription, String groupName) {
-        new Actions(driver).dragAndDrop(findClaimLine(claimLineDescription).descriptionElement, findClaimLine(groupName).descriptionElement).build().perform();
-        waitForAjaxCompleted();
+        dragAndDrop(findClaimLine(claimLineDescription).descriptionElement, findClaimLine(groupName).descriptionElement);
         return this;
     }
 
