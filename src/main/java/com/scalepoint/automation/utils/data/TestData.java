@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import com.scalepoint.automation.utils.data.request.UpdateSettlementItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -113,8 +114,8 @@ public class TestData {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
     }
 
-    public static InsertSettlementItem getInsertSettlementItemWithoutVoucher() {
-        return (InsertSettlementItem) getData(Data.CLAIM_ITEM_WITHOUT_VOUCHER);
+    public static UpdateSettlementItem getUpdateSettlementItem() {
+        return (UpdateSettlementItem) getData(Data.UPDATED_CLAIM_ITEM);
     }
 
     public static EccIntegration getEccIntegration() {
@@ -214,7 +215,7 @@ public class TestData {
         FRAUD_ALERT_CLAIM("Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
-        CLAIM_ITEM_WITHOUT_VOUCHER("Claim/ClaimItemWithoutVoucher.xml", InsertSettlementItem.class),
+        UPDATED_CLAIM_ITEM("Claim/UpdatedClaimItem.xml", UpdateSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
         TRANSLATIONS("Translations.xml", Translations.class);
