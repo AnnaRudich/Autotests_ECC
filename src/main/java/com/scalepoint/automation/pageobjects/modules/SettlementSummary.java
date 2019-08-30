@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
 import org.openqa.selenium.By;
@@ -22,6 +23,8 @@ import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementSummary extends Module {
+
+    private static final int WAIT_TIMEOUT_MS = 6000;
 
     @FindBy(xpath = "//div[@id='settlementSummaryTotalTable-targetEl']//table")
     private Table claimsResult;
@@ -85,9 +88,7 @@ public class SettlementSummary extends Module {
     }
 
     private void expand() {
-
-        $(expand).waitUntil(Condition.visible, 6000).click();
-        $(settlementSummaryTotalsPanel).waitUntil(Condition.visible, 6000);
+        clickUsingJsIfSeleniumClickReturnError(expand);
     }
 
     private String getClaimSumValue() {
@@ -139,9 +140,17 @@ public class SettlementSummary extends Module {
     }
 
     public SettlementPage editSelfRisk(String newValue){
-        expand();
-        $(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).click();
-        $(By.xpath("//input[@role='textbox']")).setValue(newValue);
+
+        SelenideElement selfRisk = $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"));
+        if(!selfRisk.isDisplayed()){
+            expand();
+        }
+        selfRisk
+                .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
+                .click();
+        $(By.xpath("//input[@role='textbox']"))
+                .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
+                .setValue(newValue);
         $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
         waitForLoaded();
         return at(SettlementPage.class);

@@ -133,7 +133,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <aspectj.version>1.8.6</aspectj.version>
-        <allure.version>1.4.23</allure.version>
+        <allure.version>1.5.4</allure.version>
         <allure.maven.version>2.5</allure.maven.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -141,7 +141,7 @@
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <fluent-hc.version>4.2.5</fluent-hc.version>
         <guava.version>23.0</guava.version>
-        <htmlelements.version>1.18</htmlelements.version>
+        <htmlelements.version>1.20.0</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
         <java.version>1.8</java.version>
         <jackson.version>2.9.9</jackson.version>
@@ -149,7 +149,7 @@
         <jaxb.version>2.2.12</jaxb.version>
         <qatools.properties.version>2.0.RC3</qatools.properties.version>
         <log4j.version>2.6.2</log4j.version>
-        <selenium.version>3.14.0</selenium.version>
+        <selenium.version>3.141.59</selenium.version>
         <spring.version>2.1.7.RELEASE</spring.version>
         <testng.version>6.14.3</testng.version>
         <suiteXmlFile/>

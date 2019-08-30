@@ -20,15 +20,17 @@ public class EventApiService{
 
     protected Logger log = LogManager.getLogger(EventApiService.class);
 
-    Token token;
+    private Token token;
+    private final static String EVENT_API_URL = Configuration.getEventApiUrl();
 
     public EventApiService() {
+
         this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.EVENTS_INTERNAL).getToken();
     }
 
     public void scheduleSubscription(String id) {
-        log.info(Configuration.getEnvironmentUrl());
-        given().baseUri("http://ecc-qa05.spcph.local:86").basePath("/api/events/").log().all()
+
+        given().baseUri(EVENT_API_URL).basePath("/api/events/").log().all()
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
                 .queryParam("subscriptionId", id)
@@ -40,6 +42,7 @@ public class EventApiService{
     }
 
     public void sendFraudStatus(ClaimLineChanged claimLineChanged, String status){
+
         Token token = new OauthTestAccountsApi()
                 .sendRequest(OauthTestAccountsApi.Scope.EVENTS, "topdanmark_dk_integration", "fT8nw3fMVWryIFTmjUqcWgSmb9wki4YNRcoBAG53uZQ")
                 .getToken();
@@ -58,8 +61,7 @@ public class EventApiService{
         fraudStatus.setStatus(status);
         fraudStatus.setCaseFraudStatus(caseFraudStatus);
         fraudStatus.setTimestamp(LocalDateTime.now().toInstant(ZoneOffset.UTC).toString());
-        log.info(Configuration.getEnvironmentUrl());
-        given().baseUri("http://ecc-qa05.spcph.local:86").basePath("/api/events/").log().all()
+        given().baseUri(EVENT_API_URL).basePath("/api/events/").log().all()
                 .header(token.getAuthorizationHeader())
                 .header("Event-Type", "fraud_status")
                 .contentType(ContentType.JSON)
@@ -73,8 +75,8 @@ public class EventApiService{
                 .all();
     }
     public void subscribeChangeLineChanged(){
-        log.info(Configuration.getEnvironmentUrl());
-        given().baseUri("http://ecc-qa05.spcph.local:86").basePath("/api/events/").log().all()
+
+        given().baseUri(EVENT_API_URL).basePath("/api/events/").log().all()
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
                 .body("{\n" +
@@ -106,8 +108,8 @@ public class EventApiService{
                 .all();
     }
     public void subscribeFraudStatus(){
-        log.info(Configuration.getEnvironmentUrl());
-        given().baseUri("http://ecc-qa05.spcph.local:86").basePath("/api/events/").log().all()
+
+        given().baseUri(EVENT_API_URL).basePath("/api/events/").log().all()
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
                 .body("    {\n" +

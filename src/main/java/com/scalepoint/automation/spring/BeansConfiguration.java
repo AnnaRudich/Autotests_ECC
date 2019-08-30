@@ -35,6 +35,8 @@ public class BeansConfiguration {
     private String serverUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ENVIRONMENT_URL + "}")
     private String environmentUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_EVENT_API_URL + "}")
+    private String eventApiUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC + "}")
     private String eccContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_ADMIN + "}")
@@ -70,6 +72,7 @@ public class BeansConfiguration {
                         .setLocale(locale)
                         .setServerUrl(serverUrl)
                         .setEnvironmentUrl(environmentUrl)
+                        .setEventApiUrl(eventApiUrl)
                         .setEccContext(eccContext)
                         .setEccAdminContext(eccAdminContext)
                         .setEccRnvContext(eccRnvContext)

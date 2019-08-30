@@ -98,7 +98,7 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "Verify damage type is required if the item is damaged and the category has reasons")
     public void damageTypeRequiredTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)

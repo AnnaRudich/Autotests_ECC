@@ -63,7 +63,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * WHEN: U3 navigates to Vouchers list in ME
      * THEN: V1 is displayed in Voucher's list in ME
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
     public void ecc3030_sharedVoucherInVouchersListForIC(@UserCompany(CompanyCode.TRYGHOLDING) User trygUser,
                                                          @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
                                                          User futureCompanyUser,

@@ -235,7 +235,7 @@ public class LessIsMoreTests extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertClaimLineIsRejected);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Move line from group to group")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "Move line from group to group")
     public void charlie550_dragAndDropFromGroupToGroup(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
