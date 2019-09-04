@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
-import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
-import com.scalepoint.automation.utils.data.request.UpdateSettlementItem;
+import com.scalepoint.automation.utils.data.request.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -92,6 +91,14 @@ public class TestData {
 
     public static Payments getPayments() {
         return (Payments) getData(Data.PAYMENTS);
+    }
+
+    public static SelfServiceRequest getSelfServiceRequest() {
+        return (SelfServiceRequest) getData(Data.SELF_SERVICE_REQUEST);
+    }
+
+    public static SelfServiceLossItems getSelfServiceLossItems() {
+        return (SelfServiceLossItems) getData(Data.SELF_SERVICE_LOSS_ITEMS);
     }
 
     public static Translations getTranslations() {
@@ -218,7 +225,9 @@ public class TestData {
         UPDATED_CLAIM_ITEM("Claim/UpdatedClaimItem.xml", UpdateSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
-        TRANSLATIONS("Translations.xml", Translations.class);
+        TRANSLATIONS("Translations.xml", Translations.class),
+        SELF_SERVICE_REQUEST("SelfServiceRequest.json", SelfServiceRequest.class),
+        SELF_SERVICE_LOSS_ITEMS("SelfServiceLossItems.json", SelfServiceLossItems.class);
 
         private String fileName;
         private JAXBContext context;
