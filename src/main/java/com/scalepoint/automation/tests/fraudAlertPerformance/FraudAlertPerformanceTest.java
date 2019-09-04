@@ -4,15 +4,17 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
 import com.scalepoint.automation.services.restService.Common.BaseService;
-import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
+import com.scalepoint.automation.services.restService.FraudStatusService;
+import com.scalepoint.automation.services.restService.SelfServiceService;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import com.scalepoint.automation.utils.data.request.SelfServiceLossItems;
+import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -22,8 +24,6 @@ import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class FraudAlertPerformanceTest extends BaseApiTest {
 
@@ -44,11 +44,10 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         new EventApiService().scheduleSubscription("9");
     }
 
-    @Test(dataProvider = "usersDataProvider")
-    public void testAdd(User user) throws InterruptedException {
+    @Test(dataProvider = "usersDataProvider", enabled = true)
+    public void testAdd(User user) {
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
-        Thread.sleep(Thread.currentThread().getId() * 10);
         ClaimSettlementItemsService claimSettlementItemsService = BaseService.loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem());
         LocalDateTime start = LocalDateTime.now();
         String token = claimSettlementItemsService.getData().getClaimToken();
@@ -56,8 +55,8 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
+        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
 
-        databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
         LocalDateTime end = LocalDateTime.now();
 
         long duration = Duration.between(end, start).getSeconds();
@@ -65,13 +64,12 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = false)
-    public void testRemove(User user) throws InterruptedException {
+    public void testRemove(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
         InsertSettlementItem insertSettlementItem = TestData.getInsertSettlementItem();
 
-        Thread.sleep(Thread.currentThread().getId() * 100);
         ClaimSettlementItemsService claimSettlementItemsService = BaseService
                 .loginAndOpenClaimWithItems(user, claimRequest, insertSettlementItem)
                 .removeLines(insertSettlementItem);
@@ -79,14 +77,69 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         LocalDateTime start = LocalDateTime.now();
         String token = claimSettlementItemsService.getData().getClaimToken();
         List<ClaimLineChanged> events = fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 2);
+                .waitForClaimUpdatedEvents(token, 1);
 
-        new EventApiService().sendFraudStatus(events.get(1), "FRAUDULENT");
-        databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
+        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
+
         LocalDateTime end = LocalDateTime.now();
 
-        long duration = Duration.between(start, end).getSeconds();
-        assertThat(duration).isLessThan(5);
+        long duration = Duration.between(end, start).getSeconds();
+        log.info("Duration: {}", duration);
+    }
+
+    @Test(dataProvider = "usersDataProvider", enabled = true)
+    public void testSelfService(User user) {
+
+        ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
+        SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
+        SelfServiceLossItems selfServiceLossItems = TestData.getSelfServiceLossItems();
+
+        selfServiceRequest.setClaimsNo(claimRequest.getCaseNumber());
+        SelfServiceService claimSettlementItemsService = BaseService
+                .loginAndOpenClaim(user, claimRequest)
+                .requestSelfService(selfServiceRequest)
+                .loginToSS(selfServiceRequest.getPassword())
+                .addLossItem(selfServiceLossItems)
+                .submitted();
+
+        LocalDateTime start = LocalDateTime.now();
+        String token = claimSettlementItemsService.getData().getClaimToken();
+        List<ClaimLineChanged> events = fraudAlertStubs
+                .waitForClaimUpdatedEvents(token, 1);
+
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
+        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
+
+        LocalDateTime end = LocalDateTime.now();
+
+        long duration = Duration.between(end, start).getSeconds();
+        log.info("Duration: {}", duration);
+    }
+
+    @Test(dataProvider = "usersDataProvider", enabled = false)
+    public void testBulk(User user) {
+
+        ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
+        SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
+
+        selfServiceRequest.setClaimsNo(claimRequest.getCaseNumber());
+        SelfServiceService claimSettlementItemsService = BaseService
+                .loginAndOpenClaim(user, claimRequest)
+                .importExcel();
+
+
+        LocalDateTime start = LocalDateTime.now();
+        String token = claimSettlementItemsService.getData().getClaimToken();
+        List<ClaimLineChanged> events = fraudAlertStubs
+                .waitForClaimUpdatedEvents(token, 1);
+
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
+        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
+
+        LocalDateTime end = LocalDateTime.now();
+
+        long duration = Duration.between(end, start).getSeconds();
         log.info("Duration: {}", duration);
     }
 
