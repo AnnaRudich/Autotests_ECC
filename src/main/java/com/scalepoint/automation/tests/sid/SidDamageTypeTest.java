@@ -5,11 +5,7 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -98,7 +94,7 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(dataProvider = "testDataProvider",
             description = "Verify damage type is required if the item is damaged and the category has reasons")
     public void damageTypeRequiredTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -109,6 +105,7 @@ public class SidDamageTypeTest extends BaseTest {
                 .enableDamage()
                 .clickOK()
                 .viewDamageTypeValidationErrorMessage()
+
                 .doAssert(claimLine -> {
                     claimLine.assertHasDamageTypeValidationError(claimItem.getDamageTypeValidationError());
                 });

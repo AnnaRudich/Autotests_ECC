@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
@@ -765,13 +767,6 @@ public class SettlementDialog extends BaseDialog {
         return damageType.isEnabled();
     }
 
-    private String getDamageTypeValidationErrorMessage(){
-        return $("#damage-type-combobox-inputEl")
-                .attr("data-errorqtip")
-                .replaceAll("<.*?>", "")
-                .trim();
-    }
-
     private boolean isRejectReasonDisabled(String visibleText) {
         new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
         $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
@@ -823,6 +818,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog viewDamageTypeValidationErrorMessage(){
+
         new Actions(driver).moveToElement($("#damage-type-combobox-inputEl")).build().perform();
         return this;
     }
@@ -1549,9 +1545,10 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
         public Asserts assertHasDamageTypeValidationError(String errorMessage){
-            assertThat(getDamageTypeValidationErrorMessage())
+            SelenideElement element = $(By.xpath(String.format("//*[contains(text(),\"%s\")]", errorMessage)));
+            assertThat(element.exists())
                     .as(String.format("Validation error message should contain following text: %s", errorMessage))
-                    .isEqualTo(errorMessage);
+                    .isTrue();
             return this;
         }
 
