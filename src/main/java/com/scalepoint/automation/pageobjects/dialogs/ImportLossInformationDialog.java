@@ -25,15 +25,20 @@ public class ImportLossInformationDialog extends BaseDialog {
     }
 
     public SettlementPage uploadExcel(String path) {
-        Wait.waitForInvisible(browseControl);
-        browseControl.sendKeys(path);
-
-        Wait.waitForDisplayed(By.id("excel-import-button"));
-        importButton.click();
-
-        ExcelImportDialog excelImportDialog = at(ExcelImportDialog.class);
-        excelImportDialog.cancel();
-        return Page.at(SettlementPage.class);
+        startUploadExcel(path);
+        return finishUploadExcel();
     }
 
+    public ImportLossInformationDialog startUploadExcel(String path){
+        Wait.waitForInvisible(browseControl);
+        browseControl.sendKeys(path);
+        Wait.waitForDisplayed(By.id("excel-import-button"));
+        importButton.click();
+        return this;
+    }
+
+    public SettlementPage finishUploadExcel(){
+        new ExcelImportSummaryDialog().confirmImport();
+        return Page.at(SettlementPage.class);
+    }
 }

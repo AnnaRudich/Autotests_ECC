@@ -18,7 +18,7 @@ public class EditPreferencesPage extends Page {
     @FindBy(id = "btnGenerate")
     private WebElement buttonGenerate;
 
-    @FindBy(id = "cancel")
+    @FindBy(id = "confirmImport")
     private WebElement buttonCancel;
 
     @Override

@@ -50,7 +50,7 @@ public class SettlementDialog extends BaseDialog {
 
     private static final By OK_BUTTON = By.id("ok-button");
     private static final By ADD_BUTTON = By.id("add-button");
-    private static final By CANCEL_BUTTON = By.id("cancel-button");
+    private static final By CANCEL_BUTTON = By.id("confirmImport-button");
     public static final String ARIA_CHECKED = "aria-checked";
     public static final String TR_CONTAINS_CLASS = ".//tr[contains(@class, '";
     public static final String REJECT_REASON_COMBOBOX_INPUT_EL = "reject-reason-combobox-inputEl";
@@ -132,7 +132,7 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(css = "#valuations-grid-body table:first-child")
     private Table firstValuation;
 
-    @FindBy(id = "cancel-button")//
+    @FindBy(id = "confirmImport-button")//
     private WebElement cancelButton;
 
     @FindBy(id = "add-valuation-button")

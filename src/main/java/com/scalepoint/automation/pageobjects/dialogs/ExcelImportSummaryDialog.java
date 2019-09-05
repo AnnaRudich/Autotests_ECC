@@ -9,12 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @EccPage
-public class ExcelImportDialog extends BaseDialog {
+public class ExcelImportSummaryDialog extends BaseDialog {
 
     private static final String CLOSE_IMPORT = "import-summary-close-button";
 
     @FindBy(id = CLOSE_IMPORT)
-    private WebElement closeButton;
+    private WebElement confirmButton;
 
     @Override
     protected BaseDialog ensureWeAreAt() {
@@ -22,8 +22,8 @@ public class ExcelImportDialog extends BaseDialog {
         return null;
     }
 
-    public SettlementPage cancel() {
-        closeButton.click();
+    public SettlementPage confirmImport() {
+        confirmButton.click();
         Wait.waitForAjaxCompleted();
         return Page.at(SettlementPage.class);
     }

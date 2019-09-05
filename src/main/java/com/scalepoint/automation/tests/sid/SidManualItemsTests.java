@@ -430,7 +430,7 @@ public class SidManualItemsTests extends BaseTest {
 
     /**
      * WHEN: U1 opens SID, fills all field with valid values(description D1 etc)
-     * WHEN: select cancel
+     * WHEN: select confirmImport
      * THEN: Cancelled claim line is not added to the claim
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify cancelled claim line is not added to the claim")

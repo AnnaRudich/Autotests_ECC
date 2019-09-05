@@ -17,7 +17,7 @@ public class ImportDialog extends BaseDialog {
     @FindBy(id = "self-service-import-button")
     private Button importSelfService;
 
-    @FindBy(id = "loss-import-cancel-button")
+    @FindBy(id = "loss-import-confirmImport-button")
     private Button cancel;
 
     @Override

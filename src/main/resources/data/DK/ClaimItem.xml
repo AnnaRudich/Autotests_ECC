@@ -81,6 +81,8 @@
     <existingVoucher4>Bilka</existingVoucher4>
     <brandLinkVoucher4>Bilka</brandLinkVoucher4>
     <excelPath1>excelImport/ClaimSheetDK2003.xls</excelPath1>
+    <excelPathWithoutCatAuto>excelImport/ClaimSheetDK2003_withoutCat_autoCat.xls</excelPathWithoutCatAuto>
+    <excelPathWithoutCatNoAuto>excelImport/ClaimSheetDK2003_withoutCat_noAutoCat.xls</excelPathWithoutCatNoAuto>
     <excelPathVoucherPrediction>excelImport/ClaimSheetDK2003_VoucherPrediction.xls</excelPathVoucherPrediction>
     <excelWithGroupingPath>excelImport/ClaimSheetDK2003_withGrouping.xls</excelWithGroupingPath>
     <xlsDescr1>samsung galaxy s7</xlsDescr1>

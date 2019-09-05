@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class AddShopDialogViewMode extends BaseDialog {
 
-    private static final String SUPPLIER_CANCEL_VIEW_SHOP_BTN = "//a[contains(@class,'supplier-cancel-view-shop-btn')]";
+    private static final String SUPPLIER_CANCEL_VIEW_SHOP_BTN = "//a[contains(@class,'supplier-confirmImport-view-shop-btn')]";
 
     @FindBy(xpath = "//label[contains(text(),'Name:')]")
     private WebElement nameLabel;
