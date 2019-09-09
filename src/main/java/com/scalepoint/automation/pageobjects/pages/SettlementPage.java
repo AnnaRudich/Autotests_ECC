@@ -361,6 +361,7 @@ public class SettlementPage extends BaseClaimPage {
         return functionalMenu.
                 openImportExcelDialog().
                 startUploadExcel(filePath);
+
     }
 
     private String reviewedColor = "rgb(30, 144, 255)";

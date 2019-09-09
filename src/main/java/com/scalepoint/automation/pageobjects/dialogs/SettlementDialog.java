@@ -357,7 +357,7 @@ public class SettlementDialog extends BaseDialog {
     @Override
     public SettlementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
-        waitForVisible(cancelButton);
+       // waitForVisible(cancelButton);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
         return this;
     }

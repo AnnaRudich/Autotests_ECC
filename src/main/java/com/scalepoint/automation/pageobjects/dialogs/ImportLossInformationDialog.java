@@ -34,6 +34,7 @@ public class ImportLossInformationDialog extends BaseDialog {
         browseControl.sendKeys(path);
         Wait.waitForDisplayed(By.id("excel-import-button"));
         importButton.click();
+        Wait.waitForLoaded();
         return this;
     }
 

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -53,11 +54,13 @@ public class ExcelImport extends BaseTest {
     @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void selectCategoryManuallyInExcelImportDialog(User user, Claim claim, ClaimItem claimItem) {
-        String claimLineDescription = claimItem.getSetDialogTextMatch();
+        String claimLineDescription = "abrakadabra1";
 
         loginAndCreateClaim(user, claim)
-                .startImportExcelFile(claimItem.getExcelPathWithoutCatNoAuto())
-                .finishUploadExcel()
+                .startImportExcelFile(claimItem.getExcelPathWithoutCatNoAuto());
+                new LossLineImportDialog().selectCategoryAndSubcategoryForTheErrorLine(claimLineDescription, claimItem.getCategoryBicycles().getGroupName(), claimItem.getCategoryBicycles().getCategoryName())
+                .selectValuationForTheErrorLine(claimLineDescription, LossLineImportDialog.ValuationType.VOUCHER)
+                .confirmImport()
                 .doAssert(sid -> sid.assertItemIsPresent(claimItem.getXlsDescr1()));
     }
 }
