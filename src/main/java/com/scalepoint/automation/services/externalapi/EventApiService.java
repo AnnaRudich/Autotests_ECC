@@ -52,7 +52,7 @@ public class EventApiService{
         caseFraudStatus.setCaseType(caseClaimLineChanged.getCaseType());
         caseFraudStatus.setNumber(caseClaimLineChanged.getNumber());
         caseFraudStatus.setToken(caseClaimLineChanged.getToken());
-        caseFraudStatus.setUuid(UUID.randomUUID().toString());
+        caseFraudStatus.setUuid(caseClaimLineChanged.getToken().split("\\.")[1]);
 
         FraudStatus fraudStatus= new FraudStatus();
         fraudStatus.setEventId(claimLineChanged.getEventId());
