@@ -19,6 +19,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -117,8 +118,8 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         log.info("Duration: {}", duration);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false)
-    public void testBulk(User user) {
+    @Test(dataProvider = "usersDataProvider", enabled = true)
+    public void testBulk(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
         SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();

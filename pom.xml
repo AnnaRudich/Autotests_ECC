@@ -126,6 +126,12 @@
                 <activatedProperties>stage</activatedProperties>
             </properties>
         </profile>
+        <profile>
+            <id>PROJECT-PERF</id>
+            <properties>
+                <activatedProperties>project-perf</activatedProperties>
+            </properties>
+        </profile>
     </profiles>
 
     <properties>
@@ -487,13 +493,13 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <dependency>
