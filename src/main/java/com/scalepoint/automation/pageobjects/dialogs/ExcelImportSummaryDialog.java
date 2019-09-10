@@ -1,28 +1,27 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$;
 
 @EccPage
 public class ExcelImportSummaryDialog extends BaseDialog {
 
-    private static final String CLOSE_IMPORT = "import-summary-close-button";
-
-    @FindBy(id = CLOSE_IMPORT)
-    private WebElement confirmButton;
+    private SelenideElement confirmButton = $(By.id("import-summary-close-button"));
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForDisplayed(By.id(CLOSE_IMPORT));
+        confirmButton.shouldBe(Condition.visible);
         return null;
     }
 
-    public SettlementPage confirmImport() {
+    public SettlementPage confirmImportSummary() {
         confirmButton.click();
         Wait.waitForAjaxCompleted();
         return Page.at(SettlementPage.class);

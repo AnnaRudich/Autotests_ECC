@@ -53,7 +53,7 @@ public class ClaimTests extends BaseTest {
      */
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-544 It's possible to confirmImport saved claim. Cancelled claim  has status Cancelled")
+            description = "CHARLIE-544 It's possible to confirmImportSummary saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
@@ -192,7 +192,7 @@ public class ClaimTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-544 It's possible to confirmImport saved claim. Cancelled claim  has status Cancelled")
+            description = "CHARLIE-544 It's possible to confirmImportSummary saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_not_possible_login_to_cancelled_claim(User user, Claim claim) {
 
         CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim)

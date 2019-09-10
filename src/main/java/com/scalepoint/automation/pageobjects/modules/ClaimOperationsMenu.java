@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.pageobjects.dialogs.AddGenericItemDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
+import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SendSelfServiceRequestDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
@@ -31,8 +31,8 @@ public class ClaimOperationsMenu extends Module {
         return BaseDialog.at(AddGenericItemDialog.class);
     }
 
-    public ImportDialog openImportDialog() {
+    public LossImportDialog openImportDialog() {
         excelImportBtn.click();
-        return BaseDialog.at(ImportDialog.class);
+        return BaseDialog.at(LossImportDialog.class);
     }
 }

@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
+import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ImportLossInformationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
@@ -73,7 +73,7 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
-    @FindBy(id = "edit-policy-confirmImport-button-btnInnerEl")
+    @FindBy(id = "edit-policy-confirmImportSummary-button-btnInnerEl")
     private WebElement cancelPolicy;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")
@@ -167,7 +167,7 @@ public class SettlementPage extends BaseClaimPage {
                 chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
     }
 
-    public ImportDialog openImportSelfServiceDialog() {
+    public LossImportDialog openImportSelfServiceDialog() {
         return claimOperationsMenu.openImportDialog();
     }
 

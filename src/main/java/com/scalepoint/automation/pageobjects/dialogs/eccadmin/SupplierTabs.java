@@ -49,7 +49,7 @@ interface SupplierTabs {
     }
 
     default SuppliersPage cancelSupplier() {
-        $(By.className("edit-supplier-confirmImport-btn")).click();
+        $(By.className("edit-supplier-confirmImportSummary-btn")).click();
         return Page.at(SuppliersPage.class);
     }
 

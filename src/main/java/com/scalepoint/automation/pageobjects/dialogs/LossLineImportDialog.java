@@ -23,7 +23,7 @@ public class LossLineImportDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementPage confirmImport(){
+    public SettlementPage confirmImportAfterErrorsWereFixed(){
         SelenideElement okButton = $("#loss-line-import-button-btnInnerEl");
         okButton.click();
         return Page.at(SettlementPage.class);
@@ -39,35 +39,26 @@ public class LossLineImportDialog extends BaseDialog {
 
 
     private void pickItemFromSelect(SelenideElement select, String valueToSelect) {
-        select.selectOptionByValue(valueToSelect);
+        select.selectOption(valueToSelect);
     }
 
-    public LossLineImportDialog selectCategoryAndSubcategoryForTheErrorLine(String lineDescription, String category, String subCategory){
-        SelenideElement groupSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryGroupDropDown();
-        SelenideElement categorySelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryDropDown();
+    public LossLineImportDialog selectCategoryAndSubcategoryForTheErrorLine(String category, String subCategory, List<String> lineDescriptions) {
+        for (String lineDescription : lineDescriptions) {
+            SelenideElement groupSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryGroupDropDown();
+            SelenideElement categorySelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryDropDown();
 
-        pickItemFromSelect(groupSelect, category);
-        pickItemFromSelect(categorySelect, subCategory);
+            pickItemFromSelect(groupSelect, category);
+            pickItemFromSelect(categorySelect, subCategory);
+        }
         return this;
     }
 
-    public LossLineImportDialog selectValuationForTheErrorLine(String lineDescription, ValuationType valuationType){
+    public LossLineImportDialog selectValuationForTheErrorLine(ValuationType valuationType, List<String> lineDescriptions){
+        for(String lineDescription: lineDescriptions){
         SelenideElement valuationSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getValuationDropDown();
-        pickItemFromSelect(valuationSelect, valuationType.name());
+        pickItemFromSelect(valuationSelect, valuationType.name());}
         return this;
     }
-
-    public LossLineImportDialog selectFirst(String cutGr, String cut){
-        SelenideElement errorLineDataRow = $$(By.xpath("//table[@class='importList_table']//tr[contains(@class, 'errorLine')]")).get(0);
-        SelenideElement categoryGroup = errorLineDataRow.find(By.xpath("//following-sibling::tr[1]//select[contains(@id, 'groupSelect')]"));
-        categoryGroup.selectOption(cutGr);
-
-        SelenideElement category = errorLineDataRow.find(By.xpath("//following-sibling::tr[2]//select[contains(@id, 'categorySelect')]"));
-        category.selectOption(cut);
-        return this;
-    }
-
-
 
 
     class ImportErrorLines {
@@ -86,7 +77,7 @@ public class LossLineImportDialog extends BaseDialog {
                return errorLines;
         }
 
-        public List<String> getColumnHeaders() {
+        List<String> getColumnHeaders() {
             List<String> columnNames = new ArrayList<>();
 
             ElementsCollection tableHeadersElements = $$(By.xpath("//tr[@class='importHeaderFixed']/th[0 < position() and position() < 14]"));
@@ -109,10 +100,10 @@ public class LossLineImportDialog extends BaseDialog {
 
 
 
-        public List<ErrorLineWrapper> collectErrorLines() {
-            By categoryGroupSelector = By.xpath("//following-sibling::tr[1]//select[contains(@id, 'groupSelect')]");
-            By categorySelector = By.xpath("//following-sibling::tr[2]//select[contains(@id, 'categorySelect')]");
-            By valuationSelector = By.xpath("//following-sibling::tr[1]//select[contains(@id, 'selectValuation')]");
+        List<ErrorLineWrapper> collectErrorLines() {
+            By categoryGroupSelector = By.xpath("following-sibling::tr[1]//select[contains(@id, 'groupSelect')]");
+            By categorySelector = By.xpath("following-sibling::tr[2]//select[contains(@id, 'categorySelect')]");
+            By valuationSelector = By.xpath("following-sibling::tr[1]//select[contains(@id, 'selectValuation')]");
             List<ErrorLineWrapper> errorLines = new ArrayList<>();
 
             ElementsCollection errorLineDataRows = $$(By.xpath("//table[@class='importList_table']//tr[contains(@class, 'errorLine')]"));
@@ -131,11 +122,11 @@ public class LossLineImportDialog extends BaseDialog {
         }
 
         private SelenideElement getSelect(SelenideElement parentOfSelect, By selectSelector){
-
+            parentOfSelect.shouldBe(Condition.visible);
             return parentOfSelect.find(selectSelector);
         }
 
-        public ErrorLineWrapper getErrorLineByDescription(String lineDescription){
+        ErrorLineWrapper getErrorLineByDescription(String lineDescription){
             ErrorLineWrapper line = null;
             for(ErrorLineWrapper errorLine: errorLines){
                 if(errorLine.getErrorLine().get("Beskrivelse").equals(lineDescription)){
@@ -160,19 +151,19 @@ public class LossLineImportDialog extends BaseDialog {
             this.valuationDropDown = valuationDropDown;
         }
 
-        public Map<String, String> getErrorLine() {
+        Map<String, String> getErrorLine() {
             return errorLine;
         }
 
-        public SelenideElement getCategoryGroupDropDown() {
+        SelenideElement getCategoryGroupDropDown() {
             return categoryGroupDropDown;
         }
 
-        public SelenideElement getCategoryDropDown() {
+        SelenideElement getCategoryDropDown() {
             return categoryDropDown;
         }
 
-        public SelenideElement getValuationDropDown() {
+        SelenideElement getValuationDropDown() {
             return valuationDropDown;
         }
     }

@@ -39,7 +39,7 @@ public class ImportLossInformationDialog extends BaseDialog {
     }
 
     public SettlementPage finishUploadExcel(){
-        new ExcelImportSummaryDialog().confirmImport();
+        new ExcelImportSummaryDialog().confirmImportSummary();
         return Page.at(SettlementPage.class);
     }
 }

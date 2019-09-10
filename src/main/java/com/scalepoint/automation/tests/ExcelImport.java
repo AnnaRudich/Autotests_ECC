@@ -13,6 +13,9 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ExcelImport extends BaseTest {
 /*
  *FToggle is enabled,
@@ -54,13 +57,13 @@ public class ExcelImport extends BaseTest {
     @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void selectCategoryManuallyInExcelImportDialog(User user, Claim claim, ClaimItem claimItem) {
-        String claimLineDescription = "abrakadabra1";
+        List<String> claimLineDescriptions = Arrays.asList("abrakadabra1", "abrakadabra2");
 
         loginAndCreateClaim(user, claim)
                 .startImportExcelFile(claimItem.getExcelPathWithoutCatNoAuto());
-                new LossLineImportDialog().selectCategoryAndSubcategoryForTheErrorLine(claimLineDescription, claimItem.getCategoryBicycles().getGroupName(), claimItem.getCategoryBicycles().getCategoryName())
-                .selectValuationForTheErrorLine(claimLineDescription, LossLineImportDialog.ValuationType.VOUCHER)
-                .confirmImport()
+                new LossLineImportDialog()
+                .selectCategoryAndSubcategoryForTheErrorLine(claimItem.getCategoryBicycles().getGroupName(), claimItem.getCategoryBicycles().getCategoryName(), claimLineDescriptions)
+                .confirmImportAfterErrorsWereFixed()
                 .doAssert(sid -> sid.assertItemIsPresent(claimItem.getXlsDescr1()));
     }
 }

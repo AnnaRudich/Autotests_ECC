@@ -25,7 +25,7 @@ public class EditDiscountDistributionDialog extends BaseDialog {
     @FindBy(id = "distribution-voucher-ok-button")
     private WebElement saveButton;
 
-    @FindBy(id = "distribution-voucher-confirmImport-button")
+    @FindBy(id = "distribution-voucher-confirmImportSummary-button")
     private WebElement cancelButton;
 
 
