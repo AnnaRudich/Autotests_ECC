@@ -1,14 +1,12 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.TextInput;
 
 import java.io.File;
 
@@ -16,22 +14,15 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LossImportDialog extends BaseDialog {
 
-    @FindBy(name = "upfile")
-    private TextInput browseControl;
-
-    private SelenideElement selfServiceImportButton = $(By.id("self-service-import-button"));
-    private SelenideElement excelImportButton = $(By.id("excel-import-button"));
-
     @FindBy(id = "self-service-import-button")
-    private Button importSelfService;
+    private WebElement selfServiceImportButton;
 
-    @FindBy(id = "loss-import-confirmImportSummary-button")
-    private Button cancel;
+    @FindBy(id = "excel-import-button")
+    private WebElement excelImportButton;
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        excelImportButton.shouldBe(Condition.visible);
-        selfServiceImportButton.shouldBe(Condition.visible);
+        Wait.waitForVisible(selfServiceImportButton);
         return this;
     }
 /*
@@ -55,7 +46,7 @@ public class LossImportDialog extends BaseDialog {
 
     private void startUploadExcel(String path){
         $(By.name("upfile")).uploadFile(new File(path));
-        excelImportButton.shouldBe(Condition.visible);
+        Wait.waitForVisible(excelImportButton);
         excelImportButton.click();
         Wait.waitForLoaded();
     }

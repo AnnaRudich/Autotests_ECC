@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
-import com.scalepoint.automation.pageobjects.dialogs.ImportLossInformationDialog;
+import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
 import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
@@ -354,13 +354,13 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage importExcelFile(String filePath) {
         return functionalMenu.
                 openImportExcelDialog().
-                uploadExcel(filePath);
+                uploadExcelNoErrors(filePath);
     }
 
-    public ImportLossInformationDialog startImportExcelFile(String filePath){
+    public LossLineImportDialog startImportExcelFile(String filePath){
         return functionalMenu.
                 openImportExcelDialog().
-                startUploadExcel(filePath);
+                uploadExcelWithErrors(filePath);
 
     }
 

@@ -23,10 +23,10 @@ public class LossLineImportDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementPage confirmImportAfterErrorsWereFixed(){
+    public ExcelImportSummaryDialog confirmImportAfterErrorsWereFixed(){
         SelenideElement okButton = $("#loss-line-import-button-btnInnerEl");
         okButton.click();
-        return Page.at(SettlementPage.class);
+        return BaseDialog.at(ExcelImportSummaryDialog.class);
     }
 
     public SettlementPage cancelImport(){
