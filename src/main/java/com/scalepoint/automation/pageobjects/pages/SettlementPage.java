@@ -396,6 +396,14 @@ public class SettlementPage extends BaseClaimPage {
             return this;
         }
 
+        public Asserts assertCategoryForLine(String lineDescription, String expectedCategoryGroup, String expectedCategory){
+            String actualCategory = getLinesByDescription(lineDescription).get(0).getCategory();
+            assertThat(actualCategory)
+                    .as("expected category is "+ expectedCategoryGroup + " - " + expectedCategory+ " but was " + actualCategory)
+                    .isEqualTo(expectedCategoryGroup+ " - " + expectedCategory);
+            return this;
+        }
+
         public Asserts assertItemIsPresent(String claimLineDescription) {
             Assert.assertTrue(isItemPresent(claimLineDescription),
                     errorMessage("The claim item [%s] is not found", claimLineDescription));

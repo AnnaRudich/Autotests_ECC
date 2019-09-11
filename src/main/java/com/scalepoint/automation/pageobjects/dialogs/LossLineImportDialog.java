@@ -42,21 +42,18 @@ public class LossLineImportDialog extends BaseDialog {
         select.selectOption(valueToSelect);
     }
 
-    public LossLineImportDialog selectCategoryAndSubcategoryForTheErrorLine(String category, String subCategory, List<String> lineDescriptions) {
-        for (String lineDescription : lineDescriptions) {
+    public LossLineImportDialog selectCategoryAndSubcategoryForTheErrorLine(String category, String subCategory, String lineDescription) {
             SelenideElement groupSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryGroupDropDown();
             SelenideElement categorySelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryDropDown();
 
             pickItemFromSelect(groupSelect, category);
             pickItemFromSelect(categorySelect, subCategory);
-        }
-        return this;
+                return this;
     }
 
-    public LossLineImportDialog selectValuationForTheErrorLine(ValuationType valuationType, List<String> lineDescriptions){
-        for(String lineDescription: lineDescriptions){
+    public LossLineImportDialog selectValuationForTheErrorLine(ValuationType valuationType, String lineDescription){
         SelenideElement valuationSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getValuationDropDown();
-        pickItemFromSelect(valuationSelect, valuationType.name());}
+        pickItemFromSelect(valuationSelect, valuationType.name());
         return this;
     }
 
