@@ -2,19 +2,19 @@ package com.scalepoint.automation.tests.fraudAlertPerformance;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.externalapi.EventApiService;
-import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
+import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.services.restService.Common.BaseService;
-import com.scalepoint.automation.services.restService.FraudStatusService;
-import com.scalepoint.automation.services.restService.SelfServiceService;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.SelfServiceLossItems;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
+import org.json.simple.parser.ParseException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -41,12 +41,12 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                 .getMappings()
                 .stream()
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-        new EventApiService().scheduleSubscription("4");
-        new EventApiService().scheduleSubscription("9");
+        new EventApiService().scheduleSubscription("3");
+        new EventApiService().scheduleSubscription("7");
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = true)
-    public void testAdd(User user) {
+    public void testAdd(User user) throws IOException {
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
         ClaimSettlementItemsService claimSettlementItemsService = BaseService.loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem());
@@ -54,6 +54,9 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         String token = claimSettlementItemsService.getData().getClaimToken();
         List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
+
+        new UnifiedIntegrationService()
+                .getCaseEndpointByToken(COUNTRY, TENANT, token);
 
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         new FraudStatusService().waitForFraudStatus("FRAUDULENT");
@@ -65,7 +68,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = false)
-    public void testRemove(User user) {
+    public void testRemove(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
@@ -80,6 +83,9 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
+        new UnifiedIntegrationService()
+                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         new FraudStatusService().waitForFraudStatus("FRAUDULENT");
 
@@ -89,8 +95,8 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         log.info("Duration: {}", duration);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = true)
-    public void testSelfService(User user) {
+    @Test(dataProvider = "usersDataProvider", enabled = false)
+    public void testSelfService(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
         SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
@@ -109,6 +115,9 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
 
+        new UnifiedIntegrationService()
+                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         new FraudStatusService().waitForFraudStatus("FRAUDULENT");
 
@@ -118,22 +127,26 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         log.info("Duration: {}", duration);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = true)
-    public void testBulk(User user) throws IOException {
+    @Test(dataProvider = "usersDataProvider", enabled = false)
+    public void testBulk(User user) throws IOException, ParseException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
         SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
 
         selfServiceRequest.setClaimsNo(claimRequest.getCaseNumber());
-        SelfServiceService claimSettlementItemsService = BaseService
+        ImportExcelService claimSettlementItemsService = BaseService
                 .loginAndOpenClaim(user, claimRequest)
-                .importExcel();
+                .importExcel()
+                .match();
 
 
         LocalDateTime start = LocalDateTime.now();
         String token = claimSettlementItemsService.getData().getClaimToken();
         List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
+
+        new UnifiedIntegrationService()
+                .getCaseEndpointByToken(COUNTRY, TENANT, token);
 
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         new FraudStatusService().waitForFraudStatus("FRAUDULENT");
@@ -147,7 +160,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
     @DataProvider(name = "usersDataProvider", parallel = true)
     public static Object[][] usersDataProvider(Method method) {
 
-        int size = 1;
+        int size = 50;
 
         Object[][] objects = new Object[size][1];
 
