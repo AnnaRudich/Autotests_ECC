@@ -49,8 +49,8 @@ public class FraudAlertTest extends BaseTest {
                 .getMappings()
                 .stream()
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-        new EventApiService().scheduleSubscription("4");
-        new EventApiService().scheduleSubscription("9");
+        new EventApiService().scheduleSubscription("3");
+        new EventApiService().scheduleSubscription("7");
     }
 
     private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
