@@ -19,7 +19,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRY
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 public class ImportExcelDiscretionaryReasonTests extends BaseTest {
 
-    private String excelImportPath = "C:\\ExcelImportCategoriesAndValuationsSelectionTest\\DK_NYT ARK(3)(a).xls";
+    private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
 
     /*
      * WHEN: Import excel file with discretionary valuation
