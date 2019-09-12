@@ -27,7 +27,7 @@ public class MailViewDialog extends BaseDialog {
     @FindBy(xpath = "//a[contains(@href,'LoginToShop?login')]")
     private Link loginToShopLink;
 
-    @FindBy(id = "show-mail-window-confirmImportSummary-button-btnInnerEl")
+    @FindBy(id = "show-mail-window-cancel-button-btnInnerEl")
     private WebElement cancelButton;
 
     @Override

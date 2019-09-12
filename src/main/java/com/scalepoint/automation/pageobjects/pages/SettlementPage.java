@@ -73,7 +73,7 @@ public class SettlementPage extends BaseClaimPage {
     private WebElement ok;
     @FindBy(id = "_OK_button")
     private Button _import;
-    @FindBy(id = "edit-policy-confirmImportSummary-button-btnInnerEl")
+    @FindBy(id = "edit-policy-cancel-button-btnInnerEl")
     private WebElement cancelPolicy;
 
     @FindBy(xpath = "//span[contains(@style, 'selectAllIcon.png')]")

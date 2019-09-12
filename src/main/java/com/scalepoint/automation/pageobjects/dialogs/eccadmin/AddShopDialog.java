@@ -18,7 +18,7 @@ public class AddShopDialog extends BaseDialog {
 
     private static final String SUPPLIER_CREATE_SHOP_BTN = "//a[contains(@class,'supplier-create-shop-btn')]";
     private static final String SUPPLIER_SAVE_SHOP_BTN = "//a[contains(@class,'supplier-save-shop-btn')]";
-    private static final String SUPPLIER_CANCEL_EDIT_SHOP_BTN = "//a[contains(@class,'supplier-confirmImportSummary-edit-shop-btn')]";
+    private static final String SUPPLIER_CANCEL_EDIT_SHOP_BTN = "//a[contains(@class,'supplier-cancel-edit-shop-btn')]";
 
     @FindBy(xpath = "//label[contains(text(),'Name:')]")
     private WebElement nameLabel;

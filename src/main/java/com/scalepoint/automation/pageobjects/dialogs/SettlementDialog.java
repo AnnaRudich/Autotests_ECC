@@ -4,7 +4,11 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
-import com.scalepoint.automation.pageobjects.extjs.*;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtElement;
+import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -17,12 +21,21 @@ import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.*;
+import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
+import ru.yandex.qatools.htmlelements.element.Link;
+import ru.yandex.qatools.htmlelements.element.Table;
+import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,15 +48,20 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForEnabled;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertEqualsNoOrder;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 
 public class SettlementDialog extends BaseDialog {
@@ -52,7 +70,7 @@ public class SettlementDialog extends BaseDialog {
 
     private static final By OK_BUTTON = By.id("ok-button");
     private static final By ADD_BUTTON = By.id("add-button");
-    private static final By CANCEL_BUTTON = By.id("confirmImportSummary-button");
+    private static final By CANCEL_BUTTON = By.id("cancel-button");
     public static final String ARIA_CHECKED = "aria-checked";
     public static final String TR_CONTAINS_CLASS = ".//tr[contains(@class, '";
     public static final String REJECT_REASON_COMBOBOX_INPUT_EL = "reject-reason-combobox-inputEl";
@@ -134,7 +152,7 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(css = "#valuations-grid-body table:first-child")
     private Table firstValuation;
 
-    @FindBy(id = "confirmImportSummary-button")//
+    @FindBy(id = "cancel-button")//
     private WebElement cancelButton;
 
     @FindBy(id = "add-valuation-button")
@@ -359,7 +377,7 @@ public class SettlementDialog extends BaseDialog {
     @Override
     public SettlementDialog ensureWeAreAt() {
         Wait.waitForAjaxCompleted();
-       // waitForVisible(cancelButton);
+        waitForVisible(cancelButton);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
         return this;
     }
