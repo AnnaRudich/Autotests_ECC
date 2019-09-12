@@ -25,7 +25,7 @@ public class LossLineImportDialog extends BaseDialog {
 
     public ExcelImportSummaryDialog confirmImportAfterErrorsWereFixed(){
         SelenideElement okButton = $("#loss-line-import-button-btnInnerEl");
-        okButton.click();
+        okButton.shouldBe(Condition.enabled).click();
         return BaseDialog.at(ExcelImportSummaryDialog.class);
     }
 
@@ -35,8 +35,6 @@ public class LossLineImportDialog extends BaseDialog {
         cancelButton.click();
         return Page.at(SettlementPage.class);
     }
-
-
 
     private void pickItemFromSelect(SelenideElement select, String valueToSelect) {
         select.selectOption(valueToSelect);

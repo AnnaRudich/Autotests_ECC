@@ -1,9 +1,7 @@
 package com.scalepoint.automation.tests;
 
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
-import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -11,10 +9,9 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.driver.DriverType;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class ExcelImportTest extends BaseTest {
+public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
 
     @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
@@ -26,19 +23,18 @@ public class ExcelImportTest extends BaseTest {
     @RequiredSetting(type = FTSetting.NUMBER_BEST_FIT_RESULTS, value = "5")
     @RequiredSetting(type = FTSetting.ALLOW_NONORDERABLE_PRODUCTS, value = "Yes, Always")
     public void autoCategorizationInExcelImport(User user, Claim claim, ClaimItem claimItem) {
-        String claimLineDescription = "Line1";
+        String claimLineDescription = "iphone";
 
-      SettlementPage settlementPage = loginAndCreateClaim(user, claim)
-                .importExcelFile(claimItem.getExcelPathWithoutCatAuto());
-
-        Assert.assertEquals(settlementPage.getLinesByDescription(claimLineDescription),
-                claimItem.getCategoryBicycles().getGroupName() + " - " + claimItem.getCategoryBicycles().getCategoryName());
+        loginAndCreateClaim(user, claim)
+                .importExcelFile(claimItem.getExcelPathWithoutCatAuto())
+                .findClaimLine(claimLineDescription)
+                .doAssert(claimLine -> claimLine.assertCategory(claimItem.getCategoryMobilePhones().getGroupName(), claimItem.getCategoryMobilePhones().getCategoryName()));
     }
 
     @RunOn(DriverType.CHROME)
-    @Jira("")
     @Test(dataProvider = "testDataProvider",
-            description = "")
+            description = "Import Excel where categories are not specified, and also line description has no sense" +
+                    "so categories should be selected manually")
     @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_EXCEL_IMPORT)
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
     @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
@@ -53,13 +49,7 @@ public class ExcelImportTest extends BaseTest {
                         claimItem.getCategoryBicycles().getCategoryName(), claimLineDescription)
                 .confirmImportAfterErrorsWereFixed()
                 .confirmImportSummary()
-                .doAssert(asserts -> {
-                    asserts.assertItemIsPresent(claimLineDescription);
-                    asserts.assertCategoryForLine(claimLineDescription, claimItem.getCategoryBicycles().getGroupName(), claimItem.getCategoryBicycles().getCategoryName());
-                });
-
-//        Assert.assertEquals(new SettlementPage().getLinesByDescription(claimLineDescription),
-//                claimItem.getCategoryBicycles().getGroupName() + " - " + claimItem.getCategoryBicycles().getCategoryName());
-
+                .findClaimLine(claimLineDescription)
+                .doAssert(claimLine -> claimLine.assertCategory(claimItem.getCategoryBicycles().getGroupName(), claimItem.getCategoryBicycles().getCategoryName()));
     }
 }

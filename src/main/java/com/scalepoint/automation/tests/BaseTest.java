@@ -154,10 +154,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         claimApi.createClaim(claim, policyType);
     }
 
-//    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
-//        return loginAndCreateClaim(user, claim, null);
-//    }
-
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
     }

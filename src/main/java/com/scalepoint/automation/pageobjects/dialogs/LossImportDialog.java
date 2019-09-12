@@ -41,7 +41,7 @@ public class LossImportDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
     /*
-     * ExcelImportTest
+     * ExcelImportCategoriesAndValuationsSelectionTest
      */
 
     private void startUploadExcel(String path){
