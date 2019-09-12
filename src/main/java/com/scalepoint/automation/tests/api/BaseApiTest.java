@@ -46,6 +46,12 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Value("${driver.type}")
     protected String browserMode;
 
+    @Value("${subscription.claimline_changed.id}")
+    protected String claimLineChangedSubscriptionId;
+
+    @Value("${subscription.fraud_status.id}")
+    protected String fraudStatusSubscriptionId;
+
     @BeforeMethod
     public void setUpData(Method method) {
         Thread.currentThread().setName("Thread " + method.getName());

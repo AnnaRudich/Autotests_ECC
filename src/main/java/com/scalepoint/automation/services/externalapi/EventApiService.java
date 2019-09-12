@@ -7,6 +7,7 @@ import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.C
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.FraudStatus;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
+import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,8 +38,7 @@ public class EventApiService{
                 .when()
                 .post("/v1/management/subscriptions/schedule")
                 .then()
-                .log()
-                .all();
+                .statusCode(HttpStatus.SC_CREATED);
     }
 
     public void sendFraudStatus(ClaimLineChanged claimLineChanged, String status){
@@ -61,7 +61,7 @@ public class EventApiService{
         fraudStatus.setStatus(status);
         fraudStatus.setCaseFraudStatus(caseFraudStatus);
         fraudStatus.setTimestamp(LocalDateTime.now().toInstant(ZoneOffset.UTC).toString());
-        given().baseUri(EVENT_API_URL).basePath("/api/events/").log().all()
+        given().baseUri(EVENT_API_URL).basePath("/api/events/")
                 .header(token.getAuthorizationHeader())
                 .header("Event-Type", "fraud_status")
                 .contentType(ContentType.JSON)
@@ -71,8 +71,7 @@ public class EventApiService{
                 .when()
                 .post("/v1/{country}/external/{tenant}/send")
                 .then()
-                .log()
-                .all();
+                .statusCode(HttpStatus.SC_CREATED);
     }
     public void subscribeChangeLineChanged(){
 
@@ -104,6 +103,7 @@ public class EventApiService{
                 .when()
                 .post("/v1/subscriptions/admin/create")
                 .then()
+                .statusCode(HttpStatus.SC_OK)
                 .log()
                 .all();
     }
@@ -144,6 +144,7 @@ public class EventApiService{
                 .when()
                 .post("/v1/subscriptions/admin/create")
                 .then()
+                .statusCode(HttpStatus.SC_OK)
                 .log()
                 .all();
     }

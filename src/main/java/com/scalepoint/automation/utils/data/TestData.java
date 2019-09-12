@@ -138,16 +138,15 @@ public class TestData {
 
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
-        String filePath = buildDataFilePath(locale, data.fileName);
         Object resultObject;
-        InputStream inputStream = TestData.class.getClassLoader().getResourceAsStream(filePath);
+        InputStream inputStream = getInputStreamFromResources(locale, data.fileName);
         try {
             if (data.fileName.endsWith(".xml")) {
                 resultObject = data.context.createUnmarshaller().unmarshal(inputStream);
             } else if (data.fileName.endsWith(".json")) {
                 resultObject = new ObjectMapper().readValue(inputStream, data.dataClass);
             } else {
-                throw new IOException("File should be xml or json, file is not valid " + filePath);
+                throw new IOException("File should be xml or json, file is not valid " + data.fileName);
             }
             preprocess(resultObject, buildParams());
             return (T) resultObject;
@@ -155,6 +154,12 @@ public class TestData {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static InputStream getInputStreamFromResources(String locale, String fileName){
+
+        String filePath = buildDataFilePath(locale, fileName);
+        return TestData.class.getClassLoader().getResourceAsStream(filePath);
     }
 
     public static String objectAsXml(Object object) {

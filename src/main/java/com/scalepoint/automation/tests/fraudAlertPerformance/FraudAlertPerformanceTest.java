@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.fraudAlertPerformance;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.services.restService.Common.BaseService;
@@ -15,16 +16,15 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.SelfServiceLossItems;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import org.json.simple.parser.ParseException;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 public class FraudAlertPerformanceTest extends BaseApiTest {
 
@@ -32,8 +32,17 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
     static final String COUNTRY = "dk";
     FraudAlertMock.FraudAlertStubs fraudAlertStubs;
 
+    private static int users;
+    private Map<String, List<Duration>> manual = new HashMap();
+    private Map<String, List<Duration>> selfService = new HashMap();
+    private Map<String, List<Duration>> bulk = new HashMap();
+
+    @Parameters({"users"})
     @BeforeClass
-    public void startWireMock() throws IOException {
+    public void startWireMock(String users) throws IOException {
+
+        this.users = Integer.valueOf(users);
+
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         fraudAlertStubs = new FraudAlertMock(wireMock).addStub(TENANT);
@@ -41,134 +50,136 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                 .getMappings()
                 .stream()
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-        new EventApiService().scheduleSubscription("3");
-        new EventApiService().scheduleSubscription("7");
+
+        new EventApiService().scheduleSubscription(claimLineChangedSubscriptionId);
+        new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
+    }
+
+    @AfterClass
+    public void measurement() throws IOException {
+
+        printResults(manual, "manual");
+        printResults(selfService, "selfService");
+        printResults(bulk, "bulk");
+    }
+
+    private void printResults(Map<String, List<Duration>> map, String name) throws IOException {
+        if(map.size() == 0){
+            return;
+        }
+
+        CSVWriter writer = new CSVWriter(new FileWriter(new File(name.concat(".csv"))));
+
+        map.entrySet().stream().forEach(
+                entry -> {
+                    String key = entry.getKey();
+                    List<Duration> value = entry.getValue();
+                    Duration firstStep = value.get(0);
+                    Duration secondStep = value.get(1);
+                    Duration average = firstStep.plus(secondStep);
+
+                    log.info("[{}] Case number: {}, duration {}, {}, sum {}", name, key, value.get(0), value.get(1), average);
+                    writer.writeNext(new String[] {key, String.valueOf(value), String.valueOf(average)});
+                });
+
+        Double average = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
+        Double max = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
+        log.info("[{}] Average {}",name ,average);
+        log.info("[{}] Max {}", name, max);
+
+        writer.writeNext(new String[]{"Average", String.valueOf(average)});
+        writer.writeNext(new String[]{"Max", String.valueOf(max)});
+        writer.close();
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = true)
     public void testAdd(User user) throws IOException {
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
-        ClaimSettlementItemsService claimSettlementItemsService = BaseService.loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem());
-        LocalDateTime start = LocalDateTime.now();
-        String token = claimSettlementItemsService.getData().getClaimToken();
-        List<ClaimLineChanged> events = fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 1);
+        ClaimSettlementItemsService claimSettlementItemsService = BaseService
+                .loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem());
 
-        new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
-
-        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
-        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
-
-        LocalDateTime end = LocalDateTime.now();
-
-        long duration = Duration.between(end, start).getSeconds();
-        log.info("Duration: {}", duration);
+        topdanmark(claimSettlementItemsService, manual);
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = false)
     public void testRemove(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
-
         InsertSettlementItem insertSettlementItem = TestData.getInsertSettlementItem();
 
         ClaimSettlementItemsService claimSettlementItemsService = BaseService
                 .loginAndOpenClaimWithItems(user, claimRequest, insertSettlementItem)
                 .removeLines(insertSettlementItem);
 
-        LocalDateTime start = LocalDateTime.now();
-        String token = claimSettlementItemsService.getData().getClaimToken();
-        List<ClaimLineChanged> events = fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 1);
-
-        new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
-
-        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
-        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
-
-        LocalDateTime end = LocalDateTime.now();
-
-        long duration = Duration.between(end, start).getSeconds();
-        log.info("Duration: {}", duration);
+        topdanmark(claimSettlementItemsService, manual);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false)
+    @Test(dataProvider = "usersDataProvider", enabled = true)
     public void testSelfService(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
         SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
         SelfServiceLossItems selfServiceLossItems = TestData.getSelfServiceLossItems();
-
         selfServiceRequest.setClaimsNo(claimRequest.getCaseNumber());
-        SelfServiceService claimSettlementItemsService = BaseService
+
+        SelfServiceService selfServiceService = BaseService
                 .loginAndOpenClaim(user, claimRequest)
                 .requestSelfService(selfServiceRequest)
                 .loginToSS(selfServiceRequest.getPassword())
                 .addLossItem(selfServiceLossItems)
                 .submitted();
 
-        LocalDateTime start = LocalDateTime.now();
-        String token = claimSettlementItemsService.getData().getClaimToken();
-        List<ClaimLineChanged> events = fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 1);
-
-        new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
-
-        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
-        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
-
-        LocalDateTime end = LocalDateTime.now();
-
-        long duration = Duration.between(end, start).getSeconds();
-        log.info("Duration: {}", duration);
+        topdanmark(selfServiceService, selfService);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false)
+    @Test(dataProvider = "usersDataProvider", enabled = true)
     public void testBulk(User user) throws IOException, ParseException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
         SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
 
         selfServiceRequest.setClaimsNo(claimRequest.getCaseNumber());
-        ImportExcelService claimSettlementItemsService = BaseService
+        ImportExcelService importExcelService = BaseService
                 .loginAndOpenClaim(user, claimRequest)
                 .importExcel()
                 .match();
 
-
-        LocalDateTime start = LocalDateTime.now();
-        String token = claimSettlementItemsService.getData().getClaimToken();
-        List<ClaimLineChanged> events = fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 1);
-
-        new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
-
-        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
-        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
-
-        LocalDateTime end = LocalDateTime.now();
-
-        long duration = Duration.between(end, start).getSeconds();
-        log.info("Duration: {}", duration);
+        topdanmark(importExcelService, bulk);
     }
 
     @DataProvider(name = "usersDataProvider", parallel = true)
     public static Object[][] usersDataProvider(Method method) {
 
-        int size = 50;
+        Object[][] objects = new Object[users][1];
 
-        Object[][] objects = new Object[size][1];
-
-        for(int i =0;i<size;i++){
+        for(int i =0;i<users;i++){
 
             objects[i][0] = new User("autotest-topdanmark".concat(new Integer(i + 1).toString()), "12341234");
         }
 
         return objects;
+    }
+
+    private void topdanmark(BaseService claimSettlementItemsService, Map<String, List<Duration>> map) throws IOException {
+
+        LocalDateTime start = LocalDateTime.now();
+        String token = claimSettlementItemsService.getData().getClaimToken();
+        List<ClaimLineChanged> events = fraudAlertStubs
+                .waitForClaimUpdatedEvents(token, 1);
+        LocalDateTime uni = LocalDateTime.now();
+
+        Case caseData = new UnifiedIntegrationService()
+                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
+
+        LocalDateTime fraudStatus = LocalDateTime.now();
+        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
+        LocalDateTime end = LocalDateTime.now();
+
+        List<Duration> list = new LinkedList<>();
+        list.add(Duration.between(start, uni));
+        list.add(Duration.between(fraudStatus, end));
+        map.put(caseData.getCaseNumber(), list);
     }
 }

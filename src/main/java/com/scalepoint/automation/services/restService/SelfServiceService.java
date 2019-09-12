@@ -31,13 +31,12 @@ public class SelfServiceService extends BaseService {
 
         this.response = given()
                 .baseUri(getEccUrl())
-                .log().all()
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
                 .contentType("application/json")
                 .body(selfServiceRequest)
                 .post(SELF_SERVICE_REQUEST)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -54,9 +53,8 @@ public class SelfServiceService extends BaseService {
     public SelfServiceService loginToSS(String password){
 
         String body = given()
-                .log().all()
                 .get(linkToSS)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response().getBody().print();
 
@@ -68,20 +66,18 @@ public class SelfServiceService extends BaseService {
 
         this.response = given()
                 .baseUri(getEnvironmentUrl())
-                .log().all()
                 .formParam("username", username)
                 .formParam("password", password)
                 .post(SELF_SERVICE_LOGIN)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 
         accessToken =  response.getHeader("Access-Token");
 
-        this.response = given().log().all()
+        this.response = given()
                 .get(response.getHeader("Location"))
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -90,14 +86,13 @@ public class SelfServiceService extends BaseService {
 
     public SelfServiceService addLossItem(SelfServiceLossItems selfServiceLossItems){
 
-        this.response = given().log().all()
+        this.response = given()
                 .baseUri(getEnvironmentUrl())
                 .header("Access-Token", accessToken)
                 .contentType("application/json")
                 .body(selfServiceLossItems)
                 .post(SELF_SERVICE_LOSS_ITEMS)
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -106,11 +101,11 @@ public class SelfServiceService extends BaseService {
 
     public SelfServiceService submitted(){
 
-        this.response = given().log().all()
+        this.response = given().log().uri()
                 .baseUri(getEnvironmentUrl())
                 .header("Access-Token", accessToken)
                 .post(SELF_SERVICE_SUBMITTED)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 

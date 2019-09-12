@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class FraudStatusService extends BaseService {
 
     private static final int POLL_MS = 10;
-    private static final int STATUS_CHANGE_TIMEOUT = 60;
+    private static final int STATUS_CHANGE_TIMEOUT = 120;
 
     private Response response;
 

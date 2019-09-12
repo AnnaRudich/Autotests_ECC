@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.restService;
 
 import com.google.common.io.CharStreams;
 import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -43,7 +44,7 @@ public class ImportExcelService extends BaseService {
         File file = new File("C:\\Users\\bna\\IdeaProjects\\automatedtest\\src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls");
 
         String boundary = "26639617130818";
-        response = given().baseUri(getEccUrl()).log().all()
+        response = given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .config(config()
                         .encoderConfig(encoderConfig()
@@ -58,7 +59,8 @@ public class ImportExcelService extends BaseService {
                         .concat("\r\nContent-Disposition: form-data; name=\"upfile\"; filename=\"DK_NYT ARK(3)(a).xls\"\r\nContent-Type: application/vnd.ms-excel\r\n\r\n")
                         .concat(CharStreams.toString(new InputStreamReader(new FileInputStream(file), Charset.forName("ISO-8859-1")))))
                 .post(EXCEL)
-                .then().log().all().statusCode(HttpStatus.SC_OK).extract().response();
+                .then()
+                .statusCode(HttpStatus.SC_OK).extract().response();
 
         String body = response.getBody().print();
         Matcher refNum = Pattern.compile("\"referenceNumber\":\\d*,").matcher(body);
@@ -75,24 +77,27 @@ public class ImportExcelService extends BaseService {
     }
 
     public ImportExcelService match() throws IOException, ParseException {
-        InputStream importLinesFile = new FileInputStream("C:\\Users\\bna\\IdeaProjects\\automatedtest\\src\\main\\resources\\data\\DK\\ImportLines.json");
+
+        InputStream importLinesFile = TestData.getInputStreamFromResources(Configuration.getLocale().getValue(), "ImportLines.json");
         JSONArray importLinesArray = (JSONArray) new JSONParser().parse(new InputStreamReader(importLinesFile));
         for(int i=0;i<importLinesArray.size();i++){
             ((JSONObject)importLinesArray.get(i)).replace("id", new Long(referenceNumbers.get(i)));
         }
 
-        InputStream importSummaryFile = new FileInputStream("C:\\Users\\bna\\IdeaProjects\\automatedtest\\src\\main\\resources\\data\\DK\\ImportSummary.json");
+        InputStream importSummaryFile = TestData.getInputStreamFromResources(Configuration.getLocale().getValue(), "ImportSummary.json");
         JSONObject importSummaryObject = (JSONObject) new JSONParser().parse(new InputStreamReader(importSummaryFile));
         importSummaryObject.replace("id", new Long(importSummary));
 
-        response = given().baseUri(getEccUrl()).log().all()
+        response = given().baseUri(getEccUrl()).log().uri()
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .formParam("importLines", importLinesArray.toString())
                 .formParam("importSummary", importSummaryObject.toString())
                 .post(MATCH)
-                .then().log().all().statusCode(HttpStatus.SC_OK).extract().response();
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
 
         return this;
     }

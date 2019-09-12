@@ -82,6 +82,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Value("${driver.type}")
     protected String browserMode;
 
+    @Value("${subscription.claimline_changed.id}")
+    protected String claimLineChangedSubscriptionId;
+
+    @Value("${subscription.fraud_status.id}")
+    protected String fraudStatusSubscriptionId;
+
     private DriverType driverType = null;
 
     @BeforeMethod

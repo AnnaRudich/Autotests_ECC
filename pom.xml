@@ -572,6 +572,12 @@
             <version>2.9.9</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.6</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -590,7 +596,7 @@
         </repository>
         <repository>
             <id>internal</id>
-            <url>http:/ecc-tools.spcph.local/nexus/content/repositories/internal</url>
+            <url>http://ecc-tools.spcph.local/nexus/content/repositories/internal</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>warn</checksumPolicy>

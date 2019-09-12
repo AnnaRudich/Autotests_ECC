@@ -7,6 +7,7 @@ import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +29,7 @@ public class UnifiedIntegrationService{
     public Case getCaseEndpointByToken(String country, String tenant, String caseToken) throws IOException {
 
         log.info(Configuration.getEnvironmentUrl());
-        String response = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH).log().all()
+        String response = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
                 .pathParam("country", country)
@@ -37,13 +38,8 @@ public class UnifiedIntegrationService{
                 .when()
                 .get("/data/v1/{country}/{tenant}/case/{caseToken}")
                 .then()
-                .log()
-                .all()
-                .statusCode(200)
-                .extract()
-                .response()
-                .getBody()
-                .print();
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response().getBody().print();
 
         return new ObjectMapper().readValue(response, Case.class);
     }
@@ -51,7 +47,7 @@ public class UnifiedIntegrationService{
     public Response getCaseEndpointByCaseNumber(String country, String tenant, String caseType, String caseNumber) {
 
         log.info(Configuration.getEnvironmentUrl());
-        return given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH).log().all()
+        return given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
                 .pathParam("country", country)
@@ -61,10 +57,7 @@ public class UnifiedIntegrationService{
                 .when()
                 .get("/data/v1/{country}/{tenant}/{caseType}/{caseNumber}")
                 .then()
-                .log()
-                .all()
-                .statusCode(200)
-                .extract()
-                .response();
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
     }
 }
