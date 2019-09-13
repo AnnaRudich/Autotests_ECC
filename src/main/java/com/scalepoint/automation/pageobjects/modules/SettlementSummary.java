@@ -115,17 +115,24 @@ public class SettlementSummary extends Module {
     }
 
     private boolean isFradulent(){
+        
+        String text = "CentralScore ej ok";
         if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
             expand();
         }
-        return fraudStatus.getText().equals("Central score ej ok");
+        return $(fraudStatus)
+                .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
     }
 
     private boolean isNotFradulent(){
+
+        String text = "CentralScore ok";
         if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
             expand();
         }
-        return fraudStatus.getText().equals("Central score ok");
+
+        return $(fraudStatus)
+                .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
