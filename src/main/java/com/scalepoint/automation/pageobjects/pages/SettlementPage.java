@@ -2,7 +2,8 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.ImportDialog;
+import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
+import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimOperationsMenu;
 import com.scalepoint.automation.pageobjects.modules.FunctionalMenu;
@@ -166,7 +167,7 @@ public class SettlementPage extends BaseClaimPage {
                 chooseItem(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
     }
 
-    public ImportDialog openImportSelfServiceDialog() {
+    public LossImportDialog openImportSelfServiceDialog() {
         return claimOperationsMenu.openImportDialog();
     }
 
@@ -353,7 +354,14 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage importExcelFile(String filePath) {
         return functionalMenu.
                 openImportExcelDialog().
-                uploadExcel(filePath);
+                uploadExcelNoErrors(filePath);
+    }
+
+    public LossLineImportDialog startImportExcelFile(String filePath){
+        return functionalMenu.
+                openImportExcelDialog().
+                uploadExcelWithErrors(filePath);
+
     }
 
     private String reviewedColor = "rgb(30, 144, 255)";
@@ -727,6 +735,14 @@ public class SettlementPage extends BaseClaimPage {
 
             public Asserts assertVoucherTooltipContains(String text) {
                 assertThat(tooltip).containsIgnoringCase(text);
+                return this;
+            }
+
+            public Asserts assertCategory(String expectedCategoryGroup, String expectedCategory){
+                String actualCategory = category;
+                assertThat(actualCategory)
+                        .as("expected category is "+ expectedCategoryGroup + " - " + expectedCategory+ " but was " + actualCategory)
+                        .isEqualTo(expectedCategoryGroup+ " - " + expectedCategory);
                 return this;
             }
         }
