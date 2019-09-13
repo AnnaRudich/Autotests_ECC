@@ -23,16 +23,14 @@ public class LossLineImportDialog extends BaseDialog {
         return this;
     }
 
-    public ExcelImportSummaryDialog confirmImportAfterErrorsWereFixed(){
+    public ExcelImportSummaryDialog confirmImportAfterErrorsWereFixed() {
         SelenideElement okButton = $("#loss-line-import-button-btnInnerEl");
         okButton.shouldBe(Condition.enabled).click();
         return BaseDialog.at(ExcelImportSummaryDialog.class);
     }
 
-    public SettlementPage cancelImport(){
-        SelenideElement cancelButton =
-                $("#loss-line-close-button-btnInnerEl");
-        cancelButton.click();
+    public SettlementPage cancelImport() {
+        $("#loss-line-close-button-btnInnerEl").click();
         return Page.at(SettlementPage.class);
     }
 
@@ -41,15 +39,15 @@ public class LossLineImportDialog extends BaseDialog {
     }
 
     public LossLineImportDialog selectCategoryAndSubcategoryForTheErrorLine(String category, String subCategory, String lineDescription) {
-            SelenideElement groupSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryGroupDropDown();
-            SelenideElement categorySelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryDropDown();
+        SelenideElement groupSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryGroupDropDown();
+        SelenideElement categorySelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getCategoryDropDown();
 
-            pickItemFromSelect(groupSelect, category);
-            pickItemFromSelect(categorySelect, subCategory);
-                return this;
+        pickItemFromSelect(groupSelect, category);
+        pickItemFromSelect(categorySelect, subCategory);
+        return this;
     }
 
-    public LossLineImportDialog selectValuationForTheErrorLine(ValuationType valuationType, String lineDescription){
+    public LossLineImportDialog selectValuationForTheErrorLine(ValuationType valuationType, String lineDescription) {
         SelenideElement valuationSelect = new ImportErrorLines().getErrorLineByDescription(lineDescription).getValuationDropDown();
         pickItemFromSelect(valuationSelect, valuationType.name());
         return this;
@@ -63,13 +61,13 @@ public class LossLineImportDialog extends BaseDialog {
             errorLines = collectErrorLines();
         }
 
-       private Map<String, String> mapHeadersToLineData(List<String> columnNames, List<String> errorLineCells) {
-           Map<String, String> errorLines = new HashMap<>();
+        private Map<String, String> mapHeadersToLineData(List<String> columnNames, List<String> errorLineCells) {
+            Map<String, String> errorLines = new HashMap<>();
 
-               for (int i = 0; i < columnNames.size(); i++) {
-                   errorLines.put(columnNames.get(i), errorLineCells.get(i));
-               }
-               return errorLines;
+            for (int i = 0; i < columnNames.size(); i++) {
+                errorLines.put(columnNames.get(i), errorLineCells.get(i));
+            }
+            return errorLines;
         }
 
         List<String> getColumnHeaders() {
@@ -87,12 +85,12 @@ public class LossLineImportDialog extends BaseDialog {
             List<String> errorLineCellsData = new ArrayList<>();
 
             ElementsCollection cells = row.findAll(By.xpath("td"));
-                for (SelenideElement cell : cells) {
-                    errorLineCellsData.add(cell.getText());
+            for (SelenideElement cell : cells) {
+                errorLineCellsData.add(cell.getText());
             }
 
-            return errorLineCellsData;      }
-
+            return errorLineCellsData;
+        }
 
 
         List<ErrorLineWrapper> collectErrorLines() {
@@ -116,15 +114,15 @@ public class LossLineImportDialog extends BaseDialog {
             return errorLines;
         }
 
-        private SelenideElement getSelect(SelenideElement parentOfSelect, By selectSelector){
+        private SelenideElement getSelect(SelenideElement parentOfSelect, By selectSelector) {
             parentOfSelect.shouldBe(Condition.visible);
             return parentOfSelect.find(selectSelector);
         }
 
-        ErrorLineWrapper getErrorLineByDescription(String lineDescription){
+        ErrorLineWrapper getErrorLineByDescription(String lineDescription) {
             ErrorLineWrapper line = null;
-            for(ErrorLineWrapper errorLine: errorLines){
-                if(errorLine.getErrorLine().get("Beskrivelse").equals(lineDescription)){
+            for (ErrorLineWrapper errorLine : errorLines) {
+                if (errorLine.getErrorLine().get("Beskrivelse").equals(lineDescription)) {
                     line = errorLine;
                 }
             }
@@ -162,7 +160,8 @@ public class LossLineImportDialog extends BaseDialog {
             return valuationDropDown;
         }
     }
-    public enum ValuationType{
+
+    public enum ValuationType {
         NEW_PRICE,
         VOUCHER;
     }
