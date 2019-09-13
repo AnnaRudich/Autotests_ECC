@@ -88,7 +88,7 @@ public class DatabaseApi {
                 .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
                 .timeout(STATUS_CHANGE_TIMEOUT, TimeUnit.SECONDS)
                 .until(() -> jdbcTemplate.queryForObject("SELECT [fraudStatus]\n" +
-                        "  FROM [QA05_ECC_DK].[dbo].[User] WHERE [ClaimNumber] = ?", int.class, claimNumber), equalTo(status));
+                        "  FROM [User] WHERE [ClaimNumber] = ?", int.class, claimNumber), equalTo(status));
     }
 
     private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {
