@@ -112,6 +112,7 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: Amount of depreciation is shown at the bottom of SID
      * THEN: Depreciation percent is shown on the settlement page after saving SID
      */
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify a manual depreciation can be entered into the field Depreciation")
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
@@ -148,14 +149,13 @@ public class SidManualItemsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
-    public void charlie_532_depreciationFromSuggestionShouldBeNotUpdatedAfterChanging(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+    public void charlie_532_depreciationFromSuggestionShouldBeNotUpdatedAfterChanging(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setNewPrice(Constants.PRICE_500)
                 .setCategory(claimItem.getCategoryVideoCamera().getGroupName())
                 .setSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
-                .fillVoucher(voucher.getVoucherGeneratedName())
                 .automaticDepreciation(false)
                 .doAssert(SettlementDialog.Asserts::assertAutomaticDepreciationLabelColor)
                 .enableAge()
@@ -177,14 +177,13 @@ public class SidManualItemsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3953 .doAssert(sid -> sid.assertDepreciationPercentageIs(\"10\"))")
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
-    public void charlie_532_depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSid(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+    public void charlie_532_depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSid(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setNewPrice(Constants.PRICE_500)
                 .setCategory(claimItem.getCategoryVideoCamera().getGroupName())
                 .setSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy())
-                .fillVoucher(voucher.getVoucherGeneratedName())
                 .automaticDepreciation(false)
                 .doAssert(SettlementDialog.Asserts::assertAutomaticDepreciationLabelColor)
                 .enableAge()

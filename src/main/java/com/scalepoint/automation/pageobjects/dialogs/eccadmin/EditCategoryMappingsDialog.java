@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
@@ -8,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+
+import static com.codeborne.selenide.Selenide.$$;
 
 public class EditCategoryMappingsDialog extends BaseDialog {
 
@@ -27,22 +31,22 @@ public class EditCategoryMappingsDialog extends BaseDialog {
     }
 
     public VoucherAgreementDialog.CategoriesTab mapCategory(PseudoCategory pseudoCategory) {
-        return clickOnCategoryAndSave(pseudoCategory, unmappedCategories);
+        return clickOnCategoryAndSave(pseudoCategory, $$("#from-list li"));
     }
 
     public VoucherAgreementDialog.CategoriesTab removeMapping(PseudoCategory pseudoCategory) {
-        return clickOnCategoryAndSave(pseudoCategory, mappedCategories);
+        return clickOnCategoryAndSave(pseudoCategory, $$("#to-list li"));
     }
 
-    private VoucherAgreementDialog.CategoriesTab clickOnCategoryAndSave(PseudoCategory pseudoCategory, List<WebElement> categories) {
+    private VoucherAgreementDialog.CategoriesTab clickOnCategoryAndSave(PseudoCategory pseudoCategory, ElementsCollection categories) {
         String optionToFind = formatCategoryOption(pseudoCategory.getGroupName(), pseudoCategory.getCategoryName());
-        for (WebElement unmappedCategory : categories) {
-            String option = unmappedCategory.getText();
-            if (option.equals(optionToFind)) {
-                doubleClick(unmappedCategory);
-                break;
-            }
-        }
+        SelenideElement element = categories
+                .stream()
+                .filter(e -> e.text().equals(optionToFind))
+                .findFirst()
+                .get();
+        element.click();
+        element.doubleClick();
         doubleClickUsingJsIfSeleniumClickReturnError(saveMappings);
         Wait.waitElementDisappeared(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]"));
         Wait.waitForAjaxCompleted();
