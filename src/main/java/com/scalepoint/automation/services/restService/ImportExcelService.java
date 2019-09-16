@@ -41,7 +41,7 @@ public class ImportExcelService extends BaseService {
 
     public ImportExcelService excel() throws IOException {
 
-        File file = new File("C:\\ExcelImport\\DK_NYT ARK(3)(a).xls");
+        File file = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls");
 
         String boundary = "26639617130818";
         response = given().baseUri(getEccUrl())

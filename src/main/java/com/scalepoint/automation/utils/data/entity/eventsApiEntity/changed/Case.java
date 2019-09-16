@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed;
 
+import com.scalepoint.ecc.thirdparty.integrations.model.audit.Product;
 import lombok.Data;
 
 @Data

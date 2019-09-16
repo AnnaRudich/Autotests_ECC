@@ -23,6 +23,7 @@ public class Item {
     Double basePrice;
     List<Valuation> valuations;
     Voucher voucher;
+    Product product;
 
     public Valuation getValuationByType(String type){
         return valuations
