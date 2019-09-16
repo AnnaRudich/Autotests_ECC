@@ -12,6 +12,8 @@ import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
@@ -19,7 +21,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRY
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 public class ImportExcelDiscretionaryReasonTests extends BaseTest {
 
-    private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
+    private String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 
     /*
      * WHEN: Import excel file with discretionary valuation
