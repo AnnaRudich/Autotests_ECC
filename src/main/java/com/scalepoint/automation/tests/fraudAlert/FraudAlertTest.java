@@ -10,7 +10,6 @@ import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
@@ -21,9 +20,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Item;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
-import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -91,7 +88,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
@@ -132,7 +129,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
@@ -170,7 +167,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         List<Item> items = caseChanged
                 .getLoss()
@@ -224,7 +221,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
@@ -259,7 +256,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
         Item item = caseChanged
                 .getLoss()
                 .getContent()
@@ -299,7 +296,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
@@ -337,7 +334,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         List<Item> items = caseChanged
                 .getLoss()
@@ -391,7 +388,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
@@ -426,7 +423,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         List<Item> items = caseChanged
                 .getLoss()
@@ -458,7 +455,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         List<Item> items = caseChanged
                 .getLoss()
@@ -492,7 +489,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
@@ -530,7 +527,7 @@ public class FraudAlertTest extends BaseTest {
                 .waitForClaimUpdatedEvents(token, 1);
 
         Case caseChanged = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
 
         Item item = caseChanged
                 .getLoss()
