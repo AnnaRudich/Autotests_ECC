@@ -6,6 +6,7 @@ import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -26,11 +27,12 @@ public class UnifiedIntegrationService{
         this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.PLATFORM_CASE_READ).getToken();
     }
 
-    public Case getCaseEndpointByToken(String country, String tenant, String caseToken) throws IOException {
+    public Case getCaseEndpointByToken(String country, String tenant, String caseToken, String eventId) throws IOException {
 
         log.info(Configuration.getEnvironmentUrl());
         String response = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
+                .header(new Header("X-REQUEST-ID", eventId))
                 .contentType(ContentType.JSON)
                 .pathParam("country", country)
                 .pathParam("tenant", tenant)

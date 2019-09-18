@@ -180,7 +180,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         LocalDateTime uni = LocalDateTime.now();
 
         Case caseData = new UnifiedIntegrationService()
-                .getCaseEndpointByToken(COUNTRY, TENANT, token);
+                .getCaseEndpointByToken(COUNTRY, TENANT, token, events.get(0).getEventId());
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
 
         LocalDateTime fraudStatus = LocalDateTime.now();
