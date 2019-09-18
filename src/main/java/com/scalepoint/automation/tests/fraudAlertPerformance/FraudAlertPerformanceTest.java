@@ -76,10 +76,10 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                     List<Duration> value = entry.getValue();
                     Duration firstStep = value.get(0);
                     Duration secondStep = value.get(1);
-                    Duration average = firstStep.plus(secondStep);
+                    Duration sum = firstStep.plus(secondStep);
 
-                    log.info("[{}] Case number: {}, duration {}, {}, sum {}", name, key, value.get(0), value.get(1), average);
-                    writer.writeNext(new String[] {key, String.valueOf(value.get(0).getNano()/1000000), String.valueOf(value.get(1).getNano()/100000), String.valueOf(average)});
+                    log.info("[{}] Case number: {}, duration {}, {}, sum {}", name, key, firstStep, secondStep, sum);
+                    writer.writeNext(new String[] {key, String.valueOf(firstStep.toNanos()/1000000), String.valueOf(secondStep.toNanos()/1000000), String.valueOf(sum)});
                 });
 
         Double average = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
