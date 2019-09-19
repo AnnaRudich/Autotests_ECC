@@ -331,7 +331,7 @@ public class FraudAlertTest extends BaseTest {
                 .delete();
 
         List<ClaimLineChanged> events = fraudAlertStubs
-                .waitForClaimUpdatedEvents(token, 1);
+                .waitForClaimUpdatedEvents(token, 2);
 
         Case caseChanged = new UnifiedIntegrationService()
                 .getCaseEndpointByToken(COUNTRY, TENANT, token, null);
@@ -343,7 +343,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(items.size()).isEqualTo(0);
 
-        new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
+        new EventApiService().sendFraudStatus(events.get(1), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
 
         settlementPage

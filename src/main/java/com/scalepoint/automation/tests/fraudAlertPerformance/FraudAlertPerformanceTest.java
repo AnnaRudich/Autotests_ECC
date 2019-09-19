@@ -88,14 +88,23 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         Double firstStepAverage = map.values().stream().map(durations -> durations.get(0).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
         Double firstStepMax = map.values().stream().map(durations -> durations.get(0).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
 
+        Double secondStepAverage = map.values().stream().map(durations -> durations.get(1).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
+        Double secondStepMax = map.values().stream().map(durations -> durations.get(1).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
+
         log.info("[{}] FirstStep Average {}",name ,firstStepAverage);
         log.info("[{}] FirstStep Max {}", name, firstStepMax);
+
+        log.info("[{}] FirstStep Average {}",name ,secondStepAverage);
+        log.info("[{}] FirstStep Max {}", name, secondStepMax);
 
         log.info("[{}] Average {}",name ,average);
         log.info("[{}] Max {}", name, max);
 
         writer.writeNext(new String[]{"FirstStep Average", String.valueOf(firstStepAverage)});
         writer.writeNext(new String[]{"FirstStep Max", String.valueOf(firstStepMax)});
+
+        writer.writeNext(new String[]{"SecondStep Average", String.valueOf(secondStepAverage)});
+        writer.writeNext(new String[]{"SecondStep Max", String.valueOf(secondStepMax)});
 
         writer.writeNext(new String[]{"Average", String.valueOf(average)});
         writer.writeNext(new String[]{"Max", String.valueOf(max)});
