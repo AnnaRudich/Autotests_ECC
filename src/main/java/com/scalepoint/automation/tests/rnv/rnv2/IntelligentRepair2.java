@@ -15,11 +15,13 @@ import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -30,7 +32,7 @@ import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.Audit
 
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class IntelligentRepair2 extends BaseTest {
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackWithInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -132,7 +134,7 @@ public class IntelligentRepair2 extends BaseTest {
                 .doAssert(InvoiceTab.Asserts::assertThereIsNoInvoiceGrid);
 
     }
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -160,7 +162,9 @@ public class IntelligentRepair2 extends BaseTest {
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
                 .getAssertion()
+                .assertEvaluateTaskButtonIsDisabled()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
+
 
         new ProjectsPage().getAssertion().assertAuditResponseText(REJECT);
     }
