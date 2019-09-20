@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.EvaluateTaskDialog;
-import com.scalepoint.automation.pageobjects.pages.rnv.InvoiceDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -28,7 +27,9 @@ import java.math.BigDecimal;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPAIR_AND_VALUATION;
-import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
+import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.APPROVE;
+import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.MANUAL;
+import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.REJECT;
 
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class IntelligentRepair2 extends BaseTest {
@@ -68,23 +69,30 @@ public class IntelligentRepair2 extends BaseTest {
                     mail.isMailExist(CUSTOMER_WELCOME);
                 });
 
-        new CustomerDetailsPage().toRepairValuationProjectsPage()
-                .openEvaluateTaskDialog()
-                .doAssert(evaluateTask -> {
-                    evaluateTask.assertRepairPriceForTheTaskWithIndexIs(1, 50.00);
-                    evaluateTask.assertTotalIs(500.00);
-                });
-        new EvaluateTaskDialog()
-                .closeDialog()
-
-                .expandTopTaskDetails()
+        new CustomerDetailsPage()
+                .toRepairValuationProjectsPage()
                 .getAssertion()
-                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertEvaluateTaskButtonIsDisabled();
+//                .openEvaluateTaskDialog()
+//                .doAssert(evaluateTask -> {
+//                    evaluateTask.assertRepairPriceForTheFirstTaskIs(1, 50.00);
+//                    evaluateTask.assertTotalIs(500.00);
+//                });
+//        new EvaluateTaskDialog()
+//                .closeDialog()
+
+                new ProjectsPage().expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasCompletedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
 
         new ProjectsPage().toInvoiceTab()
                 .openInvoiceDialogForLineWithIndex(0)
-                .doAssert(InvoiceDialog.Asserts::assertThereIsInvoiceLinesList);
+                .doAssert(invoiceDialog-> {
+                    invoiceDialog.assertThereIsInvoiceLinesList();
+                    invoiceDialog.assertTotalIs(500.00);
+                    invoiceDialog.assertRepairPriceForTheFirstTaskIs(50.00);
+                });
     }
 
     @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
@@ -191,12 +199,34 @@ public class IntelligentRepair2 extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        new RnvService().sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim);
+        new RnvService().sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim);
+
+        /*
+          new CustomerDetailsPage().toRepairValuationProjectsPage()
+                .openEvaluateTaskDialog()
+                .doAssert(evaluateTask -> {
+                    evaluateTask.assertRepairPriceForTheFirstTaskIs(1, 50.00);
+                    evaluateTask.assertTotalIs(500.00);
+                });
+        new EvaluateTaskDialog()
+                .closeDialog()
+
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement)
+                .assertAuditResponseText(APPROVE);
+
+        new ProjectsPage().toInvoiceTab()
+                .openInvoiceDialogForLineWithIndex(0)
+                .doAssert(InvoiceDialog.Asserts::assertThereIsInvoiceLinesList);
+         */
+
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement);
 
-        new ProjectsPage().getAssertion().assertAuditResponseText(MANUAL);
+        new ProjectsPage().getAssertion()
+                .assertAuditResponseText(MANUAL);
     }
 }

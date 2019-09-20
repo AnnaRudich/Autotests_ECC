@@ -88,6 +88,12 @@ public class ProjectsPage extends Page {
             return this;
         }
 
+        public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement){
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getCompletedStatusName(), "Task has " + taskStatus + " status. Must be completed");
+            return this;
+        }
+
         SelenideElement evaluateTaskButton = $(By.xpath("//span[contains(text(), 'Evaluer opgave')]/following-sibling::span"));
 
         public Assertion assertEvaluateTaskButtonIsDisabled(){
