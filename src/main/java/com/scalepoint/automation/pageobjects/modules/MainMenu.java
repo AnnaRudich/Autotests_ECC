@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.ClaimSearchPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
-import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
+import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -38,9 +38,9 @@ public class MainMenu extends Module {
     @FindBy(id = "secondaryCaseButton")
     private Button customerDetails;
 
-    public VouchersPage toEccAdminPage() {
+    public SuppliersPage toEccAdminPage() {
         $(suppliers).click();
-        return at(VouchersPage.class);
+        return at(SuppliersPage.class);
     }
 
     public AdminPage toAdminPage() {
