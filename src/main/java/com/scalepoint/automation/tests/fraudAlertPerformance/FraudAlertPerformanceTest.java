@@ -76,10 +76,11 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                     List<Duration> value = entry.getValue();
                     Duration firstStep = value.get(0);
                     Duration secondStep = value.get(1);
-                    Duration sum = firstStep.plus(secondStep);
+                    Duration caseTime = value.get(2);
+                    Duration sum = firstStep.plus(secondStep).plus(caseTime);
 
-                    log.info("[{}] Case number: {}, duration {}, {}, sum {}", name, key, firstStep, secondStep, sum);
-                    writer.writeNext(new String[] {key, String.valueOf(firstStep.toNanos()/1000000), String.valueOf(secondStep.toNanos()/1000000), String.valueOf(sum)});
+                    log.info("[{}] Case number: {}, duration {}, {}, {}, sum {}", name, key, firstStep, caseTime, secondStep, sum);
+                    writer.writeNext(new String[] {key, String.valueOf(firstStep.toNanos()/1000000), String.valueOf(caseTime.toNanos()/1000000), String.valueOf(secondStep.toNanos()/1000000), String.valueOf(sum)});
                 });
 
         Double average = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
@@ -91,11 +92,17 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         Double secondStepAverage = map.values().stream().map(durations -> durations.get(1).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
         Double secondStepMax = map.values().stream().map(durations -> durations.get(1).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
 
+        Double caseAverage = map.values().stream().map(durations -> durations.get(2).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
+        Double caseMax = map.values().stream().map(durations -> durations.get(2).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
+
         log.info("[{}] FirstStep Average {}",name ,firstStepAverage);
         log.info("[{}] FirstStep Max {}", name, firstStepMax);
 
         log.info("[{}] FirstStep Average {}",name ,secondStepAverage);
         log.info("[{}] FirstStep Max {}", name, secondStepMax);
+
+        log.info("[{}] Case Average {}",name ,caseAverage);
+        log.info("[{}] Case Max {}", name, caseMax);
 
         log.info("[{}] Average {}",name ,average);
         log.info("[{}] Max {}", name, max);
@@ -105,6 +112,9 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
 
         writer.writeNext(new String[]{"SecondStep Average", String.valueOf(secondStepAverage)});
         writer.writeNext(new String[]{"SecondStep Max", String.valueOf(secondStepMax)});
+
+        writer.writeNext(new String[]{"Case Average", String.valueOf(caseAverage)});
+        writer.writeNext(new String[]{"Vase Max", String.valueOf(caseMax)});
 
         writer.writeNext(new String[]{"Average", String.valueOf(average)});
         writer.writeNext(new String[]{"Max", String.valueOf(max)});
@@ -188,7 +198,8 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                 .waitForClaimUpdatedEvents(token, 1);
         LocalDateTime uni = LocalDateTime.now();
 
-        Case caseData = new UnifiedIntegrationService()
+        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
+        Case caseData = unifiedIntegrationService
                 .getCaseEndpointByToken(COUNTRY, TENANT, token, events.get(0).getEventId());
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
 
@@ -199,6 +210,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         List<Duration> list = new LinkedList<>();
         list.add(Duration.between(start, uni));
         list.add(Duration.between(fraudStatus, end));
+        list.add(unifiedIntegrationService.getDuration());
         map.put(caseData.getCaseNumber(), list);
     }
 }

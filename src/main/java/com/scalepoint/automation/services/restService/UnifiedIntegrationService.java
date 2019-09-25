@@ -8,11 +8,14 @@ import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 
@@ -22,6 +25,7 @@ public class UnifiedIntegrationService{
 
     private static final String BASE_PATH = "/api/integration/";
     Token token;
+    Duration duration;
 
     public UnifiedIntegrationService() {
         this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.PLATFORM_CASE_READ).getToken();
@@ -30,20 +34,28 @@ public class UnifiedIntegrationService{
     public Case getCaseEndpointByToken(String country, String tenant, String caseToken, String eventId) throws IOException {
 
         log.info(Configuration.getEnvironmentUrl());
-        String response = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
+        RequestSpecification requestSpecification = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
                 .header(new Header("X-REQUEST-ID", eventId))
                 .contentType(ContentType.JSON)
                 .pathParam("country", country)
                 .pathParam("tenant", tenant)
                 .pathParam("caseToken", caseToken)
-                .when()
-                .get("/data/v1/{country}/{tenant}/case/{caseToken}")
+                .when();
+
+        LocalDateTime caseStart = LocalDateTime.now();
+        Response response = requestSpecification
+                .get("/data/v1/{country}/{tenant}/case/{caseToken}");
+        LocalDateTime caseEnd = LocalDateTime.now();
+
+        duration = Duration.between(caseStart, caseEnd);
+
+        String body = response
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response().getBody().print();
 
-        return new ObjectMapper().readValue(response, Case.class);
+        return new ObjectMapper().readValue(body, Case.class);
     }
 
     public Response getCaseEndpointByCaseNumber(String country, String tenant, String caseType, String caseNumber) {
@@ -61,5 +73,9 @@ public class UnifiedIntegrationService{
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
+    }
+
+    public Duration getDuration(){
+        return duration;
     }
 }
