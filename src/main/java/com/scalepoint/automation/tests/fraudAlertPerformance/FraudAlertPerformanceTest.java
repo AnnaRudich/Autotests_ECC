@@ -77,14 +77,16 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
                     Duration firstStep = value.get(0);
                     Duration secondStep = value.get(1);
                     Duration caseTime = value.get(2);
-                    Duration sum = firstStep.plus(secondStep).plus(caseTime);
+                    Duration sum = firstStep
+                            .plus(secondStep)
+                            .plus(caseTime);
 
                     log.info("[{}] Case number: {}, duration {}, {}, {}, sum {}", name, key, firstStep, caseTime, secondStep, sum);
                     writer.writeNext(new String[] {key, String.valueOf(firstStep.toNanos()/1000000), String.valueOf(caseTime.toNanos()/1000000), String.valueOf(secondStep.toNanos()/1000000), String.valueOf(sum)});
                 });
 
-        Double average = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
-        Double max = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
+        Double average = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).plus(durations.get(2)).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
+        Double max = map.values().stream().map(durations -> durations.get(0).plus(durations.get(1)).plus(durations.get(2)).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
 
         Double firstStepAverage = map.values().stream().map(durations -> durations.get(0).toNanos()).mapToLong(Long::longValue).average().getAsDouble()/1000000000.0;
         Double firstStepMax = map.values().stream().map(durations -> durations.get(0).toNanos()).mapToDouble(Long::doubleValue).max().getAsDouble()/1000000000.0;
@@ -114,7 +116,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         writer.writeNext(new String[]{"SecondStep Max", String.valueOf(secondStepMax)});
 
         writer.writeNext(new String[]{"Case Average", String.valueOf(caseAverage)});
-        writer.writeNext(new String[]{"Vase Max", String.valueOf(caseMax)});
+        writer.writeNext(new String[]{"Case Max", String.valueOf(caseMax)});
 
         writer.writeNext(new String[]{"Average", String.valueOf(average)});
         writer.writeNext(new String[]{"Max", String.valueOf(max)});
