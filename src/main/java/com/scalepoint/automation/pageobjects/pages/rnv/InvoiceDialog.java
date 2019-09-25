@@ -67,13 +67,13 @@ public class InvoiceDialog extends BaseDialog {
 
             InvoiceLine(int lineIndex) {
                 this.invoiceLine = $(By.xpath("//div[contains(@id, 'invoiceRowList')]//table/tbody/tr[" + lineIndex + "]"));
-                this.description = invoiceLine.$(By.xpath("//td[1]/div")).getText();
-                this.number = Integer.valueOf(invoiceLine.$(By.xpath("//td[2]/div")).getText());
-                this.unit = Integer.valueOf(invoiceLine.$(By.xpath("//td[3]/div")).getText());
-                this.unitPrice = Double.valueOf(invoiceLine.$(By.xpath("//td[4]/div")).getText());
-                this.price = Double.valueOf(invoiceLine.$(By.xpath("//td[5]/div")).getText());
-                this.VAT = Double.valueOf(invoiceLine.$(By.xpath("//td[6]/div")).getText());
-                this.lineTotal = Double.valueOf(invoiceLine.$(By.xpath("//td[1]/div")).getText());
+                this.description = invoiceLine.find(By.xpath("//td[1]/div")).getText();
+                this.number = Integer.valueOf(invoiceLine.find(By.xpath("//td[2]/div")).getText());
+                this.unit = Integer.valueOf(invoiceLine.find(By.xpath("//td[3]/div")).getText());
+                this.unitPrice = Double.valueOf(invoiceLine.find(By.xpath("//td[4]/div")).getText());
+                this.price = Double.valueOf(invoiceLine.find(By.xpath("//td[5]/div")).getText());
+                this.VAT = Double.valueOf(invoiceLine.find(By.xpath("//td[6]/div")).getText());
+                this.lineTotal = Double.valueOf(invoiceLine.find(By.xpath("//td[1]/div")).getText());
             }
 
 
