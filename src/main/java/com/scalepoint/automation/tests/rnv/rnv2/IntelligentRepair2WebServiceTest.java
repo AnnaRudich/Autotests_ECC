@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.pageobjects.pages.rnv.EvaluateTaskDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -32,7 +31,18 @@ import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.Audit
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.REJECT;
 
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-public class IntelligentRepair2 extends BaseTest {
+public class IntelligentRepair2WebServiceTest extends BaseTest {
+
+/*
+ * send line to RnV
+ * send feedback via RnV Rest service (with Invoice and RepairPrice =50)
+ * Assert: the task will be auto accepted (ECC/wiremock/mappings/RnVFeedbackApprove.json)
+ *          and claim auto completed (ECC/wiremock/mappings/ClaimAutoComplete.json)
+ * Assert: evaluateTaskButton is disabled when task is auto accepted
+ * Assert: InvoiceTab/InvoiceDialog. Invoice total is correct
+ * Assert: Repair Price in Invoice is correct
+ * Assert: Mail "Invoice is accepted" (Faktura godkendt) is sent
+ */
 @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackWithInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
@@ -59,11 +69,9 @@ public class IntelligentRepair2 extends BaseTest {
         new RnvService().sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim);
 
         Page.to(MyPage.class)
-
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
-
-                .openRecentClaim().toMailsPage()
-
+                .openRecentClaim()
+                .toMailsPage()
                 .doAssert(mail -> {
                     mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt");
                     mail.isMailExist(CUSTOMER_WELCOME);
@@ -73,27 +81,17 @@ public class IntelligentRepair2 extends BaseTest {
                 .toRepairValuationProjectsPage()
                 .getAssertion()
                 .assertEvaluateTaskButtonIsDisabled();
-//                .openEvaluateTaskDialog()
-//                .doAssert(evaluateTask -> {
-//                    evaluateTask.assertRepairPriceForTheFirstTaskIs(1, 50.00);
-//                    evaluateTask.assertTotalIs(500.00);
-//                });
-//        new EvaluateTaskDialog()
-//                .closeDialog()
 
-                new ProjectsPage().expandTopTaskDetails()
+       new ProjectsPage().expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasCompletedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
 
         new ProjectsPage().toInvoiceTab()
                 .openInvoiceDialogForLineWithIndex(0)
-                .doAssert(invoiceDialog-> {
-                    invoiceDialog.assertThereIsInvoiceLinesList();
-                    invoiceDialog.assertTotalIs(500.00);
-                    invoiceDialog.assertRepairPriceForTheFirstTaskIs(50.00);
-                });
-    }
+                .findInvoiceLineByIndex(1)
+                .assertTotalForTheLineWithIndex(1, Constants.PRICE_50);
+}
 
     @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackNoInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
@@ -124,16 +122,10 @@ public class IntelligentRepair2 extends BaseTest {
                 .openRecentClaim().toMailsPage();
 
         new CustomerDetailsPage().toRepairValuationProjectsPage()
-                .openEvaluateTaskDialog()
-                .doAssert(evaluateTask -> {
-                    evaluateTask.assertRepairPriceForTheTaskWithIndexIs(1, 50.00);
-                    evaluateTask.assertTotalIs(0.00);
-                });
+                .getAssertion()
+                .assertEvaluateTaskButtonIsDisabled();
 
-        new EvaluateTaskDialog()
-                .closeDialog()
-
-                .expandTopTaskDetails()
+        new ProjectsPage().expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFeedbackReceivedStatus(agreement)
                 .assertAuditResponseText(APPROVE);
@@ -176,7 +168,11 @@ public class IntelligentRepair2 extends BaseTest {
 
         new ProjectsPage().getAssertion().assertAuditResponseText(REJECT);
     }
-
+/*
+ * audit response is MANUAL
+ * evaluateTaskButton is enabled
+ */
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
