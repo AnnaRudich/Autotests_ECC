@@ -206,7 +206,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
 
         LocalDateTime fraudStatus = LocalDateTime.now();
-        new FraudStatusService().waitForFraudStatus("FRAUDULENT");
+        new FraudStatusService().waitForFraudStatus("FRAUDULENT", caseData);
         LocalDateTime end = LocalDateTime.now();
 
         List<Duration> list = new LinkedList<>();

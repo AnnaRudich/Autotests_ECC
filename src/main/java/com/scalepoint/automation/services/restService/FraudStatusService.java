@@ -2,8 +2,10 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BasePath;
 import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.awaitility.core.ConditionTimeoutException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,10 +40,15 @@ public class FraudStatusService extends BaseService {
                 .extract().response().jsonPath().getString("data.status");
     }
 
-    public String waitForFraudStatus(String status){
-        return  await()
-                .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
-                .timeout(STATUS_CHANGE_TIMEOUT, TimeUnit.SECONDS)
-                .until(() -> getFraudStatus(), equalTo(status));
+    public String waitForFraudStatus(String status, Case caseData){
+        try {
+            return await()
+                    .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                    .timeout(STATUS_CHANGE_TIMEOUT, TimeUnit.SECONDS)
+                    .until(() -> getFraudStatus(), equalTo(status));
+        }catch (ConditionTimeoutException e){
+
+            throw new ConditionTimeoutException("UI not updated. Case number: ".concat(caseData.getCaseNumber()));
+        }
     }
 }
