@@ -192,8 +192,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected SuppliersPage loginToEccAdmin(User user) {
         return login(user)
                 .getMainMenu()
-                .toEccAdminPage()
-                .toSuppliersPage();
+                .toEccAdminPage();
     }
 
     protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
