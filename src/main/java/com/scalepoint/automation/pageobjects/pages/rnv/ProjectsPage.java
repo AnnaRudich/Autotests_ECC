@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.rnv;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
@@ -12,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.$;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,6 +87,28 @@ public class ProjectsPage extends Page {
             Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatusName(), "Task has " + taskStatus + " status. Must be feedback received");
             return this;
         }
+
+        public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement){
+            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            Assert.assertEquals(taskStatus, agreement.getCompletedStatusName(), "Task has " + taskStatus + " status. Must be completed");
+            return this;
+        }
+
+        SelenideElement evaluateTaskButton = $(By.xpath("//span[contains(text(), 'Evaluer opgave')]/following-sibling::span"));
+
+        public Assertion assertEvaluateTaskButtonIsDisabled(){
+            assertThat(evaluateTaskButton.has(attribute("unselectable", "on")))
+                    .as("evaluateTaskButton should be disabled").isTrue();
+            return this;
+        }
+
+        public Assertion assertEvaluateTaskButtonIsEnabled(){
+            assertThat(evaluateTaskButton.has(attribute("unselectable", "on")))
+                    .as("evaluateTaskButton should be enabled").isFalse();
+            return this;
+        }
+
+
     }
 
     public enum AuditResultEvaluationStatus {
