@@ -405,7 +405,7 @@ public class CommunicationDesignerTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare order confirmation mails")
-    public void test(User user, Claim claim, ClaimItem claimItem) {
+    public void orderConfirmationWhenWeUseProductWithdrawal(User user, Claim claim, ClaimItem claimItem) {
 
         final String ORDER_CONFIRMATION = "[OrderConfirmation]";
 
