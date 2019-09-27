@@ -13,6 +13,8 @@ import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 
@@ -303,7 +305,7 @@ public class LessIsMoreTests extends BaseTest {
     public void charlie_550_excelImportWithGrouping(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimLineGroup claimLineGroup) {
 
         loginAndCreateClaim(user, claim)
-                .importExcelFile(claimLineGroup.getExcelWithGroupsFilePath())
+                .importExcelFile(new File(claimLineGroup.getExcelWithGroupsFilePath()).getAbsolutePath())
                 .doAssert(asserts -> {
                     asserts.assertSettlementPageIsNotInFlatView();
                     asserts.assertSettlementContainsLinesWithDescriptions(claimLineGroup.getExcelLineGroups());

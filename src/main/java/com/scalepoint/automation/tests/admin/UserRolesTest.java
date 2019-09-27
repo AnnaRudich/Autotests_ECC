@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
-import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
+import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
@@ -100,8 +100,8 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(user.getLogin(), user.getPassword(), VouchersPage.class)
-                .assertLinkToECCIsNotShown();
+                .login(user.getLogin(), user.getPassword(), SuppliersPage.class)
+                .doAssert(SuppliersPage.Asserts::assertsIsToMatchingEngineLinkNotDisplayed);
     }
 
     /**
@@ -121,7 +121,7 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(user.getLogin(), user.getPassword(), VouchersPage.class)
+                .login(user.getLogin(), user.getPassword(), SuppliersPage.class)
                 .signOut();
 
         login(getSystemUser(), UsersPage.class)

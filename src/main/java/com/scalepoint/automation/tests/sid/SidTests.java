@@ -230,8 +230,7 @@ public class SidTests extends BaseTest {
 
         SuppliersPage suppliersPage = login(getSystemUser())
                 .getMainMenu()
-                .toEccAdminPage()
-                .toSuppliersPage();
+                .toEccAdminPage();
 
         SupplierDialog.GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier);
         SharedEccAdminFlows.createVoucherAgreement(generalTab,

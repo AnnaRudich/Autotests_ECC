@@ -1,0 +1,33 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="dnd" configfailurepolicy="continue" parallel="methods" thread-count="3">
+    <test verbose="1" name="excelImport" group-by-instances="false" enabled="true" preserve-order="false">
+
+        <classes>
+            <class name="com.scalepoint.automation.tests.ExcelImportCategoriesAndValuationsSelectionTest"/>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+                <methods>
+                    <include name="ecc2631_quickMatchFromExcel"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.sid.ImportExcelDiscretionaryReasonTests">
+            <methods>
+                <include name="charlie508_1_ImportExcelWithDiscretionaryValuation"/>
+                <include name="charlie508_2_ImportEcxelAddManuallyDiscrValuation"/>
+                <include name="charlie508_3_ImportEcxelAddManuallyDiscrDepreciation"/>
+            </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.LessIsMoreTests">
+                <methods>
+                    <include name="charlie_550_excelImportWithGrouping"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.VoucherPredictionTest">
+                <methods>
+                    <include name="mike41_improvedVoucherMatchForExcelImport"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

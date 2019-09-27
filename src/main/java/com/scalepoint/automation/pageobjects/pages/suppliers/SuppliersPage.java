@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
@@ -10,13 +11,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.refresh;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -52,6 +58,9 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     @FindBy(xpath = "//a[@href='toME.action']")
     private WebElement toMatchingEngineLink;
 
+    @FindBy(xpath = ".//a[contains(@href, 'logout')]")
+    private Link signOutLink;
+
     private String bySupplierNameXpath = "//tbody[contains(@id,'gridview')]//tr[contains(.,'$1')]";
     private String byVoucherXpath = "//td[contains(@class, 'x-grid-cell-supplierListVouchersId ')]";
     private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-supplierListExclusiveId ')]";
@@ -81,6 +90,10 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         return BaseDialog.at(CreateSupplierDialog.class);
     }
 
+    public LoginPage signOut() {
+        signOutLink.click();
+        return at(LoginPage.class);
+    }
 
     public SupplierDialog openFirstSupplier() {
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
@@ -142,6 +155,17 @@ public class SuppliersPage extends BaseEccAdminNavigation {
         return tickedExclOrVouchersField.isDisplayed();
     }
 
+    @FindBy(xpath = ".//a[contains(@href, 'toME.action')]")
+    private Link toMeLink;
+
+    private boolean isToMeLinkDisplayed() {
+        try {
+            return toMeLink.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public SuppliersPage doAssert(Consumer<Asserts> assertsFunc) {
         assertsFunc.accept(new Asserts());
         return SuppliersPage.this;
@@ -160,6 +184,11 @@ public class SuppliersPage extends BaseEccAdminNavigation {
 
         public Asserts assertsIsToMatchingEngineLinkDisplayed() {
             assertTrue(toMatchingEngineLink.isDisplayed());
+            return this;
+        }
+
+        public Asserts assertsIsToMatchingEngineLinkNotDisplayed() {
+            assertFalse(isToMeLinkDisplayed());
             return this;
         }
 

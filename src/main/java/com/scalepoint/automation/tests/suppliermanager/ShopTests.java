@@ -60,7 +60,6 @@ public class ShopTests extends BaseTest {
         return login(getSystemUser())
                 .getMainMenu()
                 .toEccAdminPage()
-                .toSuppliersPage()
                 .openFirstSupplier()
                 .selectShopsTab()
                 .openAddShopDialog()

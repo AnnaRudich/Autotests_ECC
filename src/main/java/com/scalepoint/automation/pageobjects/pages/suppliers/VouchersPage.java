@@ -11,7 +11,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
@@ -27,8 +26,6 @@ public class VouchersPage extends BaseEccAdminNavigation {
 
     @FindBy(xpath = ".//a[contains(@href, 'logout')]")
     private Link signOutLink;
-    @FindBy(xpath = ".//a[contains(@href, 'toME.action')]")
-    private Link toMeLink;
     @FindBy(xpath = "//button[contains(@class,'open-selected-supplier-btn')]")
     private WebElement openSelectedButton;
     @FindBy(xpath = "//input[contains(@id,'searchfield')]")
@@ -171,19 +168,6 @@ public class VouchersPage extends BaseEccAdminNavigation {
     public LoginPage signOut() {
         signOutLink.click();
         return at(LoginPage.class);
-    }
-
-    private boolean isToMeLinkDisplayed() {
-        try {
-            return toMeLink.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public VouchersPage assertLinkToECCIsNotShown() {
-        Assert.assertFalse(isToMeLinkDisplayed());
-        return this;
     }
 
     public boolean isVoucherCreated(String voucherName) {
