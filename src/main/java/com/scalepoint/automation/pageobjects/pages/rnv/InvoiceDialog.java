@@ -66,12 +66,7 @@ public class InvoiceDialog extends BaseDialog {
             Double lineTotal;
 
             InvoiceLine(int lineIndex) {
-                try {
-                    this.invoiceLine = $(By.xpath("(//div[contains(@id, 'invoiceRowList')]//table/tbody/tr)[" + lineIndex + "]"));
-                } catch (Exception e) {
-                    logger.error("could not find invoiceLine");
-                }
-
+                this.invoiceLine = $(By.xpath("(//div[contains(@id, 'invoiceRowList')]//table/tbody/tr)[" + lineIndex + "]"));
                 this.description = invoiceLine.find(By.xpath("td[1]/div")).getText();
                 this.number = Integer.valueOf(invoiceLine.find(By.xpath("td[2]/div")).getText());
                 this.unit = Integer.valueOf(invoiceLine.find(By.xpath("td[3]/div")).getText());
