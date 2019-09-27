@@ -4,13 +4,13 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
-import org.assertj.core.api.AssertionsForClassTypes;
+import lombok.Getter;
 import org.openqa.selenium.By;
 
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class InvoiceDialog extends BaseDialog {
 
@@ -35,14 +35,14 @@ public class InvoiceDialog extends BaseDialog {
 
         public InvoiceDialog.Asserts assertTotalIs(Double totalExpectedValue) {
             Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
-            AssertionsForClassTypes.assertThat(totalActualValue).as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
+            assertThat(totalActualValue).as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
                     .isEqualTo(totalExpectedValue);
             return this;
         }
 
         public InvoiceDialog.Asserts assertRepairPriceForTheFirstTaskIs(Double expectedRepairPrice) {
             Double actualRepairPrice = new Double($(By.xpath("//td[@id = 'repairPrice0']/div/span[1]")).getText());
-            AssertionsForClassTypes.assertThat(actualRepairPrice).as("Repair price should be: " + expectedRepairPrice + "but was: " + actualRepairPrice)
+            assertThat(actualRepairPrice).as("Repair price should be: " + expectedRepairPrice + "but was: " + actualRepairPrice)
                     .isEqualTo(expectedRepairPrice);
             return this;
         }
@@ -52,7 +52,7 @@ public class InvoiceDialog extends BaseDialog {
     public InvoiceLine findInvoiceLineByIndex(int lineIndex) {
         return new InvoiceLine(lineIndex);
     }
-
+        @Getter
         public class InvoiceLine {
             SelenideElement invoiceLine;
 
@@ -76,48 +76,8 @@ public class InvoiceDialog extends BaseDialog {
                 this.lineTotal = Double.valueOf(invoiceLine.find(By.xpath("td[7]/div")).getText());
             }
 
-
-            public SelenideElement getInvoiceLine() {
-                return invoiceLine;
-            }
-
-            public String getDescription() {
-                return description;
-            }
-
-            public int getNumber() {
-                return number;
-            }
-
-            public int getUnit() {
-                return unit;
-            }
-
-            public Double getUnitPrice() {
-                return unitPrice;
-            }
-
-            public Double getPrice() {
-                return price;
-            }
-
-            public Double getVAT() {
-                return VAT;
-            }
-
-            public Double getLineTotal() {
-                return lineTotal;
-            }
-
-            public InvoiceLine assertThereIsInvoiceLineWithIndex(int index){
-              assertThat(findInvoiceLineByIndex(index))
-                      .as("InvoiceLine with index: " + index + "was not found").isNotNull();
-              return this;
-            }
-
            public InvoiceLine assertTotalForTheLineWithIndex(int lineIndex, Double expectedLineTotal) {
-                assertThereIsInvoiceLineWithIndex(lineIndex);
-                Double actualLineTotal = findInvoiceLineByIndex(lineIndex).getLineTotal();
+                Double actualLineTotal = this.getLineTotal();
                 assertThat(actualLineTotal)
                                 .as("the total for line with index: " + lineIndex + " is: " + expectedLineTotal + " but was: " + actualLineTotal + "")
                                 .isEqualTo(expectedLineTotal);

@@ -89,8 +89,10 @@ public class ProjectsPage extends Page {
         }
 
         public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement){
-            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
-            Assert.assertEquals(taskStatus, agreement.getCompletedStatusName(), "Task has " + taskStatus + " status. Must be completed");
+            String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            assertThat(actualTaskStatus)
+                    .as("Task has " + actualTaskStatus + " status. Must be completed")
+                    .isEqualTo(agreement.getCompletedStatusName());
             return this;
         }
 
@@ -98,17 +100,17 @@ public class ProjectsPage extends Page {
 
         public Assertion assertEvaluateTaskButtonIsDisabled(){
             assertThat(evaluateTaskButton.has(attribute("unselectable", "on")))
-                    .as("evaluateTaskButton should be disabled").isTrue();
+                    .as("evaluateTaskButton should be disabled")
+                    .isTrue();
             return this;
         }
 
         public Assertion assertEvaluateTaskButtonIsEnabled(){
             assertThat(evaluateTaskButton.has(attribute("unselectable", "on")))
-                    .as("evaluateTaskButton should be enabled").isFalse();
+                    .as("evaluateTaskButton should be enabled")
+                    .isFalse();
             return this;
         }
-
-
     }
 
     public enum AuditResultEvaluationStatus {
