@@ -500,7 +500,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(item.getDescription()).contains(SONY_HDR_CX450);
         assertThat(item.getCategory()).isEqualTo(claimItem.getCategoryVideoCamera().getGroupName());
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2260.0);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2645.02);
         assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2699.00);
 
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
@@ -538,7 +538,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(item.getDescription()).contains(SONY_HDR_CX450);
         assertThat(item.getCategory()).isEqualTo(claimItem.getCategoryVideoCamera().getGroupName());
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2260.0);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2645.02);
         assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2699.00);
 
         new EventApiService().sendFraudStatus(events.get(0), "NOT_FRAUDULENT");
