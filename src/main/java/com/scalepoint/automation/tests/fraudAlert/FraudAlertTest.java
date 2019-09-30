@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -56,7 +57,7 @@ public class FraudAlertTest extends BaseTest {
         new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
     }
 
-    private String excelImportPath = "C:\\ExcelImport\\DK_NYT ARK(3)(a).xls";
+    private String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 
     @DataProvider(name = "fraudAlertDataProvider")
     public static Object[][] fraudAlertDataProvider(Method method) {
