@@ -151,8 +151,17 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: User fills Advanced data for V1
      * WHEN: User saves V1 data
      * THEN: Advanced data for V1 is stored correctly
+     *
+     * https://jira.scalepoint.com/browse/CLAIMSHOP-4869
+     * Feature toggle was added to hide delivery type -
+     *         FREIGHT_PRICE,
+     *         DONT_SEND_ORDER_EMAIL,
+     *         SUPPLIER_NOTES,
+     *         DELIVERY_TYPE
+     * now to apply this toggle deploy should be done, it's a bug which should be fixed
      */
-    @Test(dataProvider = "testDataProvider",
+
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to add Advanced data for new voucher")
     public void ecc3038_advancedDataAdding(User user, Voucher voucher) {
         loginToEccAdmin(user)
