@@ -114,7 +114,7 @@ public class SettlementSummary extends Module {
         return completeClaim.isEnabled();
     }
 
-    private boolean isFradulent(){
+    private boolean isFraudulent(){
         
         String text = "CentralScore ej ok";
         if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
@@ -124,7 +124,7 @@ public class SettlementSummary extends Module {
                 .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
     }
 
-    private boolean isNotFradulent(){
+    private boolean isNotFraudulent(){
 
         String text = "CentralScore ok";
         if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
@@ -185,12 +185,12 @@ public class SettlementSummary extends Module {
         }
 
         public Asserts assertFraudulent(){
-            Assert.assertTrue(isFradulent(), "Claim is not fraudulent");
+            Assert.assertTrue(isFraudulent(), "Claim is not fraudulent");
             return this;
         }
 
         public Asserts assertNotFraudulent(){
-            Assert.assertTrue(isNotFradulent(), "Claim is fraudulent");
+            Assert.assertTrue(isNotFraudulent(), "Claim is fraudulent");
             return this;
         }
 

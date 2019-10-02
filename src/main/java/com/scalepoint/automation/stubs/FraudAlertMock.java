@@ -137,35 +137,6 @@ public class FraudAlertMock {
                     throw new RuntimeException(e);
                 }
             }
-
-//            public SchemaValidation validateTemplateGenerateSchema(String claimNumber) {
-//                List jsonBodies = wireMock.find(postRequestedFor(urlPathEqualTo(ROUTE_CLAIM_UPDATED)))
-//                        .stream()
-//                        .filter(loggedRequest ->
-//                                JsonUtils.stringToJsonNode(loggedRequest.getBodyAsString())
-//                                        .path("data")
-//                                        .path("claim")
-//                                        .path("claimNumber")
-//                                        .asText()
-//                                        .equals(claimNumber)
-//                        )
-//                        .map(loggedRequest -> loggedRequest.getBodyAsString())
-//                        .collect(Collectors.toList());
-//
-//                jsonBodies.stream().forEach(body -> {
-//                    ProcessingReport report;
-//                    try {
-//                        report = templateGenerate.validate(JsonUtils.stringToJsonNode((String) body));
-//                    } catch (ProcessingException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                    assertThat(report.isSuccess())
-//                            .as(String.format("Template generate schema validation: %s", report))
-//                            .isTrue();
-//                });
-//
-//                return this;
-//            }
         }
     }
 }
