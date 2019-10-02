@@ -56,6 +56,12 @@ public class SettlementSummary extends Module {
     @FindBy(id = "auditInfoPanel")
     private WebElement auditInfoPanel;
 
+    @FindBy(css = "[id^=fraudStatus] [role=textbox]")
+    private WebElement fraudStatus;
+
+    @FindBy(id = "settlementSummaryTotalsPanel")
+    private WebElement settlementSummaryTotalsPanel;
+
     public void cancel() {
         clickUsingJsIfSeleniumClickReturnError(cancel);
     }
@@ -108,6 +114,27 @@ public class SettlementSummary extends Module {
         return completeClaim.isEnabled();
     }
 
+    private boolean isFraudulent(){
+        
+        String text = "CentralScore ej ok";
+        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
+            expand();
+        }
+        return $(fraudStatus)
+                .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
+    }
+
+    private boolean isNotFraudulent(){
+
+        String text = "CentralScore ok";
+        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
+            expand();
+        }
+
+        return $(fraudStatus)
+                .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
+    }
+
     public SettlementSummary ensureAuditInfoPanelVisible() {
         expand();
         waitForVisible(auditInfoPanel);
@@ -154,6 +181,16 @@ public class SettlementSummary extends Module {
 
         public Asserts assertCompleteClaimEnabled() {
             Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
+            return this;
+        }
+
+        public Asserts assertFraudulent(){
+            Assert.assertTrue(isFraudulent(), "Claim is not fraudulent");
+            return this;
+        }
+
+        public Asserts assertNotFraudulent(){
+            Assert.assertTrue(isNotFraudulent(), "Claim is fraudulent");
             return this;
         }
 

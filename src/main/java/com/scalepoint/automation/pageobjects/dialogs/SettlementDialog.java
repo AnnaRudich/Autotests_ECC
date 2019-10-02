@@ -17,12 +17,7 @@ import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -101,7 +96,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtInput customerDemand;
 
     @FindBy(id = "new-price-textfield-inputEl")
-    private ExtInput newPrice;
+    private WebElement newPrice;
 
     @FindBy(id = "depreciation-textfield-inputEl")
     private ExtInput depreciationPercentage;
@@ -417,6 +412,7 @@ public class SettlementDialog extends BaseDialog {
 
     private SettlementDialog setExtInputValue(ExtInput input, String value) {
         waitForVisible(input);
+        input.clear();
         input.enter(value);
         simulateBlurEvent(input);
         waitForJavascriptRecalculation();
@@ -458,7 +454,13 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setNewPrice(Double amount) {
-        return setExtInputValue(newPrice, OperationalUtils.format(amount));
+        SelenideElement element = $(newPrice).waitUntil(Condition.visible, 6000);
+        element.doubleClick();
+        element.sendKeys(Keys.DELETE);
+        element.setValue(OperationalUtils.format(amount))
+                .pressTab();
+        waitForJavascriptRecalculation();
+        return this;
     }
 
     public SettlementDialog setDiscretionaryPrice(Double amount) {

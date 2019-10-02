@@ -1,0 +1,40 @@
+{
+  "savedCategoryId":null,
+  "hasDocumentation":false,
+  "clearAttachments":false,
+  "purchasePrice":null,
+  "newPrice":123,
+  "customerDemand":1234,
+  "loadAttachments":false,
+  "quantity":1,
+  "progress":0,
+  "repair":{
+    "isRepairStarted":null,
+    "price":null,
+    "damageType":-1
+  },
+  "acquired":null,
+  "lineId":null,
+  "unableToUpload":false,
+  "uploadAttachments":false,
+  "customerNote":null,
+  "attachments":[
+
+  ],
+  "productMatch":null,
+  "deletedAttachments":[
+
+  ],
+  "groupCategoryId":2,
+  "deleted":false,
+  "noDocumentation":false,
+  "categoryId":22,
+  "id":-1,
+  "selected":false,
+  "description":"test",
+  "lossType":null,
+  "purchaseYear":-1,
+  "itemState":"NEW",
+  "age":23,
+  "purchaseMonth":-1
+}

@@ -3,10 +3,11 @@ package com.scalepoint.automation.pageobjects.modules;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class FunctionalMenu extends Module {
 
@@ -41,7 +42,7 @@ public class FunctionalMenu extends Module {
 
     public LossImportDialog openImportExcelDialog() {
         logger.info("Main: {}", driver.getWindowHandle());
-        driver.findElement(By.id("excelImportBtn")).click();
+        $("#excelImportBtn").click();
         return BaseDialog.at(LossImportDialog.class);
     }
 }

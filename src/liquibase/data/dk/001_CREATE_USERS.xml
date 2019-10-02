@@ -54,6 +54,9 @@
 
             declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TOPDANMARK')
             EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark', @chUserRights
+
+            EXEC autotests_create_performance_test_users 'autotest-topdanmark', @topdanmark_id, @chUserRights, 100
+
         </sql>
 
         <sql>

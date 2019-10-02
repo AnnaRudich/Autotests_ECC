@@ -19,6 +19,19 @@ public class OauthTestAccountsApi {
                 .formParam("client_id", "test_integration_all_tenants")
                 .formParam("client_secret", "8Qgwd8rlCEGOWZH861f_XWC-m_mxKtJgnJj6Rbq8kMU")
                 .formParam("scope", scope.getScope())
+                .formParam("tenantId")
+                .when()
+                .post()
+                .then().log().all().statusCode(HttpStatus.SC_OK).extract().as(Token.class);
+        return this;
+    }
+
+    public OauthTestAccountsApi sendRequest(Scope scope, String clientId, String clientSecret) {
+        this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
+                .formParam("grant_type", "client_credentials")
+                .formParam("client_id", clientId)
+                .formParam("client_secret", clientSecret)
+                .formParam("scope", scope.getScope())
                 .when()
                 .post()
                 .then().log().all().statusCode(HttpStatus.SC_OK).extract().as(Token.class);
@@ -38,6 +51,7 @@ public class OauthTestAccountsApi {
         CASE_INTEGRATION("case_integration"),
         AUDIT_REPORT_CREATE("audit-report:create"),
         EVENTS_INTERNAL("events-internal"),
+        EVENTS("events"),
         PLATFORM_CASE_READ("platform-case:read");
 
         private String scope;

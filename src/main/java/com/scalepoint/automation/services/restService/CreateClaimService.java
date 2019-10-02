@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -50,6 +51,12 @@ public class CreateClaimService extends BaseService {
                 .post()
                 .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).log().all();
         return this;
+    }
+
+    public SelfServiceService requestSelfService(SelfServiceRequest selfServiceRequest){
+
+        return new SelfServiceService()
+                .requestSelfService(selfServiceRequest);
     }
 
     public ClaimSettlementItemsService claimLines() {

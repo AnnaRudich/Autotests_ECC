@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
-import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import com.scalepoint.automation.utils.data.request.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -93,6 +93,14 @@ public class TestData {
         return (Payments) getData(Data.PAYMENTS);
     }
 
+    public static SelfServiceRequest getSelfServiceRequest() {
+        return (SelfServiceRequest) getData(Data.SELF_SERVICE_REQUEST);
+    }
+
+    public static SelfServiceLossItems getSelfServiceLossItems() {
+        return (SelfServiceLossItems) getData(Data.SELF_SERVICE_LOSS_ITEMS);
+    }
+
     public static Translations getTranslations() {
         return (Translations) getData(Data.TRANSLATIONS);
     }
@@ -101,12 +109,20 @@ public class TestData {
         return (ClaimRequest) getData(Data.CWA_CLAIM);
     }
 
+    public static ClaimRequest getClaimRequestFraudAlert() {
+        return (ClaimRequest) getData(Data.FRAUD_ALERT_CLAIM);
+    }
+
     public static Assignment getAssignment() {
         return (Assignment) getData(Data.ASSIGNMENT);
     }
 
     public static InsertSettlementItem getInsertSettlementItem() {
         return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
+    }
+
+    public static UpdateSettlementItem getUpdateSettlementItem() {
+        return (UpdateSettlementItem) getData(Data.UPDATED_CLAIM_ITEM);
     }
 
     public static EccIntegration getEccIntegration() {
@@ -122,16 +138,15 @@ public class TestData {
 
     private static <T> T getData(Data data) {
         String locale = Configuration.getLocale().getValue();
-        String filePath = buildDataFilePath(locale, data.fileName);
         Object resultObject;
-        InputStream inputStream = TestData.class.getClassLoader().getResourceAsStream(filePath);
+        InputStream inputStream = getInputStreamFromResources(locale, data.fileName);
         try {
             if (data.fileName.endsWith(".xml")) {
                 resultObject = data.context.createUnmarshaller().unmarshal(inputStream);
             } else if (data.fileName.endsWith(".json")) {
                 resultObject = new ObjectMapper().readValue(inputStream, data.dataClass);
             } else {
-                throw new IOException("File should be xml or json, file is not valid " + filePath);
+                throw new IOException("File should be xml or json, file is not valid " + data.fileName);
             }
             preprocess(resultObject, buildParams());
             return (T) resultObject;
@@ -139,6 +154,12 @@ public class TestData {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static InputStream getInputStreamFromResources(String locale, String fileName){
+
+        String filePath = buildDataFilePath(locale, fileName);
+        return TestData.class.getClassLoader().getResourceAsStream(filePath);
     }
 
     public static String objectAsXml(Object object) {
@@ -203,11 +224,15 @@ public class TestData {
         PAYMENTS("Payments.xml", Payments.class),
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
         CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
+        FRAUD_ALERT_CLAIM("Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
+        UPDATED_CLAIM_ITEM("Claim/UpdatedClaimItem.xml", UpdateSettlementItem.class),
         ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
-        TRANSLATIONS("Translations.xml", Translations.class);
+        TRANSLATIONS("Translations.xml", Translations.class),
+        SELF_SERVICE_REQUEST("SelfServiceRequest.json", SelfServiceRequest.class),
+        SELF_SERVICE_LOSS_ITEMS("SelfServiceLossItems.json", SelfServiceLossItems.class);
 
         private String fileName;
         private JAXBContext context;

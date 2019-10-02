@@ -13,8 +13,10 @@ import java.util.UUID;
         "tenant",
         "company",
         "country",
+        "language",
         "caseType",
         "caseNumber",
+        "checkForFraud",
         "accidentDate",
         "itemizationCaseReference",
         "externalReference",
@@ -31,6 +33,10 @@ public class ClaimRequest {
     private String company;
     @JsonProperty("country")
     private String country;
+    @JsonProperty("checkForFraud")
+    private boolean checkForFraud;
+    @JsonProperty("language")
+    private String language;
     @JsonProperty("caseType")
     private String caseType;
     @JsonProperty("caseNumber")
@@ -94,6 +100,36 @@ public class ClaimRequest {
 
     public ClaimRequest withCountry(String country) {
         this.country = country;
+        return this;
+    }
+
+    @JsonProperty("checkForFraud")
+    public boolean getCheckForFraud() {
+        return checkForFraud;
+    }
+
+    @JsonProperty("checkForFraud")
+    public void setCheckForFraud(boolean checkForFraud) {
+        this.checkForFraud = checkForFraud;
+    }
+
+    public ClaimRequest withCheckForFraud(boolean checkForFraud) {
+        this.checkForFraud = checkForFraud;
+        return this;
+    }
+
+    @JsonProperty("language")
+    public String getLanguage() {
+        return language;
+    }
+
+    @JsonProperty("language")
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public ClaimRequest withLanguage(String language) {
+        this.language = language;
         return this;
     }
 

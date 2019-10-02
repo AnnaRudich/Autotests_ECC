@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.api;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.EventDatabaseApi;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
@@ -39,8 +40,17 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected EventDatabaseApi eventDatabaseApi;
 
+    @Autowired
+    protected WireMock wireMock;
+
     @Value("${driver.type}")
     protected String browserMode;
+
+    @Value("${subscription.claimline_changed.id}")
+    protected String claimLineChangedSubscriptionId;
+
+    @Value("${subscription.fraud_status.id}")
+    protected String fraudStatusSubscriptionId;
 
     @BeforeMethod
     public void setUpData(Method method) {

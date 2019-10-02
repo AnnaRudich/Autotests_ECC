@@ -126,6 +126,12 @@
                 <activatedProperties>stage</activatedProperties>
             </properties>
         </profile>
+        <profile>
+            <id>PROJECT-PERF</id>
+            <properties>
+                <activatedProperties>project-perf</activatedProperties>
+            </properties>
+        </profile>
     </profiles>
 
     <properties>
@@ -144,7 +150,7 @@
         <htmlelements.version>1.20.0</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
         <java.version>1.8</java.version>
-        <jackson.version>2.6.0</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.9.2</jsoup.version>
         <jaxb.version>2.2.12</jaxb.version>
         <qatools.properties.version>2.0.RC3</qatools.properties.version>
@@ -289,6 +295,13 @@
     </reporting>
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>com.scalepoint</groupId>
+            <artifactId>test-client-certs</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <dependency>
             <groupId>ru.qatools.commons</groupId>
@@ -480,13 +493,13 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <dependency>
@@ -553,6 +566,18 @@
             <version>1.2.17</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.6</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -571,7 +596,7 @@
         </repository>
         <repository>
             <id>internal</id>
-            <url>http:/ecc-tools.spcph.local/nexus/content/repositories/internal</url>
+            <url>http://ecc-tools.spcph.local/nexus/content/repositories/internal</url>
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>warn</checksumPolicy>

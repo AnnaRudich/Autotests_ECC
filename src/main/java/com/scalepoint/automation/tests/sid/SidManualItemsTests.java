@@ -657,8 +657,6 @@ public class SidManualItemsTests extends BaseTest {
                     sid.assertItemIsPresent(claimItem1.getTextFieldSP());
                 });
 
-        new SettlementSummary().doAssert(asserts -> asserts.assertSubtotalSumValueIs(claimItem1.getNewPriceSP()));
-
         new SettlementDialog().ensureWeAreAt()
 
                 .setBaseData(claimItem2)

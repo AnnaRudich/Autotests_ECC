@@ -1,0 +1,8 @@
+<UpdateSettlementItem><SettlementItem id="10095472" totalDamage="false" active="true" reviewed="false" rejected="false" documentationOk="true" reductionRuleLineId="null" preDepreciation="0" postDepreciation="0" depreciateDiscounted="false" depreciationType="1" policyRuleDepreciation="0" discretionaryRuleDepreciation="0" cashReduction="0" automaticDepreciation="true" depreciationChanged="false" taxRate="0.25" includeTax="true">
+    <Claim description="item1" quantity="1" newItem="false" category="22" claimToken="881582A4-B3AB-436D-BE8F-F355CC336092" room="null" originalDescription=""/>
+    <Valuations>
+        <Valuation id="21689555" quantity="1" preDepreciation="0" active="true" dirty="true" hidden="false" valuationType="CUSTOMER_DEMAND" priceAfterAllDeductions="400"><Price name="price" netAmount="320" amount="400"/></Valuation>
+        <Valuation id="21689554" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="VOUCHER" priceAfterAllDeductions="480" baseValuation="21689556"><Price name="price" netAmount="384" amount="480"/><VoucherReplacement voucher="720909"><Price name="cashValue" netAmount="384" amount="480"/><Price name="faceValue" netAmount="480" amount="600"/></VoucherReplacement></Valuation>
+        <Valuation id="21689556" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="NEW_PRICE" priceAfterAllDeductions="600"><Price name="price" netAmount="480" amount="600"/></Valuation>
+    </Valuations>
+</SettlementItem></UpdateSettlementItem>

@@ -1,0 +1,14 @@
+{
+  "selfServiceType":"SELF_SERVICE",
+  "claimsNo":"0e2a40df-c327-4931-bfd2-99d3e936184b",
+  "firstName":"John",
+  "lastName":"Doe",
+  "email":"john.doe@scalepoint.com",
+  "culture":"da-DK",
+  "mobileNumber":"88 81 80 00",
+  "password":"12341234",
+  "sendPasswordSMS":"true",
+  "closeAutomatically":"true",
+  "customerNotes":"&nbsp;",
+  "previousNotes":""
+}

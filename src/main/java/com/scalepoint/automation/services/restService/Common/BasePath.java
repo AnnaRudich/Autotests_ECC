@@ -20,6 +20,13 @@ public interface BasePath {
     String SETTLEMENT = "/{userId}/webshop/jsp/matching_engine/settlement.jsp";
     String OWN_RISK = "/{userId}/rest/settlement/ownRisk";
     String MANUAL_REDUCTION = "/{userId}/rest/settlement/manualReduction";
+    String FRAUD_STATUS = "/{userId}/rest/settlement/fraudStatus.json";
     String REOPEN = "ReopenCustomer";
     String SETTLEMENT_TOTALS = "/{userId}/rest/settlement/settlementSummaryTotals.json";
+    String SELF_SERVICE_REQUEST = "/{userId}/rest/settlement/selfServiceRequest.json";
+    String SELF_SERVICE_LOGIN = "/self-service/dk/login";
+    String EXCEL = "/{userId}/rest/lossImport/excel";
+    String MATCH = "/{userId}/rest/lossImport/match";
+    String SELF_SERVICE_LOSS_ITEMS = "/self-service/dk/lossItems/";
+    String SELF_SERVICE_SUBMITTED = "/self-service/dk/submitted";
 }

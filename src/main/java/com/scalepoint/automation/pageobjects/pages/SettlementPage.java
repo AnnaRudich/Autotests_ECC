@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
@@ -298,6 +299,12 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
+    public SettlementPage delete() {
+        $(By.xpath("//span[contains(@style,'deleteIcon.png')]")).click();
+        $(By.xpath("//span[text() = 'Ja']")).click();
+        return this;
+    }
+
     public SettlementPage selectLinesByIndex(int... lines) {
         try {
             selectLines(lines, claimLineDescription);
@@ -511,6 +518,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public SettlementDialog editLine() {
             doubleClickClaimLine();
+            $("#main-panel-innerCt").waitUntil(Condition.visible, 6000);
             return BaseDialog.at(SettlementDialog.class);
         }
 

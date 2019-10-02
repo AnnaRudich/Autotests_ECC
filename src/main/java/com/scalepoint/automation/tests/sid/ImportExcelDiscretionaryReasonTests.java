@@ -28,6 +28,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
      * AND: Open SID
      * THEN: Drop-down for choosing reason is enabled
      */
+
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
