@@ -121,7 +121,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
             @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
-                        .withNewPrice(claimItem.getTrygNewPrice())
+                        .withNewPrice(claimItem.getNewPriceSP())
                         .withCategory(claimItem.getCategoryVideoCamera().getGroupName())
                         .withSubCategory(claimItem.getExistingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType()))
                 .enableAge()
@@ -132,13 +132,13 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
         SettlementPage settlementPage = settlementDialog.closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {
-                    asserts.assertPurchasePriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100));
-                    asserts.assertReplacementPriceIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
+                    asserts.assertPurchasePriceIs(claimItem.getNewPriceSP() * (1 - voucherPercentage / 100));
+                    asserts.assertReplacementPriceIs(claimItem.getNewPriceSP() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
                 });
         settlementPage.getSettlementSummary()
                 .doAssert(asserts -> {
-                    asserts.assertClaimSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
-                    asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
+                    asserts.assertClaimSumValueIs(claimItem.getNewPriceSP() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
+                    asserts.assertSubtotalSumValueIs(claimItem.getNewPriceSP() * (1 - voucherPercentage / 100) * (1 - depreciationPercentage / 100));
                 });
     }
 
