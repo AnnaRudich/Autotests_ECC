@@ -68,7 +68,7 @@ public class ReplacementDialogTests extends BaseTest {
     public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
-                .addLinesForChosenCategories(claimItem.getCategoryPersonalMedicine().getGroupName(), claimItem.getCategoryPurses().getGroupName());
+                .addLinesForChosenCategories(claimItem.getCategoryBabyItems().getGroupName(), claimItem.getCategoryBicycles().getGroupName());
 
 
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
