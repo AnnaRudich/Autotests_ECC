@@ -22,7 +22,7 @@ public enum FTSetting {
     ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED("input[name=ftfunctionflag4][value='1073741824']", CHECKBOX),
     ENABLE_MANUAL_REDUCTION("input[name=ftfunctionflag4][value='512']", CHECKBOX),
     REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM("input[name=ftfunctionflag4][value='262144']", CHECKBOX, true),
-    SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG("input[name=ftfunctionflag2][value='128']", CHECKBOX),
+//    SHOW_COMPACT_SETTLEMENT_ITEM_DIALOG("input[name=ftfunctionflag2][value='128']", CHECKBOX),
     SHOW_POLICY_TYPE("input[name=ftfunctionflag][value='64']", CHECKBOX),
     SHOW_MARKET_PRICE("input[name=ftfunctionflag5][value='128']", CHECKBOX),
     SHOW_SCALEPOINT_SUPPLIER("input[name=ftfunctionflag5][value='1024']", CHECKBOX),

@@ -31,7 +31,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
-@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+//@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
@@ -156,11 +156,11 @@ public class ClaimTests extends BaseTest {
     IC Validation code should be = topdanmark always
     Product should not be Iphone to have APPROVED line
      */
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(enabled = true, dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approves claim")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
+//    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+//    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
+//    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
         login(getSystemUser());
         new InsCompaniesPage().enableAuditForIc(user.getCompanyName());

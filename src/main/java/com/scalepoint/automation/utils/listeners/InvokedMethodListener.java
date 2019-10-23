@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InvokedMethodListener implements IInvokedMethodListener {
 
@@ -90,7 +91,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
         if (optionalUser.isPresent()) {
             Page.to(LoginPage.class);
-            updateFunctionalTemplate(invokedMethod, iTestResult, optionalUser.get());
+            updateFunctionalTemplate(invokedMethod, optionalUser.get());
             Browser.driver().manage().deleteAllCookies();
         }
     }
@@ -113,12 +114,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
                     logger.info("Left tests: {}", left);
 
-                    RollbackContext rollbackContext = (RollbackContext) iTestResult.getAttribute(ROLLBACK_CONTEXT);
                     cleanUpCDTemplates(iInvokedMethod, iTestResult);
-                    if (rollbackContext == null || rollbackContext.getOperations().isEmpty()) {
-                        logger.info("No ft settings found to rollback");
-                        return;
-                    }
 
                     if (featureTogglesDefaultState.isEmpty()) {
                         logger.info("No feature toggle to rollback");
@@ -127,11 +123,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     }
 
                     Page.to(LoginPage.class);
-
-                    FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-                    List<FtOperation> operations = rollbackContext.getOperations();
-                    functionalTemplatesApi.updateTemplate(rollbackContext.getUser().getFtId(), LoginPage.class, operations.toArray(new FtOperation[0]));
-
                 } catch (Exception e) {
                     /* if not caught it breaks the call of AfterMethod*/
                     logger.error(e.getMessage(), e);
@@ -220,65 +211,55 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     }
 
 
-    private void updateFunctionalTemplate(IInvokedMethod invokedMethod, ITestResult iTestResult, User user) {
-        List<FtOperation> ftOperations = new ArrayList<>();
-        List<FtOperation> defaultFtOperations = new ArrayList<>();
-
+    private void updateFunctionalTemplate(IInvokedMethod invokedMethod, User user) {
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
-        if (allSettings.isEmpty()) {
-            return;
+        String companyCode = user.getCompanyCode();
+        List<FtOperation> defaultList = DefaultFTOperations.future();
+        if(companyCode.equals("ALKA")){
+            defaultList = DefaultFTOperations.alka();
         }
+        if(companyCode.equals("TOPDANMARK")){
+            defaultList = DefaultFTOperations.topdanmark();
+        }
+        if(companyCode.equals("SCALEPOINT")){
+            defaultList = DefaultFTOperations.scalepoint();
+        }
+        if(companyCode.equals("TRYGFORSIKRING")){
+            defaultList = DefaultFTOperations.trygforsikring();
+        }
+        if(companyCode.equals("BAUTA")){
+            defaultList = DefaultFTOperations.bauta();
+        }
+        if(companyCode.equals("TRYGHOLDING")){
+            defaultList = DefaultFTOperations.trygholding();
+        }
+
 
         for (RequiredSetting setting : allSettings) {
             FTSetting settingType = setting.type();
+            defaultList = defaultList
+                    .stream()
+                    .filter(ftOperation ->
+                            !ftOperation.getSetting().equals(settingType))
+                    .collect(Collectors.toList());
             switch (settingType.getOperationType()) {
                 case CHECKBOX:
-                    if (setting.isDefault()) {
-                        defaultFtOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
-                    } else {
-                        ftOperations.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
-                    }
+                        defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
                     break;
                 case INPUT:
-                    if (setting.isDefault()) {
-                        defaultFtOperations.add(FTSettings.setValue(settingType, setting.value()));
-                    } else {
-                        ftOperations.add(FTSettings.setValue(settingType, setting.value()));
-                    }
+                        defaultList.add(FTSettings.setValue(settingType, setting.value()));
                     break;
                 case SELECT:
-                    if (setting.isDefault()) {
-                        defaultFtOperations.add(FTSettings.select(settingType, setting.value()));
-                    } else {
-                        ftOperations.add(FTSettings.select(settingType, setting.value()));
-                    }
+                        defaultList.add(FTSettings.select(settingType, setting.value()));
             }
         }
-
-        checkDefaultSettings(user, defaultFtOperations);
-        updateFtTemplateWithRequiredSettings(user, ftOperations, iTestResult);
+        updateFtTemplateWithRequiredSettings(user, defaultList);
     }
 
-    private void checkDefaultSettings(User user, List<FtOperation> ftOperations) {
-        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-        FTSettings.ComparingResult comparingResult = functionalTemplatesApi.findDifferences(user.getFtId(), ftOperations.toArray(new FtOperation[0]));
-
-        if (!comparingResult.hasSameStateAsRequested()) {
-            throw new InvalidFtOperationException(comparingResult.getDifferedOperations());
-        }
-    }
-
-    private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations, ITestResult iTestResult) {
+    private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
         functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
-
-        List<FtOperation> operationsToRollback = functionalTemplatesApi.getOperationsToRollback();
-        logger.info("Found settings to rollback: ");
-        for (FtOperation ftOperation : operationsToRollback) {
-            logger.info("--> {} ", ftOperation.toString());
-        }
-        iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, operationsToRollback));
     }
 
     private void printErrorStackTraceIfAny(ITestResult iTestResult) {
@@ -310,7 +291,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     filter(classAnnotation -> !methodSettings.contains(classAnnotation.type())).
                     forEach(requiredSettings::add);
         }
-
 
         return requiredSettings;
     }

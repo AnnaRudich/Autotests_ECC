@@ -5,12 +5,14 @@ import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ClaimLineGroup;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -23,7 +25,7 @@ public class LessIsMoreTests extends BaseTest {
     private String groupDescription = "GroupName" + System.currentTimeMillis();
     private String[] lineDescriptions = new String[]{"item1", "item2", "item3"};
 
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Claim should have flat structure")
     public void charlie550_claimHaveFlatStructure(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)

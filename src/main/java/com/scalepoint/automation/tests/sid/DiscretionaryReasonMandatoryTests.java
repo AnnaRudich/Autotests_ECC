@@ -18,10 +18,10 @@ import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Val
 import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
-@RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-@RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-@RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
-@RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
+//@RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
+//@RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
+//@RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
+//@RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class DiscretionaryReasonMandatoryTests extends BaseTest {
 
     /*

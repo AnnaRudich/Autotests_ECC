@@ -11,6 +11,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.*;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
@@ -20,6 +21,7 @@ import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -66,6 +68,7 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({InvokedMethodListener.class, SuiteListener.class, OrderRandomizer.class})
+@RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected Logger log = LogManager.getLogger(BaseTest.class);
