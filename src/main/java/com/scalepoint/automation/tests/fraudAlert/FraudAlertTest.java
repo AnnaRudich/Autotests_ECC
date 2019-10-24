@@ -15,7 +15,6 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Item;
@@ -474,7 +473,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
-    public void productSearchFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem, Translations translations) throws IOException {
+    public void productSearchFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -500,7 +499,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(item.getDescription()).contains(SONY_HDR_CX450);
         assertThat(item.getCategory()).isEqualTo(claimItem.getCategoryVideoCamera().getGroupName());
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2645.02);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2260.00);
         assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2699.00);
 
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
@@ -512,7 +511,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
-    public void productSearchNoFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem, Translations translations) throws IOException {
+    public void productSearchNoFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -538,7 +537,7 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(item.getDescription()).contains(SONY_HDR_CX450);
         assertThat(item.getCategory()).isEqualTo(claimItem.getCategoryVideoCamera().getGroupName());
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2645.02);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2260.00);
         assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2699.00);
 
         new EventApiService().sendFraudStatus(events.get(0), "NOT_FRAUDULENT");
