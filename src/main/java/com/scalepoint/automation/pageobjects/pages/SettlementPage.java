@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
@@ -25,12 +26,7 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.ScriptTimeoutException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -42,6 +38,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
@@ -492,14 +489,19 @@ public class SettlementPage extends BaseClaimPage {
             String depreciationText = $(claimLine).find("[data-columnid='depreciationColumn']").getText().replace("%", "");
             depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
             replacementPrice = OperationalUtils.getDoubleValue($(claimLine).find("[data-columnid='replacementAmountColumn']").getText());
-
-            ElementsCollection purchaseAmountElements = $(claimLine).findAll("[data-columnid='voucherPurchaseAmountValueColumn']");
-            if (!purchaseAmountElements.isEmpty()) {
-                String text = purchaseAmountElements.get(0).getText();
-                if (StringUtils.isNotBlank(text)) {
-                    this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(text);
+            try {
+                ElementsCollection purchaseAmountElements = $(claimLine)
+                        .findAll("[data-columnid='voucherPurchaseAmountValueColumn']");
+                if (!purchaseAmountElements.isEmpty()) {
+                    String text = purchaseAmountElements.get(0).getText();
+                    if (StringUtils.isNotBlank(text)) {
+                        this.voucherPurchaseAmount = OperationalUtils.getDoubleValue(text);
+                    }
                 }
+            }catch (ElementNotFound t){
+                logger.error(t);
             }
+
         }
 
         public SettlementPage selectLine() {
