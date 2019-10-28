@@ -42,6 +42,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getDefaultFTSettings;
+
 public class InvokedMethodListener implements IInvokedMethodListener {
 
     public static final String ROLLBACK_CONTEXT = "rollback_context";
@@ -215,25 +217,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
         String companyCode = user.getCompanyCode();
-        List<FtOperation> defaultList = DefaultFTOperations.future();
-        if(companyCode.equals("ALKA")){
-            defaultList = DefaultFTOperations.alka();
-        }
-        if(companyCode.equals("TOPDANMARK")){
-            defaultList = DefaultFTOperations.topdanmark();
-        }
-        if(companyCode.equals("SCALEPOINT")){
-            defaultList = DefaultFTOperations.scalepoint();
-        }
-        if(companyCode.equals("TRYGFORSIKRING")){
-            defaultList = DefaultFTOperations.trygforsikring();
-        }
-        if(companyCode.equals("BAUTA")){
-            defaultList = DefaultFTOperations.bauta();
-        }
-        if(companyCode.equals("TRYGHOLDING")){
-            defaultList = DefaultFTOperations.trygholding();
-        }
+        List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
 
 
         for (RequiredSetting setting : allSettings) {
@@ -245,13 +229,13 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                     .collect(Collectors.toList());
             switch (settingType.getOperationType()) {
                 case CHECKBOX:
-                        defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                    defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
                     break;
                 case INPUT:
-                        defaultList.add(FTSettings.setValue(settingType, setting.value()));
+                    defaultList.add(FTSettings.setValue(settingType, setting.value()));
                     break;
                 case SELECT:
-                        defaultList.add(FTSettings.select(settingType, setting.value()));
+                    defaultList.add(FTSettings.select(settingType, setting.value()));
             }
         }
         updateFtTemplateWithRequiredSettings(user, defaultList);

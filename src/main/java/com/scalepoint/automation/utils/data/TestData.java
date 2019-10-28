@@ -3,12 +3,13 @@ package com.scalepoint.automation.utils.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.*;
+import com.scalepoint.automation.utils.listeners.DefaultFTOperations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -125,6 +126,34 @@ public class TestData {
         return (UpdateSettlementItem) getData(Data.UPDATED_CLAIM_ITEM);
     }
 
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForFuture(){
+        return getData(Data.FUTURE_DEFAULT_FT_SETTINGS);
+    }
+
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForAlka(){
+        return getData(Data.ALKA_DEFAULT_FT_SETTINGS);
+    }
+
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForTopdanmark(){
+        return getData(Data.TOPDANMARK_DEFAULT_FT_SETTINGS);
+    }
+
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForScalepoint(){
+        return getData(Data.SCALEPOINT_DEFAULT_FT_SETTINGS);
+    }
+
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForTrygforsikring(){
+        return getData(Data.TRYGFORSIKRING_DEFAULT_FT_SETTINGS);
+    }
+
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForBauta(){
+        return getData(Data.BAUTA_DEFAULT_FT_SETTINGS);
+    }
+
+    public static DefaultFTOperations.DefaultFTSettings getDefaultFTSettingsForTrygholding(){
+        return getData(Data.TRYGHOLDING_DEFAULT_FT_SETTINGS);
+    }
+
     public static EccIntegration getEccIntegration() {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
@@ -232,7 +261,14 @@ public class TestData {
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
         TRANSLATIONS("Translations.xml", Translations.class),
         SELF_SERVICE_REQUEST("SelfServiceRequest.json", SelfServiceRequest.class),
-        SELF_SERVICE_LOSS_ITEMS("SelfServiceLossItems.json", SelfServiceLossItems.class);
+        SELF_SERVICE_LOSS_ITEMS("SelfServiceLossItems.json", SelfServiceLossItems.class),
+        FUTURE_DEFAULT_FT_SETTINGS("DefaultFTSettings/Future.xml", DefaultFTOperations.DefaultFTSettings.class),
+        ALKA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Alka.xml", DefaultFTOperations.DefaultFTSettings.class),
+        TOPDANMARK_DEFAULT_FT_SETTINGS("DefaultFTSettings/Topdanmark.xml", DefaultFTOperations.DefaultFTSettings.class),
+        SCALEPOINT_DEFAULT_FT_SETTINGS("DefaultFTSettings/Scalepoint.xml", DefaultFTOperations.DefaultFTSettings.class),
+        TRYGFORSIKRING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygforsikring.xml", DefaultFTOperations.DefaultFTSettings.class),
+        BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
+        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class);
 
         private String fileName;
         private JAXBContext context;
