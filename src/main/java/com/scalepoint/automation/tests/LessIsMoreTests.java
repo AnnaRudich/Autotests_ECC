@@ -25,7 +25,6 @@ public class LessIsMoreTests extends BaseTest {
     private String groupDescription = "GroupName" + System.currentTimeMillis();
     private String[] lineDescriptions = new String[]{"item1", "item2", "item3"};
 
-@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Claim should have flat structure")
     public void charlie550_claimHaveFlatStructure(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
