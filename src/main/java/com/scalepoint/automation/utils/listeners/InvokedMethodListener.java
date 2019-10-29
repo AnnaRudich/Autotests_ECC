@@ -216,6 +216,10 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, User user) {
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
+        if (allSettings.isEmpty()) {
+            return;
+        }
+
         String companyCode = user.getCompanyCode();
         List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
 
