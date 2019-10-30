@@ -649,6 +649,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private Double voucherCashValueFieldText() {
+        Wait.waitForLoaded();
         waitForVisible(voucherCashValue);
         return OperationalUtils.getDoubleValue(voucherCashValue.getText());
     }
