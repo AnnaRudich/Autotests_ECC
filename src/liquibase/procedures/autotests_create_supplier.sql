@@ -44,14 +44,15 @@ insert into [SUPPLIER] (
 		[SUORNOT], [SUSUPDELIV], [SUSUPPICKUP],	[SULOGO],[SUVCPICT],
 		[suDeliveryTime], [suHandlesWeee], [suCulture], [SUFREIGHTPRICE], [SUORDERRETURNADDRESS],
 		[SUOPENINGHOURS], [SUVOUCHERSONLY], [LogoFileId], [BannerFileId],[SUVENDORACCTNO],
-		[PushOrderDocument], [RV_TaskWebServiceUrl], [securityToken], [securityTokenIssued], [rvIntegrationType])
+		[PushOrderDocument], [RV_TaskWebServiceUrl], [securityToken], [securityTokenIssued], [rvIntegrationType], [RV_StatusMessageWebServiceUrl], [RV_FreeTextMessageWebServiceUrl])
 		SELECT
 			@SUNAME, 'ecc_auto@scalepoint.com', @SUCVRNBR, @SUPHONE, @SUADDR,
 			@SUADDR2, @PostalCode, @City, '', @insCompanyId,
 			'M',     1,           1,     '\jessops_logo.gif', '\jessops_logo.gif',
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
-			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType
+			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType,
+			'https://ecc-tools.spcph.local/mock', 'https://ecc-tools.spcph.local/mock'
 
 	select @SupplierID = @@IDENTITY
 
