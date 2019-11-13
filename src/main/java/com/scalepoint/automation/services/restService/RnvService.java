@@ -44,8 +44,8 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim) {
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, pullRnVTaskData()).buildDefaultWithInvoiceWithRepairPrice(repairPrice);
+    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, ServiceTasksExport serviceTasksExport) {
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, serviceTasksExport).buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }
 
@@ -53,6 +53,7 @@ public class RnvService extends BaseService {
         given().log().all()
                 .multiPart("securityToken", supplierSecurityToken)
                 .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
-                .when().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
+                .when().log()
+                .all().post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
     }
 }

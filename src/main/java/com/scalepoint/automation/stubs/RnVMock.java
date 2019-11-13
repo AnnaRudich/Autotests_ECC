@@ -2,14 +2,32 @@ package com.scalepoint.automation.stubs;
 
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import lombok.Getter;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class RnVMock {
 
     private static WireMock wireMock;
     RnvStub stub;
+
+    public static final int POLL_INTERVAL = 10;
+    public static final int TIMEOUT = 60;
 
     public RnVMock(WireMock wireMock){
         this.wireMock = wireMock;
@@ -21,6 +39,7 @@ public class RnVMock {
     }
 
     public class RnvStub {
+
         @Getter
         private final String baseUrl;
 //        private final String tenant;
@@ -33,6 +52,7 @@ public class RnVMock {
 
 
         public RnvStub() {
+
             WireMock.configureFor(wireMock);
             baseUrl = "/rnv/rvTaskWebServiceUrl";
         }
@@ -43,6 +63,62 @@ public class RnVMock {
                     .willReturn(aResponse()
                             .withStatus(200)));
             return this;
+        }
+
+        public ServiceTasksExport waitForServiceTask(String claimNumber) {
+
+            return
+                    await()
+                            .pollInterval(POLL_INTERVAL, TimeUnit.MILLISECONDS)
+                            .timeout(TIMEOUT, TimeUnit.SECONDS)
+                            .until(() ->
+                                            wireMock.find(postRequestedFor(urlPathEqualTo(baseUrl)))
+                                                    .stream()
+                                                    .map(loggedRequest ->loggedRequestToServiceTasksExport(loggedRequest))
+                                                    .filter(serviceTasksExport ->
+                                                            serviceTasksExport
+                                                                    .getServiceTasks()
+                                                                    .stream().filter(serviceTask ->
+                                                                    serviceTask
+                                                                            .getClaim()
+                                                                            .getClaimNumber()
+                                                                            .equals(claimNumber)
+                                                            ).count() != 0)
+                                                    .findFirst()
+                                                    .get()
+                                    , is(notNullValue()));
+        }
+
+
+
+        private ServiceTasksExport loggedRequestToServiceTasksExport(LoggedRequest loggedRequest){
+
+            try {
+
+                String form = URLDecoder
+                        .decode(
+                                loggedRequest
+                                        .getBodyAsString()
+                                        .replace("+", " "), StandardCharsets.UTF_8.toString()
+                        );
+
+                Matcher body = Pattern
+                        .compile("xmlString=.*", Pattern.DOTALL).matcher(form);
+                body.find();
+
+                String xml = body
+                        .group()
+                        .replace("xmlString=", "");
+
+                return (ServiceTasksExport) JAXBContext
+                        .newInstance(ServiceTasksExport.class)
+                        .createUnmarshaller()
+                        .unmarshal(new StringReader(xml));
+
+            } catch (IOException | JAXBException e) {
+
+                throw new RuntimeException(e);
+            }
         }
 
 //        public RnvStub templatesGenerateStub() throws IOException {
