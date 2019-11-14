@@ -3,6 +3,10 @@
     <test verbose="1" name="rv" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
             <package name="com.scalepoint.automation.tests.rnv"/>
+        </packages>
+    </test>
+    <test verbose="1" name="rv2" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
             <package name="com.scalepoint.automation.tests.rnv.rnv2"/>
         </packages>
     </test>
