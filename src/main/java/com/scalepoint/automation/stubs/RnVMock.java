@@ -5,11 +5,13 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import java.io.IOException;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +24,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class RnVMock {
+
+    protected Logger logger = LogManager.getLogger(RnVMock.class);
 
     private static WireMock wireMock;
     RnvStub stub;
@@ -85,14 +89,11 @@ public class RnVMock {
 
         private ServiceTasksExport loggedRequestToServiceTasksExport(LoggedRequest loggedRequest){
 
-            try {
+            logger.info("Mock request: {}", loggedRequest);
 
+            try {
                 String form = URLDecoder
-                        .decode(
-                                loggedRequest
-                                        .getBodyAsString()
-                                        .replace("+", " "), StandardCharsets.UTF_8.toString()
-                        );
+                        .decode(loggedRequest.getBodyAsString(), StandardCharsets.UTF_8.toString());
 
                 Matcher body = Pattern
                         .compile("xmlString=.*", Pattern.DOTALL).matcher(form);
@@ -107,7 +108,7 @@ public class RnVMock {
                         .createUnmarshaller()
                         .unmarshal(new StringReader(xml));
 
-            } catch (IOException | JAXBException e) {
+            } catch (UnsupportedEncodingException | JAXBException e) {
 
                 throw new RuntimeException(e);
             }
