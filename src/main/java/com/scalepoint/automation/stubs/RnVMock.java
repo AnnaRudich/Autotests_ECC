@@ -57,7 +57,7 @@ public class RnVMock {
             return this;
         }
 
-        public ServiceTasksExport waitForServiceTask(String claimNumber) {
+        public synchronized ServiceTasksExport waitForServiceTask(String claimNumber) {
 
             return
                     await()
