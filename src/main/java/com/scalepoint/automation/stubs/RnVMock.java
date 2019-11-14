@@ -14,6 +14,7 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,8 +64,7 @@ public class RnVMock {
 
         public synchronized ServiceTasksExport waitForServiceTask(String claimNumber) {
 
-            return
-                    await()
+            return await()
                             .pollInterval(POLL_INTERVAL, TimeUnit.MILLISECONDS)
                             .timeout(TIMEOUT, TimeUnit.SECONDS)
                             .until(() ->
@@ -81,7 +81,7 @@ public class RnVMock {
                                                                             .equals(claimNumber)
                                                             ).count() != 0)
                                                     .findFirst()
-                                                    .get()
+                                                    .orElse(null)
                                     , is(notNullValue()));
         }
 
