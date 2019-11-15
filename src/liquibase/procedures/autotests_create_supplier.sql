@@ -52,7 +52,7 @@ insert into [SUPPLIER] (
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
 			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType,
-			'https://ecc-tools.spcph.local/mock/rnv/rvTaskWebServiceUrl', 'https://ecc-tools.spcph.local/mock/rnv/rvTaskWebServiceUrl'
+			'https://ecc-tools.spcph.local/mock/rnv/rvStatusMessageWebServiceUrl', 'https://ecc-tools.spcph.local/mock/rnv/rvFreeTextMessageWebServiceUrl'
 
 	select @SupplierID = @@IDENTITY
 

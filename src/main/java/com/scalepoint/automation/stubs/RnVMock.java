@@ -14,7 +14,6 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +39,10 @@ public class RnVMock {
 
     public RnvStub addStub() {
 
-        return stub = new RnvStub().rvTaskWebServiceUrlStub();
+        return stub = new RnvStub()
+                .rvTaskWebServiceUrlStub()
+                .rvStatusMessageWebServiceUrlStub()
+                .rvFreeTextMessageWebServiceUrlStub();
     }
 
     public class RnvStub {
@@ -51,12 +53,28 @@ public class RnVMock {
         public RnvStub() {
 
             WireMock.configureFor(wireMock);
-            baseUrl = "/rnv/rvTaskWebServiceUrl";
+            baseUrl = "/rnv";
         }
 
         public RnvStub rvTaskWebServiceUrlStub() {
 
-            stubFor(post(urlPathEqualTo(baseUrl))
+            stubFor(post(urlPathEqualTo(baseUrl.concat("/rvTaskWebServiceUrl")))
+                    .willReturn(aResponse()
+                            .withStatus(200)));
+            return this;
+        }
+
+        public RnvStub rvStatusMessageWebServiceUrlStub() {
+
+            stubFor(post(urlPathEqualTo(baseUrl.concat("/rvStatusMessageWebServiceUrl")))
+                    .willReturn(aResponse()
+                            .withStatus(200)));
+            return this;
+        }
+
+        public RnvStub rvFreeTextMessageWebServiceUrlStub() {
+
+            stubFor(post(urlPathEqualTo(baseUrl.concat("/rvFreeTextMessageWebServiceUrl")))
                     .willReturn(aResponse()
                             .withStatus(200)));
             return this;
@@ -65,24 +83,24 @@ public class RnVMock {
         public synchronized ServiceTasksExport waitForServiceTask(String claimNumber) {
 
             return await()
-                            .pollInterval(POLL_INTERVAL, TimeUnit.MILLISECONDS)
-                            .timeout(TIMEOUT, TimeUnit.SECONDS)
-                            .until(() ->
-                                            wireMock.find(postRequestedFor(urlPathEqualTo(baseUrl)))
-                                                    .stream()
-                                                    .map(loggedRequest ->loggedRequestToServiceTasksExport(loggedRequest))
-                                                    .filter(serviceTasksExport ->
-                                                            serviceTasksExport
-                                                                    .getServiceTasks()
-                                                                    .stream().filter(serviceTask ->
-                                                                    serviceTask
-                                                                            .getClaim()
-                                                                            .getClaimNumber()
-                                                                            .equals(claimNumber)
-                                                            ).count() != 0)
-                                                    .findFirst()
-                                                    .orElse(null)
-                                    , is(notNullValue()));
+                    .pollInterval(POLL_INTERVAL, TimeUnit.MILLISECONDS)
+                    .timeout(TIMEOUT, TimeUnit.SECONDS)
+                    .until(() ->
+                                    wireMock.find(postRequestedFor(urlPathEqualTo(baseUrl)))
+                                            .stream()
+                                            .map(loggedRequest ->loggedRequestToServiceTasksExport(loggedRequest))
+                                            .filter(serviceTasksExport ->
+                                                    serviceTasksExport
+                                                            .getServiceTasks()
+                                                            .stream().filter(serviceTask ->
+                                                            serviceTask
+                                                                    .getClaim()
+                                                                    .getClaimNumber()
+                                                                    .equals(claimNumber)
+                                                    ).count() != 0)
+                                            .findFirst()
+                                            .orElse(null)
+                            , is(notNullValue()));
         }
 
 
