@@ -24,6 +24,8 @@ DECLARE @SUADDR NVARCHAR(50) = '489-499 Avebury Boulevard'
 DECLARE @SUADDR2 NVARCHAR(50) = 'Milton Keynes, MK9 2NW'
 DECLARE @suCulture INT = (SELECT LCID FROM Culture c JOIN FormattingProperties f ON c.Culture = f.VALUE WHERE f.[KEY] = 'scalepoint_culture_code')
 DECLARE @City NVARCHAR(30) = 'Copenhagen'
+DECLARE @rvStatusMessageWebServiceUrl NVARCHAR(100) = 'https://ecc-tools.spcph.local/mock/rnv/rvStatusMessageWebServiceUrl'
+DECLARE @rvFreeTextMessageWebServiceUrl NVARCHAR(100) = 'https://ecc-tools.spcph.local/mock/rnv/rvFreeTextMessageWebServiceUrl'
 
 IF EXISTS(SELECT * FROM dbo.SUPPLIER s WHERE s.SUNAME = @SUNAME)
 BEGIN
@@ -52,9 +54,20 @@ insert into [SUPPLIER] (
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
 			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType,
-			'https://ecc-tools.spcph.local/mock/rnv/rvStatusMessageWebServiceUrl', 'https://ecc-tools.spcph.local/mock/rnv/rvFreeTextMessageWebServiceUrl'
+			@rvStatusMessageWebServiceUrl, @rvFreeTextMessageWebServiceUrl
 
 	select @SupplierID = @@IDENTITY
+
+--add RnV_testUrl
+IF NOT EXISTS(SELECT * from [Testurls] where url = @rvStatusMessageWebServiceUrl)
+BEGIN
+insert into [Testurls] ([url]) SELECT @rvStatusMessageWebServiceUrl
+END
+
+IF NOT EXISTS(SELECT * from [Testurls] where url = @rvFreeTextMessageWebServiceUrl)
+	BEGIN
+	insert into [Testurls] ([url]) SELECT @rvFreeTextMessageWebServiceUrl
+	END
 
 	RETURN
 
