@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="rv" configfailurepolicy="continue" parallel="methods" thread-count="2">
+<suite name="rv" configfailurepolicy="continue" parallel="methods" thread-count="4">
     <test verbose="1" name="rv" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
             <package name="com.scalepoint.automation.tests.rnv"/>

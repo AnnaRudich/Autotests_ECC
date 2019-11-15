@@ -48,17 +48,17 @@ public class RnVMock {
     public class RnvStub {
 
         @Getter
-        private final String baseUrl;
+        private final String baseUrl = "/rnv";
+        private final String rvTaskWebServiceUrl = baseUrl.concat("/rvTaskWebServiceUrl");
 
         public RnvStub() {
 
             WireMock.configureFor(wireMock);
-            baseUrl = "/rnv";
         }
 
         public RnvStub rvTaskWebServiceUrlStub() {
 
-            stubFor(post(urlPathEqualTo(baseUrl.concat("/rvTaskWebServiceUrl")))
+            stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
                     .willReturn(aResponse()
                             .withStatus(200)));
             return this;
@@ -86,7 +86,7 @@ public class RnVMock {
                     .pollInterval(POLL_INTERVAL, TimeUnit.MILLISECONDS)
                     .timeout(TIMEOUT, TimeUnit.SECONDS)
                     .until(() ->
-                                    wireMock.find(postRequestedFor(urlPathEqualTo(baseUrl)))
+                                    wireMock.find(postRequestedFor(urlPathEqualTo(rvTaskWebServiceUrl)))
                                             .stream()
                                             .map(loggedRequest ->loggedRequestToServiceTasksExport(loggedRequest))
                                             .filter(serviceTasksExport ->
