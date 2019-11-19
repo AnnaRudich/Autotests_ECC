@@ -160,7 +160,7 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
+    @Test(dataProvider = "testDataProvider", description = "Check if Did you mean appears. Misspelling")
     public void charlie510_checkDidYouMean(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
@@ -177,7 +177,7 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
+    @Test(dataProvider = "testDataProvider", description = "Check if Did you mean appears. Special characters")
     public void charlie510_checkDidYouMeanWithSpecialCharacters(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
