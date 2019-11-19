@@ -8,9 +8,9 @@ import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
@@ -186,7 +186,6 @@ public class TextSearchTests extends BaseTest {
                 .doAssert(
                         asserts -> {
                             asserts.assertIsDidYouMeanDisplayed();
-                            asserts.assertQueryContainsDidYouMeanText(textSearch.getBrokenQueryWithSpecialSymbols1());
                         }
                 )
                 .clickOnDidYouMean()
