@@ -7,6 +7,7 @@
             <package name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
             <package name=".*">
                 <exclude name="com.scalepoint.automation.tests.api"/>
+                <exclude name="com.scalepoint.automation.tests.rnv"/>
                 <exclude name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
                 <exclude name="com.scalepoint.automation.tests.api.unifiedpayments.v3"/>
                 <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
@@ -16,6 +17,7 @@
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance"/>
             </package>
         </packages>
+
         <classes>
             <class name="com.scalepoint.automation.tests.RecommendedItemsTests">
                 <methods>
@@ -32,6 +34,17 @@
                     <exclude name="charlie_589_2_showScalepointSupplierNameEnabled"/>
                 </methods>
             </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.rnv2.IntelligentRepair2WebServiceTest"/>
+        </classes>
+    </test>
+    <test verbose="1" name="RnvSmoke" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.RnVSmokeTest"/>
         </classes>
     </test>
 

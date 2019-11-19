@@ -1,13 +1,13 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="rv" configfailurepolicy="continue" parallel="methods" thread-count="4">
-    <test verbose="1" name="rv" group-by-instances="false" enabled="true" preserve-order="true">
-        <packages>
-            <package name="com.scalepoint.automation.tests.rnv"/>
-        </packages>
+    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.rnv2.IntelligentRepair2WebServiceTest"/>
+        </classes>
     </test>
-    <test verbose="1" name="rv2" group-by-instances="false" enabled="true" preserve-order="true">
-        <packages>
-            <package name="com.scalepoint.automation.tests.rnv.rnv2"/>
-        </packages>
+    <test verbose="1" name="RnvSmoke" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.RnVSmokeTest"/>
+        </classes>
     </test>
 </suite>
