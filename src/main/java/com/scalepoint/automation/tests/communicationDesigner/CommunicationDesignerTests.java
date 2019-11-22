@@ -14,6 +14,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
+import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
@@ -25,6 +26,7 @@ import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -43,12 +45,15 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerTests extends BaseTest {
 
+    RnVMock.RnvStub rnvStub;
     CommunicationDesignerMock communicationDesignerMock;
 
     @BeforeClass
     public void startWireMock(){
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
+        rnvStub = new RnVMock(wireMock)
+                .addStub();
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
@@ -271,7 +276,9 @@ public class CommunicationDesignerTests extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        new RnvService().sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim);
+        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
+
+        new RnvService().sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim, serviceTasksExport);
 
         new ClaimNavigationMenu()
                 .toRepairValuationProjectsPage()

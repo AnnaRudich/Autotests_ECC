@@ -24,6 +24,8 @@ DECLARE @SUADDR NVARCHAR(50) = '489-499 Avebury Boulevard'
 DECLARE @SUADDR2 NVARCHAR(50) = 'Milton Keynes, MK9 2NW'
 DECLARE @suCulture INT = (SELECT LCID FROM Culture c JOIN FormattingProperties f ON c.Culture = f.VALUE WHERE f.[KEY] = 'scalepoint_culture_code')
 DECLARE @City NVARCHAR(30) = 'Copenhagen'
+DECLARE @rvStatusMessageWebServiceUrl NVARCHAR(100) = 'https://ecc-tools.spcph.local/mock/rnv/rvStatusMessageWebServiceUrl'
+DECLARE @rvFreeTextMessageWebServiceUrl NVARCHAR(100) = 'https://ecc-tools.spcph.local/mock/rnv/rvFreeTextMessageWebServiceUrl'
 
 IF EXISTS(SELECT * FROM dbo.SUPPLIER s WHERE s.SUNAME = @SUNAME)
 BEGIN
@@ -44,16 +46,28 @@ insert into [SUPPLIER] (
 		[SUORNOT], [SUSUPDELIV], [SUSUPPICKUP],	[SULOGO],[SUVCPICT],
 		[suDeliveryTime], [suHandlesWeee], [suCulture], [SUFREIGHTPRICE], [SUORDERRETURNADDRESS],
 		[SUOPENINGHOURS], [SUVOUCHERSONLY], [LogoFileId], [BannerFileId],[SUVENDORACCTNO],
-		[PushOrderDocument], [RV_TaskWebServiceUrl], [securityToken], [securityTokenIssued], [rvIntegrationType])
+		[PushOrderDocument], [RV_TaskWebServiceUrl], [securityToken], [securityTokenIssued], [rvIntegrationType], [RV_StatusMessageWebServiceUrl], [RV_FreeTextMessageWebServiceUrl])
 		SELECT
 			@SUNAME, 'ecc_auto@scalepoint.com', @SUCVRNBR, @SUPHONE, @SUADDR,
 			@SUADDR2, @PostalCode, @City, '', @insCompanyId,
 			'M',     1,           1,     '\jessops_logo.gif', '\jessops_logo.gif',
 			7,       NULL,        @suCulture,  1,       '',
 			'',     0,            NULL,   NULL,   NULL,
-			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType
+			0, @RV_TaskWebServiceUrl, @SecurityToken, @SecurityTokenIssued, @rvIntegrationType,
+			@rvStatusMessageWebServiceUrl, @rvFreeTextMessageWebServiceUrl
 
 	select @SupplierID = @@IDENTITY
+
+--add RnV_testUrl
+IF NOT EXISTS(SELECT * from [Testurls] where url = @rvStatusMessageWebServiceUrl)
+BEGIN
+insert into [Testurls] ([url]) SELECT @rvStatusMessageWebServiceUrl
+END
+
+IF NOT EXISTS(SELECT * from [Testurls] where url = @rvFreeTextMessageWebServiceUrl)
+	BEGIN
+	insert into [Testurls] ([url]) SELECT @rvFreeTextMessageWebServiceUrl
+	END
 
 	RETURN
 

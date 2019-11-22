@@ -1,9 +1,11 @@
 package com.scalepoint.automation.tests.rnv;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.services.restService.RnvService;
+import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
@@ -11,11 +13,28 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class RnVSmokeTest extends BaseTest {
+
+    RnVMock.RnvStub rnvStub;
+
+    @BeforeClass
+    public void startWireMock() throws IOException {
+        WireMock.configureFor(wireMock);
+        wireMock.resetMappings();
+        rnvStub = new RnVMock(wireMock)
+                .addStub();
+        wireMock.allStubMappings()
+                .getMappings()
+                .stream()
+                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+    }
     /*
      * send line to RnV
      * send feedback with Invoice
@@ -46,7 +65,10 @@ public class RnVSmokeTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        new RnvService().sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_30),claim);
+        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
+
+        new RnvService()
+                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_30),claim, serviceTasksExport);
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
