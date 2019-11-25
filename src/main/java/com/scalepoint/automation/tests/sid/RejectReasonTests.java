@@ -52,6 +52,7 @@ public class RejectReasonTests extends BaseTest {
                 .closeSidWithOk()
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
+
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Add reason to claim created before reason was created")
     public void charlie_549_checkIfCanAddNewRejectReasonToClaimCreatedBefore(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,

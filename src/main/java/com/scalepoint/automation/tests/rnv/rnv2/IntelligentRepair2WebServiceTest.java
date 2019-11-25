@@ -17,6 +17,7 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -27,8 +28,8 @@ import java.math.BigDecimal;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
+import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
 
-@RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
 public class IntelligentRepair2WebServiceTest extends BaseTest {
 
     RnVMock.RnvStub rnvStub;
@@ -57,6 +58,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      *
      */
 
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackWithInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -115,6 +117,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: InvoiceTab/InvoiceDialog is opened without errors
      */
 
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackNoInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -163,6 +166,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: the task will be auto rejected if RepairPrice=10(ECC/wiremock/mappings/RnVFeedbackRejected.json)
      * Assert: evaluateTaskButton is disabled when task is auto completed by Rejection
      */
+
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -206,6 +211,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * acceptFeedback manually through Evaluate Task dialog
      * Assert: task is Completed, evaluateTaskButton is disabled
      */
+
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -245,5 +252,38 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .getAssertion()
                 .assertTaskHasCompletedStatus(agreement)
                 .assertEvaluateTaskButtonIsDisabled();
+    }
+
+    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
+    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
+    @Test(dataProvider = "testDataProvider", description = "damageType is actualized in SID when it was changed in RnV wizard")
+    public void damageTypeEditedInRnv(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+
+        String lineDescription = RandomUtils.randomName("RnVLine");
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi)
+                .openRecentClaim()
+                .reopenClaim()
+                .openSid()
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .enableDamage()
+                .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
+                .closeSidWithOk()
+                .findClaimLine(lineDescription)
+                .selectLine()
+                .sendToRnV()
+                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
+                .selectDamageType(lineDescription, claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1))
+                .nextRnVstep()
+                .sendRnV(agreement)
+                .findClaimLine(lineDescription)
+                .editLine()
+                .doAssert(claimLine -> {
+                    claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
+                });
     }
 }
