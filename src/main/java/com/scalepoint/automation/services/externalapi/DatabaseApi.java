@@ -1,8 +1,11 @@
 package com.scalepoint.automation.services.externalapi;
 
+import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.CwaTaskLog;
+import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
+import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +22,7 @@ import java.util.stream.Stream;
 
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 @SuppressWarnings("SqlDialectInspection")
 public class DatabaseApi {
@@ -83,12 +87,36 @@ public class DatabaseApi {
         return jdbcTemplate.queryForObject("SELECT SettlementRevisionToken FROM SettlementRevision WHERE ClaimNumber = ? AND ClaimStatus = 'X'", String.class, claimNumber);
     }
 
+    public String getClaimStatus(String claimNumber){
+
+        return jdbcTemplate.queryForObject("Select TOP 1 [USL].[ClaimStatus] from [dbo].[User] as [U] " +
+                "join [dbo].[UserStatusLog] as [USL] on [USL].[Shopper] = [U].[UserID] " +
+                "where [U].[ClaimNumber] = ? " +
+                "order by [USL].[StartStamp] desc", String.class, claimNumber);
+    }
+
     public int waitForFraudStatusChange(int status, String claimNumber){
         return  await()
                 .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
                 .timeout(STATUS_CHANGE_TIMEOUT, TimeUnit.SECONDS)
                 .until(() -> jdbcTemplate.queryForObject("SELECT [fraudStatus]\n" +
                         "  FROM [User] WHERE [ClaimNumber] = ?", int.class, claimNumber), equalTo(status));
+    }
+
+    public void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimStatus){
+
+        await()
+                .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                .timeout(STATUS_CHANGE_TIMEOUT, TimeUnit.SECONDS)
+                .until(() -> {
+                    String status = getClaimStatus(claim.getClaimNumber());
+                    if (status != null) {
+                        logger.info("Claims status: {}", status);
+                        boolean equal = status.equalsIgnoreCase(claimStatus.getStatus());
+                        return equal;
+                    }
+                    return null;
+                }, is(true));
     }
 
     private static final class CwaTaskLogMapper implements RowMapper<CwaTaskLog> {

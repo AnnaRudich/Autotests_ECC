@@ -116,7 +116,7 @@ public class ProjectsPage extends Page {
     public enum AuditResultEvaluationStatus {
         APPROVE("Godkendt"),
         REJECT("Afvist"),
-        MANUAL("Manuelt"),
+        MANUAL("Handling påkrævet"),
         ERROR("Intet svar fra Validering!");
 
         String response;

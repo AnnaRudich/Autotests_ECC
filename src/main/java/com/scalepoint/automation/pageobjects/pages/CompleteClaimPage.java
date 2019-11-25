@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
@@ -154,6 +155,12 @@ public class CompleteClaimPage extends Page {
     public MyPage completeWithEmail(Claim claim) {
         compWthMailButton.click();
         SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
+        return at(MyPage.class);
+    }
+
+    public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi) {
+        compWthMailButton.click();
+        databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
 
