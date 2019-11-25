@@ -38,12 +38,12 @@
         </classes>
     </test>
 
-    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true">
+    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true" thread-count="5">
         <classes>
             <class name="com.scalepoint.automation.tests.rnv.rnv2.IntelligentRepair2WebServiceTest"/>
         </classes>
     </test>
-    <test verbose="1" name="RnvSmoke" group-by-instances="false" enabled="true" preserve-order="true">
+    <test verbose="1" name="RnvSmoke" group-by-instances="false" enabled="true" preserve-order="true" thread-count="2">
         <classes>
             <class name="com.scalepoint.automation.tests.rnv.RnVSmokeTest"/>
         </classes>
