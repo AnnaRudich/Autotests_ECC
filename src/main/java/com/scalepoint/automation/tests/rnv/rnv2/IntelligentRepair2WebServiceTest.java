@@ -20,12 +20,12 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 
 @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
@@ -79,19 +79,16 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
-
         new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim, serviceTasksExport);
+                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim, rnvStub);
 
         Page.to(MyPage.class)
-                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
-//                .openRecentClaim()
-//                .toMailsPage()
-//                .doAssert(mail -> {
-//                    mail.isMailExist(REPAIR_AND_VALUATION, "Faktura godkendt");
-//                    mail.isMailExist(CUSTOMER_WELCOME);
-//                });
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
+                .openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail -> {
+                    mail.isMailExist(CUSTOMER_WELCOME);
+                });
 
         new CustomerDetailsPage()
                 .toRepairValuationProjectsPage()
@@ -140,11 +137,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-
-        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
-
         new RnvService()
-                .sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim, serviceTasksExport);
+                .sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_50), claim, rnvStub);
 
         Page.to(MyPage.class)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
@@ -191,10 +185,9 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
 
         new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_10), claim, serviceTasksExport);
+                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_10), claim, rnvStub);
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()
@@ -235,10 +228,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
-
         new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim, serviceTasksExport);
+                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_100), claim, rnvStub);
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()

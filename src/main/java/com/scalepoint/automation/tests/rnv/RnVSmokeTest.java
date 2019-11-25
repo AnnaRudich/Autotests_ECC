@@ -13,7 +13,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -65,10 +64,8 @@ public class RnVSmokeTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
-        ServiceTasksExport serviceTasksExport = rnvStub.waitForServiceTask(claim.getClaimNumber());
-
         new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_30),claim, serviceTasksExport);
+                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_30),claim, rnvStub);
 
         new ClaimNavigationMenu().toRepairValuationProjectsPage()
                 .expandTopTaskDetails()

@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.restService;
 
 
 import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -22,14 +23,16 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal repairPrice,Claim claim, ServiceTasksExport serviceTasksExport){
+    public void sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub){
 
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, serviceTasksExport).buildDefaultWithoutInvoiceWithRepairPrice(repairPrice);
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
+                .buildDefaultWithoutInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, ServiceTasksExport serviceTasksExport) {
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, serviceTasksExport).buildDefaultWithInvoiceWithRepairPrice(repairPrice);
+    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
+                .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }
 
