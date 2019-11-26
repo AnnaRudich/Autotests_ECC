@@ -45,7 +45,6 @@ DECLARE @ICSTATECODE nvarchar(2) = NULL
 DECLARE @icNewShopLogo nvarchar(256) = NULL
 DECLARE @IcAllowCreateOwn BIT = 1
 DECLARE @SMSDISPLAYNAME VARCHAR(11) = ''
-DECLARE @icPDFLogo nvarchar(512) = NULL
 DECLARE @icFlagOverride INT  = 0
 DECLARE @ICFTNBR INT = @ICRFNBR
 
@@ -265,7 +264,6 @@ INSERT INTO [INSCOMP]
        ,[icRecieveSPNotification]
        ,[icSendSPNotificationTo]
        ,[SMSDISPLAYNAME]
-       ,[icPDFLogo]
        ,[icTextId]
        ,[icFlagOverride]
        ,[icSendSelfserviceNotificationTo]
@@ -305,7 +303,6 @@ INSERT INTO [INSCOMP]
        ,@icRecieveSPNotification
        ,@icSendSPNotificationTo
        ,@SMSDISPLAYNAME
-       ,@icPDFLogo
        ,@icTextId
        ,@icFlagOverride
        ,@icSendSelfserviceNotificationTo
