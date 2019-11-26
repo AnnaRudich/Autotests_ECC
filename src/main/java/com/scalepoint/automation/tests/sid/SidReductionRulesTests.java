@@ -13,6 +13,8 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-613")
 @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
 public class SidReductionRulesTests extends BaseTest {
@@ -49,7 +51,8 @@ public class SidReductionRulesTests extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .enableAge("2")
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE);
+                .setValuation(NEW_PRICE)
+                .toDialog();
 
         SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule_30());
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
@@ -96,7 +99,8 @@ public class SidReductionRulesTests extends BaseTest {
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .enableAge()
                 .enterAgeYears("2")
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE);
+                .setValuation(NEW_PRICE)
+                .toDialog();
 
         SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule_30());
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();

@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -53,7 +54,8 @@ public class ReplacementDialogTests extends BaseTest {
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(newPrice)
                         .withCategory(claimItem.getCategoryOther()))
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .setValuation(NEW_PRICE)
+                .toDialog()
                 .closeSidWithOk();
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()

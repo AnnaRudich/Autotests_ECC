@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -138,7 +139,8 @@ public class OrderDetailsTests extends BaseTest {
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE);
+                .setValuation(ValuationGrid.Valuation.NEW_PRICE)
+                .toDialog();
 
         Double activeValuation = dialog.getCashCompensationValue();
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)

@@ -9,8 +9,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.VOUCHER;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 /**
@@ -33,12 +33,15 @@ public class CatalogPricesTests extends BaseTest {
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-
+                .doAssert(asserts -> {
+                    asserts.assertVoucherFaceValueIs(productInfo.getMarketPrice());
+                })
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertValuationIsDisabled(CATALOG_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER);
-                    asserts.assertVoucherFaceValueIs(productInfo.getMarketPrice());//voucher is based on Market Price
+                    //voucher is based on Market Price
                     //Voucher based on MarketPrice price exists, all discount given to the IC - ADD!
                 });
     }
@@ -53,12 +56,15 @@ public class CatalogPricesTests extends BaseTest {
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .openSidForFirstProduct()
-
+                .doAssert(asserts -> {
+                    asserts.assertVoucherFaceValueIs(productInfo.getSupplierShopPrice());
+                })
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     //asserts.assertCatalogPriceInvisible(); need to be clarified; see related Jira
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER);
-                    asserts.assertVoucherFaceValueIs(productInfo.getSupplierShopPrice());//voucher is based on SupplierShopPrice for BnO products
+                    //voucher is based on SupplierShopPrice for BnO products
                 });
     }
 
@@ -73,12 +79,14 @@ public class CatalogPricesTests extends BaseTest {
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .openSidForFirstProduct()
-
+                .doAssert(asserts -> {
+                    asserts.assertVoucherFaceValueIs(productInfo.getSupplierShopPrice());
+                })
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     // asserts.assertCatalogPriceInvisible(); need to be clarified; see related Jira
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER);
-                    asserts.assertVoucherFaceValueIs(productInfo.getSupplierShopPrice());
                 });
     }
 }

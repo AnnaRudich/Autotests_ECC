@@ -14,8 +14,8 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
@@ -65,6 +65,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .editLine()
                 .setDiscretionaryPrice(400.00)
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .selectDiscretionaryReason(maxCoverageReason)
                 .closeSidWithOk()
                 .findClaimLine(claimLineDescription)
@@ -73,6 +74,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .toProductMatchPage()
                 .openSidForFirstProduct()
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .doAssert(row -> row.assertDiscretionaryReasonEqualTo(maxCoverageReason));
 
     }
@@ -100,6 +102,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .setDepreciation(10)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .setValuation(NEW_PRICE)
+                .toDialog()
                 .selectDiscretionaryReason(maxCoverageReason)
                 .closeSidWithOk()
                 .findClaimLine(claimLineDescription)
@@ -109,6 +112,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setValuation(NEW_PRICE)
+                .toDialog()
                 .doAssert(row -> row.assertDiscretionaryReasonEqualTo(maxCoverageReason));
     }
 
