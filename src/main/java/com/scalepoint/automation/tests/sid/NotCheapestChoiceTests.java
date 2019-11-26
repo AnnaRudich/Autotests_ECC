@@ -16,7 +16,7 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -109,6 +109,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .openSidForFirstProduct()
                 .setNewPrice(1.00)
                 .setValuation(MARKET_PRICE)
+                .toDialog()
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 
@@ -127,6 +128,7 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .editLine()
                 .setCustomerDemand(48.00)
                 .setValuation(CUSTOMER_DEMAND)
+                .toDialog()
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
@@ -431,7 +432,8 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .setValuation(ValuationGrid.Valuation.NEW_PRICE)
+                .toDialog()
                 .closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)

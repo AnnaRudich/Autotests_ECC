@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.*;
@@ -340,10 +341,12 @@ public class SidTests extends BaseTest {
                     });
         }
 
-        settlementDialog.parseValuationRow(SettlementDialog.Valuation.VOUCHER)
+        settlementDialog.valuationGrid().parseValuationRow(VOUCHER)
                 .doAssert(row -> {
                     row.assertCashCompensationIs(voucherValuation.getCashValue());
                 })
+                .back()
+                .toDialog()
                 .doAssert(sid -> {
                     sid.assertVoucherCashValueIs(voucherValuation.getCashValue());
                     sid.assertVoucherFaceValueIs(voucherValuation.getFaceValue());

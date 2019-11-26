@@ -1,7 +1,7 @@
 package com.scalepoint.automation.tests.sid;
 
+import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
 import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -11,7 +11,10 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.request.Valuation;
 import org.testng.annotations.Test;
+
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-588")
 @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
@@ -59,10 +62,16 @@ public class ShowMarketPricesTests extends BaseTest {
                 .chooseCategory(claimItem.getCategoryMobilePhones())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-                .setValuation(Valuation.MARKET_PRICE)
+                .setValuation(MARKET_PRICE)
+                .toDialog()
                 .doAssert(sid -> {
-                    sid.assertMarketPriceVisible();
                     sid.assertMarketPriceSupplierInvisible();
+                })
+                .valuationGrid()
+                .parseValuationRow(MARKET_PRICE)
+                .back()
+                .doAssert(asserts ->{
+                    asserts.assertMarketPriceVisible();
                 });
     }
 
@@ -118,7 +127,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 })
                 .closeProductDetails()
                 .openSidForFirstProduct()
-                .setValuation(Valuation.MARKET_PRICE)
-                .doAssert(SettlementDialog.Asserts::assertMarketPriceVisible);
+                .setValuation(MARKET_PRICE)
+                .doAssert(ValuationGrid.Asserts::assertMarketPriceVisible);
     }
 }

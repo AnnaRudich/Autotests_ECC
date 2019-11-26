@@ -10,11 +10,14 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.PRICE_500;
@@ -94,6 +97,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), claimItem.getTrygNewPrice())
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonEnabled);
     }
 
@@ -116,6 +120,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .addValuation(claimItem.getValuationTypeNewPrice(), claimItem.getTrygNewPrice())
                 .setDiscretionaryPrice(PRICE_500)
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonEnabled);
     }
 
@@ -197,16 +202,19 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                     sid.assertDiscretionaryReasonEqualTo(reasonText);
                 })
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
                     sid.assertDiscretionaryReasonEqualTo(reasonText);
                 })
                 .setValuation(CUSTOMER_DEMAND)
+                .toDialog()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
                     sid.assertDiscretionaryReasonEqualTo(reasonText);
                 })
                 .setValuation(VOUCHER)
+                .toDialog()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);
     }
 
@@ -312,6 +320,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 })
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .setValuation(VOUCHER)
+                .toDialog()
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertVoucherPresent);
@@ -379,6 +388,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(false)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .selectDiscretionaryReason(reasonText)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
@@ -413,6 +423,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(true)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .selectDiscretionaryReason(reasonText)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
@@ -453,6 +464,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(false)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
+                .toDialog()
                 .selectDiscretionaryReason(reasonText)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()

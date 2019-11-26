@@ -1,8 +1,8 @@
 package com.scalepoint.automation.tests.sid;
 
+import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -39,13 +39,18 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
-                .parseValuationRow(Valuation.NEW_PRICE)
-                .makeActive()
-                .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
                 .doAssert(sid -> {
                     sid.assertCashValueIs(replacementPrice);
                     sid.assertDepreciationAmountIs(depreciationAmount);
                 })
+                .valuationGrid()
+                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .makeActive()
+                .doAssert(row -> {
+                    row.assertTotalAmountIs(purchasePrice);
+                })
+                .back()
+                .toDialog()
                 .closeSidWithOk()
                 .findClaimLine(Constants.TEXT_LINE)
                 .doAssert(claimLine -> {
@@ -71,8 +76,11 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                             .withVoucher(claimItem.getExistingVoucher_10())
                             .withDepreciation(depreciationPercentage);
                 })
-                .parseValuationRow(Valuation.VOUCHER)
+                .valuationGrid()
+                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
+                .back()
+                .toDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
                 .findClaimLine(Constants.TEXT_LINE)
@@ -110,8 +118,11 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                             .withDepreciation(depreciationPercentage);
                 })
                 .distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo.CUSTOMER, 6)
-                .parseValuationRow(Valuation.VOUCHER)
+                .valuationGrid()
+                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
+                .back()
+                .toDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
                 .findClaimLine(Constants.TEXT_LINE)
@@ -133,7 +144,9 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .openSidForProductWithVoucher();
 
         int voucherPercentage = settlementDialog.getVoucherPercentage();
-        double voucherCashValue = settlementDialog.parseValuationRow(Valuation.VOUCHER).getTotalPrice();
+        double voucherCashValue = settlementDialog
+                .valuationGrid()
+                .parseValuationRow(ValuationGrid.Valuation.VOUCHER).getTotalPrice();
 
         int depreciationPercentage = 13;
         double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
@@ -143,9 +156,12 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         settlementDialog.closeSidWithOk()
                 .editFirstClaimLine()
-                .parseValuationRow(Valuation.VOUCHER)
+                .valuationGrid()
+                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
+                .back()
+                .toDialog()
                 .setDepreciation(depreciationPercentage)
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmountRoundHalfDown, sid))
                 .closeSidWithOk()

@@ -22,6 +22,8 @@ public interface Actions {
 
     Logger logger = LogManager.getLogger(Actions.class);
 
+    int DELAY = 200;
+
     default boolean openDialog(WebElement openButton) {
         return Window.get().openDialog(openButton);
     }
@@ -136,6 +138,10 @@ public interface Actions {
 
     default String getText(WebElement element) {
         return element.getText();
+    }
+
+    default void waitForJavascriptRecalculation() {
+        Wait.waitMillis(DELAY);
     }
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {

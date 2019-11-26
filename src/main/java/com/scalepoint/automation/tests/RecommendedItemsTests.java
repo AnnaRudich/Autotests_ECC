@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -15,6 +16,7 @@ import org.testng.annotations.Test;
 
 import java.util.function.Supplier;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-587")
@@ -46,7 +48,7 @@ public class RecommendedItemsTests extends BaseTest {
         ProductCashValue productInvoiceGtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE)), textSearchPage, null);
         ProductCashValue productInvoiceEqualMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE)), textSearchPage, null);
 
-        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE)), textSearchPage, SettlementDialog.Valuation.MARKET_PRICE);
+        ProductCashValue productInvoiceLtMarketCash = findProductAndAddToClaim(() -> SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE)), textSearchPage, MARKET_PRICE);
 
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
                 .toCompleteClaimPage()
@@ -107,7 +109,7 @@ public class RecommendedItemsTests extends BaseTest {
                 .doAssert(searchPage -> searchPage.assertRequiredPriceIsDisplayed(productInvoiceLowerMarket.getInvoicePrice()));
     }
 
-    private ProductCashValue findProductAndAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, SettlementDialog.Valuation valuation) {
+    private ProductCashValue findProductAndAddToClaim(Supplier<ProductInfo> searchStrategy, TextSearchPage textSearchPage, ValuationGrid.Valuation valuation) {
         ProductInfo productInfo = searchStrategy.get();
         SettlementDialog settlementDialog = textSearchPage
                 .searchBySku(productInfo.getSku())
