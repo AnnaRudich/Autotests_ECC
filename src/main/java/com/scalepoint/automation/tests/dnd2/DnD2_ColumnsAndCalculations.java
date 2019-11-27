@@ -74,7 +74,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                     asserts.assertCashCompensationIsDepreciated(depreciationValue, NEW_PRICE);
 
                 })
-                .toDialog()
+                .toSettlementDialog()
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {

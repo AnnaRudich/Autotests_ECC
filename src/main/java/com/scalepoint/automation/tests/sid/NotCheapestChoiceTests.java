@@ -109,7 +109,6 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .openSidForFirstProduct()
                 .setNewPrice(1.00)
                 .setValuation(MARKET_PRICE)
-                .toDialog()
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 
@@ -128,7 +127,6 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .editLine()
                 .setCustomerDemand(48.00)
                 .setValuation(CUSTOMER_DEMAND)
-                .toDialog()
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
 

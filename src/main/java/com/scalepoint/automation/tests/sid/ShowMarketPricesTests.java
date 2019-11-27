@@ -63,13 +63,12 @@ public class ShowMarketPricesTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setValuation(MARKET_PRICE)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertMarketPriceSupplierInvisible();
                 })
                 .valuationGrid()
                 .parseValuationRow(MARKET_PRICE)
-                .back()
+                .backToGrid()
                 .doAssert(asserts ->{
                     asserts.assertMarketPriceVisible();
                 });
@@ -128,6 +127,7 @@ public class ShowMarketPricesTests extends BaseTest {
                 .closeProductDetails()
                 .openSidForFirstProduct()
                 .setValuation(MARKET_PRICE)
+                .valuationGrid()
                 .doAssert(ValuationGrid.Asserts::assertMarketPriceVisible);
     }
 }

@@ -433,7 +433,6 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(ValuationGrid.Valuation.NEW_PRICE)
-                .toDialog()
                 .closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)

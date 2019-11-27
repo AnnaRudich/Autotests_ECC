@@ -83,8 +83,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryLuxuryWatches())
                 .enableAge(reductionRule.getAgeFrom2())
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
@@ -134,8 +133,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryLuxuryWatches())
                 .enableAge(reductionRule.getAgeFrom2())
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
@@ -154,7 +152,6 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 })
                 .automaticDepreciation(true)
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertCashValueIs(calculatedCashWithReduction);
                     sid.assertDepreciationAmountIs(calculatedReduction);
@@ -185,8 +182,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryHearingAids())
                 .enableAge(reductionRule.getAgeFrom2())
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
@@ -230,8 +226,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryMobilePhones())
                 .enableAge(reductionRule.getAgeFrom2())
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
         ValuationWithReduction valuationWithReduction =
@@ -281,8 +276,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryMobilePhones())
                 .enableAge(reductionRule.getAgeFrom2())
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
 
@@ -299,7 +293,6 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 })
                 .automaticDepreciation(true)
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertCashValueIs(calculation.getCashCompensationWithReduction());
                     sid.assertDepreciationAmountIs(calculation.getReduction());

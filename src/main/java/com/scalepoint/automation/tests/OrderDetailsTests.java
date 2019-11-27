@@ -139,8 +139,7 @@ public class OrderDetailsTests extends BaseTest {
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
-                .setValuation(ValuationGrid.Valuation.NEW_PRICE)
-                .toDialog();
+                .setValuation(ValuationGrid.Valuation.NEW_PRICE);
 
         Double activeValuation = dialog.getCashCompensationValue();
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)

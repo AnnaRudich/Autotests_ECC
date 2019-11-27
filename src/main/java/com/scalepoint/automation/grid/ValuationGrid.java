@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,15 +73,11 @@ public class ValuationGrid implements Actions {
         CATALOG_PRICE("valuation-type-CATALOG_PRICE"),
         USED_PRICE("valuation-type-USED_PRICE");
 
+        @Getter
         private String className;
 
         Valuation(String className) {
             this.className = className;
-        }
-
-        public String getClassName(){
-
-            return className;
         }
     }
 
@@ -137,14 +134,14 @@ public class ValuationGrid implements Actions {
             return totalPrice;
         }
 
-        public ValuationGrid back() {
+        public ValuationGrid backToGrid() {
 
             return ValuationGrid.this;
         }
 
-        public ValuationRow doAssert(Consumer<ValuationRow.Asserts> func) {
+        public ValuationGrid doAssert(Consumer<ValuationRow.Asserts> func) {
             func.accept(new ValuationRow.Asserts());
-            return ValuationRow.this;
+            return ValuationGrid.this;
 
         }
 
@@ -198,13 +195,14 @@ public class ValuationGrid implements Actions {
     }
 
     private boolean isValuationDisabled(ValuationGrid.Valuation valuation) {
-        SelenideElement unselectable = $(By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]")).shouldHave(Condition.attribute("unselectable"));
+        SelenideElement unselectable = $(By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]"))
+                .shouldHave(Condition.attribute("unselectable"));
         if (unselectable == null)
             return false;
         return true;
     }
 
-    public SettlementDialog toDialog(){
+    public SettlementDialog toSettlementDialog(){
 
         return new SettlementDialog();
     }

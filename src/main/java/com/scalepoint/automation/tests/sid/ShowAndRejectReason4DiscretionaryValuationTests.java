@@ -97,7 +97,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), claimItem.getTrygNewPrice())
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonEnabled);
     }
 
@@ -120,7 +119,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .addValuation(claimItem.getValuationTypeNewPrice(), claimItem.getTrygNewPrice())
                 .setDiscretionaryPrice(PRICE_500)
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonEnabled);
     }
 
@@ -202,19 +200,16 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                     sid.assertDiscretionaryReasonEqualTo(reasonText);
                 })
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
                     sid.assertDiscretionaryReasonEqualTo(reasonText);
                 })
                 .setValuation(CUSTOMER_DEMAND)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
                     sid.assertDiscretionaryReasonEqualTo(reasonText);
                 })
                 .setValuation(VOUCHER)
-                .toDialog()
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);
     }
 
@@ -320,7 +315,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 })
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .setValuation(VOUCHER)
-                .toDialog()
                 .closeSidWithOk()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertVoucherPresent);
@@ -388,7 +382,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(false)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .selectDiscretionaryReason(reasonText)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
@@ -423,7 +416,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(true)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .selectDiscretionaryReason(reasonText)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()
@@ -464,7 +456,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .setDiscountAndDepreciation(false)
                 .setDescription(TEXT_LINE)
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .selectDiscretionaryReason(reasonText)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reasonText))
                 .closeSidWithOk()

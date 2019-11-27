@@ -247,7 +247,6 @@ public class EditReasonTests extends BaseTest {
                 .setDiscretionaryPrice(400.00)
                 .setNewPrice(3000.00)
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .selectDiscretionaryReason(reason)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reason))
                 .closeSidWithOk()

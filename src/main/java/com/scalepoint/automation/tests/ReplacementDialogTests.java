@@ -55,7 +55,6 @@ public class ReplacementDialogTests extends BaseTest {
                         .withNewPrice(newPrice)
                         .withCategory(claimItem.getCategoryOther()))
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .closeSidWithOk();
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
                 .openReplacementWizard()

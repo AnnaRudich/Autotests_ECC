@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
 
@@ -39,18 +40,15 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
+                .valuationGrid()
+                .parseValuationRow(NEW_PRICE)
+                .makeActive()
+                .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
+                .toSettlementDialog()
                 .doAssert(sid -> {
                     sid.assertCashValueIs(replacementPrice);
                     sid.assertDepreciationAmountIs(depreciationAmount);
                 })
-                .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
-                .makeActive()
-                .doAssert(row -> {
-                    row.assertTotalAmountIs(purchasePrice);
-                })
-                .back()
-                .toDialog()
                 .closeSidWithOk()
                 .findClaimLine(Constants.TEXT_LINE)
                 .doAssert(claimLine -> {
@@ -79,8 +77,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
                 .findClaimLine(Constants.TEXT_LINE)
@@ -121,8 +118,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
                 .closeSidWithOk()
                 .findClaimLine(Constants.TEXT_LINE)
@@ -160,8 +156,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .setDepreciation(depreciationPercentage)
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmountRoundHalfDown, sid))
                 .closeSidWithOk()

@@ -40,7 +40,6 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .clickOK()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
@@ -62,7 +61,6 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
         createClaimAndFillSid(user, claim, claimItem)
                 .setDiscretionaryPrice(300.00)
                 .setValuation(DISCRETIONARY)
-                .toDialog()
                 .clickOK()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonEnabled();
@@ -106,7 +104,6 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setDepreciationType(DepreciationType.POLICY)
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
@@ -128,7 +125,6 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciation(0)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .doAssert(sid -> {
                     sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();

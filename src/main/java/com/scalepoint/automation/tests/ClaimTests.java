@@ -416,7 +416,6 @@ public class ClaimTests extends BaseTest {
                 .openSid()
                 .setBaseData(claimItem)
                 .setValuation(NEW_PRICE)
-                .toDialog()
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)

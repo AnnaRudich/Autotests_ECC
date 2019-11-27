@@ -57,16 +57,14 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(sid -> sid.assertDepreciationPercentageIs(41))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .enterAgeYears("6")
                 .automaticDepreciation(true)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(47))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
@@ -92,8 +90,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .setCategory(claimItem.getCategoryPersonalMedicine())
                 .automaticDepreciation(true)
                 .valuationGrid()
@@ -120,8 +117,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .enterAgeYears("0")
                 .automaticDepreciation(true)
                 .valuationGrid()
@@ -141,7 +137,6 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 enableAge().
                 enterAgeYears("5").
                 selectMonth("6").
-                setValuation(NEW_PRICE)
-                .toDialog();
+                setValuation(NEW_PRICE);
     }
 }

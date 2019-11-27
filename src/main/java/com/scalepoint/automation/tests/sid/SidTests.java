@@ -345,8 +345,7 @@ public class SidTests extends BaseTest {
                 .doAssert(row -> {
                     row.assertCashCompensationIs(voucherValuation.getCashValue());
                 })
-                .back()
-                .toDialog()
+                .toSettlementDialog()
                 .doAssert(sid -> {
                     sid.assertVoucherCashValueIs(voucherValuation.getCashValue());
                     sid.assertVoucherFaceValueIs(voucherValuation.getFaceValue());

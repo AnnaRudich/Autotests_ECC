@@ -51,8 +51,7 @@ public class SidReductionRulesTests extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .enableAge("2")
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule_30());
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
@@ -99,8 +98,7 @@ public class SidReductionRulesTests extends BaseTest {
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .enableAge()
                 .enterAgeYears("2")
-                .setValuation(NEW_PRICE)
-                .toDialog();
+                .setValuation(NEW_PRICE);
 
         SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule_30());
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
