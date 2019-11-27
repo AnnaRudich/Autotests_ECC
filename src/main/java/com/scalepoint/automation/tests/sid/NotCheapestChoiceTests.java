@@ -16,7 +16,7 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
 import static org.testng.Assert.assertEquals;
 
 /**

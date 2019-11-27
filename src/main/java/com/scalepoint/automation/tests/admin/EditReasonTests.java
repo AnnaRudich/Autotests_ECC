@@ -17,7 +17,7 @@ import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
 
 @SuppressWarnings("AccessStaticViaInstance")

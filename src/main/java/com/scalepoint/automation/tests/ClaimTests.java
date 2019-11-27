@@ -22,6 +22,8 @@ import org.testng.annotations.Test;
 import java.time.Year;
 import java.util.Arrays;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
@@ -277,7 +279,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -325,7 +327,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -363,7 +365,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertIsStatusMatchedNotificationContainsText(claimItem.getMatchedText()));
 
         String description = settlementDialog.getDescriptionText();
-        double price = settlementDialog.parseValuationRow(SettlementDialog.Valuation.CATALOG_PRICE).getTotalPrice();
+        double price = settlementDialog.valuationGrid().parseValuationRow(CATALOG_PRICE).getTotalPrice();
 
         settlementDialog.closeSidWithOk(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description))
@@ -412,7 +414,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .setValuation(NEW_PRICE)
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)

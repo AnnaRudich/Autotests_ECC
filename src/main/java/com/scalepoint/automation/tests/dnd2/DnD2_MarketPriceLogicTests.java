@@ -10,8 +10,8 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.MARKET_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-526")
@@ -28,6 +28,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
@@ -46,6 +47,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
@@ -63,7 +65,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
@@ -93,7 +95,7 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
-
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();

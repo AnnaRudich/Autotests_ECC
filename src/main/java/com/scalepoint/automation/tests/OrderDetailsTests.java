@@ -9,13 +9,17 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
@@ -138,7 +142,7 @@ public class OrderDetailsTests extends BaseTest {
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE);
+                .setValuation(NEW_PRICE);
 
         Double activeValuation = dialog.getCashCompensationValue();
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)

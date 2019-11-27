@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import java.time.Year;
 import java.util.Objects;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.*;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 /**
@@ -46,6 +46,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .sortOrderableFirst()
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
@@ -68,6 +69,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .openSidForFirstProduct()
                 .setDepreciation(deprecationValue)
                 .setDescription("test")
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertMarketPriceVisible();
                     asserts.assertCatalogPriceVisible();
@@ -94,10 +96,14 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
+                    asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
+                })
+                .valuationGrid()
+                .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(deprecationValue, NEW_PRICE);
                     asserts.assertCashCompensationIsDepreciated(deprecationValue, CUSTOMER_DEMAND);
                     asserts.assertPriceIsSameInTwoColumns(USED_PRICE);
-                    asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
+
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE,
                             USED_PRICE, CUSTOMER_DEMAND);
                 });
@@ -117,9 +123,12 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP())
                 .setDepreciation(deprecationValue)
                 .doAssert(asserts -> {
+                    asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
+                })
+                .valuationGrid()
+                .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(deprecationValue, NEW_PRICE);
                     asserts.assertCashCompensationIsNotDepreciated(CUSTOMER_DEMAND, initialCustomerDemand);
-                    asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE, CUSTOMER_DEMAND);
                 });
     }
@@ -138,6 +147,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
         Objects.requireNonNull(Browser.driver()).navigate().refresh();
         settlementPage.parseFirstClaimLine()
                 .editLine()
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(settlementDialog.getVoucherPercentage() / 2, NEW_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
@@ -157,6 +167,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .setDescription(claimItem.getTextFieldSP());
         int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
         settlementDialog.setDepreciation(depreciationPercentage)
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
                     asserts.assertIsLowestPriceValuationSelected(VOUCHER, NEW_PRICE);
@@ -176,6 +187,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 );
         int depreciationPercentage = settlementDialog.getVoucherPercentage() * 2;
         settlementDialog.setDepreciation(depreciationPercentage)
+                .valuationGrid()
                 .doAssert(asserts -> {
                     asserts.assertCashCompensationIsDepreciated(depreciationPercentage, NEW_PRICE);
                     asserts.assertCashCompensationIsDepreciated(depreciationPercentage, VOUCHER);

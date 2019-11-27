@@ -25,8 +25,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.CUSTOMER_DEMAND;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM;
 
@@ -86,6 +86,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCustomerDemand(customerDemand)
+                .valuationGrid()
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(customerDemand));
     }
@@ -102,6 +103,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setNewPrice(newPrice)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(newPrice));
     }
@@ -136,7 +138,9 @@ public class SidManualItemsTests extends BaseTest {
         dialog.doAssert(sid -> {
             sid.assertCashValueIs(expectedCalculations.getCashValue());
             sid.assertDepreciationAmountIs(expectedCalculations.getDepreciation());
-        }).parseValuationRow(CUSTOMER_DEMAND)
+        })
+                .valuationGrid()
+                .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> {
                     valuationRow.assertCashCompensationIs(expectedCalculations.getCashValue());
                     valuationRow.assertDepreciationPercentageIs(10);
@@ -223,6 +227,7 @@ public class SidManualItemsTests extends BaseTest {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
+                .valuationGrid()
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
                 .parseValuationRow(NEW_PRICE)
@@ -254,10 +259,12 @@ public class SidManualItemsTests extends BaseTest {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
+                .valuationGrid()
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertCashCompensationIs(claimItem.getCustomerDemand()))
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400))
+                .toSettlementDialog()
                 .setBaseData(claimItem)
                 .cancel()
                 .findClaimLine(claimItem.getTextFieldSP())
@@ -266,6 +273,7 @@ public class SidManualItemsTests extends BaseTest {
                     claimLine.assertDescriptionIs(claimItem.getTextFieldSP());
                     claimLine.assertCategoriesTextIs(pseudoCategory);
                 })
+                .valuationGrid()
                 .parseValuationRow(CUSTOMER_DEMAND)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(claimItem.getCustomerDemand()))
                 .parseValuationRow(NEW_PRICE)
@@ -288,7 +296,8 @@ public class SidManualItemsTests extends BaseTest {
                 .setBaseData(claimItem)
                 .setReviewed(true)
                 .includeInClaim(false)
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .setValuation(NEW_PRICE)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertTotalAmountIs(Constants.PRICE_2400));
     }
@@ -578,7 +587,7 @@ public class SidManualItemsTests extends BaseTest {
                 .setBaseData(claimItem)
                 .enableAge("10")
                 .selectMonth("6")
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
+                .setValuation(NEW_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
@@ -625,8 +634,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
-
+                .setValuation(NEW_PRICE)
                 .closeSidWithOk()
                 .doAssert(sid->{
                     sid.assertItemIsPresent(claimItem.getTextFieldSP());
@@ -650,8 +658,7 @@ public class SidManualItemsTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem1)
-                .setValuation(SettlementDialog.Valuation.NEW_PRICE)
-
+                .setValuation(NEW_PRICE)
                 .addOneMoreManualLine()
                 .doAssert(sid->{
                     sid.assertItemIsPresent(claimItem1.getTextFieldSP());

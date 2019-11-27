@@ -14,8 +14,9 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.DISCRETIONARY;
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)

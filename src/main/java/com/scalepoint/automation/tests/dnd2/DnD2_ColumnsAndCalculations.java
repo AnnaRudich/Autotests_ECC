@@ -14,6 +14,8 @@ import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-514")
 public class DnD2_ColumnsAndCalculations extends BaseTest {
 
@@ -65,9 +67,14 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                         .withVoucher(claimItem.getExistingVoucher_10())
                         .withDepreciation(depreciationValue))
                 .doAssert(asserts -> {
-                    asserts.assertCashCompensationIsDepreciated(depreciationValue, SettlementDialog.Valuation.NEW_PRICE);
                     asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
                 })
+                .valuationGrid()
+                .doAssert(asserts -> {
+                    asserts.assertCashCompensationIsDepreciated(depreciationValue, NEW_PRICE);
+
+                })
+                .toSettlementDialog()
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
@@ -85,7 +92,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                         .withDepreciation(depreciationValue)
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryOther())
-                        .withValuation(SettlementDialog.Valuation.NEW_PRICE))
+                        .withValuation(NEW_PRICE))
                 .closeSidWithOk()
                 .getSettlementSummary()
                 .doAssert(asserts -> {
@@ -150,7 +157,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withCategory(claimItem.getCategoryOther())
-                        .withValuation(SettlementDialog.Valuation.NEW_PRICE))
+                        .withValuation(NEW_PRICE))
                 .closeSidWithOk();
         settlementPage.parseFirstClaimLine()
                 .doAssert(asserts -> {

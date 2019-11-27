@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
+import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -22,15 +23,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.CheckBox;
-import ru.yandex.qatools.htmlelements.element.Link;
-import ru.yandex.qatools.htmlelements.element.Table;
-import ru.yandex.qatools.htmlelements.element.TextBlock;
+import ru.yandex.qatools.htmlelements.element.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -41,23 +36,15 @@ import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
-import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForEnabled;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertEqualsNoOrder;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 
 public class SettlementDialog extends BaseDialog {
-
-    private static final int DELAY = 200;
 
     private static final By OK_BUTTON = By.id("ok-button");
     private static final By ADD_BUTTON = By.id("add-button");
@@ -209,48 +196,6 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "damage-checkbox-displayEl")
     private CheckBox damageCheckbox;
 
-    public enum ValuationGridColumn {
-        CHECK_COLUMN("active-valuation-checkcolumn"),
-        TYPE("description"),
-        CASH_COMPENSATION("cashCompensation"),
-        DEPRECIATION_COLUMN("depreciation"),
-        TOTAL_AMOUNT_OF_VALUATION("totalPrice"),
-        EDIT_VALUATION("editValuation"),
-        NULL(null);
-
-        private String dataColumnId;
-
-        ValuationGridColumn(String dataColumnId) {
-            this.dataColumnId = dataColumnId;
-        }
-
-        public static ValuationGridColumn getColumn(String dataColumnId) {
-            for (ValuationGridColumn valuationGridColumn : ValuationGridColumn.values()) {
-                if (dataColumnId.equals(valuationGridColumn.dataColumnId)) {
-                    return valuationGridColumn;
-                }
-            }
-            return NULL;
-        }
-    }
-
-    public enum Valuation {
-        NOT_SELECTED("valuation-type-NOT_SELECTED"),
-        CUSTOMER_DEMAND("valuation-type-CUSTOMER_DEMAND"),
-        VOUCHER("valuation-type-VOUCHER"),
-        NEW_PRICE("valuation-type-NEW_PRICE"),
-        MARKET_PRICE("valuation-type-MARKET_PRICE"),
-        DISCRETIONARY("valuation-type-DISCRETIONARY_VALUATION"),
-        CATALOG_PRICE("valuation-type-CATALOG_PRICE"),
-        USED_PRICE("valuation-type-USED_PRICE");
-
-        private String className;
-
-        Valuation(String className) {
-            this.className = className;
-        }
-    }
-
     public enum DepreciationType {
         POLICY(0),
         DISCRETIONARY(1);
@@ -349,7 +294,7 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public FormFiller withValuation(Valuation valuation) {
+        public FormFiller withValuation(ValuationGrid.Valuation valuation) {
             sid.setValuation(valuation);
             return this;
         }
@@ -417,10 +362,6 @@ public class SettlementDialog extends BaseDialog {
         simulateBlurEvent(input);
         waitForJavascriptRecalculation();
         return this;
-    }
-
-    private void waitForJavascriptRecalculation() {
-        Wait.waitMillis(DELAY);
     }
 
     public void setSubCategoryByIndex(int index) {
@@ -738,7 +679,7 @@ public class SettlementDialog extends BaseDialog {
         }
         Wait.forCondition(webDriver -> {
             try {
-                String valuationDepreciation = Browser.driver().findElement(By.xpath(TR_CONTAINS_CLASS + Valuation.NEW_PRICE + "')]//td[4]//div")).getText();
+                String valuationDepreciation = Browser.driver().findElement(By.xpath(TR_CONTAINS_CLASS + NEW_PRICE + "')]//td[4]//div")).getText();
                 return reductionRuleValue.toString().equals(valuationDepreciation);
             } catch (Exception e) {
                 logger.error("Can't compare reduction and depreciationPercentage! " + e.getMessage(), e);
@@ -915,13 +856,13 @@ public class SettlementDialog extends BaseDialog {
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className)))));
+        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))));
         return at(EditVoucherValuationDialog.class);
     }
 
     public boolean isDiscountDistributionDisplayed() {
         try {
-            return waitForDisplayed(By.xpath(String.format(discountDistributionLocator, Valuation.VOUCHER.className))).isDisplayed();
+            return waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName()))).isDisplayed();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return false;
@@ -956,42 +897,28 @@ public class SettlementDialog extends BaseDialog {
         return comboBoxOptions.stream().map(VoucherDropdownElement::new).collect(Collectors.toList());
     }
 
-    public ValuationRow parseValuationRow(Valuation valuation) {
-        ValuationRow valuationRow = new ValuationRow(valuation);
-
-        By xpath = By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]//td");
-        Wait.waitForStaleElement(xpath);
-        waitForAjaxCompleted();
-        ElementsCollection elements = $$(xpath);
-        for (WebElement td : elements) {
-            String attribute = td.getAttribute("data-columnid");
-            switch (ValuationGridColumn.getColumn(attribute)) {
-                case CASH_COMPENSATION:
-                    valuationRow.cashCompensation = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
-                    break;
-                case DEPRECIATION_COLUMN:
-                    valuationRow.depreciationPercentage = StringUtils.isBlank(td.getText()) ? null : Integer.valueOf(td.getText());
-                    break;
-                case TOTAL_AMOUNT_OF_VALUATION:
-                    valuationRow.totalPrice = StringUtils.isBlank(td.getText()) ? null : OperationalUtils.toNumber(td.getText());
-                    break;
-                case TYPE:
-                    valuationRow.description = td.getText();
-                    break;
-                default:
-                    logger.warn("Valuation not supported: " + ValuationGridColumn.getColumn(attribute));
-                    break;
-            }
-        }
-        return valuationRow;
-
+    public ValuationGrid valuationGrid(){
+        return new ValuationGrid();
     }
 
-    private boolean isValuationDisabled(Valuation valuation) {
-        SelenideElement unselectable = $(By.xpath(TR_CONTAINS_CLASS + valuation.className + "')]/td[2]/div[contains(@style, 'silver')]")).shouldHave(Condition.attribute("unselectable"));
-        if (unselectable == null)
-            return false;
-        return true;
+    public SettlementDialog setValuation(ValuationGrid.Valuation valuation) {
+        return new ValuationGrid()
+                .parseValuationRow(valuation)
+                .makeActive()
+                .backToGrid()
+                .toSettlementDialog();
+    }
+
+    private VoucherDropdownElement parseVoucherDropdownElement(String voucherName) {
+        try {
+            List<VoucherDropdownElement> voucherDropdownElements = parseVoucherDropdown();
+            return voucherDropdownElements.stream()
+                    .filter(el -> el.getVoucherName().equals(voucherName))
+                    .findFirst()
+                    .orElseThrow((Supplier<Throwable>) () -> new AssertionError(voucherName + " is not"));
+        } catch (Throwable throwable) {
+            throw new AssertionError(throwable.getMessage(), throwable);
+        }
     }
 
     public static class VoucherDropdownElement {
@@ -1033,107 +960,6 @@ public class SettlementDialog extends BaseDialog {
         }
     }
 
-    public class ValuationRow {
-
-        private Valuation valuation;
-        private Double cashCompensation;
-        private Integer depreciationPercentage;
-        private Double totalPrice;
-        private String description;
-
-        WebDriver driver;
-        By xpath;
-        WebElement webElement;
-
-        private void setUp() {
-            driver = Browser.driver();
-            xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
-            Wait.waitForStaleElement(xpath);
-            webElement = driver.findElement(xpath);
-        }
-
-        Boolean isChecked() {
-            setUp();
-            return webElement.getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
-        }
-
-        public ValuationRow makeActive() {
-            if (!isChecked()) {
-                //one click doesn't work, each click renew dom so we should wait for stale element each time
-                for (int i = 0; i < 2; i++) {
-                    Wait.waitForStaleElement(xpath);
-                    webElement = driver.findElement(xpath);
-                    clickUsingJsIfSeleniumClickReturnError(webElement);
-                }
-            }
-            waitForJavascriptRecalculation();
-            return this;
-        }
-
-        public SettlementDialog doAssert(Consumer<Asserts> func) {
-            func.accept(new Asserts());
-            return SettlementDialog.this;
-
-        }
-
-        public class Asserts {
-            public Asserts assertCashCompensationIs(Double amount) {
-                OperationalUtils.assertEqualsDouble(cashCompensation, amount);
-                return this;
-            }
-
-            public Asserts assertTotalAmountIs(Double amount) {
-                OperationalUtils.assertEqualsDouble(totalPrice, amount);
-                return this;
-            }
-
-            public Asserts assertDepreciationPercentageIs(Integer expectedDepreciationPercentage) {
-                assertEquals(depreciationPercentage, expectedDepreciationPercentage);
-                return this;
-            }
-        }
-
-        public ValuationRow parseValuation(Valuation valuation) {
-            return SettlementDialog.this.parseValuationRow(valuation);
-        }
-
-        private ValuationRow(Valuation valuation) {
-            this.valuation = valuation;
-        }
-
-        public String getDescription() {
-            return this.description;
-        }
-
-        public Double getCashCompensation() {
-            return cashCompensation;
-        }
-
-        public Double getTotalPrice() {
-            return totalPrice;
-        }
-
-        public SettlementDialog back() {
-            return SettlementDialog.this;
-        }
-    }
-
-    public SettlementDialog setValuation(Valuation valuation) {
-        return parseValuationRow(valuation).makeActive().back();
-    }
-
-    private VoucherDropdownElement parseVoucherDropdownElement(String voucherName) {
-        try {
-            List<VoucherDropdownElement> voucherDropdownElements = parseVoucherDropdown();
-            return voucherDropdownElements.stream()
-                    .filter(el -> el.getVoucherName().equals(voucherName))
-                    .findFirst()
-                    .orElseThrow((Supplier<Throwable>) () -> new AssertionError(voucherName + " is not"));
-        } catch (Throwable throwable) {
-            throw new AssertionError(throwable.getMessage(), throwable);
-        }
-    }
-
     public SettlementDialog doAssert(Consumer<Asserts> func) {
         func.accept(new Asserts());
         return SettlementDialog.this;
@@ -1144,11 +970,6 @@ public class SettlementDialog extends BaseDialog {
         public Asserts assertDiscretionaryReasonValuePresent(String expectedValue) {
             List<String> options = discretionaryReason.getComboBoxOptions();
             Assert.assertTrue(options.stream().anyMatch(i -> i.contains(expectedValue)));
-            return this;
-        }
-
-        public Asserts assertValuationIsDisabled(Valuation valuation) {
-            assertTrue(isValuationDisabled(valuation));
             return this;
         }
 
@@ -1319,43 +1140,6 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertMarketPriceVisible() {
-            String failMessage = "Market price must be visible";
-            return checkVisibilityOfValuationRow(failMessage, Valuation.MARKET_PRICE);
-        }
-
-        public Asserts assertCatalogPriceVisible() {
-            String failMessage = "Catalog price must be visible";
-            return checkVisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
-        }
-
-        public Asserts assertCatalogPriceInvisible() {
-            String failMessage = "Catalog price must be invisible";
-            return checkInvisibilityOfValuationRow(failMessage, Valuation.CATALOG_PRICE);
-        }
-
-        private Asserts checkVisibilityOfValuationRow(String message, Valuation valuation) {
-            try {
-                if (parseValuationRow(valuation).getDescription() == null) {
-                    Assert.fail(message);
-                }
-            } catch (Exception e) {
-                Assert.fail(message);
-            }
-            return this;
-        }
-
-        private Asserts checkInvisibilityOfValuationRow(String message, Valuation valuation) {
-            try {
-                if (parseValuationRow(valuation).getDescription() != null) {
-                    Assert.fail(message);
-                }
-            } catch (Exception e) {
-                Assert.fail(message);
-            }
-            return this;
-        }
-
         public Asserts assertMarketPriceSupplierInvisible() {
             assertFalse(isMarketPriceSupplierDisplayed(), "Market price must be not visible");
             return this;
@@ -1488,48 +1272,6 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertCashCompensationIsDepreciated(int percentage, Valuation valuation) {
-            ValuationRow valuationRow = parseValuationRow(valuation);
-            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), valuationRow.getTotalPrice() * (1 - ((double) percentage / 100)));
-            return this;
-        }
-
-        public Asserts assertCashCompensationIsNotDepreciated(Valuation valuation, Double expectedNotDepreciatedValue) {
-            ValuationRow valuationRow = parseValuationRow(valuation);
-            assertEqualsDoubleWithTolerance(valuationRow.getCashCompensation(), expectedNotDepreciatedValue);
-            return this;
-        }
-
-        public Asserts assertIsLowestPriceValuationSelected(Valuation... valuations) {
-            List<ValuationRow> valuationRows = new ArrayList<>();
-            Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
-            assertTrue(valuationRows.stream().min(Comparator.comparing(ValuationRow::getCashCompensation))
-                    .map(ValuationRow::isChecked).orElse(false));
-            return this;
-        }
-
-        public Asserts assertPriceIsSameInTwoColumns(Valuation valuation) {
-            ValuationRow valuationRow = parseValuationRow(valuation);
-            assertEquals(valuationRow.cashCompensation, valuationRow.totalPrice);
-            return this;
-        }
-
-        public Asserts assertTotalPriceIsSameInRows(Valuation... valuations) {
-            List<ValuationRow> valuationRows = new ArrayList<>();
-            Arrays.stream(valuations).forEach(valuation -> valuationRows.add(parseValuationRow(valuation)));
-            assertTrue(valuationRows.stream()
-                            .map(price -> price.getTotalPrice()).collect(Collectors.toList()).stream()
-                            .distinct().count() <= 1,
-                    "Total prices are not equal");
-            return this;
-        }
-
-        public Asserts assertIsVoucherDiscountApplied(Double newPrice) {
-            ValuationRow valuationRow = parseValuationRow(Valuation.VOUCHER);
-            assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
-            return this;
-        }
-
         public Asserts assertIsStatusMatchedNotificationContainsText(String text) {
             String statusText = statusMatchedDisplayField.getText();
             assertTrue(statusText.contains(text), "Status Matched text is: '" + statusText + "' and should contain: '" + text + "'");
@@ -1581,6 +1323,12 @@ public class SettlementDialog extends BaseDialog {
                             .filter(d -> d.equals(element.getText())).count())
                             .as(String.format("Damage type: %s is not relevant for this category", element.getText()))
                             .isEqualTo(1));
+            return this;
+        }
+
+        public Asserts assertIsVoucherDiscountApplied(Double newPrice) {
+            ValuationGrid.ValuationRow valuationRow = new ValuationGrid().parseValuationRow(VOUCHER);
+            assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;
         }
     }

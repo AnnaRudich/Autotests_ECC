@@ -13,7 +13,8 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-505")
 @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
@@ -31,6 +32,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify automatic overwrite of the depreciation field")
     public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41));
     }
@@ -52,16 +54,21 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Update automatic overwrite of the depreciation field")
     public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(sid -> sid.assertDepreciationPercentageIs(41))
+                .toSettlementDialog()
                 .enterAgeYears("6")
                 .automaticDepreciation(true)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(47))
+                .toSettlementDialog()
                 .closeSidWithOk()
                 .findClaimLine(claimItem.getTextFieldSP())
                 .editLine()
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(47));
     }
@@ -80,10 +87,13 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that changing category automatically reset of the depreciation field to 0")
     public void charlie_505_4_changeCategoryResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
+                .toSettlementDialog()
                 .setCategory(claimItem.getCategoryPersonalMedicine())
                 .automaticDepreciation(true)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
@@ -104,10 +114,13 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that select other age than specified in the rules automatically reset of the depreciation field to 0")
     public void charlie_505_5_changeAgeResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
+                .toSettlementDialog()
                 .enterAgeYears("0")
                 .automaticDepreciation(true)
+                .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .makeActive()
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
