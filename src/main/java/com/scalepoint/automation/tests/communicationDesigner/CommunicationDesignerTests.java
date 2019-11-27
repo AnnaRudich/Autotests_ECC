@@ -1,8 +1,6 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.scalepoint.automation.grid.ValuationGrid;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
@@ -37,6 +35,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.Arrays;
 
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
@@ -432,7 +431,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(productInfo.getInvoicePrice() + 1000)
                 .setDescription(claimItem.getTextFieldSP())
-                .setValuation(ValuationGrid.Valuation.NEW_PRICE)
+                .setValuation(NEW_PRICE)
                 .closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)

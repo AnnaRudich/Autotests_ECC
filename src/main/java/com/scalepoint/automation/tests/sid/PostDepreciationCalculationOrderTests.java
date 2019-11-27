@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.sid;
 
-import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.SolrApi;
@@ -19,6 +18,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
 import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
 
@@ -75,7 +75,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                             .withDepreciation(depreciationPercentage);
                 })
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
+                .parseValuationRow(VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
                 .toSettlementDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
@@ -116,7 +116,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 })
                 .distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo.CUSTOMER, 6)
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
+                .parseValuationRow(VOUCHER)
                 .doAssert(row -> row.assertTotalAmountIs(discountedVoucherAmount))
                 .toSettlementDialog()
                 .doAssert(sid -> doGeneralAssert(voucherFaceValue, replacementPrice, depreciationAmount, sid))
@@ -142,7 +142,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         int voucherPercentage = settlementDialog.getVoucherPercentage();
         double voucherCashValue = settlementDialog
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.VOUCHER).getTotalPrice();
+                .parseValuationRow(VOUCHER).getTotalPrice();
 
         int depreciationPercentage = 13;
         double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
@@ -153,7 +153,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         settlementDialog.closeSidWithOk()
                 .editFirstClaimLine()
                 .valuationGrid()
-                .parseValuationRow(ValuationGrid.Valuation.VOUCHER)
+                .parseValuationRow(VOUCHER)
                 .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
                 .toSettlementDialog()
