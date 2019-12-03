@@ -442,7 +442,7 @@ public class SettlementDialog extends BaseDialog {
             $("#vouchers-combobox-trigger-picker")
                     .hover()
                     .click();
-            $$("#vouchers-combobox-picker-listEl li")
+            $$("#vouchers-combobox-picker-listEl div")
                     .stream()
                     .filter(element -> element.text().contains(voucherName))
                     .findFirst()
