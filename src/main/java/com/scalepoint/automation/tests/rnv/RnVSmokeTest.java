@@ -28,7 +28,7 @@ public class RnVSmokeTest extends BaseTest {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
-                .addStub();
+                .addStub(200);
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
@@ -59,7 +59,7 @@ public class RnVSmokeTest extends BaseTest {
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
 
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
@@ -96,7 +96,7 @@ public class RnVSmokeTest extends BaseTest {
                 .selectLine()
                 .sendToRnV()
                 .nextRnVstep()
-                .sendRnV(agreement);
+                .sendRnvIsSuccess(agreement);
 
         final String testMessage = "Test message";
         new ClaimNavigationMenu()

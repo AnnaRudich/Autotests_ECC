@@ -26,7 +26,12 @@ import com.scalepoint.automation.utils.data.entity.GenericItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.ScriptTimeoutException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -38,7 +43,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Constants.AGE_MONTH;
@@ -670,6 +674,12 @@ public class SettlementPage extends BaseClaimPage {
             public Asserts assertLineIsSentToRepair() {
                 assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0)
                         .as("repair icon should be displayed").isTrue();
+                return this;
+            }
+
+            public Asserts assertLineIsNotSentToRepair() {
+                assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0)
+                        .as("repair icon should be displayed").isFalse();
                 return this;
             }
 

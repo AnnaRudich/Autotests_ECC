@@ -96,6 +96,14 @@ public class ProjectsPage extends Page {
             return this;
         }
 
+        public Assertion assertTaskHasFailStatus(ServiceAgreement agreement){
+            String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            assertThat(actualTaskStatus)
+                    .as("Task has " + actualTaskStatus + " status. Must be completed")
+                    .isEqualTo(agreement.getSendTaskFailStatus());
+            return this;
+        }
+
         SelenideElement evaluateTaskButton = $(By.xpath("//span[contains(text(), 'Evaluer opgave')]/following-sibling::span"));
 
         public Assertion assertEvaluateTaskButtonIsDisabled(){

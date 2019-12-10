@@ -39,7 +39,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
-                .addStub();
+                .addStub(200);
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
@@ -77,7 +77,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -136,7 +136,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -186,7 +186,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -231,7 +231,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -279,7 +279,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .selectDamageType(lineDescription, claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1))
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .editLine()
                 .doAssert(claimLine -> {

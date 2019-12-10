@@ -57,6 +57,8 @@
     <repairEstimate>Reparationsestimat</repairEstimate>
     <!-->Task Statuses<-->
     <sent>Sendt!</sent>
+    <error>ERROR</error>
+    <sendTaskFailStatus>Fejl</sendTaskFailStatus>
     <waitingStatus>Afventer svar fra servicepartner</waitingStatus>
     <cancelledStatus>Annulleret</cancelledStatus>
     <feedbackReceivedStatus>Svar modtaget</feedbackReceivedStatus>

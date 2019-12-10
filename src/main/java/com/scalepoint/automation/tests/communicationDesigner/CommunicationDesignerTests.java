@@ -52,7 +52,7 @@ public class CommunicationDesignerTests extends BaseTest {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
-                .addStub();
+                .addStub(200);
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
@@ -271,7 +271,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 

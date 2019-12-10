@@ -37,10 +37,10 @@ public class RnVMock {
         this.wireMock = wireMock;
     }
 
-    public RnvStub addStub() {
+    public RnvStub addStub(int responseCode) {
 
         return stub = new RnvStub()
-                .rvTaskWebServiceUrlStub()
+                .rvTaskWebServiceUrlStub(responseCode)
                 .rvStatusMessageWebServiceUrlStub()
                 .rvFreeTextMessageWebServiceUrlStub();
     }
@@ -56,11 +56,11 @@ public class RnVMock {
             WireMock.configureFor(wireMock);
         }
 
-        public RnvStub rvTaskWebServiceUrlStub() {
+        public RnvStub rvTaskWebServiceUrlStub(int status) {
 
             stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
                     .willReturn(aResponse()
-                            .withStatus(200)));
+                            .withStatus(status)));
             return this;
         }
 
