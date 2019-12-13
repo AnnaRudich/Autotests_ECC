@@ -48,11 +48,11 @@ public class CommunicationDesignerTests extends BaseTest {
     CommunicationDesignerMock communicationDesignerMock;
 
     @BeforeClass
-    public void startWireMock(){
+    public void startWireMock() throws IOException {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
-                .addStub(200);
+                .addStub();
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()

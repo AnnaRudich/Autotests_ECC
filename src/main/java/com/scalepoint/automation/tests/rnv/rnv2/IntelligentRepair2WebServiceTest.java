@@ -24,6 +24,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
@@ -35,11 +36,11 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     RnVMock.RnvStub rnvStub;
 
     @BeforeClass
-    public void startWireMock() {
+    public void startWireMock() throws IOException {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
-                .addStub(200);
+                .addStub();
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()

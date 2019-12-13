@@ -2,6 +2,7 @@ package com.scalepoint.automation.stubs;
 
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -18,7 +20,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -37,10 +43,10 @@ public class RnVMock {
         this.wireMock = wireMock;
     }
 
-    public RnvStub addStub(int responseCode) {
+    public RnvStub addStub() throws IOException {
 
         return stub = new RnvStub()
-                .rvTaskWebServiceUrlStub(responseCode)
+                .rvTaskWebServiceUrlStub()
                 .rvStatusMessageWebServiceUrlStub()
                 .rvFreeTextMessageWebServiceUrlStub();
     }
@@ -56,12 +62,13 @@ public class RnVMock {
             WireMock.configureFor(wireMock);
         }
 
-        public RnvStub rvTaskWebServiceUrlStub(int status) {
+       public RnvStub rvTaskWebServiceUrlStub(){
 
-            stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
-                    .willReturn(aResponse()
-                            .withStatus(status)));
-            return this;
+           WireMockRule wireMockRule = new WireMockRule();
+           wireMockRule.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
+                   .andMatching(new CustomRnvMatcher())
+                   .willReturn(aResponse().withStatus(401)));
+           return this;
         }
 
         public RnvStub rvStatusMessageWebServiceUrlStub() {
@@ -69,6 +76,7 @@ public class RnVMock {
             stubFor(post(urlPathEqualTo(baseUrl.concat("/rvStatusMessageWebServiceUrl")))
                     .willReturn(aResponse()
                             .withStatus(200)));
+
             return this;
         }
 

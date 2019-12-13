@@ -28,7 +28,7 @@ public class RnVSmokeTest extends BaseTest {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
-                .addStub(200);
+                .addStub();
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()
