@@ -2,11 +2,13 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -32,6 +34,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * THEN: V1 is not displayed in Voucher's list in ME
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3030 IC1 voucher is displayed in vouchers list for IC user and not displayed for SP user")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3030_exclusiveVoucherInVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User trygChildUser,
                                                        @UserCompany(CompanyCode.TRYGHOLDING) User trygParentUser,
                                                        @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
@@ -64,6 +67,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * THEN: V1 is displayed in Voucher's list in ME
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3030_sharedVoucherInVouchersListForIC(@UserCompany(CompanyCode.TRYGHOLDING) User trygUser,
                                                          @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
                                                          User futureCompanyUser,

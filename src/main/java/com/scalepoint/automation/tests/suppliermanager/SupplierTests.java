@@ -4,12 +4,14 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialogViewM
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
+import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.Supplier;
@@ -30,6 +32,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to create new supplier. Suppliers list contains new supplier")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_createNewSupplier(User user, Supplier supplier) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
@@ -42,8 +45,11 @@ public class SupplierTests extends BaseTest {
      * WHEN: User updates general data
      * THEN: Updated General data stored correctly
      */
+    //set toggle ON
+    //check when we update supplier that GDPR and no more dialog tests for now
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         String updatedWebsite = "http://google.com";
@@ -100,6 +106,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It is possible to add Banner data")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_bannerDataAdding(User user, Supplier supplier, AttachmentFiles attachmentFiles) {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
@@ -122,6 +129,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to fill orders tab with valid values")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
@@ -158,6 +166,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for SP")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_icSupplierUnavailableForSP(@UserCompany(CompanyCode.SCALEPOINT) User spUser, User futureUser, Supplier supplier) {
         checkVisibility(futureUser, spUser, supplier, false);
     }
@@ -169,6 +178,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for another IC")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_icSupplierUnavailableForIC2(User futureUser1, User futureUser2, Supplier supplier) {
         checkVisibility(futureUser1, futureUser2, supplier, false);
     }
@@ -191,6 +201,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 Child IC supplier is available for parent IC")
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_childICSupplierAvailableForParentIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
         checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
     }
