@@ -9,13 +9,11 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -88,7 +86,6 @@ public class SelfService2Tests extends BaseTest {
         //assert Acquired in not implemented on Settlement page
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @Test(dataProvider = "testDataProvider", description = "SelfService2 password reset, login and logout")
     public void selfService2LogInWithNewPassword(User user, Claim claim) {

@@ -20,7 +20,6 @@ public class InsCompanyTest extends BaseTest {
      * WHEN: U1 creates Insurance company IC1
      * THEN: IC1 is displayed in company's list
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-509 It's possible to update new simple parent IC. IC is displayed in IC list")
     public void charlie509_updateNewSimpleParentIC(InsuranceCompany insuranceCompany) {
