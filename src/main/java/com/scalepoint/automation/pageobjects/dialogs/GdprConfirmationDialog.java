@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class GdprConfirmationDialog extends BaseDialog {
     @FindBy(css = "#messagebox-1001")
@@ -17,13 +18,13 @@ public class GdprConfirmationDialog extends BaseDialog {
         return this;
     }
 
-    public SupplierDialog.ShopsTab closeDialog(){
-        $(".x-tool-close").click();
-        return BaseDialog.at(SupplierDialog.ShopsTab.class);
+    public SupplierDialog.GeneralTab closeDialog(){
+        $$(".x-tool-close").get(1).click();
+        return at(SupplierDialog.GeneralTab.class);
     }
 
-    public SupplierDialog.ShopsTab confirmUpdate(){
+    public SupplierDialog.GeneralTab confirmUpdate(){
         $(By.xpath("//span[text() = 'Confirm']/following-sibling::span")).click();
-        return BaseDialog.at(SupplierDialog.ShopsTab.class);
+        return at(SupplierDialog.GeneralTab.class);
     }
 }

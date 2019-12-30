@@ -35,7 +35,7 @@ public class SupplierTests extends BaseTest {
     @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_createNewSupplier(User user, Supplier supplier) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()));
     }
@@ -45,15 +45,13 @@ public class SupplierTests extends BaseTest {
      * WHEN: User updates general data
      * THEN: Updated General data stored correctly
      */
-    //set toggle ON
-    //check when we update supplier that GDPR and no more dialog tests for now
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED)
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         String updatedWebsite = "http://google.com";
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier1)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier1, true)
                 .saveSupplier()
                 .editSupplier(supplier1.getSupplierName())
                 .fill(editSupplierDialog -> {
@@ -91,7 +89,7 @@ public class SupplierTests extends BaseTest {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
                 .setWebsite(webSite)
                 .uploadLogo(attachmentImage)
                 .doAssert(SupplierDialog.GeneralTab.Asserts::assertLogoPresent)
@@ -111,7 +109,7 @@ public class SupplierTests extends BaseTest {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
                 .selectBannerTab()
                 .uploadBanner(attachmentImage)
                 .doAssert(SupplierDialog.BannerTab.Asserts::assertBannerIsPresent)
@@ -133,7 +131,7 @@ public class SupplierTests extends BaseTest {
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
-        SupplierDialog.GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
+        SupplierDialog.GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
                 .selectOrdersTab()
                 .setOrderEmail(supplier.getSupplierEmail())
                 .setOrderMailFormat(SupplierDialog.OrderMailFormat.XML_MAIL_BODY)
@@ -296,7 +294,7 @@ public class SupplierTests extends BaseTest {
 
     private void checkVisibility(User userWhoCreates, User userWhoReads, Supplier supplier, boolean mustBeVisible) {
         SuppliersPage suppliersPage = loginToEccAdmin(userWhoCreates);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()))
                 .logout();

@@ -35,6 +35,7 @@ interface SupplierTabs {
         return BaseDialog.at(tabClass);
     }
 
+
     default SuppliersPage saveSupplier() {
         By editSupplierBtn = By.className("edit-supplier-save-btn");
         Wait.waitForDisplayed(editSupplierBtn);

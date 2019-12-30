@@ -235,7 +235,7 @@ public class SidTests extends BaseTest {
                 .getMainMenu()
                 .toEccAdminPage();
 
-        SupplierDialog.GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier);
+        SupplierDialog.GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false);
         SharedEccAdminFlows.createVoucherAgreement(generalTab,
                 SharedEccAdminFlows.VoucherAgreementData.newBuilder(voucher, discount)
                         .mapToCategory(claimItem.getCategoryBabyItems())

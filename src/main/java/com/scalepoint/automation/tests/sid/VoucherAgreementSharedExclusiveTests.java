@@ -98,7 +98,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
     private void createVoucherAgreement(User user, Supplier supplier, Voucher voucher, PseudoCategory pseudoCategory) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
-        SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier),
+        SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false),
                 SharedEccAdminFlows.VoucherAgreementData
                         .newBuilder(voucher, 10)
                         .mapToCategory(pseudoCategory)

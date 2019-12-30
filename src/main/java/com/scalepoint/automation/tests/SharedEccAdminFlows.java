@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class SharedEccAdminFlows implements Actions {
 
-    public static SupplierDialog.GeneralTab createSupplier(SuppliersPage suppliersPage, Supplier supplier) {
+    public static SupplierDialog.GeneralTab createSupplier(SuppliersPage suppliersPage, Supplier supplier, boolean gdprCheckIsEnabled) {
         return suppliersPage.selectCreateSupplier()
                 .fill(createSupplierDialog -> {
                     new CreateSupplierDialog.FormFiller(createSupplierDialog)
@@ -26,7 +26,7 @@ public class SharedEccAdminFlows implements Actions {
                             .withPhone(supplier.getSupplierPhone())
                             .withOrderEmail(supplier.getSupplierEmail());
                 })
-                .createSupplier();
+                .createSupplier(gdprCheckIsEnabled);
     }
 
     public static SupplierDialog.AgreementsTab createVoucherAgreement(SupplierDialog.GeneralTab supplierTab, VoucherAgreementData voucherAgreementData) {

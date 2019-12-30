@@ -570,7 +570,7 @@ public class VoucherAgreementTests extends BaseTest {
             generalTab = suppliersPage.editSupplier(voucherAgreementData.existingSupplier);
             supplierName = voucherAgreementData.existingSupplier;
         } else {
-            generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, voucherAgreementData.newSupplier);
+            generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, voucherAgreementData.newSupplier, false);
             supplierName = voucherAgreementData.newSupplier.getSupplierName();
         }
 
