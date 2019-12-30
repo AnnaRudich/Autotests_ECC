@@ -148,7 +148,7 @@ It downloads webdriver binaries automatically and setting up system properties f
 Remote driver are for running tests on selenium grid hub.
 Selenium hub is located on dev-ecc-tool's server and it is running inside docker container
 <br>
-Url to selenium grid console -> http://dev-ecc-tool02.spcph.local:4444/grid/console
+Url to selenium grid console -> http://dev-ecc-tool03.spcph.local:4444/grid/console
 <br>
 <br>
 Nodes:
