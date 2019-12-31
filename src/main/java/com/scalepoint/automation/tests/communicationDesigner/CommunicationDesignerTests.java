@@ -264,7 +264,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setBaseData(claimItem)
                 .closeSidWithOk()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()

@@ -2,7 +2,6 @@ package com.scalepoint.automation.stubs;
 
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import lombok.Getter;
@@ -11,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -20,11 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -39,14 +33,18 @@ public class RnVMock {
     public static final int POLL_INTERVAL = 10;
     public static final int TIMEOUT = 60;
 
+    public static final double UNAUTHORIZED_PRICE = 122.00;
+    public static final double OK_PRICE = 100.00;
+
     public RnVMock(WireMock wireMock){
         this.wireMock = wireMock;
     }
 
-    public RnvStub addStub() throws IOException {
+    public RnvStub addStub(){
 
         return stub = new RnvStub()
-                .rvTaskWebServiceUrlStub()
+                .rvTaskWebServiceUrlOkStub()
+                .rvTaskWebServiceUrlUnauthorizedStub()
                 .rvStatusMessageWebServiceUrlStub()
                 .rvFreeTextMessageWebServiceUrlStub();
     }
@@ -56,19 +54,26 @@ public class RnVMock {
         @Getter
         private final String baseUrl = "/rnv";
         private final String rvTaskWebServiceUrl = baseUrl.concat("/rvTaskWebServiceUrl");
+        private final String unauthorizedRegex = String.format(".*valuations.*newPrice.*%s.*", UNAUTHORIZED_PRICE);
 
         public RnvStub() {
 
             WireMock.configureFor(wireMock);
         }
 
-       public RnvStub rvTaskWebServiceUrlStub(){
+        public RnvStub rvTaskWebServiceUrlOkStub(){
+            wireMock.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
+                    .withRequestBody(notMatching(unauthorizedRegex))
+                    .willReturn(aResponse().withStatus(200)));
+            return this;
+        }
 
-           WireMockRule wireMockRule = new WireMockRule();
-           wireMockRule.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
-                   .andMatching(new CustomRnvMatcher())
-                   .willReturn(aResponse().withStatus(401)));
-           return this;
+        public RnvStub rvTaskWebServiceUrlUnauthorizedStub(){
+
+            wireMock.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
+                    .withRequestBody(matching(unauthorizedRegex))
+                    .willReturn(aResponse().withStatus(401)));
+            return this;
         }
 
         public RnvStub rvStatusMessageWebServiceUrlStub() {
