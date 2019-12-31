@@ -40,7 +40,6 @@ public class RnVSmokeTest extends BaseTest {
      * Assert: task has feedback received status
      * Assert: there are lines in Invoice dialog opened from Invoice tab
      */
-
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 

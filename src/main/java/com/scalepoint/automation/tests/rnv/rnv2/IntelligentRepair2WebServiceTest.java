@@ -24,7 +24,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
@@ -36,7 +35,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     RnVMock.RnvStub rnvStub;
 
     @BeforeClass
-    public void startWireMock() throws IOException {
+    public void startWireMock() {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
@@ -212,7 +211,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * acceptFeedback manually through Evaluate Task dialog
      * Assert: task is Completed, evaluateTaskButton is disabled
      */
-
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
