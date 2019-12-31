@@ -38,7 +38,7 @@
         </classes>
     </test>
 
-    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true" thread-count="5">
+    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
         <classes>
             <class name="com.scalepoint.automation.tests.rnv.rnv2.IntelligentRepair2WebServiceTest"/>
         </classes>
