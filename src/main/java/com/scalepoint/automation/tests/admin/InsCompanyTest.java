@@ -3,10 +3,8 @@ package com.scalepoint.automation.tests.admin;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -38,7 +36,6 @@ public class InsCompanyTest extends BaseTest {
      * WHEN: U1 creates Insurance company IC1
      * THEN: IC1 is displayed in company's list
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-509 It's possible to create new simple parent IC. IC is displayed in IC list")
     public void charlie509_createNewSimpleParentIC(InsuranceCompany insuranceCompany) {

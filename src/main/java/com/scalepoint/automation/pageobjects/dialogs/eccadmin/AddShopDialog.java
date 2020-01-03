@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
@@ -59,7 +58,6 @@ public class AddShopDialog extends BaseDialog {
         fillShopForm(shop);
         chooseShopType(shopType);
         find(By.xpath(SUPPLIER_CREATE_SHOP_BTN)).click();
-        new GdprConfirmationDialog().confirmUpdate();
         return at(SupplierDialog.ShopsTab.class);
     }
 
