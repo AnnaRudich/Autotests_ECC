@@ -385,7 +385,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
-            Wait.wait(1); //give time to render window
+//            Wait.wait(1); //give time to render window
             return this;
         }
     }
