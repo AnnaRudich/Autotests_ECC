@@ -61,7 +61,7 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
 
     public GenericItemsEditAdminPage selectCategory(String categoryName) {
         category.selectByVisibleText(categoryName);
-        Wait.wait(5);
+//        Wait.wait(5);
         return this;
     }
 
