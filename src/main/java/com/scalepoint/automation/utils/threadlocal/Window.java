@@ -42,7 +42,7 @@ public class Window {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
 
             //unexplained for now why it helps, related to charlie_588_5_showMarketPriceEnabled
-            Wait.wait(1);
+//            Wait.wait(1);
 
             openButton.click();
             if (isAlertPresent()) {
