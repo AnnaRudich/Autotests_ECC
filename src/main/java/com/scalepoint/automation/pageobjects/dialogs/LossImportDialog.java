@@ -32,7 +32,7 @@ public class LossImportDialog extends BaseDialog {
         SelenideElement selfServiceResponsesCombo = $(By.id("loss-import-combo"));
         selfServiceResponsesCombo.selectOption(1);
         Wait.waitForAjaxCompleted();
-        Wait.wait(3);
+//        Wait.wait(3);
         return this;
     }
 

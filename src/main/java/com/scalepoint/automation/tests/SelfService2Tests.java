@@ -36,11 +36,6 @@ public class SelfService2Tests extends BaseTest {
         newPasswordToSelfService = null;
     }
 
-    @Test(dataProvider = "testDataProvider")
-    public void test(Translations translations) {
-        System.out.println(translations);
-    }
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
