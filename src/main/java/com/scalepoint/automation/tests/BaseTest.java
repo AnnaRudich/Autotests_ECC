@@ -117,7 +117,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
             Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
-            Wait.wait(1);
+//            Wait.wait(1);
         } catch (Exception e) {
             log.info(e.getMessage());
         }
