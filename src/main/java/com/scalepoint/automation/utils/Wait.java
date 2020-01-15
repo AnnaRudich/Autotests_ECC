@@ -58,13 +58,13 @@ public class Wait {
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
 
-    public static void wait(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000L);
-        } catch (InterruptedException ignored) {
-            Thread.currentThread().interrupt();
-        }
-    }
+//    public static void wait(int seconds) {
+//        try {
+//            Thread.sleep(seconds * 1000L);
+//        } catch (InterruptedException ignored) {
+//            Thread.currentThread().interrupt();
+//        }
+//    }
 
     public static void waitMillis(int milliseconds) {
         try {
