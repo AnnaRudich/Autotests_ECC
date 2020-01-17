@@ -43,7 +43,7 @@ public class Wait {
     }
 
     public static void waitForJavascriptRecalculation() {
-        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait -> !((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
+        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait -> ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
 
     public static void waitForSpinnerToDisappear() {
@@ -70,13 +70,13 @@ public class Wait {
 //        }
 //    }
 
-    public static void waitMillis(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException ignored) {
-            Thread.currentThread().interrupt();
-        }
-    }
+//    public static void waitMillis(int milliseconds) {
+//        try {
+//            Thread.sleep(milliseconds);
+//        } catch (InterruptedException ignored) {
+//            Thread.currentThread().interrupt();
+//        }
+//    }
 
     public static Boolean visible(WebElement element) {
         long start = System.currentTimeMillis();
