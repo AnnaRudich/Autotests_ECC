@@ -70,13 +70,13 @@ public class Wait {
 //        }
 //    }
 
-//    public static void waitMillis(int milliseconds) {
-//        try {
-//            Thread.sleep(milliseconds);
-//        } catch (InterruptedException ignored) {
-//            Thread.currentThread().interrupt();
-//        }
-//    }
+    public static void waitMillis(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
+        }
+    }
 
     public static Boolean visible(WebElement element) {
         long start = System.currentTimeMillis();

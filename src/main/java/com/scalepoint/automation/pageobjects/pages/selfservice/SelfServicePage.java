@@ -429,7 +429,7 @@ public class SelfServicePage extends Page {
         int attempts = 2;
         do {
             try {
-//                Wait.waitMillis(500);
+                Wait.waitMillis(500);
                 return $$(locator).stream().filter(element -> element.isDisplayed()).findFirst().get();
             }catch (NoSuchElementException e) {
                 if(attempts-- >0){
