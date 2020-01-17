@@ -141,7 +141,7 @@ public interface Actions {
     }
 
     default void waitForJavascriptRecalculation() {
-        Wait.waitMillis(DELAY);
+        Wait.waitForJavascriptRecalculation();
     }
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
