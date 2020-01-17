@@ -552,7 +552,7 @@ public class SettlementDialog extends BaseDialog {
                 clickAndWait(buttonBy, button);
             }
 //            Wait.waitMillis(100);
-            Wait.waitForAjaxCompleted();
+//            Wait.waitForAjaxCompleted();
         } catch (UnhandledAlertException ignored) {
         }
 
