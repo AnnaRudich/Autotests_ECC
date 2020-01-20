@@ -48,7 +48,7 @@ public class UsersManager {
     public static Map<CompanyMethodArgument, User> fetchUsersWhenAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
         await()
                 .pollInterval(15, TimeUnit.SECONDS)
-                .timeout(5, TimeUnit.MINUTES)
+                .timeout(60, TimeUnit.MINUTES)
                 .until(() -> fetchUsersIfAvailable(companyMethodArguments), is(equalTo(true)));
 
         return companyMethodArguments;
