@@ -175,8 +175,8 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public ShopWelcomePage completeWithEmailAndLoginToShop(Claim claim) {
-        return completeWithEmail(claim).
+    public ShopWelcomePage completeWithEmailAndLoginToShop(Claim claim, DatabaseApi databaseApi) {
+        return completeWithEmail(claim, databaseApi).
                 openRecentClaim().
                 toMailsPage().
                 viewMail(MailsPage.MailType.CUSTOMER_WELCOME).

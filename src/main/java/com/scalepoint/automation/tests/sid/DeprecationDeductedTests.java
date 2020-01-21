@@ -101,7 +101,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .doAssert(page -> page.assertFaceValueTooltipIs(expectedVoucherFaceValue))
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim)
+                .completeWithEmail(claim, databaseApi)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
