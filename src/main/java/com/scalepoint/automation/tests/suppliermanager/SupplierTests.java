@@ -47,11 +47,11 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED)
+    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         String updatedWebsite = "http://google.com";
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier1, true)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier1, false)
                 .saveSupplier()
                 .editSupplier(supplier1.getSupplierName())
                 .fill(editSupplierDialog -> {

@@ -131,23 +131,6 @@ public class ClaimTests extends BaseTest {
                 });
     }
 
-
-    @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
-    @Test(dataProvider = "testDataProvider",
-            description = "ECC-3256, ECC-3050 It's possible to login to Self Service from email")
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
-    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    public void ecc3256_3050_loginToSelfService(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
-                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-                .findSelfServiceLinkAndOpenIt()
-
-                .login(Constants.DEFAULT_PASSWORD);
-    }
-
     @Test(dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
