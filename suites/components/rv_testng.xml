@@ -10,4 +10,8 @@
             <class name="com.scalepoint.automation.tests.rnv.RnVSmokeTest"/>
         </classes>
     </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
 </suite>
