@@ -50,7 +50,7 @@ public class CommunicationDesignerTests extends BaseTest {
     CommunicationDesignerMock communicationDesignerMock;
 
     @BeforeClass
-    public void startWireMock(){
+    public void startWireMock() {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
@@ -266,14 +266,14 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setBaseData(claimItem)
                 .closeSidWithOk()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 

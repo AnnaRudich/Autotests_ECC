@@ -138,6 +138,12 @@ public class ServiceAgreement {
     private String sent;
 
     @XmlElement
+    private String error;
+
+    @XmlElement
+    private String sendTaskFailStatus;
+
+    @XmlElement
     private String macroName;
 
     @XmlElement
@@ -416,6 +422,14 @@ public class ServiceAgreement {
 
     public String getSentText() {
         return sent;
+    }
+
+    public String getErrorText() {
+        return error;
+    }
+
+    public String getSendTaskFailStatus() {
+        return sendTaskFailStatus;
     }
 
     public String getExcelMacroName() {

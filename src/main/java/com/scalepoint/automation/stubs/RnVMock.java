@@ -33,14 +33,18 @@ public class RnVMock {
     public static final int POLL_INTERVAL = 10;
     public static final int TIMEOUT = 60;
 
+    public static final double UNAUTHORIZED_PRICE = 122.00;
+    public static final double OK_PRICE = 100.00;
+
     public RnVMock(WireMock wireMock){
         this.wireMock = wireMock;
     }
 
-    public RnvStub addStub() {
+    public RnvStub addStub(){
 
         return stub = new RnvStub()
-                .rvTaskWebServiceUrlStub()
+                .rvTaskWebServiceUrlOkStub()
+                .rvTaskWebServiceUrlUnauthorizedStub()
                 .rvStatusMessageWebServiceUrlStub()
                 .rvFreeTextMessageWebServiceUrlStub();
     }
@@ -50,17 +54,25 @@ public class RnVMock {
         @Getter
         private final String baseUrl = "/rnv";
         private final String rvTaskWebServiceUrl = baseUrl.concat("/rvTaskWebServiceUrl");
+        private final String unauthorizedRegex = String.format(".*valuations.*newPrice.*%s.*", UNAUTHORIZED_PRICE);
 
         public RnvStub() {
 
             WireMock.configureFor(wireMock);
         }
 
-        public RnvStub rvTaskWebServiceUrlStub() {
+        public RnvStub rvTaskWebServiceUrlOkStub(){
+            wireMock.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
+                    .withRequestBody(notMatching(unauthorizedRegex))
+                    .willReturn(aResponse().withStatus(200)));
+            return this;
+        }
 
-            stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
-                    .willReturn(aResponse()
-                            .withStatus(200)));
+        public RnvStub rvTaskWebServiceUrlUnauthorizedStub(){
+
+            wireMock.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
+                    .withRequestBody(matching(unauthorizedRegex))
+                    .willReturn(aResponse().withStatus(401)));
             return this;
         }
 
@@ -69,6 +81,7 @@ public class RnVMock {
             stubFor(post(urlPathEqualTo(baseUrl.concat("/rvStatusMessageWebServiceUrl")))
                     .willReturn(aResponse()
                             .withStatus(200)));
+
             return this;
         }
 
