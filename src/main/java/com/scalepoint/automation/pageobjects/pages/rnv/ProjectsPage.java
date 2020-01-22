@@ -99,7 +99,7 @@ public class ProjectsPage extends Page {
         public Assertion assertTaskHasFailStatus(ServiceAgreement agreement){
             String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
             assertThat(actualTaskStatus)
-                    .as("Task has " + actualTaskStatus + " status. Must be completed")
+                    .as("Task has " + actualTaskStatus + " status. Must be failed.")
                     .isEqualTo(agreement.getSendTaskFailStatus());
             return this;
         }

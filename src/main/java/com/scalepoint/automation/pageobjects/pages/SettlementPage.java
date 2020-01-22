@@ -508,6 +508,10 @@ public class SettlementPage extends BaseClaimPage {
 
         }
 
+        public Boolean ifRnvIconIsDisplayed(RnvIcon rnvIcon){
+            return claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, '"+ rnvIcon +".png')]")).size() > 0;
+        }
+
         public SettlementPage selectLine() {
             descriptionElement.click();
             return SettlementPage.this;
@@ -679,7 +683,7 @@ public class SettlementPage extends BaseClaimPage {
 
             public Asserts assertLineIsNotSentToRepair() {
                 assertThat(claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, 'wrench.png')]")).size() > 0)
-                        .as("repair icon should be displayed").isFalse();
+                        .as("repair icon should not be displayed").isFalse();
                 return this;
             }
 
@@ -766,5 +770,18 @@ public class SettlementPage extends BaseClaimPage {
                 return this;
             }
         }
+    }
+
+    public enum RnvIcon{
+        REPAIR_ICON("wrench"),
+        VALUATION_ICON("view");
+
+        public String iconFileName;
+
+
+        RnvIcon(String iconFileName) {
+            this.iconFileName = iconFileName;
+        }
+
     }
 }

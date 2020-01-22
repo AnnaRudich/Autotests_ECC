@@ -424,7 +424,7 @@ public class ServiceAgreement {
         return sent;
     }
 
-    public String getError() {
+    public String getErrorText() {
         return error;
     }
 
