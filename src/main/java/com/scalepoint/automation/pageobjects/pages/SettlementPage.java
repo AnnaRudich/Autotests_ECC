@@ -505,11 +505,6 @@ public class SettlementPage extends BaseClaimPage {
             }catch (ElementNotFound t){
                 logger.error(t);
             }
-
-        }
-
-        public Boolean ifRnvIconIsDisplayed(RnvIcon rnvIcon){
-            return claimLine.findElements(By.xpath(".//*[@data-columnid='repairValuationColumn']//img[contains(@src, '"+ rnvIcon +".png')]")).size() > 0;
         }
 
         public SettlementPage selectLine() {
@@ -770,18 +765,5 @@ public class SettlementPage extends BaseClaimPage {
                 return this;
             }
         }
-    }
-
-    public enum RnvIcon{
-        REPAIR_ICON("wrench"),
-        VALUATION_ICON("view");
-
-        public String iconFileName;
-
-
-        RnvIcon(String iconFileName) {
-            this.iconFileName = iconFileName;
-        }
-
     }
 }
