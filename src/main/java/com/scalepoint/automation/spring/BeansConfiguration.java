@@ -8,8 +8,11 @@ import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.WiremockServer;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -27,6 +30,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAutoConfiguration
 public class BeansConfiguration {
+
+    protected Logger log = LogManager.getLogger(BeansConfiguration.class);
 
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_PROTOCOL + "}")
     private String protocol;
@@ -129,6 +134,7 @@ public class BeansConfiguration {
                              @Value("${wiremock.urlPathPrefix}") String urlPathPrefix,
                              @Value("${wiremock.port}") String port){
 
+        log.info("Wiremock host: {}", host);
 
         return new WireMockBuilder()
                 .https()
