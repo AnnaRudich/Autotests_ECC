@@ -7,6 +7,7 @@ import com.mongodb.MongoClientURI;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.shared.WiremockServer;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -123,16 +124,18 @@ public class BeansConfiguration {
         return new MongoDbApi(mongoTemplate());
     }
 
-
     @Bean
     public WireMock wireMock(@Value("${wiremock.host}") String host,
                              @Value("${wiremock.urlPathPrefix}") String urlPathPrefix,
                              @Value("${wiremock.port}") String port){
+
+
         return new WireMockBuilder()
                 .https()
-                .host(host)
+                .host(WiremockServer.findByDomain(host).getIpAddress())
                 .urlPathPrefix(urlPathPrefix)
                 .port(new Integer(port))
                 .build();
     }
+
 }
