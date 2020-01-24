@@ -11,9 +11,9 @@ import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
@@ -89,7 +89,7 @@ public class DeprecationDeductedTests extends BaseTest {
     }
 
     private void verify(User user, Claim claim, Double expectedVoucherCashValue, Double expectedVoucherFaceValue, Double customerCashValue,
-                       PseudoCategory pseudoCategory, String voucherNameSP) {
+                        PseudoCategory pseudoCategory, String voucherNameSP) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(pseudoCategory, sidForm -> {
                     sidForm.withCustomerDemandPrice(Constants.PRICE_100_000)

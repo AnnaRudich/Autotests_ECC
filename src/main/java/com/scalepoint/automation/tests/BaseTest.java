@@ -19,7 +19,6 @@ import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -117,7 +116,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
             Objects.requireNonNull(Browser.driver()).manage().addCookie(cookie);
-//            Wait.wait(1);
         } catch (Exception e) {
             log.info(e.getMessage());
         }

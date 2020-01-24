@@ -253,7 +253,6 @@ public class SelfServicePage extends Page {
                 int attempts = 2;
                 do {
                     try {
-//                        Wait.waitMillis(500);
                         $("input#cs_category_group + img[class*='arrow']")
                                 .click();
                         comboList.waitUntil(visible, 500);

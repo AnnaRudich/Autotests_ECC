@@ -25,14 +25,14 @@ public class LossImportDialog extends BaseDialog {
         Wait.waitForVisible(selfServiceImportButton);
         return this;
     }
-/*
- * SelfService
- */
+    /*
+     * SelfService
+     */
     public LossImportDialog selectFirstSelfServiceResponse() {
         SelenideElement selfServiceResponsesCombo = $(By.id("loss-import-combo"));
         selfServiceResponsesCombo.selectOption(1);
         Wait.waitForAjaxCompleted();
-//        Wait.wait(3);
+
         return this;
     }
 

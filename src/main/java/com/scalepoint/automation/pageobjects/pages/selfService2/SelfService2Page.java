@@ -87,8 +87,6 @@ public class SelfService2Page extends Page {
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ENTER);
-        /*wait until ajax completed */
-//        Wait.wait(2);
         return this;
     }
 

@@ -1,8 +1,5 @@
 package com.scalepoint.automation.services.usersmanagement;
 
-import com.scalepoint.automation.services.externalapi.SolrApi;
-import com.scalepoint.automation.shared.SolrClaim;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +12,8 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class UsersManager {
 
