@@ -42,10 +42,19 @@ public class CreateSupplierDialog extends BaseDialog {
         return this;
     }
 
-    public SupplierDialog.GeneralTab createSupplier() {
+    public <T extends BaseDialog> T createSupplier(Class<T> dialogClass) {
         createSupplierButton.click();
-        return at(SupplierDialog.GeneralTab.class);
+        return at(dialogClass);
     }
+
+//    public SupplierDialog.GeneralTab createSupplier(boolean gdprCheckIsEnabled) {
+//        createSupplierButton.click();
+//        if(gdprCheckIsEnabled){
+//            BaseDialog.at(GdprConfirmationDialog.class).confirmUpdate();
+//        }
+//        return at(SupplierDialog.GeneralTab.class);
+//    }
+//
 
     public static class FormFiller {
 

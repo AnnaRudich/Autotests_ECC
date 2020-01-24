@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 public class SelfService2Tests extends BaseTest {
 
     private static final String IPHONE = "iPhone";
-    private static final String HERRE = "Herre";
+    private static final String CYKLER = "cykler";
     private static final String CLAIM_NOTE = "Claim Note";
     private static final String ITEM_CUSTOMER_NOTE = "Item Customer Note";
 
@@ -157,7 +157,7 @@ public class SelfService2Tests extends BaseTest {
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
-                .addDescription(HERRE)
+                .addDescription(CYKLER)
                 .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
                 .selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")

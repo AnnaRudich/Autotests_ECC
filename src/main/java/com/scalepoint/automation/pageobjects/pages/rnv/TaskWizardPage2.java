@@ -30,10 +30,20 @@ public class TaskWizardPage2 extends Page {
         return "/?orderToken";
     }
 
-    public SettlementPage sendRnV(ServiceAgreement serviceAgreement) {
-        String sendText = serviceAgreement.getSentText();
-        clickAndWaitForDisplaying(sendBtn, By.xpath("//div[contains(text(), '" + sendText + "')]"));
-        $("a.tasks-statuses-close-button").click();
+    public SettlementPage sendRnvIsSuccess(ServiceAgreement serviceAgreement) {
+        String sent = serviceAgreement.getSentText();
+        sendTaskAndWaitForStatus(sent);
         return at(SettlementPage.class);
+    }
+
+    public SettlementPage sendRnvIsFailOnServicePartnerSide(ServiceAgreement serviceAgreement) {
+        String error = serviceAgreement.getErrorText();
+        sendTaskAndWaitForStatus(error);
+        return at(SettlementPage.class);
+    }
+
+    private void sendTaskAndWaitForStatus(String status){
+        clickAndWaitForDisplaying(sendBtn, By.xpath("//div[contains(text(), '" + status + "')]"));
+        $("a.tasks-statuses-close-button").click();
     }
 }

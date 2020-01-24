@@ -70,14 +70,14 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -129,14 +129,14 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -179,14 +179,14 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -211,7 +211,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * acceptFeedback manually through Evaluate Task dialog
      * Assert: task is Completed, evaluateTaskButton is disabled
      */
-
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
@@ -224,14 +223,14 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
 
@@ -269,7 +268,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), 100.00)
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
                 .enableDamage()
                 .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
                 .closeSidWithOk()
@@ -279,11 +278,49 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .selectDamageType(lineDescription, claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1))
                 .nextRnVstep()
-                .sendRnV(agreement)
+                .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .editLine()
                 .doAssert(claimLine -> {
                     claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
                 });
+    }
+
+    /*
+     * send line to RnV
+     * Service Partner response is 500
+     * Assert: the error is displayed while sending
+     * Assert: the task has 'fail' status on projects page in RnV Wizard
+     */
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void sendLineToRnvFailsOnServicePartnerSide(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+
+        String lineDescription = RandomUtils.randomName("RnVLine");
+
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi)
+                .openRecentClaim()
+                .reopenClaim()
+                .openSid()
+                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.UNAUTHORIZED_PRICE)
+                .closeSidWithOk()
+                .findClaimLine(lineDescription)
+                .selectLine()
+                .sendToRnV()
+                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
+                .nextRnVstep()
+                .sendRnvIsFailOnServicePartnerSide(agreement)
+
+                .findClaimLine(lineDescription)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsNotSentToRepair);
+
+
+
+        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFailStatus(agreement);
     }
 }
