@@ -13,7 +13,8 @@ CREATE PROCEDURE [dbo].[autotests_create_supplier]
     @RV_TaskWebServiceUrl varchar(100) = null,
     @SecurityTokenIssued varchar(100) = null,
 	  @rvIntegrationType int = 1,
- 	  @SupplierId int OUTPUT
+ 	  @SupplierId int OUTPUT,
+ 	  @MockUrl varchar(50) = 'test'
      AS
 
 SET NOCOUNT ON
@@ -24,8 +25,8 @@ DECLARE @SUADDR NVARCHAR(50) = '489-499 Avebury Boulevard'
 DECLARE @SUADDR2 NVARCHAR(50) = 'Milton Keynes, MK9 2NW'
 DECLARE @suCulture INT = (SELECT LCID FROM Culture c JOIN FormattingProperties f ON c.Culture = f.VALUE WHERE f.[KEY] = 'scalepoint_culture_code')
 DECLARE @City NVARCHAR(30) = 'Copenhagen'
-DECLARE @rvStatusMessageWebServiceUrl NVARCHAR(100) = 'https://ecc-tools.spcph.local/mock/rnv/rvStatusMessageWebServiceUrl'
-DECLARE @rvFreeTextMessageWebServiceUrl NVARCHAR(100) = 'https://ecc-tools.spcph.local/mock/rnv/rvFreeTextMessageWebServiceUrl'
+DECLARE @rvStatusMessageWebServiceUrl NVARCHAR(100) = 'https://' + @MockUrl + '/mock/rnv/rvStatusMessageWebServiceUrl'
+DECLARE @rvFreeTextMessageWebServiceUrl NVARCHAR(100) = 'https://' + @MockUrl + '/mock/rnv/rvFreeTextMessageWebServiceUrl'
 
 IF EXISTS(SELECT * FROM dbo.SUPPLIER s WHERE s.SUNAME = @SUNAME)
 BEGIN

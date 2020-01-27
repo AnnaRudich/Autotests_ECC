@@ -15,7 +15,7 @@
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
 
             declare @SupplierId int
-            EXEC autotests_create_supplier @SUNAME='Autotest-Supplier-VA-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT
+            EXEC autotests_create_supplier @SUNAME='Autotest-Supplier-VA-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
 
             update [User] set UserName = concat(UserName,'-old-',UserID) where Email = 'ecc_auto@scalepoint.com' and UserName like 'autotest-%'
 
@@ -23,17 +23,17 @@
             EXEC autotests_create_user @scalepointCompany, 'autotest-sp', @adminUserRights
 
             -- there are no companies/fts in the range 50-60 across all the countries, so lets grab those ids
-            exec autotests_prepare_future_company 50, @adminUserRights
-            exec autotests_prepare_future_company 51, @adminUserRights
-            exec autotests_prepare_future_company 52, @adminUserRights
-            exec autotests_prepare_future_company 53, @adminUserRights
-            exec autotests_prepare_future_company 54, @adminUserRights
-            exec autotests_prepare_future_company 55, @adminUserRights
-            exec autotests_prepare_future_company 56, @adminUserRights
-            exec autotests_prepare_future_company 57, @adminUserRights
-            exec autotests_prepare_future_company 58, @adminUserRights
-            exec autotests_prepare_future_company 59, @adminUserRights
-            exec autotests_prepare_future_company 60, @adminUserRights
+            exec autotests_prepare_future_company 50, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 51, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 52, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 53, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 54, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 55, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 56, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 57, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 58, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 59, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 60, @adminUserRights, @MockUrl = '${wiremock.host}'
 
             declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
             EXEC autotests_create_user @lb_id, 'autotest-lb', @chUserRights

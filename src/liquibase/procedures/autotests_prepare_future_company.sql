@@ -7,7 +7,8 @@ GO
 
 CREATE PROCEDURE [dbo].[autotests_prepare_future_company]
     @companyId int,
-    @userRights int
+    @userRights int,
+    @MockUrl varchar(50)
 AS
 
 SET NOCOUNT ON
@@ -26,7 +27,7 @@ SET NOCOUNT ON
     --EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
     declare @SupplierId int
-    EXEC autotests_create_supplier @SUNAME = @supplierName, @insCompanyId = @companyId, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT
+    EXEC autotests_create_supplier @SUNAME = @supplierName, @insCompanyId = @companyId, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT, @MockUrl = @MockUrl
 
 SET NOCOUNT OFF
 
