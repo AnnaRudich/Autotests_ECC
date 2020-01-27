@@ -14,7 +14,7 @@ CREATE PROCEDURE [dbo].[autotests_create_supplier]
     @SecurityTokenIssued varchar(100) = null,
 	  @rvIntegrationType int = 1,
  	  @SupplierId int OUTPUT,
- 	  @MockUrl varchar(50) = 'test'
+ 	  @MockUrl varchar(50)
      AS
 
 SET NOCOUNT ON

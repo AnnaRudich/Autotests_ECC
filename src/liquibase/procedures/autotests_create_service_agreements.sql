@@ -9,7 +9,7 @@ GO
 CREATE PROCEDURE [dbo].[autotests_create_service_agreements]
 		@insCompanyId int,
 		@serviceAgreementName VARCHAR(50),
-		@MockUrl VARCHAR(50) = 'test'
+		@MockUrl VARCHAR(50)
 AS
 
 	SET NOCOUNT ON
