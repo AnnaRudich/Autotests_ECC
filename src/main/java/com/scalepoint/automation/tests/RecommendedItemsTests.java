@@ -53,7 +53,7 @@ public class RecommendedItemsTests extends BaseTest {
         ShopWelcomePage shopWelcomePage = textSearchPage.toSettlementPage()
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmailAndLoginToShop(claim);
+                .completeWithEmailAndLoginToShop(claim, databaseApi);
 
         shopWelcomePage.doAssert(welcomePage -> {
             welcomePage.assertItemWithPricePresent(productInvoiceGtMarketCash.name, productInvoiceGtMarketCash.lowestPrice);
@@ -92,7 +92,7 @@ public class RecommendedItemsTests extends BaseTest {
         ShopWelcomePage shopWelcomePage = settlementPage
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmailAndLoginToShop(claim);
+                .completeWithEmailAndLoginToShop(claim, databaseApi);
 
         shopWelcomePage.doAssert(welcomePage -> {
             welcomePage.assertItemNotPresent(productInvoiceHigherMarket.getModel());

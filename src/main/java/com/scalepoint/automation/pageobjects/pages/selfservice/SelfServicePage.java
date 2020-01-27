@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.selfservice;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -7,7 +8,6 @@ import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestData;
-import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,8 +18,8 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -154,13 +154,23 @@ public class SelfServicePage extends Page {
     }
 
     public class SelfServiceGrid {
-        @Getter
-        public List<SelfServiceGridRow> rows;
+
+        private ElementsCollection rows;
         SelenideElement customerComment = $("#customer_comment");
 
         SelfServiceGrid() {
-            this.rows = $("#selfService_grid")
-                    .findAll("[class*='scroller'] table[class*='row']")
+            getRows();
+        }
+
+        private ElementsCollection findAllRows(){
+
+            return rows =$("#selfService_grid")
+                    .findAll("[class*='scroller'] table[class*='row']");
+        }
+
+        public List<SelfServiceGridRow> getRows(){
+
+            return findAllRows()
                     .stream()
                     .map(SelfServiceGridRow::new)
                     .collect(Collectors.toList());
@@ -203,6 +213,7 @@ public class SelfServicePage extends Page {
             SelenideElement documentation;
             SelenideElement description;
             SelenideElement fileName;
+            SelenideElement deleteIcon;
 
             SelfServiceGridRow(SelenideElement row) {
                 this.row = row;
@@ -215,6 +226,7 @@ public class SelfServicePage extends Page {
                 documentation = row.find("[class*=documentation] div div");
                 description = row.find("[class*=description] div div");
                 fileName = row.find("[class*=fileName] div");
+                deleteIcon = row.find("[class*=delete-icon] a");
             }
 
             public SelfServiceGridRow addDescription(String text) {
@@ -241,10 +253,9 @@ public class SelfServicePage extends Page {
                 int attempts = 2;
                 do {
                     try {
-                        Wait.waitMillis(500);
                         $("input#cs_category_group + img[class*='arrow']")
                                 .click();
-                        comboList.shouldBe(visible);
+                        comboList.waitUntil(visible, 500);
                         break;
                     }catch (ElementShould e) {
                         if(attempts-- > 0){
@@ -308,8 +319,9 @@ public class SelfServicePage extends Page {
             }
 
             public SelfServiceGrid deleteRow(){
-                row.find("[class*=delete-icon] a").click();
-                Wait.waitMillis(500);
+                getRows();
+                deleteIcon.click();
+                findAllRows().shouldHave(CollectionCondition.sizeLessThan(rows.size()));
                 return new SelfServiceGrid();
             }
 

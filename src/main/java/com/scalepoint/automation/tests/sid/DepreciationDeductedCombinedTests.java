@@ -86,7 +86,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .doAssert(page -> page.assertFaceValueTooltipIs(expectedNewPrice))
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim)
+                .completeWithEmail(claim, databaseApi)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)

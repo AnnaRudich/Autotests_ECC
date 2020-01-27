@@ -2,8 +2,6 @@ package com.scalepoint.automation.utils.threadlocal;
 
 import com.google.common.base.Function;
 import com.scalepoint.automation.Actions;
-import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.Wait;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,8 +39,6 @@ public class Window {
         public boolean openDialog(WebElement openButton) {
             Set<String> windowHandlesBefore = driver.getWindowHandles();
 
-            //unexplained for now why it helps, related to charlie_588_5_showMarketPriceEnabled
-            Wait.wait(1);
 
             openButton.click();
             if (isAlertPresent()) {
