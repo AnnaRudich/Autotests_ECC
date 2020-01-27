@@ -9,7 +9,7 @@ import java.util.Arrays;
 public enum WiremockServer {
 
     WIREMOCK_1("ecc-tools.spcph.local", "10.99.14.75"),
-    WIREMOCK_2("dev-ecc-tool02.spcph.local", "10.99.14.100");
+    WIREMOCK_2("dev-ecc-tool03.spcph.local", "10.99.14.100");
 
     @Getter
     private String domain;
