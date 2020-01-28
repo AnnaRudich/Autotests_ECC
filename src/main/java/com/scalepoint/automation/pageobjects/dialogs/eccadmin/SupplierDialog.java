@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
@@ -43,6 +44,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
+        Wait.waitForJavascriptRecalculation();
         Wait.waitForAjaxCompleted();
         return this;
     }
@@ -430,12 +432,14 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(createNewVoucherAgreementBtn);
+            Wait.waitForJavascriptRecalculation();
+            Wait.waitForAjaxCompleted();
+            $(createNewVoucherAgreementBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
             return this;
         }
 
         public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
-            createNewVoucherAgreementBtn.click();
+            $(createNewVoucherAgreementBtn).click();
             return at(CreateVoucherAgreementDialog.class);
         }
 

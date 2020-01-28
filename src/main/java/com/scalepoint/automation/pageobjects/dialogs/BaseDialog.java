@@ -13,6 +13,7 @@ public abstract class BaseDialog implements Actions {
 
     protected Logger logger = LogManager.getLogger(BaseDialog.class);
     private static Logger innerLogger = LogManager.getLogger(BaseDialog.class);
+    protected static final int TIME_OUT_IN_MILISECONDS = 30000;
 
     protected WebDriver driver;
 
