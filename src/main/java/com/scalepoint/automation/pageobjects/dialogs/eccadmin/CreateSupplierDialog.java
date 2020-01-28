@@ -1,11 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class CreateSupplierDialog extends BaseDialog {
 
@@ -32,8 +35,7 @@ public class CreateSupplierDialog extends BaseDialog {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(windowHeader);
-        Wait.forCondition(webDriver -> "Add supplier".equals(windowHeader.getText()));
+        $(windowHeader).waitUntil(Condition.exactText("Add supplier"), TIME_OUT_IN_MILISECONDS);
         return this;
     }
 
@@ -43,7 +45,7 @@ public class CreateSupplierDialog extends BaseDialog {
     }
 
     public <T extends BaseDialog> T createSupplier(Class<T> dialogClass) {
-        createSupplierButton.click();
+        $(createSupplierButton).click();
         return at(dialogClass);
     }
 

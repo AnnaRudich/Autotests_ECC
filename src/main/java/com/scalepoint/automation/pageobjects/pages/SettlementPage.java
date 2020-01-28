@@ -130,6 +130,8 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementDialog editFirstClaimLine() {
+        Wait.waitForAjaxCompleted();
+        Wait.waitForJavascriptRecalculation();
         return parseFirstClaimLine().editLine();
     }
 

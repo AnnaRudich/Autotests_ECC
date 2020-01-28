@@ -108,7 +108,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
     }
 
     public SupplierDialog.GeneralTab editSupplier(String supplierName) {
-        clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath("//input[contains(@name, 'searchfield')]")));
+        $(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
         if (getOption(supplierName).getText().contains(supplierName)) {

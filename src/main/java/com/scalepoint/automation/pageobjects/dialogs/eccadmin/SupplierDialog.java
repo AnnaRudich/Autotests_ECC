@@ -43,6 +43,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
+//        Wait.waitForJavascriptRecalculation();
         Wait.waitForAjaxCompleted();
         return this;
     }
@@ -435,7 +436,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
-            createNewVoucherAgreementBtn.click();
+            $(createNewVoucherAgreementBtn).click();
             return at(CreateVoucherAgreementDialog.class);
         }
 

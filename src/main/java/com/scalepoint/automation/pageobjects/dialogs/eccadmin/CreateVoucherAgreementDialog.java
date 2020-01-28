@@ -1,11 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class CreateVoucherAgreementDialog extends BaseDialog {
 
@@ -20,8 +23,7 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(windowHeader);
-        Wait.forCondition(webDriver -> "Add voucher agreement".equals(windowHeader.getText()));
+        $(windowHeader).waitUntil(Condition.exactText("Add voucher agreement"), TIME_OUT_IN_MILISECONDS);
         return this;
     }
 
