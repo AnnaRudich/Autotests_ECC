@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,6 +15,8 @@ public class GdprConfirmationDialog extends BaseDialog {
 
     @Override
     protected GdprConfirmationDialog ensureWeAreAt() {
+        Wait.waitForJavascriptRecalculation();
+        Wait.waitForAjaxCompleted();
         gdprDialog.isDisplayed();
         return this;
     }

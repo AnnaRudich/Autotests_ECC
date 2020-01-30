@@ -105,6 +105,10 @@ public class Configuration {
         return getServerUrl() + SLASH + getEccRnvContext() + SLASH + getLocale().getValue() + SLASH;
     }
 
+    public static String getLogoutUrl(){
+        return getEccAdminUrl() + "logout";
+    }
+
     public static String getFeatureToggleAdminUrl() {
         return getEccUrl() + getFf4jToggleAdminUrl();
     }

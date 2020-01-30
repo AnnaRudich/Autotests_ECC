@@ -124,6 +124,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
                         rollbackToggleSetting(iInvokedMethod);
                     }
 
+                    Browser.open(com.scalepoint.automation.utils.Configuration.getLogoutUrl());
                     Page.to(LoginPage.class);
                 } catch (Exception e) {
                     /* if not caught it breaks the call of AfterMethod*/

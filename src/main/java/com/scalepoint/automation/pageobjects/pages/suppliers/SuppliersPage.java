@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
@@ -18,11 +19,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.refresh;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -67,12 +64,14 @@ public class SuppliersPage extends BaseEccAdminNavigation {
 
     @Override
     protected Page ensureWeAreOnPage() {
+        Wait.waitForPageLoaded();
+        waitForJavascriptRecalculation();
         waitForAjaxCompleted();
         try {
-            waitForVisible(createSupplierButton);
+            $(createSupplierButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } catch (Exception e) {
             refresh();
-            Wait.waitForVisible(createSupplierButton);
+            $(createSupplierButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
         return this;
     }
@@ -115,6 +114,7 @@ public class SuppliersPage extends BaseEccAdminNavigation {
             scrollTo(getOption(supplierName));
             doubleClickUsingJsIfSeleniumClickReturnError(getOption(supplierName));
         }
+
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
     }
 
