@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
@@ -10,7 +11,6 @@ import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -198,6 +198,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
+            waitForJavascriptRecalculation();
             waitForAjaxCompleted();
             return this;
         }
@@ -243,6 +244,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected boolean areWeAt() {
+            Wait.waitForJavascriptRecalculation();
             Wait.waitForAjaxCompleted();
             try {
                 return name.isDisplayed();
@@ -250,6 +252,16 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
                 logger.error(e.getMessage());
                 return false;
             }
+        }
+
+        @Override
+        protected BaseDialog ensureWeAreAt() {
+            Wait.waitForJavascriptRecalculation();
+            Wait.waitForAjaxCompleted();
+
+            $(windowHeader).waitUntil(Condition.matchText("[(Edit)(View)] supplier .*"), TIME_OUT_IN_MILISECONDS);
+
+            return this;
         }
 
         public GeneralTab setName(String name) {
@@ -332,61 +344,60 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             public GeneralTab.FormFiller withSupplierName(String supplierName) {
                 clearField(dialog.name);
                 dialog.name.sendKeys(supplierName);
+                JavascriptHelper.blur();
                 return this;
             }
 
             public GeneralTab.FormFiller withCvr(String cvr) {
                 clearField(dialog.cvr);
                 dialog.cvr.sendKeys(cvr);
+                JavascriptHelper.blur();
                 return this;
             }
 
             public GeneralTab.FormFiller withAddress1(String address1) {
                 clearField(dialog.address1);
                 dialog.address1.sendKeys(address1);
+                JavascriptHelper.blur();
                 return this;
             }
 
             public GeneralTab.FormFiller withAddress2(String address2) {
                 clearField(dialog.address2);
                 dialog.address2.sendKeys(address2);
+                JavascriptHelper.blur();
                 return this;
             }
 
             public GeneralTab.FormFiller withCity(String city) {
                 clearField(dialog.city);
                 dialog.city.sendKeys(city);
+                JavascriptHelper.blur();
                 return this;
             }
 
             public GeneralTab.FormFiller withPostalCode(String postalCode) {
                 clearField(dialog.postalCode);
                 dialog.postalCode.sendKeys(postalCode);
+                JavascriptHelper.blur();
                 return this;
             }
 
             public GeneralTab.FormFiller withWebsite(String website) {
                 clearField(dialog.website);
                 dialog.website.sendKeys(website);
+                JavascriptHelper.blur();
                 return this;
             }
 
             private void clearField(WebElement element) {
-                element.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-                element.sendKeys(Keys.DELETE);
-                for (int i = 0; i < 3; i++) {
-                    if (!element.getText().equals("")) {
-                        element.clear();
-                    }
-                }
-
+                SelenideElement field = $(element);
+                field.click();
+                field.clear();
+                Wait.waitForJavascriptRecalculation();
+                Wait.waitForAjaxCompleted();
             }
 
-        }
-
-        @Override
-        protected BaseDialog ensureWeAreAt() {
-            return this;
         }
     }
 
