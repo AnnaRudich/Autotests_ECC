@@ -227,7 +227,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(name = "phone")
         private WebElement phone;
 
-        @FindBy(xpath = ".//*[contains(@class,'x-window-header-text')]")
+        @FindBy(xpath = ".//div[contains(@class,'SupplierWindow')]//span[contains(@class,'x-window-header-text')]")
         private WebElement windowHeader;
 
         @FindBy(xpath = ".//*[contains(@class,'add-supplier-create-btn')]")
@@ -256,11 +256,11 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         @Override
         protected BaseDialog ensureWeAreAt() {
+            int timeout = 5000;
             Wait.waitForJavascriptRecalculation();
             Wait.waitForAjaxCompleted();
 
-            $(windowHeader).waitUntil(Condition.matchText("[(Edit)(View)] supplier .*"), TIME_OUT_IN_MILISECONDS);
-
+            $(windowHeader).waitUntil(Condition.matchText("[(Edit)(View)] supplier .*"), timeout);
             return this;
         }
 
