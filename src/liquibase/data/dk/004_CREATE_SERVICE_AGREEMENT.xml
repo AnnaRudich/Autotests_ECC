@@ -16,7 +16,7 @@
             --create shared service agreement under Scalepoint
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')
 
-            EXEC autotests_create_service_agreements @insCompanyId, @agreementName
+            EXEC autotests_create_service_agreements @insCompanyId, @agreementName, @MockUrl = '${wiremock.host}'
 
 
             --map this agreement to all test ICs
