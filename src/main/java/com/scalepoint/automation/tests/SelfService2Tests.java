@@ -36,11 +36,6 @@ public class SelfService2Tests extends BaseTest {
         newPasswordToSelfService = null;
     }
 
-    @Test(dataProvider = "testDataProvider")
-    public void test(Translations translations) {
-        System.out.println(translations);
-    }
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -93,7 +88,7 @@ public class SelfService2Tests extends BaseTest {
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim)
+                .completeWithEmail(claim, databaseApi)
                 .openRecentClaim()
                 .newSelfServicePassword()
                 .apply(SelfServicePasswordDialog.class, p -> newPasswordToSelfService = p.getNewPasswordToSelfService())
@@ -153,7 +148,7 @@ public class SelfService2Tests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim)
+                .completeWithEmail(claim, databaseApi)
                 .openRecentClaim()
                 .reopenClaim()
                 .requestSelfServiceWithEnabledNewPassword(claim, Constants.DEFAULT_PASSWORD)

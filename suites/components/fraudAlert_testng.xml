@@ -5,4 +5,8 @@
             <class name="com.scalepoint.automation.tests.fraudAlert.FraudAlertTest" />
         </classes>
     </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
 </suite>

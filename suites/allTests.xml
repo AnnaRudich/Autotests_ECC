@@ -15,6 +15,7 @@
                 <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
                 <exclude name="com.scalepoint.automation.tests.selfservice"/>
                 <exclude name="com.scalepoint.automation.tests.sidQUnit"/>
+                <exclude name="com.scalepoint.automation.tests.communicationDesigner"/>
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance"/>
             </package>
         </packages>
@@ -35,6 +36,12 @@
                     <exclude name="charlie_589_2_showScalepointSupplierNameEnabled"/>
                 </methods>
             </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="Communication Designer" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests" />
         </classes>
     </test>
 

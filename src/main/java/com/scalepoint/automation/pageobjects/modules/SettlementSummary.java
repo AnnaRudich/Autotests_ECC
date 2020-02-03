@@ -33,7 +33,7 @@ public class SettlementSummary extends Module {
     private Button cancel;
 
     @FindBy(id = "saveCaseBtn")
-    private Button saveClaim;
+    private WebElement saveClaim;
 
     @FindBy(id = "finishCaseBtn")
     private Button completeClaim;
@@ -67,10 +67,11 @@ public class SettlementSummary extends Module {
     }
 
     public void saveClaim() {
-        if (!saveClaim.isDisplayed()) {
+        SelenideElement element = $(saveClaim);
+        if (!element.isDisplayed()) {
             expand();
         }
-        clickUsingJsIfSeleniumClickReturnError(saveClaim);
+        element.click();
     }
 
     public void completeClaim() {
@@ -88,7 +89,7 @@ public class SettlementSummary extends Module {
     }
 
     private void expand() {
-        clickUsingJsIfSeleniumClickReturnError(expand);
+        $(expand).click();
     }
 
     private String getClaimSumValue() {

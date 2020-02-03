@@ -15,22 +15,14 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
-import com.scalepoint.automation.utils.data.entity.AttachmentFiles;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.Supplier;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
 import java.util.Objects;
 
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.EMAIL_REQUIRED;
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PERSONAL_CODE_REQUIRED;
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.PHONE_REQUIRED;
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.USE_PORTAL_REQUIRED;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.*;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
@@ -211,6 +203,7 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: User adds Legal Data for V1
      * THEN: Legal Data is stored correctly
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to add Conditions and Limitations for new voucher")
     public void ecc3038_initialLegalAdding(User user, Voucher voucher) {
@@ -316,6 +309,7 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC User creates voucher V1 for S1
      * THEN: SP user can't view V1 details
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "Scalepoint SupplyManager can't open IC voucher")
     @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
@@ -431,6 +425,7 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC2 user navigates to Supply Management
      * THEN: V1 statues is "Yes"
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 Voucher left by IC1 is active for IC2")
     @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
@@ -580,7 +575,8 @@ public class VoucherAgreementTests extends BaseTest {
         }
 
         /* create new voucher for him */
-        VoucherAgreementDialog.GeneralTab voucherAgreementGeneralTab = generalTab.selectAgreementsTab()
+        VoucherAgreementDialog.GeneralTab voucherAgreementGeneralTab = generalTab
+                .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)

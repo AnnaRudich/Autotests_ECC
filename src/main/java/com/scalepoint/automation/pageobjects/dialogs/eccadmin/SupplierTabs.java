@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
@@ -36,9 +37,10 @@ interface SupplierTabs {
     }
 
     default SuppliersPage saveSupplier() {
-        By editSupplierBtn = By.className("edit-supplier-save-btn");
-        Wait.waitForDisplayed(editSupplierBtn);
-        $(editSupplierBtn).click();
+        $(By.className("edit-supplier-save-btn"))
+                .waitUntil(Condition.visible, 30000)
+                .click();
+        Wait.waitForJavascriptRecalculation();
         Wait.waitForAjaxCompleted();
         return Page.at(SuppliersPage.class);
     }

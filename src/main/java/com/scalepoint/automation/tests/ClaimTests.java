@@ -81,7 +81,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim)
+                .completeWithEmail(claim, databaseApi)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
                 .toMailsPage()
@@ -191,7 +191,7 @@ public class ClaimTests extends BaseTest {
         CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim)
+                .completeWithEmail(claim, databaseApi)
                 .openRecentClaim();
 
         String loginToShopLink = customerDetailsPage

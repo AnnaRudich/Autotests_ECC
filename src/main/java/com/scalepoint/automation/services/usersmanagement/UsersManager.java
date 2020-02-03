@@ -1,6 +1,5 @@
 package com.scalepoint.automation.services.usersmanagement;
 
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
+
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class UsersManager {
 
@@ -41,13 +44,11 @@ public class UsersManager {
     }
 
     public static Map<CompanyMethodArgument, User> fetchUsersWhenAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
-        boolean fetched = false;
-        while (!fetched) {
-            fetched = fetchUsersIfAvailable(companyMethodArguments);
-            if (!fetched) {
-                Wait.wait(15);
-            }
-        }
+        await()
+                .pollInterval(15, TimeUnit.SECONDS)
+                .timeout(60, TimeUnit.MINUTES)
+                .until(() -> fetchUsersIfAvailable(companyMethodArguments), is(equalTo(true)));
+
         return companyMethodArguments;
     }
 

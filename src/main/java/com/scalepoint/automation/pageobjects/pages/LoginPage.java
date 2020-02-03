@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.google.common.base.Function;
 import com.scalepoint.automation.exceptions.LoginInvalidException;
 import com.scalepoint.automation.utils.Wait;
@@ -12,7 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
 
 @EccAdminPage
 public class LoginPage extends Page {
@@ -34,15 +35,18 @@ public class LoginPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return "";
+        return "login.action";
     }
 
     @Override
     public LoginPage ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
-        waitForVisible(username);
-        waitForVisible(password);
-        waitForVisible(loginButton);
+        Wait.waitForJavascriptRecalculation();
+        Wait.waitForAjaxCompleted();
+        $(username).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(password).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(loginButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

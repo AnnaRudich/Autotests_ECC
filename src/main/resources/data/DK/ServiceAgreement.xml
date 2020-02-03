@@ -58,7 +58,7 @@
     <!-->Task Statuses<-->
     <sent>Sendt!</sent>
     <error>ERROR</error>
-    <sendTaskFailStatus>Fejl</sendTaskFailStatus>
+    <sendTaskFailStatus>Fejl (klik her)</sendTaskFailStatus>
     <waitingStatus>Afventer svar fra servicepartner</waitingStatus>
     <cancelledStatus>Annulleret</cancelledStatus>
     <feedbackReceivedStatus>Svar modtaget</feedbackReceivedStatus>

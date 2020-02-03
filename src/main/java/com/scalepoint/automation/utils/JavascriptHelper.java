@@ -3,7 +3,9 @@ package com.scalepoint.automation.utils;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +24,7 @@ public class JavascriptHelper {
 
     private static final String DATA_JS_UTILS_JS = "js/utils.js";
     private static final String SNIPPETS_DIR = "js/snippets/";
+    private static final int DEFAULT_TIMEOUT = 30;
 
     public static void initializeCommonFunctions() {
         try {
@@ -55,5 +58,9 @@ public class JavascriptHelper {
             loaded = (Boolean) result;
         }
         return loaded;
+    }
+
+    public static void blur(){
+        ((JavascriptExecutor) Browser.driver()).executeScript("!!document.activeElement ? document.activeElement.blur() : 0");
     }
 }

@@ -42,6 +42,10 @@ public class Wait {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait -> !(Boolean) ((JavascriptExecutor) wrapWait).executeScript("return Ext.Ajax.isLoading();"));
     }
 
+    public static void waitForJavascriptRecalculation() {
+        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait -> ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
+    }
+
     public static void waitForSpinnerToDisappear() {
         forCondition1s(new Function<WebDriver, Object>() {
             @Nullable
@@ -56,14 +60,6 @@ public class Wait {
     public static void waitForPageLoaded() {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
-    }
-
-    public static void wait(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000L);
-        } catch (InterruptedException ignored) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     public static void waitMillis(int milliseconds) {
