@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -10,7 +11,8 @@ import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 @RequiredParameters("shrfnbr=%s")
@@ -38,15 +40,16 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     private Select ic;
 
     @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/Admin/generic_items_edit.jsp";
+    public GenericItemsEditAdminPage ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForPageLoaded();
+        $(descriptionField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        return this;
     }
 
     @Override
-    public GenericItemsEditAdminPage ensureWeAreOnPage() {
-        waitForUrl(getRelativeUrl());
-        waitForVisible(descriptionField);
-        return this;
+    protected String getRelativeUrl() {
+        return "webshop/jsp/Admin/generic_items_edit.jsp";
     }
 
     public void save() {

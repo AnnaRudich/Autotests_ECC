@@ -22,7 +22,7 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 @EccAdminPage
-public class VouchersPage extends BaseEccAdminNavigation {
+public class VouchersPage extends BaseSupplierAdminNavigation {
 
     @FindBy(xpath = ".//a[contains(@href, 'logout')]")
     private Link signOutLink;

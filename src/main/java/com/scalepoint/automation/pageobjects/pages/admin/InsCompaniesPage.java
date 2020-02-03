@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
 import org.openqa.selenium.By;
@@ -10,7 +10,8 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class InsCompaniesPage extends AdminBasePage {
@@ -25,9 +26,10 @@ public class InsCompaniesPage extends AdminBasePage {
     private Select companies;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected InsCompaniesPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(addButton);
+        waitForPageLoaded();
+        $(addButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
         return this;
     }
 

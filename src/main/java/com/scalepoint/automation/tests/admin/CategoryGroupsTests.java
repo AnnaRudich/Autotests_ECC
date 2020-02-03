@@ -5,8 +5,10 @@ import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Category;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")
@@ -111,6 +113,7 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 creates Pseudo Category Model M1
      * THEN: M1 is displayed in model's list
      */
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-545 It's possible to create new Pseudo Category Model. New Model is displayed in Models list")
     public void charlie545_createNewPsCatModel(User user, Category category) {

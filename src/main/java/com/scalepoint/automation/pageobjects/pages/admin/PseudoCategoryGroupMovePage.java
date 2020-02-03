@@ -1,11 +1,13 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.Wait;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Select;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class PseudoCategoryGroupMovePage extends AdminBasePage {
@@ -17,9 +19,10 @@ public class PseudoCategoryGroupMovePage extends AdminBasePage {
     private Select groups;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected PseudoCategoryGroupMovePage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(okButton);
+        waitForPageLoaded();
+        $(okButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
         return this;
     }
 

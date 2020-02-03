@@ -29,6 +29,8 @@ public abstract class Page implements Actions {
 
     private static Map<Class, String> pageAnnotationToBaseUrl = new HashMap<>();
 
+    public static final Long STANDARD_WAIT_UNTIL_TIMEOUT = 3000l;
+
     static {
         pageAnnotationToBaseUrl.put(EccPage.class, Configuration.getEccUrl());
         pageAnnotationToBaseUrl.put(EccAdminPage.class, Configuration.getEccAdminUrl());

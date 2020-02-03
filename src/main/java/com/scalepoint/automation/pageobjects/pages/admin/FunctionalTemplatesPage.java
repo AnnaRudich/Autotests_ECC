@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
@@ -7,7 +8,8 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class FunctionalTemplatesPage extends AdminBasePage {
@@ -27,18 +29,19 @@ public class FunctionalTemplatesPage extends AdminBasePage {
     @FindBy(xpath = "//select[@name='ftList']")
     private Select templatesList;
 
+    @Override
+    public FunctionalTemplatesPage ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForPageLoaded();
+        $(edit).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        return this;
+    }
 
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/Admin/func_templates.jsp";
     }
 
-    @Override
-    public FunctionalTemplatesPage ensureWeAreOnPage() {
-        waitForUrl(getRelativeUrl());
-        waitForVisible(edit);
-        return this;
-    }
 
     public EditFunctionTemplatePage editTemplate(String templateName) {
         templates.selectByVisibleText(templateName);

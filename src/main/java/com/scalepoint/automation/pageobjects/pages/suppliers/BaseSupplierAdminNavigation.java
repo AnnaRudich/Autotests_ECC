@@ -6,7 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public abstract class BaseEccAdminNavigation extends Page {
+public abstract class BaseSupplierAdminNavigation extends Page {
 
     @FindBy(className = "mainMenuSuppliersClass")
     private WebElement suppliersLink;

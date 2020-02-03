@@ -19,7 +19,6 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.refresh;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -32,7 +31,7 @@ import static org.testng.Assert.assertTrue;
  * User: kke
  */
 @EccAdminPage
-public class SuppliersPage extends BaseEccAdminNavigation {
+public class SuppliersPage extends BaseSupplierAdminNavigation {
 
     @FindBy(xpath = "//span[contains(@class,'create-supplier-btn')]")
     private WebElement createSupplierButton;

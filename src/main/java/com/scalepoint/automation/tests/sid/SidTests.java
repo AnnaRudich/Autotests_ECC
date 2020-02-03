@@ -13,10 +13,12 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
@@ -268,6 +270,7 @@ public class SidTests extends BaseTest {
      * THAN: Depreciation is 0.00
      */
     @SuppressWarnings("AccessStaticViaInstance")
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price if no vouchers selected in Add settlement dialog")
     public void ecc3025_cashCompensationWithoutDepNoVoucher(User user, Claim claim, Category category) {
         login(user, AdminPage.class)

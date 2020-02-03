@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -9,6 +9,8 @@ import ru.yandex.qatools.htmlelements.element.Select;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -38,13 +40,16 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     private WebElement firstAssigment;
 
     @Override
-    protected Page ensureWeAreOnPage() {
-        return null;
+    protected ReductionRuleAssignmentsPage ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForPageLoaded();
+        $(saveButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        return this;
     }
 
     @Override
     protected String getRelativeUrl() {
-        return null;
+        return "webshop/jsp/Admin/reduction_rule_assignment_edit.jsp";
     }
 
     public ReductionRuleAssignmentsPage fillAssignment(Assignment assignment) {

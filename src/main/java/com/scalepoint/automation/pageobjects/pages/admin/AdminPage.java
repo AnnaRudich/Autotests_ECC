@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -9,7 +10,8 @@ import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class AdminPage extends AdminBasePage {
@@ -42,14 +44,16 @@ public class AdminPage extends AdminBasePage {
     private Link editReasons;
 
     @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/Admin";
+    public AdminPage ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForPageLoaded();
+        $(matchingEngine).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        return this;
     }
 
     @Override
-    public AdminPage ensureWeAreOnPage() {
-        waitForVisible(matchingEngine);
-        return this;
+    protected String getRelativeUrl() {
+        return "webshop/jsp/Admin";
     }
 
     public SettlementPage toSettlement() {
