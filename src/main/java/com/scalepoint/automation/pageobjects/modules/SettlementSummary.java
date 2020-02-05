@@ -148,17 +148,18 @@ public class SettlementSummary extends Module {
     }
 
     public SettlementPage editSelfRisk(String newValue){
-
-        SelenideElement selfRisk = $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"));
-        if(!selfRisk.isDisplayed()){
+        if(!$(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).isDisplayed()){
             expand();
         }
-        selfRisk
+
+        $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"))
                 .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
                 .click();
+
         $(By.xpath("//input[@role='textbox']"))
                 .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
                 .setValue(newValue);
+
         $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
         waitForLoaded();
         return at(SettlementPage.class);
