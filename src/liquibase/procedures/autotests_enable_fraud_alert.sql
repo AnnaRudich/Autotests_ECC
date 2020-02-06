@@ -8,7 +8,7 @@ GO
 
 CREATE PROCEDURE [dbo].[autotests_enable_fraud_alert]
 @name nvarchar(254),
-@eventsConfiguration NVARCHAR(256) = '{"validationEngineEventsEnabled":false,"selfServiceEventsEnabled":false,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":false,"rvEventsEnabled":false,"invoiceEventsEnabled":false,"fraudEventsEnabled":true}'
+@eventsConfiguration NVARCHAR(256) = '{"validationEngineEventsEnabled":false,"selfServiceEventsEnabled":false,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":false,"rvEventsEnabled":false,"invoiceEventsEnabled":false,"fraudEventsEnabled":true,"attachmentEventsEnabled":true}'
 AS
 	SET NOCOUNT ON
 
