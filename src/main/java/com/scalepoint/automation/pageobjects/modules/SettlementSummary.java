@@ -89,7 +89,7 @@ public class SettlementSummary extends Module {
     }
 
     private void expand() {
-        $(expand).click();
+        $(expand).waitUntil(Condition.visible, Constants.WAIT_UNTIL_MS).click();
     }
 
     private String getClaimSumValue() {
