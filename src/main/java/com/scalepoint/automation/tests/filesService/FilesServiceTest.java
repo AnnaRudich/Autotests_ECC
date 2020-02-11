@@ -23,7 +23,8 @@ import static com.scalepoint.automation.utils.DateUtils.format;
 public class FilesServiceTest extends BaseTest {
 
     private String[] lineDescriptions = new String[]{"item1", "item2"};
-    private File attachment1 = new File("C:\\Users\\bna\\Desktop\\rnv_issue.png");
+    private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");
+
 
     @Test(dataProvider = "fraudAlertDataProvider", description = "test1")
     public void attachmentAddedFromClaimLineLevelToClaimLineLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
