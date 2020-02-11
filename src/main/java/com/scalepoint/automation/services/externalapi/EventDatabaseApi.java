@@ -2,6 +2,8 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.Change;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.EventAttachmentUpdated;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.EventClaimUpdated;
@@ -15,8 +17,7 @@ import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_SETTLED;
-import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.CLAIM_UPDATED;
+import static com.scalepoint.automation.services.externalapi.EventDatabaseApi.EventType.*;
 import static com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes.Property.CASE_CLOSED;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
@@ -30,6 +31,9 @@ public class EventDatabaseApi {
     private static Logger logger = LogManager.getLogger(EventDatabaseApi.class);
 
     private JdbcTemplate jdbcTemplate;
+
+    private static final int POLL_INTERVAL = 1;
+    private static final int TIMEOUT = 10;
 
     public EventDatabaseApi(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -110,7 +114,8 @@ public class EventDatabaseApi {
     public enum EventType {
 
         CLAIM_UPDATED("claim_updated", EventClaimUpdated.class),
-        CLAIM_SETTLED("case_settled", EventClaimSettled.class);
+        CLAIM_SETTLED("case_settled", EventClaimSettled.class),
+        ATTACHMENT_UPDATED("attachments_updated", EventAttachmentUpdated.class);
 
         private String type;
         private Class clazz;
@@ -154,14 +159,34 @@ public class EventDatabaseApi {
     }
 
     public void assertNumberOfCloseCaseEventsThatWasCreatedForClaim(ClaimRequest claimRequest, int eventsNumber) {
-        with().pollInterval(1, SECONDS).await().atMost(10, SECONDS).untilAsserted(() ->
+        with().pollInterval(POLL_INTERVAL, SECONDS).await().atMost(TIMEOUT, SECONDS).untilAsserted(() ->
                 assertThat(getSizeOfEventUpdatedList(claimRequest))
                         .as("There are expected to be " + eventsNumber + " CloseCase events created in event-api for case with number: " + claimRequest.getCaseNumber() + " but actual was " + getSizeOfEventUpdatedList(claimRequest))
                         .isEqualTo(eventsNumber));
     }
 
+    public EventDatabaseApi assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(ClaimRequest claimRequest, Change.Property property, int eventsNumber) {
+        with().pollInterval(POLL_INTERVAL, SECONDS).await().atMost(TIMEOUT, SECONDS).untilAsserted(() ->
+                assertThat(getSizeOfEventAttachmentsUpdatedListForGivenProperty(claimRequest, property))
+                        .as("There are expected to be " + eventsNumber + " AttqchmentsUpdated events created in event-api for case with number: " + claimRequest.getCaseNumber() + " but actual was " + getSizeOfEventAttachmentsUpdatedListForGivenProperty(claimRequest, property))
+                        .isEqualTo(eventsNumber));
+        return this;
+    }
+
     private int getSizeOfEventUpdatedList(ClaimRequest claimRequest) {
         return getEventsUpdatedList(claimRequest).size();
+    }
+
+    private int getSizeOfEventAttachmentsUpdatedList(ClaimRequest claimRequest){
+        return getEventsAttachmentUpdatedList(claimRequest).size();
+    }
+
+    private int getSizeOfEventAttachmentsUpdatedListForGivenProperty(ClaimRequest claimRequest, Change.Property property){
+        return getEventsAttachmentUpdatedList(claimRequest)
+                .stream()
+                .filter(c -> hasProperty((EventAttachmentUpdated)c, property))
+                .collect(toList())
+                .size();
     }
 
     private List getEventsUpdatedList(ClaimRequest claimRequest) {
@@ -171,8 +196,25 @@ public class EventDatabaseApi {
                 .collect(toList());
     }
 
+    private List<EventClaim> getEventsAttachmentUpdatedList(ClaimRequest claimRequest){
+        List list =  getEventsForType(ATTACHMENT_UPDATED, claimRequest.getCompany(), claimRequest.getCaseNumber())
+                .stream()
+                .collect(toList());
+
+        return list;
+    }
+
     private boolean hasProperty(EventClaimUpdated event, Changes.Property property) {
         return event.getChanges().stream().anyMatch(c -> c.getProperty().equals(property));
+    }
+
+    private boolean hasProperty(EventAttachmentUpdated event, Change.Property property){
+        boolean b = event.getChanges().stream()
+                .anyMatch(c ->
+                        c.getProperty()
+                                .equals(property));
+
+        return b;
     }
 
     private boolean hasCaseNumber(EventClaimUpdated event, String caseNumber) {

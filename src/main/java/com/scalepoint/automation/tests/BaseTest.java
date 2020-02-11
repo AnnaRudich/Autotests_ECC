@@ -73,6 +73,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected DatabaseApi databaseApi;
 
     @Autowired
+    protected EventDatabaseApi eventDatabaseApi;
+
+    @Autowired
     protected MongoDbApi mongoDbApi;
 
     @Autowired

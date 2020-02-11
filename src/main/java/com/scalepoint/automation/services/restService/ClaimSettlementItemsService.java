@@ -82,6 +82,11 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
+    public AttachmentsService toAttachments() {
+        return new AttachmentsService();
+    }
+
+
     public SettlementClaimService closeCase() {
         return new SettlementClaimService();
     }
