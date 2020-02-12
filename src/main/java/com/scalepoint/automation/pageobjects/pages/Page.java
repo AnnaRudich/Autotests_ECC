@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 public abstract class Page implements Actions {
 
     private static Map<Class, String> pageAnnotationToBaseUrl = new HashMap<>();
+    protected static final int TIME_OUT_IN_MILISECONDS = 30000;
 
     public static final Long STANDARD_WAIT_UNTIL_TIMEOUT = 3000l;
 

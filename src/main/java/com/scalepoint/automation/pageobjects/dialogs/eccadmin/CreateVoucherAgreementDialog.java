@@ -23,6 +23,8 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
+        Wait.waitForJavascriptRecalculation();
+        Wait.waitForAjaxCompleted();
         $(windowHeader).waitUntil(Condition.exactText("Add voucher agreement"), TIME_OUT_IN_MILISECONDS);
         return this;
     }

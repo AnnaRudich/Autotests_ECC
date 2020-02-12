@@ -312,8 +312,9 @@ public class SettlementDialog extends BaseDialog {
 
     @Override
     public SettlementDialog ensureWeAreAt() {
+        Wait.waitForJavascriptRecalculation();
         Wait.waitForAjaxCompleted();
-        waitForVisible(cancelButton);
+        $(cancelButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
         return this;
     }
@@ -552,6 +553,7 @@ public class SettlementDialog extends BaseDialog {
                 clickAndWait(buttonBy, button);
             }
             Wait.waitForAjaxCompleted();
+            Wait.waitForJavascriptRecalculation();
         } catch (UnhandledAlertException ignored) {
         }
 

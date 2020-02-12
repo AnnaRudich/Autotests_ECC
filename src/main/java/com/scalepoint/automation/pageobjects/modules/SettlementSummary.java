@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
@@ -33,7 +34,7 @@ public class SettlementSummary extends Module {
     private Button cancel;
 
     @FindBy(id = "saveCaseBtn")
-    private Button saveClaim;
+    private WebElement saveClaim;
 
     @FindBy(id = "finishCaseBtn")
     private Button completeClaim;
@@ -67,10 +68,11 @@ public class SettlementSummary extends Module {
     }
 
     public void saveClaim() {
-        if (!saveClaim.isDisplayed()) {
+        SelenideElement element = $(saveClaim);
+        if (!element.isDisplayed()) {
             expand();
         }
-        clickUsingJsIfSeleniumClickReturnError(saveClaim);
+        element.click();
     }
 
     public void completeClaim() {
@@ -88,7 +90,7 @@ public class SettlementSummary extends Module {
     }
 
     private void expand() {
-        clickUsingJsIfSeleniumClickReturnError(expand);
+        $(expand).waitUntil(Condition.visible, Constants.WAIT_UNTIL_MS).click();
     }
 
     private String getClaimSumValue() {
@@ -147,17 +149,18 @@ public class SettlementSummary extends Module {
     }
 
     public SettlementPage editSelfRisk(String newValue){
-
-        SelenideElement selfRisk = $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"));
-        if(!selfRisk.isDisplayed()){
+        if($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).is(not(visible))){
             expand();
         }
-        selfRisk
+
+        $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"))
                 .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
                 .click();
+
         $(By.xpath("//input[@role='textbox']"))
                 .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
                 .setValue(newValue);
+
         $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
         waitForLoaded();
         return at(SettlementPage.class);

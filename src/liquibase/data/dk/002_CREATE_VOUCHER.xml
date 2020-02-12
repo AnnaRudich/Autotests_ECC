@@ -35,7 +35,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 
         declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
         declare @SupplierVAId int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Distance-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '5000', @SupplierId = @SupplierVAId OUTPUT
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Distance-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '5000', @SupplierId = @SupplierVAId OUTPUT, @MockUrl = '${wiremock.host}'
         EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierVAId, '22', 10, 7
 
         /* ComputerCity */
@@ -49,19 +49,19 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 
         /* Autotest-Supplier-Bauta_SP,  bauta */
         declare @SupplierId int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
         EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, 12
         EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
         EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
 
         /* Autotest-Supplier-Bauta,  bauta */
         declare @SupplierIdBauta int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest_Supplier_Bauta', @insCompanyId = 12, @PostalCode = '9200', @SupplierId = @SupplierIdBauta OUTPUT
+        EXEC autotests_create_supplier @SUNAME = 'Autotest_Supplier_Bauta', @insCompanyId = 12, @PostalCode = '9200', @SupplierId = @SupplierIdBauta OUTPUT, @MockUrl = '${wiremock.host}'
         EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
 
         /* Supplier without vouchers */
         declare @SupplierIdScalepoint int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest-scalepoint-supplier', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierIdScalepoint OUTPUT
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-scalepoint-supplier', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierIdScalepoint OUTPUT, @MockUrl = '${wiremock.host}'
     </sql>
     <rollback/>
 </changeSet>
