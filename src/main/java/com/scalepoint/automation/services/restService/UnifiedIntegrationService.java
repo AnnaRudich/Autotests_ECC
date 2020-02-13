@@ -3,7 +3,9 @@ package com.scalepoint.automation.services.restService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
@@ -68,11 +70,36 @@ public class UnifiedIntegrationService{
                 .pathParam("tenant", tenant)
                 .pathParam("caseType", caseType)
                 .pathParam("caseNumber", caseNumber)
+                .body(TestData.getClaimRequestItemizationCaseTopdanmarkFNOL())
                 .when()
                 .get("/data/v1/{country}/{tenant}/{caseType}/{caseNumber}")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
+    }
+
+    public String createItemizationCaseFNOL(String locale, String tenant, ClaimRequest claimRequest){
+
+        token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.CASE_INTEGRATION).getToken();
+
+        log.info(Configuration.getEnvironmentUrl());
+        String itemizationCaseReference = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
+                .header(token.getAuthorizationHeader())
+                .contentType(ContentType.JSON)
+                .pathParam("locale", locale)
+                .pathParam("tenant", tenant)
+                .body(claimRequest)
+                .when()
+                .post("/{locale}/{tenant}/v1/case")
+                .then().log().all()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response().getBody().jsonPath().get("token");
+
+        return itemizationCaseReference;
+    }
+
+    public String createClaimFNOL(ClaimRequest claimRequest){
+        return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
     }
 
     public Duration getDuration(){

@@ -20,9 +20,14 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
-        BaseService
+        AttachmentsService attachmentsService = BaseService
                 .loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem(), TestData.getInsertSettlementItem())
-                .toAttachments()
+                .toAttachments();
+
+        eventDatabaseApi
+                .assertNumberOfClaimLineChangedEventsThatWasCreatedForClaim(claimRequest, 2);
+
+        attachmentsService
                 .addAttachmentToClaimLevel();
 
         eventDatabaseApi
@@ -35,9 +40,14 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
-        BaseService
+        AttachmentsService attachmentsService = BaseService
                 .loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem(), TestData.getInsertSettlementItem())
-                .toAttachments()
+                .toAttachments();
+
+        eventDatabaseApi
+                .assertNumberOfClaimLineChangedEventsThatWasCreatedForClaim(claimRequest, 2);
+
+        attachmentsService
                 .addAttachmentToClaimLineLevel(0);
 
         eventDatabaseApi
@@ -52,7 +62,12 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
         AttachmentsService attachmentsService = BaseService
                 .loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem(), TestData.getInsertSettlementItem())
-                .toAttachments()
+                .toAttachments();
+
+        eventDatabaseApi
+                .assertNumberOfClaimLineChangedEventsThatWasCreatedForClaim(claimRequest, 2);
+
+        attachmentsService
                 .addAttachmentToClaimLevel();
 
         eventDatabaseApi
@@ -92,7 +107,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
     @DataProvider(name = "usersDataProvider", parallel = true)
     public static Object[][] usersDataProvider(Method method) {
 
-        int users = 3;
+        int users = 1;
 
         Object[][] objects = new Object[users][1];
 

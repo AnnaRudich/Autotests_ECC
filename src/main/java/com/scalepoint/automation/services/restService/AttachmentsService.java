@@ -4,6 +4,7 @@ import com.google.common.io.CharStreams;
 import com.scalepoint.automation.services.restService.Common.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 
 import java.io.File;
@@ -24,10 +25,76 @@ import static io.restassured.config.EncoderConfig.encoderConfig;
 public class AttachmentsService extends BaseService {
 
     private Response response;
-    Integer userId = data.getUserId();
+
+    private static final String ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
+    private static final String ACCEPT_ENCODING = "gzip, deflate, br";
+    private static final String ACCEPT_LANGUAGE = "pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7";
+    private static final String BOUNDARY = "132425116134";
+    private static final String CHARSET = "ISO-8859-1";
+    private static final String ATTACHMENT_NAME = "attachmentName";
+    private static final String CONTENT_TYPE = "image/jpeg";
+    private static final String MULTIPART_FORM_DATA_PATTERN = "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\nContent-Type: %s\r\n\r\n";
+    private static final String TYPE = "IMAGE";
+    private static final String LEVEL = "root";
+
+    private final Integer userId;
+    private final File file;
+    private final String fileName;
+    private final String attachmentStream;
+
+    public AttachmentsService() throws IOException {
+
+        this.userId = data.getUserId();
+        this.file = new File("src\\main\\resources\\attachments\\bw.jpg");
+        this.fileName = file.getName();
+        this.attachmentStream = CharStreams.toString(new InputStreamReader(new FileInputStream(file), Charset.forName(CHARSET)));
+    }
 
     public Response getResponse() {
         return this.response;
+    }
+
+    public AttachmentsService addAttachmentToClaimLevel() throws IOException {
+
+        addAttachment(getAddAttachmentRequestSpecification());
+
+        return this;
+    }
+
+    public AttachmentsService addAttachmentToClaimLineLevel(int lineId) throws IOException {
+
+        RequestSpecification requestSpecification = getAddAttachmentRequestSpecification()
+                .queryParam("matchId", getTree().getChildren().get(lineId).getId());
+
+        addAttachment(requestSpecification);
+
+        return this;
+    }
+
+    public AttachmentsService linkAttachmentToClaimLineLevel(int lineTo, int lineFrom){
+
+        AttachmentsPayload attachmentsPayload = getAttachmentPayloadBuilder()
+                .coveredIds("1")
+                .matchId(getTree().getChildren().get(lineFrom).getId())
+                .id("Settlement.AttachmentModel-6")
+                .build();
+
+        linkAttachment(getAttachmentsMapPayload(lineTo, attachmentsPayload));
+
+        return this;
+    }
+
+    public AttachmentsService linkAttachmentToClaimLineLevel(int lineTo){
+
+        AttachmentsPayload attachmentsPayload = getAttachmentPayloadBuilder()
+                .coveredIds("")
+                .matchId(0)
+                .id("Settlement.AttachmentModel-1")
+                .build();
+
+        linkAttachment(getAttachmentsMapPayload(lineTo, attachmentsPayload));
+
+        return this;
     }
 
     private AttachmentsTree getTree(){
@@ -37,7 +104,7 @@ public class AttachmentsService extends BaseService {
                 .queryParam("_dc", LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond())
                 .queryParam("shnbr", userId)
                 .pathParam("userId", userId)
-                .get(BasePath.ATTACHMENTS + "/tree")
+                .get(BasePath.ATTACHMENTS.concat("/tree"))
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .log().all()
@@ -45,81 +112,51 @@ public class AttachmentsService extends BaseService {
                 .as(AttachmentsTree[].class)[0];
     }
 
-    public AttachmentsService addAttachmentToClaimLevel() throws IOException {
+    private RequestSpecification getAddAttachmentRequestSpecification() throws IOException {
 
-        File file = new File("C:\\Users\\bna\\Desktop\\rnv_issue.png");
-
-        String boundary = "132425116134";
-        given().baseUri(getEccUrl())
+        return given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
                 .config(config()
                         .encoderConfig(encoderConfig()
                                 .encodeContentTypeAs("multipart/form-data", ContentType.TEXT)))
-                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
-                .header("Accept-Encoding", "gzip, deflate, br")
-                .header("Accept-Language", "pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7")
-                .queryParam("fname", "test")
+                .header("Accept", ACCEPT)
+                .header("Accept-Encoding", ACCEPT_ENCODING)
+                .header("Accept-Language", ACCEPT_LANGUAGE)
+                .queryParam("fname", "C:\\fakepath\\".concat(fileName))
                 .queryParam("customer_id", userId)
                 .pathParam("userId", userId)
-                .contentType("multipart/form-data; boundary=".concat(boundary))
-                .body("--"
-                        .concat(boundary)
-                        .concat("\r\nContent-Disposition: form-data; name=\"attachmentName\"; filename=\"rnv_issue.png\"\r\nContent-Type: image/png\r\n\r\n")
-                        .concat(CharStreams.toString(new InputStreamReader(new FileInputStream(file), Charset.forName("ISO-8859-1")))))
-                .post(BasePath.ATTACHMENTS)
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all();
-
-        return this;
+                .contentType("multipart/form-data; boundary=".concat(BOUNDARY))
+                .body(String.format(MULTIPART_FORM_DATA_PATTERN, BOUNDARY, ATTACHMENT_NAME, fileName, CONTENT_TYPE)
+                        .concat(CharStreams.toString(new InputStreamReader(new FileInputStream(file), Charset.forName(CHARSET)))));
     }
 
-    public AttachmentsService addAttachmentToClaimLineLevel(int lineId) throws IOException {
+    private AttachmentsPayload.AttachmentsPayloadBuilder getAttachmentPayloadBuilder(){
 
-        File file = new File("C:\\Users\\bna\\Desktop\\rnv_issue.png");
-
-        String boundary = "132425116134";
-        given().baseUri(getEccUrl())
-                .sessionId(data.getEccSessionId())
-                .config(config()
-                        .encoderConfig(encoderConfig()
-                                .encodeContentTypeAs("multipart/form-data", ContentType.TEXT)))
-                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9")
-                .header("Accept-Encoding", "gzip, deflate, br")
-                .header("Accept-Language", "pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7")
-                .queryParam("fname", "test")
-                .queryParam("customer_id", userId)
-                .queryParam("matchId", getTree().getChildren().get(lineId).getId())
-                .pathParam("userId", userId)
-                .contentType("multipart/form-data; boundary=".concat(boundary))
-                .body("--"
-                        .concat(boundary)
-                        .concat("\r\nContent-Disposition: form-data; name=\"attachmentName\"; filename=\"rnv_issue.png\"\r\nContent-Type: image/png\r\n\r\n")
-                        .concat(CharStreams.toString(new InputStreamReader(new FileInputStream(file), Charset.forName("ISO-8859-1")))))
-                .post(BasePath.ATTACHMENTS)
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all();
-
-        return this;
+        return AttachmentsPayload.builder()
+                .name(fileName)
+                .type(TYPE)
+                .level(LEVEL)
+                .guid(UUID.randomUUID().toString());
     }
 
-    public AttachmentsService linkAttachmentToClaimLineLevel(int lineTo, int lineFrom){
+    private AttachmentsMapPayload getAttachmentsMapPayload(int lineTo, AttachmentsPayload attachmentsPayload){
 
-
-        AttachmentsMapPayload attachmentsMapPayload = AttachmentsMapPayload
+        return AttachmentsMapPayload
                 .builder()
                 .matchIdToMap(getTree().getChildren().get(lineTo).getId().toString())
-                .attachments(Arrays.asList(AttachmentsPayload.builder()
-                        .name("rnv_issue.png")
-                        .type("IMAGE")
-                        .level("root")
-                        .coveredIds("1")
-                        .matchId(getTree().getChildren().get(lineFrom).getId())
-                        .guid(UUID.randomUUID().toString())
-                        .id("Settlement.AttachmentModel-6")
-                        .build()))
+                .attachments(Arrays.asList(attachmentsPayload))
                 .build();
+    }
+
+    private void addAttachment(RequestSpecification requestSpecification){
+
+        requestSpecification
+                .post(BasePath.ATTACHMENTS)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all();
+    }
+    private void linkAttachment(AttachmentsMapPayload attachmentsMapPayload){
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
@@ -131,38 +168,5 @@ public class AttachmentsService extends BaseService {
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .log().all();
-
-        return this;
-    }
-
-    public AttachmentsService linkAttachmentToClaimLineLevel(int lineTo){
-
-
-        AttachmentsMapPayload attachmentsMapPayload = AttachmentsMapPayload
-                .builder()
-                .matchIdToMap(getTree().getChildren().get(lineTo).getId().toString())
-                .attachments(Arrays.asList(AttachmentsPayload.builder()
-                        .name("rnv_issue.png")
-                        .type("IMAGE")
-                        .level("root")
-                        .coveredIds("")
-                        .matchId(0)
-                        .guid(UUID.randomUUID().toString())
-                        .id("Settlement.AttachmentModel-1")
-                        .build()))
-                .build();
-
-        given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getEccSessionId())
-                .header("Content-Type", "application/json")
-                .queryParam("customer_id", userId)
-                .pathParam("userId", userId)
-                .body(attachmentsMapPayload)
-                .post(BasePath.ATTACHMENTS + "/mapped")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all();
-
-        return this;
     }
 }

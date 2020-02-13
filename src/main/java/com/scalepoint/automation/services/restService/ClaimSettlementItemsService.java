@@ -6,6 +6,7 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -82,7 +83,7 @@ public class ClaimSettlementItemsService extends BaseService {
     }
 
 
-    public AttachmentsService toAttachments() {
+    public AttachmentsService toAttachments() throws IOException {
         return new AttachmentsService();
     }
 

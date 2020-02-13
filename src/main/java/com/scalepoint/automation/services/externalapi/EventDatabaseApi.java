@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.Change;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.EventAttachmentUpdated;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.Changes;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated.EventClaimUpdated;
@@ -115,6 +116,7 @@ public class EventDatabaseApi {
 
         CLAIM_UPDATED("claim_updated", EventClaimUpdated.class),
         CLAIM_SETTLED("case_settled", EventClaimSettled.class),
+        CLAIM_CHANGED("claimline_changed", ClaimLineChanged.class),
         ATTACHMENT_UPDATED("attachments_updated", EventAttachmentUpdated.class);
 
         private String type;
@@ -173,12 +175,20 @@ public class EventDatabaseApi {
         return this;
     }
 
+    public EventDatabaseApi assertNumberOfClaimLineChangedEventsThatWasCreatedForClaim(ClaimRequest claimRequest, int eventsNumber) {
+        with().pollInterval(POLL_INTERVAL, SECONDS).await().atMost(TIMEOUT, SECONDS).untilAsserted(() ->
+                assertThat(getSizeOfEventClaimlineChangedList(claimRequest))
+                        .as("There are expected to be " + eventsNumber + " Claimline changed events created in event-api for case with number: " + claimRequest.getCaseNumber() + " but actual was " + getSizeOfEventClaimlineChangedList(claimRequest))
+                        .isEqualTo(eventsNumber));
+        return this;
+    }
+
     private int getSizeOfEventUpdatedList(ClaimRequest claimRequest) {
         return getEventsUpdatedList(claimRequest).size();
     }
 
-    private int getSizeOfEventAttachmentsUpdatedList(ClaimRequest claimRequest){
-        return getEventsAttachmentUpdatedList(claimRequest).size();
+    private int getSizeOfEventClaimlineChangedList(ClaimRequest claimRequest){
+        return getEventsClaimlineChangedList(claimRequest).size();
     }
 
     private int getSizeOfEventAttachmentsUpdatedListForGivenProperty(ClaimRequest claimRequest, Change.Property property){
@@ -197,11 +207,17 @@ public class EventDatabaseApi {
     }
 
     private List<EventClaim> getEventsAttachmentUpdatedList(ClaimRequest claimRequest){
-        List list =  getEventsForType(ATTACHMENT_UPDATED, claimRequest.getCompany(), claimRequest.getCaseNumber())
+        return getEventsList(claimRequest, ATTACHMENT_UPDATED);
+    }
+
+    private List<EventClaim> getEventsClaimlineChangedList(ClaimRequest claimRequest){
+        return getEventsList(claimRequest, CLAIM_CHANGED);
+    }
+
+    private List<EventClaim> getEventsList(ClaimRequest claimRequest, EventType eventType){
+        return getEventsForType(eventType, claimRequest.getCompany(), claimRequest.getCaseNumber())
                 .stream()
                 .collect(toList());
-
-        return list;
     }
 
     private boolean hasProperty(EventClaimUpdated event, Changes.Property property) {

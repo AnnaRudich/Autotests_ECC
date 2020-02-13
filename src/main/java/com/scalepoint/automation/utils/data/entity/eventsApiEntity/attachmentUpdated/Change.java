@@ -23,7 +23,9 @@ public class Change {
         ATTACHMENT_ADDED_FROM_CLAIM_LEVEL_TO_CLAIM_LINE_LEVEL("attachmentAddedFromClaimLevelToClaimLineLevel"),
         ATTACHMENT_ADDED_FROM_CLAIM_LINE_LEVEL_TO_CLAIM_LINE_LEVEL("attachmentAddedFromClaimLineLevelToClaimLineLevel"),
         ATTACHMENT_DELETED_FROM_CLAIM_LEVEL("attachmentDeletedFromClaimLevel"),
-        ATTACHMENT_UNLINKED_FROM_CLAIM_LINE_LEVEL("attachmentUnlinkedFromClaimLineLevel");
+        ATTACHMENT_UNLINKED_FROM_CLAIM_LINE_LEVEL("attachmentUnlinkedFromClaimLineLevel"),
+        ATTACHMENT_IMPORTED_FROM_FNOL("attachmentImportedFromFNOL"),
+        ATTACHMENT_IMPORTED_FROM_SELFSERVICE("attachmentImportedFromSelfService");
 
         private final String value;
         private final static Map<String, Change.Property> CONSTANTS = new HashMap<>();
