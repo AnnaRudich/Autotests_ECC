@@ -42,6 +42,9 @@ public class SettlementSummary extends Module {
     @FindBy(id = "settleExternallyBtn")
     private Button completeClaimExternally;
 
+    @FindBy(id="sendToAuditBtn-btnInnerEl")
+    private WebElement sentToAudit;
+
     @FindBy(xpath = "//div[contains(@class, 'x-tool-expand-top')]")
     private WebElement expand;
 
@@ -76,7 +79,7 @@ public class SettlementSummary extends Module {
     }
 
     public void completeClaim() {
-        if (!completeClaim.isDisplayed()) {
+        if (!completeClaim.isDisplayed()^sentToAudit.isDisplayed()) {
             expand();
         }
         clickUsingJsIfSeleniumClickReturnError(completeClaim);
