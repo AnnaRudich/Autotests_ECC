@@ -43,7 +43,7 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     protected ReductionRuleAssignmentsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(saveButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

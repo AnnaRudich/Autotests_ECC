@@ -1,9 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.services.externalapi.EccFileApi;
 import com.scalepoint.automation.utils.ExcelDocUtil;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -35,7 +35,7 @@ public class CommunicationTab extends BaseClaimPage {
     @Override
     protected CommunicationTab ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(sendBtn);
+        $(sendBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

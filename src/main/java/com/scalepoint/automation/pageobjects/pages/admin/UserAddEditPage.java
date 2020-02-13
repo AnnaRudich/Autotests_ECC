@@ -95,7 +95,7 @@ public class UserAddEditPage extends AdminBasePage {
     protected UserAddEditPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(loginField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(loginField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

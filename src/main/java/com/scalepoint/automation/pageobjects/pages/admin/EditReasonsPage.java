@@ -62,7 +62,7 @@ public class EditReasonsPage extends AdminBasePage {
     protected EditReasonsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(reasonTypes).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(reasonTypes).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

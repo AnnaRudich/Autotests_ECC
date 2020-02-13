@@ -22,7 +22,7 @@ public class PseudoCategoryGroupMovePage extends AdminBasePage {
     protected PseudoCategoryGroupMovePage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(okButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(okButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

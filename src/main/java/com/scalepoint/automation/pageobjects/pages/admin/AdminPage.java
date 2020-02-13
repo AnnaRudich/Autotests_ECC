@@ -47,7 +47,7 @@ public class AdminPage extends AdminBasePage {
     public AdminPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(matchingEngine).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(matchingEngine).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

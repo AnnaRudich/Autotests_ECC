@@ -29,7 +29,7 @@ public class InsCompaniesPage extends AdminBasePage {
     protected InsCompaniesPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(addButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

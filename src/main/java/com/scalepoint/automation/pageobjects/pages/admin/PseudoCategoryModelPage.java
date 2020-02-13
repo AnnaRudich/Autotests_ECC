@@ -33,7 +33,7 @@ public class PseudoCategoryModelPage extends AdminBasePage {
     protected PseudoCategoryModelPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(addButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

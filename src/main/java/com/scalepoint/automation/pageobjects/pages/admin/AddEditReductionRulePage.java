@@ -116,7 +116,7 @@ public class AddEditReductionRulePage extends AdminBasePage {
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(nameField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(nameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

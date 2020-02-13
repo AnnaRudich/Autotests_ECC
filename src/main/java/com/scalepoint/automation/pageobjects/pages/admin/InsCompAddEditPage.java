@@ -82,7 +82,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     protected InsCompAddEditPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(companyIDField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(companyIDField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

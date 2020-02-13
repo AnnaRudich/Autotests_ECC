@@ -43,7 +43,7 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     public GenericItemsEditAdminPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(descriptionField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(descriptionField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

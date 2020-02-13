@@ -39,7 +39,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     public EditFunctionTemplatePage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(saveValues).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(saveValues).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

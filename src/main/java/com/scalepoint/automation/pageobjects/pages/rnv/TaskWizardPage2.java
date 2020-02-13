@@ -2,13 +2,13 @@ package com.scalepoint.automation.pageobjects.pages.rnv;
 
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @RVPage
@@ -21,7 +21,7 @@ public class TaskWizardPage2 extends Page {
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(sendBtn);
+        $(sendBtn).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
         return null;
     }
 

@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -43,10 +42,10 @@ public class ReductionRulesPage extends AdminBasePage {
     private WebElement quickSearchField;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected ReductionRulesPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), "webshop/jsp/Admin/ReductionRuleRefresh");
         waitForPageLoaded();
-        $(newButton).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

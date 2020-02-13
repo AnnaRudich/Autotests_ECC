@@ -39,7 +39,7 @@ public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
     protected PseudoCategoryGroupAddEditPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(groupNameField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(groupNameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

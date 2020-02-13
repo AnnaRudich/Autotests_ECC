@@ -46,7 +46,7 @@ public class ReplacementDialogTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-592")
     @Test(dataProvider = "testDataProvider",
-            description = "CONTENTS-592 manual line is not shown in replacement dialog")
+            description = "CONTENTS-592 manual line is not shown in replacement dialogs")
     public void contents592_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_500;
 

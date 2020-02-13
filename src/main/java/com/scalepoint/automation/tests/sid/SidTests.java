@@ -30,7 +30,7 @@ import static com.scalepoint.automation.utils.Constants.*;
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class SidTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialogs")
     public void ecc3025_selectVoucherExistingCatAddDialog(User user, Claim claim, Voucher voucher) {
         PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
         loginAndCreateClaim(user, claim)
@@ -41,14 +41,14 @@ public class SidTests extends BaseTest {
 
     /**
      * GIVEN: Existing category C1 with existing group G1 and mapped to G1-C1 voucher V1
-     * WHEN: User selects C1, G1 and V1 in Settlement dialog
+     * WHEN: User selects C1, G1 and V1 in Settlement dialogs
      * WHEN: User adds new price P1
      * WHEN: User adds depreciation D1
      * THAN: Cash compensation is P1 - V1 discount - D1
      * THAN: Depreciation is D1 amount of Cash Compensation
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
-            " - depreciation percent if voucher selected in Add settlement dialog")
+            " - depreciation percent if voucher selected in Add settlement dialogs")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, Voucher voucher) {
         PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
@@ -79,7 +79,7 @@ public class SidTests extends BaseTest {
      * WHEN user selects Voucher2
      * THAN the distance is equal to predefined value
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
     public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucherForDistances();
@@ -122,7 +122,7 @@ public class SidTests extends BaseTest {
      * WHEN user searches for Shop with Voucher2 option and predefined Zip code
      * THAN it's possible to find shop with distance as predefined value
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
     public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
@@ -144,7 +144,7 @@ public class SidTests extends BaseTest {
     }
 
     /**
-     * GIVEN: "Move the Discount Distribution to the Voucher replacement dialog box" is disabled
+     * GIVEN: "Move the Discount Distribution to the Voucher replacement dialogs box" is disabled
      * GIVEN: Existing Voucher with specified group and Category
      * GIVEN: Voucher's DD is default
      * WHEN: User opens Vouchers Replacement Dialog
@@ -165,7 +165,7 @@ public class SidTests extends BaseTest {
      * THEN: Face Value = Cash Value / (1 - comDiscount / 100 (It is new because DtDn was changed)
      */
     @RequiredSetting(type = MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
     public void ecc3025_voucherRepDialogDDDialogFVCV(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
@@ -181,7 +181,7 @@ public class SidTests extends BaseTest {
     }
 
     /**
-     * GIVEN: "Move the Discount Distribution to the Voucher replacement dialog box" is enabled
+     * GIVEN: "Move the Discount Distribution to the Voucher replacement dialogs box" is enabled
      * GIVEN: Existing Voucher with specified group and Category
      * GIVEN: Voucher's DD is default
      * WHEN: User opens Vouchers Replacement Dialog
@@ -202,7 +202,7 @@ public class SidTests extends BaseTest {
      * THEN: Face Value = Cash Value / (1 - comDiscount / 100 (It is new because DtDn was changed)
      */
     @RequiredSetting(type = MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
     public void ecc3025_voucherRepDialogCustomDtDnDialogFVCV2(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
@@ -220,7 +220,7 @@ public class SidTests extends BaseTest {
     /**
      * GIVEN: New Supplier S1
      * GIVEN: New voucher V1 of S1
-     * WHEN: User opens Terms and Conditions dialog for V1
+     * WHEN: User opens Terms and Conditions dialogs for V1
      * THEN: Terms and Conditions data contains correct V1 name
      * THEN: Terms and Conditions data contains correct V1 discount
      * THEN: Terms and Conditions data contains correct S1 telephone number
@@ -264,14 +264,14 @@ public class SidTests extends BaseTest {
 
     /**
      * GIVEN: New category C1 with random group G1 without mapped vouchers
-     * WHEN: User selects C1 and G1 in Settlement dialog
+     * WHEN: User selects C1 and G1 in Settlement dialogs
      * WHEN: User adds new price P1
      * THAN: Cash compensation is P1
      * THAN: Depreciation is 0.00
      */
     @SuppressWarnings("AccessStaticViaInstance")
     @RunOn(DriverType.CHROME)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price if no vouchers selected in Add settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price if no vouchers selected in Add settlement dialogs")
     public void ecc3025_cashCompensationWithoutDepNoVoucher(User user, Claim claim, Category category) {
         login(user, AdminPage.class)
                 .createPsModelWithCategoryAndEnable(category, "All Categories")
@@ -293,13 +293,13 @@ public class SidTests extends BaseTest {
 
     /**
      * GIVEN: Existing category C1 with existing group G1 and mapped to G1-C1 voucher V1
-     * WHEN: User selects C1, G1 and V1 in Settlement dialog
+     * WHEN: User selects C1, G1 and V1 in Settlement dialogs
      * WHEN: User adds new price P1
      * THAN: Cash compensation is P1 - V1 discount
      * THAN: Depreciation is 0.00
      */
     @SuppressWarnings("AccessStaticViaInstance")
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price minus voucher percent if voucher selected in Add settlement dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price minus voucher percent if voucher selected in Add settlement dialogs")
     public void ecc3025_cashCompensationWithoutDepVoucher(User user, Claim claim, ClaimItem item) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation = SidCalculator.calculateVoucherValuation(
                 Constants.PRICE_2400,

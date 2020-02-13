@@ -33,7 +33,7 @@ public class FunctionalTemplatesPage extends AdminBasePage {
     public FunctionalTemplatesPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(edit).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(edit).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

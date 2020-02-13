@@ -1,4 +1,4 @@
-package com.scalepoint.automation.pageobjects.pages.rnv;
+package com.scalepoint.automation.pageobjects.pages.rnv.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;

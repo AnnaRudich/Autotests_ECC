@@ -456,10 +456,10 @@ public class VoucherAgreementTests extends BaseTest {
     /**
      * GIVEN: IC1 and IC2 Users with Supply Manager credentials, SP supplier S1
      * WHEN: IC1 User creates voucher V1 for S1
-     * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialog
+     * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialogs
      */
     @Test(enabled = false, dataProvider = "testDataProvider",
-            description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialog")
+            description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialogs")
     public void ecc3038_ic1VoucherNotAvailableIC2(User futureUser1, User futureUser2, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser1, AUTOTEST_SUPPLIER_VA_TESTS)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
@@ -472,12 +472,12 @@ public class VoucherAgreementTests extends BaseTest {
     /**
      * GIVEN: SP and IC Users with Supply Manager credentials, SP Voucher V1
      * WHEN: SP User sets V1 as inactive
-     * THEN: V1 is not available for IC User in Supplier dialog
+     * THEN: V1 is not available for IC User in Supplier dialogs
      * <p>
      * ecc3038_inactiveSPVoucherNotAvailableICVouchersList
      */
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
+            description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialogs")
     @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_inactiveSPVoucherNotAvailableIC(@UserCompany(CompanyCode.SCALEPOINT) User scalepointUser, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(scalepointUser, supplier)

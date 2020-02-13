@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class RequiredValuationIsNeededDialog extends BaseDialog {
 
-    @FindBy(xpath = "//div[contains(@class,'required-valuation-is-needed-dialog')]")
+    @FindBy(xpath = "//div[contains(@class,'required-valuation-is-needed-dialogs')]")
     private WebElement dialog;
 
     @Override

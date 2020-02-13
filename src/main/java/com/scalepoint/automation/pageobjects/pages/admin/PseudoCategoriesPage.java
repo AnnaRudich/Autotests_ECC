@@ -32,7 +32,7 @@ public class PseudoCategoriesPage extends AdminBasePage {
     protected PseudoCategoriesPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(quickSearchField).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(quickSearchField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

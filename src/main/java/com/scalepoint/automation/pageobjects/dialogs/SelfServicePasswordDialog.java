@@ -10,10 +10,10 @@ import org.openqa.selenium.support.FindBy;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SelfServicePasswordDialog extends BaseDialog {
-    @FindBy(css = "#new-password-dialog-ok-button-btnIconEl")
+    @FindBy(css = "#new-password-dialogs-ok-button-btnIconEl")
     private WebElement ok;
 
-    @FindBy(css = "#new-password-dialog-password-textfield-inputEl")
+    @FindBy(css = "#new-password-dialogs-password-textfield-inputEl")
     private WebElement passwordInput;
 
     @Override
@@ -28,7 +28,7 @@ public class SelfServicePasswordDialog extends BaseDialog {
 
     public CustomerDetailsPage closeSelfServicePasswordDialog() {
         ok.click();
-        Wait.waitElementDisappeared(By.cssSelector("#new-password-dialog-ok-button-btnIconEl"));
+        Wait.waitElementDisappeared(By.cssSelector("#new-password-dialogs-ok-button-btnIconEl"));
         return Page.at(CustomerDetailsPage.class);
     }
 }

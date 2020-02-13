@@ -25,7 +25,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     protected PseudoCategoryModelAddEditPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
-        $(saveOption).waitUntil(Condition.visible, STANDARD_WAIT_UNTIL_TIMEOUT);
+        $(saveOption).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 
