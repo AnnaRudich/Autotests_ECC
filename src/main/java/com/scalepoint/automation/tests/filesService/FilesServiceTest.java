@@ -12,12 +12,10 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.Change;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOPDANMARK;
@@ -30,7 +28,7 @@ public class FilesServiceTest extends BaseTest {
     private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");
     private static final String IPHONE = "iPhone";
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "test1")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentAddedFromClaimLineLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLineLevelToClaimLineLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -44,7 +42,6 @@ public class FilesServiceTest extends BaseTest {
                 .doAssert(attachmentDialog ->
                         attachmentDialog
                                 .attachmentHasLink(attachment1.getName(), 1))
-                .getListpanelAttachmentView()
                 .linkAttachment(attachment1.getName(), lineDescriptions[1])
                 .doAssert(attachmentDialog ->
                         attachmentDialog
@@ -58,7 +55,7 @@ public class FilesServiceTest extends BaseTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LINE_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "test2")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentAddedFromClaimLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLevelToClaimLineLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -70,7 +67,6 @@ public class FilesServiceTest extends BaseTest {
                 .doAssert(attachmentDialog ->
                         attachmentDialog
                                 .attachmentExists(attachment1.getName()))
-                .getListpanelAttachmentView()
                 .linkAttachment(attachment1.getName(), lineDescriptions[0])
                 .doAssert(attachmentDialog ->
                         attachmentDialog
@@ -85,8 +81,8 @@ public class FilesServiceTest extends BaseTest {
     }
 
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "test3")
-    public void attachmenDeletedFromClaimLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
+    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentDeletedFromClaimLevel")
+    public void attachmentDeletedFromClaimLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
@@ -110,7 +106,7 @@ public class FilesServiceTest extends BaseTest {
                         Change.Property.ATTACHMENT_DELETED_FROM_CLAIM_LEVEL, 1);
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "test4")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentUnlinkedFromClaimLineLevel")
     public void attachmentUnlinkedFromClaimLineLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -137,7 +133,7 @@ public class FilesServiceTest extends BaseTest {
                         Change.Property.ATTACHMENT_UNLINKED_FROM_CLAIM_LINE_LEVEL, 1);
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider",
+    @Test(dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -167,7 +163,7 @@ public class FilesServiceTest extends BaseTest {
                         Change.Property.ATTACHMENT_IMPORTED_FROM_SELFSERVICE,1);
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "test4")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "FNOL")
     public void attachmentImportedFromFNOL(@UserCompany(TOPDANMARK) User user, Claim claim){
 
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
@@ -190,20 +186,5 @@ public class FilesServiceTest extends BaseTest {
         eventDatabaseApi
                 .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(createClaimRequest,
                         Change.Property.ATTACHMENT_IMPORTED_FROM_FNOL,1);
-    }
-
-    @DataProvider(name = "fraudAlertDataProvider")
-    public static Object[][] fraudAlertDataProvider(Method method) {
-
-        Object[][] testDataProvider = provide(method);
-
-        for (int i = 0; i < testDataProvider[0].length; i++) {
-            if (testDataProvider[0][i].getClass().equals(ClaimRequest.class)) {
-
-                testDataProvider[0][i] = TestData.getClaimRequestFraudAlert();
-            }
-        }
-
-        return testDataProvider;
     }
 }

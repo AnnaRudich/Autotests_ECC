@@ -20,6 +20,7 @@ import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -143,6 +144,21 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             LogManager.getLogger(BaseTest.class).error(ex);
         }
         return params;
+    }
+
+    @DataProvider(name = "topdanmarkDataProvider")
+    public static Object[][] topdanmarkDataProvider(Method method) {
+
+        Object[][] testDataProvider = provide(method);
+
+        for (int i = 0; i < testDataProvider[0].length; i++) {
+            if (testDataProvider[0][i].getClass().equals(ClaimRequest.class)) {
+
+                testDataProvider[0][i] = TestData.getClaimRequestFraudAlert();
+            }
+        }
+
+        return testDataProvider;
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {

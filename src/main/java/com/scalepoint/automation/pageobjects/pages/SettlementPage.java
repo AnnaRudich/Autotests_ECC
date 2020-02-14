@@ -100,7 +100,7 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForJavascriptRecalculation();
-//        Wait.waitForAjaxCompleted();
+        Wait.waitForAjaxCompleted();
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }

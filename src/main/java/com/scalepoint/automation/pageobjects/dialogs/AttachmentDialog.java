@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.Wait;
+import lombok.Getter;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -14,7 +15,6 @@ import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.assertj.core.api.Assertions.*;
@@ -47,30 +47,50 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
     public AttachmentDialog uploadAttachment(File file){
 
-        int currentSize = new ListpanelAttachmentView().attachmentsSize();
+        ListpanelAttachmentView listpanelAttachmentView = new ListpanelAttachmentView();
+
+        int currentSize = listpanelAttachmentView.attachmentsSize();
 
         enterToHiddenUploadFileField($("input[name=attachmentName]").getWrappedElement(), file.getAbsolutePath());
 
         Wait.waitForJavascriptRecalculation();
         Wait.waitForAjaxCompleted();
 
-        ElementsCollection elements = new ListpanelAttachmentView().attachments;
-        elements.shouldHave(CollectionCondition.size(++currentSize));
-        elements.get(currentSize - 1).find(".file-name").waitUntil(Condition.matchesText(file.getName()), TIME_OUT_IN_MILISECONDS);
+        listpanelAttachmentView.waitForNewAttachment(++currentSize, file.getName());
+
+        return at(AttachmentDialog.class);
+    }
+
+    public AttachmentDialog linkAttachment(String name, String lineDescription){
+
+        ListpanelAttachmentView.Attachment attachment = new ListpanelAttachmentView().getAttachmentByName(name);
+
+        TreepanelAttachmentView.Line line = new TreepanelAttachmentView().getLine(lineDescription);
+
+        dragAndDrop(attachment.getDragArea(), line.getDropArea());
+
+        String id = line.getId();
+
+        attachment.waitForLink(id);
 
         return at(AttachmentDialog.class);
     }
 
     public AttachmentDialog doAssert(Consumer<Asserts> func) {
+
         func.accept(new Asserts());
+
         return AttachmentDialog.this;
     }
 
     public class Asserts {
 
+        ListpanelAttachmentView listpanelAttachmentView = new ListpanelAttachmentView();
+
         public Asserts attachmentExists(String name) {
 
-            assertThatCode(() -> new ListpanelAttachmentView().getAttachmentByName(name))
+            assertThatCode(() -> listpanelAttachmentView.getAttachmentByName(name))
+                    .as(String.format("Attachement named %s doesn't exist", name))
                     .doesNotThrowAnyException();
 
             return this;
@@ -78,7 +98,8 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
         public Asserts attachmentNotExists(String name){
 
-            assertThatThrownBy(() -> new ListpanelAttachmentView().getAttachmentByName(name))
+            assertThatThrownBy(() -> listpanelAttachmentView.getAttachmentByName(name))
+                    .as("Attachment named %s exists", name)
                     .isInstanceOf(NoSuchElementException.class);
 
             return this;
@@ -86,12 +107,9 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
         public Asserts attachmentHasLink(String name, int id){
 
-            String title = new ListpanelAttachmentView()
-                    .getAttachmentByName(name)
-                    .find("td > .file-name span")
-                    .getAttribute("title");
+            String links = listpanelAttachmentView.getAttachmentByName(name).getLinks();
 
-            assertThat(title)
+            assertThat(links)
                     .as(String.format("Attachment named: %s doesn't have link to line id: %s", name, id))
                     .containsIgnoringCase(String.valueOf(id));
 
@@ -100,12 +118,9 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
         public Asserts attachmentHasNotLink(String name, int id){
 
-            String title = new ListpanelAttachmentView()
-                    .getAttachmentByName(name)
-                    .find("td > .file-name span")
-                    .getAttribute("title");
+            String links = listpanelAttachmentView.getAttachmentByName(name).getLinks();
 
-            assertThat(title)
+            assertThat(links)
                     .as(String.format("Attachment named: %s doesn't have link to line id: %s", name, id))
                     .doesNotContain(String.valueOf(id));
 
@@ -133,15 +148,13 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
         public AttachmentDialog selectLine(String lineDescription){
 
-            SelenideElement element = getLine(lineDescription);
-
             int tryCounter = 2;
             ElementShould elementShould;
             do {
                 try {
 
-                    $(element).click();
-                    element.waitUntil(Condition.attribute("aria-selected", "true"), 3000);
+                    getLine(lineDescription)
+                            .select();
 
                     return AttachmentDialog.this;
                 } catch (ElementShould e) {
@@ -150,20 +163,47 @@ public class AttachmentDialog extends BaseDialog implements Actions {
                 }
             }while (--tryCounter > 0);
 
-                throw elementShould;
+            throw elementShould;
         }
 
-        public SelenideElement getLine(String lineDescription){
+        public Line getLine(String lineDescription){
 
-            return claimLines
+            SelenideElement element = claimLines
                     .stream()
                     .filter(claimLine -> claimLine.find("span").getText().contains(lineDescription))
                     .findFirst()
                     .orElseThrow(NoSuchElementException::new);
+
+            return new Line(element);
+        }
+
+        class Line{
+
+            private SelenideElement element;
+            private final int TIMEOUT = 3000;
+            @Getter
+            private String id;
+            @Getter
+            private SelenideElement dropArea;
+
+            private Line(SelenideElement element){
+
+                this.element = element;
+                this.id = element.find(".x-tree-node-text").getText().substring(0,1);
+                dropArea = element.find("td");
+            }
+
+            public void select(){
+
+                element.click();
+                element.waitUntil(Condition.attribute("aria-selected", "true"), TIMEOUT);
+            }
         }
     }
 
     public class ListpanelAttachmentView{
+
+        private static final String ATTACHMENT_NAME = "div > .file-name";
 
         private ElementsCollection attachments;
 
@@ -172,72 +212,98 @@ public class AttachmentDialog extends BaseDialog implements Actions {
             attachments = $$(".thumb-wrap");
         }
 
-        public AttachmentDialog linkAttachment(String name, String lineDescription){
+        public AttachmentDialog deleteAttachment(String name){
 
-            SelenideElement attachment = getAttachmentByName(name);
+            int currentSize = attachmentsSize();
 
-            SelenideElement line = new TreepanelAttachmentView().getLine(lineDescription);
+            getAttachmentByName(name)
+                    .delete();
 
-            dragAndDrop(attachment.find(".thumb-view img"), line.find("td"));
+            $$("div[role=alertdialog] a[role=button][aria-hidden=false]").get(0).click();
 
-            String id = line.find(".x-tree-node-text ").getText().substring(0,1);
-
-            attachment.find("tr > td >.file-name span").waitUntil(Condition.text(id), TIME_OUT_IN_MILISECONDS);
+            ElementsCollection elements = attachments;
+            elements.shouldHave(CollectionCondition.size(--currentSize));
 
             return at(AttachmentDialog.class);
         }
 
+        public AttachmentDialog unlinkAttachment(String name){
 
-        public AttachmentDialog deleteAttachment(String name){
+            int currentSize = attachmentsSize();
 
-            int currentSize = new ListpanelAttachmentView().attachmentsSize();
+            getAttachmentByName(name)
+                    .unlink();
 
-            new ListpanelAttachmentView().attachments
-                    .stream()
-                    .filter(e -> e.find("div > .file-name").getText().equals(name))
-                    .findFirst()
-                    .orElseThrow(NoSuchElementException::new)
-                    .find("img[id^=\"img_delete\"]")
-                    .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
-                    .click();
-
-            $$("div[role=alertdialog] a[role=button][aria-hidden=false]").get(0).click();
-
-            ElementsCollection elements = new ListpanelAttachmentView().attachments;
+            ElementsCollection elements = attachments;
             elements.shouldHave(CollectionCondition.size(--currentSize));
 
-            return AttachmentDialog.this;
+            return at(AttachmentDialog.class);
         }
 
-        public AttachmentDialog unlinkAttachment(String name){
+        private Attachment getAttachmentByName(String name){
 
             SelenideElement element = attachments
                     .stream()
-                    .filter(e -> e.find(".file-name").getText().equals(name))
-                    .findFirst()
-                    .orElseThrow(NoSuchElementException::new)
-                    .find("img[id^=\"img_link\"]")
-                    .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-
-            element.click();
-
-            element.waitUntil(not(Condition.exist), TIME_OUT_IN_MILISECONDS);
-
-            return AttachmentDialog.this;
-        }
-
-        private SelenideElement getAttachmentByName(String name){
-
-            return attachments
-                    .stream()
-                    .filter(e -> e.find("div > .file-name").getText().equals(name))
+                    .filter(e -> e.find(ATTACHMENT_NAME).getText().equals(name))
                     .findFirst()
                     .orElseThrow(NoSuchElementException::new);
+
+            return new Attachment(element);
+        }
+
+        public void waitForNewAttachment(int newSize, String name){
+
+            ElementsCollection elements = new ListpanelAttachmentView().attachments;
+            elements.shouldHave(CollectionCondition.size(newSize));
+            elements.get(newSize - 1)
+                    .find(ATTACHMENT_NAME)
+                    .waitUntil(Condition.matchesText(name), TIME_OUT_IN_MILISECONDS);
         }
 
         public int attachmentsSize(){
 
             return attachments.size();
+        }
+
+        class Attachment{
+
+            private SelenideElement element;
+            @Getter
+            private SelenideElement dragArea;
+            @Getter
+            private String links;
+
+            private Attachment(SelenideElement element){
+
+                this.element = element;
+                dragArea = element.find(".thumb-view img");
+                links = element.find("td > .file-name span").getAttribute("title");
+            }
+
+            public ListpanelAttachmentView delete(){
+
+                element.find("img[id^=\"img_delete\"]")
+                        .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                        .click();
+
+                return new ListpanelAttachmentView();
+            }
+
+            public ListpanelAttachmentView unlink(){
+
+                element.find("img[id^=\"img_link\"]")
+                        .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                        .click();
+
+                return new ListpanelAttachmentView();
+            }
+
+            public Attachment waitForLink(String id){
+
+                element.find("tr > td >.file-name span").waitUntil(Condition.text(id), TIME_OUT_IN_MILISECONDS);
+
+                return this;
+            }
         }
     }
 

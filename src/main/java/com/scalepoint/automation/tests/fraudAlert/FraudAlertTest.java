@@ -12,7 +12,6 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -21,12 +20,10 @@ import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Item;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,22 +55,7 @@ public class FraudAlertTest extends BaseTest {
 
     private String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 
-    @DataProvider(name = "fraudAlertDataProvider")
-    public static Object[][] fraudAlertDataProvider(Method method) {
-
-        Object[][] testDataProvider = provide(method);
-
-        for (int i = 0; i < testDataProvider[0].length; i++) {
-            if (testDataProvider[0][i].getClass().equals(ClaimRequest.class)) {
-
-                testDataProvider[0][i] = TestData.getClaimRequestFraudAlert();
-            }
-        }
-
-        return testDataProvider;
-    }
-
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Add")
     public void manualClaimHandlingAddFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -109,7 +91,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Edit")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Edit")
     public void manualClaimHandlingEditNoFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -150,7 +132,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Remove")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Remove")
     public void manualClaimHandlingRemoveNoFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -184,7 +166,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider",
+    @Test(dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
@@ -241,7 +223,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Add")
     public void manualClaimHandlingAddNoFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -276,7 +258,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Edit")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Edit")
     public void manualClaimHandlingEditFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -317,7 +299,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Remove")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Remove")
     public void manualClaimHandlingRemoveFraud(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -351,7 +333,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider",
+    @Test(dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
@@ -410,7 +392,7 @@ public class FraudAlertTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
+    @Test(dataProvider = "topdanmarkDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
     public void importExcelNoFraud(@UserCompany(TOPDANMARK) User user,
                                    ClaimRequest claimRequest) throws IOException {
@@ -442,7 +424,7 @@ public class FraudAlertTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
+    @Test(dataProvider = "topdanmarkDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
             " drop-down for choosing reason is enabled")
     public void importExcelFraud(@UserCompany(TOPDANMARK) User user,
                                  ClaimRequest claimRequest) throws IOException {
@@ -472,7 +454,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Add")
     public void productSearchFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -510,7 +492,7 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(dataProvider = "fraudAlertDataProvider", description = "Add")
+    @Test(dataProvider = "topdanmarkDataProvider", description = "Add")
     public void productSearchNoFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
