@@ -51,6 +51,7 @@ public class IP1Api {
             b.addParameter("phone1", claim.getPhoneNumber());
             b.addParameter("deductible", "0");
             b.addParameter("claimsNumber", claim.getClaimNumber());
+            b.addParameter("policy", claim.getPolicyTypeFF());
             if (StringUtils.isNotBlank(claim.getDamageDate())) {
                 b.addParameter("damageDate", claim.getDamageDate());
             }

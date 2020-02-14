@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
@@ -40,6 +41,9 @@ public class SettlementSummary extends Module {
 
     @FindBy(id = "settleExternallyBtn")
     private Button completeClaimExternally;
+
+    @FindBy(id="sendToAuditBtn-btnInnerEl")
+    private WebElement sentToAudit;
 
     @FindBy(xpath = "//div[contains(@class, 'x-tool-expand-top')]")
     private WebElement expand;
@@ -75,7 +79,7 @@ public class SettlementSummary extends Module {
     }
 
     public void completeClaim() {
-        if (!completeClaim.isDisplayed()) {
+        if (!completeClaim.isDisplayed()^sentToAudit.isDisplayed()) {
             expand();
         }
         clickUsingJsIfSeleniumClickReturnError(completeClaim);
@@ -89,7 +93,7 @@ public class SettlementSummary extends Module {
     }
 
     private void expand() {
-        $(expand).click();
+        $(expand).waitUntil(Condition.visible, Constants.WAIT_UNTIL_MS).click();
     }
 
     private String getClaimSumValue() {
@@ -148,7 +152,7 @@ public class SettlementSummary extends Module {
     }
 
     public SettlementPage editSelfRisk(String newValue){
-        if(!$(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).isDisplayed()){
+        if($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).is(not(visible))){
             expand();
         }
 
