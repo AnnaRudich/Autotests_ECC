@@ -1,10 +1,11 @@
-package com.scalepoint.automation.pageobjects.pages;
+package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
+import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;

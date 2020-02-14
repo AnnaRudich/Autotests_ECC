@@ -20,6 +20,7 @@ public class InvoiceTab extends BaseClaimPage {
     protected InvoiceTab ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
+        waitForJavascriptRecalculation();
         $("#grid-invoice-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }

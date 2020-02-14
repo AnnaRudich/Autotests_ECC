@@ -7,11 +7,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import com.scalepoint.automation.utils.data.entity.Translations;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
@@ -142,7 +140,6 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 creates role Role1
      * THEN: Role1 is displayed in roles list
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to create new role with all enabled options. The RR is displayed in Roles list")
     public void charlie551_createNewRoleAllOptionsEnabled(Translations translations) {

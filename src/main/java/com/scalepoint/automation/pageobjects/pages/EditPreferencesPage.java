@@ -1,13 +1,15 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -25,7 +27,9 @@ public class EditPreferencesPage extends Page {
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompleted();
-        waitForVisible(buttonGenerate);
+        waitForJavascriptRecalculation();
+        waitForPageLoaded();
+        $(buttonGenerate).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.modules.ClaimMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.shared.ClaimStatus;
@@ -14,7 +15,8 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class MyPage extends Page {
@@ -49,8 +51,11 @@ public class MyPage extends Page {
     @Override
     public MyPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(editPreferences);
-        waitForVisible(lastClaims);
+        waitForPageLoaded();
+        waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        $(editPreferences).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(lastClaims).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

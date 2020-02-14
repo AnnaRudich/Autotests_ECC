@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -15,7 +16,9 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForInvisible;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,8 +60,11 @@ public class NewCustomerPage extends Page {
     @Override
     public NewCustomerPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(claimsNumber);
-        waitForVisible(surname);
+        waitForAjaxCompleted();
+        waitForPageLoaded();
+        waitForJavascriptRecalculation();
+        $(claimsNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(surname).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

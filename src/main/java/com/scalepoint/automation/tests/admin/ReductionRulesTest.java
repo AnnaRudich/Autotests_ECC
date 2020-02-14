@@ -4,12 +4,10 @@ import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePag
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.translations.RRLinesFields;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -284,7 +282,6 @@ public class ReductionRulesTest extends BaseTest {
      * WHEN: U1 add reduction rule RR1 with 3 lines  different claimant rating and price range/age overlap
      * THEN: Validation failed; RR1 NOT created
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyFailRRValidationThreeLinesOverlap(ReductionRule rule) {
         toNewReductionRulePage()
@@ -696,7 +693,6 @@ public class ReductionRulesTest extends BaseTest {
                 .assertRuleDisplayed(rule);
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
     public void charlie_497_verifyCreateRuleAndAssignIt(ReductionRule rule, Assignment assignment) {
         databaseApi.removeAssignment(assignment);

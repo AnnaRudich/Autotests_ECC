@@ -8,7 +8,7 @@ public class SaveConfirmationPage extends Page {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected SaveConfirmationPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         return this;
     }

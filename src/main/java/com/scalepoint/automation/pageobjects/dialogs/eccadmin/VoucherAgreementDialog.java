@@ -17,13 +17,17 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertTrue;
 
 public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreementTabs {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForAjaxCompleted();
+        waitForAjaxCompleted();
+        waitForPageLoaded();
+        waitForJavascriptRecalculation();
         return this;
     }
 
@@ -80,7 +84,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
             }
 
             public FormFiller withActive(boolean active) {
-                Wait.waitForAjaxCompleted();
+                waitForAjaxCompleted();
                 Wait.waitForVisible(dialog.agreementStatusCombo).select(active ? "Active" : "Inactive");
                 return this;
             }
@@ -108,7 +112,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
 
         @Override
         protected boolean areWeAt() {
-            Wait.waitForAjaxCompleted();
+            waitForAjaxCompleted();
             try {
                 return voucherNameInput.isDisplayed();
             } catch (Exception e) {

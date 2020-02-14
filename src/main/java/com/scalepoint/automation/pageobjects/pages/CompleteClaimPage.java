@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
@@ -18,7 +19,9 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -84,8 +87,10 @@ public class CompleteClaimPage extends Page {
     @Override
     public CompleteClaimPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(emailField);
-        waitForVisible(saveClaim);
+        waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        waitForPageLoaded();
+        $(saveClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

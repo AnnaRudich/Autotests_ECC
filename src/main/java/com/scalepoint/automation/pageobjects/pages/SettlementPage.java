@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv.TaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
@@ -99,8 +100,8 @@ public class SettlementPage extends BaseClaimPage {
     @Override
     public SettlementPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForJavascriptRecalculation();
-        Wait.waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }

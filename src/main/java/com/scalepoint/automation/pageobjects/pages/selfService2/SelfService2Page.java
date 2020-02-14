@@ -19,6 +19,8 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -60,8 +62,12 @@ public class SelfService2Page extends Page {
     By logOutButtonXpath = By.xpath(".//div[@class='log-out']//input[@value='Log ud']");
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected SelfService2Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
+        waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        waitForPageLoaded();
+        $(save).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

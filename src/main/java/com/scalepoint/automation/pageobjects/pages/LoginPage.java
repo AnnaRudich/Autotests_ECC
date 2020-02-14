@@ -14,6 +14,8 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccAdminPage
 public class LoginPage extends Page {
@@ -40,10 +42,10 @@ public class LoginPage extends Page {
 
     @Override
     public LoginPage ensureWeAreOnPage() {
-
         waitForUrl(getRelativeUrl());
-        Wait.waitForJavascriptRecalculation();
-        Wait.waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
+        waitForPageLoaded();
         $(username).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(password).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(loginButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -7,6 +8,10 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class OrderDetailsPage extends Page {
@@ -59,9 +64,13 @@ public class OrderDetailsPage extends Page {
     private WebElement cancelOrderNoteTextArea;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected OrderDetailsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
+        waitForPageLoaded();
+        waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        $(showButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

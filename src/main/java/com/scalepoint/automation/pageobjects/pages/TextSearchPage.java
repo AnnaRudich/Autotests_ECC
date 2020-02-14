@@ -139,8 +139,11 @@ public class TextSearchPage extends Page {
     @Override
     public TextSearchPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForDisplayed(By.id("categoryLegend"));
-        Wait.waitForAjaxCompleted();
+        waitForAjaxCompleted();
+        waitForPageLoaded();
+        waitForJavascriptRecalculation();
+        $(By.id("categoryLegend")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+
         return this;
     }
 

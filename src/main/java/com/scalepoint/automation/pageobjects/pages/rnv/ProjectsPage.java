@@ -16,6 +16,7 @@ import org.testng.Assert;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -32,6 +33,8 @@ public class ProjectsPage extends Page {
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
+        waitForPageLoaded();
+        waitForJavascriptRecalculation();
         return this;
     }
 

@@ -1,12 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.testng.Assert.assertTrue;
 
 public class AddShopDialog extends BaseDialog {
@@ -49,8 +51,10 @@ public class AddShopDialog extends BaseDialog {
     private WebElement editableShopDialog;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(nameLabel);
+    protected AddShopDialog ensureWeAreAt() {
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
+        $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

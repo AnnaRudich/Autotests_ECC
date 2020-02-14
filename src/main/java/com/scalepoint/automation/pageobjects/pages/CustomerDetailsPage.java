@@ -60,11 +60,14 @@ public class CustomerDetailsPage extends BaseClaimPage {
     @Override
     public CustomerDetailsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), getAlternativeUrl());
+        waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+        waitForPageLoaded();
         if (driver.getCurrentUrl().contains(getRelativeUrl())) {
-            waitForVisible(reopenClaim);
-            waitForVisible(cancelClaimButton);
+            $(reopenClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+            $(cancelClaimButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } else {
-            waitForVisible(claimNumber);
+            $(claimNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
         return this;
     }

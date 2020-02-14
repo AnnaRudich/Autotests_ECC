@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
@@ -11,7 +12,9 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 public class EditCategoryMappingsDialog extends BaseDialog {
 
@@ -26,7 +29,9 @@ public class EditCategoryMappingsDialog extends BaseDialog {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(saveMappings);
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
+        $(saveMappings).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

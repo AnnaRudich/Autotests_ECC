@@ -2,13 +2,13 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 
 public class CreateSupplierDialog extends BaseDialog {
 
@@ -34,7 +34,9 @@ public class CreateSupplierDialog extends BaseDialog {
     private WebElement createSupplierButton;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
+    protected CreateSupplierDialog ensureWeAreAt() {
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
         $(windowHeader).waitUntil(Condition.exactText("Add supplier"), TIME_OUT_IN_MILISECONDS);
         return this;
     }
