@@ -1,12 +1,9 @@
 package com.scalepoint.automation.tests.filesService;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
@@ -15,8 +12,6 @@ import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.Change;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.driver.DriverType;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -26,7 +21,6 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOPDANMARK;
-import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 
@@ -46,9 +40,16 @@ public class FilesServiceTest extends BaseTest {
                 .openAttachmentsDialog()
                 .getTreepanelAttachmentView()
                 .selectLine(lineDescriptions[0])
-                .uploadAttachment(attachment1.getAbsolutePath())
+                .uploadAttachment(attachment1)
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentHasLink(attachment1.getName(), 1))
                 .getListpanelAttachmentView()
-                .linkAttachment(attachment1.getName(), lineDescriptions[1]);
+                .linkAttachment(attachment1.getName(), lineDescriptions[1])
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentHasLink(attachment1.getName(), 1)
+                                .attachmentHasLink(attachment1.getName(), 2));
 
         eventDatabaseApi
                 .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
@@ -65,9 +66,16 @@ public class FilesServiceTest extends BaseTest {
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
-                .uploadAttachment(attachment1.getAbsolutePath())
+                .uploadAttachment(attachment1)
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentExists(attachment1.getName()))
                 .getListpanelAttachmentView()
-                .linkAttachment(attachment1.getName(), lineDescriptions[0]);
+                .linkAttachment(attachment1.getName(), lineDescriptions[0])
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentExists(attachment1.getName())
+                                .attachmentHasLink(attachment1.getName(), 1));
 
         eventDatabaseApi
                 .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
@@ -85,9 +93,15 @@ public class FilesServiceTest extends BaseTest {
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .getToolBarMenu()
                 .openAttachmentsDialog()
-                .uploadAttachment(attachment1.getAbsolutePath())
+                .uploadAttachment(attachment1)
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentExists(attachment1.getName()))
                 .getListpanelAttachmentView()
-                .deleteAttachment(attachment1.getName());
+                .deleteAttachment(attachment1.getName())
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentNotExists(attachment1.getName()));
 
         eventDatabaseApi
                 .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
@@ -106,9 +120,15 @@ public class FilesServiceTest extends BaseTest {
                 .openAttachmentsDialog()
                 .getTreepanelAttachmentView()
                 .selectLine(lineDescriptions[0])
-                .uploadAttachment(attachment1.getAbsolutePath())
+                .uploadAttachment(attachment1)
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentExists(attachment1.getName()))
                 .getListpanelAttachmentView()
-                .unlinkAttachment(attachment1.getName());
+                .unlinkAttachment(attachment1.getName())
+                .doAssert(attachmentDialog ->
+                        attachmentDialog
+                                .attachmentNotExists(attachment1.getName()));
 
         eventDatabaseApi
                 .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
@@ -167,9 +187,9 @@ public class FilesServiceTest extends BaseTest {
                 .saveItem()
                 .sendResponseToEcc();
 
-    eventDatabaseApi
-            .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(createClaimRequest,
-                    Change.Property.ATTACHMENT_IMPORTED_FROM_FNOL,1);
+        eventDatabaseApi
+                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(createClaimRequest,
+                        Change.Property.ATTACHMENT_IMPORTED_FROM_FNOL,1);
     }
 
     @DataProvider(name = "fraudAlertDataProvider")
