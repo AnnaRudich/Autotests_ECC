@@ -49,4 +49,11 @@
             <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
         </classes>
     </test>
+    <test verbose="1" name="Files max110" enabled="true" preserve-order="true" >
+        <parameter name="users"  value="110"/>
+        <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
+        <classes>
+            <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+        </classes>
+    </test>
 </suite>
