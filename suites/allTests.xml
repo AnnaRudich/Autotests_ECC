@@ -39,6 +39,12 @@
         </classes>
     </test>
 
+    <test verbose="1" name="Files Service" enabled="true" preserve-order="true" thread-count="1">
+        <classes>
+            <class name="com.scalepoint.automation.tests.filesService.FilesServiceTest" />
+        </classes>
+    </test>
+
     <test verbose="1" name="Communication Designer" enabled="true" preserve-order="true" thread-count="6">
         <classes>
             <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests" />
