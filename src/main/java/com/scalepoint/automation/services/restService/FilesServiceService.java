@@ -58,12 +58,12 @@ public class FilesServiceService extends BaseService {
                 .when()
                 .get()
                 .then()
-//                .log().all()
+                .log().all()
                 .statusCode(200)
                 .extract().response();
         LocalDateTime end = LocalDateTime.now();
         Duration duration = Duration.between(start, end);
-        logger.info(duration);
+        logger.info("Duration" + duration);
         return this;
     }
 }
