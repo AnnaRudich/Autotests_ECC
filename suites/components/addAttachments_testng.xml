@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Files Service" configfailurepolicy="continue" data-provider-thread-count="100">
     <test verbose="1" name="Files_add_attachment" enabled="true" preserve-order="true" >
-        <parameter name="users"  value="200"/>
+        <parameter name="users"  value="500"/>
         <parameter name="fileGUID"  value="FE26B59B-93FF-47DE-9661-668BB005A00D"/>
         <classes>
             <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />

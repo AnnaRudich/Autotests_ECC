@@ -45,7 +45,7 @@ public class AttachmentsService extends BaseService {
     public AttachmentsService() throws IOException {
 
         this.userId = data.getUserId();
-        this.file = new File("src\\main\\resources\\attachments\\5mb_attachment.jpg");
+        this.file = new File("src\\main\\resources\\attachments\\bw.jpg");
         this.fileName = file.getName();
         this.attachmentStream = CharStreams.toString(new InputStreamReader(new FileInputStream(file), Charset.forName(CHARSET)));
     }
