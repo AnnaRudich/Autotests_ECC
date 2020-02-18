@@ -41,7 +41,6 @@ public class FilesServiceService extends BaseService {
 
     public FilesServiceService getFile(String fileGUID) {
 
-        LocalDateTime start = LocalDateTime.now();
         this.response = given()
                 .baseUri("https://dev-ecc-01.spcph.test")
                 .basePath("/api/fs/files/{locale}/{tenant}/{fileGUID}")
@@ -61,9 +60,6 @@ public class FilesServiceService extends BaseService {
 //                .log().all()
                 .statusCode(200)
                 .extract().response();
-        LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
-        logger.info("Duration" + duration);
         return this;
     }
 }

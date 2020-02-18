@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.filesService;
 
+import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.AttachmentsService;
 import com.scalepoint.automation.services.restService.Common.BaseService;
@@ -10,19 +11,22 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.Change;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.response.Token;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.ITestContext;
+import org.testng.annotations.*;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileServicePerformanceTest extends BaseApiTest {
 
 
     private static int users;
     private static String fileGUID;
+    private CSVWriter csv;
 
     @Parameters({"users", "fileGUID"})
     @BeforeClass
@@ -30,6 +34,19 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
         this.users = Integer.valueOf(users);
         this.fileGUID = fileGUID;
+    }
+
+    @BeforeMethod
+    public void createFile(ITestContext iTestContext) throws IOException {
+        String name = iTestContext.getName();
+
+        csv = new CSVWriter(new FileWriter(new File(name.concat(".csv"))));
+    }
+
+    @AfterClass
+    public void closeFile() throws IOException {
+
+        csv.close();
     }
     @Test(dataProvider = "usersDataProvider", enabled = false)
     public void addAttachmentToClaimLevel(User user) throws IOException {
@@ -121,10 +138,17 @@ public class FileServicePerformanceTest extends BaseApiTest {
     }
 
     @Test(dataProvider = "performanceDataProvider", enabled = true)
-    public void test(String fileGUID) {
+    public void test(String fileGUID) throws IOException {
 
         Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.FILES_READ, "topdanmark_dk_integration", "YBaPu4TqRpE_aYg8r8n8g7qcbOps1gCFm3ATuBdWJCU").getToken();
-        String content = new FilesServiceService(token).getFile(fileGUID).getResponse().getBody().jsonPath().get("content");
+        LocalDateTime start = LocalDateTime.now();
+        new FilesServiceService(token)
+                .getFile(fileGUID);
+        LocalDateTime end = LocalDateTime.now();
+        long duration = Duration.between(start, end).toMillis();
+        log.info("Duration :", duration);
+
+        csv.writeNext(new String[]{String.valueOf(duration)});
     }
 
     @DataProvider(name = "performanceDataProvider", parallel = true)
