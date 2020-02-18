@@ -169,7 +169,7 @@ public class AttachmentsService extends BaseService {
                 .body(attachmentsMapPayload)
                 .post(BasePath.ATTACHMENTS + "/mapped")
                 .then()
-                .statusCode(HttpStatus.SC_OK)
+                .statusCode(HttpStatus.SC_OK);
 //                .log().all();
     }
 }
