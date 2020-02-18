@@ -48,7 +48,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
         csv.close();
     }
-    @Test(dataProvider = "usersDataProvider", enabled = false)
+    @Test(dataProvider = "usersDataProvider", enabled = true)
     public void addAttachmentToClaimLevel(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
@@ -63,9 +63,9 @@ public class FileServicePerformanceTest extends BaseApiTest {
         attachmentsService
                 .addAttachmentToClaimLevel();
 
-        eventDatabaseApi
-                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
-                        Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LEVEL,1);
+//        eventDatabaseApi
+//                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
+//                        Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LEVEL,1);
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = false)
@@ -137,7 +137,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LINE_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-    @Test(dataProvider = "performanceDataProvider", enabled = true)
+    @Test(dataProvider = "performanceDataProvider", enabled = false)
     public void test(String fileGUID) throws IOException {
 
         Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.FILES_READ, "topdanmark_dk_integration", "YBaPu4TqRpE_aYg8r8n8g7qcbOps1gCFm3ATuBdWJCU").getToken();
@@ -164,10 +164,8 @@ public class FileServicePerformanceTest extends BaseApiTest {
         return objects;
     }
 
-    @DataProvider(name = "usersDataProvider", parallel = true)
+    @DataProvider(name = "usersDataProvider", parallel = false)
     public static Object[][] usersDataProvider(Method method) {
-
-        int users = 1;
 
         Object[][] objects = new Object[users][1];
 
