@@ -99,7 +99,8 @@ public class AttachmentsService extends BaseService {
 
     private AttachmentsTree getTree(){
 
-        return given().baseUri(getEccUrl()).log().all()
+        return given().baseUri(getEccUrl())
+//                .log().all()
                 .sessionId(data.getEccSessionId())
                 .queryParam("_dc", LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond())
                 .queryParam("shnbr", userId)
@@ -107,14 +108,15 @@ public class AttachmentsService extends BaseService {
                 .get(BasePath.ATTACHMENTS.concat("/tree"))
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .log().all()
+//                .log().all()
                 .extract()
                 .as(AttachmentsTree[].class)[0];
     }
 
     private RequestSpecification getAddAttachmentRequestSpecification() throws IOException {
 
-        return given().baseUri(getEccUrl()).log().all()
+        return given().baseUri(getEccUrl())
+//                .log().all()
                 .sessionId(data.getEccSessionId())
                 .config(config()
                         .encoderConfig(encoderConfig()
@@ -153,12 +155,13 @@ public class AttachmentsService extends BaseService {
         requestSpecification
                 .post(BasePath.ATTACHMENTS)
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all();
+                .statusCode(HttpStatus.SC_OK);
+//                .log().all();
     }
     private void linkAttachment(AttachmentsMapPayload attachmentsMapPayload){
 
-        given().baseUri(getEccUrl()).log().all()
+        given().baseUri(getEccUrl())
+//                .log().all()
                 .sessionId(data.getEccSessionId())
                 .header("Content-Type", "application/json")
                 .queryParam("customer_id", userId)
@@ -167,6 +170,6 @@ public class AttachmentsService extends BaseService {
                 .post(BasePath.ATTACHMENTS + "/mapped")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .log().all();
+//                .log().all();
     }
 }
