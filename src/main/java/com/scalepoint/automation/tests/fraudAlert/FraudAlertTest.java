@@ -185,7 +185,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider",
-            description = "SelfService")
+            description = "SelfService", enabled = false)
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -352,7 +352,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider",
-            description = "SelfService")
+            description = "SelfService", enabled = false)
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -411,7 +411,7 @@ public class FraudAlertTest extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+            " drop-down for choosing reason is enabled", enabled = false)
     public void importExcelNoFraud(@UserCompany(TOPDANMARK) User user,
                                    ClaimRequest claimRequest) throws IOException {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -443,7 +443,7 @@ public class FraudAlertTest extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+            " drop-down for choosing reason is enabled", enabled = false)
     public void importExcelFraud(@UserCompany(TOPDANMARK) User user,
                                  ClaimRequest claimRequest) throws IOException {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));

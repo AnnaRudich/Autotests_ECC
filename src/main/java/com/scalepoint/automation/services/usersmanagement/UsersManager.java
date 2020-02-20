@@ -5,9 +5,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -23,24 +21,33 @@ public class UsersManager {
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
     private static User systemUser;
 
-    private static Map<String, User> usersInfo = new HashMap<>();
+    private static Map<String, Set<User>> usersInfo = new HashMap<>();
 
     public static void initManager(ExistingUsers existingUsers) {
         logger.info("Initializing UsersManager");
         existingUsers.getUsers().forEach(user -> {
             if (user.isSystem()) {
                 systemUser = user;
+                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
                 return;
             }
             if (user.isBasic()) {
                 basicUsersQueue.add(user);
+                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
             } else {
-                exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompanyCode()),
-                        new ArrayBlockingQueue<>(1, true, Collections.singleton(user)));
+
+                CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
+                if(!exceptionalUsersQueues.containsKey(key)) {
+                    exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompanyCode()),
+                            new ArrayBlockingQueue<>(6, true, Collections.singleton(user)));
+                }else{
+
+                    exceptionalUsersQueues.get(key).add(user);
+                }
+                usersInfo.put(user.getCompanyCode(), new HashSet<>(exceptionalUsersQueues.get(key)));
             }
-            usersInfo.put(user.getCompanyCode(), user);
         });
-//        printQueues();
+        printQueues();
     }
 
     public static Map<CompanyMethodArgument, User> fetchUsersWhenAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
@@ -53,26 +60,56 @@ public class UsersManager {
     }
 
     private static synchronized boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
-        String users = companyMethodArguments.entrySet().stream().map(e -> (e.getKey().companyCode + ":" + (e.getValue() != null ? e.getValue().getLogin() : "?"))).collect(Collectors.joining(", "));
+        String users = companyMethodArguments
+                .entrySet()
+                .stream()
+                .map(e -> (e.getKey().companyCode + ":" + (e.getValue() != null ? e.getValue().getLogin() : "?")))
+                .collect(Collectors.joining(", "));
+
         logger.info("Requested: {}", users);
 
-        int requestedBasicUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
+        int requestedBasicUsersCount = (int) companyMethodArguments
+                .keySet()
+                .stream()
+                .filter(companyCode -> usersInfo.get(companyCode.companyCode.name())
+                        .stream()
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new)
+                        .isBasic())
+                .count();
+
         boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
 
-        int requestedExceptionalUsersCount = (int) companyMethodArguments.keySet().stream().filter(companyCode -> !usersInfo.get(companyCode.companyCode.name()).isBasic()).count();
+        int requestedExceptionalUsersCount = (int) companyMethodArguments
+                .keySet()
+                .stream()
+                .filter(companyCode -> !usersInfo.get(companyCode.companyCode.name())
+                        .stream()
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new)
+                        .isBasic())
+                .count();
+
         long count = companyMethodArguments.keySet()
                 .stream()
                 .filter(companyMethodArgument -> {
                     CompanyCode companyCode = companyMethodArgument.companyCode;
-                    boolean notBasicUser = !usersInfo.get(companyCode.name()).isBasic();
+                    boolean notBasicUser = !usersInfo
+                            .get(companyCode.name())
+                            .stream()
+                            .findFirst()
+                            .orElseThrow(NoSuchElementException::new)
+                            .isBasic();
                     if (notBasicUser && exceptionalUsersQueues.containsKey(companyCode)) {
                         return !exceptionalUsersQueues.get(companyCode).isEmpty();
                     }
                     return notBasicUser;
                 })
                 .count();
+
         logger.info("Found exceptional users: {}", count);
-        boolean exceptionalUsersAvailable = count == requestedExceptionalUsersCount;
+
+        boolean exceptionalUsersAvailable = count <= requestedExceptionalUsersCount;
 
         logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
 
