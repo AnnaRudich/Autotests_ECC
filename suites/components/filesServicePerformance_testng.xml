@@ -1,50 +1,43 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Files Service" configfailurepolicy="continue" data-provider-thread-count="100">
-        <test verbose="1" name="Files_small" enabled="true" preserve-order="true" >
+        <test verbose="1" name="Files_sharp100" enabled="true" preserve-order="true" >
             <parameter name="users"  value="100"/>
-            <parameter name="fileGUID"  value="FE26B59B-93FF-47DE-9661-668BB005A00D"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>
         </test>
         <test verbose="1" name="Files_max50" enabled="true" preserve-order="true" >
             <parameter name="users"  value="50"/>
-            <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>
         </test>
         <test verbose="1" name="Files_max60" enabled="true" preserve-order="true" >
             <parameter name="users"  value="60"/>
-            <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>
         </test>
         <test verbose="1" name="Files_max70" enabled="true" preserve-order="true" >
             <parameter name="users"  value="70"/>
-            <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>
         </test>
         <test verbose="1" name="Files_max80" enabled="true" preserve-order="true" >
             <parameter name="users"  value="80"/>
-            <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>
         </test>
         <test verbose="1" name="Files_max90" enabled="true" preserve-order="true" >
             <parameter name="users"  value="90"/>
-            <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>
         </test>
         <test verbose="1" name="Files_max100" enabled="true" preserve-order="true" >
             <parameter name="users"  value="100"/>
-            <parameter name="fileGUID"  value="379EDA13-E080-4CB7-9D67-E115236DA2FE"/>
             <classes>
                 <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
             </classes>

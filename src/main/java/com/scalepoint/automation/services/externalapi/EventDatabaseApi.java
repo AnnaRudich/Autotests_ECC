@@ -225,12 +225,10 @@ public class EventDatabaseApi {
     }
 
     private boolean hasProperty(EventAttachmentUpdated event, Change.Property property){
-        boolean b = event.getChanges().stream()
+        return event.getChanges().stream()
                 .anyMatch(c ->
                         c.getProperty()
                                 .equals(property));
-
-        return b;
     }
 
     private boolean hasCaseNumber(EventClaimUpdated event, String caseNumber) {

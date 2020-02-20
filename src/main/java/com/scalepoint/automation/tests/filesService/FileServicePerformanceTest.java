@@ -25,21 +25,19 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
 
     private static int users;
-    private static String fileGUID;
     private CSVWriter csv;
 
-    @Parameters({"users", "fileGUID"})
+    @Parameters({"users"})
     @BeforeClass
-    public void startWireMock(String users, String fileGUID) throws IOException {
+    public void startWireMock(String users){
 
         this.users = Integer.valueOf(users);
-        this.fileGUID = fileGUID;
     }
 
     @BeforeMethod
     public void createFile(ITestContext iTestContext) throws IOException {
-        String name = iTestContext.getName();
 
+        String name = iTestContext.getName();
         csv = new CSVWriter(new FileWriter(new File(name.concat(".csv"))));
     }
 
@@ -63,9 +61,9 @@ public class FileServicePerformanceTest extends BaseApiTest {
         attachmentsService
                 .addAttachmentToClaimLevel();
 
-//        eventDatabaseApi
-//                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
-//                        Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LEVEL,1);
+        eventDatabaseApi
+                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
+                        Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LEVEL,1);
     }
 
     @Test(dataProvider = "usersDataProvider", enabled = false)
@@ -88,57 +86,8 @@ public class FileServicePerformanceTest extends BaseApiTest {
                         Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LINE_LEVEL,1);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false)
-    public void linkAttachmentFromClaimLevel(User user) throws IOException {
-
-        ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
-
-        AttachmentsService attachmentsService = BaseService
-                .loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem(), TestData.getInsertSettlementItem())
-                .toAttachments();
-
-        eventDatabaseApi
-                .assertNumberOfClaimLineChangedEventsThatWasCreatedForClaim(claimRequest, 2);
-
-        attachmentsService
-                .addAttachmentToClaimLevel();
-
-        eventDatabaseApi
-                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
-                        Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LEVEL,1);
-
-        attachmentsService
-                .linkAttachmentToClaimLineLevel(0);
-
-        eventDatabaseApi
-                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
-                        Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
-    }
-
-    @Test(dataProvider = "usersDataProvider", enabled = false)
-    public void linkAttachmentFromClaimLineLevel(User user) throws IOException {
-
-        ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
-
-        AttachmentsService attachmentsService = BaseService
-                .loginAndOpenClaimWithItems(user, claimRequest, TestData.getInsertSettlementItem(), TestData.getInsertSettlementItem())
-                .toAttachments()
-                .addAttachmentToClaimLineLevel(0);
-
-        eventDatabaseApi
-                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
-                        Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LINE_LEVEL,1);
-
-        attachmentsService
-                .linkAttachmentToClaimLineLevel(1,0);
-
-        eventDatabaseApi
-                .assertNumberOfAttachmentsUpdatedEventsThatWasCreatedForClaim(claimRequest,
-                        Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LINE_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
-    }
-
     @Test(dataProvider = "performanceDataProvider", enabled = true)
-    public void test(String fileGUID) throws IOException {
+    public void performanceTest(String fileGUID) {
 
         Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.FILES_READ, "topdanmark_dk_integration", "YBaPu4TqRpE_aYg8r8n8g7qcbOps1gCFm3ATuBdWJCU").getToken();
         LocalDateTime start = LocalDateTime.now();
@@ -164,7 +113,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
         return objects;
     }
 
-    @DataProvider(name = "usersDataProvider", parallel = false)
+    @DataProvider(name = "usersDataProvider", parallel = true)
     public static Object[][] usersDataProvider(Method method) {
 
         Object[][] objects = new Object[users][1];

@@ -82,8 +82,7 @@ public class UnifiedIntegrationService{
 
         token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.CASE_INTEGRATION).getToken();
 
-        log.info(Configuration.getEnvironmentUrl());
-        String itemizationCaseReference = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
+        return given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
                 .pathParam("locale", locale)
@@ -94,12 +93,15 @@ public class UnifiedIntegrationService{
                 .then().log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response().getBody().jsonPath().get("token");
-
-        return itemizationCaseReference;
     }
 
     public String createClaimFNOL(ClaimRequest claimRequest){
-        return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
+
+        return new CreateClaimService(token)
+                .addClaim(claimRequest)
+                .getResponse()
+                .jsonPath()
+                .get("token");
     }
 
     public Duration getDuration(){
