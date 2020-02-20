@@ -38,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FraudAlertTest extends BaseTest {
 
     private static final String SONY_HDR_CX450 = "Sony HDR-CX450";
+    private static final String IPHONE = "iPhone";
 
     static final String TENANT = "topdanmark";
     static final String COUNTRY = "dk";
@@ -185,13 +186,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider",
-            description = "SelfService", enabled = false)
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+            description = "SelfService")
     public void selfServiceAddNoFraud(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -200,22 +195,15 @@ public class FraudAlertTest extends BaseTest {
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-                .findSelfServiceLinkAndOpenIt()
+                .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
-                .getSelfServiceGrid()
-                .getRows()
-                .get(1)
-                .addDescription("test")
-                .selectRandomCategory()
-                .selectRandomAcquired()
-                .selectRandomPurchaseDate()
-                .addPurchasePrice("1500")
-                .addNewPrice("2500")
-                .addCustomerDemandPrice("2000")
-                .uploadDocumentation(false)
-                .selfServiceGrid()
-                .selfServicePage()
-                .selectSubmitOption();
+                .addDescription(IPHONE)
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .selectAge("2")
+                .addDocumentation()
+                .saveItem()
+                .sendResponseToEcc();
 
         List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
@@ -229,9 +217,9 @@ public class FraudAlertTest extends BaseTest {
                 .getItems()
                 .get(0);
 
-        assertThat(item.getValuationByType("PURCHASE_PRICE").getPrice()).isEqualTo(1500.0);
-        assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(2000.0);
-        assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2500.0);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(5097.0);
+        assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(50.0);
+        assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(500.0);
 
         new EventApiService().sendFraudStatus(events.get(0), "NOT_FRAUDULENT");
         databaseApi.waitForFraudStatusChange(2, claimRequest.getCaseNumber());
@@ -352,13 +340,7 @@ public class FraudAlertTest extends BaseTest {
     }
 
     @Test(dataProvider = "fraudAlertDataProvider",
-            description = "SelfService", enabled = false)
-    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
-    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+            description = "SelfService")
     public void selfServiceAddFraud(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -367,22 +349,15 @@ public class FraudAlertTest extends BaseTest {
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-                .findSelfServiceLinkAndOpenIt()
+                .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
-                .getSelfServiceGrid()
-                .getRows()
-                .get(1)
-                .addDescription("test")
-                .selectRandomCategory()
-                .selectRandomAcquired()
-                .selectRandomPurchaseDate()
-                .addPurchasePrice("1500")
-                .addNewPrice("2500")
-                .addCustomerDemandPrice("2000")
-                .uploadDocumentation(false)
-                .selfServiceGrid()
-                .selfServicePage()
-                .selectSubmitOption();
+                .addDescription(IPHONE)
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .selectAge("2")
+                .addDocumentation()
+                .saveItem()
+                .sendResponseToEcc();
 
         List<ClaimLineChanged> events = fraudAlertStubs
                 .waitForClaimUpdatedEvents(token, 1);
@@ -396,9 +371,9 @@ public class FraudAlertTest extends BaseTest {
                 .getItems()
                 .get(0);
 
-        assertThat(item.getValuationByType("PURCHASE_PRICE").getPrice()).isEqualTo(1500.0);
-        assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(2000.0);
-        assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(2500.0);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(5097.0);
+        assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(50.0);
+        assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(500.0);
 
         new EventApiService().sendFraudStatus(events.get(0), "FRAUDULENT");
         databaseApi.waitForFraudStatusChange(1, claimRequest.getCaseNumber());
@@ -408,10 +383,8 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled", enabled = false)
+            " drop-down for choosing reason is enabled")
     public void importExcelNoFraud(@UserCompany(TOPDANMARK) User user,
                                    ClaimRequest claimRequest) throws IOException {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -440,10 +413,8 @@ public class FraudAlertTest extends BaseTest {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(dataProvider = "fraudAlertDataProvider", description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled", enabled = false)
+            " drop-down for choosing reason is enabled")
     public void importExcelFraud(@UserCompany(TOPDANMARK) User user,
                                  ClaimRequest claimRequest) throws IOException {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
