@@ -217,7 +217,6 @@ public class FraudAlertTest extends BaseTest {
                 .getItems()
                 .get(0);
 
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(5097.0);
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(50.0);
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(500.0);
 
@@ -370,8 +369,7 @@ public class FraudAlertTest extends BaseTest {
                 .getContent()
                 .getItems()
                 .get(0);
-
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(5097.0);
+        
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(50.0);
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(500.0);
 
