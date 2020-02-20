@@ -17,6 +17,8 @@
                 <exclude name="com.scalepoint.automation.tests.sidQUnit"/>
                 <exclude name="com.scalepoint.automation.tests.communicationDesigner"/>
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance"/>
+                <exclude name="com.scalepoint.automation.tests.filesService" />
+                <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance" />
             </package>
         </packages>
 
