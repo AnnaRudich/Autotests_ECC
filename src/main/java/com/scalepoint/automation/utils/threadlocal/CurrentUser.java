@@ -47,5 +47,6 @@ public class CurrentUser {
         if (claimIdHolder.get() != null) {
             claimIdHolder.remove();
         }
+        logger.info("CurrentUser cleaned");
     }
 }
