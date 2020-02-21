@@ -109,7 +109,7 @@ public class UsersManager {
 
         logger.info("Found exceptional users: {}", count);
 
-        boolean exceptionalUsersAvailable = count <= requestedExceptionalUsersCount;
+        boolean exceptionalUsersAvailable = count == requestedExceptionalUsersCount;
 
         logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
 
