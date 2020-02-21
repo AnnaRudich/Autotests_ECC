@@ -4,14 +4,12 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.EventApiService;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
@@ -369,7 +367,7 @@ public class FraudAlertTest extends BaseTest {
                 .getContent()
                 .getItems()
                 .get(0);
-        
+
         assertThat(item.getValuationByType("CUSTOMER_DEMAND").getPrice()).isEqualTo(50.0);
         assertThat(item.getValuationByType("NEW_PRICE").getPrice()).isEqualTo(500.0);
 

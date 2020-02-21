@@ -24,7 +24,7 @@ public class TestDataActions {
         Class<?>[] parameterTypes = method.getParameterTypes();
         List<Object> instances = new ArrayList<>(parameterTypes.length);
         try {
-            Map<UsersManager.CompanyMethodArgument, User> requestedUsers = UsersManager.fetchUsersWhenAvailable(TESTextractAllCompanyCodesRequested(method));
+            Map<UsersManager.CompanyMethodArgument, User> requestedUsers = UsersManager.fetchUsersWhenAvailable(extractAllCompanyCodesRequested(method));
             Map<Integer, User> indexToUser = requestedUsers.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getIndex(), Map.Entry::getValue));
             for (int i = 0; i < parameterTypes.length; i++) {
                 Class<?> parameterType = parameterTypes[i];
@@ -74,34 +74,6 @@ public class TestDataActions {
     private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {
         Map<UsersManager.CompanyMethodArgument, User> companyCodes = new HashMap<>();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        for (int i = 0; i < parameterTypes.length; i++) {
-            Class<?> parameterType = parameterTypes[i];
-            if (parameterType.equals(User.class)) {
-                CompanyCode companyCode = CompanyCode.FUTURE50;
-                Annotation[] annotations = method.getParameterAnnotations()[i];
-                if (annotations.length > 0) {
-                    Annotation annotation = annotations[0];
-                    if (annotation.annotationType().equals(UserCompany.class)) {
-                        companyCode = ((UserCompany) annotation).value();
-                    }
-                }
-                companyCodes.put(UsersManager.CompanyMethodArgument.create(i, companyCode), null);
-            }
-        }
-        return companyCodes;
-    }
-
-    private static Map<UsersManager.CompanyMethodArgument, User> TESTextractAllCompanyCodesRequested(Method method) {
-        Map<UsersManager.CompanyMethodArgument, User> companyCodes = new HashMap<>();
-        Class<?>[] parameterTypes = method.getParameterTypes();
-
-//        Arrays.stream(method.getParameterTypes())
-//                .parallel()
-//                .filter(parameterType -> parameterType.equals(User.class))
-//                .
-
-
-
         for (int i = 0; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];
             if (parameterType.equals(User.class)) {
