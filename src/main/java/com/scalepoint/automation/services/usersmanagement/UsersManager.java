@@ -195,6 +195,7 @@ public class UsersManager {
         } else {
             exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
         }
+        logger.info("User: {} released", user.getLogin());
     }
 
     private static void printQueues() {

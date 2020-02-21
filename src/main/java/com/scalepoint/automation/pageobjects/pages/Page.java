@@ -192,7 +192,9 @@ public abstract class Page implements Actions {
         }
 
         public static void cleanUp() {
+            innerLogger.info("PageCache clean up");
             holder.remove();
+            innerLogger.info("PageCache cleaned");
         }
 
         static void setSavePointUrl(String url) {
