@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
@@ -49,9 +48,7 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
         waitForPageLoaded();
-        waitForAjaxCompleted();
         waitForJavascriptRecalculation();
-        $(internalNote).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

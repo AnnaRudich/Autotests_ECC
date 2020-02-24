@@ -1,8 +1,10 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.utils.Wait;
+import com.codeborne.selenide.Condition;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$;
 
 /**
  * @author : igu
@@ -14,7 +16,7 @@ public class RequiredValuationIsNeededDialog extends BaseDialog {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(dialog);
+        $(dialog).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

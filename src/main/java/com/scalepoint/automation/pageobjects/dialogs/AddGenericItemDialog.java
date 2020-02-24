@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxColumn;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -27,8 +28,8 @@ public class AddGenericItemDialog extends BaseDialog {
 
     @Override
     public AddGenericItemDialog ensureWeAreAt() {
-        waitForVisible(category);
-        waitForVisible(ok);
+        $(category).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         waitForAjaxCompleted();
         return this;
     }

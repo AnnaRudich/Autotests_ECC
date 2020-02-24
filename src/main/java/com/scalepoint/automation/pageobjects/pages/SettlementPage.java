@@ -101,13 +101,11 @@ public class SettlementPage extends BaseClaimPage {
     public SettlementPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForJavascriptRecalculation();
-        waitForAjaxCompleted();
         try{
             Wait.waitForAjaxCompleted();
         }catch (TimeoutException e){
             logger.warn("waitForAjaxCompleted Timeout");
         }
-
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }

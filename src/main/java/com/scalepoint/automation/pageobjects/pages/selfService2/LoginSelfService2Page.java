@@ -9,7 +9,6 @@ import org.openqa.selenium.support.FindBy;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +28,6 @@ public class LoginSelfService2Page extends Page {
     @Override
     public LoginSelfService2Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompleted();
         waitForPageLoaded();
         waitForJavascriptRecalculation();
         $(login).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
