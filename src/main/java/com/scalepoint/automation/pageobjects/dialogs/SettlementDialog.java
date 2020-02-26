@@ -552,7 +552,6 @@ public class SettlementDialog extends BaseDialog {
                 logger.error(e.getMessage());
                 clickAndWait(buttonBy, button);
             }
-            Wait.waitForAjaxCompleted();
             Wait.waitForJavascriptRecalculation();
         } catch (UnhandledAlertException ignored) {
         }

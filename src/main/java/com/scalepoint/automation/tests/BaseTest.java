@@ -116,6 +116,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         driver.manage().window().maximize();
 
         Configuration.savePageSource = false;
+
+        log.info("Initialization completed for : {}", method.getName());
     }
 
     @AfterMethod
@@ -132,6 +134,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
         ThreadContext.clearMap();
+        log.info("Clean up completed after: {} ", method.getName());
     }
 
     @DataProvider(name = "testDataProvider")
