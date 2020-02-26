@@ -9,7 +9,6 @@ import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -19,7 +18,6 @@ import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Item;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

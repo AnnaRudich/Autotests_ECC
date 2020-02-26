@@ -4,7 +4,6 @@ import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.CaseClaimLineChanged;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.CaseFraudStatus;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.FraudStatus;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
