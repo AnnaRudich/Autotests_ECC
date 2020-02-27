@@ -59,7 +59,7 @@ public class AuthenticationApi {
         List<NameValuePair> params = ParamsBuilder.create().
                 add("j_username", user.getLogin()).
                 add("j_password", user.getPassword()).
-                add("successurl", "").get();
+                add("redirectToken", "").get();
 
         try {
             SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
@@ -78,7 +78,7 @@ public class AuthenticationApi {
 
             String successUrl = loginResponse.getHeaders("Location")[0].getValue();
             log.info("Redirected to {} Auth: {} - {}", successUrl, user.getLogin(), user.getPassword());
-            if (!successUrl.contains("?successurl=")) {
+            if (!successUrl.contains("?redirectToken=")) {
                 throw new IllegalStateException("Bad URL: " + successUrl);
             }
 
