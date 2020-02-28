@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.scalepoint.automation.pageobjects.dialogs.AttachmentDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.UpdateCategoriesDialog;
 import com.scalepoint.automation.pageobjects.pages.ClaimLineNotesPage;
@@ -60,7 +61,7 @@ public class ToolBarMenu extends Module {
 
     @FindBy(xpath = "//span[contains(@style, 'updateCategory')]/ancestor::a")
     private Button updateCategory;
-    
+
 
     public TextSearchPage toProductMatchPage() {
         productMatch.click();
@@ -93,6 +94,11 @@ public class ToolBarMenu extends Module {
     public ToolBarMenu openUpdateCategoriesDialog() {
         updateCategory.click();
         return this;
+    }
+
+    public AttachmentDialog openAttachmentsDialog(){
+        attachments.click();
+        return BaseDialog.at(AttachmentDialog.class);
     }
 
     public ClaimLineNotesPage toClaimLineNotesPage() {

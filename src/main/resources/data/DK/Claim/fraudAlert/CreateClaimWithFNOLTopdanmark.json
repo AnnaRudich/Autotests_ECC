@@ -1,0 +1,41 @@
+{
+  "tenant": "topdanmark",
+  "company": "topdanmark",
+  "country": "dk",
+  "caseType": "contentClaim",
+  "itemizationCaseReference": null,
+  "externalReference": null,
+  "allowAutoClose": false,
+  "accidentDate": null,
+  "policy": {
+    "number": null
+  },
+  "customer": {
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "email": "john.doe@scalepoint.com",
+    "mobile": "88 81 80 00",
+    "phone": "12 12 12 12",
+    "address": {
+      "street1": "Ingemandsvej 27",
+      "postalCode": "2000",
+      "city": "Frederiksberg",
+      "personalTaxId":"1312790528"
+    },
+    "personalTaxId":"0812750127",
+    "paymentDetails":[{
+      "type": "iban",
+      "iban": "DK5000400440116243"
+    }]
+  },
+  "checkForFraud": "true",
+  "extraModifiers": [
+    {
+      "type": "postItemizationCompletedUrl",
+      "value": "http://www.abcinsurance.com/thankyou.aspx?userid=DPMWI29us9IcUvGb"
+    },
+    {
+      "type": "replyToCaseEmail",
+      "value": "bna@scalepoint.com"
+    }]
+}

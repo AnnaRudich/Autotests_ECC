@@ -4,7 +4,6 @@ import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.CaseClaimLineChanged;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.CaseFraudStatus;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.FraudStatus;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
@@ -54,7 +52,7 @@ public class EventApiService{
         caseFraudStatus.setToken(caseClaimLineChanged.getToken());
         caseFraudStatus.setUuid(caseClaimLineChanged.getToken().split("\\.")[1]);
 
-        FraudStatus fraudStatus= new FraudStatus();
+        com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.FraudStatus fraudStatus= new com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.FraudStatus();
         fraudStatus.setEventId(claimLineChanged.getEventId());
         fraudStatus.setEventType("fraud_status");
         fraudStatus.setPayloadVersion("1.0.0");
@@ -72,5 +70,21 @@ public class EventApiService{
                 .post("/v1/{country}/external/{tenant}/send")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED);
+    }
+
+    public enum FraudStatus {
+
+        NOT_FRAUDULENT(2),
+        FRAUDULENT(1);
+
+        private int status;
+
+        FraudStatus(int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
     }
 }

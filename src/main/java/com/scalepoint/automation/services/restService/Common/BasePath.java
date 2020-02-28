@@ -29,4 +29,5 @@ public interface BasePath {
     String MATCH = "/{userId}/rest/lossImport/match";
     String SELF_SERVICE_LOSS_ITEMS = "/self-service/dk/lossItems/";
     String SELF_SERVICE_SUBMITTED = "/self-service/dk/submitted";
+    String ATTACHMENTS = "/{userId}/rest/settlement/attachments";
 }

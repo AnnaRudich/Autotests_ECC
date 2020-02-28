@@ -52,7 +52,8 @@ public class OauthTestAccountsApi {
         AUDIT_REPORT_CREATE("audit-report:create"),
         EVENTS_INTERNAL("events-internal"),
         EVENTS("events"),
-        PLATFORM_CASE_READ("platform-case:read");
+        PLATFORM_CASE_READ("platform-case:read"),
+        FILES_READ("files:read");
 
         private String scope;
 

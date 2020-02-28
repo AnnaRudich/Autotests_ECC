@@ -17,6 +17,8 @@
                 <exclude name="com.scalepoint.automation.tests.sidQUnit"/>
                 <exclude name="com.scalepoint.automation.tests.communicationDesigner"/>
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance"/>
+                <exclude name="com.scalepoint.automation.tests.filesService" />
+                <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance" />
             </package>
         </packages>
 
@@ -36,6 +38,12 @@
                     <exclude name="charlie_589_2_showScalepointSupplierNameEnabled"/>
                 </methods>
             </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="Files Service" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.filesService.FilesServiceTest" />
         </classes>
     </test>
 

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.request;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.HashMap;
@@ -32,9 +33,12 @@ public class ClaimRequest {
     @JsonProperty("company")
     private String company;
     @JsonProperty("country")
+    @Getter
     private String country;
     @JsonProperty("checkForFraud")
     private boolean checkForFraud;
+    @JsonProperty("integrationOptions")
+    private IntegrationOptions integrationOptions;
     @JsonProperty("language")
     private String language;
     @JsonProperty("caseType")
@@ -88,14 +92,14 @@ public class ClaimRequest {
         return this;
     }
 
-    @JsonProperty("country")
-    public String getCountry() {
-        return country;
+    @JsonProperty("integrationOptions")
+    public IntegrationOptions getIntegrationOptions() {
+        return integrationOptions;
     }
 
-    @JsonProperty("country")
-    public void setCountry(String country) {
-        this.country = country;
+    @JsonProperty("integrationOptions")
+    public void setIntegrationOptions(IntegrationOptions integrationOptions) {
+        this.integrationOptions = integrationOptions;
     }
 
     public ClaimRequest withCountry(String country) {
