@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
@@ -160,6 +161,11 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi) {
         compWthMailButton.click();
+
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
