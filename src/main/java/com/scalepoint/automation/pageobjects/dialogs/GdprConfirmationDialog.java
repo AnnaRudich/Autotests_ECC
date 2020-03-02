@@ -38,4 +38,8 @@ public class GdprConfirmationDialog extends BaseDialog {
     public void confirmUpdateOnBaseInfo(){
         $(By.xpath("//span[text() = 'Gem']/following-sibling::span")).click();
     }
+
+    public void confirmUpdateOnRequestSS(){
+        $(By.xpath("//span[text() = 'Gem']")).click();
+    }
 }
