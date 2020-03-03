@@ -172,12 +172,20 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         return at(MyPage.class);
     }
 
-    public MyPage completeExternally(Claim claim) {
+    public MyPage completeExternally(Claim claim, DatabaseApi databaseApi) {
         compExternallyButton.click();
-        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
+        databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
     }
 
@@ -193,12 +201,20 @@ public class CompleteClaimPage extends Page {
 
     public MyPage saveClaim() {
         saveClaim.click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         return at(MyPage.class);
     }
 
     public ReplacementDialog openReplacementWizard() {
         Wait.waitForAjaxCompleted();
         replace.click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         return BaseDialog.at(ReplacementDialog.class);
     }
 
