@@ -18,6 +18,7 @@ SET NOCOUNT ON
 DECLARE @passwordType CHAR(1) = 'C'
 DECLARE @USERTYPE_ADMIN BIGINT = 4
 DECLARE @USERROLE_ITMANAGER BIGINT = 1
+DECLARE @USER_AND_ROLES_ACCESS BIGINT = 12
 DECLARE @firstname NVARCHAR(256) = 'FirstName'
 DECLARE @lastname NVARCHAR(256) = 'LastName'
 DECLARE @enableDND bit = 0
@@ -34,6 +35,7 @@ DECLARE @hashType VARCHAR(10) = 'SHA1'
   BEGIN
     IF NOT EXISTS(SELECT 1 FROM [UserRoleMapping] WHERE UserId = @userId)
       INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USERROLE_ITMANAGER)
+      INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USER_AND_ROLES_ACCESS)
     RETURN
   END
 
@@ -55,6 +57,7 @@ DECLARE @hashType VARCHAR(10) = 'SHA1'
 
   IF (@userrole&@USERTYPE_ADMIN != 0)
 	  INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USERROLE_ITMANAGER)
+	  INSERT INTO UserRoleMapping (UserId, RoleId) VALUES (@userId, @USER_AND_ROLES_ACCESS)
 
 	PRINT 'User was successfully created with id = ' + CAST(@userId AS VARCHAR)
 
