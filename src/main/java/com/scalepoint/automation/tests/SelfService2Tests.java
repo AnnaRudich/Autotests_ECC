@@ -62,7 +62,7 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemsListSizeIs(1))
 
                 .startEditItem()
-                .selectAcquired(translations.getAcquired().getAcquiredNew())
+//                .selectAcquired(translations.getAcquired().getAcquiredNew())
                 .finishEditItem()
 
                 .deleteItem()

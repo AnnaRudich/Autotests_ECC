@@ -16,7 +16,6 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -294,6 +293,7 @@ public class ClaimTests extends BaseTest {
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)
+                .addNewPrice(Constants.PRICE_500)
                 .selectCategory(claimItem.getCategoryMobilePhones())
                 .saveItem()
                 .sendResponseToEcc();
