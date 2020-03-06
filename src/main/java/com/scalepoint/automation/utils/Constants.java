@@ -26,6 +26,7 @@ public class Constants {
     public static final int AGE_YEAR = 1;
 
     public static final Integer DEPRECIATION_10 = 10;
+    public static final Integer DEPRECIATION_5 = 5;
     public static final Integer VOUCHER_DISCOUNT_10 = 10;
     public static final int WAIT_UNTIL_MS = 6000;
 
