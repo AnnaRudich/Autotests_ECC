@@ -3,12 +3,12 @@ package com.scalepoint.automation.tests.eccCwaIntegration;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.shared.CwaTaskLog;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.shared.CwaTaskLog;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.ExtraModifier;
@@ -54,6 +54,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
                 .addDescription(claimItem.getSetDialogTextMatch())
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)
+                .addNewPrice(Constants.PRICE_100)
                 .saveItem()
                 .sendResponseToEcc();
 

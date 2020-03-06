@@ -62,7 +62,7 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemsListSizeIs(1))
 
                 .startEditItem()
-                .selectAcquired(translations.getAcquired().getAcquiredNew())
+//                .selectAcquired(translations.getAcquired().getAcquiredNew())
                 .finishEditItem()
 
                 .deleteItem()
@@ -141,8 +141,9 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE, enabled = false)
+    @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4975")
     @Test(dataProvider = "testDataProvider",
-            description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService")
+            description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService", enabled = false)
     public void submitRepairLine(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()

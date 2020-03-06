@@ -217,7 +217,7 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
           ,[ftMaxZipCodeDistance]
           ,[ftfunctionflags4]
           ,@textId
-          ,[ftSelfServiceFlags]
+          ,[ftSelfServiceFlags] | power(2,17)
           ,[PseudoCatModelId]
           ,[ftPwdExpDays]
           ,[ftMaxNotificationDays]
