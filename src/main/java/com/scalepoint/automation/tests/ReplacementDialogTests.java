@@ -34,7 +34,11 @@ public class ReplacementDialogTests extends BaseTest {
                             .withCategory(item.getCategoryBabyItems())
                             .withVoucher(item.getExistingVoucher_10());
                 });
-        new SettlementDialog().closeSidWithOk().toCompleteClaimPage().fillClaimForm(claim)
+
+        new SettlementDialog()
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
                 .openReplacementWizard()
                 .editVoucherFaceValue(newVoucherFaceValue)
 
@@ -56,7 +60,9 @@ public class ReplacementDialogTests extends BaseTest {
                         .withCategory(claimItem.getCategoryOther()))
                 .setValuation(NEW_PRICE)
                 .closeSidWithOk();
-        new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
+        new SettlementPage()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
                 .openReplacementWizard()
 
                 .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);

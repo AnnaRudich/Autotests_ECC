@@ -11,9 +11,9 @@ import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-557")
@@ -92,6 +92,7 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Click View voucher details
      * THEN: Brands and Tags contain correct info (entered in SM Admin)
      */
+
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify exclusive voucher")
     public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserCompany(CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         checkBrandsAndTags(user, claim, claimItem, voucher);
@@ -105,7 +106,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(assignedCategory)
-                .setDepreciation(Constants.DEPRECIATION_10)
+                .setDepreciation(Constants.DEPRECIATION_5)
                 .fillVoucher(voucher.getVoucherGeneratedName())
                 .openVoucherValuationCard()
                 .doAssert(editVoucherValuation -> {

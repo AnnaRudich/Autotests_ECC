@@ -139,6 +139,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)
+                .addNewPrice((double)3000)
                 .selectCategory(claimItem.getCategoryMobilePhones())
                 .saveItem()
                 .saveResponse()

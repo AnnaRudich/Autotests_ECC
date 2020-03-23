@@ -3,6 +3,7 @@ package com.scalepoint.automation.utils.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
@@ -23,6 +24,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 @SuppressWarnings("unchecked")
@@ -112,6 +114,28 @@ public class TestData {
 
     public static ClaimRequest getClaimRequestFraudAlert() {
         return (ClaimRequest) getData(Data.FRAUD_ALERT_CLAIM);
+    }
+
+    public static ClaimRequest getClaimRequestItemizationCaseTopdanmarkFNOL() {
+        ClaimRequest claimRequest = getData(Data.TOPDANMARK_FNOL_ITEMIZATION_CASE);
+        claimRequest.setCaseNumber(UUID.randomUUID().toString());
+        Policy policy = new Policy();
+        policy.setNumber("dk".concat(Integer.toString(RandomUtils.randomInt())));
+        claimRequest.setPolicy(policy);
+        claimRequest.setExternalReference(UUID.randomUUID().toString());
+
+        return claimRequest;
+    }
+
+    public static ClaimRequest getClaimRequestCreateClaimTopdanmarkFNOL() {
+        ClaimRequest claimRequest = getData(Data.TOPDANMARK_FNOL_CREATE_CLAIM);
+        claimRequest.setCaseNumber(UUID.randomUUID().toString());
+        Policy policy = new Policy();
+        policy.setNumber("dk".concat(Integer.toString(RandomUtils.randomInt())));
+        claimRequest.setPolicy(policy);
+        claimRequest.setExternalReference(UUID.randomUUID().toString());
+
+        return claimRequest;
     }
 
     public static Assignment getAssignment() {
@@ -254,6 +278,8 @@ public class TestData {
         ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
         CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
         FRAUD_ALERT_CLAIM("Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
+        TOPDANMARK_FNOL_ITEMIZATION_CASE("Claim/fraudAlert/ClaimRequestTopadanmarkFNOL.json", ClaimRequest.class),
+        TOPDANMARK_FNOL_CREATE_CLAIM("Claim/fraudAlert/CreateClaimWithFNOLTopdanmark.json", ClaimRequest.class),
         ASSIGNMENT("Assignment.xml", Assignment.class),
         CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
         UPDATED_CLAIM_ITEM("Claim/UpdatedClaimItem.xml", UpdateSettlementItem.class),

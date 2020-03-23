@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -48,17 +49,12 @@ public class CreateSupplierDialog extends BaseDialog {
 
     public <T extends BaseDialog> T createSupplier(Class<T> dialogClass) {
         $(createSupplierButton).click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnAddSupplier();
+        }
         return at(dialogClass);
     }
-
-//    public SupplierDialog.GeneralTab createSupplier(boolean gdprCheckIsEnabled) {
-//        createSupplierButton.click();
-//        if(gdprCheckIsEnabled){
-//            BaseDialog.at(GdprConfirmationDialog.class).confirmUpdate();
-//        }
-//        return at(SupplierDialog.GeneralTab.class);
-//    }
-//
 
     public static class FormFiller {
 

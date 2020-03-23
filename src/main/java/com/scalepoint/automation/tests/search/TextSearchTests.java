@@ -13,9 +13,11 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.DUAL_KAMERA_NEJ;
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.TOUCH_SCREEN_NEJ;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 
 public class TextSearchTests extends BaseTest {
 
@@ -23,7 +25,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -68,7 +70,7 @@ public class TextSearchTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
     public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         int index = 0;
-        Attributes[] attributes = {DUAL_KAMERA_NEJ, NFC_NEJ};
+        Attributes[] attributes = {TOUCH_SCREEN_NEJ, NFC_NEJ};
         TextSearch textSearch = translations.getTextSearch();
 
         loginAndCreateClaim(user, claim)
@@ -148,7 +150,7 @@ public class TextSearchTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
     public void charlie510_checkSearchBySku(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

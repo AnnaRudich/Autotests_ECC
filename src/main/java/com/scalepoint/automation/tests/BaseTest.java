@@ -16,9 +16,11 @@ import com.scalepoint.automation.services.restService.Common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
+import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -55,10 +57,13 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
+import static com.scalepoint.automation.utils.DateUtils.ISO8601;
+import static com.scalepoint.automation.utils.DateUtils.format;
 
 @SpringBootTest(classes = Application.class)
 @TestExecutionListeners(inheritListeners = false, listeners = {
@@ -71,6 +76,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected DatabaseApi databaseApi;
+
+    @Autowired
+    protected EventDatabaseApi eventDatabaseApi;
 
     @Autowired
     protected MongoDbApi mongoDbApi;
@@ -141,6 +149,21 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return params;
     }
 
+    @DataProvider(name = "topdanmarkDataProvider")
+    public static Object[][] topdanmarkDataProvider(Method method) {
+
+        Object[][] testDataProvider = provide(method);
+
+        for (int i = 0; i < testDataProvider[0].length; i++) {
+            if (testDataProvider[0][i].getClass().equals(ClaimRequest.class)) {
+
+                testDataProvider[0][i] = TestData.getClaimRequestFraudAlert();
+            }
+        }
+
+        return testDataProvider;
+    }
+
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
         return functionalTemplatesApi.updateTemplate(user.getFtId(), returnPageClass, operations);
@@ -155,12 +178,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return redirectToSettlementPage(user);
     }
 
-    protected static void createClaim(User user, Claim claim, String policyType){
-
-        ClaimApi claimApi = new ClaimApi(user);
-        claimApi.createClaim(claim, policyType);
-    }
-
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
     }
@@ -173,6 +190,15 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
         Token token = new OauthTestAccountsApi().sendRequest().getToken();
         return new CreateClaimService(token).addClaim(claimRequest);
+    }
+
+    protected String createFNOLClaimAndGetClaimToken(ClaimRequest itemizationRequest, ClaimRequest createClaimRequest){
+        itemizationRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
+        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
+        String test = unifiedIntegrationService.createItemizationCaseFNOL(createClaimRequest.getCountry(), createClaimRequest.getTenant(), itemizationRequest);
+        createClaimRequest.setItemizationCaseReference(test);
+        createClaimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
+        return unifiedIntegrationService.createClaimFNOL(createClaimRequest);
     }
 
     protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {

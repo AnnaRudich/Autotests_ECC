@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL;
 
-
 public class CompleteClaimExternally extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
@@ -21,7 +20,7 @@ public class CompleteClaimExternally extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeExternally(claim)
+                .completeExternally(claim, databaseApi)
                 .doAssert(myPage ->
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )

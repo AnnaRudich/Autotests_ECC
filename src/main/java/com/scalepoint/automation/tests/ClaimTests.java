@@ -73,6 +73,7 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
@@ -96,7 +97,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeExternally(claim)
+                .completeExternally(claim, databaseApi)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusClosedExternally()));
     }
 
@@ -130,7 +131,6 @@ public class ClaimTests extends BaseTest {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
     }
-
     @Test(dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
@@ -304,6 +304,7 @@ public class ClaimTests extends BaseTest {
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
                 .selectPurchaseMonth(JANUARY)
+                .addNewPrice((double)3000)
                 .selectCategory(claimItem.getCategoryMobilePhones())
                 .saveItem()
                 .sendResponseToEcc();

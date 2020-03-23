@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
@@ -165,18 +166,31 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi) {
         compWthMailButton.click();
+
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
 
     public MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         return at(MyPage.class);
     }
 
-    public MyPage completeExternally(Claim claim) {
+    public MyPage completeExternally(Claim claim, DatabaseApi databaseApi) {
         compExternallyButton.click();
-        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
+        databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
     }
 
@@ -192,12 +206,20 @@ public class CompleteClaimPage extends Page {
 
     public MyPage saveClaim() {
         saveClaim.click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         return at(MyPage.class);
     }
 
     public ReplacementDialog openReplacementWizard() {
         Wait.waitForAjaxCompleted();
         replace.click();
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnBaseInfo();
+        }
         return BaseDialog.at(ReplacementDialog.class);
     }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Files Service" configfailurepolicy="continue" data-provider-thread-count="100">
+        <test verbose="1" name="Files_sharp100" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="100"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+        <test verbose="1" name="Files_max50" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="50"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+        <test verbose="1" name="Files_max60" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="60"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+        <test verbose="1" name="Files_max70" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="70"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+        <test verbose="1" name="Files_max80" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="80"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+        <test verbose="1" name="Files_max90" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="90"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+        <test verbose="1" name="Files_max100" enabled="true" preserve-order="true" >
+            <parameter name="users"  value="100"/>
+            <classes>
+                <class name="com.scalepoint.automation.tests.filesService.FileServicePerformanceTest" />
+            </classes>
+        </test>
+</suite>

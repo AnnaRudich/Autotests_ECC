@@ -200,15 +200,21 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public void selectCancelOption() {
-        clickAndWaitForDisplaying(cancelButton, By.xpath("//button[contains(@class,'icon-create')]"));
+        $(saveButton).click();
+        acceptAlert();
+        $(By.xpath("//button[contains(@class,'icon-create')]")).shouldBe(Condition.visible);
     }
 
     public UsersPage selectSaveOption() {
         try {
-            clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
+            $(saveButton).click();
+            acceptAlert();
+            $(By.xpath("//button[contains(@class,'icon-create')]")).shouldBe(Condition.visible);
         } catch (TimeoutException e) {
             logger.error(e.getMessage());
-            clickAndWaitForDisplaying(saveButton, By.xpath("//button[contains(@class,'icon-create')]"));
+            $(saveButton).click();
+            acceptAlert();
+            $(By.xpath("//button[contains(@class,'icon-create')]")).shouldBe(Condition.visible);
         }
         return at(UsersPage.class);
     }
