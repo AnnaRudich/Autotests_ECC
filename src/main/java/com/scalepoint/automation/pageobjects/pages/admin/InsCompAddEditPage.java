@@ -93,11 +93,7 @@ public class InsCompAddEditPage extends AdminBasePage {
 
     public void selectSaveOption() {
         $("#btnOk").click();
-
-        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
-        if(gdprDialog.isGdprDialogPresent()){
-            gdprDialog.confirmUpdateOnAddSupplier();
-        }
+        new GdprConfirmationDialog().confirmUpdateOnAddSupplier();
     }
 
     public InsCompaniesPage createCompany(InsuranceCompany insuranceCompany) {

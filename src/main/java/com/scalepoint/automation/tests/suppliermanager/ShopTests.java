@@ -21,7 +21,7 @@ public class ShopTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3036 It's possible to create new shop for existing supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3036_createNewShop(Shop shop) {
         createRetailShop(shop)
                 .doAssert(shopTab -> shopTab.assertNewShopExists(shop))
@@ -35,7 +35,7 @@ public class ShopTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3036 It's possible to update all new shop data for existing supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3036_updateNewShop(Shop shop, Shop updatedWithNewData) {
         createRetailShop(shop)
                 .openEditShopDialog(shop.getShopName())
@@ -54,7 +54,7 @@ public class ShopTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3036 It's possible to delete new shop for existing supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3036_deleteNewShop(Shop shop) {
         createRetailShop(shop)
                 .deleteShop(shop)

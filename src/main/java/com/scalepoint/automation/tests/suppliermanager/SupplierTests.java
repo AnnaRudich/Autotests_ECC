@@ -32,10 +32,10 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to create new supplier. Suppliers list contains new supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_createNewSupplier(User user, Supplier supplier) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()));
     }
@@ -47,11 +47,11 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         String updatedWebsite = "http://google.com";
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier1, false)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier1)
                 .saveSupplier()
                 .editSupplier(supplier1.getSupplierName())
                 .fill(editSupplierDialog -> {
@@ -89,7 +89,7 @@ public class SupplierTests extends BaseTest {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .setWebsite(webSite)
                 .uploadLogo(attachmentImage)
                 .doAssert(SupplierDialog.GeneralTab.Asserts::assertLogoPresent)
@@ -104,12 +104,12 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It is possible to add Banner data")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_bannerDataAdding(User user, Supplier supplier, AttachmentFiles attachmentFiles) {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
 
         SuppliersPage suppliersPage = loginToEccAdmin(user);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .selectBannerTab()
                 .uploadBanner(attachmentImage)
                 .doAssert(SupplierDialog.BannerTab.Asserts::assertBannerIsPresent)
@@ -127,11 +127,11 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to fill orders tab with valid values")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
-        SupplierDialog.GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
+        SupplierDialog.GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .selectOrdersTab()
                 .setOrderEmail(supplier.getSupplierEmail())
                 .setOrderMailFormat(SupplierDialog.OrderMailFormat.XML_MAIL_BODY)
@@ -164,7 +164,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for SP")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_icSupplierUnavailableForSP(@UserCompany(CompanyCode.SCALEPOINT) User spUser, User futureUser, Supplier supplier) {
         checkVisibility(futureUser, spUser, supplier, false);
     }
@@ -176,7 +176,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for another IC")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_icSupplierUnavailableForIC2(User futureUser1, User futureUser2, Supplier supplier) {
         checkVisibility(futureUser1, futureUser2, supplier, false);
     }
@@ -199,7 +199,7 @@ public class SupplierTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 Child IC supplier is available for parent IC")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3037_childICSupplierAvailableForParentIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
         checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
     }
@@ -294,7 +294,7 @@ public class SupplierTests extends BaseTest {
 
     private void checkVisibility(User userWhoCreates, User userWhoReads, Supplier supplier, boolean mustBeVisible) {
         SuppliersPage suppliersPage = loginToEccAdmin(userWhoCreates);
-        SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false)
+        SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()))
                 .logout();

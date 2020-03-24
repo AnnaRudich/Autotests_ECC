@@ -13,8 +13,8 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import org.apache.commons.lang.StringUtils;
 
 public class SharedEccAdminFlows implements Actions {
-    public static SupplierDialog.GeneralTab createSupplier(SuppliersPage suppliersPage, Supplier supplier, boolean gdprCheckIsEnabled) {
-        CreateSupplierDialog createSupplierDialog = suppliersPage.selectCreateSupplier()
+    public static SupplierDialog.GeneralTab createSupplier(SuppliersPage suppliersPage, Supplier supplier) {
+        return suppliersPage.selectCreateSupplier()
                 .fill(supplierDialog -> new CreateSupplierDialog.FormFiller(supplierDialog)
                         .withSupplierName(supplier.getSupplierName())
                         .withCvr(supplier.getSupplierCVR())
@@ -23,11 +23,8 @@ public class SharedEccAdminFlows implements Actions {
                         .withCity(supplier.getCity())
                         .withPostalCode(supplier.getPostCode())
                         .withPhone(supplier.getSupplierPhone())
-                        .withOrderEmail(supplier.getSupplierEmail()));
-        return gdprCheckIsEnabled ?
-                createSupplierDialog.createSupplier(GdprConfirmationDialog.class).confirmUpdate()
-                : createSupplierDialog.createSupplier(SupplierDialog.GeneralTab.class);
-
+                        .withOrderEmail(supplier.getSupplierEmail()))
+                .createSupplier(SupplierDialog.GeneralTab.class);
     }
 
     public static SupplierDialog.AgreementsTab createVoucherAgreement(SupplierDialog.GeneralTab supplierTab, VoucherAgreementData voucherAgreementData) {

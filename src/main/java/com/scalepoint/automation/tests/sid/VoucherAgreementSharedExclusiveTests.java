@@ -30,7 +30,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * THEN: V1 is not displayed in Voucher's list in ME
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3030 IC1 voucher is displayed in vouchers list for IC user and not displayed for SP user")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3030_exclusiveVoucherInVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User trygChildUser,
                                                        @UserCompany(CompanyCode.TRYGHOLDING) User trygParentUser,
                                                        @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
@@ -63,7 +63,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * THEN: V1 is displayed in Voucher's list in ME
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
-    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
+//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3030_sharedVoucherInVouchersListForIC(@UserCompany(CompanyCode.TRYGHOLDING) User trygUser,
                                                          @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
                                                          User futureCompanyUser,
@@ -94,7 +94,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
     private void createVoucherAgreement(User user, Supplier supplier, Voucher voucher, PseudoCategory pseudoCategory) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
-        SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier, false),
+        SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier),
                 SharedEccAdminFlows.VoucherAgreementData
                         .newBuilder(voucher, 10)
                         .mapToCategory(pseudoCategory)
