@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
@@ -92,6 +93,11 @@ public class InsCompAddEditPage extends AdminBasePage {
 
     public void selectSaveOption() {
         $("#btnOk").click();
+
+        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
+        if(gdprDialog.isGdprDialogPresent()){
+            gdprDialog.confirmUpdateOnAddSupplier();
+        }
     }
 
     public InsCompaniesPage createCompany(InsuranceCompany insuranceCompany) {
