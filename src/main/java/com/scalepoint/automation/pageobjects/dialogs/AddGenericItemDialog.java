@@ -13,17 +13,18 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 
 public class AddGenericItemDialog extends BaseDialog {
 
-    @FindBy(id = "generic-item-dialogs-category-combo")
+    @FindBy(id = "generic-item-dialog-category-combo")
     private ExtComboBox category;
 
-    @FindBy(id = "generic-item-dialogs-add-button")
+    @FindBy(id = "generic-item-dialog-add-button")
     private Button ok;
 
-    @FindBy(id = "generic-item-dialogs-close-button")
+    @FindBy(id = "generic-item-dialog-close-button")
     private Button cancel;
 
     @Override
@@ -35,10 +36,10 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {
-        $(By.id("generic-item-dialogs-category-combo-inputEl")).click();
+        $(By.id("generic-item-dialog-category-combo-inputEl")).click();
         selectCategory(categoryGroup, category);
 
-        ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(waitForDisplayed(By.id("generic-item-dialogs-grid")),
+        ExtCheckboxColumn extCheckboxColumn = new ExtCheckboxColumn(waitForDisplayed(By.id("generic-item-dialog-grid")),
                 "description", "checked", 0);
         extCheckboxColumn.enable(itemName);
         ok.click();
