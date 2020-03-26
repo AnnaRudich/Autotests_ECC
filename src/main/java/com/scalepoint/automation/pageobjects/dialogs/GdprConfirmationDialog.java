@@ -22,29 +22,7 @@ public class GdprConfirmationDialog extends BaseDialog {
         return this;
     }
 
-    public boolean isGdprDialogPresent(){
-        return $$("#messagebox-1001").size() != 0;
-    }
-
-    public SupplierDialog.GeneralTab closeDialog(){
-        $$(".x-tool-close").get(1).click();
-        return at(SupplierDialog.GeneralTab.class);
-    }
-
-    public SupplierDialog.GeneralTab confirmUpdate(){
-        $(By.xpath("//span[text() = 'Confirm']/following-sibling::span")).click();
-        return at(SupplierDialog.GeneralTab.class);
-    }
-
-    public void confirmUpdateOnBaseInfo(){
-        $(By.xpath("//span[text() = 'Gem']/following-sibling::span")).click();
-    }
-
-    public void confirmUpdateOnRequestSS(){
-        $(By.xpath("//span[text() = 'Gem']")).click();
-    }
-
-    public void confirmUpdateOnAddSupplier(){
+    public void confirm(){
         $$(".x-message-box a[role=button]").get(0).click();
     }
 }
