@@ -94,7 +94,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     public void selectSaveOption(boolean gdpr) {
         $("#btnOk").click();
         if(gdpr) {
-            new GdprConfirmationDialog().confirmUpdateOnAddSupplier();
+            new GdprConfirmationDialog().confirm();
         }
     }
 

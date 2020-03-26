@@ -88,7 +88,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     public SettlementPage send() {
         ok.click();
-        new GdprConfirmationDialog().confirmUpdateOnRequestSS();
+        new GdprConfirmationDialog().confirm();
         waitForInvisible(ok);
         return Page.at(SettlementPage.class);
     }
