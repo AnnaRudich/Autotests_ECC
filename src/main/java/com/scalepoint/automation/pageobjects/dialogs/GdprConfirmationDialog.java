@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class GdprConfirmationDialog extends BaseDialog {
-    @FindBy(css = "#messagebox-1001")
+    @FindBy(css = ".x-message-box")
     private WebElement gdprDialog;
 
     @Override
@@ -45,6 +45,6 @@ public class GdprConfirmationDialog extends BaseDialog {
     }
 
     public void confirmUpdateOnAddSupplier(){
-        $(By.xpath("//span[text() = 'Save']/following-sibling::span")).click();
+        $$(".x-message-box a[role=button]").get(0).click();
     }
 }

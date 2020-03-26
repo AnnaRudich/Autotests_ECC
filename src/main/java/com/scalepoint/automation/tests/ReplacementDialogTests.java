@@ -39,7 +39,7 @@ public class ReplacementDialogTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .editVoucherFaceValue(newVoucherFaceValue)
 
                 .doAssert(replacementDialog -> {
@@ -63,7 +63,7 @@ public class ReplacementDialogTests extends BaseTest {
         new SettlementPage()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
 
                 .doAssert(ReplacementDialog.Asserts::assertItemsListIsEmpty);
     }
@@ -79,7 +79,7 @@ public class ReplacementDialogTests extends BaseTest {
 
 
         new SettlementPage().toCompleteClaimPage().fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
 
                 .replaceItemByIndex(0)
                 .getAccessToShopForRemainingAmount()
@@ -115,7 +115,7 @@ public class ReplacementDialogTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
 
                 .doAssert(ReplacementDialog.Asserts::assertGoToShopIsNotDisplayed);
     }

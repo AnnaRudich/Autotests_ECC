@@ -8,12 +8,10 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -77,6 +75,7 @@ public class SidTests extends BaseTest {
      * WHEN user selects Voucher2
      * THAN the distance is equal to predefined value
      */
+
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
@@ -90,21 +89,21 @@ public class SidTests extends BaseTest {
                             .withVoucher(existingVoucher);
                 });
         SettlementPage settlementPage = settlementDialog.doAssert(sid -> sid.assertVoucherDropdownWithoutDistance(existingVoucher)).closeSidWithOk();
-        changePostalCodeAndReturnToSid(settlementPage, "3000", claim)
+        changePostalCodeAndReturnToSid(settlementPage, "3000", claim, true)
                 .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 203))
                 .closeSidWithOk();
 
-        changePostalCodeAndReturnToSid(settlementPage, "6000", claim)
+        changePostalCodeAndReturnToSid(settlementPage, "6000", claim, false)
                 .doAssert(sid -> sid.assertVoucherDropdownKnowsDistance(existingVoucher, 72))
                 .closeSidWithOk();
     }
 
-    private SettlementDialog changePostalCodeAndReturnToSid(SettlementPage settlementPage, String postalCode, Claim claim) {
+    private SettlementDialog changePostalCodeAndReturnToSid(SettlementPage settlementPage, String postalCode, Claim claim, boolean gdpr) {
         return settlementPage
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .enterZipCode(postalCode)
-                .saveClaim()
+                .saveClaim(gdpr)
                 .openRecentClaim()
                 .reopenClaim()
                 .findClaimLine(Constants.TEXT_LINE)

@@ -2,12 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -29,15 +24,9 @@ import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -82,7 +71,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
                 .toMailsPage()
@@ -109,7 +98,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .saveClaim()
+                .saveClaim(true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusSaved()));
     }
 
@@ -163,7 +152,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode())
-                .saveClaim()
+                .saveClaim(true)
                 .openRecentClaim()
                 .reopenClaim()
 
@@ -191,7 +180,7 @@ public class ClaimTests extends BaseTest {
         CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim();
 
         String loginToShopLink = customerDetailsPage
@@ -387,7 +376,7 @@ public class ClaimTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
@@ -412,7 +401,7 @@ public class ClaimTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .goToShop()
                 .toProductSearchPage()
                 .searchForProduct(productInfo.getModel())
