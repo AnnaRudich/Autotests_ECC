@@ -93,7 +93,7 @@ public class OrderDetailsTests extends BaseTest {
         OrderDetailsPage ordersPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .goToShop()
                 .addFirstRecommendedItemToCart()
                 .checkoutProduct()
@@ -148,7 +148,7 @@ public class OrderDetailsTests extends BaseTest {
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .goToShop()
                 .toProductSearchPage();
 
@@ -202,7 +202,7 @@ public class OrderDetailsTests extends BaseTest {
         ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .goToShop()
                 .toProductSearchPage();
 
@@ -237,7 +237,7 @@ public class OrderDetailsTests extends BaseTest {
         ShopProductSearchPage shopProductSearchPage = loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .goToShop()
                 .toProductSearchPage();
 
@@ -297,7 +297,7 @@ public class OrderDetailsTests extends BaseTest {
         OrderDetailsPage ordersPage = settlementDialog.closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .replaceAllItems()
                 .toOrdersDetailsPage()
                 .cancelItem();
@@ -333,11 +333,11 @@ public class OrderDetailsTests extends BaseTest {
         OrderDetailsPage ordersPage = settlementDialog.closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .replaceAllItems()
                 .reopenClaim()
                 .toCompleteClaimPage()
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, false)
                 .openRecentClaim()
                 .toOrdersDetailsPage();
 
@@ -378,7 +378,7 @@ public class OrderDetailsTests extends BaseTest {
         ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .goToShop()
                 .addFirstRecommendedItemToCart()
                 .toProductSearchPage();

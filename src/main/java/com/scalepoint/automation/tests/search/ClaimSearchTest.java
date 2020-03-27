@@ -99,7 +99,7 @@ public class ClaimSearchTest extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .getMainMenu()
                 .openClaimSearch()
                 .fillClaimNumber(claim.getClaimNumber())

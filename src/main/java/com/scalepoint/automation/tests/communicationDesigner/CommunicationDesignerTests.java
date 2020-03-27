@@ -39,9 +39,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerTests extends BaseTest {
@@ -90,7 +88,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -127,7 +125,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
@@ -185,13 +183,13 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
 
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_REJECTION)
@@ -221,7 +219,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -230,7 +228,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
 
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
@@ -260,7 +258,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -289,13 +287,13 @@ public class CommunicationDesignerTests extends BaseTest {
                 .toSettlementPage()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .reopenClaim();
         new SettlementSummary()
                 .editSelfRisk("2000")
                 .toCompleteClaimPage()
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
 
                 .openRecentClaim()
                 .toMailsPage()
@@ -329,7 +327,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -337,7 +335,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(true)
                 .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted)
@@ -375,7 +373,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -383,7 +381,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
@@ -425,7 +423,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .to(InsCompaniesPage.class)
                 .editCompany(user.getCompanyName())
                 .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption();
+                .selectSaveOption(false);
 
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
@@ -438,7 +436,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
