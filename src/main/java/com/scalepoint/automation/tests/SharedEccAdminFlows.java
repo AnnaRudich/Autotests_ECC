@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.Actions;
-import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;

@@ -211,7 +211,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         boolean omItemizationReminderLossItems;
         boolean omItemizationSubmitLossItems;
         boolean omItemizationSaveLossItems;
-//        boolean omSettlementNotification;
+        //        boolean omSettlementNotification;
 //        boolean omSettlementNotificationClosedExternal;
 //        boolean omSettlementPreview;
         boolean omOrderConfirmation;
