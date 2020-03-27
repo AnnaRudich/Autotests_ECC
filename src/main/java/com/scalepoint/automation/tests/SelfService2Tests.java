@@ -97,11 +97,9 @@ public class SelfService2Tests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(newPasswordToSelfService)
                 .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed)
-                .savePoint(SelfService2Page.class)
                 .logOut()
-                .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful)
-                .backToSavePoint(SelfService2Page.class)
-                .doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
+                .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
+                new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")

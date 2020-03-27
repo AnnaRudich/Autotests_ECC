@@ -51,6 +51,9 @@ public class SelfService2Page extends Page {
     @FindBy(id = "save-button")
     private WebElement save;
 
+    @FindBy(css = "#save-item-button")
+    private WebElement saveItem;
+
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
 
@@ -65,7 +68,7 @@ public class SelfService2Page extends Page {
         waitForUrl(getRelativeUrl());
         waitForJavascriptRecalculation();
         waitForPageLoaded();
-        $(save).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(saveItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 
@@ -220,7 +223,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page saveItem() {
-        $("#save-item-button").click();
+        $(saveItem).click();
         Wait.waitForSpinnerToDisappear();
         return at(SelfService2Page.class);
     }

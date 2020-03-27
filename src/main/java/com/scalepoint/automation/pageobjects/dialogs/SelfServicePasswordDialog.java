@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
@@ -7,18 +8,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
 
 public class SelfServicePasswordDialog extends BaseDialog {
-    @FindBy(css = "#new-password-dialogs-ok-button-btnIconEl")
+    @FindBy(css = "#new-password-dialog-ok-button")
     private WebElement ok;
 
-    @FindBy(css = "#new-password-dialogs-password-textfield-inputEl")
+    @FindBy(css = "#new-password-dialog-password-textfield-inputEl")
     private WebElement passwordInput;
 
     @Override
     protected SelfServicePasswordDialog ensureWeAreAt() {
-        waitForVisible(ok);
+        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 
