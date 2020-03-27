@@ -312,7 +312,6 @@ public class VoucherAgreementTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "Scalepoint SupplyManager can't open IC voucher")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_spSMCantOpenICVoucher(User futureUser,
                                               @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
                                               ClaimItem claimItem,
@@ -356,7 +355,6 @@ public class VoucherAgreementTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 Parent IC voucher is  available for child IC in Vouchers List")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_parentICVoucherAvailableChildICVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User childUser,
                                                                     @UserCompany(CompanyCode.TRYGHOLDING) User parentUser,
                                                                     ClaimItem claimItem,
@@ -380,7 +378,6 @@ public class VoucherAgreementTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to join left Shared Voucher for IC SM. Voucher gets status active")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_joinLeftSPVoucherActiveStatus(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
@@ -410,7 +407,6 @@ public class VoucherAgreementTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 SP voucher active status is Noe for IC SM if no categories are assigned to Voucher")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_inactiveSPVoucherNoCatAssigned(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
@@ -428,7 +424,6 @@ public class VoucherAgreementTests extends BaseTest {
 
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 Voucher left by IC1 is active for IC2")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_voucherLeftByIC1ActiveIC2(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser1, User futureUser2, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
@@ -478,7 +473,6 @@ public class VoucherAgreementTests extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3038_inactiveSPVoucherNotAvailableIC(@UserCompany(CompanyCode.SCALEPOINT) User scalepointUser, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(scalepointUser, supplier)
                 .withVoucherInactive(voucher.getVoucherGeneratedName(), 10)

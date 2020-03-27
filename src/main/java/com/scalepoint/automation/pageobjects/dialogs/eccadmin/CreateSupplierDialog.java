@@ -46,7 +46,8 @@ public class CreateSupplierDialog extends BaseDialog {
 
     public <T extends BaseDialog> T createSupplier(Class<T> dialogClass) {
         $(createSupplierButton).click();
-        new GdprConfirmationDialog().confirm();
+        at(GdprConfirmationDialog.class)
+                .confirm();
         return at(dialogClass);
     }
 

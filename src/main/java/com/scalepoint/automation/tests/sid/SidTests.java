@@ -223,7 +223,6 @@ public class SidTests extends BaseTest {
      * THEN: Terms and Conditions data contains correct S1 telephone number
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 Voucher's Terms and Conditions contain correct info about voucher and supplier")
-//    @FeatureToggleSetting(type = FeatureIds.GDPR_SENSITIVE_FIELDS_CHECK_ENABLED, enabled = false)
     public void ecc3025_voucherTradesTermsConditionsCorrectInfo(User user, Claim claim, Supplier supplier, Voucher voucher, ClaimItem claimItem) {
         String conditionsText = "Autotest Sample Conditions";
         int discount = 10;

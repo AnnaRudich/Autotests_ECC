@@ -60,7 +60,8 @@ public class AddShopDialog extends BaseDialog {
         chooseShopType(shopType);
         find(By.xpath(SUPPLIER_CREATE_SHOP_BTN)).click();
         if(gdpr){
-            new GdprConfirmationDialog().confirm();
+            at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         return at(SupplierDialog.ShopsTab.class);
     }

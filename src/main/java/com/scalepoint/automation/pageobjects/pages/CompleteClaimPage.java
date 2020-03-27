@@ -162,7 +162,9 @@ public class CompleteClaimPage extends Page {
     public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi, boolean gdpr) {
         compWthMailButton.click();
         if(gdpr) {
-            new GdprConfirmationDialog().confirm();
+            BaseDialog.
+                    at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
@@ -170,13 +172,17 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
-        new GdprConfirmationDialog().confirm();
+        BaseDialog.
+                at(GdprConfirmationDialog.class)
+                .confirm();
         return at(MyPage.class);
     }
 
     public MyPage completeExternally(Claim claim, DatabaseApi databaseApi) {
         compExternallyButton.click();
-        new GdprConfirmationDialog().confirm();
+        BaseDialog
+                .at(GdprConfirmationDialog.class)
+                .confirm();
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
     }
@@ -194,7 +200,9 @@ public class CompleteClaimPage extends Page {
     public MyPage saveClaim(boolean gdpr) {
         saveClaim.click();
         if(gdpr) {
-            new GdprConfirmationDialog().confirm();
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         return at(MyPage.class);
     }
@@ -203,7 +211,9 @@ public class CompleteClaimPage extends Page {
         Wait.waitForAjaxCompleted();
         replace.click();
         if(gdpr) {
-            new GdprConfirmationDialog().confirm();
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         return BaseDialog.at(ReplacementDialog.class);
     }

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -94,7 +95,9 @@ public class InsCompAddEditPage extends AdminBasePage {
     public void selectSaveOption(boolean gdpr) {
         $("#btnOk").click();
         if(gdpr) {
-            new GdprConfirmationDialog().confirm();
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
+                    .confirm();
         }
     }
 
