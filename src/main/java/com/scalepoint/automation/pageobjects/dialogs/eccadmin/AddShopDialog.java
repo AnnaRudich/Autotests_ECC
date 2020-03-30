@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.utils.data.entity.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -58,10 +59,14 @@ public class AddShopDialog extends BaseDialog {
         return this;
     }
 
-    public SupplierDialog.ShopsTab createShop(Shop shop, ShopType shopType) {
+    public SupplierDialog.ShopsTab createShop(Shop shop, ShopType shopType, boolean gdpr) {
         fillShopForm(shop);
         chooseShopType(shopType);
         find(By.xpath(SUPPLIER_CREATE_SHOP_BTN)).click();
+        if(gdpr){
+            at(GdprConfirmationDialog.class)
+                    .confirm();
+        }
         return at(SupplierDialog.ShopsTab.class);
     }
 

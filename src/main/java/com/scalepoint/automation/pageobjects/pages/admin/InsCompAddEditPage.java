@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -91,8 +93,13 @@ public class InsCompAddEditPage extends AdminBasePage {
         return "webshop/jsp/Admin/insurance_company_edit.jsp";
     }
 
-    public void selectSaveOption() {
+    public void selectSaveOption(boolean gdpr) {
         $("#btnOk").click();
+        if(gdpr) {
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
+                    .confirm();
+        }
     }
 
     public InsCompaniesPage createCompany(InsuranceCompany insuranceCompany) {
@@ -134,14 +141,14 @@ public class InsCompAddEditPage extends AdminBasePage {
 
         companyContactNumberField.sendKeys(insuranceCompany.getContactNumber());
         companyOfficeHoursField.sendKeys(insuranceCompany.getOfficeHours());
-        selectSaveOption();
+        selectSaveOption(true);
         return at(InsCompaniesPage.class);
     }
 
     public InsCompaniesPage updateNameAndSave(InsuranceCompany insuranceCompany) {
         companyNameField.clear();
         companyNameField.sendKeys(insuranceCompany.getIcName());
-        selectSaveOption();
+        selectSaveOption(false);
         return at(InsCompaniesPage.class);
     }
 
@@ -150,7 +157,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         if (option.getText().equals("Enabled")) {
             option.click();
         }
-        selectSaveOption();
+        selectSaveOption(true);
     }
 
     public void selectParentCompany(InsuranceCompany insuranceCompany) {
@@ -205,7 +212,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         boolean omItemizationReminderLossItems;
         boolean omItemizationSubmitLossItems;
         boolean omItemizationSaveLossItems;
-//        boolean omSettlementNotification;
+        //        boolean omSettlementNotification;
 //        boolean omSettlementNotificationClosedExternal;
 //        boolean omSettlementPreview;
         boolean omOrderConfirmation;

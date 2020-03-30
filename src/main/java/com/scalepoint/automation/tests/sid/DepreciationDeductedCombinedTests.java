@@ -86,7 +86,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .doAssert(page -> page.assertFaceValueTooltipIs(expectedNewPrice))
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
@@ -106,7 +106,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .reopenClaim()
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(false)
                 .doAssert(replacementDialog -> {
                     replacementDialog.assertItemPriceValueIs(expectedCashValue);
                     replacementDialog.assertVoucherFaceValueIs(expectedNewPrice);

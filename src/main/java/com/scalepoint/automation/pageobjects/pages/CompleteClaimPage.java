@@ -164,12 +164,12 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi) {
+    public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi, boolean gdpr) {
         compWthMailButton.click();
-
-        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
-        if(gdprDialog.isGdprDialogPresent()){
-            gdprDialog.confirmUpdateOnBaseInfo();
+        if(gdpr) {
+            BaseDialog.
+                    at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
@@ -177,25 +177,23 @@ public class CompleteClaimPage extends Page {
 
     public MyPage completeWithoutEmail() {
         compWithoutMailButton.click();
-        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
-        if(gdprDialog.isGdprDialogPresent()){
-            gdprDialog.confirmUpdateOnBaseInfo();
-        }
+        BaseDialog.
+                at(GdprConfirmationDialog.class)
+                .confirm();
         return at(MyPage.class);
     }
 
     public MyPage completeExternally(Claim claim, DatabaseApi databaseApi) {
         compExternallyButton.click();
-        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
-        if(gdprDialog.isGdprDialogPresent()){
-            gdprDialog.confirmUpdateOnBaseInfo();
-        }
+        BaseDialog
+                .at(GdprConfirmationDialog.class)
+                .confirm();
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
     }
 
     public ShopWelcomePage completeWithEmailAndLoginToShop(Claim claim, DatabaseApi databaseApi) {
-        return completeWithEmail(claim, databaseApi).
+        return completeWithEmail(claim, databaseApi, true).
                 openRecentClaim().
                 toMailsPage().
                 viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
@@ -204,21 +202,23 @@ public class CompleteClaimPage extends Page {
                 login();
     }
 
-    public MyPage saveClaim() {
+    public MyPage saveClaim(boolean gdpr) {
         saveClaim.click();
-        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
-        if(gdprDialog.isGdprDialogPresent()){
-            gdprDialog.confirmUpdateOnBaseInfo();
+        if(gdpr) {
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         return at(MyPage.class);
     }
 
-    public ReplacementDialog openReplacementWizard() {
+    public ReplacementDialog openReplacementWizard(boolean gdpr) {
         Wait.waitForAjaxCompleted();
         replace.click();
-        GdprConfirmationDialog gdprDialog = new GdprConfirmationDialog();
-        if(gdprDialog.isGdprDialogPresent()){
-            gdprDialog.confirmUpdateOnBaseInfo();
+        if(gdpr) {
+            BaseDialog
+                    .at(GdprConfirmationDialog.class)
+                    .confirm();
         }
         return BaseDialog.at(ReplacementDialog.class);
     }

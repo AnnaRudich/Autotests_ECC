@@ -144,7 +144,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             User user = findMethodParameter(iTestResult, User.class).get();
             Page.to(InsCompAddEditPage.class, user.getCompanyId())
                     .setCommunicationDesignerSection(CommunicationDesigner.builder().build())
-                    .selectSaveOption();
+                    .selectSaveOption(false);
         }
     }
 

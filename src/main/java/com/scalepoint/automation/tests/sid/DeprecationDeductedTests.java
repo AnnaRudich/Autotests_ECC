@@ -101,7 +101,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .doAssert(page -> page.assertFaceValueTooltipIs(expectedVoucherFaceValue))
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim, databaseApi)
+                .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
@@ -122,7 +122,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .reopenClaim()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard()
+                .openReplacementWizard(false)
                 .doAssert(replacementDialog -> {
                     replacementDialog.assertVoucherFaceValueIs(expectedVoucherFaceValue);
                     replacementDialog.assertItemPriceValueIs(expectedVoucherCashValue);
