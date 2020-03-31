@@ -4,6 +4,7 @@ import com.scalepoint.automation.utils.Configuration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
@@ -149,7 +150,8 @@ public enum DriversFactory {
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("operations-type");
-        options.addArguments("start-maximized");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments(" --window-position=0,0");
         options.addArguments("--disable-popup-blocking");
 //        options.addArguments("-incognito");
         options.addArguments("--disable-web-security");

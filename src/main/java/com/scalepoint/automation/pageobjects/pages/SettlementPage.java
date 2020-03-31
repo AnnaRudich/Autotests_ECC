@@ -273,6 +273,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public CompleteClaimPage toCompleteClaimPage() {
         waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
         settlementSummary.completeClaim();
         try {
             driver.switchTo().alert().accept();

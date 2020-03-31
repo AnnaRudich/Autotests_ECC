@@ -79,7 +79,7 @@ public class SettlementSummary extends Module {
     }
 
     public void completeClaim() {
-        if (!completeClaim.isDisplayed()^sentToAudit.isDisplayed()) {
+        if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
             expand();
         }
         clickUsingJsIfSeleniumClickReturnError(completeClaim);

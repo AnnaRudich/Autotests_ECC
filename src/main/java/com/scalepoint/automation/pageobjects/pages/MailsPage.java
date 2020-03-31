@@ -94,7 +94,21 @@ public class MailsPage extends BaseClaimPage {
     }
 
     public MailViewDialog viewMail(MailType mailType, String mailSubject) {
-        return parseMails().findMailsByTypeAndSubject(mailType, mailSubject).viewMail();
+
+        MailViewDialog mailViewDialog = null;
+
+        int counter = 1;
+        do {
+            try {
+                mailViewDialog = parseMails().findMailsByTypeAndSubject(mailType, mailSubject).viewMail();
+            } catch (Exception e) {
+                logger.warn("View mail exception: {}", e);
+                refresh();
+                at(MailsPage.class);
+            }
+        }while (counter-- >= 0);
+
+        return mailViewDialog;
     }
 
     public Mail getLatestMail(MailType mailType) {
