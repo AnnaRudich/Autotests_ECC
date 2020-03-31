@@ -15,6 +15,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,10 +33,14 @@ public class MailViewDialog extends BaseDialog {
 
     @Override
     public MailViewDialog ensureWeAreAt() {
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
         return this;
     }
 
     public MailsPage cancel(){
+//        waitForJavascriptRecalculation();
+//        waitForAjaxCompleted();
         $(cancelButton).click();
         return Page.at(MailsPage.class);
     }

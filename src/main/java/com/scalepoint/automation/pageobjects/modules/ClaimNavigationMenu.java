@@ -2,10 +2,12 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 
 public class ClaimNavigationMenu extends Module {
@@ -14,7 +16,7 @@ public class ClaimNavigationMenu extends Module {
     private Link settelment;
 
     @FindBy(id = "mailsButton")
-    private Link mails;
+    private WebElement mails;
 
     @FindBy(id = "importButton")
     private Button imports;
@@ -43,12 +45,12 @@ public class ClaimNavigationMenu extends Module {
     }
 
     public MailsPage toMailsPage() {
-        clickUsingJsIfSeleniumClickReturnError(mails);
+        $(mails).click();
         return at(MailsPage.class);
     }
 
     public MailsPage toEmptyMailsPage() {
-        clickUsingJsIfSeleniumClickReturnError(mails);
+        $(mails).click();
         return new MailsPage();
     }
 

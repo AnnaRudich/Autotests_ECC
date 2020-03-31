@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,6 +65,8 @@ public class MailsPage extends BaseClaimPage {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
         waitForVisible(latestMailSubject);
+        waitForJavascriptRecalculation();
+        waitForAjaxCompleted();
         return this;
     }
 
@@ -83,7 +88,7 @@ public class MailsPage extends BaseClaimPage {
             String type = element.findElement(By.xpath(".//td[contains(@data-columnid,'type_column')]")).getText();
             String dateValue = element.findElement(By.xpath(".//td[contains(@data-columnid,'date_column')]")).getText();
             LocalDateTime sentDate = LocalDateTime.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-            Button viewMailButton = new Button(element.findElement(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]")));
+            SelenideElement viewMailButton = $(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]"));
             mailRows.add(new Mail(text, type, sentDate, viewMailButton));
         }
         return new Mails(mailRows);
@@ -101,12 +106,13 @@ public class MailsPage extends BaseClaimPage {
         do {
             try {
                 mailViewDialog = parseMails().findMailsByTypeAndSubject(mailType, mailSubject).viewMail();
+                counter = 0;
             } catch (Exception e) {
                 logger.warn("View mail exception: {}", e);
                 refresh();
                 at(MailsPage.class);
             }
-        }while (counter-- >= 0);
+        }while (counter-- > 0);
 
         return mailViewDialog;
     }
@@ -157,10 +163,10 @@ public class MailsPage extends BaseClaimPage {
     public static class Mail {
         private String subject;
         private LocalDateTime sentDate;
-        private Button viewMailButton;
+        private SelenideElement viewMailButton;
         private MailType mailType;
 
-        public Mail(String subject, String type, LocalDateTime sentDate, Button viewMailButton) {
+        public Mail(String subject, String type, LocalDateTime sentDate, SelenideElement viewMailButton) {
             this.subject = subject;
             this.mailType = MailType.findByText(type);
             this.sentDate = sentDate;
@@ -176,7 +182,11 @@ public class MailsPage extends BaseClaimPage {
         }
 
         public MailViewDialog viewMail() {
-            viewMailButton.click();
+            Wait.waitForJavascriptRecalculation();
+            waitForAjaxCompleted();
+            $(viewMailButton)
+                    .hover()
+                    .click();
             return BaseDialog.at(MailViewDialog.class);
         }
 
