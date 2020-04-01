@@ -30,7 +30,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with discretionary depreciation
      * AND: Select depreciable valuation
      * AND: click OK button
-     * THEN: the field has red frame; the dialogs is not closed
+     * THEN: the field has red frame; the dialog is not closed
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
     public void charlie_508_1_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
@@ -52,7 +52,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with discretionary valuation
      * AND: Select depreciable valuation
      * AND: click OK button
-     * THEN: the field has red frame; the dialogs is not closed
+     * THEN: the field has red frame; the dialog is not closed
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option")
     public void charlie_508_2_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
@@ -73,7 +73,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with discretionary depreciation
      * AND: Select non-depreciable valuation
      * AND: click OK button
-     * THEN: the field is disabled; the dialogs is closed
+     * THEN: the field is disabled; the dialog is closed
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
     public void charlie_508_3_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
@@ -94,7 +94,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with policy depreciation
      * AND: Select depreciable valuation
      * AND: click OK button
-     * THEN: the field is disabled; the dialogs is closed
+     * THEN: the field is disabled; the dialog is closed
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding policy depreciation")
     public void charlie_508_4_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
@@ -115,7 +115,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: Add the item with discretionary depreciation = 0%
      * AND: Select depreciable valuation
      * AND: click OK button
-     * THEN: the field is disabled; the dialogs is closed
+     * THEN: the field is disabled; the dialog is closed
      */
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation=0%")
     public void charlie_508_5_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,

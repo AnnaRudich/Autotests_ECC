@@ -29,14 +29,14 @@ public class SidShowVoucherDetails extends BaseTest {
      * <p>
      * WHEN: Create claim
      * AND: Open SID
-     * AND: Open Terms and conditions dialogs
+     * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible
-     * WHEN: Close dialogs
+     * WHEN: Close dialog
      * AND: Click View voucher details
-     * AND: Open Terms and conditions dialogs
+     * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible and equals the ones previous
      * <p>
-     * GIVEN: FT Show compact settlement item dialogs is ON
+     * GIVEN: FT Show compact settlement item dialog is ON
      * WHEN: Create claim
      * AND: Open SID
      * THEN: Verify that BRAND AND TAGS are visible in compact mode
@@ -55,14 +55,14 @@ public class SidShowVoucherDetails extends BaseTest {
      * <p>
      * WHEN: Create claim
      * AND: Open SID
-     * AND: Open Terms and conditions dialogs
+     * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible
-     * WHEN: Close dialogs
+     * WHEN: Close dialog
      * AND: Click View voucher details
-     * AND: Open Terms and conditions dialogs
+     * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible and equals the ones previous
      * <p>
-     * GIVEN: FT Show compact settlement item dialogs is ON
+     * GIVEN: FT Show compact settlement item dialog is ON
      * WHEN: Create claim
      * AND: Open SID
      * THEN: Verify that BRAND AND TAGS are visible in compact mode
@@ -118,11 +118,11 @@ public class SidShowVoucherDetails extends BaseTest {
     /**
      * WHEN: Create claim
      * AND: Open SID
-     * AND: Open Terms and conditions dialogs
+     * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible
-     * WHEN: Close dialogs
+     * WHEN: Close dialog
      * AND: Click View voucher details
-     * AND: Open Terms and conditions dialogs
+     * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible and equals the ones previous
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify 'Trade and conditions' buttons and window")
@@ -146,7 +146,7 @@ public class SidShowVoucherDetails extends BaseTest {
     }
 
     /**
-     * GIVEN: FT Show compact settlement item dialogs is ON
+     * GIVEN: FT Show compact settlement item dialog is ON
      * WHEN: Create claim
      * AND: Open SID
      * THEN: Verify that BRAND AND TAGS are visible in compact modev

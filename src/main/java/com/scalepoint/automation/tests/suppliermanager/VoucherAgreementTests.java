@@ -449,10 +449,10 @@ public class VoucherAgreementTests extends BaseTest {
     /**
      * GIVEN: IC1 and IC2 Users with Supply Manager credentials, SP supplier S1
      * WHEN: IC1 User creates voucher V1 for S1
-     * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialogs
+     * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialog
      */
     @Test(enabled = false, dataProvider = "testDataProvider",
-            description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialogs")
+            description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialog")
     public void ecc3038_ic1VoucherNotAvailableIC2(User futureUser1, User futureUser2, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser1, AUTOTEST_SUPPLIER_VA_TESTS)
                 .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
@@ -465,7 +465,7 @@ public class VoucherAgreementTests extends BaseTest {
     /**
      * GIVEN: SP and IC Users with Supply Manager credentials, SP Voucher V1
      * WHEN: SP User sets V1 as inactive
-     * THEN: V1 is not available for IC User in Supplier dialogs
+     * THEN: V1 is not available for IC User in Supplier dialog
      * <p>
      * ecc3038_inactiveSPVoucherNotAvailableICVouchersList
      */

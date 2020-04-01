@@ -284,7 +284,7 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: Click Add new valuation
      * WHEN: Select new valuation
      * WHEN: Input price
-     * WHEN: U1 fills settlement dialogs with valid values
+     * WHEN: U1 fills settlement dialog with valid values
      * THEN: New valuation appears in SID
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it is possible to add new valuation")
@@ -304,7 +304,7 @@ public class SidManualItemsTests extends BaseTest {
 
     /**
      * WHEN: Input price
-     * WHEN: U1 fills settlement dialogs with valid values
+     * WHEN: U1 fills settlement dialog with valid values
      * WHEN: "Reviewed" option is enabled (checked)
      * WHEN: "Include in claim" option is disabled
      * THEN: description D1 of claim line CL1 is colored in blue
@@ -367,7 +367,7 @@ public class SidManualItemsTests extends BaseTest {
 
     /**
      * WHEN: Input price
-     * WHEN: U1 fills settlement dialogs with valid values
+     * WHEN: U1 fills settlement dialog with valid values
      * WHEN: "Reviewed" option is disabled (unchecked)
      * WHEN: "Include in claim" option is disabled
      * THEN: description D1 of claim line CL1 is colored in pink

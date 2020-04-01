@@ -44,7 +44,7 @@ public class SidTests extends BaseTest {
 
     /**
      * GIVEN: Existing category C1 with existing group G1 and mapped to G1-C1 voucher V1
-     * WHEN: User selects C1, G1 and V1 in Settlement dialogs
+     * WHEN: User selects C1, G1 and V1 in Settlement dialog
      * WHEN: User adds new price P1
      * WHEN: User adds depreciation D1
      * THAN: Cash compensation is P1 - V1 discount - D1
@@ -126,7 +126,7 @@ public class SidTests extends BaseTest {
      * WHEN user searches for Shop with Voucher2 option and predefined Zip code
      * THAN it's possible to find shop with distance as predefined value
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
@@ -169,7 +169,7 @@ public class SidTests extends BaseTest {
      * THEN: Face Value = Cash Value / (1 - comDiscount / 100 (It is new because DtDn was changed)
      */
     @RequiredSetting(type = MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_voucherRepDialogDDDialogFVCV(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
@@ -206,7 +206,7 @@ public class SidTests extends BaseTest {
      * THEN: Face Value = Cash Value / (1 - comDiscount / 100 (It is new because DtDn was changed)
      */
     @RequiredSetting(type = MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialogs")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_voucherRepDialogCustomDtDnDialogFVCV2(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher_10();
@@ -267,7 +267,7 @@ public class SidTests extends BaseTest {
 
     /**
      * GIVEN: New category C1 with random group G1 without mapped vouchers
-     * WHEN: User selects C1 and G1 in Settlement dialogs
+     * WHEN: User selects C1 and G1 in Settlement dialog
      * WHEN: User adds new price P1
      * THAN: Cash compensation is P1
      * THAN: Depreciation is 0.00
@@ -295,7 +295,7 @@ public class SidTests extends BaseTest {
 
     /**
      * GIVEN: Existing category C1 with existing group G1 and mapped to G1-C1 voucher V1
-     * WHEN: User selects C1, G1 and V1 in Settlement dialogs
+     * WHEN: User selects C1, G1 and V1 in Settlement dialog
      * WHEN: User adds new price P1
      * THAN: Cash compensation is P1 - V1 discount
      * THAN: Depreciation is 0.00
