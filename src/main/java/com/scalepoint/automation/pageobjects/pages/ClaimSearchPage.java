@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,8 +24,7 @@ public class ClaimSearchPage extends Page {
     @Override
     protected ClaimSearchPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompleted();
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(searchButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForInvisible;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -60,9 +60,8 @@ public class NewCustomerPage extends Page {
     @Override
     public NewCustomerPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompleted();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
-        waitForJavascriptRecalculation();
         $(claimsNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(surname).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

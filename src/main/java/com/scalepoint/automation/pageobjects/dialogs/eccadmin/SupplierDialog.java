@@ -44,8 +44,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
     @Override
     protected SupplierDialog ensureWeAreAt() {
-        waitForJavascriptRecalculation();
-        waitForAjaxCompleted();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 

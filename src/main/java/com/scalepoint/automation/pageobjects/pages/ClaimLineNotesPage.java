@@ -13,7 +13,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,8 +39,7 @@ public class ClaimLineNotesPage extends BaseClaimPage implements RequiresJavascr
     @Override
     protected ClaimLineNotesPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompleted();
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(closeNotesButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

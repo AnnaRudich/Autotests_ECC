@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,8 +26,7 @@ public class EditPreferencesPage extends Page {
     @Override
     protected Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompleted();
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(buttonGenerate).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

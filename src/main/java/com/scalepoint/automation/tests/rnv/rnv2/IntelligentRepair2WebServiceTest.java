@@ -118,6 +118,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: evaluateTaskButton is disabled when task is auto completed by Acceptation
      * Assert: InvoiceTab/InvoiceDialog is opened without errors
      */
+
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackNoInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
@@ -209,7 +210,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * send feedback via RnV Rest service (withOUT Invoice)
      * Assert: audit response is Manual and the task will still be active if RepairPrice=100(ECC/wiremock/mappings/RnVFeedbackManual.json)
      * Assert: evaluateTaskButton is enabled when audit replied "MANUAL"
-     * acceptFeedback manually through Evaluate Task dialogs
+     * acceptFeedback manually through Evaluate Task dialog
      * Assert: task is Completed, evaluateTaskButton is disabled
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)

@@ -28,6 +28,7 @@ public class LoginSelfService2Page extends Page {
     @Override
     public LoginSelfService2Page ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
+        waitForJavascriptRecalculation();
         waitForPageLoaded();
         $(login).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

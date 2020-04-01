@@ -18,7 +18,7 @@ public class OpenSettlementOptionDialog extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return "webshop/jsp/matching_engine/dialogs/open_claim_option_dialog.jsp";
+        return "webshop/jsp/matching_engine/dialog/open_claim_option_dialog.jsp";
     }
 
     @Override

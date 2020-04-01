@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class EditCategoryMappingsDialog extends BaseDialog {
 
@@ -29,8 +29,7 @@ public class EditCategoryMappingsDialog extends BaseDialog {
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        waitForJavascriptRecalculation();
-        waitForAjaxCompleted();
+        waitForAjaxCompletedAndJsRecalculation();
         $(saveMappings).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }

@@ -13,6 +13,7 @@ import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
@@ -36,7 +37,7 @@ public class CommunicationTab extends BaseClaimPage {
     @Override
     protected CommunicationTab ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(sendBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

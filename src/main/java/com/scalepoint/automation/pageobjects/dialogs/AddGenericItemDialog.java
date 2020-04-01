@@ -63,7 +63,7 @@ public class AddGenericItemDialog extends BaseDialog {
         this.category.select(categoryGroup + " - " + category);
         Wait.waitForAjaxCompleted();
         try {
-            WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialogs-grid']//div[text() = '" + itemName + "']"));
+            WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '" + itemName + "']"));
             if (element != null && element.isDisplayed()) {
                 return true;
             }

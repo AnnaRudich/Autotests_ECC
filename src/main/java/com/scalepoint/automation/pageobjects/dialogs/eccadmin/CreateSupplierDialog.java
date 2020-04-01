@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class CreateSupplierDialog extends BaseDialog {
 
@@ -36,8 +36,7 @@ public class CreateSupplierDialog extends BaseDialog {
 
     @Override
     protected CreateSupplierDialog ensureWeAreAt() {
-        waitForJavascriptRecalculation();
-        waitForAjaxCompleted();
+        waitForAjaxCompletedAndJsRecalculation();
         $(windowHeader).waitUntil(Condition.exactText("Add supplier"), TIME_OUT_IN_MILISECONDS);
         return this;
     }

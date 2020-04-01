@@ -15,7 +15,7 @@ import ru.yandex.qatools.htmlelements.element.Table;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
@@ -51,9 +51,8 @@ public class MyPage extends Page {
     @Override
     public MyPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
-        waitForAjaxCompleted();
-        waitForJavascriptRecalculation();
         $(editPreferences).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(lastClaims).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;

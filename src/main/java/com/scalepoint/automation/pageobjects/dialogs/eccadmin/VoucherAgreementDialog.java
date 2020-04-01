@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertTrue;
 
@@ -25,9 +26,8 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
 
     @Override
     protected BaseDialog ensureWeAreAt() {
-        waitForAjaxCompleted();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
-        waitForJavascriptRecalculation();
         return this;
     }
 

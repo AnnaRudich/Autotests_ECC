@@ -60,8 +60,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
     @Override
     public CustomerDetailsPage ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), getAlternativeUrl());
-        waitForAjaxCompleted();
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         if (driver.getCurrentUrl().contains(getRelativeUrl())) {
             $(reopenClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
