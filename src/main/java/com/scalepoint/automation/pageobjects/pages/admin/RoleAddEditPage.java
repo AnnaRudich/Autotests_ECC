@@ -154,11 +154,10 @@ public class RoleAddEditPage extends AdminBasePage {
     private WebElement saveButton;
 
     @Override
-    protected RoleAddEditPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

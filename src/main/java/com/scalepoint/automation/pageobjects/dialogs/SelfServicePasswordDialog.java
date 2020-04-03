@@ -18,9 +18,8 @@ public class SelfServicePasswordDialog extends BaseDialog {
     private WebElement passwordInput;
 
     @Override
-    protected SelfServicePasswordDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public String getNewPasswordToSelfService() {

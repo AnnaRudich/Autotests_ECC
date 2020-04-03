@@ -52,10 +52,9 @@ public class AddShopDialog extends BaseDialog {
     private WebElement editableShopDialog;
 
     @Override
-    protected AddShopDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public SupplierDialog.ShopsTab createShop(Shop shop, ShopType shopType, boolean gdpr) {

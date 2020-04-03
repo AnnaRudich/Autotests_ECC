@@ -60,12 +60,11 @@ public class MailsPage extends BaseClaimPage {
     }
 
     @Override
-    public MailsPage ensureWeAreOnPage() {
+   protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
         waitForPageLoaded();
         $(latestMailSubject).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public boolean isRequiredMailSent(String subj) {

@@ -30,11 +30,10 @@ public class PseudoCategoryModelPage extends AdminBasePage {
     private Select modelsList;
 
     @Override
-    protected PseudoCategoryModelPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

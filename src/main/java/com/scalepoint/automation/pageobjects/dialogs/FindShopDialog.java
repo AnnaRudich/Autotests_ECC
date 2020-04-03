@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
@@ -13,8 +14,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForAllElementsVisible;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class FindShopDialog extends BaseDialog {
 
@@ -34,10 +36,10 @@ public class FindShopDialog extends BaseDialog {
     private Button alertOk;
 
     @Override
-    public FindShopDialog ensureWeAreAt() {
-        waitForVisible(postalCodeInput);
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(postalCodeInput).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         processAlertIfPresent();
-        return this;
     }
 
     private FindShopDialog processAlertIfPresent() {

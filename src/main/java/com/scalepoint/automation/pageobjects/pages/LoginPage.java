@@ -41,14 +41,13 @@ public class LoginPage extends Page {
     }
 
     @Override
-    public LoginPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(username).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(password).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(loginButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

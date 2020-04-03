@@ -26,11 +26,10 @@ public class InsCompaniesPage extends AdminBasePage {
     private Select companies;
 
     @Override
-    protected InsCompaniesPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

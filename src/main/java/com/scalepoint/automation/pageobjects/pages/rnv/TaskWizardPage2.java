@@ -21,12 +21,11 @@ public class TaskWizardPage2 extends Page {
     private WebElement sendBtn;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(sendBtn).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
-        return null;
     }
 
     @Override

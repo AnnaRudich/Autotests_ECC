@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.google.common.base.Strings;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import org.openqa.selenium.By;
@@ -113,11 +112,10 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(nameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

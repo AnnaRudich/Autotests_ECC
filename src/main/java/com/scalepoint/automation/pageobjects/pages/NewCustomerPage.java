@@ -58,13 +58,12 @@ public class NewCustomerPage extends Page {
     }
 
     @Override
-    public NewCustomerPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(claimsNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(surname).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public WebElement getContinueButton() {

@@ -36,11 +36,10 @@ public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
     private Button moveCategoryButton;
 
     @Override
-    protected PseudoCategoryGroupAddEditPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(groupNameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

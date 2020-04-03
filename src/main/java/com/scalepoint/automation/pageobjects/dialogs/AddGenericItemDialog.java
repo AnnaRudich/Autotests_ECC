@@ -13,7 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 
 public class AddGenericItemDialog extends BaseDialog {
@@ -28,11 +28,10 @@ public class AddGenericItemDialog extends BaseDialog {
     private Button cancel;
 
     @Override
-    public AddGenericItemDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
         $(category).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        waitForAjaxCompleted();
-        return this;
     }
 
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {

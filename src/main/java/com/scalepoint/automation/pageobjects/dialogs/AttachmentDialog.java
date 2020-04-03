@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.*;
 
 public class AttachmentDialog extends BaseDialog implements Actions {
@@ -29,12 +30,9 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-
-        Wait.waitForJavascriptRecalculation();
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
         $(dialogHeader).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-
-        return this;
     }
 
     public TreepanelAttachmentView getTreepanelAttachmentView(){

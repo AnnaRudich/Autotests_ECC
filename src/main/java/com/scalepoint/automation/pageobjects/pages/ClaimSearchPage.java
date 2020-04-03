@@ -22,12 +22,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ClaimSearchPage extends Page {
 
     @Override
-    protected ClaimSearchPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(searchButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

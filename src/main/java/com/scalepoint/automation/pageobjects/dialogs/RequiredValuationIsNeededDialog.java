@@ -10,9 +10,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class RequiredValuationIsNeededDialog extends BaseDialog {
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         $(".required-valuation-is-needed-dialog").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
-
 }

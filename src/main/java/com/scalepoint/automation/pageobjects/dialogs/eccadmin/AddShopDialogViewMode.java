@@ -21,10 +21,9 @@ public class AddShopDialogViewMode extends BaseDialog {
     private WebElement nameLabel;
 
     @Override
-    protected AddShopDialogViewMode ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public SupplierDialog.ShopsTab cancelViewShopDialog() {

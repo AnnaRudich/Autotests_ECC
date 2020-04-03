@@ -11,9 +11,8 @@ public class DibsAccept extends Page {
     private WebElement continueOption;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
     }
 
     @Override

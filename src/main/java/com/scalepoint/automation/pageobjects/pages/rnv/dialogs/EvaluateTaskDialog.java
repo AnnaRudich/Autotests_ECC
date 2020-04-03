@@ -11,14 +11,14 @@ import java.util.function.Consumer;
 
 import static ch.lambdaj.Lambda.on;
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class EvaluateTaskDialog extends BaseDialog {
     @Override
-    protected EvaluateTaskDialog ensureWeAreAt() {
-        Wait.waitForAjaxCompleted();
+    protected void ensureWeAreAt() {
+        waitForAjaxCompleted();
         $(By.xpath("//span[contains(@id, 'evaluateTaskWindow')]")).shouldBe(Condition.visible);
-        return this;
     }
 
     public ProjectsPage closeDialog(){

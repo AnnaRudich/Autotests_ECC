@@ -49,13 +49,12 @@ public class MyPage extends Page {
     }
 
     @Override
-    public MyPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(editPreferences).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(lastClaims).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public CustomerDetailsPage openRecentClaim() {

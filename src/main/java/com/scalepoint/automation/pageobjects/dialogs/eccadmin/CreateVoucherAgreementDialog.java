@@ -22,10 +22,9 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
     private WebElement createVoucherButton;
 
     @Override
-    protected CreateVoucherAgreementDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         $(windowHeader).waitUntil(Condition.exactText("Add voucher agreement"), TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public CreateVoucherAgreementDialog fill(Consumer<CreateVoucherAgreementDialog> fillFunc) {

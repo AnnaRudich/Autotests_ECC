@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.NotesPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -7,7 +8,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class EditCustomerNoteDialog extends BaseDialog {
@@ -16,9 +18,9 @@ public class EditCustomerNoteDialog extends BaseDialog {
     private WebElement ok;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        waitForVisible(ok);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+       $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public NotesPage addCustomerNote(String note) {

@@ -40,11 +40,10 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     private Select ic;
 
     @Override
-    public GenericItemsEditAdminPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(descriptionField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

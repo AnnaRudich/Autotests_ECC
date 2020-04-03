@@ -35,12 +35,11 @@ public class CommunicationTab extends BaseClaimPage {
     private WebElement sendBtn;
 
     @Override
-    protected CommunicationTab ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(sendBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

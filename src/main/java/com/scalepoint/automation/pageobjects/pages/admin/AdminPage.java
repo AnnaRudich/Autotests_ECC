@@ -44,11 +44,10 @@ public class AdminPage extends AdminBasePage {
     private Link editReasons;
 
     @Override
-    public AdminPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(matchingEngine).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

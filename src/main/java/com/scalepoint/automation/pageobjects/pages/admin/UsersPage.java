@@ -39,11 +39,10 @@ public class UsersPage extends AdminBasePage {
     private String filterByIcXpath = "//select[contains(@name, 'company')]/option[contains(text(), '$1')]";
 
     @Override
-    protected UsersPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(createUserButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

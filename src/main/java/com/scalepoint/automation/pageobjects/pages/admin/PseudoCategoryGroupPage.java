@@ -32,11 +32,10 @@ public class PseudoCategoryGroupPage extends AdminBasePage {
     }
 
     @Override
-    protected PseudoCategoryGroupPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(edit).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     private boolean isGroupDisplayed(String groupName) {

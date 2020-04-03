@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
@@ -25,10 +26,9 @@ import static org.testng.Assert.assertTrue;
 public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreementTabs {
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
-        return this;
     }
 
     public static class GeneralTab extends BaseDialog implements VoucherAgreementTabs {
@@ -122,9 +122,8 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(voucherNameInput);
-            return this;
+        protected void ensureWeAreAt() {
+            $(voucherNameInput).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
 
         public GeneralTab doAssert(Consumer<Asserts> assertFunc) {
@@ -303,8 +302,8 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
         }
 
         public AdvancedTab doAssert(Consumer<Asserts> assertFunc) {
@@ -377,9 +376,9 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         private WebElement limitationsInput;
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(conditionsInput);
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
+           $(conditionsInput).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
 
         public LegalTab setConditions(String conditionsText) {
@@ -418,9 +417,9 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         private WebElement tags;
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(brands);
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
+            $(brands).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
 
         public CoverageTab setBrands(String brandsText) {
@@ -446,9 +445,9 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         private WebElement issued;
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(information);
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
+          $(information).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
 
         public InfoTab setInformation(String informationText) {
@@ -480,9 +479,9 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         private WebElement editMappingsBtn;
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(editMappingsBtn);
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
+          $(editMappingsBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
 
         public CategoriesTab doAssert(Consumer<Asserts> assertFunc) {
@@ -547,8 +546,8 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
         }
 
         public DiscountDistributionTab doAssert(Consumer<Asserts> assertFunc) {

@@ -59,11 +59,10 @@ public class EditReasonsPage extends AdminBasePage {
     private CheckBox showDisabledCheckbox;
 
     @Override
-    protected EditReasonsPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(reasonTypes).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

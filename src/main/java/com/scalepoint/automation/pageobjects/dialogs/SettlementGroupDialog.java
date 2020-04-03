@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
@@ -7,7 +8,6 @@ import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,15 +17,10 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SettlementGroupDialog extends BaseDialog {
-
-    @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForAjaxCompleted();
-        return this;
-    }
 
     @FindBy(name = "groupName")
     private ExtInput groupName;
@@ -57,6 +52,13 @@ public class SettlementGroupDialog extends BaseDialog {
 
     private By saveGroup = By.xpath("//*[contains(@id, 'group-save-button-btnEl')]");
     private By closeGroup = By.xpath("//*[contains(@id, 'group-close-button-btnInnerEl')]");
+
+
+    @Override
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(saveGroup).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+    }
 
 
     public SettlementGroupDialog enterGroupName(String name) {

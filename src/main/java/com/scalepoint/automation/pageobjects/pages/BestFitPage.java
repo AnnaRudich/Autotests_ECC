@@ -17,12 +17,11 @@ public class BestFitPage extends Page {
     private static final String MARKET_PRICE_XPATH = "//td[contains(@class,'bestfitleftheader_bottom') and contains(text(),'Markedspris')]";
 
     @Override
-    protected BestFitPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(By.id("table1")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return null;
     }
 
     @Override

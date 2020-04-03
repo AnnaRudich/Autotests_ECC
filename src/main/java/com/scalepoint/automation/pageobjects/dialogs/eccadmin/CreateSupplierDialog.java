@@ -35,10 +35,9 @@ public class CreateSupplierDialog extends BaseDialog {
     private WebElement createSupplierButton;
 
     @Override
-    protected CreateSupplierDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         $(windowHeader).waitUntil(Condition.exactText("Add supplier"), TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public CreateSupplierDialog fill(Consumer<CreateSupplierDialog> fillFunc) {

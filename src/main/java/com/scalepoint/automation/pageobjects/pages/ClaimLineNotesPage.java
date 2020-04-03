@@ -37,12 +37,11 @@ public class ClaimLineNotesPage extends BaseClaimPage implements RequiresJavascr
     private WebElement copyNoteTextButton;
 
     @Override
-    protected ClaimLineNotesPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(closeNotesButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

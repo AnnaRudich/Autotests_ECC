@@ -58,7 +58,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
     }
 
     @Override
-    public CustomerDetailsPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), getAlternativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
@@ -68,7 +68,6 @@ public class CustomerDetailsPage extends BaseClaimPage {
         } else {
             $(claimNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
-        return this;
     }
 
     public String getClaimNumber() {

@@ -29,11 +29,10 @@ public class PseudoCategoriesPage extends AdminBasePage {
     private Select pseudoCategoryList;
 
     @Override
-    protected PseudoCategoriesPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(quickSearchField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

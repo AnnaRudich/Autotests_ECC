@@ -5,7 +5,6 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import org.openqa.selenium.By;
@@ -19,7 +18,10 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.refresh;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
+import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -63,17 +65,15 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-supplierListExclusiveId ')]";
 
     @Override
-    protected Page ensureWeAreOnPage() {
-        Wait.waitForPageLoaded();
-        waitForJavascriptRecalculation();
-        waitForAjaxCompleted();
+    protected void ensureWeAreOnPage() {
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
         try {
             $(createSupplierButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } catch (Exception e) {
             refresh();
             $(createSupplierButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
-        return this;
     }
 
     @Override

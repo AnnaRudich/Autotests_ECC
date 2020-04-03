@@ -25,9 +25,8 @@ public class DibsCard extends Page {
     private WebElement submitButton;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
     }
 
     @Override

@@ -44,11 +44,10 @@ public class GenericItemsAdminPage extends AdminBasePage {
     private Select categories;
 
     @Override
-    public GenericItemsAdminPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

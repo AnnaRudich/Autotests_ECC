@@ -30,11 +30,10 @@ public class FunctionalTemplatesPage extends AdminBasePage {
     private Select templatesList;
 
     @Override
-    public FunctionalTemplatesPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(edit).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

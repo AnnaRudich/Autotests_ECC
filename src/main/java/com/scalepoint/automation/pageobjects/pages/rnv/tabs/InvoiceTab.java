@@ -18,12 +18,11 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class InvoiceTab extends BaseClaimPage {
 
     @Override
-    protected InvoiceTab ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $("#grid-invoice-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

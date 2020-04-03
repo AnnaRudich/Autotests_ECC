@@ -1,11 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class AddValuationDialog extends BaseDialog {
 
@@ -19,11 +22,9 @@ public class AddValuationDialog extends BaseDialog {
     private Button ok;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(addValuationType);
-        Wait.waitForVisible(addValuationPrice);
-        Wait.waitForVisible(ok);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(addValuationType).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public SettlementDialog addValuation(String valuationName, Double priceAmount) {

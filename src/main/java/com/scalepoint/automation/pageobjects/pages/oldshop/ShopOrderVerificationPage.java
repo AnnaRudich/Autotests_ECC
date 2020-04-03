@@ -18,10 +18,9 @@ public class ShopOrderVerificationPage extends Page {
     private WebElement placeMyOrderButton;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(agreeBox);
-        return this;
     }
 
     @Override

@@ -81,11 +81,10 @@ public class InsCompAddEditPage extends AdminBasePage {
     private String byAuditXpath = "//select[@name='auditEnabled']/option[contains(.,'$1')]";
 
     @Override
-    protected InsCompAddEditPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(companyIDField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

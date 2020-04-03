@@ -664,8 +664,7 @@ public class SidManualItemsTests extends BaseTest {
                     sid.assertItemIsPresent(claimItem1.getTextFieldSP());
                 });
 
-        new SettlementDialog().ensureWeAreAt()
-
+        new SettlementDialog()
                 .setBaseData(claimItem2)
                 .setValuation(NEW_PRICE)
                 .closeSidWithOk()

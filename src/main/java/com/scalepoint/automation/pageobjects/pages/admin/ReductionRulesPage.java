@@ -42,11 +42,10 @@ public class ReductionRulesPage extends AdminBasePage {
     private WebElement quickSearchField;
 
     @Override
-    protected ReductionRulesPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), "webshop/jsp/Admin/ReductionRuleRefresh");
         waitForPageLoaded();
         $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

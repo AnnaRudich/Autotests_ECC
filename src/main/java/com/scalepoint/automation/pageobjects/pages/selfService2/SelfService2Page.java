@@ -64,12 +64,11 @@ public class SelfService2Page extends Page {
     By logOutButtonXpath = By.xpath(".//div[@class='log-out']//input[@value='Log ud']");
 
     @Override
-    protected SelfService2Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForJavascriptRecalculation();
         waitForPageLoaded();
         $(saveItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

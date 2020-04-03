@@ -98,16 +98,16 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     @Override
-    public SettlementPage ensureWeAreOnPage() {
+   protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForJavascriptRecalculation();
+        waitForPageLoaded();
         try{
             Wait.waitForAjaxCompleted();
         }catch (TimeoutException e){
             logger.warn("waitForAjaxCompleted Timeout");
         }
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public ClaimLine findClaimLine(String description) {

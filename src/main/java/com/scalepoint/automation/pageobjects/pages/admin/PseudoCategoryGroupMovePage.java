@@ -19,11 +19,10 @@ public class PseudoCategoryGroupMovePage extends AdminBasePage {
     private Select groups;
 
     @Override
-    protected PseudoCategoryGroupMovePage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(okButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

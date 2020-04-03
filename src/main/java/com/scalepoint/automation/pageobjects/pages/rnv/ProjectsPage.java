@@ -32,11 +32,10 @@ public class ProjectsPage extends Page {
     private WebElement auditInfoPanelHeader;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
-        return this;
     }
 
     @Override

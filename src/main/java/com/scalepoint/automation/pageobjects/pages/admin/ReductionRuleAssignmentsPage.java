@@ -40,11 +40,10 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     private WebElement firstAssigment;
 
     @Override
-    protected ReductionRuleAssignmentsPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

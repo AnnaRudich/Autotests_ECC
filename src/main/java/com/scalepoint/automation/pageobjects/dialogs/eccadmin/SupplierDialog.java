@@ -43,9 +43,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
     }
 
     @Override
-    protected SupplierDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
-        return this;
     }
 
     public static class OrdersTab extends BaseDialog implements SupplierTabs {
@@ -169,9 +168,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            waitForAjaxCompleted();
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
         }
     }
 
@@ -196,10 +194,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            waitForJavascriptRecalculation();
-            waitForAjaxCompleted();
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
         }
     }
 
@@ -254,12 +250,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForJavascriptRecalculation();
-            Wait.waitForAjaxCompleted();
-
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
             $(windowHeader).waitUntil(Condition.matchText("[(Edit)(View)] supplier .*"), TIME_OUT_IN_MILISECONDS);
-            return this;
         }
 
         public GeneralTab setName(String name) {
@@ -422,8 +415,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
         }
     }
 
@@ -440,11 +433,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         private WebElement createNewVoucherAgreementBtn;
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForJavascriptRecalculation();
-            Wait.waitForAjaxCompleted();
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
             $(createNewVoucherAgreementBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-            return this;
         }
 
         public CreateVoucherAgreementDialog openCreateVoucherAgreementDialog() {
@@ -551,9 +542,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         private String byShopNameXpath = "id('supplierShopsGridId')//div[contains(text(),'$1')]";
 
         @Override
-        protected BaseDialog ensureWeAreAt() {
-            Wait.waitForVisible(shopsGridId);
-            return this;
+        protected void ensureWeAreAt() {
+            waitForAjaxCompletedAndJsRecalculation();
+            $(shopsGridId).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
 
         public AddShopDialog openAddShopDialog() {

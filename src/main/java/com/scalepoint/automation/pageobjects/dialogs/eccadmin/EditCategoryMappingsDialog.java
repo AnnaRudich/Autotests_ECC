@@ -28,10 +28,9 @@ public class EditCategoryMappingsDialog extends BaseDialog {
     private List<WebElement> mappedCategories;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         $(saveMappings).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public VoucherAgreementDialog.CategoriesTab mapCategory(PseudoCategory pseudoCategory) {

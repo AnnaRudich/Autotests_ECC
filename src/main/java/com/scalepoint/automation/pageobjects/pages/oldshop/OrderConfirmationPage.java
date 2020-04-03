@@ -13,10 +13,9 @@ public class OrderConfirmationPage extends Page {
     private WebElement checkout_button;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(checkout_button);
-        return this;
     }
 
     @Override

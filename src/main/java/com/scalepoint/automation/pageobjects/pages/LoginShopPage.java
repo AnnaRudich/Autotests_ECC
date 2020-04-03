@@ -34,12 +34,11 @@ public class LoginShopPage extends Page {
     }
 
     @Override
-    public LoginShopPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(password).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(login).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public LoginShopPage enterPassword(String _password) {

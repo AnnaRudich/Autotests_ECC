@@ -31,12 +31,11 @@ public class TaskWizardPage1 extends Page {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(nameField).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
-        return null;
     }
 
     @Override

@@ -3,22 +3,21 @@ package com.scalepoint.automation.pageobjects.pages.rnv.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.openqa.selenium.By;
 
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InvoiceDialog extends BaseDialog {
 
     @Override
-    public InvoiceDialog ensureWeAreAt() {
-        Wait.waitForAjaxCompleted();
+    protected void ensureWeAreAt() {
+        waitForAjaxCompleted();
         $(By.xpath("//div[contains(text(), 'Faktura')]")).shouldBe(Condition.visible);
-        return this;
     }
 
     public InvoiceDialog doAssert(Consumer<InvoiceDialog.Asserts> assertFunc) {

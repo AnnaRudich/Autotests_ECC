@@ -86,12 +86,11 @@ public class CompleteClaimPage extends Page {
     }
 
     @Override
-    public CompleteClaimPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
         $(saveClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     By replacementButtonByXpath = By.id("genlever");

@@ -28,11 +28,10 @@ public class PseudoCategoryAddEditPage extends AdminBasePage {
     private Select pseudoCategoryGroups;
 
     @Override
-    protected PseudoCategoryAddEditPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(descriptionField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

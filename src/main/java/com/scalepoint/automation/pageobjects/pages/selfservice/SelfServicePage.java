@@ -40,9 +40,8 @@ public class SelfServicePage extends Page {
     @FindBy(xpath = "//*[contains(@class, 'x-combo-list-item')]")
     private List<WebElement> allDescriptionSuggestions;
 
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
     }
 
     @Override

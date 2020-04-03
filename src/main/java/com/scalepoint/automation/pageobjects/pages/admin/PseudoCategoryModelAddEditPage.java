@@ -22,11 +22,10 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     private String byCategoryNameXpath = "//div/label[contains(.,'$1')]/input";
 
     @Override
-    protected PseudoCategoryModelAddEditPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(saveOption).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     @Override

@@ -36,11 +36,10 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     private WebElement name;
 
     @Override
-    public EditFunctionTemplatePage ensureWeAreOnPage() {
+   protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForPageLoaded();
         $(saveValues).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        return this;
     }
 
     public FunctionalTemplatesPage saveTemplate() {

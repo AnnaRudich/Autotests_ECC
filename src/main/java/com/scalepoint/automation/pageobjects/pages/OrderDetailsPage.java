@@ -61,11 +61,10 @@ public class OrderDetailsPage extends Page {
     private WebElement cancelOrderNoteTextArea;
 
     @Override
-    protected OrderDetailsPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
         waitForPageLoaded();
-        return this;
     }
 
     @Override
