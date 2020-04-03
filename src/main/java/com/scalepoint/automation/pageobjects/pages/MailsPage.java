@@ -88,7 +88,7 @@ public class MailsPage extends BaseClaimPage {
             String type = element.findElement(By.xpath(".//td[contains(@data-columnid,'type_column')]")).getText();
             String dateValue = element.findElement(By.xpath(".//td[contains(@data-columnid,'date_column')]")).getText();
             LocalDateTime sentDate = LocalDateTime.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-            SelenideElement viewMailButton = $(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]"));
+            WebElement viewMailButton = element.findElement(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]"));
             mailRows.add(new Mail(text, type, sentDate, viewMailButton));
         }
         return new Mails(mailRows);
@@ -163,10 +163,10 @@ public class MailsPage extends BaseClaimPage {
     public static class Mail {
         private String subject;
         private LocalDateTime sentDate;
-        private SelenideElement viewMailButton;
+        private WebElement viewMailButton;
         private MailType mailType;
 
-        public Mail(String subject, String type, LocalDateTime sentDate, SelenideElement viewMailButton) {
+        public Mail(String subject, String type, LocalDateTime sentDate, WebElement viewMailButton) {
             this.subject = subject;
             this.mailType = MailType.findByText(type);
             this.sentDate = sentDate;
