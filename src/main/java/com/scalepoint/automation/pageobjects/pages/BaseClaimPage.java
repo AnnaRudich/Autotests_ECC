@@ -17,8 +17,7 @@ public abstract class BaseClaimPage extends Page {
     }
 
     public MailsPage toMailsPage() {
-        Wait.waitForJavascriptRecalculation();
-        Wait.waitForAjaxCompleted();
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return claimNavigationMenu.toMailsPage();
     }
 
