@@ -100,8 +100,7 @@ public class SettlementPage extends BaseClaimPage {
     @Override
    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForJavascriptRecalculation();
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         try{
             Wait.waitForAjaxCompleted();
         }catch (TimeoutException e){

@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -63,7 +63,7 @@ public class MailsPage extends BaseClaimPage {
    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(latestMailSubject).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
