@@ -469,8 +469,7 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_inactiveSPVoucherNotAvailableICVouchersList
      */
-    @Test(dataProvider = "testDataProvider",
-            description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
     public void ecc3038_inactiveSPVoucherNotAvailableIC(@UserCompany(CompanyCode.SCALEPOINT) User scalepointUser, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(scalepointUser, supplier)
                 .withVoucherInactive(voucher.getVoucherGeneratedName(), 10)

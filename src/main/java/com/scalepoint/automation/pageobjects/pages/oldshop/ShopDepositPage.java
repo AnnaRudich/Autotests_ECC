@@ -21,10 +21,9 @@ public class ShopDepositPage extends Page {
     private WebElement bankTransferBox;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(checkOutButton);
-        return this;
     }
 
     @Override

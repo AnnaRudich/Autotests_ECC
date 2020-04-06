@@ -44,10 +44,9 @@ public class ShopCashPayoutPage extends Page {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(proceedCheckout);
-        return this;
     }
 
     @Override

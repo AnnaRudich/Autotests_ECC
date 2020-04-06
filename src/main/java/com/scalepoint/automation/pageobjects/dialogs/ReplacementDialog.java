@@ -47,18 +47,16 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//span[@id='replacement-button-shop-btnEl']")
     private WebElement goToShopButton;
 
-    //    @FindBy(xpath = "//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span")
     private By selectAllItemsCheckbox = By.xpath("//div[contains(@id, 'headercontainer')]//div[contains(@id, 'headercontainer')]//div[contains(@class, 'x-column-header-checkbox')]//span");
 
     @FindBy(xpath = "//span[contains(text(), 'OK')]/ancestor::a")
     private Button alertOk;
 
     @Override
-    public ReplacementDialog ensureWeAreAt() {
-        Wait.waitForAjaxCompleted();
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
         switchToLast();
-        waitForVisible(cancelButton);
-        return this;
+        $(cancelButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     private By nextButtonByXpath = By.xpath("//span[@id='replacement-button-next-btnIconEl']");

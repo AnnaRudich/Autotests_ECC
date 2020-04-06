@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxColumn;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -12,7 +13,8 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
 
 public class AddGenericItemDialog extends BaseDialog {
 
@@ -26,11 +28,10 @@ public class AddGenericItemDialog extends BaseDialog {
     private Button cancel;
 
     @Override
-    public AddGenericItemDialog ensureWeAreAt() {
-        waitForVisible(category);
-        waitForVisible(ok);
-        waitForAjaxCompleted();
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(category).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public SettlementPage chooseItem(String itemName, String categoryGroup, String category) {

@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 
 public class UpdateCategoriesDialog extends BaseDialog {
@@ -25,9 +25,9 @@ public class UpdateCategoriesDialog extends BaseDialog {
 
 
     @Override
-    protected UpdateCategoriesDialog ensureWeAreAt() {
-        waitForVisible(category);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(category).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public UpdateCategoriesDialog selectCategory(String categoryText) {

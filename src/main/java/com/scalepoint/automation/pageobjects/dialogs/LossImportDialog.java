@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class LossImportDialog extends BaseDialog {
 
@@ -21,9 +23,9 @@ public class LossImportDialog extends BaseDialog {
     private WebElement excelImportButton;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(selfServiceImportButton);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(selfServiceImportButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
     /*
      * SelfService

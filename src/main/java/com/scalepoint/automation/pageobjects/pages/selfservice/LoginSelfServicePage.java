@@ -28,11 +28,10 @@ public class LoginSelfServicePage extends Page {
     }
 
     @Override
-    public LoginSelfServicePage ensureWeAreOnPage() {
+    public void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForVisible(passwordField);
         waitForVisible(login);
-        return this;
     }
 
     public LoginSelfServicePage enterPassword(String password) {

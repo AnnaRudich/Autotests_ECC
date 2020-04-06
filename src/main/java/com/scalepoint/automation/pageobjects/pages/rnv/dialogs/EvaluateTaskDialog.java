@@ -1,7 +1,8 @@
-package com.scalepoint.automation.pageobjects.pages.rnv;
+package com.scalepoint.automation.pageobjects.pages.rnv.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -10,14 +11,14 @@ import java.util.function.Consumer;
 
 import static ch.lambdaj.Lambda.on;
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class EvaluateTaskDialog extends BaseDialog {
     @Override
-    protected EvaluateTaskDialog ensureWeAreAt() {
-        Wait.waitForAjaxCompleted();
+    protected void ensureWeAreAt() {
+        waitForAjaxCompleted();
         $(By.xpath("//span[contains(@id, 'evaluateTaskWindow')]")).shouldBe(Condition.visible);
-        return this;
     }
 
     public ProjectsPage closeDialog(){

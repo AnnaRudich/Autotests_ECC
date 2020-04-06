@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.Wait;
@@ -13,6 +14,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertEquals;
 
 public class EditVoucherValuationDialog extends BaseDialog {
@@ -51,10 +53,10 @@ public class EditVoucherValuationDialog extends BaseDialog {
     private WebElement editDistributionButton;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(ok);
-        Wait.waitForVisible(voucherFaceValue);
-        return null;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(voucherFaceValue).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public EditVoucherValuationDialog updatePercentage(DistributeTo distributeTo, Integer percentage) {

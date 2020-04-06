@@ -1,16 +1,19 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import org.junit.Assert;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 /**
  * @author : igu
@@ -27,10 +30,10 @@ public class NotCheapestChoiceDialog extends BaseDialog {
     private TextBlock amount;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(reason);
-        Wait.waitForVisible(ok);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(reason).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     //TODO the price is not i18n, 1.00 instead pf 1,00

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.GenericItem;
@@ -11,7 +12,8 @@ import ru.yandex.qatools.htmlelements.element.Select;
 
 import java.util.function.Consumer;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -42,16 +44,17 @@ public class GenericItemsAdminPage extends AdminBasePage {
     private Select categories;
 
     @Override
+    protected void ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForPageLoaded();
+        $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+    }
+
+    @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/Admin/generic_items.jsp";
     }
 
-    @Override
-    public GenericItemsAdminPage ensureWeAreOnPage() {
-        waitForUrl(getRelativeUrl());
-        waitForVisible(newButton);
-        return this;
-    }
 
     public GenericItemsEditAdminPage clickCreateNewItem() {
         clickAndWaitForDisplaying(newButton, By.name("ispublished"));

@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.utils.Wait;
@@ -19,8 +20,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -59,13 +59,11 @@ public class MailsPage extends BaseClaimPage {
     }
 
     @Override
-    public MailsPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
-        waitForVisible(latestMailSubject);
-        waitForJavascriptRecalculation();
-        waitForAjaxCompleted();
-        return this;
+        waitForAjaxCompletedAndJsRecalculation();
+        $(latestMailSubject).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public boolean isRequiredMailSent(String subj) {
@@ -180,8 +178,7 @@ public class MailsPage extends BaseClaimPage {
         }
 
         public MailViewDialog viewMail() {
-            Wait.waitForJavascriptRecalculation();
-            waitForAjaxCompleted();
+            Wait.waitForAjaxCompletedAndJsRecalculation();
             $(viewMailButton)
                     .hover()
                     .click();

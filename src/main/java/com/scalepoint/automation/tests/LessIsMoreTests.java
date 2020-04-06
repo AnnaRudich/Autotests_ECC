@@ -1,7 +1,7 @@
 package com.scalepoint.automation.tests;
 
 
-import com.scalepoint.automation.pageobjects.pages.SettlementGroupDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SettlementGroupDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;

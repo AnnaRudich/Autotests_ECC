@@ -3,14 +3,15 @@ package com.scalepoint.automation.pageobjects.pages.selfService2;
 import com.scalepoint.automation.pageobjects.pages.Page;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 public class SaveConfirmationPage extends Page {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
+        waitForPageLoaded();
     }
 
     @Override

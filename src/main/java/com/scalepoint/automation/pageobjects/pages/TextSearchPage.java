@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.ProductDetailsPage;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
@@ -137,11 +136,11 @@ public class TextSearchPage extends Page {
     }
 
     @Override
-    public TextSearchPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForDisplayed(By.id("categoryLegend"));
-        Wait.waitForAjaxCompleted();
-        return this;
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
+        $(By.id("categoryLegend")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public TextSearchPage sortOrderableFirst() {

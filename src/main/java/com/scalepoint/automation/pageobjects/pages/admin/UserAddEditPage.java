@@ -4,7 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.junit.Assert;
@@ -21,6 +20,7 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -92,10 +92,10 @@ public class UserAddEditPage extends AdminBasePage {
     private String byRolesXpath = "//*[@id='rolesDiv']/table/tbody/tr/td[1][contains(.,'$1')]";
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(loginField);
-        return this;
+        waitForPageLoaded();
+        $(loginField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

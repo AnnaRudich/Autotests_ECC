@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
@@ -9,6 +10,9 @@ import org.testng.Assert;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+
 public class AddShopDialogViewMode extends BaseDialog {
 
     private static final String SUPPLIER_CANCEL_VIEW_SHOP_BTN = "//a[contains(@class,'supplier-cancel-view-shop-btn')]";
@@ -17,9 +21,9 @@ public class AddShopDialogViewMode extends BaseDialog {
     private WebElement nameLabel;
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(nameLabel);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public SupplierDialog.ShopsTab cancelViewShopDialog() {

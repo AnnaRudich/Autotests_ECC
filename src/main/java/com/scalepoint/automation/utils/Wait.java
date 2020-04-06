@@ -46,6 +46,11 @@ public class Wait {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait -> ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
 
+    public static void waitForAjaxCompletedAndJsRecalculation(){
+        waitForAjaxCompleted();
+        waitForJavascriptRecalculation();
+    }
+
     public static void waitForSpinnerToDisappear() {
         forCondition1s(new Function<WebDriver, Object>() {
             @Nullable

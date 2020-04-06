@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -18,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 @RequiredParameters("ftrfnbr=%s&showHidden=true")
@@ -34,20 +36,20 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     private WebElement name;
 
     @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/Admin/func_template_edit.jsp";
-    }
-
-    @Override
-    public EditFunctionTemplatePage ensureWeAreOnPage() {
+   protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(saveValues);
-        return this;
+        waitForPageLoaded();
+        $(saveValues).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public FunctionalTemplatesPage saveTemplate() {
         clickUsingJsIfSeleniumClickReturnError(saveValues);
         return at(FunctionalTemplatesPage.class);
+    }
+
+    @Override
+    protected String getRelativeUrl() {
+        return "webshop/jsp/Admin/func_template_edit.jsp";
     }
 
     public List<FtOperation> findDifferences(FtOperation... operations) {

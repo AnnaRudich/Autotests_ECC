@@ -1,14 +1,15 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
-public class OpenSettlementOptionDialog extends Page {
+public class OpenSettlementOptionDialog extends BaseDialog{
 
     @FindBy(id = "btn_reopen")
     private Button reopen;
@@ -17,15 +18,9 @@ public class OpenSettlementOptionDialog extends Page {
     private Button cancel;
 
     @Override
-    protected String getRelativeUrl() {
-        return "webshop/jsp/matching_engine/dialog/open_claim_option_dialog.jsp";
-    }
-
-    @Override
-    public OpenSettlementOptionDialog ensureWeAreOnPage() {
-        waitForUrl(getRelativeUrl());
-        waitForVisible(reopen);
-        waitForVisible(cancel);
-        return null;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(reopen).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(cancel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 }

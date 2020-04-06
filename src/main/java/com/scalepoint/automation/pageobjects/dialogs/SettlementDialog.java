@@ -311,12 +311,10 @@ public class SettlementDialog extends BaseDialog {
     }
 
     @Override
-    public SettlementDialog ensureWeAreAt() {
-        Wait.waitForJavascriptRecalculation();
-        Wait.waitForAjaxCompleted();
+   protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
         $(cancelButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
-        return this;
     }
 
 
