@@ -39,8 +39,6 @@ public class MailViewDialog extends BaseDialog {
     }
 
     public MailsPage cancel(){
-//        waitForJavascriptRecalculation();
-//        waitForAjaxCompleted();
         $(cancelButton).click();
         return Page.at(MailsPage.class);
     }

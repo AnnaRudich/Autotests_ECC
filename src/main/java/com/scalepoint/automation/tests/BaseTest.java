@@ -41,8 +41,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,9 +113,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         ServiceData.init(databaseApi);
 
         JavascriptHelper.initializeCommonFunctions();
-//        WebDriver.Window window = driver.manage().window();
-//        window.setPosition(new Point(0,0));
-//        window.setSize(new Dimension(1920, 1080));
 
         Configuration.savePageSource = false;
 
