@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import org.openqa.selenium.NoSuchElementException;
@@ -13,7 +13,8 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 @RequiredParameters("pseudocatgroupid=%s")
@@ -35,10 +36,10 @@ public class PseudoCategoryGroupAddEditPage extends AdminBasePage {
     private Button moveCategoryButton;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(groupNameField);
-        return this;
+        waitForPageLoaded();
+        $(groupNameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.google.common.base.Strings;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ReductionRule;
 import org.openqa.selenium.By;
@@ -11,7 +11,7 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertEquals;
 
 @EccPage
@@ -112,10 +112,10 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(nameField);
-        return this;
+        waitForPageLoaded();
+        $(nameField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

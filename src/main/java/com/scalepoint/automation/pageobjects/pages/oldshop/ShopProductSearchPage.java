@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
 
 import com.scalepoint.automation.pageobjects.modules.oldshop.AccountBox;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -62,10 +61,9 @@ public class ShopProductSearchPage extends ShopFlow {
     private AccountBox accountBox = new AccountBox();
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         Wait.waitForVisible(searchField);
-        return this;
     }
 
     @Override

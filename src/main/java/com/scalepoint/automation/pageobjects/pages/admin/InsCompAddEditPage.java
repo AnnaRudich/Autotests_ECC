@@ -1,8 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -15,7 +15,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 @RequiredParameters("icrfnbr=%s")
@@ -81,10 +81,10 @@ public class InsCompAddEditPage extends AdminBasePage {
     private String byAuditXpath = "//select[@name='auditEnabled']/option[contains(.,'$1')]";
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(companyIDField);
-        return this;
+        waitForPageLoaded();
+        $(companyIDField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

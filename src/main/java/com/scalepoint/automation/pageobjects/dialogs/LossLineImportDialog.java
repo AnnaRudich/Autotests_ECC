@@ -14,13 +14,14 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class LossLineImportDialog extends BaseDialog {
 
     @Override
-    protected LossLineImportDialog ensureWeAreAt() {
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
         $("#importList_main").shouldBe(Condition.visible);
-        return this;
     }
 
     public ExcelImportSummaryDialog confirmImportAfterErrorsWereFixed() {

@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.EvaluateTaskDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -15,6 +16,8 @@ import org.testng.Assert;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -29,9 +32,10 @@ public class ProjectsPage extends Page {
     private WebElement auditInfoPanelHeader;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
     }
 
     @Override

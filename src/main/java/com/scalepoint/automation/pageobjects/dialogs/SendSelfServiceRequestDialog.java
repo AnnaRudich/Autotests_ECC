@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -9,8 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForInvisible;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SendSelfServiceRequestDialog extends BaseDialog {
 
@@ -36,10 +38,10 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     private WebElement newPasswordCheckbox;
 
     @Override
-    public SendSelfServiceRequestDialog ensureWeAreAt() {
-        waitForVisible(email);
-        waitForVisible(ok);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(email).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public SendSelfServiceRequestDialog fill(Claim claim, String password) {

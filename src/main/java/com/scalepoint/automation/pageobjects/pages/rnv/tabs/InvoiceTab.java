@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
-import com.scalepoint.automation.pageobjects.pages.rnv.InvoiceDialog;
+import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.InvoiceDialog;
 import org.openqa.selenium.By;
 
 import java.util.function.Consumer;
@@ -11,14 +11,18 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class InvoiceTab extends BaseClaimPage {
 
     @Override
-    protected InvoiceTab ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
+        $("#grid-invoice-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

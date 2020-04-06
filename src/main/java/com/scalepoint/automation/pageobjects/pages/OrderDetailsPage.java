@@ -8,6 +8,8 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+
 @EccPage
 public class OrderDetailsPage extends Page {
 
@@ -59,10 +61,10 @@ public class OrderDetailsPage extends Page {
     private WebElement cancelOrderNoteTextArea;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
-        return this;
+        waitForPageLoaded();
     }
 
     @Override

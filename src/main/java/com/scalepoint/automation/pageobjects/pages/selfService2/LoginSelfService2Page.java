@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.selfService2;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
@@ -7,7 +8,8 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginSelfService2Page extends Page {
@@ -24,11 +26,11 @@ public class LoginSelfService2Page extends Page {
     }
 
     @Override
-    public LoginSelfService2Page ensureWeAreOnPage() {
+    public void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(passwordField);
-        waitForVisible(login);
-        return this;
+        waitForJavascriptRecalculation();
+        waitForPageLoaded();
+        $(login).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public SelfService2Page login(String password) {

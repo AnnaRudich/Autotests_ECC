@@ -1,8 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.Keys;
@@ -12,6 +12,9 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -34,9 +37,11 @@ public class ClaimLineNotesPage extends BaseClaimPage implements RequiresJavascr
     private WebElement copyNoteTextButton;
 
     @Override
-    protected Page ensureWeAreOnPage() {
-        Wait.waitForVisible(closeNotesButton);
-        return this;
+    protected void ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
+        $(closeNotesButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

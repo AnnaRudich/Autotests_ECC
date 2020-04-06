@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -14,14 +15,18 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClaimSearchPage extends Page {
 
     @Override
-    protected Page ensureWeAreOnPage() {
-        Wait.waitForVisible(soegButton);
-        return this;
+    protected void ensureWeAreOnPage() {
+        waitForUrl(getRelativeUrl());
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
+        $(searchButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class ClaimSearchPage extends Page {
     private WebElement postalfieldInput;
 
     @FindBy(id = "soeg")
-    private WebElement soegButton;
+    private WebElement searchButton;
 
 
     public List<ClaimRow> getClaimRows() {
@@ -92,7 +97,7 @@ public class ClaimSearchPage extends Page {
     }
 
     public ClaimSearchPage search() {
-        soegButton.click();
+        searchButton.click();
         Wait.waitForAjaxCompleted();
         return this;
     }

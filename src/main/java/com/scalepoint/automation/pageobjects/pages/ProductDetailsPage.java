@@ -1,7 +1,5 @@
-package com.scalepoint.automation.pageobjects.dialogs;
+package com.scalepoint.automation.pageobjects.pages;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.WebElement;
@@ -10,6 +8,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -26,10 +25,10 @@ public class ProductDetailsPage extends Page {
     private WebElement marketPriceSupplier;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         switchToLast();
         waitForUrl(getRelativeUrl());
-        return this;
+        waitForPageLoaded();
     }
 
     @Override

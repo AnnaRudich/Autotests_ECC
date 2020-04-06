@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.utils.Wait;
@@ -8,7 +9,8 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class LoginShopPage extends Page {
@@ -32,11 +34,11 @@ public class LoginShopPage extends Page {
     }
 
     @Override
-    public LoginShopPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(password);
-        waitForVisible(login);
-        return this;
+        waitForPageLoaded();
+        $(password).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        $(login).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public LoginShopPage enterPassword(String _password) {

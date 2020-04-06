@@ -470,9 +470,9 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 adds New price amount V1
      * THEN: Cash compensation CC is equal to V1
      * WHEN: U1 selects Add valuation option
-     * THEN: Add valuation dialog is displayed
+     * THEN: Add valuation dialogs is displayed
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to open Add Valuation dialog in SID")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to open Add Valuation dialogs in SID")
     public void ecc3144_17_openAddValuationDialogInSID(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -485,14 +485,14 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 adds New price amount V1
      * THEN: Cash compensation CC is equal to V1
      * WHEN: U1 selects Add valuation option
-     * THEN: Add valuation dialog is displayed
+     * THEN: Add valuation dialogs is displayed
      * WHEN: U1 selects third valuation type
      * WHEN: U1 adds valuation amount V2 < V1 and selects closeSidWithOk option
      * THEN: V2 is displayed in SID
      * THEN: CC is equal to V2
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add new valuation price in add " +
-            "valuation dialog (user selects 3d type)")
+            "valuation dialogs (user selects 3d type)")
     public void ecc3144_18_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -508,13 +508,13 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 adds New price amount V1
      * THEN: Cash compensation CC is equal to V1
      * WHEN: U1 selects Add valuation option
-     * THEN: Add valuation dialog is displayed
+     * THEN: Add valuation dialogs is displayed
      * WHEN: U1 selects fourth valuation type
      * WHEN: U1 adds valuation amount V2 < V1 and selects closeSidWithOk option
      * THEN: V2 is displayed in SID
      * THEN: CC is equal to V2
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialog (user selects 4th type)")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialogs (user selects 4th type)")
     public void ecc3144_19_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -531,14 +531,14 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 adds New price amount V1
      * THEN: Cash compensation CC is equal to V1
      * WHEN: U1 selects Add valuation option
-     * THEN: Add valuation dialog is displayed
+     * THEN: Add valuation dialogs is displayed
      * WHEN: U1 selects fifth valuation type
      * WHEN: U1 adds valuation amount V2 < V1 and selects closeSidWithOk option
      * THEN: V2 is displayed in SID
      * THEN: CC is equal to V2
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify it's possible to add new valuation price in " +
-            "add valuation dialog (user selects 5th type)")
+            "add valuation dialogs (user selects 5th type)")
     public void ecc3144_20_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -664,8 +664,7 @@ public class SidManualItemsTests extends BaseTest {
                     sid.assertItemIsPresent(claimItem1.getTextFieldSP());
                 });
 
-        new SettlementDialog().ensureWeAreAt()
-
+        new SettlementDialog()
                 .setBaseData(claimItem2)
                 .setValuation(NEW_PRICE)
                 .closeSidWithOk()

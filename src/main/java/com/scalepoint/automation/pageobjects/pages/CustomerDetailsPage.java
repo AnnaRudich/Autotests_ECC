@@ -58,15 +58,16 @@ public class CustomerDetailsPage extends BaseClaimPage {
     }
 
     @Override
-    public CustomerDetailsPage ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), getAlternativeUrl());
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
         if (driver.getCurrentUrl().contains(getRelativeUrl())) {
-            waitForVisible(reopenClaim);
-            waitForVisible(cancelClaimButton);
+            $(reopenClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+            $(cancelClaimButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } else {
-            waitForVisible(claimNumber);
+            $(claimNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
-        return this;
     }
 
     public String getClaimNumber() {

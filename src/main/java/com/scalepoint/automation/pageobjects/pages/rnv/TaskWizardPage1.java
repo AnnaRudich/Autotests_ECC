@@ -4,7 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,7 +16,10 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @RVPage
 public class TaskWizardPage1 extends Page {
@@ -29,11 +31,11 @@ public class TaskWizardPage1 extends Page {
 
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(nameField);
-        Wait.waitForAjaxCompleted();
-        return null;
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
+        $(nameField).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

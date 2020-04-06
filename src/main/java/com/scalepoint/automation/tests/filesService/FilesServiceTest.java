@@ -78,7 +78,6 @@ public class FilesServiceTest extends BaseTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-
     @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentDeletedFromClaimLevel")
     public void attachmentDeletedFromClaimLevel(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));

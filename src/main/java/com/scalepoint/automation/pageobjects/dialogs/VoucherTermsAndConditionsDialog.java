@@ -1,12 +1,15 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
-import com.scalepoint.automation.utils.Wait;
+import com.codeborne.selenide.Condition;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class VoucherTermsAndConditionsDialog extends BaseDialog {
 
@@ -23,9 +26,9 @@ public class VoucherTermsAndConditionsDialog extends BaseDialog {
     private WebElement questionsText;
 
     @Override
-    protected VoucherTermsAndConditionsDialog ensureWeAreAt() {
-        Wait.waitForVisible(termsAndConditions);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(termsAndConditions).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public String getTermsAndConditions() {

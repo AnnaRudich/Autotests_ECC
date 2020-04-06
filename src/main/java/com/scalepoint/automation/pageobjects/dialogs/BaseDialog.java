@@ -22,7 +22,7 @@ public abstract class BaseDialog implements Actions {
         HtmlElementLoader.populatePageObject(this, this.driver);
     }
 
-    protected abstract BaseDialog ensureWeAreAt();
+    protected abstract void ensureWeAreAt();
 
     protected boolean areWeAt() {
         return false;

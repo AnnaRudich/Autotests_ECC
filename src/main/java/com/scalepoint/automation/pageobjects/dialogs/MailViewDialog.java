@@ -15,6 +15,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,8 +32,8 @@ public class MailViewDialog extends BaseDialog {
     private WebElement cancelButton;
 
     @Override
-    public MailViewDialog ensureWeAreAt() {
-        return this;
+    public void ensureWeAreAt() {
+        waitForPageLoaded();
     }
 
     public MailsPage cancel(){

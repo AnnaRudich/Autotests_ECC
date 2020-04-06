@@ -44,7 +44,7 @@ public abstract class Page implements Actions {
         HtmlElementLoader.populatePageObject(this, this.driver);
     }
 
-    protected abstract Page ensureWeAreOnPage();
+    protected abstract void ensureWeAreOnPage();
 
     protected Boolean areWeAt() {
         return false;

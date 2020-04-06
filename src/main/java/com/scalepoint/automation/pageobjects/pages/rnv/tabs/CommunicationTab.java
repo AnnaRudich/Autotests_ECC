@@ -1,9 +1,9 @@
 package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.services.externalapi.EccFileApi;
 import com.scalepoint.automation.utils.ExcelDocUtil;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -13,6 +13,8 @@ import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Condition.exactTextCaseSensitive;
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class CommunicationTab extends BaseClaimPage {
@@ -33,10 +35,11 @@ public class CommunicationTab extends BaseClaimPage {
     private WebElement sendBtn;
 
     @Override
-    protected CommunicationTab ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(sendBtn);
-        return this;
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
+        $(sendBtn).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

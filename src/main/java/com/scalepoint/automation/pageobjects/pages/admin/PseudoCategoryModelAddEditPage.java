@@ -1,11 +1,14 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class PseudoCategoryModelAddEditPage extends AdminBasePage {
@@ -19,10 +22,10 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     private String byCategoryNameXpath = "//div/label[contains(.,'$1')]/input";
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(saveOption);
-        return null;
+        waitForPageLoaded();
+        $(saveOption).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

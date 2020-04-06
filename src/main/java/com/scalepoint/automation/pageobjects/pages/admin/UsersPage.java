@@ -1,9 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.SystemUser;
 import org.openqa.selenium.By;
@@ -17,6 +16,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 
 @EccPage
@@ -39,10 +39,10 @@ public class UsersPage extends AdminBasePage {
     private String filterByIcXpath = "//select[contains(@name, 'company')]/option[contains(text(), '$1')]";
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(createUserButton);
-        return this;
+        waitForPageLoaded();
+        $(createUserButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
@@ -12,6 +12,8 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -40,10 +42,10 @@ public class ReductionRulesPage extends AdminBasePage {
     private WebElement quickSearchField;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), "webshop/jsp/Admin/ReductionRuleRefresh");
-        Wait.waitForVisible(newButton);
-        return this;
+        waitForPageLoaded();
+        $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

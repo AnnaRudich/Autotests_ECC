@@ -1,6 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
@@ -10,6 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class PseudoCategoryModelPage extends AdminBasePage {
@@ -27,10 +30,10 @@ public class PseudoCategoryModelPage extends AdminBasePage {
     private Select modelsList;
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        Wait.waitForVisible(addButton);
-        return this;
+        waitForPageLoaded();
+        $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override

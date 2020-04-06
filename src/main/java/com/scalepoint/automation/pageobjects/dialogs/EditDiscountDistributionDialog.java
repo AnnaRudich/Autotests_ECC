@@ -1,12 +1,15 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class EditDiscountDistributionDialog extends BaseDialog {
 
@@ -30,9 +33,9 @@ public class EditDiscountDistributionDialog extends BaseDialog {
 
 
     @Override
-    protected BaseDialog ensureWeAreAt() {
-        Wait.waitForVisible(saveButton);
-        return this;
+    protected void ensureWeAreAt() {
+        waitForAjaxCompletedAndJsRecalculation();
+        $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public EditDiscountDistributionDialog updatePercentage(EditVoucherValuationDialog.DistributeTo distributeTo, Integer percentage) {

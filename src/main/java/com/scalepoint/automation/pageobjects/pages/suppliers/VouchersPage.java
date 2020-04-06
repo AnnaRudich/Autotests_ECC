@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
@@ -18,11 +18,13 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.refresh;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 @EccAdminPage
-public class VouchersPage extends BaseEccAdminNavigation {
+public class VouchersPage extends BaseSupplierAdminNavigation {
 
     @FindBy(xpath = ".//a[contains(@href, 'logout')]")
     private Link signOutLink;
@@ -44,16 +46,17 @@ public class VouchersPage extends BaseEccAdminNavigation {
     private String byActiveXpath = "//td[contains(@class, 'x-grid-cell-voucherListActiveId ')]";
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
+        waitForAjaxCompletedAndJsRecalculation();
+        waitForPageLoaded();
         try {
-            Wait.waitForVisible(firstVoucherItem);
+            $(firstVoucherItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } catch (Exception e) {
             refresh();
             //TODO remove after https://jira.scalepoint.com/browse/CONTENTS-4491
-            Wait.waitForVisible(firstVoucherItem);
+            $(firstVoucherItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         }
-        return this;
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -50,6 +51,9 @@ public class SelfService2Page extends Page {
     @FindBy(id = "save-button")
     private WebElement save;
 
+    @FindBy(css = "#save-item-button")
+    private WebElement saveItem;
+
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
 
@@ -60,9 +64,11 @@ public class SelfService2Page extends Page {
     By logOutButtonXpath = By.xpath(".//div[@class='log-out']//input[@value='Log ud']");
 
     @Override
-    protected Page ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        return this;
+        waitForJavascriptRecalculation();
+        waitForPageLoaded();
+        $(saveItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     @Override
@@ -216,7 +222,7 @@ public class SelfService2Page extends Page {
     }
 
     public SelfService2Page saveItem() {
-        $("#save-item-button").click();
+        $(saveItem).click();
         Wait.waitForSpinnerToDisappear();
         return at(SelfService2Page.class);
     }
