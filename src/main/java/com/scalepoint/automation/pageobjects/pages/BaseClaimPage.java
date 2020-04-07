@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.MainMenu;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
+import com.scalepoint.automation.utils.Wait;
 
 public abstract class BaseClaimPage extends Page {
 
@@ -16,6 +17,7 @@ public abstract class BaseClaimPage extends Page {
     }
 
     public MailsPage toMailsPage() {
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return claimNavigationMenu.toMailsPage();
     }
 

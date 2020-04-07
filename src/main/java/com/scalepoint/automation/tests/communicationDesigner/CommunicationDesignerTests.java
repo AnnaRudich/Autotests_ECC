@@ -295,7 +295,7 @@ public class CommunicationDesignerTests extends BaseTest {
         new SettlementSummary()
                 .editSelfRisk("2000")
                 .toCompleteClaimPage()
-                .completeWithEmail(claim, databaseApi, true)
+                .completeWithEmail(claim, databaseApi, false)
 
                 .openRecentClaim()
                 .toMailsPage()

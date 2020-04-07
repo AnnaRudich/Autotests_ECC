@@ -212,6 +212,7 @@ public class CompleteClaimPage extends Page {
 
     public ReplacementDialog openReplacementWizard(boolean gdpr) {
         Wait.waitForAjaxCompleted();
+        Wait.waitForJavascriptRecalculation();
         replace.click();
         if(gdpr) {
             BaseDialog

@@ -113,7 +113,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         ServiceData.init(databaseApi);
 
         JavascriptHelper.initializeCommonFunctions();
-        driver.manage().window().maximize();
 
         Configuration.savePageSource = false;
 

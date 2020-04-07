@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,7 +59,7 @@ public class MailsPage extends BaseClaimPage {
     }
 
     @Override
-   protected void ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         replaceAmpInUrl();
         waitForAjaxCompletedAndJsRecalculation();
@@ -85,7 +84,7 @@ public class MailsPage extends BaseClaimPage {
             String type = element.findElement(By.xpath(".//td[contains(@data-columnid,'type_column')]")).getText();
             String dateValue = element.findElement(By.xpath(".//td[contains(@data-columnid,'date_column')]")).getText();
             LocalDateTime sentDate = LocalDateTime.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-            Button viewMailButton = new Button(element.findElement(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]")));
+            WebElement viewMailButton = element.findElement(By.xpath(".//a[contains(@class,'viewMailButtonCls ')]//span[contains(@class, 'x-btn-inner')]"));
             mailRows.add(new Mail(text, type, sentDate, viewMailButton));
         }
         return new Mails(mailRows);
@@ -96,7 +95,22 @@ public class MailsPage extends BaseClaimPage {
     }
 
     public MailViewDialog viewMail(MailType mailType, String mailSubject) {
-        return parseMails().findMailsByTypeAndSubject(mailType, mailSubject).viewMail();
+
+        MailViewDialog mailViewDialog = null;
+
+        int counter = 1;
+        do {
+            try {
+                mailViewDialog = parseMails().findMailsByTypeAndSubject(mailType, mailSubject).viewMail();
+                counter = 0;
+            } catch (Exception e) {
+                logger.warn("View mail exception: {}", e);
+                refresh();
+                at(MailsPage.class);
+            }
+        }while (counter-- > 0);
+
+        return mailViewDialog;
     }
 
     public Mail getLatestMail(MailType mailType) {
@@ -145,10 +159,10 @@ public class MailsPage extends BaseClaimPage {
     public static class Mail {
         private String subject;
         private LocalDateTime sentDate;
-        private Button viewMailButton;
+        private WebElement viewMailButton;
         private MailType mailType;
 
-        public Mail(String subject, String type, LocalDateTime sentDate, Button viewMailButton) {
+        public Mail(String subject, String type, LocalDateTime sentDate, WebElement viewMailButton) {
             this.subject = subject;
             this.mailType = MailType.findByText(type);
             this.sentDate = sentDate;
@@ -164,7 +178,10 @@ public class MailsPage extends BaseClaimPage {
         }
 
         public MailViewDialog viewMail() {
-            viewMailButton.click();
+            Wait.waitForAjaxCompletedAndJsRecalculation();
+            $(viewMailButton)
+                    .hover()
+                    .click();
             return BaseDialog.at(MailViewDialog.class);
         }
 
