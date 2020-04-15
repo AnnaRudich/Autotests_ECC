@@ -219,7 +219,7 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public <T extends Page> T selectSaveOption(Class<T> page) {
-        clickUsingJsIfSeleniumClickReturnError(saveButton);
+        safeJavaScriptClick(saveButton);
         return at(page);
     }
 
@@ -385,7 +385,7 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public String generateAndGetNewPassword() {
-        clickUsingJsIfSeleniumClickReturnError(generatePasswordButton);
+        safeJavaScriptClick(generatePasswordButton);
         return getAlertTextAndAccept().split(" ")[1];
     }
 

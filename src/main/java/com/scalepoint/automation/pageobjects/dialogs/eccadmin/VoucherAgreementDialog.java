@@ -510,7 +510,7 @@ public class VoucherAgreementDialog extends BaseDialog implements VoucherAgreeme
         }
 
         public EditCategoryMappingsDialog openEditMappingsDialog() {
-            clickUsingJsIfSeleniumClickReturnError(editMappingsBtn);
+            safeJavaScriptClick(editMappingsBtn);
             return BaseDialog.at(EditCategoryMappingsDialog.class);
         }
 

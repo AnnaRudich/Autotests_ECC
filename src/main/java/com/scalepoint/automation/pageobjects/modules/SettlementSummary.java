@@ -65,7 +65,7 @@ public class SettlementSummary extends Module {
     private WebElement settlementSummaryTotalsPanel;
 
     public void cancel() {
-        clickUsingJsIfSeleniumClickReturnError(cancel);
+        safeJavaScriptClick(cancel);
     }
 
     public void saveClaim() {
@@ -80,14 +80,14 @@ public class SettlementSummary extends Module {
         if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
             expand();
         }
-        clickUsingJsIfSeleniumClickReturnError(completeClaim);
+        safeJavaScriptClick(completeClaim);
     }
 
     public void completeClaimWithoutMail() {
         if (!completeClaimExternally.isDisplayed()) {
             expand();
         }
-        clickUsingJsIfSeleniumClickReturnError(completeClaimExternally);
+        safeJavaScriptClick(completeClaimExternally);
     }
 
     private void expand() {

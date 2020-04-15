@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.refresh;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
@@ -112,7 +111,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
         if (getOption(supplierName).getText().contains(supplierName)) {
             scrollTo(getOption(supplierName));
-            doubleClickUsingJsIfSeleniumClickReturnError(getOption(supplierName));
+            safeJavaScriptDoubleClick(getOption(supplierName));
         }
 
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
@@ -126,7 +125,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public boolean isSupplierCreated(String supplierName) {
-        clickUsingJsIfSeleniumClickReturnError(find(By.xpath("//input[contains(@name,'searchfield')]")));
+        safeJavaScriptClick(find(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         String xpath = bySupplierNameXpath.replace("$1", supplierName);

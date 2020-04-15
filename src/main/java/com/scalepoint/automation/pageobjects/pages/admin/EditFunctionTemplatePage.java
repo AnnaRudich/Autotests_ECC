@@ -43,7 +43,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     }
 
     public FunctionalTemplatesPage saveTemplate() {
-        clickUsingJsIfSeleniumClickReturnError(saveValues);
+        safeJavaScriptClick(saveValues);
         return at(FunctionalTemplatesPage.class);
     }
 

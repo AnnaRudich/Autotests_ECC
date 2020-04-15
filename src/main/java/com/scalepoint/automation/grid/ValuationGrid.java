@@ -111,7 +111,7 @@ public class ValuationGrid implements Actions {
                 for (int i = 0; i < 2; i++) {
                     Wait.waitForStaleElement(xpath);
                     webElement = driver.findElement(xpath);
-                    clickUsingJsIfSeleniumClickReturnError(webElement);
+                    safeJavaScriptClick(webElement);
                 }
             }
             waitForJavascriptRecalculation();

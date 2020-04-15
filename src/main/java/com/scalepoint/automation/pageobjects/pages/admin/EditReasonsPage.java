@@ -80,7 +80,7 @@ public class EditReasonsPage extends AdminBasePage {
 
     public EditReasonsPage addReason(String reason) {
         addReasonField.enter(reason);
-        clickUsingJsIfSeleniumClickReturnError(save);
+        safeJavaScriptClick(save);
         return at(EditReasonsPage.class);
     }
 

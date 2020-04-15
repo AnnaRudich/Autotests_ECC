@@ -54,7 +54,7 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     public SettlementPage close() {
-        clickUsingJsIfSeleniumClickReturnError(cancel);
+        safeJavaScriptClick(cancel);
         return Page.at(SettlementPage.class);
     }
 

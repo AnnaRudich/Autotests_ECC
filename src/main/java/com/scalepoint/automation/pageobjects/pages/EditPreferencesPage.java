@@ -37,7 +37,7 @@ public class EditPreferencesPage extends Page {
     }
 
     public String generateNewPassword() {
-        clickUsingJsIfSeleniumClickReturnError(buttonGenerate);
+        safeJavaScriptClick(buttonGenerate);
         return getAlertTextAndAccept().split(" ")[1];
     }
 

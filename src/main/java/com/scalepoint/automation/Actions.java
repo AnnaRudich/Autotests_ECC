@@ -149,7 +149,7 @@ public interface Actions {
     }
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
-        clickUsingJsIfSeleniumClickReturnError(element);
+        safeJavaScriptClick(element);
         $(byWaitForElement).waitUntil(Condition.visible, 60000);
     }
 
@@ -287,23 +287,39 @@ public interface Actions {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
     }
 
-    default void clickUsingJsIfSeleniumClickReturnError(WebElement element) {
+    default void safeJavaScriptClick(WebElement element){
         try {
-            element.click();
+            if (element.isEnabled() && element.isDisplayed()) {
+                System.out.println("Clicking on element with using java script click");
+
+                ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
+            } else {
+                System.out.println("Unable to click on element");
+            }
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Element is not attached to the page document "+ e.getStackTrace());
+        } catch (NoSuchElementException e) {
+            System.out.println("Element was not found in DOM "+ e.getStackTrace());
         } catch (Exception e) {
-            clickElementUsingJS(element);
+            System.out.println("Unable to click on element "+ e.getStackTrace());
         }
     }
 
-    default void doubleClickElementUsingJS(WebElement element) {
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
-    }
-
-    default void doubleClickUsingJsIfSeleniumClickReturnError(WebElement element) {
+    default void safeJavaScriptDoubleClick(WebElement element) {
         try {
-            doubleClick(element);
+            if (element.isEnabled() && element.isDisplayed()) {
+                System.out.println("Clicking on element with using java script click");
+
+                ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
+            } else {
+                System.out.println("Unable to click on element");
+            }
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Element is not attached to the page document "+ e.getStackTrace());
+        } catch (NoSuchElementException e) {
+            System.out.println("Element was not found in DOM "+ e.getStackTrace());
         } catch (Exception e) {
-            doubleClickElementUsingJS(element);
+            System.out.println("Unable to click on element "+ e.getStackTrace());
         }
     }
 

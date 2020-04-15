@@ -40,7 +40,7 @@ public class ClaimNavigationMenu extends Module {
     private Link history;
 
     public SettlementPage toSettlementPage() {
-        clickUsingJsIfSeleniumClickReturnError(settelment);
+        safeJavaScriptClick(settelment);
         return at(SettlementPage.class);
     }
 
@@ -55,39 +55,39 @@ public class ClaimNavigationMenu extends Module {
     }
 
     public CustomerDetailsPage toCustomerDetailsPage() {
-        clickUsingJsIfSeleniumClickReturnError(details);
+        safeJavaScriptClick(details);
         return at(CustomerDetailsPage.class);
     }
 
     public void ClickImports() {
-        clickUsingJsIfSeleniumClickReturnError(imports);
+        safeJavaScriptClick(imports);
     }
 
     public ProjectsPage toRepairValuationProjectsPage() {
-        clickUsingJsIfSeleniumClickReturnError(repairValuation);
+        safeJavaScriptClick(repairValuation);
         return at(ProjectsPage.class);
     }
 
     public void ClickSettlementSummary() {
-        clickUsingJsIfSeleniumClickReturnError(settlementSummary);
+        safeJavaScriptClick(settlementSummary);
     }
 
     public OrderDetailsPage toOrderDetailsPage() {
-        clickUsingJsIfSeleniumClickReturnError(order);
+        safeJavaScriptClick(order);
         return at(OrderDetailsPage.class);
     }
 
     public void ClickDetails() {
-        clickUsingJsIfSeleniumClickReturnError(details);
+        safeJavaScriptClick(details);
     }
 
     public NotesPage toNotesPage() {
-        clickUsingJsIfSeleniumClickReturnError(notes);
+        safeJavaScriptClick(notes);
         return at(NotesPage.class);
     }
 
     public void ClickHistory() {
-        clickUsingJsIfSeleniumClickReturnError(history);
+        safeJavaScriptClick(history);
     }
 
 }

@@ -530,7 +530,7 @@ public class SettlementPage extends BaseClaimPage {
                     "targLink.dispatchEvent (clickEvent);";
 
             try {
-                clickUsingJsIfSeleniumClickReturnError(descriptionElement);
+                safeJavaScriptClick(descriptionElement);
                 doubleClick(descriptionElement);
                 waitForAjaxCompleted();
                 String js =
