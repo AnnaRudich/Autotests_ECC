@@ -199,7 +199,6 @@ public interface Actions {
 
     default boolean isElementPresent(By by) {
         try {
-            doubleClick();
             Browser.driver().findElement(by);
             return true;
         } catch (Exception e) {
