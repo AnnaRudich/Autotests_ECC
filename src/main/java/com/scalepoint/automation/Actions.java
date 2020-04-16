@@ -288,39 +288,45 @@ public interface Actions {
     }
 
     default void safeJavaScriptClick(WebElement element){
-        try {
-            if (element.isEnabled() && element.isDisplayed()) {
-                System.out.println("Clicking on element with using java script click");
-
-                ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
-            } else {
-                System.out.println("Unable to click on element");
+        int counter = 1;
+        do {
+            try {
+                if (element.isEnabled() && element.isDisplayed()) {
+                    logger.info("Clicking on element with using java script click");
+                    ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
+                    break;
+                } else {
+                    logger.error("Unable to click on element");
+                }
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Element is not attached to the page document " + e);
+            } catch (NoSuchElementException e) {
+                logger.warn("Element was not found in DOM " + e);
+            } catch (Exception e) {
+                logger.warn("Unable to click on element " + e);
             }
-        } catch (StaleElementReferenceException e) {
-            System.out.println("Element is not attached to the page document "+ e.getStackTrace());
-        } catch (NoSuchElementException e) {
-            System.out.println("Element was not found in DOM "+ e.getStackTrace());
-        } catch (Exception e) {
-            System.out.println("Unable to click on element "+ e.getStackTrace());
-        }
+        }while (counter-- > 0);
     }
 
     default void safeJavaScriptDoubleClick(WebElement element) {
-        try {
-            if (element.isEnabled() && element.isDisplayed()) {
-                System.out.println("Clicking on element with using java script click");
-
-                ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
-            } else {
-                System.out.println("Unable to click on element");
+        int counter = 1;
+        do {
+            try {
+                if (element.isEnabled() && element.isDisplayed()) {
+                    logger.info("Clicking on element with using java script click");
+                    ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
+                    break;
+                } else {
+                    logger.error("Unable to click on element");
+                }
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Element is not attached to the page document " + e);
+            } catch (NoSuchElementException e) {
+                logger.warn("Element was not found in DOM " + e);
+            } catch (Exception e) {
+                logger.warn("Unable to click on element " + e);
             }
-        } catch (StaleElementReferenceException e) {
-            System.out.println("Element is not attached to the page document "+ e.getStackTrace());
-        } catch (NoSuchElementException e) {
-            System.out.println("Element was not found in DOM "+ e.getStackTrace());
-        } catch (Exception e) {
-            System.out.println("Unable to click on element "+ e.getStackTrace());
-        }
+        }while (counter-- > 0);
     }
 
     default void replaceAmpInUrl() {
