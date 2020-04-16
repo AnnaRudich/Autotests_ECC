@@ -447,7 +447,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public VoucherAgreementGeneralTab editVoucherAgreement(String agreementName) {
             Wait.waitForAjaxCompleted();
             doubleClick(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'" + agreementName + "')]"));
-            isOn(GeneralTab.class);
+            isOn(VoucherAgreementGeneralTab.class);
             Wait.waitForAjaxCompleted();
             return at(VoucherAgreementGeneralTab.class);
         }
