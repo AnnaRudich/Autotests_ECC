@@ -189,19 +189,11 @@ public interface Actions {
         }
     }
 
-    default boolean isElementPresent(WebElement element) {
-        try {
-            return element != null;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     default boolean isElementPresent(By by) {
         try {
             Browser.driver().findElement(by);
             return true;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
