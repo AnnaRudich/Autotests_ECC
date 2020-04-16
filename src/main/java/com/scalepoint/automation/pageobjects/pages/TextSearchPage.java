@@ -216,9 +216,9 @@ public class TextSearchPage extends Page {
     public SettlementDialog openSidForFirstProduct() {
         Wait.waitForAjaxCompleted();
         Wait.waitForVisible(match);
-        safeJavaScriptClick(match);
+        clickUsingJavaScriptIfClickDoesNotWork(match);
         if (!BaseDialog.isOn(SettlementDialog.class)) {
-            safeJavaScriptClick(match);
+            clickUsingJavaScriptIfClickDoesNotWork(match);
         }
         return BaseDialog.at(SettlementDialog.class);
     }

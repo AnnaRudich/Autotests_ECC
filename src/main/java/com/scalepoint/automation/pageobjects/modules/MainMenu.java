@@ -49,7 +49,7 @@ public class MainMenu extends Module {
     }
 
     public void logOut() {
-        safeJavaScriptClick(signOut);
+        clickUsingJavaScriptIfClickDoesNotWork(signOut);
         acceptAlert();
     }
 

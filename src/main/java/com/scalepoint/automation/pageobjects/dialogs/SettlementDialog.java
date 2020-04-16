@@ -371,7 +371,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog uncheckedDocumentation() {
         if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
             forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
-            safeJavaScriptClick(sufficientDocumentation);
+            clickUsingJavaScriptIfClickDoesNotWork(sufficientDocumentation);
         }
         waitForJavascriptRecalculation();
         return this;
@@ -562,7 +562,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private void clickAndWait(By buttonBy, WebElement button) {
-        safeJavaScriptClick(button);
+        clickUsingJavaScriptIfClickDoesNotWork(button);
         Wait.waitElementDisappeared(buttonBy);
     }
 
@@ -854,7 +854,7 @@ public class SettlementDialog extends BaseDialog {
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> safeJavaScriptClick(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))));
+        IntStream.range(0, 3).forEach(i -> clickUsingJavaScriptIfClickDoesNotWork(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))));
         return at(EditVoucherValuationDialog.class);
     }
 

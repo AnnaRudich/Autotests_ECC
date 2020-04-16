@@ -24,11 +24,11 @@ public class FunctionalMenu extends Module {
     private Button importExcel;
 
     public void findInCatalogue() {
-        safeJavaScriptClick(findInCatalogue);
+        clickUsingJavaScriptIfClickDoesNotWork(findInCatalogue);
     }
 
     public SettlementDialog addManually() {
-        safeJavaScriptClick(addManually);
+        clickUsingJavaScriptIfClickDoesNotWork(addManually);
         return BaseDialog.at(SettlementDialog.class);
     }
 

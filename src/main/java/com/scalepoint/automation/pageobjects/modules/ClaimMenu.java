@@ -53,7 +53,7 @@ public class ClaimMenu extends Module {
                 }
             }
         } else {
-            clickElementUsingJS($(By.xpath("//div[contains(@id, 'messagebox')]//a//span[text()='Yes']")));
+            clickUsingJS($(By.xpath("//div[contains(@id, 'messagebox')]//a//span[text()='Yes']")));
         }
     }
 

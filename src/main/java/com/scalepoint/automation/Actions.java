@@ -7,7 +7,15 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -17,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.waitForVisibleAndEnabled;
 
 public interface Actions {
 
@@ -149,7 +158,7 @@ public interface Actions {
     }
 
     default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
-        safeJavaScriptClick(element);
+        clickUsingJavaScriptIfClickDoesNotWork(element);
         $(byWaitForElement).waitUntil(Condition.visible, 60000);
     }
 
@@ -159,7 +168,7 @@ public interface Actions {
 
     default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
         element.click();
-        Wait.waitForEnabled(byEnabledElement);
+        Wait.waitForVisibleAndEnabled(byEnabledElement);
     }
 
 
@@ -190,6 +199,7 @@ public interface Actions {
 
     default boolean isElementPresent(By by) {
         try {
+            doubleClick();
             Browser.driver().findElement(by);
             return true;
         } catch (Exception e) {
@@ -197,9 +207,9 @@ public interface Actions {
         }
     }
 
-    default boolean isDisplayed(By element) {
+    default boolean isDisplayed(By locator) {
         try {
-            return Browser.driver().findElement(element).isDisplayed();
+            return Browser.driver().findElement(locator).isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -215,22 +225,6 @@ public interface Actions {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    default void clickJS(WebElement element) {
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(element));
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
-    }
-
-    default void doubleClick(WebElement element) {
-        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
-        action.doubleClick(element);
-        action.perform();
-    }
-
-    default void doubleClick(By by) {
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(by));
-        doubleClick(Browser.driver().findElement(by));
     }
 
     default WebElement find(By by) {
@@ -283,50 +277,44 @@ public interface Actions {
         return StringUtils.isBlank(value) ? "unknown" : value;
     }
 
-    default void clickElementUsingJS(WebElement element) {
+    default void clickUsingJS(WebElement element) {
+        logger.warn("clicking on element with java script click");
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
     }
 
-    default void safeJavaScriptClick(WebElement element){
-        int counter = 1;
-        do {
-            try {
-                if (element.isEnabled() && element.isDisplayed()) {
-                    logger.info("Clicking on element with using java script click");
-                    ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
-                    break;
-                } else {
-                    logger.error("Unable to click on element");
-                }
+    default void clickUsingJavaScriptIfClickDoesNotWork(WebElement element){
+         try {
+                waitForVisibleAndEnabled(element);
+                element.click();
             } catch (StaleElementReferenceException e) {
                 logger.warn("Element is not attached to the page document " + e);
+                clickUsingJS(element);
             } catch (NoSuchElementException e) {
                 logger.warn("Element was not found in DOM " + e);
+                clickUsingJS(element);
             } catch (Exception e) {
                 logger.warn("Unable to click on element " + e);
+                clickUsingJS(element);
             }
-        }while (counter-- > 0);
     }
 
-    default void safeJavaScriptDoubleClick(WebElement element) {
-        int counter = 1;
-        do {
+    default void doubleClick(WebElement element) {
             try {
-                if (element.isEnabled() && element.isDisplayed()) {
-                    logger.info("Clicking on element with using java script click");
-                    ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].dblclick();", element);
-                    break;
-                } else {
-                    logger.error("Unable to click on element");
-                }
+                waitForVisibleAndEnabled(element);
+                org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
+                action.doubleClick(element);
+                action.perform();
             } catch (StaleElementReferenceException e) {
                 logger.warn("Element is not attached to the page document " + e);
             } catch (NoSuchElementException e) {
                 logger.warn("Element was not found in DOM " + e);
             } catch (Exception e) {
-                logger.warn("Unable to click on element " + e);
+                logger.error("Unable to doubleClick on element " + e);
             }
-        }while (counter-- > 0);
+        }
+
+    default void doubleClick(By by) {
+        doubleClick(find(by));
     }
 
     default void replaceAmpInUrl() {

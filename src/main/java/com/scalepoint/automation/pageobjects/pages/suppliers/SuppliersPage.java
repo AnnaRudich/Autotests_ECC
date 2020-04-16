@@ -111,7 +111,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
         if (getOption(supplierName).getText().contains(supplierName)) {
             scrollTo(getOption(supplierName));
-            safeJavaScriptDoubleClick(getOption(supplierName));
+            doubleClick(getOption(supplierName));
         }
 
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
@@ -125,7 +125,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public boolean isSupplierCreated(String supplierName) {
-        safeJavaScriptClick(find(By.xpath("//input[contains(@name,'searchfield')]")));
+        clickUsingJavaScriptIfClickDoesNotWork(find(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         String xpath = bySupplierNameXpath.replace("$1", supplierName);

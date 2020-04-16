@@ -33,7 +33,7 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
     }
 
     public VoucherAgreementDialog.GeneralTab createVoucherAgreement() {
-        clickElementUsingJS(createVoucherButton);
+        clickUsingJS(createVoucherButton);
         return at(VoucherAgreementDialog.GeneralTab.class);
     }
 

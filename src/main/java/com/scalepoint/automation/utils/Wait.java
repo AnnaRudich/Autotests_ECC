@@ -121,12 +121,21 @@ public class Wait {
         }
     }
 
-    public static WebElement waitForEnabled(By locator) {
+    public static WebElement waitForVisibleAndEnabled(By locator) {
         long start = System.currentTimeMillis();
         try {
             return wrapShort(ExpectedConditions.elementToBeClickable(locator));
         } finally {
-            logIfLong(start, "waitForEnabled");
+            logIfLong(start, "wait for element to be visible and enabled");
+        }
+    }
+
+    public static WebElement waitForVisibleAndEnabled(WebElement element) {
+        long start = System.currentTimeMillis();
+        try {
+            return wrapShort(ExpectedConditions.elementToBeClickable(element));
+        } finally {
+            logIfLong(start, "wait for element to be visible and enabled");
         }
     }
 
@@ -344,17 +353,17 @@ public class Wait {
     }
 
     public static <E extends TypifiedElement> E waitForEnabled(E element) {
-        waitForEnabled(element.getWrappedElement());
+        waitForClickable(element.getWrappedElement());
         return element;
     }
 
-    private static WebElement waitForEnabled(WebElement element) {
+    private static WebElement waitForClickable(WebElement element) {
         long start = System.currentTimeMillis();
         try {
             wrap(d -> element.isEnabled());
             return element;
         } finally {
-            logIfLong(start, "waitForEnabled");
+            logIfLong(start, "waitForVisibleAndEnabled");
         }
     }
 
