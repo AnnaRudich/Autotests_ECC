@@ -215,7 +215,6 @@ public class TextSearchPage extends Page {
 
     public SettlementDialog openSidForFirstProduct() {
         Wait.waitForAjaxCompleted();
-        Wait.waitForVisible(match);
         clickUsingJavaScriptIfClickDoesNotWork(match);
         if (!BaseDialog.isOn(SettlementDialog.class)) {
             clickUsingJavaScriptIfClickDoesNotWork(match);

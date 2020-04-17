@@ -594,7 +594,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public SupplierDialog.ShopsTab deleteShop(Shop shop) {
             selectShop(shop);
             deleteShopButton.click();
-            clickUsingJS(deleteShopYesButton);
+            clickUsingJavaScriptIfClickDoesNotWork(deleteShopYesButton);
             waitForAjaxCompleted();
             return this;
         }

@@ -99,13 +99,13 @@ public class EditFunctionTemplatePage extends AdminBasePage {
 
         if (enable && !checkBox.isSelected()) {
             logger.info("Enabling: " + description);
-            clickUsingJS(element);
+            clickUsingJavaScriptIfClickDoesNotWork(element);
             checkBox.select();
         }
 
         if (!enable && checkBox.isSelected()) {
             logger.info("Disabling: " + description);
-            clickUsingJS(element);
+            clickUsingJavaScriptIfClickDoesNotWork(element);
         }
         logger.debug("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }
