@@ -542,7 +542,6 @@ public class SettlementDialog extends BaseDialog {
     private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
         try {
             WebElement button = driver.findElement(buttonBy);
-            waitForVisible(button);
             forCondition(ExpectedConditions.elementToBeClickable(button));
             try {
                 clickAndWait(buttonBy, button);
@@ -563,7 +562,8 @@ public class SettlementDialog extends BaseDialog {
 
     private void clickAndWait(By buttonBy, WebElement button) {
         clickUsingJavaScriptIfClickDoesNotWork(button);
-        Wait.waitElementDisappeared(buttonBy);
+        waitForAjaxCompleted();
+        waitElementDisappeared(buttonBy);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {

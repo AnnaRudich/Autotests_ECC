@@ -196,10 +196,10 @@ public class Wait {
         }
     }
 
-    public static void waitElementDisappeared(By element) {
+    public static void waitElementDisappeared(By locator) {
         long start = System.currentTimeMillis();
         try {
-            forCondition(ExpectedConditions.invisibilityOfElementLocated(element), 5);
+            forCondition(ExpectedConditions.invisibilityOfElementLocated(locator), 5);
         } finally {
             logIfLong(start, "waitElementDisappeared");
         }
