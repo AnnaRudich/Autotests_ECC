@@ -3,7 +3,8 @@ package com.scalepoint.automation.tests.suppliermanager;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementAdvancedTab;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -20,7 +21,7 @@ import org.testng.annotations.Test;
 
 import java.util.Objects;
 
-import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog.AdvancedTab.EVoucherOptions.*;
+import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementAdvancedTab.EVoucherOptions.*;
 import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-499")
@@ -125,7 +126,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .saveVoucherAgreement()
                 .editVoucherAgreement(voucher.getVoucherGeneratedName())
                 .fill(tab -> {
-                    new VoucherAgreementDialog.GeneralTab.FormFiller(tab)
+                    new VoucherAgreementGeneralTab.FormFiller(tab)
                             .withActive(false)
                             .withDiscount(discount)
                             .withFaceValue(faceValue)
@@ -176,8 +177,8 @@ public class VoucherAgreementTests extends BaseTest {
                 .createVoucherAgreement()
                 .selectAdvancedTab()
                 .fill(tab -> {
-                    new VoucherAgreementDialog.AdvancedTab.FormFiller(tab)
-                            .useOrderEmail(VoucherAgreementDialog.AdvancedTab.OrderMailType.OTHER, "ipo@scalepoint.com")
+                    new VoucherAgreementAdvancedTab.FormFiller(tab)
+                            .useOrderEmail(VoucherAgreementAdvancedTab.OrderMailType.OTHER, "ipo@scalepoint.com")
                             .withDeliveryCost(10)
                             .withDeliveryType("Delivery type Text")
                             .withPopularity(5)
@@ -187,7 +188,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .editVoucherAgreement(voucher.getVoucherGeneratedName())
                 .selectAdvancedTab()
                 .doAssert(tab -> {
-                    tab.assertOrderType(VoucherAgreementDialog.AdvancedTab.OrderMailType.OTHER);
+                    tab.assertOrderType(VoucherAgreementAdvancedTab.OrderMailType.OTHER);
                     tab.assertOtherEmail("ipo@scalepoint.com");
                     tab.assertDeliveryType("Delivery type Text");
                     tab.assertPopularity(5);
@@ -566,7 +567,7 @@ public class VoucherAgreementTests extends BaseTest {
         }
 
         /* create new voucher for him */
-        VoucherAgreementDialog.GeneralTab voucherAgreementGeneralTab = generalTab
+        VoucherAgreementGeneralTab voucherAgreementGeneralTab = generalTab
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
@@ -579,7 +580,7 @@ public class VoucherAgreementTests extends BaseTest {
 
         if (!voucherAgreementData.voucherActive) {
             voucherAgreementGeneralTab
-                    .fill(tab -> new VoucherAgreementDialog.GeneralTab.FormFiller(tab).withActive(false));
+                    .fill(tab -> new VoucherAgreementGeneralTab.FormFiller(tab).withActive(false));
         }
 
         /* assign groups if needs */

@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -32,9 +33,9 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
         return this;
     }
 
-    public VoucherAgreementDialog.GeneralTab createVoucherAgreement() {
+    public VoucherAgreementGeneralTab createVoucherAgreement() {
         clickElementUsingJS(createVoucherButton);
-        return at(VoucherAgreementDialog.GeneralTab.class);
+        return at(VoucherAgreementGeneralTab.class);
     }
 
     public static class FormFiller {
