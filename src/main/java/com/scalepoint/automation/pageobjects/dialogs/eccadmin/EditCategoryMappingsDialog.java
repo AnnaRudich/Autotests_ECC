@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementCategoriesTab;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import org.openqa.selenium.By;
@@ -33,15 +34,15 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         $(saveMappings).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
-    public VoucherAgreementDialog.CategoriesTab mapCategory(PseudoCategory pseudoCategory) {
+    public VoucherAgreementCategoriesTab mapCategory(PseudoCategory pseudoCategory) {
         return clickOnCategoryAndSave(pseudoCategory, $$("#from-list li"));
     }
 
-    public VoucherAgreementDialog.CategoriesTab removeMapping(PseudoCategory pseudoCategory) {
+    public VoucherAgreementCategoriesTab removeMapping(PseudoCategory pseudoCategory) {
         return clickOnCategoryAndSave(pseudoCategory, $$("#to-list li"));
     }
 
-    private VoucherAgreementDialog.CategoriesTab clickOnCategoryAndSave(PseudoCategory pseudoCategory, ElementsCollection categories) {
+    private VoucherAgreementCategoriesTab clickOnCategoryAndSave(PseudoCategory pseudoCategory, ElementsCollection categories) {
         String optionToFind = formatCategoryOption(pseudoCategory.getGroupName(), pseudoCategory.getCategoryName());
         SelenideElement element = categories
                 .stream()
@@ -53,7 +54,7 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         doubleClick(saveMappings);
         Wait.waitElementDisappeared(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]"));
         Wait.waitForAjaxCompleted();
-        return at(VoucherAgreementDialog.CategoriesTab.class);
+        return at(VoucherAgreementCategoriesTab.class);
     }
 
     public static String formatCategoryOption(String categoryName, String subcategoryName) {

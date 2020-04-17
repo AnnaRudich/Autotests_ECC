@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
@@ -443,12 +444,12 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             return at(CreateVoucherAgreementDialog.class);
         }
 
-        public VoucherAgreementDialog.GeneralTab editVoucherAgreement(String agreementName) {
+        public VoucherAgreementGeneralTab editVoucherAgreement(String agreementName) {
             Wait.waitForAjaxCompleted();
             doubleClick(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'" + agreementName + "')]"));
-            isOn(VoucherAgreementDialog.GeneralTab.class);
+            isOn(VoucherAgreementGeneralTab.class);
             Wait.waitForAjaxCompleted();
-            return at(VoucherAgreementDialog.GeneralTab.class);
+            return at(VoucherAgreementGeneralTab.class);
         }
 
         public enum ActionType {

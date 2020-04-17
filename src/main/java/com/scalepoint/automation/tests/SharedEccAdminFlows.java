@@ -4,7 +4,7 @@ import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.VoucherAgreementDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.utils.data.entity.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.Supplier;
@@ -27,7 +27,7 @@ public class SharedEccAdminFlows implements Actions {
     }
 
     public static SupplierDialog.AgreementsTab createVoucherAgreement(SupplierDialog.GeneralTab supplierTab, VoucherAgreementData voucherAgreementData) {
-        VoucherAgreementDialog.GeneralTab generalTab = supplierTab
+        VoucherAgreementGeneralTab generalTab = supplierTab
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
