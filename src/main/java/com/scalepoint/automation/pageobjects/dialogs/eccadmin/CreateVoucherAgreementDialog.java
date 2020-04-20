@@ -17,7 +17,7 @@ public class CreateVoucherAgreementDialog extends BaseDialog {
     private WebElement voucherName;
     @FindBy(name = "agreementDiscount")
     private WebElement agreementDiscount;
-    @FindBy(xpath = ".//div[contains(@class, 'addSupplierVoucherWindow')]//*[contains(@class,'x-window-header-text')]")
+    @FindBy(xpath = ".//div[contains(@class, 'addSupplierVoucherWindow')]//*[contains(@class,'x-window-header-text')]/span")
     private WebElement windowHeader;
     @FindBy(xpath = ".//*[contains(@class,'supplier-create-voucher-btn')]")
     private WebElement createVoucherButton;
