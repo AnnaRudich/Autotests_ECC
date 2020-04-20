@@ -511,6 +511,11 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
                 return this;
             }
 
+            public Asserts assertShopOnlyVoucherIsPresent(String voucherName){
+                Assert.assertTrue($(By.xpath(DIV_ID_SUPPLIER_VOUCHERS_GRID_ID_DIV_TEXT + voucherName + "_SHOP"+"']")).exists());
+                return this;
+            }
+
             public Asserts assertIsExclusiveTickForVoucherVisible() {
                 Assert.assertTrue(isExclusiveTickForFirstVoucherAvailable());
                 return this;
