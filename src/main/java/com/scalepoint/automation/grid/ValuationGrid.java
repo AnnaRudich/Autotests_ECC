@@ -7,13 +7,11 @@ import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
@@ -24,6 +22,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
@@ -89,33 +89,26 @@ public class ValuationGrid implements Actions {
         private Double totalPrice;
         private String description;
 
-        WebDriver driver;
-        By xpath;
-        WebElement webElement;
-
-        private void setUp() {
-            driver = Browser.driver();
-            xpath = By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']");
-            Wait.waitForStaleElement(xpath);
-            webElement = driver.findElement(xpath);
-        }
-
-        Boolean isChecked() {
-            setUp();
-            return webElement.getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
+        Boolean isValuationChecked() {
+            return $(By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']"))
+                    .getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
         }
 
         public ValuationRow makeActive() {
-            if (!isChecked()) {
-                //one click doesn't work, each click renew dom so we should wait for stale element each time
-                for (int i = 0; i < 2; i++) {
-                    Wait.waitForStaleElement(xpath);
-                    webElement = driver.findElement(xpath);
-                    clickUsingJavaScriptIfClickDoesNotWork(webElement);
-                }
+            acceptAlertIfPresent();
+            while(!isValuationChecked()){
+                $(By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']")).click();
             }
             waitForJavascriptRecalculation();
             return this;
+        }
+
+        private void acceptAlertIfPresent(){
+            SelenideElement alertDialog = $("div[role='alertdialog']");
+            if(alertDialog.is(appear)) {
+                alertDialog.$(By.xpath("//span[contains(text(),'Ja')]")).click();
+                alertDialog.shouldNotBe(visible);
+            }
         }
 
         private ValuationRow(Valuation valuation) {
@@ -243,7 +236,7 @@ public class ValuationGrid implements Actions {
             List<ValuationGrid.ValuationRow> valuationRows = new ArrayList<>();
             Arrays.stream(valuations).forEach(v -> valuationRows.add(parseValuationRow(v)));
             assertTrue(valuationRows.stream().min(Comparator.comparing(ValuationGrid.ValuationRow::getCashCompensation))
-                    .map(ValuationGrid.ValuationRow::isChecked).orElse(false));
+                    .map(ValuationGrid.ValuationRow::isValuationChecked).orElse(false));
             return this;
         }
 
