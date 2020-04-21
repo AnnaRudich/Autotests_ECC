@@ -353,17 +353,17 @@ public class Wait {
     }
 
     public static <E extends TypifiedElement> E waitForEnabled(E element) {
-        waitForClickable(element.getWrappedElement());
+        waitForEnabled(element.getWrappedElement());
         return element;
     }
 
-    private static WebElement waitForClickable(WebElement element) {
+    private static WebElement waitForEnabled(WebElement element) {
         long start = System.currentTimeMillis();
         try {
             wrap(d -> element.isEnabled());
             return element;
         } finally {
-            logIfLong(start, "waitForVisibleAndEnabled");
+            logIfLong(start, "waitForEnabled");
         }
     }
 
