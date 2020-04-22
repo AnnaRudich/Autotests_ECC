@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
@@ -47,7 +48,11 @@ public class Wait {
     }
 
     public static void waitForAjaxCompletedAndJsRecalculation(){
-        waitForAjaxCompleted();
+        try{
+            waitForAjaxCompleted();
+        }catch (TimeoutException e){
+            log.warn("waitForAjaxCompleted Timeout");
+        }
         waitForJavascriptRecalculation();
     }
 
