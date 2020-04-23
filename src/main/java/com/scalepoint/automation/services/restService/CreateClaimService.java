@@ -45,11 +45,13 @@ public class CreateClaimService extends BaseService {
     public CreateClaimService openClaim() {
         setUserIdByClaimToken();
 
-        given().log().all().baseUri(getEccUrl()).queryParam("token", data.getClaimToken())
+        response = given().log().all().baseUri(getEccUrl()).queryParam("token", data.getClaimToken())
                 .basePath(OPEN_CLAIM)
                 .sessionId(data.getEccSessionId())
                 .post()
-                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).log().all();
+                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).log().all()
+                .extract()
+                .response();
         return this;
     }
 

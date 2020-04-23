@@ -26,6 +26,14 @@ public class InsertSettlementItem {
         this.caseId = caseId;
     }
 
+    public Integer getEccItemId() {
+        return eccItemId;
+    }
+
+    public void setEccItemId(Integer eccItemId) {
+        this.eccItemId = eccItemId;
+    }
+
     public SettlementItem getSettlementItem() {
         return SettlementItem;
     }

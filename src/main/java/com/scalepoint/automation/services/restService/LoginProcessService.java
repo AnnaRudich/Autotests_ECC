@@ -29,31 +29,31 @@ public class LoginProcessService extends BaseService {
 
     public LoginProcessService login(User user) {
 
-        Response loginProcessResponse = given().baseUri(getEccAdminUrl())
+        Response loginProcessResponse = given().log().all().baseUri(getEccAdminUrl())
                 .redirects().follow(false)
                 .formParam("j_username", user.getLogin())
                 .formParam("j_password", user.getPassword())
                 .post("/loginProcess")
-                .then()
+                .then().log().all()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 
-        Response loginActionResponse = given().baseUri(getLocationHeader(loginProcessResponse))
+        Response loginActionResponse = given().log().all().baseUri(getLocationHeader(loginProcessResponse))
                 .redirects().follow(false)
                 .sessionId(loginProcessResponse.getSessionId())
                 .get()
-                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
+                .then().log().all().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
 
-        this.response = given().baseUri(getLocationHeader(loginActionResponse))
+        this.response = given().log().all().baseUri(getLocationHeader(loginActionResponse))
                 .redirects().follow(false)
                 .get(getLocationHeader(loginActionResponse))
-                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
+                .then().log().all().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
 
-        given().baseUri(getEccUrl())
+        given().log().all().baseUri(getEccUrl())
                 .sessionId(response.getSessionId())
                 .queryParam("sessionident", response.getSessionId())
                 .get("webshop/jsp/matching_engine/start.jsp")
-                .then()
+                .then().log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
