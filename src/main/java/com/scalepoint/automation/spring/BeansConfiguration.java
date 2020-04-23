@@ -49,6 +49,8 @@ public class BeansConfiguration {
     private String eccAdminContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_RNV + "}")
     private String eccRnvContext;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_SELFSERVICE + "}")
+    private String eccSelfServiceContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_SOLR_URL + "}")
     private String solrBaseUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_URL + "}")
@@ -82,6 +84,7 @@ public class BeansConfiguration {
                         .setEccContext(eccContext)
                         .setEccAdminContext(eccAdminContext)
                         .setEccRnvContext(eccRnvContext)
+                        .setSelfServiceContext(eccSelfServiceContext)
                         .setSolrBaseUrl(solrBaseUrl)
                         .setHubRemote(hubRemoteUrl)
                         .setHubLocalZalenium(hubLocalZaleniumUrl)

@@ -1,58 +1,121 @@
 package com.scalepoint.automation.tests.headers;
 
 import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
+import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.services.restService.CreateClaimService;
+import com.scalepoint.automation.services.restService.SelfServiceService;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.api.BaseApiTest;
+import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.rnv.sendToRepairAndValuation.SelectedLinesAndCategories;
+import com.scalepoint.automation.utils.data.entity.rnv.sendToRepairAndValuation.SendToRepairAndValuation;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
+import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import lombok.Data;
 import org.apache.http.HttpStatus;
+import org.hamcrest.Matcher;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static com.scalepoint.automation.services.restService.Common.BaseService.*;
 import static com.scalepoint.automation.tests.BaseTest.provide;
 import static com.scalepoint.automation.utils.Configuration.*;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 public class HeadersTest extends BaseApiTest {
 
     static String CACHE_CONTROL = "max-age=2592000";
     static String CACHE_CONTROL2 = "no-cache, no-store, max-age=0, must-revalidate";
-    static String CONTENT_SECURITY_POLICY = "default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com/qunit/qunit-2.0.0.js; style-src 'self' 'unsafe-inline' https://code.jquery.com/qunit/qunit-2.0.0.css; img-src 'self' data:; frame-src 'self'; connect-src 'self'";
-    static String CONTENT_SECURITY_POLICY2 = "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; frame-src 'self'; connect-src 'self'";
+    static String CONTENT_SECURITY_POLICY_LONG = "default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com/qunit/qunit-2.0.0.js; style-src 'self' 'unsafe-inline' https://code.jquery.com/qunit/qunit-2.0.0.css; img-src 'self' data:; frame-src 'self'; connect-src 'self'";
+    static String CONTENT_SECURITY_POLICY_SHORT = "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; frame-src 'self'; connect-src 'self'";
+    static String CONTENT_SECURITY_POLICY_SS = "script-src 'self' https://www.google.com/recaptcha/api.js https://www.gstatic.com http://*.scalepoint.com 'nonce-";
     static String EXPIRES = "0";
     static String PRAGMA = "no-cache";
 
 
-    @Test(dataProvider = "testproviderstaticFilesECC")
-    public void test(User user, String url){
+    @Test(dataProvider = "staticFilesECCDataProvider")
+    public void staticFilesECCTest(User user, String url){
+
+        ValidatableResponse validatableResponse = login(user, url);
+
+        assertMaxAgeAndPolicyLong(validatableResponse);
+    }
+
+    @Test(dataProvider = "staticNoCacheECCDataProvider")
+    public void staticNoCacheECCTest(User user, ClaimRequest claimRequest, String url){
+
+        ValidatableResponse validatableResponse = claim(user, claimRequest, url);
+
+        assertExpiresPragmaNoCasheAndPolicyLong(validatableResponse);
+    }
+
+    @Test(dataProvider = "staticFilesAdminDataProvider")
+    public void staticFilesAdminTest(User user, String url){
+
+        ValidatableResponse validatableResponse = admin(user , url);
+
+        assertMaxAgeAndPolicyShort(validatableResponse);
+    }
+
+    @Test(dataProvider = "noCacheAdminDataProvider")
+    public void noCacheAdminTest(User user, String url){
+
+        ValidatableResponse validatableResponse = admin(user , url);
+
+        assertExpiresPragmaNoCasheAndPolicyShort(validatableResponse);
+    }
+
+    @Test(dataProvider = "staticFilesRnVDataProvider")
+    public void staticFilesRnVTest(User user, ClaimRequest claimRequest, InsertSettlementItem insertSettlementItem,  String url){
+
+        ValidatableResponse validatableResponse = rnv(user, claimRequest, insertSettlementItem, url);
+
+        assertMaxAgeAndPolicyShort(validatableResponse);
+    }
+
+    @Test(dataProvider = "staticFilesSelfServiceDataProvider")
+    public void staticFilesSelfServiceTest(@UserCompany(CompanyCode.TOPDANMARK) User user, String url){
+
+        ValidatableResponse validatableResponse = selfService(user, url);
+
+        assertMaxAgeAndPolicySelfService(validatableResponse);
+    }
+
+    @Test(dataProvider = "noCacheSelfServiceDataProvider")
+    public void noCacheSelfServiceTest(@UserCompany(CompanyCode.TOPDANMARK) User user, String url){
+
+        ValidatableResponse validatableResponse = selfService(user, url);
+
+        assertExpiresPragmaNoCasheAndPolicySelfService(validatableResponse);
+    }
+
+    private ValidatableResponse login(User user, String url){
 
         String sessionID = loginUser(user).getData().getEccSessionId();
 
-        ValidatableResponse validatableResponse = given()
+        return given()
                 .baseUri(getEccUrl())
                 .sessionId(sessionID)
                 .get(url)
                 .then()
                 .statusCode(HttpStatus.SC_OK);
-
-        assert3(validatableResponse);
     }
 
-    @Test(dataProvider = "testproviderstaticNoCacheECC")
-    public void test3(User user, ClaimRequest claimRequest, String url){
+    private ValidatableResponse claim(User user, ClaimRequest claimRequest, String url){
+
+        String pathParam = "userId";
 
         CreateClaimService loginProcessService = loginAndOpenClaim(user, claimRequest);
 
@@ -60,42 +123,16 @@ public class HeadersTest extends BaseApiTest {
                 .baseUri(getEccUrl())
                 .sessionId(loginProcessService.getData().getEccSessionId());
 
-        if(url.contains("userId")) {
+        if(url.contains(pathParam)) {
 
             requestSpecification
-                    .pathParam("userId", loginProcessService.getData().getUserId());
+                    .pathParam(pathParam, loginProcessService.getData().getUserId());
         }
 
-        ValidatableResponse validatableResponse = requestSpecification
+        return requestSpecification
                 .get(url)
                 .then()
                 .statusCode(HttpStatus.SC_OK);
-
-        assert2(validatableResponse);
-    }
-
-    @Test(dataProvider = "testproviderstaticFilesAdmin")
-    public void test1(User user, String url){
-
-        ValidatableResponse validatableResponse = admin(user , url);
-
-        assert4(validatableResponse);
-    }
-
-    @Test(dataProvider = "testprovidernoCacheAdmin")
-    public void test4(User user, String url){
-
-        ValidatableResponse validatableResponse = admin(user , url);
-
-        assert1(validatableResponse);
-    }
-
-    @Test(dataProvider = "testproviderstaticFilesRnV")
-    public void test2(User user, ClaimRequest claimRequest, InsertSettlementItem insertSettlementItem,  String url){
-
-        ValidatableResponse validatableResponse = rnv(user, claimRequest, insertSettlementItem, url);
-
-        assert4(validatableResponse);
     }
 
     private ValidatableResponse admin(User user , String url){
@@ -116,13 +153,32 @@ public class HeadersTest extends BaseApiTest {
                 .then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
 
-        return given().log().all()
+        return given()
                 .baseUri(getEccAdminUrl()).redirects().follow(false)
                 .sessionId(response.getSessionId())
                 .get(url)
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_OK);
+    }
+
+    private ValidatableResponse selfService(User user, String url){
+
+        SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
+        ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
+        selfServiceRequest.setClaimsNo(claimRequest.getCaseNumber());
+
+        SelfServiceService selfServiceService = BaseService
+                .loginAndOpenClaim(user, claimRequest)
+                .requestSelfService(selfServiceRequest)
+                .loginToSS(selfServiceRequest.getPassword());
+
+        return given()
+                .baseUri(getSelfServiceUrl())
+                .header("Access-Token", selfServiceService.getData().getSelfServiceAccessToken())
+                .get(url)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .assertThat();
     }
 
     private ValidatableResponse rnv(User user, ClaimRequest claimRequest, InsertSettlementItem insertSettlementItem, String url){
@@ -131,17 +187,17 @@ public class HeadersTest extends BaseApiTest {
 
         String sessionID = loginProcessService.getData().getEccSessionId();
 
+        SelectedLinesAndCategories selectedLineCategory = SelectedLinesAndCategories.builder()
+                .claimLineId(1)
+                .description(insertSettlementItem.getSettlementItem().getClaim().getDescription())
+                .isIsRvRepairTaskSentOrApproved(false)
+                .itemId(insertSettlementItem.getEccItemId().toString())
+                .build();
 
-        Body body = new Body();
-        body.setSelectedGroups(new ArrayList<>());
-        body.setSelectedLines(Arrays.asList(insertSettlementItem.getEccItemId().toString()));
-        SelectedLinesAndCategories selectedLineCategory = new SelectedLinesAndCategories();
-        selectedLineCategory.setItemId(insertSettlementItem.getEccItemId().toString());
-        selectedLineCategory.setClaimLineId(1);
-        selectedLineCategory.setPseudocatId(209083);
-        selectedLineCategory.setDescription(insertSettlementItem.getSettlementItem().getClaim().getDescription());
-        selectedLineCategory.setIsRvRepairTaskSentOrApproved(false);
-        body.setSelectedLinesAndCategories(Collections.singletonList(selectedLineCategory));
+        SendToRepairAndValuation body = SendToRepairAndValuation.builder()
+                .selectedGroups(new ArrayList<>())
+                .selectedLines(Arrays.asList(insertSettlementItem.getEccItemId().toString()))
+                .selectedLinesAndCategories(Arrays.asList(selectedLineCategory)).build();
 
         Response response = given()
                 .baseUri(getEccUrl())
@@ -170,7 +226,7 @@ public class HeadersTest extends BaseApiTest {
                 .then()
                 .statusCode(HttpStatus.SC_OK);
 
-        assert1(validatableResponse);
+        assertExpiresPragmaNoCasheAndPolicyShort(validatableResponse);
 
         return given()
                 .baseUri(getEccRnvUrl())
@@ -180,73 +236,95 @@ public class HeadersTest extends BaseApiTest {
                 .statusCode(HttpStatus.SC_OK);
     }
 
-    private void assert1(ValidatableResponse validatableResponse){
+    public void assertMaxAgeAndPolicyLong(ValidatableResponse validatableResponse){
 
-        validatableResponse
+        assertCacheControlAndContentSecurityPolicy(validatableResponse, equalTo(CACHE_CONTROL), equalTo(CONTENT_SECURITY_POLICY_LONG));
+    }
+
+    public void assertMaxAgeAndPolicyShort(ValidatableResponse validatableResponse){
+
+        assertCacheControlAndContentSecurityPolicy(validatableResponse, equalTo(CACHE_CONTROL), equalTo(CONTENT_SECURITY_POLICY_SHORT));
+    }
+
+
+    public void assertMaxAgeAndPolicySelfService(ValidatableResponse validatableResponse){
+
+        assertCacheControlAndContentSecurityPolicy(validatableResponse, equalTo(CACHE_CONTROL), containsString(CONTENT_SECURITY_POLICY_SS));
+    }
+
+    public void assertExpiresPragmaNoCasheAndPolicySelfService(ValidatableResponse validatableResponse){
+
+        assertCacheControlAndContentSecurityPolicy(assertExpiresPragma(validatableResponse), equalTo(CACHE_CONTROL2), containsString(CONTENT_SECURITY_POLICY_SS));
+    }
+
+    private void assertExpiresPragmaNoCasheAndPolicyShort(ValidatableResponse validatableResponse){
+
+        assertCacheControlAndContentSecurityPolicy(assertExpiresPragma(validatableResponse), equalTo(CACHE_CONTROL2), equalTo(CONTENT_SECURITY_POLICY_SHORT));
+    }
+
+    private void assertExpiresPragmaNoCasheAndPolicyLong(ValidatableResponse validatableResponse){
+
+        assertCacheControlAndContentSecurityPolicy(assertExpiresPragma(validatableResponse), equalTo(CACHE_CONTROL2), equalTo(CONTENT_SECURITY_POLICY_LONG));
+    }
+
+    private ValidatableResponse assertExpiresPragma(ValidatableResponse validatableResponse){
+
+        return validatableResponse
                 .assertThat()
-                .header("Cache-Control", CACHE_CONTROL2)
                 .header("Expires", EXPIRES)
-                .header("Pragma", PRAGMA)
-                .header("Content-Security-Policy", CONTENT_SECURITY_POLICY2);
+                .header("Pragma", PRAGMA);
     }
 
-    public void assert2(ValidatableResponse validatableResponse){
+    private ValidatableResponse assertCacheControlAndContentSecurityPolicy(ValidatableResponse validatableResponse, Matcher cacheControl, Matcher contentSecurityPolicy){
 
-        validatableResponse
-                .assertThat()
-                .header("Cache-Control", CACHE_CONTROL2)
-                .header("Expires", EXPIRES)
-                .header("Pragma", PRAGMA)
-                .header("Content-Security-Policy", CONTENT_SECURITY_POLICY);
+        return validatableResponse
+                .header("Cache-Control", cacheControl)
+                .header("Content-Security-Policy", contentSecurityPolicy);
     }
 
-    public void assert3(ValidatableResponse validatableResponse){
+    @DataProvider(name = "staticFilesECCDataProvider")
+    public static Object[][] staticFilesECCDataProvider(Method method) {
 
-        validatableResponse
-                .assertThat()
-                .header("Cache-Control", CACHE_CONTROL)
-                .header("Content-Security-Policy", CONTENT_SECURITY_POLICY);
+        return dataProvider(method, staticFilesECC);
     }
 
-    public void assert4(ValidatableResponse validatableResponse){
+    @DataProvider(name = "staticFilesAdminDataProvider")
+    public static Object[][] staticFilesAdminDataProvider(Method method) {
 
-        validatableResponse
-                .assertThat()
-                .header("Cache-Control", CACHE_CONTROL)
-                .header("Content-Security-Policy", CONTENT_SECURITY_POLICY2);
+        return dataProvider(method, staticFilesAdmin);
     }
 
-    @DataProvider(name = "testproviderstaticFilesECC")
-    public static Object[][] testproviderstaticFilesECC(Method method) {
+    @DataProvider(name = "staticFilesRnVDataProvider")
+    public static Object[][] staticFilesRnVDataProvider(Method method) {
 
-        return test(method, staticFilesECC);
+        return dataProvider(method, staticFilesRnV);
     }
 
-    @DataProvider(name = "testproviderstaticFilesAdmin")
-    public static Object[][] testproviderstaticFilesAdmin(Method method) {
+    @DataProvider(name = "staticNoCacheECCDataProvider")
+    public static Object[][] staticNoCacheECCDataProvider(Method method) {
 
-        return test(method, staticFilesAdmin);
+        return dataProvider(method, noCacheECC);
     }
 
-    @DataProvider(name = "testproviderstaticFilesRnV")
-    public static Object[][] testproviderstaticFilesRnV(Method method) {
+    @DataProvider(name = "noCacheAdminDataProvider")
+    public static Object[][] noCacheAdminDataProvider(Method method) {
 
-        return test(method, staticFilesRnV);
+        return dataProvider(method, noCacheAdmin);
     }
 
-    @DataProvider(name = "testproviderstaticNoCacheECC")
-    public static Object[][] testproviderstaticNoCacheECC(Method method) {
+    @DataProvider(name = "staticFilesSelfServiceDataProvider")
+    public static Object[][] staticFilesSelfServiceDataProvider(Method method) {
 
-        return test(method, noCacheECC);
+        return dataProvider(method, staticFilesSelfService);
     }
 
-    @DataProvider(name = "testprovidernoCacheAdmin")
-    public static Object[][] testprovidernoCacheAdmin(Method method) {
+    @DataProvider(name = "noCacheSelfServiceDataProvider")
+    public static Object[][] noCacheSelfServiceDataProvider(Method method) {
 
-        return test(method, noCacheAdmin);
+        return dataProvider(method, noCacheSelfService);
     }
 
-    public static Object[][] test(Method method, String[] request){
+    public static Object[][] dataProvider(Method method, String[] request){
 
         Object[] baseObjects = provide(method)[0];
 
@@ -291,24 +369,23 @@ public class HeadersTest extends BaseApiTest {
 
     };
 
+    public static String[] staticFilesSelfService= {
+            "resources/self-service-site-topdanmark.css?v=3.0.0.local",
+            "resources/self-service-widget-topdanmark.css?v=3.0.0.local",
+            "static/js/app.min.js?v=3.0.0.local",
+            "static/favicons/topdanmark.ico",
+            "static/logo/topdanmark.png",
+            "static/images/no_pic.png"
+
+    };
+
+    public static String[] noCacheSelfService= {
+            "categories/",
+            "initdata"
+
+    };
+
     public static String[] noCacheAdmin= {
             ""
     };
-
-    @Data
-    class Body{
-        List<String> selectedGroups;
-        List<String> selectedLines;
-        List<SelectedLinesAndCategories> selectedLinesAndCategories;
-    }
-
-    @Data
-    class SelectedLinesAndCategories{
-
-        String itemId;
-        int claimLineId;
-        int pseudocatId;
-        String description;
-        boolean isIsRvRepairTaskSentOrApproved;
-    }
 }
