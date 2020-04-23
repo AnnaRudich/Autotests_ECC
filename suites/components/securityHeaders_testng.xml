@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="UnifiedPayment" configfailurepolicy="continue" parallel="methods" thread-count="1">
+    <test verbose="1" name="SecurityHeaders" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+            <package name="com.scalepoint.automation.tests.headers"/>
+        </packages>
+    </test>
+</suite>
