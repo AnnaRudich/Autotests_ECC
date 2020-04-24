@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
@@ -9,6 +10,7 @@ import org.testng.Assert;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAgreementTabs {
@@ -144,6 +146,19 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
+    }
+
+    public VoucherAgreementAdvancedTab createShopOnlyVoucher(){
+        $("a[data-qtip='Create-button'] span").click();
+        confirmShopVoucherCreation();
+        return VoucherAgreementAdvancedTab.this;
+    }
+
+    private void confirmShopVoucherCreation(){
+        $(".x-message-box")
+                .find("span[class='x-btn-button']")
+                .waitUntil(Condition.appear, TIME_OUT_IN_MILISECONDS)
+                .click();
     }
 
     public VoucherAgreementAdvancedTab doAssert(Consumer<Asserts> assertFunc) {

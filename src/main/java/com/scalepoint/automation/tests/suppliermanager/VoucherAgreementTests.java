@@ -481,6 +481,44 @@ public class VoucherAgreementTests extends BaseTest {
         testVoucherVisibilityAcrossCompanies(data);
     }
 
+    /**
+     * create voucher
+     * open Advanced tab and click shop-only-voucher button
+     * assert shop voucher is created from 'standard voucher' and shown in the list
+     * assert there is no shop voucher available in SID
+     */
+    @Test(dataProvider = "testDataProvider",
+            description = "CLAIMSHOP-5147 Differentiate between which discounts on vouchers we show/sell in shop and in ECC")
+    public void createShopOnlyVoucher(User user, Voucher voucher, Claim claim, ClaimItem claimItem) {
+        loginToEccAdmin(user)
+                .editSupplier(Constants.getSupplierNameForVATests(user))
+                .selectAgreementsTab()
+                .openCreateVoucherAgreementDialog()
+                .fill(createVoucherAgreementDialog -> {
+                    new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
+                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withAgreementDiscount(10);
+                })
+                .createVoucherAgreement()
+                .selectCategoriesTab()
+                .mapToCategory(claimItem.getCategoryBabyItems())
+                .selectAdvancedTab()
+                .createShopOnlyVoucher()
+                .saveVoucherAgreement()
+                .doAssert(tab -> tab.assertShopOnlyVoucherIsPresent(voucher.getVoucherGeneratedName()));
+
+        new SupplierDialog().saveSupplier().logout();
+
+        loginAndCreateClaim(user, claim)
+                .openSidAndFill(sid -> sid
+                        .withCategory(claimItem.getCategoryBabyItems())
+                        .withNewPrice(PRICE_2400))
+                .doAssert(a -> {
+                    a.assertVoucherListed(voucher.getVoucherGeneratedName());
+                    a.assertVoucherNotListed(voucher.getVoucherGeneratedName() + "_SHOP");
+                });
+    }
+
 
     static class VoucherAgreementData {
         private String existingSupplier;
