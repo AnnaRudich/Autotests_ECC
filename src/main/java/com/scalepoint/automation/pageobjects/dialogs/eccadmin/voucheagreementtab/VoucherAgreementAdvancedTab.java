@@ -156,7 +156,7 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
 
     private void confirmShopVoucherCreation(){
         $(".x-message-box")
-                .$("span[class='x-btn-button']")
+                .find("span[class='x-btn-button']")
                 .waitUntil(Condition.appear, TIME_OUT_IN_MILISECONDS)
                 .click();
     }
