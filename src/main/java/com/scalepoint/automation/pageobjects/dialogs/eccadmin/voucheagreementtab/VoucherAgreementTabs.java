@@ -59,7 +59,7 @@ public interface VoucherAgreementTabs extends Actions {
             element.click();
         }catch (Throwable e) {
             logger.warn("Click throws following exception: {}", e);
-            clickElementUsingJS(element);
+            clickUsingJS(element);
         }finally {
             zoom(1);
         }
