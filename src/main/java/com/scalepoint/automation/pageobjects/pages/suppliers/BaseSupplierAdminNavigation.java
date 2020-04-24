@@ -28,7 +28,7 @@ public abstract class BaseSupplierAdminNavigation extends Page {
     }
 
     public LoginPage logout() {
-        clickUsingJsIfSeleniumClickReturnError(logoutLink);
+        clickUsingJavaScriptIfClickDoesNotWork(logoutLink);
         return at(LoginPage.class);
     }
 }

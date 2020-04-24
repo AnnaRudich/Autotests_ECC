@@ -39,7 +39,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelPage save() {
-        clickUsingJsIfSeleniumClickReturnError(saveOption);
+        clickUsingJavaScriptIfClickDoesNotWork(saveOption);
         return at(PseudoCategoryModelPage.class);
     }
 

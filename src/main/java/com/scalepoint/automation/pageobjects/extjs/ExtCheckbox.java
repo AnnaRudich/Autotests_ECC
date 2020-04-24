@@ -19,7 +19,7 @@ public class ExtCheckbox extends ExtElement implements Actions {
 
     public void set(boolean state) {
         if (state != isSelected()) {
-            clickUsingJsIfSeleniumClickReturnError(getWrappedElement().findElement(By.tagName(INPUT)));
+            clickUsingJavaScriptIfClickDoesNotWork(getWrappedElement().findElement(By.tagName(INPUT)));
         }
     }
 

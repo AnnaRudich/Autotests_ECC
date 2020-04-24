@@ -43,7 +43,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     }
 
     public FunctionalTemplatesPage saveTemplate() {
-        clickUsingJsIfSeleniumClickReturnError(saveValues);
+        clickUsingJavaScriptIfClickDoesNotWork(saveValues);
         return at(FunctionalTemplatesPage.class);
     }
 
@@ -99,13 +99,13 @@ public class EditFunctionTemplatePage extends AdminBasePage {
 
         if (enable && !checkBox.isSelected()) {
             logger.info("Enabling: " + description);
-            clickElementUsingJS(element);
+            clickUsingJavaScriptIfClickDoesNotWork(element);
             checkBox.select();
         }
 
         if (!enable && checkBox.isSelected()) {
             logger.info("Disabling: " + description);
-            clickElementUsingJS(element);
+            clickUsingJavaScriptIfClickDoesNotWork(element);
         }
         logger.debug("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }
