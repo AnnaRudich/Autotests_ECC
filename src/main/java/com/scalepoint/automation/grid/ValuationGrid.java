@@ -92,8 +92,8 @@ public class ValuationGrid implements Actions {
                     .getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
         }
 
-        public ValuationRow makeActive(Boolean alertPresent) {
-            if(alertPresent){
+        public ValuationRow makeActive(Boolean isAlertPresent) {
+            if(isAlertPresent){
                 confirmAlert();
             }
             while(!isValuationChecked()){
