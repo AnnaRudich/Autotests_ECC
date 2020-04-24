@@ -902,7 +902,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setValuation(ValuationGrid.Valuation valuation) {
         return new ValuationGrid()
                 .parseValuationRow(valuation)
-                .makeActive()
+                .makeActive(false)
                 .backToGrid()
                 .toSettlementDialog();
     }

@@ -62,7 +62,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .automaticDepreciation(true)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
-                .makeActive()
+                .makeActive(false)
                 .doAssert(row -> row.assertDepreciationPercentageIs(47))
                 .toSettlementDialog()
                 .closeSidWithOk()
@@ -95,7 +95,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .automaticDepreciation(true)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
-                .makeActive()
+                .makeActive(true)
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
     }
 
@@ -122,7 +122,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .automaticDepreciation(true)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
-                .makeActive()
+                .makeActive(false)
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
     }
 

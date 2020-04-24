@@ -1,5 +1,4 @@
 package com.scalepoint.automation.pageobjects.pages.oldshop;
-
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import org.openqa.selenium.WebElement;

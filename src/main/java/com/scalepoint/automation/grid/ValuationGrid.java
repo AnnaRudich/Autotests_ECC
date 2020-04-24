@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
@@ -94,8 +92,10 @@ public class ValuationGrid implements Actions {
                     .getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
         }
 
-        public ValuationRow makeActive() {
-            acceptAlertIfPresent();
+        public ValuationRow makeActive(Boolean alertPresent) {
+            if(alertPresent){
+                confirmAlert();
+            }
             while(!isValuationChecked()){
                 $(By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']")).click();
             }
@@ -103,12 +103,8 @@ public class ValuationGrid implements Actions {
             return this;
         }
 
-        private void acceptAlertIfPresent(){
-            SelenideElement alertDialog = $("div[role='alertdialog']");
-            if(alertDialog.is(appear)) {
-                alertDialog.$(By.xpath("//span[contains(text(),'Ja')]")).click();
-                alertDialog.shouldNotBe(visible);
-            }
+        private void confirmAlert(){
+            $("div[role='alertdialog']").find(By.xpath("//span[contains(text(),'Ja')]")).click();
         }
 
         private ValuationRow(Valuation valuation) {
