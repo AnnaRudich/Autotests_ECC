@@ -477,7 +477,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             $(voucherRow).click();
 
             By actionButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
-            Wait.waitForEnabled(actionButtonBy);
+            Wait.waitForVisibleAndEnabled(actionButtonBy);
 
             WebElement actionButton = $(actionButtonBy);
             Assert.assertEquals(actionButton.getText(), actionType == ActionType.JOIN ? "Join" : "Leave");
@@ -593,14 +593,14 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             WebElement item = find(byShopNameXpath, shopName);
             scrollTo(item);
             doubleClick(item);
-            waitForEnabled(By.name("shopName"));
+            Wait.waitForVisibleAndEnabled(By.name("shopName"));
             return at(AddShopDialog.class);
         }
 
         public SupplierDialog.ShopsTab deleteShop(Shop shop) {
             selectShop(shop);
             deleteShopButton.click();
-            clickElementUsingJS(deleteShopYesButton);
+            clickUsingJavaScriptIfClickDoesNotWork(deleteShopYesButton);
             waitForAjaxCompleted();
             return this;
         }

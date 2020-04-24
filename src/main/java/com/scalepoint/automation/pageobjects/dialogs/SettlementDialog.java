@@ -371,7 +371,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog uncheckedDocumentation() {
         if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
             forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
-            clickUsingJsIfSeleniumClickReturnError(sufficientDocumentation);
+            clickUsingJavaScriptIfClickDoesNotWork(sufficientDocumentation);
         }
         waitForJavascriptRecalculation();
         return this;
@@ -542,7 +542,6 @@ public class SettlementDialog extends BaseDialog {
     private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
         try {
             WebElement button = driver.findElement(buttonBy);
-            waitForVisible(button);
             forCondition(ExpectedConditions.elementToBeClickable(button));
             try {
                 clickAndWait(buttonBy, button);
@@ -562,8 +561,9 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private void clickAndWait(By buttonBy, WebElement button) {
-        clickUsingJsIfSeleniumClickReturnError(button);
-        Wait.waitElementDisappeared(buttonBy);
+        clickUsingJavaScriptIfClickDoesNotWork(button);
+        waitForAjaxCompleted();
+        waitElementDisappeared(buttonBy);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
@@ -854,7 +854,7 @@ public class SettlementDialog extends BaseDialog {
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> clickUsingJsIfSeleniumClickReturnError(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))));
+        IntStream.range(0, 3).forEach(i -> clickUsingJavaScriptIfClickDoesNotWork(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))));
         return at(EditVoucherValuationDialog.class);
     }
 
@@ -902,7 +902,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setValuation(ValuationGrid.Valuation valuation) {
         return new ValuationGrid()
                 .parseValuationRow(valuation)
-                .makeActive()
+                .makeActive(false)
                 .backToGrid()
                 .toSettlementDialog();
     }

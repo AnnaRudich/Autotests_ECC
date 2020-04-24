@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
@@ -47,7 +48,11 @@ public class Wait {
     }
 
     public static void waitForAjaxCompletedAndJsRecalculation(){
-        waitForAjaxCompleted();
+        try{
+            waitForAjaxCompleted();
+        }catch (TimeoutException e){
+            log.warn("waitForAjaxCompleted Timeout");
+        }
         waitForJavascriptRecalculation();
     }
 
@@ -121,12 +126,21 @@ public class Wait {
         }
     }
 
-    public static WebElement waitForEnabled(By locator) {
+    public static WebElement waitForVisibleAndEnabled(By locator) {
         long start = System.currentTimeMillis();
         try {
             return wrapShort(ExpectedConditions.elementToBeClickable(locator));
         } finally {
-            logIfLong(start, "waitForEnabled");
+            logIfLong(start, "wait for element to be visible and enabled");
+        }
+    }
+
+    public static WebElement waitForVisibleAndEnabled(WebElement element) {
+        long start = System.currentTimeMillis();
+        try {
+            return wrapShort(ExpectedConditions.elementToBeClickable(element));
+        } finally {
+            logIfLong(start, "wait for element to be visible and enabled");
         }
     }
 
@@ -187,10 +201,10 @@ public class Wait {
         }
     }
 
-    public static void waitElementDisappeared(By element) {
+    public static void waitElementDisappeared(By locator) {
         long start = System.currentTimeMillis();
         try {
-            forCondition(ExpectedConditions.invisibilityOfElementLocated(element), 5);
+            forCondition(ExpectedConditions.invisibilityOfElementLocated(locator), 5);
         } finally {
             logIfLong(start, "waitElementDisappeared");
         }

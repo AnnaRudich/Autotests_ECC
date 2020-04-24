@@ -40,7 +40,7 @@ public class ClaimNavigationMenu extends Module {
     private Link history;
 
     public SettlementPage toSettlementPage() {
-        clickUsingJsIfSeleniumClickReturnError(settelment);
+        clickUsingJavaScriptIfClickDoesNotWork(settelment);
         return at(SettlementPage.class);
     }
 
@@ -55,39 +55,39 @@ public class ClaimNavigationMenu extends Module {
     }
 
     public CustomerDetailsPage toCustomerDetailsPage() {
-        clickUsingJsIfSeleniumClickReturnError(details);
+        clickUsingJavaScriptIfClickDoesNotWork(details);
         return at(CustomerDetailsPage.class);
     }
 
     public void ClickImports() {
-        clickUsingJsIfSeleniumClickReturnError(imports);
+        clickUsingJavaScriptIfClickDoesNotWork(imports);
     }
 
     public ProjectsPage toRepairValuationProjectsPage() {
-        clickUsingJsIfSeleniumClickReturnError(repairValuation);
+        clickUsingJavaScriptIfClickDoesNotWork(repairValuation);
         return at(ProjectsPage.class);
     }
 
     public void ClickSettlementSummary() {
-        clickUsingJsIfSeleniumClickReturnError(settlementSummary);
+        clickUsingJavaScriptIfClickDoesNotWork(settlementSummary);
     }
 
     public OrderDetailsPage toOrderDetailsPage() {
-        clickUsingJsIfSeleniumClickReturnError(order);
+        clickUsingJavaScriptIfClickDoesNotWork(order);
         return at(OrderDetailsPage.class);
     }
 
     public void ClickDetails() {
-        clickUsingJsIfSeleniumClickReturnError(details);
+        clickUsingJavaScriptIfClickDoesNotWork(details);
     }
 
     public NotesPage toNotesPage() {
-        clickUsingJsIfSeleniumClickReturnError(notes);
+        clickUsingJavaScriptIfClickDoesNotWork(notes);
         return at(NotesPage.class);
     }
 
     public void ClickHistory() {
-        clickUsingJsIfSeleniumClickReturnError(history);
+        clickUsingJavaScriptIfClickDoesNotWork(history);
     }
 
 }

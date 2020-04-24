@@ -279,7 +279,8 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementGroupDialog openGroupCreationDialog() {
-        $$(groupButton).get(0).click();
+        $$(groupButton).get(0).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                .waitUntil(Condition.enabled, TIME_OUT_IN_MILISECONDS).click();
         return BaseDialog.at(SettlementGroupDialog.class);
     }
 
@@ -530,7 +531,7 @@ public class SettlementPage extends BaseClaimPage {
                     "targLink.dispatchEvent (clickEvent);";
 
             try {
-                clickUsingJsIfSeleniumClickReturnError(descriptionElement);
+                clickUsingJavaScriptIfClickDoesNotWork(descriptionElement);
                 doubleClick(descriptionElement);
                 waitForAjaxCompleted();
                 String js =
