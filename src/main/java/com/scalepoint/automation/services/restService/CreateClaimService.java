@@ -31,12 +31,15 @@ public class CreateClaimService extends BaseService {
     }
 
     public CreateClaimService addClaim(ClaimRequest claimRequest) {
-        this.response = given().baseUri(getEccUrl()).basePath(UNIFIED_INTEGRATION).log().all()
+
+        this.response = given()
+                .baseUri(getEccUrl())
+                .basePath(UNIFIED_INTEGRATION)
                 .body(claimRequest)
                 .header(token.getAuthorizationHeader())
                 .when()
                 .post()
-                .then().log().all()
+                .then()
                 .extract().response();
         data.setClaimToken(response.jsonPath().get("token"));
         return this;
@@ -45,13 +48,14 @@ public class CreateClaimService extends BaseService {
     public CreateClaimService openClaim() {
         setUserIdByClaimToken();
 
-        response = given().log().all().baseUri(getEccUrl()).queryParam("token", data.getClaimToken())
+        response = given()
+                .baseUri(getEccUrl())
+                .queryParam("token", data.getClaimToken())
                 .basePath(OPEN_CLAIM)
                 .sessionId(data.getEccSessionId())
                 .post()
-                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).log().all()
-                .extract()
-                .response();
+                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
+                .extract().response();
         return this;
     }
 
