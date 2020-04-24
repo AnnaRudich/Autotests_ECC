@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -8,9 +10,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.zoom;
 import static com.scalepoint.automation.pageobjects.dialogs.BaseDialog.at;
 
-public interface VoucherAgreementTabs {
+public interface VoucherAgreementTabs extends Actions {
+
+    int TIMEOUT_MS = 10000;
 
     default VoucherAgreementLegalTab selectLegalTab() {
         return selectTab(VoucherAgreementLegalTab.class, "Legal");
@@ -47,7 +52,17 @@ public interface VoucherAgreementTabs {
     }
 
     default SupplierDialog.AgreementsTab saveVoucherAgreement() {
-        $(By.className("supplier-save-voucher-btn")).click();
+        zoom(0.5);
+        SelenideElement element = $(".supplier-save-voucher-btn")
+                .waitUntil(Condition.visible, TIMEOUT_MS);
+        try {
+            element.click();
+        }catch (Throwable e) {
+            logger.warn("Click throws following exception: {}", e);
+            clickElementUsingJS(element);
+        }finally {
+            zoom(1);
+        }
         return at(SupplierDialog.AgreementsTab.class);
     }
 }

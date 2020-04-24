@@ -5,4 +5,9 @@
             <package name="com.scalepoint.automation.tests.suppliermanager"/>
         </packages>
     </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+
 </suite>

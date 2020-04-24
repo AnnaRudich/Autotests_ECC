@@ -6,6 +6,8 @@ import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,6 +20,9 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.testng.Assert.assertTrue;
 
 public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgreementTabs {
+
+
+    Logger logger = LogManager.getLogger(VoucherAgreementGeneralTab.class);
 
     @FindBy(name = "voucherName")
     private WebElement voucherNameInput;
