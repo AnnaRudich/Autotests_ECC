@@ -1,0 +1,38 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="shop" configfailurepolicy="continue" parallel="methods" thread-count="9">
+    <test verbose="1" name="sid" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.OrderDetailsTests"/>
+
+            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests">
+                <methods>
+                    <include name="orderConfirmationWhenWeUseProductWithdrawal" />
+                    <include name="orderConfirmationWhenWeUseCreditCard" />
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.DeprecationDeductedTests">
+                <methods>
+                    <include name="ecc3288_2_displayVoucherValueWithDeprecationDeductedON"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.DepreciationDeductedCombinedTests">
+                <methods>
+                    <include name="ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.RecommendedItemsTests">
+                <methods>
+                    <include name="ecc3278_productPricesInShopCatalog"/>
+                    <include name="ecc3278_productPricesInShopCatalogNotAdding"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+                <methods>
+                    <include name="charlie544_completeSimpleClaimWithShopExistingData"/>
+                </methods>
+
+            </class>
+        </classes>
+
+    </test>
+</suite>
