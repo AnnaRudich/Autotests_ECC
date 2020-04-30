@@ -1,15 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="shop" configfailurepolicy="continue" parallel="methods" thread-count="9">
-    <test verbose="1" name="sid" group-by-instances="false" enabled="true" preserve-order="true">
+<suite name="shop" configfailurepolicy="continue" parallel="methods" thread-count="6">
+    <test verbose="1" name="shop" enabled="true">
         <classes>
             <class name="com.scalepoint.automation.tests.OrderDetailsTests"/>
-
-            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests">
-                <methods>
-                    <include name="orderConfirmationWhenWeUseProductWithdrawal" />
-                    <include name="orderConfirmationWhenWeUseCreditCard" />
-                </methods>
-            </class>
             <class name="com.scalepoint.automation.tests.sid.DeprecationDeductedTests">
                 <methods>
                     <include name="ecc3288_2_displayVoucherValueWithDeprecationDeductedON"/>
@@ -30,9 +23,18 @@
                 <methods>
                     <include name="charlie544_completeSimpleClaimWithShopExistingData"/>
                 </methods>
-
             </class>
         </classes>
+    </test>
 
+    <test verbose="1" name="Communication Designer" enabled="true" thread-count="2">
+        <classes>
+            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests">
+            <methods>
+                <include name="orderConfirmationWhenWeUseProductWithdrawal" />
+                <include name="orderConfirmationWhenWeUseCreditCard" />
+            </methods>
+        </class>
+        </classes>
     </test>
 </suite>
