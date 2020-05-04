@@ -474,10 +474,10 @@ public class SettlementPage extends BaseClaimPage {
             this.description = descriptionElement.getText();
             this.actualColor = descriptionElement.getAttribute("style");
             this.computedColor = descriptionElement.getCssValue("color");
-            this.category = $(claimLine).find("[data-columnid='categoryGroupColumn']").getText();
-            this.quantity = Integer.valueOf($(claimLine).find("[data-columnid='quantityColumn']").getText());
+//            this.category = $(claimLine).find("[data-columnid='categoryGroupColumn']").getText();
+//            this.quantity = Integer.valueOf($(claimLine).find("[data-columnid='quantityColumn']").getText());
 
-            this.age = $(claimLine).find("[data-columnid='settlementAgeColumn']").getText();
+//            this.age = $(claimLine).find("[data-columnid='settlementAgeColumn']").getText();
 
             ElementsCollection purchasePriceElements = $(claimLine).findAll("[data-columnid='totalPurchasePriceColumn']");
             if (!purchasePriceElements.isEmpty()) {
@@ -487,9 +487,9 @@ public class SettlementPage extends BaseClaimPage {
                 }
             }
 
-            String depreciationText = $(claimLine).find("[data-columnid='depreciationColumn']").getText().replace("%", "");
-            depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
-            replacementPrice = OperationalUtils.getDoubleValue($(claimLine).find("[data-columnid='replacementAmountColumn']").getText());
+//            String depreciationText = $(claimLine).find("[data-columnid='depreciationColumn']").getText().replace("%", "");
+//            depreciation = NumberUtils.isNumber(depreciationText) ? Integer.valueOf(depreciationText) : -1;
+//            replacementPrice = OperationalUtils.getDoubleValue($(claimLine).find("[data-columnid='replacementAmountColumn']").getText());
             try {
                 ElementsCollection purchaseAmountElements = $(claimLine)
                         .findAll("[data-columnid='voucherPurchaseAmountValueColumn']");
