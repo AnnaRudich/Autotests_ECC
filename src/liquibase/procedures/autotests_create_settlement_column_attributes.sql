@@ -7,7 +7,7 @@ GO
 
 
 CREATE PROCEDURE [dbo].[autotests_create_settlement_column_attributes]
-@modelId INT,
+@modelId INT
 AS
 	SET NOCOUNT ON
 

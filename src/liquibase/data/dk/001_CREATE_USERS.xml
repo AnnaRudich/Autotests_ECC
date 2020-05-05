@@ -14,7 +14,7 @@
             declare @chUserRights int = 10 -- claims handler/supply manager
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
 
-            autotests_create_settlement_column_attributes @scalepointCompany
+            EXEC autotests_create_settlement_column_attributes @scalepointCompany
 
             declare @SupplierId int
             EXEC autotests_create_supplier @SUNAME='Autotest-Supplier-VA-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
