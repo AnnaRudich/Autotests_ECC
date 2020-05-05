@@ -1,11 +1,11 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.CASE_GET_REVISION;
+import static com.scalepoint.automation.services.restService.common.BasePath.CASE_GET_REVISION;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 

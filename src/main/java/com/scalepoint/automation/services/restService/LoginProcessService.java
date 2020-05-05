@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.RestAssured;

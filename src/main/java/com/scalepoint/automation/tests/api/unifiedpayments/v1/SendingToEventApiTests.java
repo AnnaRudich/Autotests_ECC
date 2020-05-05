@@ -12,8 +12,8 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
-import static com.scalepoint.automation.services.restService.Common.BaseService.loginUser;
+import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
+import static com.scalepoint.automation.services.restService.common.BaseService.loginUser;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.*;
 import static org.assertj.core.api.Assertions.assertThat;
 

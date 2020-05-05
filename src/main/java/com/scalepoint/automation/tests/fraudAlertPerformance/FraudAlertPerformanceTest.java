@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.restService.*;
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;

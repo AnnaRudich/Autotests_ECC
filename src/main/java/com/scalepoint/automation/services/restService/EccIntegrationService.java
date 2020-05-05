@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import io.restassured.response.ValidatableResponse;
@@ -8,7 +8,7 @@ import io.restassured.response.ValidatableResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.*;
+import static com.scalepoint.automation.services.restService.common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 

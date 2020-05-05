@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
 import com.google.common.io.CharStreams;
-import com.scalepoint.automation.services.restService.Common.*;
+import com.scalepoint.automation.services.restService.common.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;

@@ -1,14 +1,14 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.OPEN_CLAIM;
-import static com.scalepoint.automation.services.restService.Common.BasePath.UNIFIED_INTEGRATION;
+import static com.scalepoint.automation.services.restService.common.BasePath.OPEN_CLAIM;
+import static com.scalepoint.automation.services.restService.common.BasePath.UNIFIED_INTEGRATION;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 

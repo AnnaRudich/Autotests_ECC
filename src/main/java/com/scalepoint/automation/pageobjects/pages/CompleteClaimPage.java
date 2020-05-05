@@ -8,7 +8,6 @@ import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
-import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.Wait;
@@ -154,12 +153,6 @@ public class CompleteClaimPage extends Page {
     public CompleteClaimPage enterClaimNumber(String claimNumber) {
         this.claimNumber.enter(claimNumber);
         return this;
-    }
-
-    public MyPage completeWithEmail(Claim claim) {
-        compWthMailButton.click();
-        SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
-        return at(MyPage.class);
     }
 
     public MyPage completeWithEmail(Claim claim, DatabaseApi databaseApi, boolean gdpr) {

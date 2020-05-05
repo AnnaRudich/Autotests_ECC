@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import io.restassured.response.Response;
@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.INSERT_SETTLEMENT_ITEM;
-import static com.scalepoint.automation.services.restService.Common.BasePath.REMOVE_SETTLEMENT_ITEM;
+import static com.scalepoint.automation.services.restService.common.BasePath.INSERT_SETTLEMENT_ITEM;
+import static com.scalepoint.automation.services.restService.common.BasePath.REMOVE_SETTLEMENT_ITEM;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 

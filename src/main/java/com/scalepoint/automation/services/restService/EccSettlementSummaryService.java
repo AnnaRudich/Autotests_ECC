@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BasePath;
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BasePath;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 

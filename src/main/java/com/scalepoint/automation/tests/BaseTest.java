@@ -12,7 +12,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.services.restService.Common.ServiceData;
+import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
