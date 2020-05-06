@@ -13,5 +13,5 @@ import java.util.List;
 @Getter
 @ToString
 public class OrderLines {
-    List<OrderLine> listOfOrderLines= new ArrayList<>();
+    List<OrderLine> orderLine = new ArrayList<>();
 }

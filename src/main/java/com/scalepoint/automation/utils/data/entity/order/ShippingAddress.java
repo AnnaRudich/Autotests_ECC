@@ -6,20 +6,42 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+
 @Builder
 @Setter
 @Getter
 @ToString
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ShippingAddress {
-
-   String firstName;//Gerald
-   String lastName;//Monroe
-   String addressLine1 = "";
-   String addressLine2 = "";
-   String zipCode = "";
-   String city = "Copenhagen";
-   String state= "";
-   String country = Locale.DK.getValue();//DK
-   String mobilePhone = "";
-   String phone = "";
+    @XmlAttribute
+    String firstName;
+    @XmlAttribute
+    String lastName;
+    @XmlAttribute
+    @Builder.Default
+    String addressLine1 = "";
+    @XmlAttribute
+    @Builder.Default
+    String addressLine2 = "";
+    @XmlAttribute
+    @Builder.Default
+    String zipCode = "";
+    @XmlAttribute
+    @Builder.Default
+    String city = "Copenhagen";
+    @XmlAttribute
+    @Builder.Default
+    String state = "";
+    @XmlAttribute
+    @Builder.Default
+    String country = Locale.DK.getValue();
+    @XmlAttribute
+    @Builder.Default
+    String mobilePhone = "";
+    @XmlAttribute
+    @Builder.Default
+    String phone = "";
 }

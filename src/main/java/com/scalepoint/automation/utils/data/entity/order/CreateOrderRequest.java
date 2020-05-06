@@ -1,7 +1,9 @@
 package com.scalepoint.automation.utils.data.entity.order;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -16,6 +18,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class CreateOrderRequest {
     Order order;
     Account account;

@@ -14,5 +14,5 @@ import java.util.List;
 @Getter
 @ToString
 public class Deposits {
-    List<Deposit> listOfDeposits = new ArrayList<>();
+    List<Deposit> deposit = new ArrayList<>();
 }

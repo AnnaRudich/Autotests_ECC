@@ -37,7 +37,7 @@ public class CreateOrderService extends BaseService {
                 .contentType("application/xml")
                 .body(buildOrderRequestBody(claimNumber))
                 .when()
-                .post("http://qa14.scalepoint.com/webapp/ScalePoint/dk/resteasy/uCommerce/CreateOrder")
+                .post("https://qa14.scalepoint.com/webapp/ScalePoint/dk/resteasy/uCommerce/CreateOrder")
                 .then().statusCode(200).log();
     }
 
@@ -55,7 +55,7 @@ public class CreateOrderService extends BaseService {
         ScalepointAccount scalepointAccount = ScalepointAccount.builder().accountID("DK" + data.getUserId()).build();
         Deposit deposit = Deposit.builder().amount(400.00).scalepointAccount(scalepointAccount).build();
         listOfDeposits.add(deposit);
-        Deposits deposits = Deposits.builder().listOfDeposits(listOfDeposits).build();
+        Deposits deposits = Deposits.builder().deposit(listOfDeposits).build();
 
         Payments payments = Payments.builder().deposits(deposits).build();
 
@@ -73,7 +73,7 @@ public class CreateOrderService extends BaseService {
         List<OrderLine> listOfOrderLines = new ArrayList<>();
         listOfOrderLines.add(orderLine);
 
-        OrderLines orderLines = OrderLines.builder().listOfOrderLines(listOfOrderLines).build();
+        OrderLines orderLines = OrderLines.builder().orderLine(listOfOrderLines).build();
 
         SubTotalPurchasePrice subTotalPurchasePrice = SubTotalPurchasePrice.builder().amount(200.00).amountNet(160.4).build();
         SubTotalInvoicePrice subTotalInvoicePrice = SubTotalInvoicePrice.builder().amount(200.00).amountNet(160.4).build();
@@ -84,7 +84,7 @@ public class CreateOrderService extends BaseService {
         List<Suborder> listOfSuborders = new ArrayList<>();
         listOfSuborders.add(suborder);
 
-        Suborders suborders = Suborders.builder().suborders(listOfSuborders).build();
+        Suborders suborders = Suborders.builder().suborder(listOfSuborders).build();
 
         ShippingAddress shippingAddress = ShippingAddress.builder().firstName("Gerald").lastName("Monroe").build();
 
