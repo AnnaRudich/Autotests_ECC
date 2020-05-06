@@ -75,7 +75,7 @@ public class SidTests extends BaseTest {
      * WHEN user selects Voucher2
      * THAN the distance is equal to predefined value
      */
-
+//Here
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
@@ -119,6 +119,7 @@ public class SidTests extends BaseTest {
      * WHEN user searches for Shop with Voucher2 option and predefined Zip code
      * THAN it's possible to find shop with distance as predefined value
      */
+    //Here
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000

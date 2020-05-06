@@ -37,21 +37,21 @@
             exec autotests_prepare_future_company 59, @adminUserRights, @MockUrl = '${wiremock.host}'
             exec autotests_prepare_future_company 60, @adminUserRights, @MockUrl = '${wiremock.host}'
 
-            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%LB')
             EXEC autotests_create_user @lb_id, 'autotest-lb', @chUserRights
 
-            declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'BAUTA')
+            declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%BAUTA')
             EXEC autotests_create_user @bauta_id, 'autotest-bauta', @chUserRights
 
-            declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
+            declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGFORSIKRING')
             EXEC autotests_create_user @tryg_id, 'autotest-trygfors', @chUserRights
             EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
-            declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
+            declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGHOLDING')
             EXEC autotests_create_user @tryghold_id, 'autotest-trygholding', @chUserRights
             EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
-            declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'ALKA')
+            declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%ALKA')
             EXEC autotests_create_user @alka_id, 'autotest-alka', @chUserRights
 
             declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TOPDANMARK')
@@ -78,7 +78,7 @@
 
         <sql>
             --enable eventAPI and UnifiedPayments for Topdanmark
-            declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TOPDANMARK')
+            declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TOPDANMARK')
             UPDATE [dbo].[INSCOMP]
             SET eventAPIEnabled=1, unifiedPaymentsVersion = 3, eventsConfiguration='{"validationEngineEventsEnabled":true,"selfServiceEventsEnabled":true,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":true}'
             WHERE ICRFNBR=@topdanmark_id
@@ -86,7 +86,7 @@
 
         <sql>
             --enable eventAPI and UnifiedPayments for LB
-            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%LB')
             UPDATE [dbo].[INSCOMP]
             SET eventAPIEnabled=1, unifiedPaymentsVersion = 1, eventsConfiguration='{"validationEngineEventsEnabled":true,"selfServiceEventsEnabled":true,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":true}'
             WHERE ICRFNBR=@lb_id
@@ -94,7 +94,7 @@
 
         <sql>
             --disable audit for LB
-            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%LB')
             UPDATE [dbo].[INSCOMP]
             SET auditEnabled=0
             WHERE ICRFNBR=@lb_id
