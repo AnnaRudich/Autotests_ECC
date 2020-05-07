@@ -92,7 +92,7 @@
 
         <sql>
             --enable eventAPI and UnifiedPayments for LB
-            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like = 'LB')
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
             UPDATE [dbo].[INSCOMP]
             SET eventAPIEnabled=1, unifiedPaymentsVersion = 1, eventsConfiguration='{"validationEngineEventsEnabled":true,"selfServiceEventsEnabled":true,"unifiedPaymentEventsEnabled":true,"reopenEventsEnabled":true}'
             WHERE ICRFNBR=@lb_id
