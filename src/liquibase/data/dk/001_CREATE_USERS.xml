@@ -38,29 +38,29 @@
             exec autotests_prepare_future_company 60, @adminUserRights, @MockUrl = '${wiremock.host}'
 
             declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%LB')
-            EXEC autotests_fix_company_codes @lb_id 'LB'
+            EXEC autotests_fix_company_codes @lb_id, 'LB'
             EXEC autotests_create_user @lb_id, 'autotest-lb', @chUserRights
 
             declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%BAUTA')
-            EXEC autotests_create_user @bauta_id 'BAUTA'
+            EXEC autotests_fix_company_codes @bauta_id, 'BAUTA'
             EXEC autotests_create_user @bauta_id, 'autotest-bauta', @chUserRights
 
             declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGFORSIKRING')
-            EXEC autotests_create_user @tryg_id 'TRYGFORSIKRING'
+            EXEC autotests_fix_company_codes @tryg_id, 'TRYGFORSIKRING'
             EXEC autotests_create_user @tryg_id, 'autotest-trygfors', @chUserRights
             EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
             declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGHOLDING')
-            EXEC autotests_create_user @tryghold_id 'TRYGHOLDING'
+            EXEC autotests_fix_company_codes @tryghold_id, 'TRYGHOLDING'
             EXEC autotests_create_user @tryghold_id, 'autotest-trygholding', @chUserRights
             EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
             declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%ALKA')
-            EXEC autotests_create_user @alka_id 'ALKA'
+            EXEC autotests_fix_company_codes @alka_id, 'ALKA'
             EXEC autotests_create_user @alka_id, 'autotest-alka', @chUserRights
 
             declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TOPDANMARK')
-            EXEC autotests_create_user @topdanmark_id 'TOPDANMARK'
+            EXEC autotests_fix_company_codes @topdanmark_id, 'TOPDANMARK'
             EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark', @chUserRights
 
             EXEC autotests_create_performance_test_users 'autotest-topdanmark', @topdanmark_id, @chUserRights, 100
