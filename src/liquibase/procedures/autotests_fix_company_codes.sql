@@ -8,7 +8,7 @@ GO
 
 CREATE PROCEDURE [dbo].[autotests_fix_company_codes]
 @ICRFNBR int,
-@NAME nvarchar(254),
+@NAME nvarchar(254)
 AS
 	SET NOCOUNT ON
 
