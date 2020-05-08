@@ -5,7 +5,7 @@
     <functionTemplate>Default</functionTemplate>
     <ftTrygHolding>Tryg Holding</ftTrygHolding>
     <icCulture>da-DK</icCulture>
-    <guiTemplate>tryg</guiTemplate>
+    <guiTemplate>standard</guiTemplate>
     <contactNumber>00447788998877</contactNumber>
     <officeHours>8a.m. - 4p.m.</officeHours>
     <sendTimeFrom>00:00</sendTimeFrom>
