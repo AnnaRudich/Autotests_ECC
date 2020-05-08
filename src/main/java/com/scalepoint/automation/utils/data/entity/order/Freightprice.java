@@ -8,15 +8,19 @@ import lombok.ToString;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 @Builder
 @Setter
 @Getter
 @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="Freightprice")
 public class Freightprice {
     @XmlAttribute
-    Double amount;
+    @Builder.Default
+    Double amount= 0.0;
     @XmlAttribute
-    Double amountNet;
+    @Builder.Default
+    Double amountNet = 0.0;
 }

@@ -8,6 +8,7 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.CreateOrderService;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -84,6 +85,8 @@ public class OrderDetailsTests extends BaseTest {
             description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
     public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, Translations translations) {
 
+
+        XpriceInfo productInfo = getXPriceForProduct();
         OrderDetails orderDetails = translations.getOrderDetails();
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);

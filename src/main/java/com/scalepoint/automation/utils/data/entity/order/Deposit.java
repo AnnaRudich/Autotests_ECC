@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 @Builder
 @Setter
@@ -17,5 +18,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Deposit {
     @XmlAttribute
     Double amount;
+
+    @XmlElement(name="ScalepointAccount")
     ScalepointAccount scalepointAccount;
 }

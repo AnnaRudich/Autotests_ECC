@@ -7,6 +7,8 @@ import com.scalepoint.automation.utils.data.entity.order.BasePurchasePrice;
 import com.scalepoint.automation.utils.data.entity.order.CreateOrderRequest;
 import com.scalepoint.automation.utils.data.entity.order.Deposit;
 import com.scalepoint.automation.utils.data.entity.order.Deposits;
+import com.scalepoint.automation.utils.data.entity.order.Freightprice;
+import com.scalepoint.automation.utils.data.entity.order.MarketPrice;
 import com.scalepoint.automation.utils.data.entity.order.Order;
 import com.scalepoint.automation.utils.data.entity.order.OrderLine;
 import com.scalepoint.automation.utils.data.entity.order.OrderLines;
@@ -15,13 +17,15 @@ import com.scalepoint.automation.utils.data.entity.order.OrderTotalPurchasePrice
 import com.scalepoint.automation.utils.data.entity.order.OrderedItem;
 import com.scalepoint.automation.utils.data.entity.order.Payments;
 import com.scalepoint.automation.utils.data.entity.order.Product;
+import com.scalepoint.automation.utils.data.entity.order.RecommendedPrice;
 import com.scalepoint.automation.utils.data.entity.order.ScalepointAccount;
 import com.scalepoint.automation.utils.data.entity.order.ShippingAddress;
 import com.scalepoint.automation.utils.data.entity.order.SubTotalInvoicePrice;
 import com.scalepoint.automation.utils.data.entity.order.SubTotalPurchasePrice;
-import com.scalepoint.automation.utils.data.entity.order.Suborder;
-import com.scalepoint.automation.utils.data.entity.order.Suborders;
+import com.scalepoint.automation.utils.data.entity.order.SubOrder;
+import com.scalepoint.automation.utils.data.entity.order.SubOrders;
 import com.scalepoint.automation.utils.data.entity.order.Supplier;
+import com.scalepoint.automation.utils.data.entity.order.SupplierShopPrice;
 import com.scalepoint.automation.utils.data.entity.order.TotalInvoicePrice;
 import com.scalepoint.automation.utils.data.entity.order.TotalPurchasePrice;
 
@@ -42,32 +46,39 @@ public class CreateOrderService extends BaseService {
     }
 
 
-
     public CreateOrderRequest buildOrderRequestBody(String claimNumber){
-        //String userId = "DK556";
 
         setUserIdByClaimNumber(claimNumber);
 
-        OrderTotalPurchasePrice orderTotalPurchasePrice = OrderTotalPurchasePrice.builder().amount(400.00).amountNet(320.8).build();
-        OrderTotalInvoicePrice orderTotalInvoicePrice = OrderTotalInvoicePrice.builder().amount(400.00).amountNet(320.8).build();
+        OrderTotalPurchasePrice orderTotalPurchasePrice = OrderTotalPurchasePrice.builder().amount(400.00).amountNet(320.80).build();
+        OrderTotalInvoicePrice orderTotalInvoicePrice = OrderTotalInvoicePrice.builder().amount(400.00).amountNet(320.80).build();
 
         List<Deposit> listOfDeposits = new ArrayList<>();
         ScalepointAccount scalepointAccount = ScalepointAccount.builder().accountID("DK" + data.getUserId()).build();
         Deposit deposit = Deposit.builder().amount(400.00).scalepointAccount(scalepointAccount).build();
         listOfDeposits.add(deposit);
-        Deposits deposits = Deposits.builder().deposit(listOfDeposits).build();
+        Deposits deposits = Deposits.builder().depositsTotal(400.00).deposit(listOfDeposits).build();
 
         Payments payments = Payments.builder().deposits(deposits).build();
 
-        AgreementData agreementData = AgreementData.builder().build();
-        Product product = Product.builder().productID("DK3828512").agreementData(agreementData).skuNumber("1986156").build();//get product data using solrApi
+        RecommendedPrice recommendedPrice = RecommendedPrice.builder().build();
+        MarketPrice marketPrice = MarketPrice.builder().build();
+        SupplierShopPrice supplierShopPrice = SupplierShopPrice.builder().build();
+
+        AgreementData agreementData = AgreementData.builder()
+                .recommendedPrice(recommendedPrice).marketPrice(marketPrice).supplierShopPrice(supplierShopPrice).build();
+
+        Product product = Product.builder()
+                .agreementData(agreementData).build();
+
         OrderedItem orderedItem = OrderedItem.builder().product(product).build();
 
-        BasePurchasePrice basePurchasePrice = BasePurchasePrice.builder().amount(100.0).amountNet(80.2).build();
-        TotalPurchasePrice totalPurchasePrice = TotalPurchasePrice.builder().amount(100.0).amountNet(80.2).build();
-        TotalInvoicePrice totalInvoicePrice = TotalInvoicePrice.builder().amount(100.0).amountNet(80.2).build();
+        BasePurchasePrice basePurchasePrice = BasePurchasePrice.builder().amount(100.00).amountNet(80.20).build();
+        TotalPurchasePrice totalPurchasePrice = TotalPurchasePrice.builder().amount(100.00).amountNet(80.20).build();
+        TotalInvoicePrice totalInvoicePrice = TotalInvoicePrice.builder().amount(100.00).amountNet(80.20).build();
+        Freightprice freightprice = Freightprice.builder().build();
 
-        OrderLine orderLine = OrderLine.builder().basePurchasePrice(basePurchasePrice).totalInvoicePrice(totalInvoicePrice)
+        OrderLine orderLine = OrderLine.builder().description("APPLE iPhone SE 16GB Guld").freightprice(freightprice).basePurchasePrice(basePurchasePrice).totalInvoicePrice(totalInvoicePrice)
                 .totalPurchasePrice(totalPurchasePrice).orderedItem(orderedItem).build();
 
         List<OrderLine> listOfOrderLines = new ArrayList<>();
@@ -75,16 +86,16 @@ public class CreateOrderService extends BaseService {
 
         OrderLines orderLines = OrderLines.builder().orderLine(listOfOrderLines).build();
 
-        SubTotalPurchasePrice subTotalPurchasePrice = SubTotalPurchasePrice.builder().amount(200.00).amountNet(160.4).build();
-        SubTotalInvoicePrice subTotalInvoicePrice = SubTotalInvoicePrice.builder().amount(200.00).amountNet(160.4).build();
+        SubTotalPurchasePrice subTotalPurchasePrice = SubTotalPurchasePrice.builder().amount(200.00).amountNet(160.40).build();
+        SubTotalInvoicePrice subTotalInvoicePrice = SubTotalInvoicePrice.builder().amount(200.00).amountNet(160.40).build();
         Supplier supplier = Supplier.builder().supplierID("DK24368").build();
-        Suborder suborder = Suborder.builder().orderLines(orderLines)
+        SubOrder suborder = SubOrder.builder().orderLines(orderLines)
                 .subTotalInvoicePrice(subTotalInvoicePrice).subTotalPurchasePrice(subTotalPurchasePrice).supplier(supplier).build();
 
-        List<Suborder> listOfSuborders = new ArrayList<>();
+        List<SubOrder> listOfSuborders = new ArrayList<>();
         listOfSuborders.add(suborder);
 
-        Suborders suborders = Suborders.builder().suborder(listOfSuborders).build();
+        SubOrders suborders = SubOrders.builder().suborder(listOfSuborders).build();
 
         ShippingAddress shippingAddress = ShippingAddress.builder().firstName("Gerald").lastName("Monroe").build();
 

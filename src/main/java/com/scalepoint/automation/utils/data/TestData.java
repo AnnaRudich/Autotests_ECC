@@ -182,6 +182,10 @@ public class TestData {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
+    public static OrderProduct getOrderProduct(){
+        return (OrderProduct)getData(Data.ORDER_PRODUCT);
+    }
+
     @SuppressWarnings("ConstantConditions")
     public static Map<ClaimStatus, String> getClaimStatuses() {
         Map<ClaimStatus, String> statusPerText = new HashMap<>();
@@ -294,7 +298,9 @@ public class TestData {
         SCALEPOINT_DEFAULT_FT_SETTINGS("DefaultFTSettings/Scalepoint.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGFORSIKRING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygforsikring.xml", DefaultFTOperations.DefaultFTSettings.class),
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
-        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class);
+        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class),
+        ORDER_PRODUCT("OrderProduct.xml", OrderProduct.class);
+
 
         private String fileName;
         private JAXBContext context;

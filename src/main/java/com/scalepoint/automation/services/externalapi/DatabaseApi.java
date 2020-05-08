@@ -2,7 +2,6 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.CwaTaskLog;
-import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -42,6 +41,15 @@ public class DatabaseApi {
                 "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
                         Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")), new XpriceInfoMapper());
+    }
+
+    public XpriceInfo findOrderableProduct(){
+        return jdbcTemplate.queryForObject(
+                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice," +
+                        "xp.supplierName,xp.agreementId, xp.priceModelId, xp.priceModelTypeId," +
+                        "xp.discountCategoryID,xp.discountFromDate, xp.discountToDate, xp.discountValue, " +
+                        "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId " +
+                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID", new XpriceInfoMapper());
     }
 
     public Integer getUserIdByClaimToken(String claimToken) {
@@ -141,6 +149,15 @@ public class DatabaseApi {
             xpriceInfo.setInvoicePrice(rs.getDouble("invoicePrice"));
             xpriceInfo.setSupplierName(rs.getString("supplierName"));
             xpriceInfo.setSupplierShopPrice(rs.getDouble("supplierShopPrice"));
+            xpriceInfo.setPriceModelID(rs.getString("priceModelId"));
+            xpriceInfo.setPriceModelType(rs.getString("priceModelTypeId"));
+            xpriceInfo.setDiscountFromDate(rs.getString("discountFromDate"));
+            xpriceInfo.setDiscountToDate(rs.getString("discountToDate"));
+            xpriceInfo.setDiscountValue(rs.getDouble("discountValue"));
+            xpriceInfo.setPriceSourceType(rs.getString("priceSourceType"));
+            xpriceInfo.setPriceSourceSupplierID(rs.getString("priceSourceSupplierID"));
+            xpriceInfo.setOriginalProductID(rs.getString("productOriginalId"));
+            xpriceInfo.setSupplierId(rs.getString("supplierId"));
             return xpriceInfo;
         }
     }

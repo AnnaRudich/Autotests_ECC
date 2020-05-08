@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 import java.util.UUID;
 
 @Setter
@@ -15,6 +16,7 @@ import java.util.UUID;
 @ToString
 @Builder
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name="Order")
 public class Order {
     @XmlAttribute
     @Builder.Default
@@ -23,6 +25,6 @@ public class Order {
     OrderTotalPurchasePrice orderTotalPurchasePrice;
     OrderTotalInvoicePrice orderTotalInvoicePrice;
     Payments payments;
-    Suborders suborders;
+    SubOrders suborders;
     ShippingAddress shippingAddress;
 }
