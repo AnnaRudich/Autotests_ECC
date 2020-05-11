@@ -14,5 +14,9 @@ AS
 	UPDATE [PsuedoCategory]
 	SET damageTypes = 'damageType1,damageType2'
     WHERE PseudoCategoryID = 209083 --Category Personal Medicine
+    
+    UPDATE [dbo].[PsuedoCategory]
+    SET [damageTypes] = 'Væskeskade,Kortslutning,Tabt/itu/flækket,Brandskade' 
+    where [PseudoCategoryText] = (select [TextId] from [QA10_ECC_DK].[dbo].[Text_Pseudocat] where [Name] = 'Videokamera')
 
 	SET NOCOUNT OFF

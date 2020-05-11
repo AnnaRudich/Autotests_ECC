@@ -334,7 +334,7 @@ public class UserAddEditPage extends AdminBasePage {
         }
 
         if (userTypes.contains(UserType.ADMIN) || userTypes.contains(UserType.CLAIMSHANDLER)) {
-            selectCreateNewCaseManually();
+//            selectCreateNewCaseManually();
         }
         return this;
     }

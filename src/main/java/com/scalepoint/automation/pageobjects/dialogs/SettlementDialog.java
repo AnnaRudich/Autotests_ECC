@@ -563,7 +563,7 @@ public class SettlementDialog extends BaseDialog {
     private void clickAndWait(By buttonBy, WebElement button) {
         clickUsingJavaScriptIfClickDoesNotWork(button);
         waitForAjaxCompleted();
-        waitElementDisappeared(buttonBy);
+        $(buttonBy).waitUntil(Condition.disappear, 5000);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
