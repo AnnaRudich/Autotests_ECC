@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CreateOrderRequest {
     @XmlElement(name="Order")
     Order order;
-
     @XmlElement(name="Account")
     Account account;
 }

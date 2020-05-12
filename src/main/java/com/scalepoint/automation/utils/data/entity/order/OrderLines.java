@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,8 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-@XmlType(name="OrderLines")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrderLines {
+    @XmlElement(name = "OrderLine")
     List<OrderLine> orderLine = new ArrayList<>();
 }

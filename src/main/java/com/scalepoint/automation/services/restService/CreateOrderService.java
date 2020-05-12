@@ -50,14 +50,14 @@ public class CreateOrderService extends BaseService {
 
         setUserIdByClaimNumber(claimNumber);
 
-        OrderTotalPurchasePrice orderTotalPurchasePrice = OrderTotalPurchasePrice.builder().amount(400.00).amountNet(320.80).build();
-        OrderTotalInvoicePrice orderTotalInvoicePrice = OrderTotalInvoicePrice.builder().amount(400.00).amountNet(320.80).build();
+        OrderTotalPurchasePrice orderTotalPurchasePrice = OrderTotalPurchasePrice.builder().amount(100.00).amountNet(80.20).build();
+        OrderTotalInvoicePrice orderTotalInvoicePrice = OrderTotalInvoicePrice.builder().amount(100.00).amountNet(80.20).build();
 
         List<Deposit> listOfDeposits = new ArrayList<>();
         ScalepointAccount scalepointAccount = ScalepointAccount.builder().accountID("DK" + data.getUserId()).build();
-        Deposit deposit = Deposit.builder().amount(400.00).scalepointAccount(scalepointAccount).build();
+        Deposit deposit = Deposit.builder().amount(100.00).scalepointAccount(scalepointAccount).build();
         listOfDeposits.add(deposit);
-        Deposits deposits = Deposits.builder().depositsTotal(400.00).deposit(listOfDeposits).build();
+        Deposits deposits = Deposits.builder().depositsTotal(100.00).deposit(listOfDeposits).build();
 
         Payments payments = Payments.builder().deposits(deposits).build();
 
@@ -78,7 +78,7 @@ public class CreateOrderService extends BaseService {
         TotalInvoicePrice totalInvoicePrice = TotalInvoicePrice.builder().amount(100.00).amountNet(80.20).build();
         Freightprice freightprice = Freightprice.builder().build();
 
-        OrderLine orderLine = OrderLine.builder().description("APPLE iPhone SE 16GB Guld").freightprice(freightprice).basePurchasePrice(basePurchasePrice).totalInvoicePrice(totalInvoicePrice)
+        OrderLine orderLine = OrderLine.builder().quantity(1).description("APPLE iPhone SE 16GB Guld").freightprice(freightprice).basePurchasePrice(basePurchasePrice).totalInvoicePrice(totalInvoicePrice)
                 .totalPurchasePrice(totalPurchasePrice).orderedItem(orderedItem).build();
 
         List<OrderLine> listOfOrderLines = new ArrayList<>();
@@ -86,8 +86,8 @@ public class CreateOrderService extends BaseService {
 
         OrderLines orderLines = OrderLines.builder().orderLine(listOfOrderLines).build();
 
-        SubTotalPurchasePrice subTotalPurchasePrice = SubTotalPurchasePrice.builder().amount(200.00).amountNet(160.40).build();
-        SubTotalInvoicePrice subTotalInvoicePrice = SubTotalInvoicePrice.builder().amount(200.00).amountNet(160.40).build();
+        SubTotalPurchasePrice subTotalPurchasePrice = SubTotalPurchasePrice.builder().amount(100.00).amountNet(80.20).build();
+        SubTotalInvoicePrice subTotalInvoicePrice = SubTotalInvoicePrice.builder().amount(100.00).amountNet(80.20).build();
         Supplier supplier = Supplier.builder().supplierID("DK24368").build();
         SubOrder suborder = SubOrder.builder().orderLines(orderLines)
                 .subTotalInvoicePrice(subTotalInvoicePrice).subTotalPurchasePrice(subTotalPurchasePrice).supplier(supplier).build();

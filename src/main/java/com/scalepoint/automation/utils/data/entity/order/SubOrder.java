@@ -8,7 +8,7 @@ import lombok.ToString;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.UUID;
 
 @Builder
@@ -16,13 +16,17 @@ import java.util.UUID;
 @Getter
 @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Suborder")
 public class SubOrder {
     @XmlAttribute
     @Builder.Default
     String subOrderID = UUID.randomUUID().toString();
+
+    @XmlElement(name ="OrderLines")
     OrderLines orderLines;
+    @XmlElement(name = "SubTotalPurchasePrice")
     SubTotalPurchasePrice subTotalPurchasePrice;
+    @XmlElement(name = "SubTotalInvoicePrice")
     SubTotalInvoicePrice subTotalInvoicePrice;
+    @XmlElement(name = "Supplier")
     Supplier supplier;
 }

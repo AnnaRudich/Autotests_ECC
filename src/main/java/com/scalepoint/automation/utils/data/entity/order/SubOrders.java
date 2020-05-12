@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Suborders")
 public class SubOrders {
+    @XmlElement(name = "SobOrder")
     List<SubOrder> suborder = new ArrayList<>();
 }

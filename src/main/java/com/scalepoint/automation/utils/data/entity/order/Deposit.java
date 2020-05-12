@@ -19,6 +19,6 @@ public class Deposit {
     @XmlAttribute
     Double amount;
 
-    @XmlElement(name="ScalepointAccount")
+    @XmlElement(name = "ScalepointAccount")
     ScalepointAccount scalepointAccount;
 }
