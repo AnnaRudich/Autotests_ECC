@@ -18,7 +18,7 @@ CREATE PROCEDURE [dbo].[autotests_create_redruleline]
 AS
 	SET NOCOUNT ON
 
-  DECLARE @ReductionRuleId INT = (SELECT TOP (1000) [ReductionRuleID], [Description]
+  DECLARE @ReductionRuleId INT = (SELECT TOP (1000) [ReductionRuleID]
                                     FROM [dbo].[ReductionRule] where [Description] = @ReductionRuleDescription)
   INSERT INTO [dbo].[ReductionRuleLine]
          ([Description], [Sequence], [ClaimReduction], [CashReduction], [NewItemCode], [ReductionRule], [AgeFrom], [AgeTo], [priceRangeFrom], [priceRangeTo], [claimantRating])
