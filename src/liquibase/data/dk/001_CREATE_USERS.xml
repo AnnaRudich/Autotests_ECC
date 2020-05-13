@@ -108,6 +108,12 @@
             SET auditEnabled=0
             WHERE ICRFNBR=@lb_id
         </sql>
+        <sql>
+            --create choice reason for TRYG
+            declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
+            INSERT INTO [QA10_ECC_DK].[dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
+            VALUES ('Max dækning', 0, @tryghold_id, 1)
+        </sql>
 
         <rollback/>
     </changeSet>
