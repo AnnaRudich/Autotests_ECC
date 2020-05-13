@@ -19,7 +19,7 @@ AS
 	SET NOCOUNT ON
 
   DECLARE @ReductionRuleId INT = (SELECT TOP (1000) [ReductionRuleID], [Description]
-                                    FROM [dbo].[ReductionRule] where [Description] = @description)
+                                    FROM [dbo].[ReductionRule] where [Description] = @ReductionRuleDescription)
   INSERT INTO [dbo].[ReductionRuleLine]
          ([Description], [Sequence], [ClaimReduction], [CashReduction], [NewItemCode], [ReductionRule], [AgeFrom], [AgeTo], [priceRangeFrom], [priceRangeTo], [claimantRating])
   VALUES ( @LineDescription, @Sequence, @ClaimReduction, @CashReduction, 'O', @ReductionRuleId, @AgeFrom, @AgeTo, @PriceFrom, @PriceTo, 0)
