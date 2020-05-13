@@ -16,7 +16,7 @@
             EXEC autotests_create_redruleline 'test1', 'autotest-example2', 0, 10, NULL, NULL, 0.2, 0, 1
 
             EXEC autotests_create_redrule 'autotest-example3', NULL, 'Videokamera', 'Foto &amp; Video'
-            EXEC autotests_create_redruleline 'example3', 'autotest-example3' 5, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_redruleline 'example3', 'autotest-example3', 5, 10, NULL, NULL, 0.2, 0, 1
 
             EXEC autotests_create_redrule 'autotest-example4', NULL, 'Memorycard &amp; Batteri', 'Foto &amp; Video'
             EXEC autotests_create_redruleline 'test', 'autotest-example4', 0, 10, NULL, NULL, 0.2, 0, 1
