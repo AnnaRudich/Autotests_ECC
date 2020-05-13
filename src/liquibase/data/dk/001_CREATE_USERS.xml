@@ -48,12 +48,15 @@
             declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGFORSIKRING')
             EXEC autotests_fix_company_codes @tryg_id, 'TRYGFORSIKRING'
             EXEC autotests_create_user @tryg_id, 'autotest-trygfors', @chUserRights
-            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
+            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil'
+            EXEC autotests_create_redruleline '36-37', 'Autotest-MusikRule', 36, 37, 10, 20, 0.2, 0, 1
+            EXEC autotests_create_redrule 'Autotest-CycleRule', 'TRYGFORSIKRING', 'Cykler', 'Cykler &amp; Tilbehør'
+            EXEC autotests_create_redruleline '10-71', 'Autotest-CycleRule', 10, 71, 0, 1000, 0.41, 0, 1
+            EXEC autotests_create_redruleline '72-84', 'Autotest-CycleRule', 72, 84, 0, 1000, 0.47, 0, 1
 
             declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGHOLDING')
             EXEC autotests_fix_company_codes @tryghold_id, 'TRYGHOLDING'
             EXEC autotests_create_user @tryghold_id, 'autotest-trygholding', @chUserRights
-            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
             declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%ALKA')
             EXEC autotests_fix_company_codes @alka_id, 'ALKA'

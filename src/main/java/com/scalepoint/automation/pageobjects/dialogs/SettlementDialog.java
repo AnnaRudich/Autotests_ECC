@@ -432,7 +432,9 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setCategory(PseudoCategory categoryInfo) {
         setCategory(categoryInfo.getGroupName());
+        waitForAjaxCompletedAndJsRecalculation();
         setSubCategory(categoryInfo.getCategoryName());
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
