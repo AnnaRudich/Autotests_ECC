@@ -67,7 +67,7 @@ END
 IF (LEN(@CategoriesAsStr)>0)
 INSERT INTO @categories SELECT * FROM autotests_splitstr_on_ints(@CategoriesAsStr)
 
-PRINT N'category-' + @categories
+PRINT N'category-' + SELECT id FROM @categories
 
 DECLARE @PseudocatModelId INT = (
   SELECT pm.PseudoCatModelId FROM INSCOMP ic
