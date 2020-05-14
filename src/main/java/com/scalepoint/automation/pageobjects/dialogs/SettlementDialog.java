@@ -286,6 +286,7 @@ public class SettlementDialog extends BaseDialog {
         public FormFiller withAge(int years, int month) {
             sid.enableAge(Integer.toString(years))
                     .selectMonth(Integer.toString(month));
+            waitForAjaxCompletedAndJsRecalculation();
             return this;
         }
 

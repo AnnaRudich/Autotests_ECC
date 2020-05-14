@@ -17,11 +17,7 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NOT_SELECTED;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.PRICE_500;
@@ -280,7 +276,6 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                         .withCategory(claimItem.getCategoryMusic())
                         .withNewPrice(10.00)
                         .withAge(3, 0)
-                        .withValuation(NEW_PRICE)
                         .withReductionRule(20)
                         .withDepreciation(SettlementDialog.DepreciationType.POLICY))
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);

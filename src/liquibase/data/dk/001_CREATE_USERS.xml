@@ -113,12 +113,16 @@
             declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
             INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
             VALUES ('Max dækning', 0, @tryghold_id, 1)
+            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
+            VALUES ('Skønnet erstatning grundet manglende dokumentation', 0, @tryghold_id, 1)
         </sql>
         <sql>
             --create choice reason for TRYGFORSIKRING
             declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
             INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
             VALUES ('Max dækning', 0, @tryg_id, 1)
+            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
+            VALUES ('Skønnet erstatning grundet manglende dokumentation', 0, @tryg_id, 1)
         </sql>
 
         <rollback/>
