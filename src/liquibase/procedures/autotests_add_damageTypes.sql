@@ -17,6 +17,6 @@ AS
     
     UPDATE [dbo].[PsuedoCategory]
     SET [damageTypes] = 'Væskeskade,Kortslutning,Tabt/itu/flækket,Brandskade' 
-    where [PseudoCategoryText] = (select [TextId] from [QA10_ECC_DK].[dbo].[Text_Pseudocat] where [Name] = 'Videokamera')
+    where [PseudoCategoryText] = (select [TextId] from [dbo].[Text_Pseudocat] where [Name] = 'Videokamera')
 
 	SET NOCOUNT OFF
