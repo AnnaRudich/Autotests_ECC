@@ -249,7 +249,8 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         ON ps.[PseudoCategoryText] = tp.[Id]
         WHERE tp.[Name] = 'Sko')
         EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-trygforsikring', @insCompanyId = @trygforsikringCompany, @PostalCode = '9200', @SupplierId = @SupplierIdTrygforsikring OUTPUT, @MockUrl = '${wiremock.host}'
-        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-15', @SupplierIdTrygforsikring, @PseudoCategoryId, 15, @trygforsikringCompany
+        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, '200101', 15, @trygforsikringCompany
+        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, '200068', 15, @trygforsikringCompany
     </sql>
     <rollback/>
 </changeSet>
