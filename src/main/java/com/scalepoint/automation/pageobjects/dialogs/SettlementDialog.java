@@ -466,7 +466,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog enableAge(String years) {
         enableAge();
         enterAgeYears(years);
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 

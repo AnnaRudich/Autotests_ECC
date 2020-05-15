@@ -61,8 +61,8 @@
             declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%ALKA')
             EXEC autotests_fix_company_codes @alka_id, 'ALKA'
             EXEC autotests_create_user @alka_id, 'autotest-alka', @chUserRights
-            EXEC autotests_create_redrule 'Autotest-Alka-LuksusureRule', 'ALKA', 'Luksusure', 'Smykker, Ure &amp; Tilbehør'
-            EXEC autotests_create_redruleline '48-60', 'Autotest-Alka-LuksusureRule', 48, 60, 0, 2400, 0.25, 0, 1
+            EXEC autotests_create_redrule 'Autotest-AlkaRule', 'ALKA', 'Luksusure', 'Smykker, Ure &amp; Tilbehør'
+            EXEC autotests_create_redruleline '48-60', 'Autotest-AlkaRule', 48, 60, 0, 2400, 0.25, 0, 1
 
             declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TOPDANMARK')
             EXEC autotests_fix_company_codes @topdanmark_id, 'TOPDANMARK'
