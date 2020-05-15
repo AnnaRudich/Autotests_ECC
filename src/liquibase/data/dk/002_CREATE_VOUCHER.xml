@@ -227,7 +227,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         /* Autotest-Supplier-Bauta_SP,  bauta */
         declare @bautaCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
         declare @SupplierId int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = @scalepointCompany, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = @bautaCompany, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
         EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, @bautaCompany
         EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, @scalepointCompany, @Status = 0
         EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, @scalepointCompany, @Status = 0
