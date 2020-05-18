@@ -134,7 +134,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setCategory(claimItem.getCategoryBabyItems())
-                .fillVoucher(claimItem.getExistingVoucher2());
+                .fillVoucher(claimItem.getExistingVoucher1());
 
         VoucherTermsAndConditionsDialog voucherTermsAndConditionsDialog = settlementDialog.openVoucherTermAndConditions();
         String termsAndConditions = voucherTermsAndConditionsDialog.getTermsAndConditions();
@@ -172,7 +172,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setCategory(claimItem.getCategoryBabyItems())
-                .fillVoucher(claimItem.getExistingVoucher2())
+                .fillVoucher(claimItem.getExistingVoucher1())
                 .doAssert(sid -> sid.assertBrandTextIs(voucher.getBrandLink()))
                 .cancel();
     }
@@ -199,7 +199,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryBabyItems())
-                .fillVoucher(claimItem.getExistingVoucher2());
+                .fillVoucher(claimItem.getExistingVoucher1());
 
         EditVoucherValuationDialog editVoucherValuationDialog = settlementDialog
                 .openVoucherValuationCard()
@@ -227,7 +227,7 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setCategory(claimItem.getCategoryBabyItems())
-                .fillVoucher(claimItem.getExistingVoucher2())
+                .fillVoucher(claimItem.getExistingVoucher1())
                 .doAssert(sid -> sid.assertBrandTextIs(claimItem.getExistingVoucher2()))
                 .fillVoucher(claimItem.getExistingVoucher4())
                 .doAssert(sid -> sid.assertBrandTextIs(claimItem.getBrandLinkVoucher4()));
