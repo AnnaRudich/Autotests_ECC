@@ -244,14 +244,19 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         /* Autotest-Supplier-trygforsikring, trygforsikring */
         declare @trygforsikringCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
         declare @SupplierIdTrygforsikring int
-        declare @PseudoCategoryId varchar(MAX) = (SELECT CAST(ps.[PseudoCategoryID] AS VARCHAR)
+        declare @SkoPseudoCategoryId varchar(MAX) = (SELECT CAST(ps.[PseudoCategoryID] AS VARCHAR)
         FROM [dbo].[PsuedoCategory] AS ps
         JOIN [dbo].[Text_Pseudocat] AS tp
-        ON ps.[PseudoCategoryText] = tp.[Id]
+        ON ps.[PseudoCategoryText] = tp.[TextId]
         WHERE tp.[Name] = 'Sko')
+        declare @SmykkerPseudoCategoryId varchar(MAX) = (SELECT CAST(ps.[PseudoCategoryID] AS VARCHAR)
+        FROM [dbo].[PsuedoCategory] AS ps
+        JOIN [dbo].[Text_Pseudocat] AS tp
+        ON ps.[PseudoCategoryText] = tp.[TextId]
+        WHERE tp.[Name] = 'Smykker')
         EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-trygforsikring', @insCompanyId = @trygforsikringCompany, @PostalCode = '9200', @SupplierId = @SupplierIdTrygforsikring OUTPUT, @MockUrl = '${wiremock.host}'
-        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, '200101', 15, @trygforsikringCompany
-        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, '200068', 15, @trygforsikringCompany
+        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, @SkoPseudoCategoryId', 15, @trygforsikringCompany
+        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, @SmykkerPseudoCategoryId, 15, @trygforsikringCompany
     </sql>
     <rollback/>
 </changeSet>
