@@ -30,7 +30,7 @@ public class ShowMarketPricesTests extends BaseTest {
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
-                .chooseCategory(claimItem.getCategoryBabyItems())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
                 .doAssert(TextSearchPage.Asserts::assertMarketPriceSortingInvisible)
                 .sortOrderableFirst()
                 .openProductDetailsOfFirstProduct()

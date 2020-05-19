@@ -242,7 +242,7 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         EXEC autotests_create_supplier @SUNAME = 'Autotest-scalepoint-supplier', @insCompanyId = @scalepointCompany, @PostalCode = '9200', @SupplierId = @SupplierIdScalepoint OUTPUT, @MockUrl = '${wiremock.host}'
 
         /* Autotest-Supplier-trygforsikring, trygforsikring */
-        declare @trygforsikringCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
+        declare @trygforsikringCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
         declare @SupplierIdTrygforsikring int
         declare @PseudoCategoryId varchar(MAX) = (SELECT CAST(ps.[PseudoCategoryID] AS VARCHAR)
         FROM [dbo].[PsuedoCategory] AS ps

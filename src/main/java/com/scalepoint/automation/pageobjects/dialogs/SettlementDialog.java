@@ -360,7 +360,7 @@ public class SettlementDialog extends BaseDialog {
         input.clear();
         input.enter(value);
         simulateBlurEvent(input);
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -397,10 +397,12 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setNewPrice(Double amount) {
         SelenideElement element = $(newPrice).waitUntil(Condition.visible, 6000);
         element.doubleClick();
+        waitForAjaxCompletedAndJsRecalculation();
         element.sendKeys(Keys.DELETE);
+        waitForAjaxCompletedAndJsRecalculation();
         element.setValue(OperationalUtils.format(amount))
                 .pressTab();
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -465,6 +467,7 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog enableAge(String years) {
         enableAge();
+        waitForAjaxCompletedAndJsRecalculation();
         enterAgeYears(years);
         waitForAjaxCompletedAndJsRecalculation();
         return this;
@@ -687,13 +690,14 @@ public class SettlementDialog extends BaseDialog {
             }
             return true;
         });
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
     public SettlementDialog automaticDepreciation(boolean state) {
         Wait.waitForEnabled(automaticDepreciation);
         automaticDepreciation.set(state);
+        waitForAjaxCompletedAndJsRecalculation();
         Wait.waitForLoaded();
         return this;
     }
