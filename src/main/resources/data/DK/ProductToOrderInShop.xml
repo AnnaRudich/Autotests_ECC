@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<createOrder>
+<product>
+    <orderLineTotalPriceAmount>100</>
+    <vat>0,2</vat>
+    <quantity>1</quantity>
+</product>
+
+<voucher>
+
+</voucher>
+
+</createOrder>

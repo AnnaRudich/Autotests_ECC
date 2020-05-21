@@ -12,20 +12,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Data
 public class OrderDetails {
     @XmlElement
-    private String indemnity;
+    private String indemnityText;
     @XmlElement
-    private String orderedItems;
+    private String orderedItemsText;
     @XmlElement
-    private String withdrawalls;
+    private String withdrawallsText;
     @XmlElement
-    private String deposits;
+    private String depositsText;
     @XmlElement
-    private String remainingIdemnity;
+    private String remainingCompensationText;
     @XmlElement
     private String totalText;
 
     public String getIndemnity(String companyName) {
-        return substituteParams(indemnity, companyName);
+        return substituteParams(indemnityText, companyName);
     }
 
     private String substituteParams(String message, String companyName) {

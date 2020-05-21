@@ -257,7 +257,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return databaseApi.findProduct(priceConditions);
     }
 
-    public XpriceInfo getXPriceForProduct(){
+    public XpriceInfo getXPriceInfoForProduct(){
         return databaseApi.findOrderableProduct();
     }
 }

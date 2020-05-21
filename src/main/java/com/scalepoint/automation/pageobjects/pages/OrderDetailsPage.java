@@ -1,5 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -8,13 +11,20 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class OrderDetailsPage extends Page {
 
     @FindBy(xpath = "//div[@class='table-header']")
     private WebElement legendItem;
+
     @FindBy(xpath = "//div[@class='table-content']//tr[1]/td[1]")
     private WebElement idemnityText;
 
@@ -54,11 +64,10 @@ public class OrderDetailsPage extends Page {
     @FindBy(xpath = "//input[contains(@name,'article')]")
     private WebElement articleCheckbox;
 
-    @FindBy(id = "_OK_button")
-    private WebElement okOrderButton;
 
-    @FindBy(name = "internal_note")
-    private WebElement cancelOrderNoteTextArea;
+    ElementsCollection orderTotalRows = $$("#total table tr");
+
+
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -124,5 +133,47 @@ public class OrderDetailsPage extends Page {
         Window.get().switchToLast();
         return BaseDialog.at(AddInternalNoteDialog.class)
                 .addInternalNote("Autotests", OrderDetailsPage.class);
+    }
+
+    public OrderDetailsPage doAssert(Consumer<OrderDetailsPage.Asserts> assertFunc) {
+        assertFunc.accept(new OrderDetailsPage.Asserts());
+        return OrderDetailsPage.this;
+    }
+
+    public class Asserts {
+
+        public void assertRemainingCompensationTotal(Double expectedTotal) {
+            String remainingCompensationText = OrderTotalRowTexts.REMAINING_COMPENSATION_TEXT.getTotalText();
+            String expectedTotalReformatted = setDecimalSeparatorAsComma(expectedTotal);
+
+            SelenideElement actualTotalElement = orderTotalRows.find(Condition.text(remainingCompensationText));
+
+            assertThat(actualTotalElement.getText().equals(remainingCompensationText + expectedTotalReformatted))
+                    .as("was: " + actualTotalElement.getText() + " but should be :" + expectedTotalReformatted)
+                    .isTrue();
+        }
+
+        public String setDecimalSeparatorAsComma(Double number) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator(' ');
+            String pattern = "###,###.00";
+            DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
+            return  decimalFormat.format(number);
+        }
+    }
+
+    public enum OrderTotalRowTexts{
+        REMAINING_COMPENSATION_TEXT("Tilbageværende erstatning :");
+
+        private String totalText;
+
+        OrderTotalRowTexts(String totalText) {
+            this.totalText = totalText;
+        }
+
+        public String getTotalText() {
+            return totalText;
+        }
     }
 }

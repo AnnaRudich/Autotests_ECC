@@ -4,7 +4,7 @@ public class XpriceInfo {
 
     private String productKey;
 
-    private int productId;
+    private String productId;
 
     private double invoicePrice;
 
@@ -30,6 +30,8 @@ public class XpriceInfo {
 
     private String supplierId;
 
+    private String agreementId;
+
     public String getSupplierName() {
         return supplierName;
     }
@@ -50,7 +52,7 @@ public class XpriceInfo {
         this.productKey = productKey;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -63,7 +65,7 @@ public class XpriceInfo {
         return productKey;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
@@ -146,12 +148,33 @@ public class XpriceInfo {
     }
 
 
+    public String getAgreementId() {
+        return agreementId;
+    }
+
+    public void setAgreementId(String agreementId) {
+        this.agreementId = agreementId;
+    }
+
+
     @Override
     public String toString() {
-        return "XPriceInfo{" +
-                "productKey=" + productKey +
+        return "XpriceInfo{" +
+                "productKey='" + productKey + '\'' +
                 ", productId=" + productId +
-                ", invoicePrice='" + invoicePrice + '\'' +
+                ", invoicePrice=" + invoicePrice +
+                ", supplierName='" + supplierName + '\'' +
+                ", supplierShopPrice=" + supplierShopPrice +
+                ", priceModelID='" + priceModelID + '\'' +
+                ", priceModelType='" + priceModelType + '\'' +
+                ", discountFromDate='" + discountFromDate + '\'' +
+                ", discountToDate='" + discountToDate + '\'' +
+                ", discountValue=" + discountValue +
+                ", priceSourceType='" + priceSourceType + '\'' +
+                ", priceSourceSupplierID='" + priceSourceSupplierID + '\'' +
+                ", originalProductID='" + originalProductID + '\'' +
+                ", supplierId='" + supplierId + '\'' +
+                ", agreementId='" + agreementId + '\'' +
                 '}';
     }
 }

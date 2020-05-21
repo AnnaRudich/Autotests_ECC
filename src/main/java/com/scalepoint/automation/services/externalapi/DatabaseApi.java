@@ -48,8 +48,8 @@ public class DatabaseApi {
                 "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice," +
                         "xp.supplierName,xp.agreementId, xp.priceModelId, xp.priceModelTypeId," +
                         "xp.discountCategoryID,xp.discountFromDate, xp.discountToDate, xp.discountValue, " +
-                        "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId " +
-                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID", new XpriceInfoMapper());
+                        "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId, xp.agreementId " +
+                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID WHERE xp.productId!=xp.productOriginalId AND pr.Published=1", new XpriceInfoMapper());
     }
 
     public Integer getUserIdByClaimToken(String claimToken) {
@@ -144,7 +144,7 @@ public class DatabaseApi {
 
         public XpriceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             XpriceInfo xpriceInfo = new XpriceInfo();
-            xpriceInfo.setProductId(rs.getInt("ProductId"));
+            xpriceInfo.setProductId(rs.getString("ProductId"));
             xpriceInfo.setProductKey(rs.getString("ProductKey"));
             xpriceInfo.setInvoicePrice(rs.getDouble("invoicePrice"));
             xpriceInfo.setSupplierName(rs.getString("supplierName"));
@@ -158,6 +158,7 @@ public class DatabaseApi {
             xpriceInfo.setPriceSourceSupplierID(rs.getString("priceSourceSupplierID"));
             xpriceInfo.setOriginalProductID(rs.getString("productOriginalId"));
             xpriceInfo.setSupplierId(rs.getString("supplierId"));
+            xpriceInfo.setAgreementId(rs.getString("agreementId"));
             return xpriceInfo;
         }
     }

@@ -17,6 +17,6 @@ import java.util.List;
 @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SubOrders {
-    @XmlElement(name = "SobOrder")
+    @XmlElement(name = "SubOrder")
     List<SubOrder> suborder = new ArrayList<>();
 }

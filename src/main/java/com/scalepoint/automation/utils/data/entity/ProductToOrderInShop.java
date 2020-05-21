@@ -14,7 +14,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Data
 @Getter
 @Setter
-public class OrderProduct {
+public class ProductToOrderInShop {
     @XmlElement
     private String vat;
+
+    @XmlElement
+    private Double orderLineTotalPriceAmount;
+
+    @XmlElement
+    private int quantity;
 }

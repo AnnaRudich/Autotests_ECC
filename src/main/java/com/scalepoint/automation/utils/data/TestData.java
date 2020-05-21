@@ -182,8 +182,8 @@ public class TestData {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
-    public static OrderProduct getOrderProduct(){
-        return (OrderProduct)getData(Data.ORDER_PRODUCT);
+    public static ProductToOrderInShop getOrderProduct(){
+        return (ProductToOrderInShop)getData(Data.CREATE_ORDER);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -299,7 +299,7 @@ public class TestData {
         TRYGFORSIKRING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygforsikring.xml", DefaultFTOperations.DefaultFTSettings.class),
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class),
-        ORDER_PRODUCT("OrderProduct.xml", OrderProduct.class);
+        CREATE_ORDER("ProductToOrderInShop.xml", ProductToOrderInShop.class);
 
 
         private String fileName;

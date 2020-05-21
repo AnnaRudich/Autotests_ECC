@@ -18,4 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class OrderedItem {
     @XmlElement(name = "Product")
     Product product;
+
+    @XmlElement(name="Voucher")
+    Voucher voucher;
 }
