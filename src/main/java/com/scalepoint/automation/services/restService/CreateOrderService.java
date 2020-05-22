@@ -75,12 +75,11 @@ public class CreateOrderService extends BaseService {
                         xpriceInfo.getProductId(), xpriceInfo.getProductKey()))
                 .build();
 
-        //SupplierID validated
         SubOrder suborder = SubOrder.builder()
                 .orderLines(buildOrderLines(orderedItem, 1, "Test description"))
                 .subTotalInvoicePrice(buildSubTotalInvoicePrice(Constants.PRICE_100, 80.20))//if we can use net = 100?
                 .subTotalPurchasePrice(buildSubTotalPurchasePrice(Constants.PRICE_100, 80.20))
-                .supplier(buildSupplier("DK24473")).build();
+                .supplier(buildSupplier("DK" + xpriceInfo.getSupplierId())).build();
 
         Order order = Order.builder().orderTotalInvoicePrice(buildOrderTotalInvoicePrice()).orderTotalPurchasePrice(buildOrderTotalPurchasePrice())
                 .payments(payments).shippingAddress(buildShippingAddress()).suborders(buildSubOrders(suborder)).build();
