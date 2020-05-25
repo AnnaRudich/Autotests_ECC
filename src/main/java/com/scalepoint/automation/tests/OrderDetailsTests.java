@@ -9,6 +9,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.CreateOrderService;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
+import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -111,7 +112,7 @@ public class OrderDetailsTests extends BaseTest {
 
         new OrderDetailsPage()
                 .doAssert(orderDetailsPage->orderDetailsPage
-                        .assertRemainingCompensationTotal(800.00));
+                        .assertRemainingCompensationTotal(activeValuation - Constants.PRICE_100));
 
 
 

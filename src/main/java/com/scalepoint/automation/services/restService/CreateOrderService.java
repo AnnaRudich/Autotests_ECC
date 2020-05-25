@@ -75,118 +75,22 @@ public class CreateOrderService extends BaseService {
                         xpriceInfo.getProductId(), xpriceInfo.getProductKey()))
                 .build();
 
-        SubOrder suborder = SubOrder.builder()
-                .orderLines(buildOrderLines(orderedItem, 1, "Test description"))
-                .subTotalInvoicePrice(buildSubTotalInvoicePrice(Constants.PRICE_100, 80.20))//if we can use net = 100?
-                .subTotalPurchasePrice(buildSubTotalPurchasePrice(Constants.PRICE_100, 80.20))
-                .supplier(buildSupplier("DK" + xpriceInfo.getSupplierId())).build();
-
-        Order order = Order.builder().orderTotalInvoicePrice(buildOrderTotalInvoicePrice()).orderTotalPurchasePrice(buildOrderTotalPurchasePrice())
-                .payments(payments).shippingAddress(buildShippingAddress()).suborders(buildSubOrders(suborder)).build();
-
-
         Account account = Account.builder().accountID("DK" + data.getUserId()).build();
-        return CreateOrderRequest.builder().order(order).account(account).build();
+        return CreateOrderRequest.builder().order(buildOrder(payments, orderedItem, xpriceInfo.getSupplierId())).account(account).build();
     }
 
     public CreateOrderRequest buildVoucherOrderRequestBody(String claimNumber){
 
         setUserIdByClaimNumber(claimNumber);
 
-        OrderTotalPurchasePrice orderTotalPurchasePrice = OrderTotalPurchasePrice.builder()
-                .amount(100.00)
-                .amountNet(80.20).build();
-
-        OrderTotalInvoicePrice orderTotalInvoicePrice = OrderTotalInvoicePrice.builder()
-                .amount(100.00)
-                .amountNet(80.20).build();
-
-        List<Deposit> listOfDeposits = new ArrayList<>();
-        ScalepointAccount scalepointAccount = ScalepointAccount.builder()
-                .accountID("DK" + data.getUserId()).build();
-
-        Deposit deposit = Deposit.builder()
-                .amount(100.00)
-                .scalepointAccount(scalepointAccount).build();
-
-        listOfDeposits.add(deposit);
-
-        Deposits deposits = Deposits.builder()
-                .depositsTotal(100.00)
-                .deposit(listOfDeposits).build();
-
-        Payments payments = Payments.builder().deposits(deposits).build();
+        Payments payments = Payments.builder().deposits(buildDeposits(buildScalepointAccount("DK" + data.getUserId()))).build();
 
         OrderedItem orderedItem = OrderedItem.builder()
-                .voucher(buildVoucher(VoucherType.EVOUCHER,"DK2405254" )).build();
+                .voucher(buildVoucher(VoucherType.EVOUCHER, "DK6"))
+                .build();
 
-        BasePurchasePrice basePurchasePrice = BasePurchasePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(Constants.PRICE_100).build();
-
-        TotalPurchasePrice totalPurchasePrice = TotalPurchasePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(Constants.PRICE_100).build();
-
-        TotalInvoicePrice totalInvoicePrice = TotalInvoicePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(Constants.PRICE_100).build();
-
-        Freightprice freightprice = Freightprice.builder().build();
-
-        OrderLine orderLine = OrderLine.builder()
-                .quantity(1)
-                .description("Test Description")
-                .freightprice(freightprice)
-                .basePurchasePrice(basePurchasePrice)
-                .totalInvoicePrice(totalInvoicePrice)
-                .totalPurchasePrice(totalPurchasePrice)
-                .orderedItem(orderedItem).build();
-
-        List<OrderLine> listOfOrderLines = new ArrayList<>();
-        listOfOrderLines.add(orderLine);
-
-        OrderLines orderLines = OrderLines.builder()
-                .orderLine(listOfOrderLines).build();
-
-        SubTotalPurchasePrice subTotalPurchasePrice = SubTotalPurchasePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(Constants.PRICE_100).build();
-
-        SubTotalInvoicePrice subTotalInvoicePrice = SubTotalInvoicePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(80.20).build();
-
-        //SupplierID validated
-        Supplier supplier = Supplier.builder()
-                .supplierID("DK24473").build();
-
-        SubOrder suborder = SubOrder.builder().orderLines(orderLines)
-                .subTotalInvoicePrice(subTotalInvoicePrice)
-                .subTotalPurchasePrice(subTotalPurchasePrice)
-                .supplier(supplier).build();
-
-        List<SubOrder> listOfSuborders = new ArrayList<>();
-        listOfSuborders.add(suborder);
-
-        SubOrders suborders = SubOrders.builder().suborder(listOfSuborders).build();
-
-        ShippingAddress shippingAddress = ShippingAddress.builder()
-                .firstName("Gerald")
-                .lastName("Monroe").build();
-
-        Order order = Order.builder()
-                .orderTotalInvoicePrice(orderTotalInvoicePrice)
-                .orderTotalPurchasePrice(orderTotalPurchasePrice)
-                .payments(payments)
-                .shippingAddress(shippingAddress)
-                .suborders(suborders).build();
-
-
-        Account account = Account.builder()
-                .accountID("DK" + data.getUserId()).build();
-
-        return CreateOrderRequest.builder().order(order).account(account).build();
+        Account account = Account.builder().accountID("DK" + data.getUserId()).build();
+        return CreateOrderRequest.builder().order(buildOrder(payments, orderedItem, "24426")).account(account).build();
     }
 
 
@@ -307,6 +211,17 @@ public class CreateOrderService extends BaseService {
                 .accountID(accountId).build();
     }
 
+    private Order buildOrder(Payments payments, OrderedItem orderedItem, String supplierId){
+        SubOrder suborder = SubOrder.builder()
+                .orderLines(buildOrderLines(orderedItem, 1, "Test description"))
+                .subTotalInvoicePrice(buildSubTotalInvoicePrice(Constants.PRICE_100, 80.20))//if we can use net = 100?
+                .subTotalPurchasePrice(buildSubTotalPurchasePrice(Constants.PRICE_100, 80.20))
+                .supplier(buildSupplier("DK" + supplierId)).build();
+
+        return Order.builder().orderTotalInvoicePrice(buildOrderTotalInvoicePrice()).orderTotalPurchasePrice(buildOrderTotalPurchasePrice())
+                .payments(payments).shippingAddress(buildShippingAddress()).suborders(buildSubOrders(suborder)).build();
+
+    }
 
 
     enum VoucherType{
