@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.CwaTaskLog;
+import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -103,6 +104,13 @@ public class DatabaseApi {
                 "order by [USL].[StartStamp] desc", String.class, claimNumber);
     }
 
+    public VoucherInfo getVoucherInfo(Boolean isEvoucher){
+        int isEvoucherNumber = isEvoucher ? 1 : 0;
+        return jdbcTemplate.queryForObject("select top (1) VoucherAgreementId, RebatePercentage, SupplierId " +
+                "from VoucherAgreement" +
+                "where EVoucher="+isEvoucherNumber+" and Status=1", new VoucherInfoMapper());
+    }
+
     public int waitForFraudStatusChange(int status, String claimNumber){
         return  await()
                 .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
@@ -160,6 +168,16 @@ public class DatabaseApi {
             xpriceInfo.setSupplierId(rs.getString("supplierId"));
             xpriceInfo.setAgreementId(rs.getString("agreementId"));
             return xpriceInfo;
+        }
+    }
+
+    private static final class VoucherInfoMapper implements RowMapper<VoucherInfo>{
+        public VoucherInfo mapRow(ResultSet resultSet, int i) throws SQLException {
+            VoucherInfo voucherInfo = new VoucherInfo();
+            voucherInfo.setVoucherId();
+            voucherInfo.setVoucherSupplier();
+            voucherInfo.setPurchaseDiscount();
+            return voucherInfo;
         }
     }
 

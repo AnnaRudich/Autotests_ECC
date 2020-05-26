@@ -182,10 +182,6 @@ public class TestData {
         return (EccIntegration) getData(Data.ECC_INTEGRATION);
     }
 
-    public static ProductToOrderInShop getOrderProduct(){
-        return (ProductToOrderInShop)getData(Data.CREATE_ORDER);
-    }
-
     @SuppressWarnings("ConstantConditions")
     public static Map<ClaimStatus, String> getClaimStatuses() {
         Map<ClaimStatus, String> statusPerText = new HashMap<>();
@@ -298,8 +294,7 @@ public class TestData {
         SCALEPOINT_DEFAULT_FT_SETTINGS("DefaultFTSettings/Scalepoint.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGFORSIKRING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygforsikring.xml", DefaultFTOperations.DefaultFTSettings.class),
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
-        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class),
-        CREATE_ORDER("ProductToOrderInShop.xml", ProductToOrderInShop.class);
+        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class);
 
 
         private String fileName;
