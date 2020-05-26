@@ -79,6 +79,7 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Select again another voucher
      * THEN: Check that another voucher is displayed
      */
+
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify shared voucher")
     public void ecc5519_1_sharedVoucherAndTagsBrandInSID(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         checkBrandsAndTags(user, claim, claimItem, voucher);
@@ -163,6 +164,7 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Select again another voucher
      * THEN: Check that another voucher is displayed
      */
+
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify that Brands and Tags are visible in compact mode")
     public void ecc5519_3_voucherBrandTagInSIDCompactMode(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         loginAndCreateClaim(user, claim)
@@ -218,6 +220,7 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Select again another voucher
      * THEN: Check that another voucher is displayed
      */
+
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify that user can re-select voucher")
     public void ecc5519_5_reselectVoucherInSID(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)

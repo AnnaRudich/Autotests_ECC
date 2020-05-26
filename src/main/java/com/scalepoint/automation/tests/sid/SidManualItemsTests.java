@@ -648,6 +648,7 @@ public class SidManualItemsTests extends BaseTest {
                 .setValuation(NEW_PRICE)
                 .closeSidWithOk();
     }
+
     @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM)
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
     @Test(dataProvider = "testDataProvider",

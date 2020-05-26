@@ -68,6 +68,7 @@ public class VoucherPredictionTest extends BaseTest {
                 .doAssert(sid -> sid.assertVoucherIsSelected(mongoDbApi.getVoucherPredictedObjectsBy(claim.getClaimNumber(), lineDescription)
                         .get(0).getPredictedVoucher().getVoucherName()));
     }
+
     @Test(dataProvider = "testDataProvider",
             description = "MIKE-17 - call Improved voucher match service in excel")
     public void mike41_improvedVoucherMatchForExcelImport(User user, Claim claim, ClaimItem claimItem) {

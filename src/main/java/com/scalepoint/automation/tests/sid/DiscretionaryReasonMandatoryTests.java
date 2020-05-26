@@ -74,6 +74,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
      * AND: click OK button
      * THEN: the field is disabled; the dialog is closed
      */
+
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
     public void charlie_508_3_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
@@ -82,7 +83,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
                 .setDepreciation(Constants.DEPRECIATION_10)
                 .setDepreciationType(DepreciationType.DISCRETIONARY)
                 .doAssert(sid -> {
-                    sid.assertDiscretionaryReasonEnabled();
+                    sid.assertDiscretionaryReasonDisabled();
                     sid.assertDiscretionaryReasonHasNormalBorder();
                 });
     }

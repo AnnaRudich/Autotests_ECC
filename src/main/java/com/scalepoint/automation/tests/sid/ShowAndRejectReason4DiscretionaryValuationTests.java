@@ -176,6 +176,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Verify the reason's representation for different valuations.
      * THEN: Selected reason is displayed for all valuation types with enable state except of the voucher valuation
      */
+
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)

@@ -45,7 +45,6 @@ public class CatalogPricesTests extends BaseTest {
                     //Voucher based on MarketPrice price exists, all discount given to the IC - ADD!
                 });
     }
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")

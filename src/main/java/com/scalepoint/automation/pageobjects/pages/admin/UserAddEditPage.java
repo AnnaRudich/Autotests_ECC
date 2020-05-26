@@ -332,10 +332,11 @@ public class UserAddEditPage extends AdminBasePage {
         } else {
             disableSMType();
         }
-
-        if (userTypes.contains(UserType.ADMIN) || userTypes.contains(UserType.CLAIMSHANDLER)) {
+        //TODO verify if it is needed
+//
+//        if (userTypes.contains(UserType.ADMIN) || userTypes.contains(UserType.CLAIMSHANDLER)) {
 //            selectCreateNewCaseManually();
-        }
+//        }
         return this;
     }
 

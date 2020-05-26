@@ -333,7 +333,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public boolean isItemPresent(String item) {
         List<WebElement> claims = claimLineDescription;
-        return claims.stream().anyMatch(claim -> claim.getText().trim().equals(item));
+        return claims.stream().anyMatch(claim -> claim.getText().trim().contains(item));
     }
 
     public boolean isSettlementPagePresent() {
