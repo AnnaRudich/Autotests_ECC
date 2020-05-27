@@ -144,7 +144,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(VOUCHER).getTotalPrice();
 
-        int depreciationPercentage = 13;
+        int depreciationPercentage = 10;
         double depreciationAmount = voucherCashValue * (double) depreciationPercentage / 100;
         double depreciationAmountRoundHalfDown = BigDecimal.valueOf(depreciationAmount).setScale(4, BigDecimal.ROUND_HALF_DOWN).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
         double replacementPrice = voucherCashValue - depreciationAmount;
