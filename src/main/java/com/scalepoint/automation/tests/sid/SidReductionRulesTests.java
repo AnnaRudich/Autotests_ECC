@@ -41,7 +41,7 @@ public class SidReductionRulesTests extends BaseTest {
      * THEN: Value in depreciation field is changed to value of reduction rule
      */
 
-    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button", enabled = false)
     public void ecc3031_1_reductionRulePolicyType(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
@@ -88,7 +88,7 @@ public class SidReductionRulesTests extends BaseTest {
      * THEN: Value in depreciation field is changed to value of reduction rule
      */
 
-    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule policy type after ticking Depreciation automatically updated checkbox")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule policy type after ticking Depreciation automatically updated checkbox", enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     public void ecc3031_2_reductionRulePolicyTypeAutomatic(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)

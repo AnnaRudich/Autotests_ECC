@@ -180,7 +180,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON", enabled = false)
     public void charlie_508_8_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem,
                                                             Translations translations) {
         String reasonText = translations.getDiscretionaryReason().getMaxCoverage();

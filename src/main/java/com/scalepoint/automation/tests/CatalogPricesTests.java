@@ -24,7 +24,7 @@ public class CatalogPricesTests extends BaseTest {
      * this section covers ProductsAsVouchers "B&O products"
      */
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductInvoicePrice < Market price")
+    @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductInvoicePrice < Market price", enabled = false)
     public void charlie543_addOrderableProductsWithBnoWhenProductPriceLowerThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
@@ -47,7 +47,7 @@ public class CatalogPricesTests extends BaseTest {
     }
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
+    @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price", enabled = false)
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceEqualsMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 

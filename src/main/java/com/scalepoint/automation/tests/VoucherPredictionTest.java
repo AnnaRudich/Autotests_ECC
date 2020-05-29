@@ -22,7 +22,7 @@ public class VoucherPredictionTest extends BaseTest {
     private static final String lineDescription = "claimLine1";
 
     @Test(dataProvider = "testDataProvider",
-            description = "MIKE-41 - call Improved voucher match service is SID, manual line")
+            description = "MIKE-41 - call Improved voucher match service is SID, manual line", enabled = false)
     public void mike41_improvedVoucherMatchForManualLines(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
@@ -40,7 +40,7 @@ public class VoucherPredictionTest extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @Test(dataProvider = "testDataProvider",
-            description = "MIKE-42 - call Improved voucher match service in SelfService")
+            description = "MIKE-42 - call Improved voucher match service in SelfService", enabled = false)
     public void mike41_improvedVoucherMatchForSelfService(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
@@ -70,7 +70,7 @@ public class VoucherPredictionTest extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider",
-            description = "MIKE-17 - call Improved voucher match service in excel")
+            description = "MIKE-17 - call Improved voucher match service in excel", enabled = false)
     public void mike41_improvedVoucherMatchForExcelImport(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)

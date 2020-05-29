@@ -116,7 +116,7 @@ public class SidManualItemsTests extends BaseTest {
      */
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
-    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify a manual depreciation can be entered into the field Depreciation")
+    @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify a manual depreciation can be entered into the field Depreciation", enabled = false)
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
@@ -652,7 +652,7 @@ public class SidManualItemsTests extends BaseTest {
     @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM)
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
     @Test(dataProvider = "testDataProvider",
-            description = "possible to add one manual line when SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM FeatureToggle is ON")
+            description = "possible to add one manual line when SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM FeatureToggle is ON", enabled = false)
     public void E2E_addButtonOnNewManualItem(User user, Claim claim, ClaimItem claimItem1, ClaimItem claimItem2){
 
         loginAndCreateClaim(user, claim)
