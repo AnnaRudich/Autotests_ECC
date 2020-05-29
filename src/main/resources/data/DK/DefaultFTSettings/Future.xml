@@ -101,7 +101,7 @@
             <key>USE_SELF_SERVICE2</key><value>ENABLE</value>
         </entry>
         <entry>
-            <key>INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE</key><value>DISABLE</value>
+            <key>INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE</key><value>ENABLE</value>
         </entry>
         <entry>
             <key>INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE</key><value>ENABLE</value>
@@ -111,6 +111,12 @@
         </entry>
         <entry>
             <key>INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE</key><value>ENABLE</value>
+        </entry>
+        <entry>
+            <key>VALIDATE_PURCHASE_PRICE_VALUATION</key><value>DISABLE</value>
+        </entry>
+        <entry>
+            <key>VALIDATE_CUSTOMER_DEMAND_VALUATION</key><value>DISABLE</value>
         </entry>
         <entry>
             <key>VALIDATE_AGE</key><value>DISABLE</value>

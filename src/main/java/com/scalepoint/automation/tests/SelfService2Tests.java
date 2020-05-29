@@ -35,6 +35,7 @@ public class SelfService2Tests extends BaseTest {
         description = null;
         newPasswordToSelfService = null;
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -99,7 +100,7 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed)
                 .logOut()
                 .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
-                new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
+        new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")

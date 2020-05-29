@@ -87,10 +87,9 @@ public class LessIsMoreTests extends BaseTest {
                     asserts.assertIsValuationFiledDisabled();
                 });
     }
-
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @Test(dataProvider = "testDataProvider", description = "Create valuation group")
+    @Test(dataProvider = "testDataProvider", description = "Create valuation group", enabled = false)
     public void charlie550_createValuationGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])

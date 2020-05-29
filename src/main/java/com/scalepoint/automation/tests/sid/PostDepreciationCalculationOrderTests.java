@@ -129,7 +129,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider",
-            description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
+            description = "ECC-3638 Calculations order of PRE-depreciation_logic claims", enabled = false)
     public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
 
         ProductInfo product = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY));

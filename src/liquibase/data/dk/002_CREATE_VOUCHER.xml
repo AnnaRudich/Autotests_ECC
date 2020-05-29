@@ -10,18 +10,195 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     <comment>Create Vouchers</comment>
 
     <sql>
-        IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
+        IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Voucher_Bike')
         BEGIN
-        UPDATE [dbo].[VoucherAgreement]
-        SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
-        WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Sodavand')
+
+        INSERT INTO [dbo].[VoucherAgreement] ([Status]
+        ,[Url]
+        ,[StepAmount]
+        ,[MinAmount]
+        ,[RebatePercentage]
+        ,[InvoicePercentage]
+        ,[VATPercentage]
+        ,[EVoucher]
+        ,[DeliveryCost]
+        ,[IncludeDelivery]
+        ,[VoucherName]
+        ,[SupplierId]
+        ,[ThumbnailImage]
+        ,[CreationDate]
+        ,[DeletionDate]
+        ,[LowestPrice]
+        ,[InvoicePrice]
+        ,[Email]
+        ,[EmailType]
+        ,[insuranceCompanyId]
+        ,[IsSupplierUrl]
+        ,[IsSupplierLogo]
+        ,[EVoucherEmailRequired]
+        ,[EVoucherPhoneRequired]
+        ,[EVoucherPersonalCodeRequired]
+        ,[UseEVoucherPortal]
+        ,[ImageFileId]
+        ,[Brands]
+        ,[Tags]
+        ,[deliveryType]
+        ,[OrderFeeId]
+        ,[VoucherStyleId]
+        ,[Popularity]
+        ,[ReasonSubType]
+        ,[ReasonType]
+        ,[rightOfCancellationRequired]
+        ,[eVoucherFlowId]
+        ,[goyadaProductCode]
+        ,[goyadaShopId]
+        ,[lastStatusUpdate]
+        ,[scheduledStatusChangeDate]
+        ,[boostedOverVoucherId]
+        ,[shopOnlyVoucherId]
+        ,[payExMerchantId]
+        ,[MaxAmount])
+        SELECT [Status]
+        ,[Url]
+        ,[StepAmount]
+        ,[MinAmount]
+        ,0.00000000
+        ,0.00000000
+        ,[VATPercentage]
+        ,[EVoucher]
+        ,[DeliveryCost]
+        ,[IncludeDelivery]
+        ,'Voucher_AUTOTEST'
+        ,[SupplierId]
+        ,[ThumbnailImage]
+        ,[CreationDate]
+        ,[DeletionDate]
+        ,[LowestPrice]
+        ,[InvoicePrice]
+        ,[Email]
+        ,[EmailType]
+        ,[insuranceCompanyId]
+        ,[IsSupplierUrl]
+        ,[IsSupplierLogo]
+        ,[EVoucherEmailRequired]
+        ,[EVoucherPhoneRequired]
+        ,[EVoucherPersonalCodeRequired]
+        ,[UseEVoucherPortal]
+        ,[ImageFileId]
+        ,[Brands]
+        ,[Tags]
+        ,[deliveryType]
+        ,[OrderFeeId]
+        ,[VoucherStyleId]
+        ,[Popularity]
+        ,[ReasonSubType]
+        ,[ReasonType]
+        ,[rightOfCancellationRequired]
+        ,[eVoucherFlowId]
+        ,[goyadaProductCode]
+        ,[goyadaShopId]
+        ,[lastStatusUpdate]
+        ,[scheduledStatusChangeDate]
+        ,[boostedOverVoucherId]
+        ,[shopOnlyVoucherId]
+        ,[payExMerchantId]
+        ,[MaxAmount]
+        FROM [dbo].[VoucherAgreement] WHERE [VoucherName] = 'Voucher_Bike' AND [SupplierId] = 24426
         END
 
-        IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
+        IF EXISTS(SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'EVoucher_Bike')
         BEGIN
-        UPDATE [dbo].[VoucherAgreement]
-        SET [RebatePercentage] = 0.00000000 , [InvoicePercentage] = 0.00000000
-        WHERE  VoucherAgreementId = (SELECT VoucherAgreementId FROM [dbo].[VoucherAgreement] WHERE VoucherName = 'Scalepoint Slik - TEST')
+        INSERT INTO [dbo].[VoucherAgreement] ([Status]
+        ,[Url]
+        ,[StepAmount]
+        ,[MinAmount]
+        ,[RebatePercentage]
+        ,[InvoicePercentage]
+        ,[VATPercentage]
+        ,[EVoucher]
+        ,[DeliveryCost]
+        ,[IncludeDelivery]
+        ,[VoucherName]
+        ,[SupplierId]
+        ,[ThumbnailImage]
+        ,[CreationDate]
+        ,[DeletionDate]
+        ,[LowestPrice]
+        ,[InvoicePrice]
+        ,[Email]
+        ,[EmailType]
+        ,[insuranceCompanyId]
+        ,[IsSupplierUrl]
+        ,[IsSupplierLogo]
+        ,[EVoucherEmailRequired]
+        ,[EVoucherPhoneRequired]
+        ,[EVoucherPersonalCodeRequired]
+        ,[UseEVoucherPortal]
+        ,[ImageFileId]
+        ,[Brands]
+        ,[Tags]
+        ,[deliveryType]
+        ,[OrderFeeId]
+        ,[VoucherStyleId]
+        ,[Popularity]
+        ,[ReasonSubType]
+        ,[ReasonType]
+        ,[rightOfCancellationRequired]
+        ,[eVoucherFlowId]
+        ,[goyadaProductCode]
+        ,[goyadaShopId]
+        ,[lastStatusUpdate]
+        ,[scheduledStatusChangeDate]
+        ,[boostedOverVoucherId]
+        ,[shopOnlyVoucherId]
+        ,[payExMerchantId]
+        ,[MaxAmount])
+        SELECT [Status]
+        ,[Url]
+        ,[StepAmount]
+        ,[MinAmount]
+        ,0.00000000
+        ,0.00000000
+        ,[VATPercentage]
+        ,[EVoucher]
+        ,[DeliveryCost]
+        ,[IncludeDelivery]
+        ,'E_Voucher_AUTOTEST'
+        ,[SupplierId]
+        ,[ThumbnailImage]
+        ,[CreationDate]
+        ,[DeletionDate]
+        ,[LowestPrice]
+        ,[InvoicePrice]
+        ,[Email]
+        ,[EmailType]
+        ,[insuranceCompanyId]
+        ,[IsSupplierUrl]
+        ,[IsSupplierLogo]
+        ,[EVoucherEmailRequired]
+        ,[EVoucherPhoneRequired]
+        ,[EVoucherPersonalCodeRequired]
+        ,[UseEVoucherPortal]
+        ,[ImageFileId]
+        ,[Brands]
+        ,[Tags]
+        ,[deliveryType]
+        ,[OrderFeeId]
+        ,[VoucherStyleId]
+        ,[Popularity]
+        ,[ReasonSubType]
+        ,[ReasonType]
+        ,[rightOfCancellationRequired]
+        ,[eVoucherFlowId]
+        ,[goyadaProductCode]
+        ,[goyadaShopId]
+        ,[lastStatusUpdate]
+        ,[scheduledStatusChangeDate]
+        ,[boostedOverVoucherId]
+        ,[shopOnlyVoucherId]
+        ,[payExMerchantId]
+        ,[MaxAmount]
+        FROM [dbo].[VoucherAgreement] WHERE [VoucherName] = 'EVoucher_Bike' AND [SupplierId] = 24426
         END
 
         /*
@@ -31,37 +208,55 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         */
 
         /* 10socks.com.com supplier */
-        EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher', 17, '22', 10, 7
-
         declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
+        EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher', 17, '22', 10, @scalepointCompany
+
         declare @SupplierVAId int
         EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Distance-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '5000', @SupplierId = @SupplierVAId OUTPUT, @MockUrl = '${wiremock.host}'
-        EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierVAId, '22', 10, 7
+        EXEC autotests_create_voucher_agreement 'Autotest-SpVoucher-Distance', @SupplierVAId, '22', 10, @scalepointCompany
 
         /* ComputerCity */
-        EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher1', 1663, '22', 10, 7
+        EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher1', 1663, '22', 10, @scalepointCompany
 
         /* Cool Shop */
-        EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher2', 3921, '200018', 10, 7
+        EXEC autotests_create_voucher_agreement 'Autotest-DNDVoucher2', 3921, '200018', 10, @scalepointCompany
 
         /* Webhallen */
-        EXEC autotests_create_voucher_agreement 'Autotest-BO', 24398, '200018', 6, 7
+        EXEC autotests_create_voucher_agreement 'Autotest-BO', 24398, '200018', 6, @scalepointCompany
 
         /* Autotest-Supplier-Bauta_SP,  bauta */
+        declare @bautaCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
         declare @SupplierId int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
-        EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, 12
-        EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
-        EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, 7, @Status = 0
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-Bauta_SP', @insCompanyId = @scalepointCompany, @PostalCode = '9200', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
+        EXEC autotests_create_voucher_agreement 'Autotest-Bauta-Voucher-10', @SupplierId, '200018', 10, @bautaCompany
+        EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Inactive-Voucher-10', @SupplierId, '200018', 10, @scalepointCompany, @Status = 0
+        EXEC autotests_create_voucher_agreement 'Autotest-Scalepoint-Voucher-10', @SupplierId, '200018', 10, @scalepointCompany, @Status = 0
 
         /* Autotest-Supplier-Bauta,  bauta */
         declare @SupplierIdBauta int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest_Supplier_Bauta', @insCompanyId = 12, @PostalCode = '9200', @SupplierId = @SupplierIdBauta OUTPUT, @MockUrl = '${wiremock.host}'
-        EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, 12
+        EXEC autotests_create_supplier @SUNAME = 'Autotest_Supplier_Bauta', @insCompanyId = @bautaCompany, @PostalCode = '9200', @SupplierId = @SupplierIdBauta OUTPUT, @MockUrl = '${wiremock.host}'
+        EXEC autotests_create_voucher_agreement 'Autotest_Bauta_Voucher-15', @SupplierIdBauta, '200018', 15, @bautaCompany
 
         /* Supplier without vouchers */
         declare @SupplierIdScalepoint int
-        EXEC autotests_create_supplier @SUNAME = 'Autotest-scalepoint-supplier', @insCompanyId = 7, @PostalCode = '9200', @SupplierId = @SupplierIdScalepoint OUTPUT, @MockUrl = '${wiremock.host}'
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-scalepoint-supplier', @insCompanyId = @scalepointCompany, @PostalCode = '9200', @SupplierId = @SupplierIdScalepoint OUTPUT, @MockUrl = '${wiremock.host}'
+
+        /* Autotest-Supplier-trygforsikring, trygforsikring */
+        declare @trygforsikringCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
+        declare @SupplierIdTrygforsikring int
+        declare @SkoPseudoCategoryId varchar(MAX) = (SELECT CAST(ps.[PseudoCategoryID] AS VARCHAR)
+        FROM [dbo].[PsuedoCategory] AS ps
+        JOIN [dbo].[Text_Pseudocat] AS tp
+        ON ps.[PseudoCategoryText] = tp.[TextId]
+        WHERE tp.[Name] = 'Sko')
+        declare @SmykkerPseudoCategoryId varchar(MAX) = (SELECT CAST(ps.[PseudoCategoryID] AS VARCHAR)
+        FROM [dbo].[PsuedoCategory] AS ps
+        JOIN [dbo].[Text_Pseudocat] AS tp
+        ON ps.[PseudoCategoryText] = tp.[TextId]
+        WHERE tp.[Name] = 'Smykker')
+        EXEC autotests_create_supplier @SUNAME = 'Autotest-Supplier-trygforsikring', @insCompanyId = @trygforsikringCompany, @PostalCode = '9200', @SupplierId = @SupplierIdTrygforsikring OUTPUT, @MockUrl = '${wiremock.host}'
+        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, @SkoPseudoCategoryId, 15, @trygforsikringCompany
+        EXEC autotests_create_voucher_agreement 'Autotest_Trygforsikring_Voucher-155', @SupplierIdTrygforsikring, @SmykkerPseudoCategoryId, 15, @trygforsikringCompany
     </sql>
     <rollback/>
 </changeSet>

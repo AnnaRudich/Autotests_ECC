@@ -67,7 +67,7 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
+    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes", enabled = false)
     public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         int index = 0;
         Attributes[] attributes = {TOUCH_SCREEN_NEJ, NFC_NEJ};

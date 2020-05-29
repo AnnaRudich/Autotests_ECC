@@ -25,7 +25,8 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price is unavailable on the Product's Best Fit page
      * THEN: Market Price supplier not displays on Product Details page
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
+
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page", enabled = false)
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)

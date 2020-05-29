@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="bna" runOnChange="false">
+
+        <comment>Enable GDPR sensitive fields check</comment>
+        <sql>
+            update [FF4J_FEATURES] set [ENABLE] = 1 WHERE [FEAT_UID] = 'GDPR_SENSITIVE_FIELDS_CHECK_ENABLED'
+        </sql>
+    </changeSet>
+</databaseChangeLog>

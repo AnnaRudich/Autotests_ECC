@@ -17,10 +17,8 @@
         <groupName>Foto &amp; Video</groupName>
         <categoryName>Videokamera</categoryName>
         <damageTypes>
-            <damageType>Væskeskade</damageType>
-            <damageType>Kortslutning</damageType>
-            <damageType>Tabt/itu/flækket</damageType>
-            <damageType>Brandskade</damageType>
+            <damageType>damageType1</damageType>
+            <damageType>damageType2</damageType>
         </damageTypes>
     </categoryVideoCamera>
 

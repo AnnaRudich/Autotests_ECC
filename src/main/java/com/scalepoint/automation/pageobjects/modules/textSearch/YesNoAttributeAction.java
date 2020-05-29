@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.modules.textSearch;
 
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,8 @@ import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import java.util.Arrays;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class YesNoAttributeAction implements SearchAttributesActions {
 
@@ -20,23 +23,23 @@ public class YesNoAttributeAction implements SearchAttributesActions {
     }
 
     private void yesNoSelect(By by, String[] options) {
-        WebElement initialElement = null;
+        SelenideElement initialElement = null;
         try {
-            initialElement = Browser.driver().findElement(by);
+            initialElement = $(by);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
 
         assert initialElement != null;
 
-        CheckBox checkBox = new CheckBox(initialElement.findElement(By.xpath("./parent::td/input")));
+        SelenideElement checkBox = initialElement.find(By.xpath("./parent::td/input"));
         if (!checkBox.isSelected()) {
-            checkBox.select();
+            checkBox.click();
         }
-        Select selectYesNo = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[1]")));
+        Select selectYesNo = new Select(initialElement.find(By.xpath("../parent::tr/td[@class='blueBorder']/select[1]")));
         Select comparision = new Select(null);
         if (options.length > 1) {
-            comparision = new Select(initialElement.findElement(By.xpath("../parent::tr/td[@class='blueBorder']/select[2]")));
+            comparision = new Select(initialElement.find(By.xpath("../parent::tr/td[@class='blueBorder']/select[2]")));
         }
         Select finalComparision = comparision;
         Arrays.stream(options).forEach(option -> chooseOptionFromSelects(option, selectYesNo, finalComparision));
