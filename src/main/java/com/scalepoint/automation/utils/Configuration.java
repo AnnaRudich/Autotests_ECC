@@ -29,6 +29,7 @@ public class Configuration {
     private static final String tasksFeedbackUrl = "ws/task_feedback.action";
     private static final String pullTaskDataUrl = "ws/tasks.xml";
     private static final String repairValuationUrl = "repairValuation";
+    private static final String createOrderBasePath = "resteasy/uCommerce/CreateOrder";
 
     private static final String SLASH = "/";
 
@@ -236,6 +237,14 @@ public class Configuration {
 
     public static String getRepairValuationUrl() {
         return repairValuationUrl;
+    }
+
+    private static String getCreateOrderBasePath() {
+        return createOrderBasePath;
+    }
+
+    public static String getCreateOrderWebServiceUrl(){
+        return getEccUrl()+getCreateOrderBasePath();
     }
 
 }

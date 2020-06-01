@@ -1,7 +1,9 @@
 package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.common.BaseService;
+import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
+import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.data.entity.order.Account;
 import com.scalepoint.automation.utils.data.entity.order.AgreementData;
@@ -39,24 +41,31 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 public class CreateOrderService extends BaseService {
+    
+    private final String TEST_DESCRIPTION = "Test description";
+    private final Double amount = Constants.PRICE_100;
+    private final Double amountNet = 80.2;
+    private final int quantity = 1;
+    private final String locale = Configuration.getLocale().getValue().toUpperCase();
+            
 
     public void createOrderForProduct(XpriceInfo xpriceInfo, String claimNumber){
         given().log().all()
                 .contentType("application/xml")
                 .body(buildProductOrderRequestBody(xpriceInfo, claimNumber))
                 .when()
-                .post("https://qa14.scalepoint.com/webapp/ScalePoint/dk/resteasy/uCommerce/CreateOrder")
+                .post(Configuration.getCreateOrderWebServiceUrl())
                 .then().statusCode(200).log();
 
         Browser.driver().navigate().refresh();
     }
 
-    public void createOrderForVoucher(String claimNumber){
+    public void createOrderForVoucher(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
         given().log().all()
                 .contentType("application/xml")
-                .body(buildVoucherOrderRequestBody(claimNumber))
+                .body(buildVoucherOrderRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
                 .when()
-                .post("https://qa14.scalepoint.com/webapp/ScalePoint/dk/resteasy/uCommerce/CreateOrder")//getEccUrl()+basePath("resteasy/uCommerce/CreateOrder")
+                .post(Configuration.getCreateOrderWebServiceUrl())
                 .then().statusCode(200).log();
 
         Browser.driver().navigate().refresh();
@@ -67,7 +76,7 @@ public class CreateOrderService extends BaseService {
 
         setUserIdByClaimNumber(claimNumber);
 
-        Payments payments = Payments.builder().deposits(buildDeposits(buildScalepointAccount("DK" + data.getUserId()))).build();
+        Payments payments = Payments.builder().deposits(buildDeposits(buildScalepointAccount(locale + data.getUserId()))).build();
 
         OrderedItem orderedItem = OrderedItem.builder()
                 .product(buildProduct(xpriceInfo.getPriceModelID(), xpriceInfo.getPriceModelType(), xpriceInfo.getAgreementId(),
@@ -75,39 +84,41 @@ public class CreateOrderService extends BaseService {
                         xpriceInfo.getProductId(), xpriceInfo.getProductKey()))
                 .build();
 
-        Account account = Account.builder().accountID("DK" + data.getUserId()).build();
+        Account account = Account.builder().accountID(locale + data.getUserId()).build();
         return CreateOrderRequest.builder().order(buildOrder(payments, orderedItem, xpriceInfo.getSupplierId())).account(account).build();
     }
 
-    public CreateOrderRequest buildVoucherOrderRequestBody(String claimNumber){
+    public CreateOrderRequest buildVoucherOrderRequestBody(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
+
+        VoucherType voucherType = isEvoucher ? VoucherType.EVOUCHER : VoucherType.PHYSICAL_VOUCHER;
 
         setUserIdByClaimNumber(claimNumber);
 
-        Payments payments = Payments.builder().deposits(buildDeposits(buildScalepointAccount("DK" + data.getUserId()))).build();
+        Payments payments = Payments.builder().deposits(buildDeposits(buildScalepointAccount(locale + data.getUserId()))).build();
 
         OrderedItem orderedItem = OrderedItem.builder()
-                .voucher(buildVoucher(VoucherType.EVOUCHER, "DK6"))
+                .voucher(buildVoucher(voucherType, locale + voucherInfo.getVoucherId(), customerMail, customerPhone, voucherInfo.getPurchaseDiscount()))
                 .build();
 
-        Account account = Account.builder().accountID("DK" + data.getUserId()).build();
-        return CreateOrderRequest.builder().order(buildOrder(payments, orderedItem, "24426")).account(account).build();
+        Account account = Account.builder().accountID(locale + data.getUserId()).build();
+        return CreateOrderRequest.builder().order(buildOrder(payments, orderedItem, voucherInfo.getVoucherSupplierId())).account(account).build();
     }
 
 
     private OrderTotalPurchasePrice buildOrderTotalPurchasePrice(){
         return OrderTotalPurchasePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(80.20).build();
+                .amount(amount*quantity)
+                .amountNet(amountNet*quantity).build();
     }
 
     private OrderTotalInvoicePrice buildOrderTotalInvoicePrice(){
         return OrderTotalInvoicePrice.builder()
-                .amount(Constants.PRICE_100)
-                .amountNet(80.20).build();
+                .amount(amount*quantity)
+                .amountNet(amountNet*quantity).build();
     }
 
     private Deposits buildDeposits(ScalepointAccount scalepointAccount){
-        Double amountValue = Constants.PRICE_100;
+        Double amountValue = amount*quantity;
         List<Deposit> listOfDeposits = new ArrayList<>();
         Deposit deposit = Deposit.builder().amount(amountValue).scalepointAccount(scalepointAccount).build();
         listOfDeposits.add(deposit);
@@ -120,30 +131,31 @@ public class CreateOrderService extends BaseService {
         MarketPrice marketPrice = MarketPrice.builder().build();
         SupplierShopPrice supplierShopPrice = SupplierShopPrice.builder().build();
         return AgreementData.builder()
-                .priceModelID("DK"+priceModelID)
+                .priceModelID(locale+priceModelID)
                 .priceModelType(priceModelType)
-                .agreementID("DK"+agreementID)
+                .agreementID(locale+agreementID)
                 .discountValue(discountValue)
                 .priceSourceType(priceSourceType)
-                .priceSourceSupplierID("DK" + priceSourceSupplierID)
+                .priceSourceSupplierID(locale + priceSourceSupplierID)
                 .recommendedPrice(recommendedPrice).marketPrice(marketPrice).supplierShopPrice(supplierShopPrice).build();
     }
     private Product buildProduct(String priceModelID, String priceModelType, String agreementID, Double discountValue,
                                  String priceSourceType, String priceSourceSupplierID, String productId, String skuNumber){
         return  Product.builder()
-                .productID("DK" + productId)
+                .productID(locale + productId)
                 .skuNumber(skuNumber)
                 .agreementData(buildProductAgreementData(priceModelID, priceModelType, agreementID, discountValue, priceSourceType, priceSourceSupplierID)).build();
 
     }
 
-    private Voucher buildVoucher(VoucherType voucherType, String id){
+    private Voucher buildVoucher(VoucherType voucherType, String voucherId, String customerEmail,
+                                 String customerPhone, Double purchaseDiscount){
         return Voucher.builder()
-                .customerEmail("aru@scalepoint.com")
-                .customerPhone("44222222")
-                .voucherID(id)
+                .customerEmail(customerEmail)
+                .customerPhone(customerPhone)
+                .voucherID(voucherId)
                 .voucherType(voucherType.name())
-                .purchaseDiscount("0.1000").build();
+                .purchaseDiscount(purchaseDiscount).build();
     }
 
     private BasePurchasePrice buildBasePurchasePrice(Double amount, Double net){
@@ -166,9 +178,9 @@ public class CreateOrderService extends BaseService {
         return OrderLine.builder().quantity(quantity)
                 .description(description)
                 .freightprice(buildFreightPrice(0.0, 0.0))
-                .basePurchasePrice(buildBasePurchasePrice(Constants.PRICE_100,80.2))
-                .totalInvoicePrice(buildTotalInvoicePrice(Constants.PRICE_100, 80.2))
-                .totalPurchasePrice(buildTotalPurchasePrice(Constants.PRICE_100, 80.2))
+                .basePurchasePrice(buildBasePurchasePrice(amount,amountNet))
+                .totalInvoicePrice(buildTotalInvoicePrice(amount, amountNet))
+                .totalPurchasePrice(buildTotalPurchasePrice(amount, amountNet))
                 .orderedItem(orderedItem).build();
     }
 
@@ -213,10 +225,10 @@ public class CreateOrderService extends BaseService {
 
     private Order buildOrder(Payments payments, OrderedItem orderedItem, String supplierId){
         SubOrder suborder = SubOrder.builder()
-                .orderLines(buildOrderLines(orderedItem, 1, "Test description"))
-                .subTotalInvoicePrice(buildSubTotalInvoicePrice(Constants.PRICE_100, 80.20))//if we can use net = 100?
-                .subTotalPurchasePrice(buildSubTotalPurchasePrice(Constants.PRICE_100, 80.20))
-                .supplier(buildSupplier("DK" + supplierId)).build();
+                .orderLines(buildOrderLines(orderedItem, quantity, TEST_DESCRIPTION))
+                .subTotalInvoicePrice(buildSubTotalInvoicePrice(amount*quantity, amountNet*quantity))
+                .subTotalPurchasePrice(buildSubTotalPurchasePrice(amount*quantity, amountNet*quantity))
+                .supplier(buildSupplier(locale + supplierId)).build();
 
         return Order.builder().orderTotalInvoicePrice(buildOrderTotalInvoicePrice()).orderTotalPurchasePrice(buildOrderTotalPurchasePrice())
                 .payments(payments).shippingAddress(buildShippingAddress()).suborders(buildSubOrders(suborder)).build();

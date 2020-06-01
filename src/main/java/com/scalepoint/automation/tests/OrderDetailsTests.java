@@ -6,22 +6,16 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.restService.CreateOrderService;
 import com.scalepoint.automation.shared.ProductInfo;
-import com.scalepoint.automation.shared.XpriceInfo;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.ProductToOrderInShop;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -70,78 +64,6 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0d, "Remaining value is 0");
     }
-
-    /**
-     * GIVEN: SP User
-     * WHEN: User creates claim
-     * WHEN: Add voucher on settlement page (Face value=900)
-     * WHEN: Go to shop and buy the voucher from suggestions
-     * THEN: The state on Order page is the following:
-     * Scalepoint har betalt til Scalepoint (Erstatning) :  900.00
-     * Scalepoint har betalt til leverandør (Varekøb) :  900.00
-     * Scalepoint har betalt til kunde (Udbetalinger) :  0,00
-     * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
-     * Tilbageværende erstatning :  0,00
-     */
-    @RunOn(DriverType.CHROME)
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
-    @Test(dataProvider = "testDataProvider",
-            description = "create order with product and verify orderTotals")
-    public void charlie540_ordersPageWhenWeBuyProduct_positiveBalance(User user, Claim claim, ClaimItem claimItem, ProductToOrderInShop productToOrderInShop) {
-
-        XpriceInfo productInfo = getXPriceInfoForProduct();
-
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog dialog = settlementPage
-                .openSid()
-                .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(900.00)
-                .setDescription(claimItem.getTextFieldSP())
-                .setValuation(NEW_PRICE);
-
-        Double activeValuation = dialog.getCashCompensationValue();
-
-        dialog.closeSidWithOk(SettlementPage.class)
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .toOrdersDetailsPage();
-
-        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
-
-        new OrderDetailsPage()
-                .doAssert(orderDetailsPage->orderDetailsPage
-                        .assertRemainingCompensationTotal(activeValuation - Constants.PRICE_100));
-
-
-
-
-
-
-//        .openReplacementWizard(true)
-//                .goToShop()
-//                .addFirstRecommendedItemToCart()
-//                .checkoutProduct()
-//                .toOrdersDetailsPage();
-//
- //    Assert.assertEquals(new OrderDetailsPage().getLegendItemText(), orderDetails.getTotalText());
-//        Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
-//        Assert.assertEquals(Math.abs(ordersPage.getIdemnityValue() - activeValuation), 0.0, "Idemnity value " + ordersPage.getIdemnityValue() + " must be equal to cashValue " + activeValuation + " of the voucher");
-//
-//        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
-//        Assert.assertEquals((ordersPage.getOrderedItemsValue() - activeValuation), 0.0, "Ordered value must be equal cashValue of the voucher");
-//
-//        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
-//        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value must be 0");
-//
-//        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
-//        Assert.assertEquals(ordersPage.getDepositValue(), 0.0, "Deposits value must be 0");
-//
-//        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
-//        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value must be 0");
-   }
-
 
     /**
      * GIVEN: SP User

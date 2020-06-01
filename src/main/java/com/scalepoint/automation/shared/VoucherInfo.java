@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class VoucherInfo {
     String voucherId;
-    String voucherSupplier;
+    String voucherSupplierId;
     Double purchaseDiscount;
 }

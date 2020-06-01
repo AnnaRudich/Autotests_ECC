@@ -106,9 +106,11 @@ public class DatabaseApi {
 
     public VoucherInfo getVoucherInfo(Boolean isEvoucher){
         int isEvoucherNumber = isEvoucher ? 1 : 0;
-        return jdbcTemplate.queryForObject("select top (1) VoucherAgreementId, RebatePercentage, SupplierId " +
-                "from VoucherAgreement" +
-                "where EVoucher="+isEvoucherNumber+" and Status=1", new VoucherInfoMapper());
+        return jdbcTemplate.queryForObject(
+                "select top (1) VoucherAgreementId, RebatePercentage, SupplierId "+
+                        "FROM VoucherAgreement "+
+                        "where EVoucher="+isEvoucherNumber+" and Status=1",
+                new VoucherInfoMapper());
     }
 
     public int waitForFraudStatusChange(int status, String claimNumber){
@@ -172,11 +174,11 @@ public class DatabaseApi {
     }
 
     private static final class VoucherInfoMapper implements RowMapper<VoucherInfo>{
-        public VoucherInfo mapRow(ResultSet resultSet, int i) throws SQLException {
+        public VoucherInfo mapRow(ResultSet rs, int i) throws SQLException {
             VoucherInfo voucherInfo = new VoucherInfo();
-            voucherInfo.setVoucherId();
-            voucherInfo.setVoucherSupplier();
-            voucherInfo.setPurchaseDiscount();
+            voucherInfo.setVoucherId(rs.getString("VoucherAgreementId"));
+            voucherInfo.setVoucherSupplierId(rs.getString("SupplierId"));
+            voucherInfo.setPurchaseDiscount(rs.getDouble("RebatePercentage"));
             return voucherInfo;
         }
     }

@@ -32,7 +32,7 @@ public class Voucher {
     String voucherID;
 
     @XmlAttribute
-    String purchaseDiscount;
+    Double purchaseDiscount;
 
     @XmlAttribute
     String voucherType;

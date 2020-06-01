@@ -1,18 +1,15 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Window;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$$;
@@ -66,7 +63,6 @@ public class OrderDetailsPage extends Page {
 
 
     ElementsCollection orderTotalRows = $$("#total table tr");
-
 
 
     @Override
@@ -142,38 +138,88 @@ public class OrderDetailsPage extends Page {
 
     public class Asserts {
 
-        public void assertRemainingCompensationTotal(Double expectedTotal) {
-            String remainingCompensationText = OrderTotalRowTexts.REMAINING_COMPENSATION_TEXT.getTotalText();
-            String expectedTotalReformatted = setDecimalSeparatorAsComma(expectedTotal);
-
-            SelenideElement actualTotalElement = orderTotalRows.find(Condition.text(remainingCompensationText));
-
-            assertThat(actualTotalElement.getText().equals(remainingCompensationText + expectedTotalReformatted))
-                    .as("was: " + actualTotalElement.getText() + " but should be :" + expectedTotalReformatted)
-                    .isTrue();
-        }
-
-        public String setDecimalSeparatorAsComma(Double number) {
-            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-            symbols.setDecimalSeparator(',');
-            symbols.setGroupingSeparator(' ');
-            String pattern = "###,###.00";
-            DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
-            return  decimalFormat.format(number);
-        }
+    public void assertCompensationAmount(Double expectedCompensationAmount){
+           Double actualCompensationAmount = new OrderTotals().getCompensationAmount();
+           assertThat(expectedCompensationAmount.equals(actualCompensationAmount))
+                   .as("compensationAmount was: " + actualCompensationAmount + " but should be: " + expectedCompensationAmount)
+                   .isTrue();
+    }
+    public void assertAmountScalepointHasPaidToSupplier(Double expectedGoodsAmount){
+           Double actualGoodsAmount = new OrderTotals().getGoods();
+           assertThat(expectedGoodsAmount.equals(actualGoodsAmount))
+                .as("amount Scalepoint has paid to Supplier was: " + actualGoodsAmount + " but should be: " + expectedGoodsAmount)
+                .isTrue();
     }
 
-    public enum OrderTotalRowTexts{
-        REMAINING_COMPENSATION_TEXT("Tilbageværende erstatning :");
+    public void assertAmountScalepointPaidToCustomer(Double expectedPayouts){
+        Double actualPayouts = new OrderTotals().getPayouts();
+        assertThat(expectedPayouts.equals(actualPayouts))
+                .as("amount Scalepoint paid to customer was: " + actualPayouts + "but should be: " + expectedPayouts)
+                .isTrue();
+    }
 
-        private String totalText;
+    public void assertAmountCustomerHasPaidToScalepoint(Double expectedDeposit){
+        Double actualDeposit = new OrderTotals().getDeposits();
+        assertThat(expectedDeposit.equals(actualDeposit))
+                .as("amount customer has paid to Scalepoint was :" + "but should be: " + expectedDeposit)
+                .isTrue();
+    }
 
-        OrderTotalRowTexts(String totalText) {
-            this.totalText = totalText;
+    public void assertRemainingCompensationTotal(Double expectedRemainingCompensation) {
+        Double actualRemainingCompensation = new OrderTotals().getRemainingCompensation();
+        assertThat(expectedRemainingCompensation.equals(actualRemainingCompensation)).
+                as("remaining compensation was: " + actualRemainingCompensation + " but should be :" + expectedRemainingCompensation)
+                .isTrue();
+    }
+
+}
+
+    class OrderTotals{
+        private Double compensationAmount; //IC to Scalepoint
+        private Double goods;//Scalepoint has paid to supplier
+        private Double payouts;//Scalepoint paid to customer
+        private Double deposits;//Customer has paid to Scalepoint
+        private Double remainingCompensation;
+
+
+
+        Double getCompensationAmount() {
+            return compensationAmount;
         }
 
-        public String getTotalText() {
-            return totalText;
+        Double getGoods() {
+            return goods;
+        }
+
+        Double getPayouts() {
+            return payouts;
+        }
+
+        Double getDeposits() {
+            return deposits;
+        }
+
+        Double getRemainingCompensation() {
+            return remainingCompensation;
+        }
+
+
+        OrderTotals() {
+            this.compensationAmount = getValueForTotalRowWithIndex(0);
+            this.goods = getValueForTotalRowWithIndex(2);
+            this.payouts = getValueForTotalRowWithIndex(3);
+            this.deposits = getValueForTotalRowWithIndex(4);
+            this.remainingCompensation = getValueForTotalRowWithIndex(6);
+        }
+
+        private Double getValueForTotalRowWithIndex(int rowIndex){
+            return Double.valueOf(getTextForTotalRowWithIndex(rowIndex).replace(',', '.'));
+        }
+
+        private String getTextForTotalRowWithIndex(int rowIndex){
+            ElementsCollection totalRows = $$("#total table tr");
+            By amountTextSelector = By.xpath("td[2]");
+            return totalRows.get(rowIndex).find(amountTextSelector).getText();
         }
     }
 }
