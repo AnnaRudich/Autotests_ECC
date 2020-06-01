@@ -14,8 +14,6 @@
             declare @chUserRights int = 10 -- claims handler/supply manager
             declare @scalepointCompany bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'SCALEPOINT')
 
-            EXEC autotests_create_settlement_column_attributes 1
-
             declare @SupplierId int
             EXEC autotests_create_supplier @SUNAME='Autotest-Supplier-VA-Tests', @insCompanyId = @scalepointCompany, @PostalCode = '4321', @SupplierId = @SupplierId OUTPUT, @MockUrl = '${wiremock.host}'
 
@@ -37,39 +35,24 @@
             exec autotests_prepare_future_company 59, @adminUserRights, @MockUrl = '${wiremock.host}'
             exec autotests_prepare_future_company 60, @adminUserRights, @MockUrl = '${wiremock.host}'
 
-            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%LB')
-            EXEC autotests_fix_company_codes @lb_id, 'LB'
+            declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
             EXEC autotests_create_user @lb_id, 'autotest-lb', @chUserRights
 
-            declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%BAUTA')
-            EXEC autotests_fix_company_codes @bauta_id, 'BAUTA'
+            declare @bauta_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'BAUTA')
             EXEC autotests_create_user @bauta_id, 'autotest-bauta', @chUserRights
 
-            declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGFORSIKRING')
-            EXEC autotests_fix_company_codes @tryg_id, 'TRYGFORSIKRING'
+            declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
             EXEC autotests_create_user @tryg_id, 'autotest-trygfors', @chUserRights
-            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil'
-            EXEC autotests_create_redruleline '36-37', 'Autotest-MusikRule', 36, 37, 10, 20, 0.2, 0, 1
-            EXEC autotests_create_redrule 'Autotest-CycleRule', 'TRYGFORSIKRING', 'Cykler', 'Cykler &amp; Tilbehør'
-            EXEC autotests_create_redruleline '10-71', 'Autotest-CycleRule', 10, 71, 0, 1000, 0.41, 0, 1
-            EXEC autotests_create_redruleline '72-84', 'Autotest-CycleRule', 72, 84, 0, 1000, 0.47, 0, 1
-            EXEC autotests_create_redrule 'Autotest-PhoneRule', 'TRYGFORSIKRING', 'Mobiltelefoner', 'Telefoni'
-            EXEC autotests_create_redruleline '48-60', 'Autotest-PhoneRule', 48, 60, 0, 2400, 0.40, 0, 1
+            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
-            declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TRYGHOLDING')
-            EXEC autotests_fix_company_codes @tryghold_id, 'TRYGHOLDING'
+            declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
             EXEC autotests_create_user @tryghold_id, 'autotest-trygholding', @chUserRights
+            EXEC autotests_create_redrule 'Autotest-MusikRule', 'TRYGFORSIKRING', 'Øvrige', 'Musik, Film &amp; Spil', '36-37', 36, 37, 10, 20, 0.2, 0, 1
 
-            declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%ALKA')
-            EXEC autotests_fix_company_codes @alka_id, 'ALKA'
+            declare @alka_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'ALKA')
             EXEC autotests_create_user @alka_id, 'autotest-alka', @chUserRights
-            EXEC autotests_create_redrule 'Autotest-AlkaRule1', 'ALKA', 'Luksusure', 'Smykker, Ure &amp; Tilbehør'
-            EXEC autotests_create_redruleline '48-60', 'Autotest-AlkaRule1', 48, 60, 0, 2400, 0.25, 0, 1
-            EXEC autotests_create_redrule 'Autotest-AlkaRule2', 'ALKA', 'Mobiltelefoner', 'Telefoni'
-            EXEC autotests_create_redruleline '48-60', 'Autotest-AlkaRule2', 48, 60, 0, 2400, 0.40, 0, 1
 
-            declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode like '%TOPDANMARK')
-            EXEC autotests_fix_company_codes @topdanmark_id, 'TOPDANMARK'
+            declare @topdanmark_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TOPDANMARK')
             EXEC autotests_create_user @topdanmark_id, 'autotest-topdanmark', @chUserRights
 
             EXEC autotests_create_performance_test_users 'autotest-topdanmark', @topdanmark_id, @chUserRights, 100
@@ -113,26 +96,6 @@
             UPDATE [dbo].[INSCOMP]
             SET auditEnabled=0
             WHERE ICRFNBR=@lb_id
-        </sql>
-        <sql>
-            --create choice reason for TRYGHOLDING
-            declare @tryghold_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGHOLDING')
-            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
-            VALUES ('Max dækning', 0, @tryghold_id, 1)
-            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
-            VALUES ('Skønnet erstatning grundet manglende dokumentation', 0, @tryghold_id, 1)
-            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
-            VALUES ('Skønnet erstatning grundet forbrug', 0, @tryghold_id, 1)
-        </sql>
-        <sql>
-            --create choice reason for TRYGFORSIKRING
-            declare @tryg_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'TRYGFORSIKRING')
-            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
-            VALUES ('Max dækning', 0, @tryg_id, 1)
-            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
-            VALUES ('Skønnet erstatning grundet manglende dokumentation', 0, @tryg_id, 1)
-            INSERT INTO [dbo].[ChoiceReason]([ReasonName], [ReasonType], [InsuranceCompanyId], [IsActive])
-            VALUES ('Skønnet erstatning grundet forbrug', 0, @tryg_id, 1)
         </sql>
 
         <rollback/>

@@ -10,9 +10,23 @@ CREATE PROCEDURE [dbo].[autotests_create_redrule]
   @CompanyName VARCHAR(32),
   @PseudoCategoryText VARCHAR(510),
   @PseudoCategoryGroupName VARCHAR(254),
+  @LineDescription VARCHAR(60),
+  @AgeFrom INT,
+  @AgeTo INT,
+  @PriceFrom DECIMAL(15,2),
+  @PriceTo DECIMAL(15,2),
+  @ClaimReduction FLOAT,
+  @CashReduction FLOAT,
+  @Sequence INT,
   @DepreciationType INT = 1
 AS
+
 	SET NOCOUNT ON
+
+  IF EXISTS (SELECT * FROM [dbo].[ReductionRule] RR
+    JOIN [dbo].[ReductionRuleLine] RRL ON RR.[ReductionRuleID] = RRL.[ReductionRule]
+    WHERE RR.[Description] = @RuleName AND RRL.[Sequence] = @Sequence)
+  RETURN
 
 	DECLARE @CompanyID int
   IF @CompanyName IS NOT NULL
@@ -32,6 +46,10 @@ AS
   INSERT INTO [dbo].[ReductionRuleConfiguration]
          ([PseudoCategory], [InsuranceCompany], [ReductionRule])
   VALUES (@PseudoCategoryId, @CompanyID, @ReductionRuleId)
+
+  INSERT INTO [dbo].[ReductionRuleLine]
+         ([Description], [Sequence], [ClaimReduction], [CashReduction], [NewItemCode], [ReductionRule], [AgeFrom], [AgeTo], [priceRangeFrom], [priceRangeTo], [claimantRating])
+  VALUES ( @LineDescription, @Sequence, @ClaimReduction, @CashReduction, 'O', @ReductionRuleId, @AgeFrom, @AgeTo, @PriceFrom, @PriceTo, 0)
 
 	SET NOCOUNT OFF
 

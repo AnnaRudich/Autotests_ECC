@@ -55,6 +55,8 @@ public class FraudAlertTest extends BaseTest {
 
     private String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 
+
+
     @Test(dataProvider = "topdanmarkDataProvider", description = "Add")
     public void productSearchFraud(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
@@ -198,8 +200,8 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(item.getDescription()).contains(SONY_HDR_CX450);
         assertThat(item.getCategory()).isEqualTo(claimItem.getCategoryVideoCamera().getGroupName());
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(3089.00);
-        assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(3168.00);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2723.00);
+        assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2793.00);
 
         fraudStatus(events.get(0), claimRequest.getCaseNumber(),fraudStatus);
 

@@ -26,7 +26,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDoubleWithTolerance;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -97,10 +96,10 @@ public class ValuationGrid implements Actions {
             if(isAlertPresent){
                 confirmAlert();
             }
-            do{
+            while(!isValuationChecked()){
                 $(By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']")).click();
-            }while(!isValuationChecked());
-            waitForAjaxCompletedAndJsRecalculation();
+            }
+            waitForJavascriptRecalculation();
             return this;
         }
 

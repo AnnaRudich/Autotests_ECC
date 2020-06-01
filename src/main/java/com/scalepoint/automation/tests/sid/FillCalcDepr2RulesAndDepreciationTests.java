@@ -29,7 +29,6 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
      * THEN: depreciation is applied automatically
      * AND: the depreciation value is displayed in the depreciation input =41%
      */
-
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify automatic overwrite of the depreciation field")
     public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
@@ -93,8 +92,10 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .doAssert(row -> row.assertDepreciationPercentageIs(41))
                 .toSettlementDialog()
                 .setCategory(claimItem.getCategoryPersonalMedicine())
+                .automaticDepreciation(true)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
+                .makeActive(true)
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
     }
 
@@ -110,7 +111,6 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
      * THEN: depreciation field is automatically reset to 0
      * SUMMARY: change any other parameter so that no match to rule age
      */
-
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that select other age than specified in the rules automatically reset of the depreciation field to 0")
     public void charlie_505_5_changeAgeResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)

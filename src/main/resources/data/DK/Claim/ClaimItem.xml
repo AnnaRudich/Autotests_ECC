@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<InsertSettlementItem caseId="151">
-    <SettlementItem id="-1" totalDamage="false" active="true" reviewed="false" rejected="false" documentationOk="true" reductionRuleLineId="null" preDepreciation="0" postDepreciation="0" depreciateDiscounted="false" depreciationType="1" policyRuleDepreciation="0" discretionaryRuleDepreciation="0" cashReduction="0" automaticDepreciation="true" depreciationChanged="false" taxRate="0.25" includeTax="true">
-        <Claim description="test" quantity="1" newItem="false" category="3" claimToken="566d054a-347e-4985-9eee-0d436042b4ae" room="0" originalDescription="" />
+<InsertSettlementItem caseId="2327141">
+    <SettlementItem id="-1" active="true" reviewed="false" rejected="false" documentationOk="true" reductionRuleLineId="null" preDepreciation="0" postDepreciation="0" depreciateDiscounted="false" depreciationType="1" policyRuleDepreciation="0" discretionaryRuleDepreciation="0" cashReduction="0" automaticDepreciation="true" depreciationChanged="false" taxRate="0.25" includeTax="true">
+        <Claim description="item1" quantity="1" newItem="false" category="22" claimToken="E96A1045-A0D8-43C4-8A4E-37B42DD63678" room="0" originalDescription=""/>
         <Valuations>
-            <Valuation id="-2" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="CUSTOMER_DEMAND" priceAfterAllDeductions="1000">
-                <Price name="price" netAmount="800" amount="1000" />
+            <Valuation id="-3" quantity="1" preDepreciation="0" active="true" dirty="true" hidden="false" valuationType="VOUCHER" priceAfterAllDeductions="400" baseValuation="-4">
+                <Price name="price" netAmount="320" amount="400"/>
+                <VoucherReplacement voucher="720909">
+                    <Price name="cashValue" netAmount="320" amount="400"/>
+                    <Price name="faceValue" netAmount="400" amount="500"/>
+                </VoucherReplacement>
             </Valuation>
-            <Valuation id="-3" quantity="1" preDepreciation="0" active="true" dirty="true" hidden="false" valuationType="NEW_PRICE" priceAfterAllDeductions="1000">
-                <Price name="price" netAmount="800" amount="1000" />
+            <Valuation id="-2" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="CUSTOMER_DEMAND" priceAfterAllDeductions="400">
+                <Price name="price" netAmount="320" amount="400"/>
+            </Valuation>
+            <Valuation id="-4" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="NEW_PRICE" priceAfterAllDeductions="500">
+                <Price name="price" netAmount="400" amount="500"/>
             </Valuation>
         </Valuations>
     </SettlementItem>

@@ -40,7 +40,7 @@ public class RnVSmokeTest extends BaseTest {
      * Assert: task has feedback received status
      * Assert: there are lines in Invoice dialog opened from Invoice tab
      */
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback", enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -78,7 +78,7 @@ public class RnVSmokeTest extends BaseTest {
                 .assertTotalForTheLineWithIndex(1, Constants.PRICE_50);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback", enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void messagesTest(User user, Claim claim, ServiceAgreement agreement) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");

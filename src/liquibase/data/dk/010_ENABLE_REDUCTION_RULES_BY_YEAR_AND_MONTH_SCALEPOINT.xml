@@ -14,7 +14,7 @@
 
             Update [FUNCTEMPLATE]
             set [ftSelfServiceFlags] =
-            (select [ftSelfServiceFlags] from [FUNCTEMPLATE] where FTRFNBR = 1) | power(2,17)
+            (select [ftSelfServiceFlags] from [FUNCTEMPLATE] where FTTMPLNAME = 'Default') | power(2,17)
             where FTTMPLNAME = 'Default'
         </sql>
     </changeSet>

@@ -6,7 +6,6 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Executor;
 import org.jsoup.Jsoup;
@@ -20,7 +19,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static com.scalepoint.automation.utils.Http.post;
-import static io.restassured.RestAssured.given;
 
 public class FunctionalTemplatesApi extends AuthenticationApi {
 
@@ -74,16 +72,6 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
                     }
 
                     templatePage.saveTemplate();
-                    String sessionId = Browser.driver().manage().getCookieNamed("JSESSIONID").getValue();
-                    given().baseUri(com.scalepoint.automation.utils.Configuration.getEccUrl()).log().all()
-                            .basePath("rest/selfservicereload/functiontemplate")
-                            .sessionId(sessionId)
-                            .redirects().follow(false)
-                            .when()
-                            .post()
-                            .then()
-                            .log().all()
-                            .statusCode(HttpStatus.SC_OK);
 
                     return detectPage(currentUrl, returnPageClass);
 

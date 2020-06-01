@@ -10,7 +10,6 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,7 +55,6 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
         company.selectByVisibleText(assignment.getCompany());
         pseudoCategory.selectByVisibleText(assignment.getPseudoCategory());
         policy.selectByVisibleText(assignment.getPolicy());
-        waitForJavascriptRecalculation();
         return this;
     }
 

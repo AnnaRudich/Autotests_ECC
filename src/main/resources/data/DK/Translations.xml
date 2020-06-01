@@ -46,9 +46,9 @@
     <textSearch>
         <brokenQuery1>samsunh</brokenQuery1>
         <brokenQueryWithSpecialSymbols1>samsungs&amp;/@$'_'"\{}%</brokenQueryWithSpecialSymbols1>
-        <modelGalaxyS7>Galaxy S7 32 Gb Rose Gold</modelGalaxyS7>
-        <groupChildren>Personlig Pleje</groupChildren>
-        <subgroupChildrenEquipment>Barbermaskiner</subgroupChildrenEquipment>
+        <modelGalaxyS7>Galaxy S7 Edge 32GB Hvid</modelGalaxyS7>
+        <groupChildren>Børn</groupChildren>
+        <subgroupChildrenEquipment>Baby Udstyr</subgroupChildrenEquipment>
         <subgroupCameraLenses>Kameraobjektiver</subgroupCameraLenses>
         <subgroupVideocamera>Videokameraer</subgroupVideocamera>
         <attribute>Socket</attribute>

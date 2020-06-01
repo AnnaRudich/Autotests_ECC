@@ -11,23 +11,17 @@
 
         <sql>
             /* add reduction rule for all companies for test_category */
-            EXEC autotests_create_pseudo_category 'test_category', 'test_category_group', 'Standard Model'
-            EXEC autotests_create_redrule 'autotest-example2', NULL, 'test_category', 'test_category_group'
-            EXEC autotests_create_redruleline 'test1', 'autotest-example2', 0, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_pseudo_category 'test_category', 'test_category_group', 'All Categories'
+            EXEC autotests_create_redrule 'autotest-example2', NULL, 'test_category', 'test_category_group', 'test1', 0, 10, NULL, NULL, 0.2, 0, 1
 
-            EXEC autotests_create_redrule 'autotest-example3', NULL, 'Videokamera', 'Foto &amp; Video'
-            EXEC autotests_create_redruleline 'example3', 'autotest-example3', 5, 10, NULL, NULL, 0.2, 0, 1
-
-            EXEC autotests_create_redrule 'autotest-example4', NULL, 'Memorycard &amp; Batteri', 'Foto &amp; Video'
-            EXEC autotests_create_redruleline 'test', 'autotest-example4', 0, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_redrule 'autotest-example3', NULL, 'Videokamera', 'Foto &amp; Video', 'example3', 5, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_redrule 'autotest-example4', NULL, 'Memorycard &amp; Batteri', 'Foto &amp; Video', 'test', 0, 10, NULL, NULL, 0.2, 0, 1
 
             /* Discretionary type */
-            EXEC autotests_create_redrule 'autotest-example5', NULL, 'Videokameratilbehør', 'Foto &amp; Video', 2
-            EXEC autotests_create_redruleline 'test', 'autotest-example5', 0, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_redrule 'autotest-example5', NULL, 'Videokameratilbehør', 'Foto &amp; Video', 'test', 0, 10, NULL, NULL, 0.2, 0, 1, 2
 
-            EXEC autotests_create_pseudo_category 'test_category_1', 'test_category_group_1', 'Standard Model'
-            EXEC autotests_create_redrule 'autotest-example6', NULL, 'test_category_1', 'test_category_group_1', 2
-            EXEC autotests_create_redruleline 'test1', 'autotest-example6', 0, 10, NULL, NULL, 0.2, 0, 1
+            EXEC autotests_create_pseudo_category 'test_category_1', 'test_category_group_1', 'All Categories'
+            EXEC autotests_create_redrule 'autotest-example6', NULL, 'test_category_1', 'test_category_group_1', 'test1', 0, 10, NULL, NULL, 0.2, 0, 1, 2
         </sql>
         <rollback/>
     </changeSet>

@@ -17,7 +17,11 @@ import com.scalepoint.automation.utils.data.entity.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NOT_SELECTED;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.PRICE_500;
@@ -176,11 +180,10 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Verify the reason's representation for different valuations.
      * THEN: Selected reason is displayed for all valuation types with enable state except of the voucher valuation
      */
-
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON", enabled = false)
+    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")
     public void charlie_508_8_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem,
                                                             Translations translations) {
         String reasonText = translations.getDiscretionaryReason().getMaxCoverage();
@@ -277,6 +280,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                         .withCategory(claimItem.getCategoryMusic())
                         .withNewPrice(10.00)
                         .withAge(3, 0)
+                        .withValuation(NEW_PRICE)
                         .withReductionRule(20)
                         .withDepreciation(SettlementDialog.DepreciationType.POLICY))
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);
