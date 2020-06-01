@@ -296,7 +296,6 @@ public class TestData {
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class);
 
-
         private String fileName;
         private JAXBContext context;
         private Class dataClass;

@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
-public class ShopTests extends BaseTest {
+public class UCommerceShopTests extends BaseTest {
 
     private final Double orderedProductPrice = Constants.PRICE_100;
     private final Double orderedVoucherPrice = Constants.PRICE_100;
@@ -83,7 +83,7 @@ public class ShopTests extends BaseTest {
 
         new OrderDetailsPage()
                 .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
+                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedVoucherPrice);
                     orderDetailsPage.assertCompensationAmount(activeValuation);
                 });
     }

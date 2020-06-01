@@ -18,8 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AgreementData {
     @XmlAttribute
-    @Builder.Default
-    String priceModelID = "DK1";
+    String priceModelID;
 
     @XmlAttribute
     String priceModelType;
@@ -28,15 +27,13 @@ public class AgreementData {
     String agreementID;
 
     @XmlAttribute
-    @Builder.Default
-    Double discountValue = 0.0000;
+    Double discountValue;
 
     @XmlAttribute
     String priceSourceType;
 
     @XmlAttribute
-    @Builder.Default
-    String priceSourceSupplierID = "DK13";
+    String priceSourceSupplierID;
 
     @Builder.Default
     @XmlElement(name="RecommendedPrice")

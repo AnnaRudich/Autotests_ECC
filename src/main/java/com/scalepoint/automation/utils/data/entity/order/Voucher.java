@@ -16,9 +16,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Voucher {
 
-   // CustomerEmail="{{email}}" CustomerPhone="44222222" CustomerPersonalCode=""
-    // voucherID="DK2405254" purchaseDiscount="0.1000" voucherType="EVOUCHER"/>
-
     @XmlAttribute(name="CustomerEmail")
     String customerEmail;
 

@@ -9,12 +9,10 @@ import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -42,7 +40,7 @@ public class RnVSmokeTest extends BaseTest {
      * Assert: task has feedback received status
      * Assert: there are lines in Invoice dialog opened from Invoice tab
      */
-    @RunOn(DriverType.CHROME)
+
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
