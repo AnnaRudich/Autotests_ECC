@@ -2,9 +2,7 @@ package com.scalepoint.automation.utils.data.entity.order;
 
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-@Setter
-@Getter
-@ToString
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Deposits {
 

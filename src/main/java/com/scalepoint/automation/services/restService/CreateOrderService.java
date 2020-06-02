@@ -33,7 +33,6 @@ import com.scalepoint.automation.utils.data.entity.order.SupplierShopPrice;
 import com.scalepoint.automation.utils.data.entity.order.TotalInvoicePrice;
 import com.scalepoint.automation.utils.data.entity.order.TotalPurchasePrice;
 import com.scalepoint.automation.utils.data.entity.order.Voucher;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +55,6 @@ public class CreateOrderService extends BaseService {
                 .when()
                 .post(Configuration.getCreateOrderWebServiceUrl())
                 .then().statusCode(200).log();
-
-        Browser.driver().navigate().refresh();
     }
 
     public void createOrderForVoucher(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
@@ -67,8 +64,6 @@ public class CreateOrderService extends BaseService {
                 .when()
                 .post(Configuration.getCreateOrderWebServiceUrl())
                 .then().statusCode(200).log();
-
-        Browser.driver().navigate().refresh();
     }
 
 

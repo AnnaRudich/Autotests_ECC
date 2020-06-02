@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -129,6 +130,11 @@ public class OrderDetailsPage extends Page {
         Window.get().switchToLast();
         return BaseDialog.at(AddInternalNoteDialog.class)
                 .addInternalNote("Autotests", OrderDetailsPage.class);
+    }
+
+    public OrderDetailsPage refreshPageToGetOrders(){
+        Browser.driver().navigate().refresh();
+        return this;
     }
 
     public OrderDetailsPage doAssert(Consumer<OrderDetailsPage.Asserts> assertFunc) {

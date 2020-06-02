@@ -1,24 +1,18 @@
 package com.scalepoint.automation.utils.data.entity.order;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @Builder
-@Setter
-@Getter
-@ToString
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Freightprice {
     @XmlAttribute
-    @Builder.Default
-    Double amount= 0.0;
+    Double amount;
     @XmlAttribute
-    @Builder.Default
-    Double amountNet = 0.0;
+    Double amountNet;
 }

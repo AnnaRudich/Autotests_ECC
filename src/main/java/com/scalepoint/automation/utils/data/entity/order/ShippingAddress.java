@@ -2,18 +2,14 @@ package com.scalepoint.automation.utils.data.entity.order;
 
 import com.scalepoint.automation.shared.Locale;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @Builder
-@Setter
-@Getter
-@ToString
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ShippingAddress {
     @XmlAttribute

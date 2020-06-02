@@ -49,12 +49,12 @@ public class UCommerceShopTests extends BaseTest {
         new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
 
         new OrderDetailsPage()
+                .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage -> {
                         orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
                         orderDetailsPage.assertCompensationAmount(activeValuation);
                 });
     }
-
 
     @Test(dataProvider = "testDataProvider",
             description = "create order with physical voucher and verify orderTotals")
