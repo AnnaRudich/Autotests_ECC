@@ -20,7 +20,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -50,72 +52,18 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(companyName));
         Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0d, "Idemnity value is not 0");
 
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
         Assert.assertEquals(ordersPage.getOrderedItemsValue(), 0.0d, "Ordered value is 0");
 
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
         Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0d, "Withdraw value is 0");
 
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
         Assert.assertEquals(ordersPage.getDepositValue(), 0.0d, "Deposits value is 0");
 
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0d, "Remaining value is 0");
     }
-
-    /**
-     * GIVEN: SP User
-     * WHEN: User creates claim
-     * WHEN: Add voucher on settlement page (Face value=900)
-     * WHEN: Go to shop and buy the voucher from suggestions
-     * THEN: The state on Order page is the following:
-     * Scalepoint har betalt til Scalepoint (Erstatning) :  900.00
-     * Scalepoint har betalt til leverandør (Varekøb) :  900.00
-     * Scalepoint har betalt til kunde (Udbetalinger) :  0,00
-     * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
-     * Tilbageværende erstatning :  0,00
-     */
-    @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
-    @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-540 ME: Order page; Make voucher order from suggestions")
-    public void charlie540_ordersPageWhenWeBuyVoucher(User user, Claim claim, ClaimItem claimItem, Translations translations) {
-
-        OrderDetails orderDetails = translations.getOrderDetails();
-
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        SettlementDialog dialog = settlementPage
-                .openSid()
-                .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(900.00)
-                .setDescription(claimItem.getTextFieldSP());
-
-        Double activeValuation = dialog.getCashCompensationValue();
-        OrderDetailsPage ordersPage = dialog.closeSidWithOk(SettlementPage.class)
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .openReplacementWizard(true)
-                .goToShop()
-                .addFirstRecommendedItemToCart()
-                .checkoutProduct()
-                .toOrdersDetailsPage();
-
-        Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
-        Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
-        Assert.assertEquals(Math.abs(ordersPage.getIdemnityValue() - activeValuation), 0.0, "Idemnity value " + ordersPage.getIdemnityValue() + " must be equal to cashValue " + activeValuation + " of the voucher");
-
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
-        Assert.assertEquals((ordersPage.getOrderedItemsValue() - activeValuation), 0.0, "Ordered value must be equal cashValue of the voucher");
-
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value must be 0");
-
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
-        Assert.assertEquals(ordersPage.getDepositValue(), 0.0, "Deposits value must be 0");
-
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
-        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value must be 0");
-    }
-
 
     /**
      * GIVEN: SP User
@@ -168,16 +116,16 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
 
         Assert.assertEquals(ordersPage.getIdemnityValue() - activeValuation, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") must be equal to price=" + activeValuation);
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
 
         Assert.assertEquals(ordersPage.getOrderedItemsValue() - productPrice, 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " must be product price=" + productPrice);
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
 
         Assert.assertEquals(ordersPage.getWithdrawValue() - withdrawValue, 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") must be equals to " + withdrawValue);
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
 
         Assert.assertEquals(ordersPage.getDepositValue(), 0.0, "Deposits value(" + ordersPage.getDepositValue() + " must be 0");
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
 
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " must be 0");
     }
@@ -217,16 +165,16 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
 
         Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
 
         Assert.assertEquals(ordersPage.getOrderedItemsValue() - productPrice, 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is product price=" + productPrice);
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
 
         Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
 
         Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
 
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
@@ -252,16 +200,16 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
 
         Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
 
         Assert.assertEquals(ordersPage.getOrderedItemsValue() - productPrice, 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is product price=" + productPrice);
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
 
         Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
 
         Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
 
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
@@ -306,13 +254,13 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
         Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
         Assert.assertEquals(ordersPage.getOrderedItemsValue(), 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is 0");
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
         Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
         Assert.assertEquals(ordersPage.getDepositValue(), 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is 0");
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue() - price, 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is equal to " + price);
     }
 
@@ -345,11 +293,11 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
         Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
         Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is equals to 0");
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
 
@@ -393,16 +341,16 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(Math.abs(ordersPage.getIdemnityValue() - activeValuation), 0.0, "Idemnity value " + ordersPage.getIdemnityValue() + " must be equal to cashValue " + activeValuation + " of the voucher");
 
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItems());
+        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
         Assert.assertEquals(ordersPage.getOrderedItemsValue() - (productPrice + activeValuation), 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is voucher price=" + activeValuation + " + product price=" + productPrice);
 
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawalls());
+        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
         Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
 
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDeposits());
+        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
         Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
 
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingIdemnity());
+        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
 }

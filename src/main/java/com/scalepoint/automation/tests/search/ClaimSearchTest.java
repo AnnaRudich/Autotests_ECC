@@ -8,7 +8,10 @@ import com.scalepoint.automation.utils.data.entity.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.shared.ClaimStatus.*;
+import static com.scalepoint.automation.shared.ClaimStatus.CLOSED_EXTERNALLY;
+import static com.scalepoint.automation.shared.ClaimStatus.COMPLETED;
+import static com.scalepoint.automation.shared.ClaimStatus.IN_USE;
+import static com.scalepoint.automation.shared.ClaimStatus.OPEN;
 
 
 public class ClaimSearchTest extends BaseTest {

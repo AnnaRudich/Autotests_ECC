@@ -12,11 +12,12 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.services.restService.Common.ServiceData;
+import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
+import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
@@ -255,6 +256,14 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     public XpriceInfo getXpricesForConditions(DatabaseApi.PriceConditions... priceConditions) {
         return databaseApi.findProduct(priceConditions);
+    }
+
+    public XpriceInfo getXPriceInfoForProduct(){
+        return databaseApi.findOrderableProduct();
+    }
+
+    public VoucherInfo getVoucherInfo(Boolean isEvoucher){
+        return databaseApi.getVoucherInfo(isEvoucher);
     }
 }
 

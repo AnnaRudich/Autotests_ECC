@@ -2,7 +2,7 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.shared.CwaTaskLog;
-import com.scalepoint.automation.shared.SolrClaim;
+import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.data.entity.Assignment;
 import com.scalepoint.automation.utils.data.entity.Claim;
@@ -42,6 +42,15 @@ public class DatabaseApi {
                 "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
                         Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")), new XpriceInfoMapper());
+    }
+
+    public XpriceInfo findOrderableProduct(){
+        return jdbcTemplate.queryForObject(
+                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice," +
+                        "xp.supplierName,xp.agreementId, xp.priceModelId, xp.priceModelTypeId," +
+                        "xp.discountCategoryID,xp.discountFromDate, xp.discountToDate, xp.discountValue, " +
+                        "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId, xp.agreementId " +
+                        "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID WHERE xp.productId!=xp.productOriginalId AND pr.Published=1", new XpriceInfoMapper());
     }
 
     public Integer getUserIdByClaimToken(String claimToken) {
@@ -95,6 +104,15 @@ public class DatabaseApi {
                 "order by [USL].[StartStamp] desc", String.class, claimNumber);
     }
 
+    public VoucherInfo getVoucherInfo(Boolean isEvoucher){
+        int isEvoucherNumber = isEvoucher ? 1 : 0;
+        return jdbcTemplate.queryForObject(
+                "select top (1) VoucherAgreementId, RebatePercentage, SupplierId "+
+                        "FROM VoucherAgreement "+
+                        "where EVoucher="+isEvoucherNumber+" and Status=1",
+                new VoucherInfoMapper());
+    }
+
     public int waitForFraudStatusChange(int status, String claimNumber){
         return  await()
                 .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
@@ -136,12 +154,32 @@ public class DatabaseApi {
 
         public XpriceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             XpriceInfo xpriceInfo = new XpriceInfo();
-            xpriceInfo.setProductId(rs.getInt("ProductId"));
+            xpriceInfo.setProductId(rs.getString("ProductId"));
             xpriceInfo.setProductKey(rs.getString("ProductKey"));
             xpriceInfo.setInvoicePrice(rs.getDouble("invoicePrice"));
             xpriceInfo.setSupplierName(rs.getString("supplierName"));
             xpriceInfo.setSupplierShopPrice(rs.getDouble("supplierShopPrice"));
+            xpriceInfo.setPriceModelID(rs.getString("priceModelId"));
+            xpriceInfo.setPriceModelType(rs.getString("priceModelTypeId"));
+            xpriceInfo.setDiscountFromDate(rs.getString("discountFromDate"));
+            xpriceInfo.setDiscountToDate(rs.getString("discountToDate"));
+            xpriceInfo.setDiscountValue(rs.getDouble("discountValue"));
+            xpriceInfo.setPriceSourceType(rs.getString("priceSourceType"));
+            xpriceInfo.setPriceSourceSupplierID(rs.getString("priceSourceSupplierID"));
+            xpriceInfo.setOriginalProductID(rs.getString("productOriginalId"));
+            xpriceInfo.setSupplierId(rs.getString("supplierId"));
+            xpriceInfo.setAgreementId(rs.getString("agreementId"));
             return xpriceInfo;
+        }
+    }
+
+    private static final class VoucherInfoMapper implements RowMapper<VoucherInfo>{
+        public VoucherInfo mapRow(ResultSet rs, int i) throws SQLException {
+            VoucherInfo voucherInfo = new VoucherInfo();
+            voucherInfo.setVoucherId(rs.getString("VoucherAgreementId"));
+            voucherInfo.setVoucherSupplierId(rs.getString("SupplierId"));
+            voucherInfo.setPurchaseDiscount(rs.getDouble("RebatePercentage"));
+            return voucherInfo;
         }
     }
 

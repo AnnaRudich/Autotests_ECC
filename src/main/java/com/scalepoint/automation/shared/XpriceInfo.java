@@ -1,10 +1,13 @@
 package com.scalepoint.automation.shared;
 
+import lombok.Data;
+
+@Data
 public class XpriceInfo {
 
     private String productKey;
 
-    private int productId;
+    private String productId;
 
     private double invoicePrice;
 
@@ -12,53 +15,23 @@ public class XpriceInfo {
 
     private double supplierShopPrice;
 
-    public String getSupplierName() {
-        return supplierName;
-    }
+    private String priceModelID;
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
+    private String priceModelType;
 
-    public double getSupplierShopPrice() {
-        return supplierShopPrice;
-    }
+    private String discountFromDate;
 
-    public void setSupplierShopPrice(double supplierShopPrice) {
-        this.supplierShopPrice = supplierShopPrice;
-    }
+    private String discountToDate;
 
-    public void setProductKey(String productKey) {
-        this.productKey = productKey;
-    }
+    private Double discountValue;
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
+    private String priceSourceType;
 
-    public void setInvoicePrice(double invoicePrice) {
-        this.invoicePrice = invoicePrice;
-    }
+    private String priceSourceSupplierID;
 
+    private String originalProductID;
 
-    public String getProductKey() {
-        return productKey;
-    }
+    private String supplierId;
 
-    public int getProductId() {
-        return productId;
-    }
-
-    public double getInvoicePrice() {
-        return invoicePrice;
-    }
-
-    @Override
-    public String toString() {
-        return "XPriceInfo{" +
-                "productKey=" + productKey +
-                ", productId=" + productId +
-                ", invoicePrice='" + invoicePrice + '\'' +
-                '}';
-    }
+    private String agreementId;
 }

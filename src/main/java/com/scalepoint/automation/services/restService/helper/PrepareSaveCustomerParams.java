@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService.helper;
 
-import com.scalepoint.automation.services.restService.Common.Data;
+import com.scalepoint.automation.services.restService.common.Data;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;

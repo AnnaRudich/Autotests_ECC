@@ -1,4 +1,4 @@
-package com.scalepoint.automation.services.restService.Common;
+package com.scalepoint.automation.services.restService.common;
 
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 

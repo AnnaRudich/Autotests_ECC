@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BasePath;
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BasePath;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.restService.helper.PrepareSaveCustomerParams;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import io.restassured.response.Response;
@@ -9,8 +9,8 @@ import org.apache.http.HttpStatus;
 
 import java.util.Map;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.CANCEL_CLAIM;
-import static com.scalepoint.automation.services.restService.Common.BasePath.SAVE_CLAIM;
+import static com.scalepoint.automation.services.restService.common.BasePath.CANCEL_CLAIM;
+import static com.scalepoint.automation.services.restService.common.BasePath.SAVE_CLAIM;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;

@@ -36,11 +36,11 @@
 
     <orderDetails>
         <totalText>Total</totalText>
-        <indemnity>{companyName} har betalt til Scalepoint (Erstatning) :</indemnity>
-        <orderedItems>Scalepoint har betalt til leverandør (Varekøb) :</orderedItems>
-        <withdrawalls>Scalepoint har betalt til kunde (Udbetalinger) :</withdrawalls>
-        <deposits>Kunde har betalt til Scalepoint (Indbetalinger) :</deposits>
-        <remainingIdemnity>Tilbageværende erstatning :</remainingIdemnity>
+        <indemnityText>{companyName} har betalt til Scalepoint (Erstatning) :</indemnityText>
+        <orderedItemsText>Scalepoint har betalt til leverandør (Varekøb) :</orderedItemsText>
+        <withdrawallsText>Scalepoint har betalt til kunde (Udbetalinger) :</withdrawallsText>
+        <depositsText>Kunde har betalt til Scalepoint (Indbetalinger) :</depositsText>
+        <remainingCompensationText>Tilbageværende erstatning :</remainingCompensationText>
     </orderDetails>
 
     <textSearch>

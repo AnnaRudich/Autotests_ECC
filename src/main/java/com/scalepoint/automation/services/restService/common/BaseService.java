@@ -1,4 +1,4 @@
-package com.scalepoint.automation.services.restService.Common;
+package com.scalepoint.automation.services.restService.common;
 
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
@@ -41,6 +41,10 @@ public class BaseService {
 
     public void setUserIdByClaimToken() {
         data.setUserId(data.getDatabaseApi().getUserIdByClaimToken(getClaimTokenWithoutPrefix()));
+    }
+
+    public void setUserIdByClaimNumber(String claimNumber){
+        data.setUserId(data.getDatabaseApi().getUserIdByClaimNumber(claimNumber));
     }
 
     public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items) {

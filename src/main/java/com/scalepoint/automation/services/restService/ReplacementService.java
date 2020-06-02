@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.externalapi.SolrApi;
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.restService.helper.PrepareSaveCustomerParams;
 import org.apache.http.HttpStatus;
 

@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.request.SelfServiceLossItems;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import io.restassured.response.Response;
@@ -9,7 +9,7 @@ import org.apache.http.HttpStatus;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.*;
+import static com.scalepoint.automation.services.restService.common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.Configuration.getEnvironmentUrl;
 import static io.restassured.RestAssured.given;

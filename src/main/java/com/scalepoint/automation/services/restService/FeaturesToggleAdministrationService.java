@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.Configuration;
 import io.restassured.response.ValidatableResponse;

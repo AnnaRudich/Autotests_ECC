@@ -12,7 +12,7 @@ import org.apache.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
-import static com.scalepoint.automation.services.restService.Common.BaseService.loginAndOpenClaimWithItems;
+import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;

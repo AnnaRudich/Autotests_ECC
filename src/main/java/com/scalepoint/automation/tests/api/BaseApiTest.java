@@ -5,7 +5,7 @@ import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.EventDatabaseApi;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
-import com.scalepoint.automation.services.restService.Common.ServiceData;
+import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;

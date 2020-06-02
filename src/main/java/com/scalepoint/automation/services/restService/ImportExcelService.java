@@ -1,7 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
 import com.google.common.io.CharStreams;
-import com.scalepoint.automation.services.restService.Common.BaseService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import io.restassured.http.ContentType;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.scalepoint.automation.services.restService.Common.BasePath.EXCEL;
-import static com.scalepoint.automation.services.restService.Common.BasePath.MATCH;
+import static com.scalepoint.automation.services.restService.common.BasePath.EXCEL;
+import static com.scalepoint.automation.services.restService.common.BasePath.MATCH;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.config;
 import static io.restassured.RestAssured.given;

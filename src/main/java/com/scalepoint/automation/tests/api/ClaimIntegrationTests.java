@@ -10,7 +10,7 @@ import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.services.restService.Common.BaseService.loginUser;
+import static com.scalepoint.automation.services.restService.common.BaseService.loginUser;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 
 public class ClaimIntegrationTests extends BaseApiTest {
