@@ -39,15 +39,18 @@ public class DatabaseApi {
 
     public XpriceInfo findProduct(PriceConditions... priceConditions) {
         return jdbcTemplate.queryForObject(
-                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName " +
+                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice,xp.supplierName, " +
+                        "xp.agreementId, xp.priceModelId, xp.priceModelTypeId," +
+                        "xp.discountCategoryID,xp.discountFromDate, xp.discountToDate, xp.discountValue, " +
+                        "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId, xp.agreementId " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID where " +
                         Stream.of(priceConditions).map(PriceConditions::getCondition).collect(Collectors.joining(" and ")), new XpriceInfoMapper());
     }
 
     public XpriceInfo findOrderableProduct(){
         return jdbcTemplate.queryForObject(
-                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice," +
-                        "xp.supplierName,xp.agreementId, xp.priceModelId, xp.priceModelTypeId," +
+                "SELECT top(1) pr.ProductKey, xp.productId, xp.invoicePrice,xp.supplierShopPrice, xp.supplierName," +
+                        "xp.agreementId, xp.priceModelId, xp.priceModelTypeId," +
                         "xp.discountCategoryID,xp.discountFromDate, xp.discountToDate, xp.discountValue, " +
                         "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId, xp.agreementId " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID WHERE xp.productId!=xp.productOriginalId AND pr.Published=1", new XpriceInfoMapper());

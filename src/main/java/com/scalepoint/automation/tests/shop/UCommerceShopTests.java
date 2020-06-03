@@ -82,6 +82,7 @@ public class UCommerceShopTests extends BaseTest {
         new CreateOrderService().createOrderForVoucher(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
         new OrderDetailsPage()
+                .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage -> {
                     orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedVoucherPrice);
                     orderDetailsPage.assertCompensationAmount(activeValuation);
