@@ -14,9 +14,12 @@ import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
+import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -174,12 +177,12 @@ public class SettlementSummary extends Module {
 
     public class Asserts {
         public Asserts assertClaimSumValueIs(double value) {
-            Assert.assertEquals(toNumber(getClaimSumValue()), value, "Claim sum must be: " + value);
+            Assert.assertEquals(toNumber(getClaimSumValue()), formatDoubleToHaveTwoDigits(value), "Claim sum must be: " + value);
             return this;
         }
 
         public Asserts assertSubtotalSumValueIs(double value) {
-            Assert.assertEquals(toNumber(getSubtotalSumValue()), value, "Subtotal sum must be: " + value);
+            Assert.assertEquals(toNumber(getSubtotalSumValue()), formatDoubleToHaveTwoDigits(value), "Subtotal sum must be: " + value);
             return this;
         }
 

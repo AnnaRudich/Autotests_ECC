@@ -16,7 +16,7 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
 public class SidDamageTypeTest extends BaseTest {
 
-    private static final String SONY_HDR_CX450 = "Sony Handycam HDR-CX450";
+    private static final String SONY_HDR_CX450 = "Sony HDR-CX450";
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
     @Test(dataProvider = "testDataProvider",

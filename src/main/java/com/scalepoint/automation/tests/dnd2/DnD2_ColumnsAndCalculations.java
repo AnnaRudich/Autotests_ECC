@@ -118,7 +118,6 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
                     asserts.assertSubtotalSumValueIs(claimItem.getTrygNewPrice() - (claimItem.getTrygNewPrice() * depreciationValue / 100));
                 });
     }
-
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
