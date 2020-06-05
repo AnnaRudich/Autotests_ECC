@@ -1,9 +1,9 @@
 package com.scalepoint.automation.tests.headers;
 
 import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
-import com.scalepoint.automation.services.restService.Common.BaseService;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.SelfServiceService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.scalepoint.automation.services.restService.Common.BaseService.*;
+import static com.scalepoint.automation.services.restService.common.BaseService.*;
 import static com.scalepoint.automation.tests.BaseTest.provide;
 import static com.scalepoint.automation.utils.Configuration.*;
 import static io.restassured.RestAssured.given;
