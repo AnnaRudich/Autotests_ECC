@@ -18,7 +18,6 @@ public class SelfServiceService extends BaseService {
 
     private Response response;
     private String linkToSS;
-    private String accessToken;
 
     public Response getResponse() {
         return this.response;
@@ -70,7 +69,7 @@ public class SelfServiceService extends BaseService {
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 
-        accessToken =  response.getHeader("Access-Token");
+        data.setSelfServiceAccessToken(response.getHeader("Access-Token"));
 
         this.response = given()
                 .get(response.getHeader("Location"))
@@ -85,7 +84,7 @@ public class SelfServiceService extends BaseService {
 
         this.response = given()
                 .baseUri(getEnvironmentUrl())
-                .header("Access-Token", accessToken)
+                .header("Access-Token", data.getSelfServiceAccessToken())
                 .contentType("application/json")
                 .body(selfServiceLossItems)
                 .post(SELF_SERVICE_LOSS_ITEMS)
@@ -100,7 +99,7 @@ public class SelfServiceService extends BaseService {
 
         this.response = given().log().uri()
                 .baseUri(getEnvironmentUrl())
-                .header("Access-Token", accessToken)
+                .header("Access-Token", data.getSelfServiceAccessToken())
                 .post(SELF_SERVICE_SUBMITTED)
                 .then()
                 .statusCode(HttpStatus.SC_OK)

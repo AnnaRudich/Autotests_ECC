@@ -77,6 +77,12 @@
         </packages>
     </test>
 
+    <test verbose="1" name="SecurityHeaders" enabled="true" preserve-order="true" thread-count="1">
+        <packages>
+            <package name="com.scalepoint.automation.tests.headers"/>
+        </packages>
+    </test>
+
     <listeners>
         <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
     </listeners>

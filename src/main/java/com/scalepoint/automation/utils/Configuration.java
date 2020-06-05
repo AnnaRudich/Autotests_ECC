@@ -10,6 +10,7 @@ public class Configuration {
     public static final String KEY_CONTEXT_ECC = "context.ecc";
     public static final String KEY_CONTEXT_ECC_ADMIN = "context.ecc.admin";
     public static final String KEY_CONTEXT_ECC_RNV = "context.ecc.rnv";
+    public static final String KEY_CONTEXT_ECC_SELFSERVICE = "context.selfservice";
     public static final String KEY_SERVER_URL = "url.base.server";
     public static final String KEY_ENVIRONMENT_URL = "url.environment";
     public static final String KEY_EVENT_API_URL = "url.eventapi";
@@ -41,6 +42,7 @@ public class Configuration {
     private static String eccContext;
     private static String eccAdminContext;
     private static String eccRnvContext;
+    private static String selfServiceContext;
     private static String solrBaseUrl;
     private static String hubRemote;
     private static String hubRemoteZalenium;
@@ -94,6 +96,10 @@ public class Configuration {
         return eccRnvContext;
     }
 
+    public static String getSelfServiceContext() {
+        return selfServiceContext;
+    }
+
     public static String getEccUrl() {
         return getServerUrl() + SLASH + getEccContext() + SLASH + getLocale().getValue() + SLASH;
     }
@@ -104,6 +110,10 @@ public class Configuration {
 
     public static String getEccRnvUrl() {
         return getServerUrl() + SLASH + getEccRnvContext() + SLASH + getLocale().getValue() + SLASH;
+    }
+
+    public static String getSelfServiceUrl() {
+        return getServerUrl() + SLASH + getSelfServiceContext() + SLASH + getLocale().getValue() + SLASH;
     }
 
     public static String getLogoutUrl(){
@@ -187,6 +197,11 @@ public class Configuration {
 
     public Configuration setEccRnvContext(String eccRnvContext) {
         Configuration.eccRnvContext = eccRnvContext;
+        return this;
+    }
+
+    public Configuration setSelfServiceContext(String selfServiceContext) {
+        Configuration.selfServiceContext = selfServiceContext;
         return this;
     }
 

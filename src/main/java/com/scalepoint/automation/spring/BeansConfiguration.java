@@ -8,7 +8,6 @@ import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.WiremockServer;
-import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +48,8 @@ public class BeansConfiguration {
     private String eccAdminContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_RNV + "}")
     private String eccRnvContext;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_CONTEXT_ECC_SELFSERVICE + "}")
+    private String eccSelfServiceContext;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_SOLR_URL + "}")
     private String solrBaseUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_ECC_DB_URL + "}")
@@ -82,6 +83,7 @@ public class BeansConfiguration {
                         .setEccContext(eccContext)
                         .setEccAdminContext(eccAdminContext)
                         .setEccRnvContext(eccRnvContext)
+                        .setSelfServiceContext(eccSelfServiceContext)
                         .setSolrBaseUrl(solrBaseUrl)
                         .setHubRemote(hubRemoteUrl)
                         .setHubLocalZalenium(hubLocalZaleniumUrl)
@@ -121,7 +123,7 @@ public class BeansConfiguration {
 
     @Bean
     public MongoTemplate mongoTemplate(){
-       return new MongoTemplate(mongoDbFactory());
+        return new MongoTemplate(mongoDbFactory());
     }
 
     @Bean

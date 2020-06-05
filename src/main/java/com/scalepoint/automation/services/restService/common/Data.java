@@ -11,6 +11,7 @@ public class Data {
     private String rnvSessionId;
     private String claimToken;
     private Integer userId;
+    private String selfServiceAccessToken;
     private static DatabaseApi databaseApi;
 
     public Data() {
@@ -54,5 +55,14 @@ public class Data {
 
     public void setDatabaseApi(DatabaseApi databaseApi) {
         this.databaseApi = databaseApi;
+    }
+
+    public void setSelfServiceAccessToken(String selfServiceAccessToken){
+
+        this.selfServiceAccessToken = selfServiceAccessToken;
+    }
+
+    public String getSelfServiceAccessToken(){
+        return selfServiceAccessToken;
     }
 }
