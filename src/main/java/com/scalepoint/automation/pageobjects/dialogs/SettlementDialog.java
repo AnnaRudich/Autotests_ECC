@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -74,7 +75,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtComboBox availableVoucher;
 
     @FindBy(id = "vouchers-combobox")
-    private ExtComboBox voucher;
+    private ExtComboBox voucherCombo;
 
     @FindBy(id = "quantity-textfield-inputEl")
     private ExtInput quantity;
@@ -140,7 +141,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtInput ageYears;
 
     @FindBy(css = "#voucher-supplier-link a")
-    private Link brand;
+    private Link voucherLink;
 
     @FindBy(id = "voucher-valuation-card-edit-valuation")
     private Button voucherValuationCard;
@@ -437,7 +438,10 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillVoucher(String voucherName) {
-        if (voucher.isDisplayed()) {
+        if ($("#voucher-supplier-link a").has(text(voucherName))
+                & !voucherCombo.isDisplayed()) {
+            return this;
+        } else {
             $("#vouchers-combobox-trigger-picker")
                     .hover()
                     .click();
@@ -447,9 +451,6 @@ public class SettlementDialog extends BaseDialog {
                     .findFirst()
                     .get()
                     .click();
-        } else {
-            Wait.waitUntilVisible(availableVoucher);
-            availableVoucher.select(voucherName);
         }
         waitForJavascriptRecalculation();
         return this;
@@ -891,7 +892,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public List<VoucherDropdownElement> parseVoucherDropdown() {
-        List<String> comboBoxOptions = voucher.getComboBoxOptions();
+        List<String> comboBoxOptions = voucherCombo.getComboBoxOptions();
         return comboBoxOptions.stream().map(VoucherDropdownElement::new).collect(Collectors.toList());
     }
 
@@ -1058,8 +1059,8 @@ public class SettlementDialog extends BaseDialog {
         }
 
         private List<String> getVouchersList() {
-            if (voucher.isDisplayed()) {
-                return voucher.getComboBoxOptions();
+            if (voucherCombo.isDisplayed()) {
+                return voucherCombo.getComboBoxOptions();
             } else {
                 return availableVoucher.getComboBoxOptions();
             }
@@ -1235,8 +1236,8 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
-        public Asserts assertBrandTextIs(String brandLink) {
-            assertEquals($(brand).getText(), brandLink, "Wrong Brand is Displayed");
+        public Asserts assertBrandTextIs(String selectedVoucher) {
+            assertEquals($(voucherLink).getText(), selectedVoucher, "Wrong voucher is Displayed");
             return this;
         }
 
