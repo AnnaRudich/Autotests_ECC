@@ -442,10 +442,10 @@ public class SettlementDialog extends BaseDialog {
                 & !voucherCombo.isDisplayed()) {
             return this;
         } else {
-            $("#available-vouchers-combobox-trigger-picker")
+            $("#vouchers-combobox-trigger-picker")
                     .hover()
                     .click();
-            $$("#available-vouchers-combobox-picker-listEl div")
+            $$("#vouchers-combobox-picker-listEl div")
                     .stream()
                     .filter(element -> element.text().contains(voucherName))
                     .findFirst()
