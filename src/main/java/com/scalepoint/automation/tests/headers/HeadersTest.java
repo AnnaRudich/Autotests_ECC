@@ -38,7 +38,7 @@ public class HeadersTest extends BaseApiTest {
 
     static String CACHE_CONTROL = "max-age=2592000";
     static String CACHE_CONTROL2 = "no-cache, no-store, max-age=0, must-revalidate";
-    static String CONTENT_SECURITY_POLICY_LONG = "default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com/qunit/qunit-2.0.0.js; style-src 'self' 'unsafe-inline' https://code.jquery.com/qunit/qunit-2.0.0.css; img-src 'self' data:; frame-src 'self'; connect-src 'self'";
+    static String CONTENT_SECURITY_POLICY_LONG = "default-src 'none'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; frame-src 'self'; connect-src 'self'";
     static String CONTENT_SECURITY_POLICY_SHORT = "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; frame-src 'self'; connect-src 'self'";
     static String CONTENT_SECURITY_POLICY_SS = "script-src 'self' https://www.google.com/recaptcha/api.js https://www.gstatic.com http://*.scalepoint.com 'nonce-";
     static String EXPIRES = "0";
