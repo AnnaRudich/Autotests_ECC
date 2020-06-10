@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.order;
 
+import com.scalepoint.automation.utils.RandomUtils;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import java.util.UUID;
 
 @Builder
 @Data
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Order {
     @XmlAttribute
     @Builder.Default
-    String orderID = UUID.randomUUID().toString();
+    String orderID = String.valueOf(RandomUtils.randomInt());
 
     @XmlElement(name = "OrderTotalPurchasePrice")
     OrderTotalPurchasePrice orderTotalPurchasePrice;
