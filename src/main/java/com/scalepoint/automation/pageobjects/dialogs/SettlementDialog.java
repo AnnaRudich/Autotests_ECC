@@ -34,7 +34,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -438,8 +440,9 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillVoucher(String voucherName) {
+        waitForAjaxCompletedAndJsRecalculation();
         if ($("#voucher-supplier-link a").has(text(voucherName))
-                & !voucherCombo.isDisplayed()) {
+                & $("#vouchers-combobox").is(not(visible))) {
             return this;
         } else {
             $("#vouchers-combobox-trigger-picker")
