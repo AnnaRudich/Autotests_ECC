@@ -12,10 +12,10 @@ import java.io.Serializable;
 
 @Builder
 @Data
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PredictedVoucher implements Serializable {
 
     private String voucherName;
+
 }

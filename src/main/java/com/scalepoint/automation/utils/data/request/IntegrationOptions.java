@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class IntegrationOptions {
 
-    boolean startSelfService;
+    private boolean startSelfService;
+
 }

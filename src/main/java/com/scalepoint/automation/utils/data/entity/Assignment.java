@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Created by bza on 6/22/2017.
  */
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class Assignment {
 
     @XmlElement

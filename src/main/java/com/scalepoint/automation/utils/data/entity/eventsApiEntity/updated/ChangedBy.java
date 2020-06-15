@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -8,6 +9,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "fullName",
@@ -24,36 +26,6 @@ public class ChangedBy {
     private String userType;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("fullName")
-    public String getFullName() {
-        return fullName;
-    }
-
-    @JsonProperty("fullName")
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    @JsonProperty("username")
-    public String getUsername() {
-        return username;
-    }
-
-    @JsonProperty("username")
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @JsonProperty("userType")
-    public String getUserType() {
-        return userType;
-    }
-
-    @JsonProperty("userType")
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
 
     @Override
     public String toString() {

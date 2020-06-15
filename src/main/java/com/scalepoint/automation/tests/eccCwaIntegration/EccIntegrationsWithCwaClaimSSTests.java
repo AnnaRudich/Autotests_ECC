@@ -31,7 +31,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
     @BeforeMethod
     public void setUpForEccIntegrationsTest() {
         ClaimRequest claimRequest = TestData.getClaimRequest();
-        claimRequest.getExtraModifiers().add(new ExtraModifier().withType("cwaServiceId").withValue("1234"));
+        claimRequest.getExtraModifiers().add(ExtraModifier.builder().type("cwaServiceId").value("1234").build());
         claimToken = createCwaClaimAndGetClaimToken(claimRequest);
         userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken.replace("c.", ""));
     }

@@ -69,10 +69,10 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      */
     public void openNewVoucherForEditing(Voucher voucher) {
         find(By.xpath("//input[contains(@class,'voucherListSearchField')]")).click();
-        makeVouchersSearch(voucher.getVoucherGeneratedName());
+        makeVouchersSearch(voucher.getVoucherNameSP());
         List<WebElement> elements = Wait.waitForStaleElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
         for (WebElement item : elements) {
-            if (item.getText().contains(voucher.getVoucherGeneratedName())) {
+            if (item.getText().contains(voucher.getVoucherNameSP())) {
                 scrollTo(item);
                 doubleClick(item);
                 Wait.waitForDisplayed(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
@@ -152,12 +152,12 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      */
     public boolean isActiveOrExclFieldTickedVouchersList(Voucher voucher) {
         find(By.xpath("//input[contains(@id,'searchfield')]")).click();
-        makeVouchersSearch(voucher.getVoucherGeneratedName());
+        makeVouchersSearch(voucher.getVoucherNameSP());
         Wait.waitForStaleElements((By.xpath("id('vouchersGridId')")));
-        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherGeneratedName());
+        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherNameSP());
         try {
             WebElement item = find(By.xpath(xpath));
-            return item.getText().contains(voucher.getVoucherGeneratedName()) && isActiveOrExclFieldTicked();
+            return item.getText().contains(voucher.getVoucherNameSP()) && isActiveOrExclFieldTicked();
         } catch (Exception e) {
             return false;
         }

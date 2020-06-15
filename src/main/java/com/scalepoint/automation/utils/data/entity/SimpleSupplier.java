@@ -7,11 +7,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "simpleSupplier", propOrder = {
         "name"
 })
-@Data
 public class SimpleSupplier {
 
     @XmlAttribute(name = "name")
@@ -28,4 +28,5 @@ public class SimpleSupplier {
     private String shopName;
     @XmlAttribute(name = "withVouchers")
     private boolean withVouchers;
+
 }

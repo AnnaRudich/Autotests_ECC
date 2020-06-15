@@ -39,7 +39,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
                                                        Voucher voucher,
                                                        ClaimItem claimItem) {
 
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
         createVoucherAgreement(trygParentUser, supplier, voucher, claimItem.getCategoryBabyItems());
 
         loginAndCheckVoucherPresence(trygChildUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
@@ -70,7 +70,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
                                                          Voucher voucher,
                                                          ClaimItem claimItem) {
 
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
         createVoucherAgreement(scalepointUser, supplier, voucher, claimItem.getCategoryBabyItems());
 
         loginAndCheckVoucherPresence(trygUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);

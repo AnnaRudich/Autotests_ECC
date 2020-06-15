@@ -1,30 +1,18 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BankImport extends Bank {
 
+    @XmlAttribute
     private String bankName;
+    @XmlAttribute
     private String fikNumber;
 
-    public BankImport() {
-    }
-
-    @XmlAttribute
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    @XmlAttribute
-    public String getFikNumber() {
-        return fikNumber;
-    }
-
-    public void setFikNumber(String fikNumber) {
-        this.fikNumber = fikNumber;
-    }
 }

@@ -39,7 +39,7 @@ public class SidTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setCategory(categoryInfo)
-                .doAssert(sid -> sid.assertVoucherListed(voucher.getVoucherGeneratedName()));
+                .doAssert(sid -> sid.assertVoucherListed(voucher.getVoucherNameSP()));
     }
 
     /**
@@ -66,7 +66,7 @@ public class SidTests extends BaseTest {
                             .withCustomerDemandPrice(PRICE_100_000)
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withVoucher(voucher.getVoucherGeneratedName());
+                            .withVoucher(voucher.getVoucherNameSP());
                 })
                 .doAssert(sid -> {
                     sid.assertCashValueIs(calculatedCashValue);
@@ -129,7 +129,7 @@ public class SidTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
-        String existingVoucher = voucher.getExistingVoucher_10();
+        String existingVoucher = voucher.getExistingVoucher();
         String existingVoucherShopName = "Test shop " + existingVoucher;
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
@@ -172,7 +172,7 @@ public class SidTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_voucherRepDialogDDDialogFVCV(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
-        String existingVoucher = voucher.getExistingVoucher_10();
+        String existingVoucher = voucher.getExistingVoucher();
 
         int voucherDiscount = 10;
         int customerDiscount = 5;
@@ -209,7 +209,7 @@ public class SidTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_voucherRepDialogCustomDtDnDialogFVCV2(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
-        String existingVoucher = voucher.getExistingVoucher_10();
+        String existingVoucher = voucher.getExistingVoucher();
 
         int voucherDiscount = 10;
         int customerDiscount = 5;
@@ -233,7 +233,7 @@ public class SidTests extends BaseTest {
     public void ecc3025_voucherTradesTermsConditionsCorrectInfo(User user, Claim claim, Supplier supplier, Voucher voucher, ClaimItem claimItem) {
         String conditionsText = "Autotest Sample Conditions";
         int discount = 10;
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
         String supplierPhone = supplier.getSupplierPhone();
 
         SuppliersPage suppliersPage = login(getSystemUser())
@@ -315,7 +315,7 @@ public class SidTests extends BaseTest {
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withCategory(item.getCategoryBabyItems())
-                            .withVoucher(item.getExistingVoucher_10());
+                            .withVoucher(item.getExistingVoucher1());
                 })
                 .doAssert(sid -> {
                     sid.assertCashValueIs(voucherValuation.getCashCompensationOfVoucher());

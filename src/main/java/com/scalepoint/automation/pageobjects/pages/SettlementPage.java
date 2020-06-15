@@ -231,7 +231,7 @@ public class SettlementPage extends BaseClaimPage {
                     .withSubCategory(pseudoCategory.getCategoryName())
                     .withNewPrice(PRICE_2400)
                     .withAge(AGE_YEAR, AGE_MONTH)
-                    .withVoucher(claimItem.getExistingVoucher_10()))
+                    .withVoucher(claimItem.getExistingVoucher1()))
                     .closeSidWithOk();
         }
         return this;

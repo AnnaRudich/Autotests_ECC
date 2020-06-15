@@ -1,6 +1,9 @@
 
 package com.scalepoint.automation.utils.data.entity.payments;
 
+import com.scalepoint.automation.utils.annotations.RunOn;
+import lombok.Data;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -28,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;/complexType>
  * </pre>
  */
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "masterCard", propOrder = {
         "cardNumber",
@@ -48,105 +52,5 @@ public class MasterCard {
     protected String cardHolderName;
     @XmlElement(required = true)
     protected String cvc;
-
-    /**
-     * Gets the value of the cardNumber property.
-     *
-     * @return possible object is
-     * {@link String }
-     */
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    /**
-     * Sets the value of the cardNumber property.
-     *
-     * @param value allowed object is
-     *              {@link String }
-     */
-    public void setCardNumber(String value) {
-        this.cardNumber = value;
-    }
-
-    /**
-     * Gets the value of the expMonth property.
-     *
-     * @return possible object is
-     * {@link String }
-     */
-    public String getExpMonth() {
-        return expMonth;
-    }
-
-    /**
-     * Sets the value of the expMonth property.
-     *
-     * @param value allowed object is
-     *              {@link String }
-     */
-    public void setExpMonth(String value) {
-        this.expMonth = value;
-    }
-
-    /**
-     * Gets the value of the expYear property.
-     *
-     * @return possible object is
-     * {@link String }
-     */
-    public String getExpYear() {
-        return expYear;
-    }
-
-    /**
-     * Sets the value of the expYear property.
-     *
-     * @param value allowed object is
-     *              {@link String }
-     */
-    public void setExpYear(String value) {
-        this.expYear = value;
-    }
-
-    /**
-     * Gets the value of the cardHolderName property.
-     *
-     * @return possible object is
-     * {@link String }
-     */
-    public String getCardHolderName() {
-        return cardHolderName;
-    }
-
-    /**
-     * Sets the value of the cardHolderName property.
-     *
-     * @param value allowed object is
-     *              {@link String }
-     */
-    public void setCardHolderName(String value) {
-        this.cardHolderName = value;
-    }
-
-    /**
-     * Gets the value of the cvc property.
-     *
-     * @return possible object is
-     * {@link String }
-     */
-    public String getCvc() {
-        return cvc;
-    }
-
-    /**
-     * Sets the value of the cvc property.
-     *
-     * @param value allowed object is
-     *              {@link String }
-     */
-    public void setCvc(String value) {
-        this.cvc = value;
-    }
 
 }

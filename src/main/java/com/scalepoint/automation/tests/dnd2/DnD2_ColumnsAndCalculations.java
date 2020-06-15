@@ -64,7 +64,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withVoucher(claimItem.getExistingVoucher_10())
+                        .withVoucher(claimItem.getExistingVoucher1())
                         .withDepreciation(depreciationValue))
                 .doAssert(asserts -> {
                     asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
@@ -198,7 +198,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withVoucher(claimItem.getExistingVoucher_10())
+                        .withVoucher(claimItem.getExistingVoucher1())
                         .withDepreciation(depreciationValue))
                 .closeSidWithOk();
         settlementPage.parseFirstClaimLine()

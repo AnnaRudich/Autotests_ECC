@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class Supplier {
 
     private String supplierID = Integer.toString(RandomUtils.randomInt());
@@ -22,7 +22,6 @@ public class Supplier {
     private String promotionText = RandomUtils.randomName("Promotion");
     private String commercialText = RandomUtils.randomName("Commercial");
     private String shopTitleText = RandomUtils.randomName("ShopTitle");
-
     @XmlElement
     private String supplierPhone;
     @XmlElement
@@ -41,4 +40,5 @@ public class Supplier {
     private String bankFikNumber;
     @XmlElement
     private String bankName;
+
 }

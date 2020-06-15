@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class ClaimItem {
 
     private String textFieldSP = RandomUtils.randomName("ClaimItem");
@@ -30,7 +30,6 @@ public class ClaimItem {
     private String existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy;
     @XmlElement
     private String existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType;
-
     @XmlElement
     private String existingVoucher1;
     @XmlElement
@@ -121,167 +120,30 @@ public class ClaimItem {
     private String matchedText;
     @XmlElement
     private String damageTypeValidationError;
-
     @XmlElement(name = "categoryBabyItems")
     private PseudoCategory categoryBabyItems;
-
     @XmlElement(name = "categoryVideoCamera")
     private PseudoCategory categoryVideoCamera;
-
     @XmlElement(name = "categoryMobilePhones")
     private PseudoCategory categoryMobilePhones;
-
     @XmlElement(name = "categoryShoes")
     private PseudoCategory categoryShoes;
-
     @XmlElement(name = "categoryJewelry")
     private PseudoCategory categoryJewelry;
-
     @XmlElement(name = "categoryPersonalMedicine")
     private PseudoCategory categoryPersonalMedicine;
-
     @XmlElement(name = "categoryBicycles")
     private PseudoCategory categoryBicycles;
-
     @XmlElement(name = "categoryMusic")
     private PseudoCategory categoryMusic;
-
     @XmlElement(name = "categoryOther")
     private PseudoCategory categoryOther;
-
     @XmlElement(name = "categoryPurses")
     private PseudoCategory categoryPurses;
-
     @XmlElement(name = "categoryLuxuryWatches")
     private PseudoCategory categoryLuxuryWatches;
-
     @XmlElement(name = "categoryHearingAids")
     private PseudoCategory categoryHearingAids;
-
-    public Double getTrygNewPrice() {
-        return trygNewPrice;
-    }
-
-    public String getTextFieldSP() {
-        return textFieldSP;
-    }
-
-    public String getExistingGroupWithPolicyDepreciationTypeAndReductionRule() {
-        return existingGroupWithPolicyDepreciationTypeAndReductionRule;
-    }
-
-    public String getExistingGroupWithDiscretionaryDepreciationTypeAndReductionRule() {
-        return existingGroupWithDiscretionaryDepreciationTypeAndReductionRule;
-    }
-
-
-    public String getExistingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy() {
-        return existingSubCategoryForVideoGroupWithReductionRuleAndDepreciationPolicy;
-    }
-
-    public String getExistingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType() {
-        return existingSubCategoryForVideoGroupWithReductionRuleAndDiscretionaryType;
-    }
-
-    public String getExistingVoucher_10() {
-        return existingVoucher1;
-    }
-
-    public String getExcelPath1() {
-        return getResourcePath(excelPath1);
-    }
-
-    public String getExcelPathWithoutCatAuto(){
-        return getResourcePath(excelPathWithoutCatAuto);
-    }
-
-    public String getExcelPathWithoutCatNoAuto(){
-        return getResourcePath(excelPathWithoutCatNoAuto);
-    }
-
-    public String getExcelPathVoucherPrediction(){
-        return getResourcePath(excelPathVoucherPrediction);
-    }
-
-    public String getXlsDescr1() {
-        return xlsDescr1;
-    }
-
-    public String getFileLoc() {
-        return getResourcePath(fileLoc);
-    }
-
-    public String getExistingVoucher2() {
-        return existingVoucher2;
-    }
-
-    public String getSetDialogTextMatch() {
-        return setDialogTextMatch;
-    }
-
-    public Double getCustomerDemand() {
-        return customerDemand;
-    }
-
-    public Double getUsedPrice() {
-        return usedPrice;
-    }
-
-    public String getBlueColor() {
-        return blueColor;
-    }
-
-    public String getPinkColor() {
-        return pinkColor;
-    }
-
-    public Double getLowerPrice() {
-        return lowerPrice;
-    }
-
-    public String getValuationTypeNewPrice() {
-        return valuationTypeNewPrice;
-    }
-
-    public String getValuationTypeUsedPrice() {
-        return valuationTypeUsedPrice;
-    }
-
-    public String getValuationTypeDiscretionary() {
-        return valuationTypeDiscretionary;
-    }
-
-    public String getValuationTypeRepair() {
-        return valuationTypeRepair;
-    }
-
-    public Integer getReductionRule_30() {
-        return reductionRule;
-    }
-
-    public Integer getAlkaUserReductionRule_25() {
-        return alkaUserReductionRule;
-    }
-
-    public Integer getAlkaUserReductionRule40() {
-        return alkaUserReductionRule40;
-    }
-
-    public String getExistingVoucher4() {
-        return existingVoucher4;
-    }
-
-    public String getBrandLinkVoucher4() {
-        return brandLinkVoucher4;
-    }
-
-    public String getMatchedText() {
-        return matchedText;
-    }
-
-    public Double getNewPriceSP() {
-        return newPriceSP;
-    }
 
     @Override
     public String toString() {

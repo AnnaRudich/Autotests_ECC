@@ -42,15 +42,15 @@ public class VoucherAgreementApi extends AuthenticationApi {
 
     private String createNewVoucherAgreement(String supplierId, Voucher voucher) {
         List<NameValuePair> params = Http.ParamsBuilder.create().
-                add("voucherName", voucher.getVoucherGeneratedName()).
+                add("voucherName", voucher.getVoucherNameSP()).
                 add("agreementStatus", "ACTIVE").
                 add("useSupplierLogo", "true").
                 add("useSupplierUrl", "true").
                 add("agreementDiscount", voucher.getDiscount().toString()).
                 add("minimumAmount", "1").
                 add("stepAmount", "1").
-                add("brands", voucher.getBrandsText()).
-                add("tags", voucher.getTagsText()).
+                add("brands", voucher.getBrands()).
+                add("tags", voucher.getTags()).
                 add("orderFeeId", "-1").get();
 
         try {

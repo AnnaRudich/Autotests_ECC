@@ -11,10 +11,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * NewSystemUser: kke
  */
+
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class Category implements Cloneable {
+
     private String groupName = RandomUtils.randomName("Group");
     private String categoryName = RandomUtils.randomName("Category");
     private String modelName = RandomUtils.randomName("Model");
@@ -22,4 +24,5 @@ public class Category implements Cloneable {
     public Category clone() throws CloneNotSupportedException {
         return (Category) super.clone();
     }
+
 }

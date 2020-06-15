@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class GenericItem {
 
     private String name = RandomUtils.randomName("GenericItem");
@@ -18,6 +18,5 @@ public class GenericItem {
     private String group;
     @XmlElement
     private String category;
-
     private String price = "100";
 }

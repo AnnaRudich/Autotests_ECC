@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class CaseFraudStatus {
 
-    String uuid;
-    String number;
-    String token;
-    String caseType;
+    private String uuid;
+    private String number;
+    private String token;
+    private String caseType;
+
 }

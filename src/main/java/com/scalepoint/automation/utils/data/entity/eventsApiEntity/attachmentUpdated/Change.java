@@ -10,11 +10,11 @@ import java.util.Map;
 @Data
 public class Change {
 
-    Property property;
-    String attachmentGUID;
-    String attachmentLink;
-    String fileType;
-    String fileName;
+    private Property property;
+    private String attachmentGUID;
+    private String attachmentLink;
+    private String fileType;
+    private String fileName;
 
     public enum Property {
 

@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * NewSystemUser: kke
  */
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class ReductionRule implements Cloneable {
 
     private String rrName = RandomUtils.randomName("RR");
@@ -42,4 +42,5 @@ public class ReductionRule implements Cloneable {
     public ReductionRule clone() throws CloneNotSupportedException {
         return (ReductionRule) super.clone();
     }
+
 }

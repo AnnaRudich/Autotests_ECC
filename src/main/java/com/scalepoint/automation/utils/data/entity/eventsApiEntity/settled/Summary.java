@@ -2,11 +2,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "manualReduction",
@@ -29,38 +31,6 @@ public class Summary {
     private Double depreciation;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public Double getManualReduction() {
-        return manualReduction;
-    }
-
-    public void setManualReduction(Double manualReduction) {
-        this.manualReduction = manualReduction;
-    }
-
-    public Double getShareOfVat() {
-        return shareOfVat;
-    }
-
-    public void setShareOfVat(Double shareOfVat) {
-        this.shareOfVat = shareOfVat;
-    }
-
-    public Double getDeductible() {
-        return deductible;
-    }
-
-    public void setDeductible(Double deductible) {
-        this.deductible = deductible;
-    }
-
-    public Double getDepreciation() {
-        return depreciation;
-    }
-
-    public void setDepreciation(Double depreciation) {
-        this.depreciation = depreciation;
-    }
 
     @Override
     public String toString() {

@@ -74,6 +74,6 @@ public class UnifiedPaymentsAssertUtils {
 
 
     private static boolean isEqual(PartyRef partyRef, BaseUnifiedPaymentsApiTest.PartyReference partyNum) {
-        return partyRef.get$ref().equals("/parties/" + partyNum.getValue());
+        return partyRef.getRef().equals("/parties/" + partyNum.getValue());
     }
 }

@@ -87,21 +87,21 @@ public class ProjectsPage extends Page {
         }
 
         public Assertion assertTaskHasFeedbackReceivedStatus(ServiceAgreement agreement) {
-            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
-            Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatusName(), "Task has " + taskStatus + " status. Must be feedback received");
+            String taskStatus = getTaskStatus(agreement.getTestAgrNameForRnV());
+            Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatus(), "Task has " + taskStatus + " status. Must be feedback received");
             return this;
         }
 
         public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement){
-            String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            String actualTaskStatus = getTaskStatus(agreement.getTestAgrNameForRnV());
             assertThat(actualTaskStatus)
                     .as("Task has " + actualTaskStatus + " status. Must be completed")
-                    .isEqualTo(agreement.getCompletedStatusName());
+                    .isEqualTo(agreement.getFeedbackCompletedStatus());
             return this;
         }
 
         public Assertion assertTaskHasFailStatus(ServiceAgreement agreement){
-            String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            String actualTaskStatus = getTaskStatus(agreement.getTestAgrNameForRnV());
             assertThat(actualTaskStatus)
                     .as("Task has " + actualTaskStatus + " status. Must be failed.")
                     .isEqualTo(agreement.getSendTaskFailStatus());

@@ -12,9 +12,11 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Deposit {
+
     @XmlAttribute
     Double amount;
 
     @XmlElement(name = "ScalepointAccount")
     ScalepointAccount scalepointAccount;
+
 }

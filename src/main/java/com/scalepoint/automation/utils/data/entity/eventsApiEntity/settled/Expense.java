@@ -1,11 +1,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "$id",
@@ -19,7 +21,6 @@ import java.util.Map;
         "payeeParty",
         "expenseType"
 })
-
 public class Expense {
 
     @JsonProperty(value = "$id", required = true)
@@ -51,86 +52,6 @@ public class Expense {
     private String expenseType;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public String get$id() {
-        return $id;
-    }
-
-    public void set$id(String $id) {
-        this.$id = $id;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public String getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(String issueDate) {
-        this.issueDate = issueDate;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public Boolean getAdministrative() {
-        return administrative;
-    }
-
-    public void setAdministrative(Boolean administrative) {
-        this.administrative = administrative;
-    }
-
-    public PartyRef getPayerParty() {
-        return payerParty;
-    }
-
-    public void setPayerParty(PartyRef payerParty) {
-        this.payerParty = payerParty;
-    }
-
-    public PartyRef getPayeeParty() {
-        return payeeParty;
-    }
-
-    public void setPayeeParty(PartyRef payeeParty) {
-        this.payeeParty = payeeParty;
-    }
-
-    public String getExpenseType() {
-        return expenseType;
-    }
-
-    public void setExpenseType(String expenseType) {
-        this.expenseType = expenseType;
-    }
 
     @Override
     public String toString() {

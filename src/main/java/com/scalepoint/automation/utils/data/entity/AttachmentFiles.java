@@ -9,10 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 
-
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class AttachmentFiles {
 
     @XmlElement
@@ -21,6 +20,5 @@ public class AttachmentFiles {
     public String getJpgFile2Loc() {
         return getResourcePath(jpgFile2);
     }
-
 
 }

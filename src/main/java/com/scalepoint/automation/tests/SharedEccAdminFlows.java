@@ -32,7 +32,7 @@ public class SharedEccAdminFlows implements Actions {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucherAgreementData.voucherGeneralData.getVoucherGeneratedName())
+                            .withVoucherName(voucherAgreementData.voucherGeneralData.getVoucherNameSP())
                             .withAgreementDiscount(voucherAgreementData.discount);
                 })
                 .createVoucherAgreement();

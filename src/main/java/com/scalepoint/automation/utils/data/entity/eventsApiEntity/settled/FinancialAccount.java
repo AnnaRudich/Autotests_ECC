@@ -1,11 +1,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
@@ -28,41 +30,6 @@ public class FinancialAccount {
     private String paymentDescription;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * The identifier for the Financial Account; the Bank Account Number
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public FiBranch getFiBranch() {
-        return fiBranch;
-    }
-
-    public void setFiBranch(FiBranch fiBranch) {
-        this.fiBranch = fiBranch;
-    }
-
-    public String getPaymentNote() {
-        return paymentNote;
-    }
-
-    public void setPaymentNote(String paymentNote) {
-        this.paymentNote = paymentNote;
-    }
-
-    public String getPaymentDescription() {
-        return paymentDescription;
-    }
-
-    public void setPaymentDescription(String paymentDescription) {
-        this.paymentDescription = paymentDescription;
-    }
 
     @Override
     public String toString() {

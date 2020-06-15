@@ -52,7 +52,7 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedFaceValue = Constants.PRICE_2400;
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
 
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, categoryInfo, voucherName);
     }
@@ -83,7 +83,7 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
         Double expectedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
 
-        String voucherName = claimItem.getExistingVoucher_10();
+        String voucherName = claimItem.getExistingVoucher1();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, expectedCashValue, claimItem.getCategoryBabyItems(), voucherName);
     }

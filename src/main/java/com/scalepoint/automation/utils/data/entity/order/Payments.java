@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Payments {
+
     @XmlElement(name = "Deposits")
     Deposits deposits;
+
 }

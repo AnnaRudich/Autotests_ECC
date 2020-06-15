@@ -2,11 +2,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id"
@@ -20,20 +22,6 @@ public class FiBranch {
     private String id;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    /**
-     * For domestic bank transfer it is 4 digits bank branch number.
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * For domestic bank transfer it is 4 digits bank branch number.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
 
     @Override
     public String toString() {

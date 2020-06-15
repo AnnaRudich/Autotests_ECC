@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.entity;
 
 import com.scalepoint.automation.utils.RandomUtils;
+import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -8,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Voucher {
@@ -117,226 +119,6 @@ public class Voucher {
     @XmlElement
     private String voucherTerm;
 
-    public String getTrygVoucher() {
-        return trygVoucher;
-    }
-
-    public String getVoucherGeneratedName() {
-        return voucherNameSP;
-    }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public String getDiscount2() {
-        return discount2;
-    }
-
-    public void setDiscount2(String discount2) {
-        this.discount2 = discount2;
-    }
-
-    public String getDiscountUpdate() {
-        return discountUpdate;
-    }
-
-    public String getClaimantDiscountDD() {
-        return claimantDiscountDD;
-    }
-
-    public String getExisting_supplier() {
-        return existing_supplier;
-    }
-
-    public String getVoucherURL() {
-        return voucherURL;
-    }
-
-    public String getLogoPath() {
-        return logoPath;
-    }
-
-    public String getMinFV() {
-        return minFV;
-    }
-
-    public String getStepFV() {
-        return stepFV;
-    }
-
-    public String getCulture() {
-        return culture;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getInvoice_rebate() {
-        return invoice_rebate;
-    }
-
-    public String getCustomer_rebate() {
-        return customer_rebate;
-    }
-
-    public String getDiscount_mode() {
-        return discount_mode;
-    }
-
-    public String getConditions() {
-        return conditions;
-    }
-
-    public String getLimitations() {
-        return limitations;
-    }
-
-    public String getWorkflow_voucher() {
-        return workflow_voucher;
-    }
-
-    public String getLarge_customer_rebate() {
-        return large_customer_rebate;
-    }
-
-    public String getCustom_min_amount() {
-        return custom_min_amount;
-    }
-
-    public String getCustom_step_amount() {
-        return custom_step_amount;
-    }
-
-    public String getDiscountModeGain() {
-        return discountModeGain;
-    }
-
-    public String getVoucherListDebateDescription() {
-        return voucherListDebateDescription;
-    }
-
-    public String getVoucherListGainDescription() {
-        return voucherListGainDescription;
-    }
-
-    public String getCustomCustomerRebate() {
-        return customCustomerRebate;
-    }
-
-    public String getCustomValueOfVoucher() {
-        return customValueOfVoucher;
-    }
-
-    public String getCustomInvoicePrice() {
-        return customInvoicePrice;
-    }
-
-    public String getCustomGainPercentage() {
-        return customGainPercentage;
-    }
-
-    public String getCustomInvoicePriceGain() {
-        return customInvoicePriceGain;
-    }
-
-    public String getCustomValueOfVoucherGain() {
-        return customValueOfVoucherGain;
-    }
-
-    public String getCustomLogo() {
-        return customLogo;
-    }
-
-    public String getSimpleAgreementDiscount() {
-        return simpleAgreementDiscount;
-    }
-
-    public String getSimpleCustomerDiscount() {
-        return simpleCustomerDiscount;
-    }
-
-    public String getAgreementEnabled() {
-        return agreementEnabled;
-    }
-
-    public String getAgreementDisabled() {
-        return agreementDisabled;
-    }
-
-    public String getOtherOrderEmail() {
-        return otherOrderEmail;
-    }
-
-    public String getDeliveryCost() {
-        return deliveryCost;
-    }
-
-    public String getLegalGermanConditions() {
-        return legalGermanConditions;
-    }
-
-    public String getLegalGermanLimitations() {
-        return legalGermanLimitations;
-    }
-
-    public String getLegalFrenchConditions() {
-        return legalFrenchConditions;
-    }
-
-    public String getLegalFrenchLimitations() {
-        return legalFrenchLimitations;
-    }
-
-    public String getLegalItalianConditions() {
-        return legalItalianConditions;
-    }
-
-    public String getLegalItalianLimitations() {
-        return legalItalianLimitations;
-    }
-
-    public String getLegalEnglishConditions() {
-        return legalEnglishConditions;
-    }
-
-    public String getLegalEnglishLimitations() {
-        return legalEnglishLimitations;
-    }
-
-    public String getBrandsText() {
-        return brands;
-    }
-
-    public String getTagsText() {
-        return tags;
-    }
-
-    public String getVoucherTerm() {
-        return voucherTerm;
-    }
-
-    public String getExistingBrand() {
-        return existingBrand;
-    }
-
-    public String getExistingTags() {
-        return existingTags;
-    }
-
-    public String getBrandLink() {
-        return brandLink;
-    }
-
-    public String getExistingVoucher_10() {
-        return existingVoucher;
-    }
-
-    public String getExistingVoucherForDistances() {
-        return existingVoucherForDistances;
-    }
-
     @Override
     public String toString() {
         return "Voucher{" +
@@ -344,6 +126,7 @@ public class Voucher {
                 ", discount='" + discount + '\'' +
                 '}';
     }
+
 }
 
 

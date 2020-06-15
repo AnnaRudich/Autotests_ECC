@@ -32,7 +32,7 @@ public class ReplacementDialogTests extends BaseTest {
                     sid
                             .withNewPrice(Constants.PRICE_2400)
                             .withCategory(item.getCategoryBabyItems())
-                            .withVoucher(item.getExistingVoucher_10());
+                            .withVoucher(item.getExistingVoucher1());
                 });
 
         new SettlementDialog()

@@ -70,7 +70,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
-                            .withVoucher(claimItem.getExistingVoucher_10());
+                            .withVoucher(claimItem.getExistingVoucher1());
                 });
 
         if (setDiscountAndDepreciation) {

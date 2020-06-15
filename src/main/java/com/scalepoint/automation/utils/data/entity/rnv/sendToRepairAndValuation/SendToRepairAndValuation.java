@@ -8,8 +8,10 @@ import java.util.List;
 @Builder
 @Data
 public class SendToRepairAndValuation{
-    List<String> selectedGroups;
-    List<String> selectedLines;
-    List<SelectedLinesAndCategories> selectedLinesAndCategories;
+
+    private List<String> selectedGroups;
+    private List<String> selectedLines;
+    private List<SelectedLinesAndCategories> selectedLinesAndCategories;
+
 }
 

@@ -107,11 +107,11 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(assignedCategory)
                 .setDepreciation(Constants.DEPRECIATION_5)
-                .fillVoucher(voucher.getVoucherGeneratedName())
+                .fillVoucher(voucher.getVoucherNameSP())
                 .openVoucherValuationCard()
                 .doAssert(editVoucherValuation -> {
-                    editVoucherValuation.assertBrandsTextIs(voucher.getBrandsText());
-                    editVoucherValuation.assertTagsTextIs(voucher.getTagsText());
+                    editVoucherValuation.assertBrandsTextIs(voucher.getBrands());
+                    editVoucherValuation.assertTagsTextIs(voucher.getTags());
                 });
     }
 

@@ -13,10 +13,10 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SubOrder {
+
     @XmlAttribute
     @Builder.Default
     String subOrderID = String.valueOf(RandomUtils.randomInt());
-
     @XmlElement(name ="OrderLines")
     OrderLines orderLines;
     @XmlElement(name = "SubTotalPurchasePrice")
@@ -25,4 +25,5 @@ public class SubOrder {
     SubTotalInvoicePrice subTotalInvoicePrice;
     @XmlElement(name = "Supplier")
     Supplier supplier;
+
 }

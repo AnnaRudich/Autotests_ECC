@@ -1,40 +1,24 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
 
+
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceLineExport extends ServiceLine {
 
+    @XmlElement
     private ItemExport item;
+    @XmlElement
     private ValuationsExport valuations;
-    private List<AttachmentExport> attachments;
-
-    @XmlElement
-    public ItemExport getItem() {
-        return item;
-    }
-
-    public void setItem(ItemExport item) {
-        this.item = item;
-    }
-
-    @XmlElement
-    public ValuationsExport getValuations() {
-        return valuations;
-    }
-
-    public void setValuations(ValuationsExport valuations) {
-        this.valuations = valuations;
-    }
-
     @XmlElementWrapper(name = "attachments")
     @XmlElement(name = "attachment")
-    public List<AttachmentExport> getAttachments() {
-        return attachments;
-    }
+    private List<AttachmentExport> attachments;
 
-    public void setAttachments(List<AttachmentExport> attachments) {
-        this.attachments = attachments;
-    }
 }

@@ -42,7 +42,7 @@ public class SettlementSummaryTests extends BaseTest {
                             .withCategory(item.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withVoucher(voucher.getExistingVoucher_10());
+                            .withVoucher(voucher.getExistingVoucher());
                 })
                 .closeSidWithOk()
                 .getSettlementSummary()
@@ -80,7 +80,7 @@ public class SettlementSummaryTests extends BaseTest {
                             .withCategory(item.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withVoucher(voucher.getExistingVoucher_10());
+                            .withVoucher(voucher.getExistingVoucher());
                 })
                 .closeSidWithOk()
                 .toTextSearchPage()

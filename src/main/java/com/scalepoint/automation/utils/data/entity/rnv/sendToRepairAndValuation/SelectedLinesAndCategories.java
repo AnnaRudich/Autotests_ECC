@@ -7,9 +7,10 @@ import lombok.Data;
 @Data
 public class SelectedLinesAndCategories{
 
-    String itemId;
-    int claimLineId;
-    int pseudocatId;
-    String description;
-    boolean isIsRvRepairTaskSentOrApproved;
+    private String itemId;
+    private int claimLineId;
+    private int pseudocatId;
+    private String description;
+    private boolean isIsRvRepairTaskSentOrApproved;
+
 }

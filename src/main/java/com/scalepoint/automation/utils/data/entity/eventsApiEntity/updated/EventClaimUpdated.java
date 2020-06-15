@@ -2,6 +2,7 @@ package com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated;
 
 import com.fasterxml.jackson.annotation.*;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
+import lombok.Data;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "eventType",
@@ -46,7 +48,7 @@ public class EventClaimUpdated extends EventClaim {
      * (Required)
      */
     @JsonProperty("case")
-    private Case _case;
+    private Case aCase;
     @JsonProperty("changedBy")
     private ChangedBy changedBy;
     /**
@@ -56,104 +58,6 @@ public class EventClaimUpdated extends EventClaim {
     private List<Changes> changes = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("eventType")
-    public String getEventType() {
-        return eventType;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("eventType")
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("payloadVersion")
-    public String getPayloadVersion() {
-        return payloadVersion;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("payloadVersion")
-    public void setPayloadVersion(String payloadVersion) {
-        this.payloadVersion = payloadVersion;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("correlationId")
-    public String getCorrelationId() {
-        return correlationId;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("correlationId")
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("timestamp")
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("timestamp")
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("case")
-    public Case getCase() {
-        return _case;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("case")
-    public void setCase(Case _case) {
-        this._case = _case;
-    }
-
-    @JsonProperty("changedBy")
-    public ChangedBy getChangedBy() {
-        return changedBy;
-    }
-
-    @JsonProperty("changedBy")
-    public void setChangedBy(ChangedBy changedBy) {
-        this.changedBy = changedBy;
-    }
-
-    /**
-     * (Required)
-     */
-    @JsonProperty("changes")
-    public List<Changes> getChanges() {
-        return changes;
-    }
 
     /**
      * (Required)
@@ -180,7 +84,7 @@ public class EventClaimUpdated extends EventClaim {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(eventType).append(payloadVersion).append(correlationId).append(timestamp).append(_case).append(changedBy).append(changes).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(eventType).append(payloadVersion).append(correlationId).append(timestamp).append(aCase).append(changedBy).append(changes).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -192,7 +96,7 @@ public class EventClaimUpdated extends EventClaim {
             return false;
         }
         EventClaimUpdated rhs = ((EventClaimUpdated) other);
-        return new EqualsBuilder().append(eventType, rhs.eventType).append(payloadVersion, rhs.payloadVersion).append(correlationId, rhs.correlationId).append(timestamp, rhs.timestamp).append(_case, rhs._case).append(changedBy, rhs.changedBy).append(changes, rhs.changes).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(eventType, rhs.eventType).append(payloadVersion, rhs.payloadVersion).append(correlationId, rhs.correlationId).append(timestamp, rhs.timestamp).append(aCase, rhs.aCase).append(changedBy, rhs.changedBy).append(changes, rhs.changes).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }

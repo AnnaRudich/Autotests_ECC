@@ -1,89 +1,33 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "claimant")
 public class Claimant {
+
+    @XmlAttribute
     private String name;
+    @XmlAttribute
     private String mobilePhone;
+    @XmlAttribute
     private String phone;
+    @XmlAttribute
     private String address1;
+    @XmlAttribute
     private String address2;
+    @XmlAttribute
     private String postalCode;
+    @XmlAttribute
     private String city;
+    @XmlAttribute
     private String email;
 
-
-    @XmlAttribute
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @XmlAttribute
-    public String getMobilePhone() {
-        return mobilePhone;
-    }
-
-    public void setMobilePhone(String mobile) {
-        this.mobilePhone = mobile;
-    }
-
-    @XmlAttribute
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    @XmlAttribute
-    public String getAddress1() {
-        return address1;
-    }
-
-    public void setAddress1(String address1) {
-        this.address1 = address1;
-    }
-
-    @XmlAttribute
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress2(String address2) {
-        this.address2 = address2;
-    }
-
-    @XmlAttribute
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    @XmlAttribute
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    @XmlAttribute
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

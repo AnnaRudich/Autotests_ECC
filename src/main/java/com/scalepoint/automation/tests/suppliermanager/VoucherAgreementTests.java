@@ -40,7 +40,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
@@ -52,13 +52,13 @@ public class VoucherAgreementTests extends BaseTest {
                 .saveVoucherAgreement()
                 .saveSupplier()
                 .toVouchersPage()
-                .doAssert(page -> page.assertVoucherPresent(voucher.getVoucherGeneratedName()))
+                .doAssert(page -> page.assertVoucherPresent(voucher.getVoucherNameSP()))
                 .signOut();
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(),
                         sid -> sid.withNewPrice(PRICE_2400)
-                                .withVoucher(voucher.getVoucherGeneratedName()))
+                                .withVoucher(voucher.getVoucherNameSP()))
                 .openEditDiscountDistributionForVoucher()
                 .doAssert(asserts -> {
                     asserts.assertBrandsTextIs(brand);
@@ -86,14 +86,14 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
                 .saveVoucherAgreement()
                 .saveSupplier()
                 .toVouchersPage()
-                .doAssert(page -> page.assertVoucherPresent(voucher.getVoucherGeneratedName()));
+                .doAssert(page -> page.assertVoucherPresent(voucher.getVoucherNameSP()));
 
     }
 
@@ -119,12 +119,12 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
                 .saveVoucherAgreement()
-                .editVoucherAgreement(voucher.getVoucherGeneratedName())
+                .editVoucherAgreement(voucher.getVoucherNameSP())
                 .fill(tab -> {
                     new VoucherAgreementGeneralTab.FormFiller(tab)
                             .withActive(false)
@@ -135,7 +135,7 @@ public class VoucherAgreementTests extends BaseTest {
                             .withLogo(attachmentFiles.getJpgFile2Loc());
                 })
                 .saveVoucherAgreement()
-                .editVoucherAgreement(voucher.getVoucherGeneratedName())
+                .editVoucherAgreement(voucher.getVoucherNameSP())
                 .doAssert(dialog -> {
                     dialog.assertDiscount(discount);
                     dialog.assertFaceValue(faceValue);
@@ -171,7 +171,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
@@ -185,7 +185,7 @@ public class VoucherAgreementTests extends BaseTest {
                             .useAsEVoucher(EMAIL_REQUIRED, PERSONAL_CODE_REQUIRED, PHONE_REQUIRED, USE_PORTAL_REQUIRED);
                 })
                 .saveVoucherAgreement()
-                .editVoucherAgreement(voucher.getVoucherGeneratedName())
+                .editVoucherAgreement(voucher.getVoucherNameSP())
                 .selectAdvancedTab()
                 .doAssert(tab -> {
                     tab.assertOrderType(VoucherAgreementAdvancedTab.OrderMailType.OTHER);
@@ -215,7 +215,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
@@ -223,7 +223,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .setConditions(conditions)
                 .setLimitations(limitations)
                 .saveVoucherAgreement()
-                .editVoucherAgreement(voucher.getVoucherGeneratedName())
+                .editVoucherAgreement(voucher.getVoucherNameSP())
                 .selectLegalTab()
                 .doAssert(tab -> {
                     tab.assertConditions(conditions);
@@ -254,7 +254,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(discount);
                 })
                 .createVoucherAgreement()
@@ -262,7 +262,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .doAssert(tab -> tab.assertDiscountToIc(discount))
                 .setDiscountToIc(discountToIc)
                 .saveVoucherAgreement()
-                .editVoucherAgreement(voucher.getVoucherGeneratedName())
+                .editVoucherAgreement(voucher.getVoucherNameSP())
                 .selectDiscountDistributionTab()
                 .doAssert(tab -> {
                     tab.assertDiscountToClaimant(discountToCustomer);
@@ -288,14 +288,14 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
                 .selectCategoriesTab()
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .saveVoucherAgreement()
-                .editVoucherAgreement(voucher.getVoucherGeneratedName())
+                .editVoucherAgreement(voucher.getVoucherNameSP())
                 .selectCategoriesTab()
                 .doAssert(tab -> tab.assertCategoryMapped(claimItem.getCategoryBabyItems()))
                 .removeMapping(claimItem.getCategoryBabyItems())
@@ -318,7 +318,7 @@ public class VoucherAgreementTests extends BaseTest {
                                               Voucher voucher) {
 
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser, supplier)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(scalepointUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.NOT_VISIBLE)
@@ -339,7 +339,7 @@ public class VoucherAgreementTests extends BaseTest {
                                                                     Supplier supplier,
                                                                     Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(childUser, supplier)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(parentUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
@@ -360,7 +360,7 @@ public class VoucherAgreementTests extends BaseTest {
                                                                     Supplier supplier,
                                                                     Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(parentUser, supplier)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(childUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
@@ -379,13 +379,13 @@ public class VoucherAgreementTests extends BaseTest {
             description = "ECC-3038 It's possible to join left Shared Voucher for IC SM. Voucher gets status active")
     public void ecc3038_joinLeftSPVoucherActiveStatus(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(futureUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
 
-        String vname = voucher.getVoucherGeneratedName();
+        String vname = voucher.getVoucherNameSP();
 
         SupplierDialog.AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
         Objects.requireNonNull(agreementsTab)
@@ -408,7 +408,7 @@ public class VoucherAgreementTests extends BaseTest {
             description = "ECC-3038 SP voucher active status is Noe for IC SM if no categories are assigned to Voucher")
     public void ecc3038_inactiveSPVoucherNoCatAssigned(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .thenLoginAnotherUser(futureUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.NOT_ACTIVE)
                 .build();
@@ -425,13 +425,13 @@ public class VoucherAgreementTests extends BaseTest {
             description = "ECC-3038 Voucher left by IC1 is active for IC2")
     public void ecc3038_voucherLeftByIC1ActiveIC2(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser1, User futureUser2, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(futureUser1)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.ACTIVE)
                 .build();
 
-        String vname = voucher.getVoucherGeneratedName();
+        String vname = voucher.getVoucherNameSP();
         SupplierDialog.AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
         Objects.requireNonNull(agreementsTab)
                 .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
@@ -456,7 +456,7 @@ public class VoucherAgreementTests extends BaseTest {
             description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialog")
     public void ecc3038_ic1VoucherNotAvailableIC2(User futureUser1, User futureUser2, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser1, AUTOTEST_SUPPLIER_VA_TESTS)
-                .withVoucherActive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherActive(voucher.getVoucherNameSP(), 10)
                 .thenLoginAnotherUser(futureUser2)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.NOT_VISIBLE)
                 .build();
@@ -473,7 +473,7 @@ public class VoucherAgreementTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
     public void ecc3038_inactiveSPVoucherNotAvailableIC(@UserCompany(CompanyCode.SCALEPOINT) User scalepointUser, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(scalepointUser, supplier)
-                .withVoucherInactive(voucher.getVoucherGeneratedName(), 10)
+                .withVoucherInactive(voucher.getVoucherNameSP(), 10)
                 .mapToCategory(claimItem.getCategoryBabyItems())
                 .thenLoginAnotherUser(futureUser)
                 .expectVoucherStateForAnotherUser(VoucherAgreementState.NOT_VISIBLE)
@@ -496,7 +496,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .openCreateVoucherAgreementDialog()
                 .fill(createVoucherAgreementDialog -> {
                     new CreateVoucherAgreementDialog.FormFiller(createVoucherAgreementDialog)
-                            .withVoucherName(voucher.getVoucherGeneratedName())
+                            .withVoucherName(voucher.getVoucherNameSP())
                             .withAgreementDiscount(10);
                 })
                 .createVoucherAgreement()
@@ -505,7 +505,7 @@ public class VoucherAgreementTests extends BaseTest {
                 .selectAdvancedTab()
                 .createShopOnlyVoucher()
                 .saveVoucherAgreement()
-                .doAssert(tab -> tab.assertShopOnlyVoucherIsPresent(voucher.getVoucherGeneratedName()));
+                .doAssert(tab -> tab.assertShopOnlyVoucherIsPresent(voucher.getVoucherNameSP()));
 
         new SupplierDialog().saveSupplier().logout();
 
@@ -514,8 +514,8 @@ public class VoucherAgreementTests extends BaseTest {
                         .withCategory(claimItem.getCategoryBabyItems())
                         .withNewPrice(PRICE_2400))
                 .doAssert(a -> {
-                    a.assertVoucherListed(voucher.getVoucherGeneratedName());
-                    a.assertVoucherNotListed(voucher.getVoucherGeneratedName() + "_SHOP");
+                    a.assertVoucherListed(voucher.getVoucherNameSP());
+                    a.assertVoucherNotListed(voucher.getVoucherNameSP() + "_SHOP");
                 });
     }
 

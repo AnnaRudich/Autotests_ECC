@@ -110,7 +110,7 @@ public class ExcelDocUtil {
     public void updateFirstCLInExcel(ServiceAgreement serviceAgreement) {
         setCellValue(mainTemplateSheet, description, serviceAgreement.getUpdDesc());
         setCellValue(mainTemplateSheet, categoryGroup, serviceAgreement.getUpdCat());
-        setCellValue(mainTemplateSheet, subCategory, serviceAgreement.getUpdSubCategory());
+        setCellValue(mainTemplateSheet, subCategory, serviceAgreement.getUpdSubcat());
         setCellValue(mainTemplateSheet, quantity, serviceAgreement.getUpdQuantity());
         setCellValue(mainTemplateSheet, ageMonth, serviceAgreement.getUpdMonth());
         setCellValue(mainTemplateSheet, ageYears, serviceAgreement.getUpdYear());

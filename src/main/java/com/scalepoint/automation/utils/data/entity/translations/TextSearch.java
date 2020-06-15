@@ -7,10 +7,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class TextSearch {
+
     @XmlElement
     private String modelGalaxyS7;
     @XmlElement
@@ -27,4 +28,5 @@ public class TextSearch {
     private String brokenQueryWithSpecialSymbols1;
     @XmlElement
     private String brandSamsung;
+
 }

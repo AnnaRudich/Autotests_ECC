@@ -1,7 +1,9 @@
 package com.scalepoint.automation.utils.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class ClaimStatus {
 
     @JsonProperty("status")
@@ -9,11 +11,4 @@ public class ClaimStatus {
     @JsonProperty("name")
     private String name;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

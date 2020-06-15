@@ -1,15 +1,14 @@
 package com.scalepoint.automation.utils.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class ClaimStatuses {
 
     @JsonProperty("claimStatuses")
     private List<ClaimStatus> claimStatuses;
 
-    public List<ClaimStatus> getClaimStatuses() {
-        return claimStatuses;
-    }
 }

@@ -13,10 +13,10 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Order {
+
     @XmlAttribute
     @Builder.Default
     String orderID = String.valueOf(RandomUtils.randomInt());
-
     @XmlElement(name = "OrderTotalPurchasePrice")
     OrderTotalPurchasePrice orderTotalPurchasePrice;
     @XmlElement(name = "OrderTotalInvoicePrice")

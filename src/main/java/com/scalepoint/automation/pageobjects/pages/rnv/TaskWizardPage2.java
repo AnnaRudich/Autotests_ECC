@@ -34,13 +34,13 @@ public class TaskWizardPage2 extends Page {
     }
 
     public SettlementPage sendRnvIsSuccess(ServiceAgreement serviceAgreement) {
-        String sent = serviceAgreement.getSentText();
+        String sent = serviceAgreement.getSent();
         sendTaskAndWaitForStatus(sent);
         return at(SettlementPage.class);
     }
 
     public SettlementPage sendRnvIsFailOnServicePartnerSide(ServiceAgreement serviceAgreement) {
-        String error = serviceAgreement.getErrorText();
+        String error = serviceAgreement.getError();
         sendTaskAndWaitForStatus(error);
         return at(SettlementPage.class);
     }

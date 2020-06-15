@@ -7,5 +7,6 @@ import java.util.List;
 @Data
 public class Content {
 
-    List<Item> items;
+    private List<Item> items;
+
 }

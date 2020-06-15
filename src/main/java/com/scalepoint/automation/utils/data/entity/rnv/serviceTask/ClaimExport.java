@@ -1,16 +1,16 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ClaimExport extends Claim {
-    private String policyType;
 
     @XmlAttribute
-    public String getPolicyType() {
-        return policyType;
-    }
+    private String policyType;
 
-    public void setPolicyType(String policyType) {
-        this.policyType = policyType;
-    }
 }

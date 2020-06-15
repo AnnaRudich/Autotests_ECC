@@ -15,25 +15,18 @@ public class Translations {
 
     @XmlElement(name = "acquiredType")
     private Acquired acquired;
-
     @XmlElement(name = "depreciationType")
     private DepreciationType depreciationType;
-
     @XmlElement(name = "discretionaryReason")
     private DiscretionaryReason discretionaryReason;
-
     @XmlElement(name = "rrLinesFields")
     private RRLinesFields rrLinesFields;
-
     @XmlElement(name = "orderDetails")
     private OrderDetails orderDetails;
-
     @XmlElement(name = "textSearch")
     private TextSearch textSearch;
-
     @XmlElement(name = "rnvtasktype")
     private RnvTaskType rnvTaskType;
-
     @XmlElement(name = "roles")
     private Roles roles;
 

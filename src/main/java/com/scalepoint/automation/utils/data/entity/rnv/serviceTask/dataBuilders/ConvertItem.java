@@ -4,6 +4,7 @@ import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ItemExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ItemImport;
 
 public class ConvertItem {
+
     public static ItemImport convertItem(ItemExport itemExport) {
         ItemImport itemImport = new ItemImport();
         itemImport.setAge(itemExport.getAge());

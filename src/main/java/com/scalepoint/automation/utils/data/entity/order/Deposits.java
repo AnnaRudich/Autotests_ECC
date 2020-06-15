@@ -19,5 +19,6 @@ public class Deposits {
     @XmlAttribute
     Double depositsTotal;
     @XmlElement(name = "Deposit")
-    List<Deposit> deposit = new ArrayList<>();
+    List<Deposit> deposit;
+
 }

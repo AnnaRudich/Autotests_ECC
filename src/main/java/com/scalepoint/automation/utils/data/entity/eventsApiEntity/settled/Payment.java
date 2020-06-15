@@ -2,11 +2,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "uuid",
@@ -42,70 +44,6 @@ public class Payment {
     private PaymentMeans paymentMeans;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    /**
-     * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
-     * (Required)
-     */
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    /**
-     * ISO 4217 alpha3. (https://www.iso.org/iso-4217-currency-codes.html)
-     * (Required)
-     */
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public PartyRef getPayerParty() {
-        return payerParty;
-    }
-
-    public void setPayerParty(PartyRef payerParty) {
-        this.payerParty = payerParty;
-    }
-
-    public PartyRef getPayeeParty() {
-        return payeeParty;
-    }
-
-    public void setPayeeParty(PartyRef payeeParty) {
-        this.payeeParty = payeeParty;
-    }
-
-    public PaymentMeans getPaymentMeans() {
-        return paymentMeans;
-    }
-
-    public void setPaymentMeans(PaymentMeans paymentMeans) {
-        this.paymentMeans = paymentMeans;
-    }
 
     @Override
     public String toString() {

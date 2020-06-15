@@ -128,7 +128,7 @@ public class SidManualItemsTests extends BaseTest {
                 .openSidAndFill(pseudoCategory, sid -> {
                     sid.withText(claimItem.getTextFieldSP())
                             .withCustomerDemandPrice(Constants.PRICE_500)
-                            .withVoucher(voucher.getVoucherGeneratedName())
+                            .withVoucher(voucher.getVoucherNameSP())
                             .withDepreciation(Constants.DEPRECIATION_10)
                             .withValuation(CUSTOMER_DEMAND);
                 });

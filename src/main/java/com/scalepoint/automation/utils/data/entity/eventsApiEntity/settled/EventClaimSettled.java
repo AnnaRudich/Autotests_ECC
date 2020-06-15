@@ -3,12 +3,14 @@ package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.EventClaim;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "eventType",
@@ -37,7 +39,7 @@ public class EventClaimSettled extends EventClaim {
     private String timestamp;
 
     @JsonProperty(value = "case", required = true)
-    private Case _case;
+    private Case aCase;
 
     @JsonProperty(value = "settlement", required = true)
     private Settlement settlement;
@@ -56,86 +58,6 @@ public class EventClaimSettled extends EventClaim {
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getPayloadVersion() {
-        return payloadVersion;
-    }
-
-    public void setPayloadVersion(String payloadVersion) {
-        this.payloadVersion = payloadVersion;
-    }
-
-    public String getCorrelationId() {
-        return correlationId;
-    }
-
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Case getCase() {
-        return _case;
-    }
-
-    public void setCase(Case _case) {
-        this._case = _case;
-    }
-
-    public Settlement getSettlement() {
-        return settlement;
-    }
-
-    public void setSettlement(Settlement settlement) {
-        this.settlement = settlement;
-    }
-
-    public List<Party> getParties() {
-        return parties;
-    }
-
-    public void setParties(List<Party> parties) {
-        this.parties = parties;
-    }
-
-    public List<Expense> getExpenses() {
-        return expenses;
-    }
-
-    public void setExpenses(List<Expense> expenses) {
-        this.expenses = expenses;
-    }
-
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
-
-    public List<Obligation> getObligations() {
-        return obligations;
-    }
-
-    public void setObligations(List<Obligation> obligations) {
-        this.obligations = obligations;
-    }
 
     @Override
     public String toString() {

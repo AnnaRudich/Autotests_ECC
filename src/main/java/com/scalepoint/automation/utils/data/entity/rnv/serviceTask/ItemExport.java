@@ -1,97 +1,33 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.math.BigDecimal;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ItemExport extends Item {
+
+    @XmlAttribute
     private String manufacturer;
+    @XmlAttribute
     private String model;
+    @XmlAttribute
     private String serialNumber;
+    @XmlAttribute
     private String damageDescription;
+    @XmlAttribute
     private BigDecimal repairLimit;
+    @XmlAttribute
     private Integer depreciation;
+    @XmlAttribute
     private String customerNotesToClaimLine;
+    @XmlAttribute(name = "EAN")
     private String EAN;
+    @XmlAttribute
     private String damageType;
 
-    @XmlAttribute
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    @XmlAttribute
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    @XmlAttribute
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    @XmlAttribute
-    public String getDamageDescription() {
-        return damageDescription;
-    }
-
-    public void setDamageDescription(String damageDescription) {
-        this.damageDescription = damageDescription;
-    }
-
-    @XmlAttribute
-    public BigDecimal getRepairLimit() {
-        return repairLimit;
-    }
-
-    public void setRepairLimit(BigDecimal repairLimit) {
-        this.repairLimit = repairLimit;
-    }
-
-    @XmlAttribute
-    public Integer getDepreciation() {
-        return depreciation;
-    }
-
-    public void setDepreciation(Integer depreciation) {
-        this.depreciation = depreciation;
-    }
-
-    @XmlAttribute
-    public String getCustomerNotesToClaimLine() {
-        return customerNotesToClaimLine;
-    }
-
-    public void setCustomerNotesToClaimLine(String customerNotesToClaimLine) {
-        this.customerNotesToClaimLine = customerNotesToClaimLine;
-    }
-
-    @XmlAttribute(name = "EAN")
-    public String getEAN() {
-        return EAN;
-    }
-
-    public void setEAN(String EAN) {
-        this.EAN = EAN;
-    }
-
-    @XmlAttribute
-    public String getDamageType() {
-        return damageType;
-    }
-
-    public void setDamageType(String damageType) {
-        this.damageType = damageType;
-    }
 }

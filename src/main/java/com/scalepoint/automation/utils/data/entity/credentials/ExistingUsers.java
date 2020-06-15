@@ -1,6 +1,8 @@
 
 package com.scalepoint.automation.utils.data.entity.credentials;
 
+import lombok.Data;
+
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,12 @@ import java.util.List;
  * &lt;/complexType>
  * </pre>
  */
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "existingUsers")
 @XmlType(name = "existingUsers", propOrder = {
         "users"
 })
-@XmlRootElement(name = "existingUsers")
 public class ExistingUsers {
 
     @XmlElement(name = "user")

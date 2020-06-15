@@ -71,7 +71,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, purchasePrice, sid)
-                            .withVoucher(claimItem.getExistingVoucher_10())
+                            .withVoucher(claimItem.getExistingVoucher1())
                             .withDepreciation(depreciationPercentage);
                 })
                 .valuationGrid()
@@ -111,7 +111,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     prepareBaseFiller(claimItem, purchasePrice, sid)
-                            .withVoucher(claimItem.getExistingVoucher_10())
+                            .withVoucher(claimItem.getExistingVoucher1())
                             .withDepreciation(depreciationPercentage);
                 })
                 .distributeDiscountForVoucherValuation(EditVoucherValuationDialog.DistributeTo.CUSTOMER, 6)
