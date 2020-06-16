@@ -6,9 +6,9 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgree
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.Supplier;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.Supplier;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import org.apache.commons.lang.StringUtils;
 
 public class SharedEccAdminFlows implements Actions {

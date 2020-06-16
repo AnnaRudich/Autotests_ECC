@@ -12,7 +12,7 @@ import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;

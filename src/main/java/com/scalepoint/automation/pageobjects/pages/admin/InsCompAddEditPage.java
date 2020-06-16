@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
-import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
+import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;

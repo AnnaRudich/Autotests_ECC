@@ -78,13 +78,13 @@ public class ImportExcelService extends BaseService {
 
     public ImportExcelService match() throws IOException, ParseException {
 
-        InputStream importLinesFile = TestData.getInputStreamFromResources(Configuration.getLocale().getValue(), "ImportLines.json");
+        InputStream importLinesFile = TestData.getInputStreamFromResources(Configuration.getLocale().getValue(), "importExcel/ImportLines.json");
         JSONArray importLinesArray = (JSONArray) new JSONParser().parse(new InputStreamReader(importLinesFile));
         for(int i=0;i<importLinesArray.size();i++){
             ((JSONObject)importLinesArray.get(i)).replace("id", new Long(referenceNumbers.get(i)));
         }
 
-        InputStream importSummaryFile = TestData.getInputStreamFromResources(Configuration.getLocale().getValue(), "ImportSummary.json");
+        InputStream importSummaryFile = TestData.getInputStreamFromResources(Configuration.getLocale().getValue(), "importExcel/ImportSummary.json");
         JSONObject importSummaryObject = (JSONObject) new JSONParser().parse(new InputStreamReader(importSummaryFile));
         importSummaryObject.replace("id", new Long(importSummary));
 

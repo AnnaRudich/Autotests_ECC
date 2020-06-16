@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.SystemUser;
+import com.scalepoint.automation.utils.data.entity.input.SystemUser;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;

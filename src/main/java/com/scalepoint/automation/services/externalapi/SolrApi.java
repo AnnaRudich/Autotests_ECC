@@ -5,7 +5,7 @@ import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SolrClaim;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;

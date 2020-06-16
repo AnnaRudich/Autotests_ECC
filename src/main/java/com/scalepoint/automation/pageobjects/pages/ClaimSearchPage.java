@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

@@ -7,7 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.data.entity.SystemUser;
+import com.scalepoint.automation.utils.data.entity.input.SystemUser;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 

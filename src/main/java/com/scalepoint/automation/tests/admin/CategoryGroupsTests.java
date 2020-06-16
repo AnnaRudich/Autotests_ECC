@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.data.entity.Category;
+import com.scalepoint.automation.utils.data.entity.input.Category;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 

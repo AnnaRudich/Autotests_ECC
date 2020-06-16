@@ -1,6 +1,5 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
@@ -48,16 +47,6 @@ public class Change {
         @JsonValue
         public String value() {
             return this.value;
-        }
-
-        @JsonCreator
-        public static Change.Property fromValue(String value) {
-            Change.Property constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
         }
     }
 }

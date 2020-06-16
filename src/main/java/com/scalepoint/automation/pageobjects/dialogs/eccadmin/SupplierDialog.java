@@ -10,7 +10,7 @@ import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.data.entity.Shop;
+import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

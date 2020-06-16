@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
 import com.scalepoint.automation.utils.RandomUtils;
 import lombok.Data;
@@ -7,8 +7,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 
 @Data
 @XmlRootElement
@@ -151,4 +149,5 @@ public class ClaimItem {
                 "ssDescriptionSP='" + ssDescriptionSP + '\'' +
                 '}';
     }
+
 }

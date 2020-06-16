@@ -1,6 +1,5 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
-import com.scalepoint.automation.utils.RandomUtils;
 import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,13 +7,20 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Created by bza on 6/22/2017.
+ */
+
 @Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Roles {
+public class Assignment {
 
-    private String roleName = RandomUtils.randomName("Role");
     @XmlElement
-    private String itManager;
+    private String company;
+    @XmlElement
+    private String pseudoCategory;
+    @XmlElement
+    private String policy;
 
 }

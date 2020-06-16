@@ -4,7 +4,7 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

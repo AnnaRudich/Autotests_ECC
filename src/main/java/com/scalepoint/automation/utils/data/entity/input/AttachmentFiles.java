@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
 import lombok.Data;
 
@@ -7,20 +7,18 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Created by bza on 6/22/2017.
- */
+import static com.scalepoint.automation.utils.SystemUtils.getResourcePath;
 
 @Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Assignment {
+public class AttachmentFiles {
 
     @XmlElement
-    private String company;
-    @XmlElement
-    private String pseudoCategory;
-    @XmlElement
-    private String policy;
+    private String jpgFile2;
+
+    public String getJpgFile2Loc() {
+        return getResourcePath(jpgFile2);
+    }
 
 }

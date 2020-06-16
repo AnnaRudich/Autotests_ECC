@@ -3,7 +3,7 @@ package com.scalepoint.automation.tests.suppliermanager;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.data.entity.Shop;
+import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog.ShopType.RETAIL;

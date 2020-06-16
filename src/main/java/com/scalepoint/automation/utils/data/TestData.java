@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.*;
+import com.scalepoint.automation.utils.data.entity.input.*;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.request.*;
 import com.scalepoint.automation.utils.listeners.DefaultFTOperations;
@@ -260,34 +260,34 @@ public class TestData {
     }
 
     public enum Data {
-        EXISTING_SUPPLIER("ExistingSuppliers.xml", ExistingSuppliers.class),
-        SUPPLIER("Supplier.xml", Supplier.class),
-        SHOP("Shop.xml", Shop.class),
-        VOUCHER("Voucher.xml", Voucher.class),
-        SYSTEMCREDENTIALS("ExistingUsers.xml", ExistingUsers.class),
-        NEWSYSTEMUSER("SystemUser.xml", SystemUser.class),
-        CATEGORIES("Category.xml", Category.class),
-        INSURANCECOMPANY("InsuranceCompany.xml", InsuranceCompany.class),
-        REDUCTIONRULE("ReductionRule.xml", ReductionRule.class),
-        CLAIM("Claim.xml", Claim.class),
-        CLAIMITEM("ClaimItem.xml", ClaimItem.class),
-        GENERICITEM("GenericItem.xml", GenericItem.class),
-        SERVAGREEMENT("ServiceAgreement.xml", ServiceAgreement.class),
-        CLGROUP("ClaimLineGroup.xml", ClaimLineGroup.class),
-        PAYMENTS("Payments.xml", Payments.class),
-        ATTFILES("AttachmentFiles.xml", AttachmentFiles.class),
-        CWA_CLAIM("Claim/ClaimRequest.json", ClaimRequest.class),
-        FRAUD_ALERT_CLAIM("Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
-        TOPDANMARK_FNOL_ITEMIZATION_CASE("Claim/fraudAlert/ClaimRequestTopadanmarkFNOL.json", ClaimRequest.class),
-        TOPDANMARK_FNOL_CREATE_CLAIM("Claim/fraudAlert/CreateClaimWithFNOLTopdanmark.json", ClaimRequest.class),
-        ASSIGNMENT("Assignment.xml", Assignment.class),
-        CLAIM_ITEM("Claim/ClaimItem.xml", InsertSettlementItem.class),
-        UPDATED_CLAIM_ITEM("Claim/UpdatedClaimItem.xml", UpdateSettlementItem.class),
-        ECC_INTEGRATION("Claim/EccIntegration.xml", EccIntegration.class),
+        EXISTING_SUPPLIER("input/ExistingSuppliers.xml", ExistingSuppliers.class),
+        SUPPLIER("input/Supplier.xml", Supplier.class),
+        SHOP("input/Shop.xml", Shop.class),
+        VOUCHER("input/Voucher.xml", Voucher.class),
+        SYSTEMCREDENTIALS("input/ExistingUsers.xml", ExistingUsers.class),
+        NEWSYSTEMUSER("input/SystemUser.xml", SystemUser.class),
+        CATEGORIES("input/Category.xml", Category.class),
+        INSURANCECOMPANY("input/InsuranceCompany.xml", InsuranceCompany.class),
+        REDUCTIONRULE("input/ReductionRule.xml", ReductionRule.class),
+        CLAIM("input/Claim.xml", Claim.class),
+        CLAIMITEM("input/ClaimItem.xml", ClaimItem.class),
+        GENERICITEM("input/GenericItem.xml", GenericItem.class),
+        SERVAGREEMENT("input/ServiceAgreement.xml", ServiceAgreement.class),
+        CLGROUP("input/ClaimLineGroup.xml", ClaimLineGroup.class),
+        PAYMENTS("input/Payments.xml", Payments.class),
+        ATTFILES("input/AttachmentFiles.xml", AttachmentFiles.class),
+        CWA_CLAIM("request/Claim/ClaimRequest.json", ClaimRequest.class),
+        FRAUD_ALERT_CLAIM("request/Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
+        TOPDANMARK_FNOL_ITEMIZATION_CASE("request/Claim/fraudAlert/ClaimRequestTopadanmarkFNOL.json", ClaimRequest.class),
+        TOPDANMARK_FNOL_CREATE_CLAIM("request/Claim/fraudAlert/CreateClaimWithFNOLTopdanmark.json", ClaimRequest.class),
+        ASSIGNMENT("input/Assignment.xml", Assignment.class),
+        CLAIM_ITEM("request/Claim/ClaimItem.xml", InsertSettlementItem.class),
+        UPDATED_CLAIM_ITEM("request/Claim/UpdatedClaimItem.xml", UpdateSettlementItem.class),
+        ECC_INTEGRATION("request/Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
-        TRANSLATIONS("Translations.xml", Translations.class),
-        SELF_SERVICE_REQUEST("SelfServiceRequest.json", SelfServiceRequest.class),
-        SELF_SERVICE_LOSS_ITEMS("SelfServiceLossItems.json", SelfServiceLossItems.class),
+        TRANSLATIONS("input/Translations.xml", Translations.class),
+        SELF_SERVICE_REQUEST("request/selfServiceSelfServiceRequest.json", SelfServiceRequest.class),
+        SELF_SERVICE_LOSS_ITEMS("request/selfService/SelfServiceLossItems.json", SelfServiceLossItems.class),
         FUTURE_DEFAULT_FT_SETTINGS("DefaultFTSettings/Future.xml", DefaultFTOperations.DefaultFTSettings.class),
         ALKA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Alka.xml", DefaultFTOperations.DefaultFTSettings.class),
         TOPDANMARK_DEFAULT_FT_SETTINGS("DefaultFTSettings/Topdanmark.xml", DefaultFTOperations.DefaultFTSettings.class),

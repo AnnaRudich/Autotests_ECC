@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
 
 import lombok.AllArgsConstructor;
@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VoucherPredictionObject implements Serializable {
+public class PredictedVoucher implements Serializable {
 
-    private PredictedVoucher predictedVoucher;
+    private String voucherName;
 
 }

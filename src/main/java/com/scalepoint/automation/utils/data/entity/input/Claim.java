@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
 import com.scalepoint.automation.utils.RandomUtils;
 import lombok.AccessLevel;

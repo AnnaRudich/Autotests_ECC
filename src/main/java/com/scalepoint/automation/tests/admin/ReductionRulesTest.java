@@ -4,9 +4,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePag
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.data.entity.Assignment;
-import com.scalepoint.automation.utils.data.entity.ReductionRule;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.input.Assignment;
+import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
+import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.translations.RRLinesFields;
 import org.testng.annotations.Test;
 
