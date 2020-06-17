@@ -445,15 +445,7 @@ public class SettlementDialog extends BaseDialog {
                 & $("#vouchers-combobox").is(not(visible))) {
             return this;
         } else {
-            $("#vouchers-combobox-trigger-picker")
-                    .hover()
-                    .click();
-            $$("#vouchers-combobox-picker-listEl div")
-                    .stream()
-                    .filter(element -> element.text().contains(voucherName))
-                    .findFirst()
-                    .get()
-                    .click();
+            availableVoucher.select(voucherName);
         }
         waitForJavascriptRecalculation();
         return this;
