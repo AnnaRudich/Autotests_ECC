@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.utils.data.entity.Assignment;
+import com.scalepoint.automation.utils.data.entity.input.Assignment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

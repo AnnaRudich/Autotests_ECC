@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.rnv;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -34,13 +34,13 @@ public class TaskWizardPage2 extends Page {
     }
 
     public SettlementPage sendRnvIsSuccess(ServiceAgreement serviceAgreement) {
-        String sent = serviceAgreement.getSentText();
+        String sent = serviceAgreement.getSent();
         sendTaskAndWaitForStatus(sent);
         return at(SettlementPage.class);
     }
 
     public SettlementPage sendRnvIsFailOnServicePartnerSide(ServiceAgreement serviceAgreement) {
-        String error = serviceAgreement.getErrorText();
+        String error = serviceAgreement.getError();
         sendTaskAndWaitForStatus(error);
         return at(SettlementPage.class);
     }

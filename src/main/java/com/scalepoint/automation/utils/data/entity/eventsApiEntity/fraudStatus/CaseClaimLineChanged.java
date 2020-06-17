@@ -4,10 +4,12 @@ import lombok.Data;
 
 @Data
 public class CaseClaimLineChanged {
-    String uuid;
-    String number;
-    String token;
-    String caseType;
-    String externalClaimId;
-    String company;
+
+    private String uuid;
+    private String number;
+    private String token;
+    private String caseType;
+    private String externalClaimId;
+    private String company;
+
 }

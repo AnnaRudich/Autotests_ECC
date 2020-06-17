@@ -16,10 +16,10 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -69,7 +69,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
@@ -128,7 +128,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
@@ -178,7 +178,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
@@ -222,7 +222,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
@@ -267,7 +267,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .enableDamage()
                 .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
                 .closeSidWithOk()
@@ -303,7 +303,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.UNAUTHORIZED_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.UNAUTHORIZED_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()

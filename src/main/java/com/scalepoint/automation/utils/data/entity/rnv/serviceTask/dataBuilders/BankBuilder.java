@@ -1,10 +1,11 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
 
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.Supplier;
+import com.scalepoint.automation.utils.data.entity.input.Supplier;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.BankImport;
 
 public class BankBuilder {
+
     private BankImport bankImport;
 
     public BankBuilder() {

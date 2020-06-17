@@ -6,11 +6,12 @@ import lombok.Data;
 @Data
 public class FraudStatus {
 
-    String eventId;
-    String eventType;
-    String payloadVersion;
-    String timestamp;
+    private String eventId;
+    private String eventType;
+    private String payloadVersion;
+    private String timestamp;
     @JsonProperty("case")
-    CaseFraudStatus caseFraudStatus;
-    String status;
+    private CaseFraudStatus caseFraudStatus;
+    private String status;
+
 }

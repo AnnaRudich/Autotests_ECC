@@ -8,8 +8,8 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.SystemUser;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.input.SystemUser;
+import com.scalepoint.automation.utils.data.entity.input.Translations;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;

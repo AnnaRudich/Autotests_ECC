@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class Valuation {
-    Double price;
-    Boolean active;
-    String type;
+
+    private Double price;
+    private Boolean active;
+    private String type;
+
 }

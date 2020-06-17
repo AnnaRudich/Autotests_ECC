@@ -11,12 +11,13 @@ import java.util.List;
 @Data
 public class EventAttachmentUpdated extends EventClaim {
 
-    String eventId;
-    List<Change> changes;
-    String eventType;
-    String payloadVersion;
-    String correlationId;
-    String timestamp;
+    private String eventId;
+    private List<Change> changes;
+    private String eventType;
+    private String payloadVersion;
+    private String correlationId;
+    private String timestamp;
     @JsonProperty("case")
-    Case aCase;
+    private Case aCase;
+
 }

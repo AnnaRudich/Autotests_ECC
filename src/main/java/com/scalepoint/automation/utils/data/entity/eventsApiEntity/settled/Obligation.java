@@ -1,11 +1,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "$id",
@@ -45,62 +47,6 @@ public class Obligation {
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public String get$id() {
-        return $id;
-    }
-
-    public void set$id(String $id) {
-        this.$id = $id;
-    }
-
-    public String getObligationType() {
-        return obligationType;
-    }
-
-    public void setObligationType(String obligationType) {
-        this.obligationType = obligationType;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public PartyRef getPayerParty() {
-        return payerParty;
-    }
-
-    public void setPayerParty(PartyRef payerParty) {
-        this.payerParty = payerParty;
-    }
-
-    public PartyRef getPayeeParty() {
-        return payeeParty;
-    }
-
-    public void setPayeeParty(PartyRef payeeParty) {
-        this.payeeParty = payeeParty;
-    }
-
-    public Expense getExpense() {
-        return expense;
-    }
-
-    public void setExpense(Expense expense) {
-        this.expense = expense;
-    }
 
     @Override
     public String toString() {

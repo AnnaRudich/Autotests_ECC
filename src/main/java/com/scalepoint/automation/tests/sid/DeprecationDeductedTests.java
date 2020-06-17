@@ -9,10 +9,10 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -52,7 +52,7 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedFaceValue = Constants.PRICE_2400;
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
 
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, categoryInfo, voucherName);
     }
@@ -83,7 +83,7 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedCashValue = expectedCalculation.getCashCompensationWithDepreciation();
         Double expectedFaceValue = expectedCalculation.getCashCompensationOfVoucher();
 
-        String voucherName = claimItem.getExistingVoucher_10();
+        String voucherName = claimItem.getExistingVoucher1();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, expectedCashValue, claimItem.getCategoryBabyItems(), voucherName);
     }

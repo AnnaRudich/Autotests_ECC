@@ -2,11 +2,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "schemeId",
@@ -21,22 +23,6 @@ public class Id {
     private String value;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public Id.SchemeId getSchemeId() {
-        return schemeId;
-    }
-
-    public void setSchemeId(Id.SchemeId schemeId) {
-        this.schemeId = schemeId;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
     public String toString() {

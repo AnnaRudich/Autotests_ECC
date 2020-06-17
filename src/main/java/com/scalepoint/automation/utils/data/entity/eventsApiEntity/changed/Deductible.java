@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class Deductible {
 
-    Double value;
+   private Double value;
+
 }

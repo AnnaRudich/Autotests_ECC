@@ -5,7 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.refresh;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertFalse;
@@ -69,10 +68,10 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      */
     public void openNewVoucherForEditing(Voucher voucher) {
         find(By.xpath("//input[contains(@class,'voucherListSearchField')]")).click();
-        makeVouchersSearch(voucher.getVoucherGeneratedName());
+        makeVouchersSearch(voucher.getVoucherNameSP());
         List<WebElement> elements = Wait.waitForStaleElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
         for (WebElement item : elements) {
-            if (item.getText().contains(voucher.getVoucherGeneratedName())) {
+            if (item.getText().contains(voucher.getVoucherNameSP())) {
                 scrollTo(item);
                 doubleClick(item);
                 Wait.waitForDisplayed(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
@@ -152,12 +151,12 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      */
     public boolean isActiveOrExclFieldTickedVouchersList(Voucher voucher) {
         find(By.xpath("//input[contains(@id,'searchfield')]")).click();
-        makeVouchersSearch(voucher.getVoucherGeneratedName());
+        makeVouchersSearch(voucher.getVoucherNameSP());
         Wait.waitForStaleElements((By.xpath("id('vouchersGridId')")));
-        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherGeneratedName());
+        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherNameSP());
         try {
             WebElement item = find(By.xpath(xpath));
-            return item.getText().contains(voucher.getVoucherGeneratedName()) && isActiveOrExclFieldTicked();
+            return item.getText().contains(voucher.getVoucherNameSP()) && isActiveOrExclFieldTicked();
         } catch (Exception e) {
             return false;
         }

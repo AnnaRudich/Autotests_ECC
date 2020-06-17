@@ -7,9 +7,9 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -42,7 +42,7 @@ public class SettlementSummaryTests extends BaseTest {
                             .withCategory(item.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withVoucher(voucher.getExistingVoucher_10());
+                            .withVoucher(voucher.getExistingVoucher());
                 })
                 .closeSidWithOk()
                 .getSettlementSummary()
@@ -80,7 +80,7 @@ public class SettlementSummaryTests extends BaseTest {
                             .withCategory(item.getCategoryBabyItems())
                             .withNewPrice(PRICE_2400)
                             .withDepreciation(DEPRECIATION_10)
-                            .withVoucher(voucher.getExistingVoucher_10());
+                            .withVoucher(voucher.getExistingVoucher());
                 })
                 .closeSidWithOk()
                 .toTextSearchPage()

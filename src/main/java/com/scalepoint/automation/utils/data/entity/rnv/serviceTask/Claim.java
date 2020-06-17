@@ -1,151 +1,46 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.*;
 import java.math.BigDecimal;
 
+
+@Data
 @XmlSeeAlso(ClaimExport.class)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "claim")
 public class Claim {
+
+    @XmlAttribute
     private Integer insuranceCompanyId;
+    @XmlAttribute
     private String insuranceCompanyName;
+    @XmlAttribute
     private String claimHandlerName;
+    @XmlAttribute
     private String claimHandlerFullName;
+    @XmlAttribute
     private String claimHandlerEmail;
+    @XmlAttribute
     private Integer claimReferenceNumber;
+    @XmlAttribute
     private String claimNumber;
+    @XmlAttribute
     private BigDecimal selfRisk;
+    @XmlAttribute
     private BigDecimal takenSelfRisk;
+    @XmlAttribute
     private BigDecimal updateClaimSelfRisk;
+    @XmlAttribute
     private String updateSelfRiskReason;
+    @XmlAttribute
     private String claimDate;
+    @XmlAttribute
     private String customerNoteToClaim;
+    @XmlAttribute
     private String policyNumber;
 
-    @XmlAttribute
-    public int getInsuranceCompanyId() {
-        return insuranceCompanyId;
-    }
-
-    public void setInsuranceCompanyId(int insuranceCompanyId) {
-        this.insuranceCompanyId = insuranceCompanyId;
-    }
-
-    @XmlAttribute
-    public String getInsuranceCompanyName() {
-        return insuranceCompanyName;
-    }
-
-    public void setInsuranceCompanyName(String insuranceCompanyName) {
-        this.insuranceCompanyName = insuranceCompanyName;
-    }
-
-    @XmlAttribute
-    public String getClaimHandlerName() {
-        return claimHandlerName;
-    }
-
-    public void setClaimHandlerName(String claimHandlerName) {
-        this.claimHandlerName = claimHandlerName;
-    }
-
-    @XmlAttribute
-    public String getClaimHandlerFullName() {
-        return claimHandlerFullName;
-    }
-
-    public void setClaimHandlerFullName(String claimHandlerFullName) {
-        this.claimHandlerFullName = claimHandlerFullName;
-    }
-
-    @XmlAttribute
-    public String getClaimHandlerEmail() {
-        return claimHandlerEmail;
-    }
-
-    public void setClaimHandlerEmail(String claimHandlerEmail) {
-        this.claimHandlerEmail = claimHandlerEmail;
-    }
-
-    @XmlAttribute
-    public int getClaimReferenceNumber() {
-        return claimReferenceNumber;
-    }
-
-    public void setClaimReferenceNumber(int claimReferenceNumber) {
-        this.claimReferenceNumber = claimReferenceNumber;
-    }
-
-    @XmlAttribute
-    public String getClaimNumber() {
-        return claimNumber;
-    }
-
-    public void setClaimNumber(String claimNumber) {
-        this.claimNumber = claimNumber;
-    }
-
-    @XmlAttribute
-    public String getUpdateSelfRiskReason() {
-        return updateSelfRiskReason;
-    }
-
-    public void setUpdateSelfRiskReason(String updateSelfRiskReason) {
-        this.updateSelfRiskReason = updateSelfRiskReason;
-    }
-
-    @XmlAttribute
-    public BigDecimal getUpdateClaimSelfRisk() {
-        return updateClaimSelfRisk;
-    }
-
-    public void setUpdateClaimSelfRisk(BigDecimal updateClaimSelfRisk) {
-        this.updateClaimSelfRisk = updateClaimSelfRisk;
-    }
-
-    @XmlAttribute
-    public BigDecimal getSelfRisk() {
-        return selfRisk;
-    }
-
-    public void setSelfRisk(BigDecimal selfRisk) {
-        this.selfRisk = selfRisk;
-    }
-
-    @XmlAttribute
-    public BigDecimal getTakenSelfRisk() {
-        return takenSelfRisk;
-    }
-
-    public void setTakenSelfRisk(BigDecimal takenSelfRisk) {
-        this.takenSelfRisk = takenSelfRisk;
-    }
-
-    @XmlAttribute
-    public String getClaimDate() {
-        return claimDate;
-    }
-
-    public void setClaimDate(String claimDate) {
-        this.claimDate = claimDate;
-    }
-
-    @XmlAttribute
-    public String getCustomerNoteToClaim() {
-        return customerNoteToClaim;
-    }
-
-    public void setCustomerNoteToClaim(String customerNoteToClaim) {
-        this.customerNoteToClaim = customerNoteToClaim;
-    }
-
-    @XmlAttribute
-    public String getPolicyNumber() {
-        return policyNumber;
-    }
-
-    public void setPolicyNumber(String policyNumber) {
-        this.policyNumber = policyNumber;
-    }
 }

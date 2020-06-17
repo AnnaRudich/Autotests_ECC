@@ -6,7 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;

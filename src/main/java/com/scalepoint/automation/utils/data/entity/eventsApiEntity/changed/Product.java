@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class Product {
-    String brand;
-    String catalogCategory;
-    String code;
-    double retailPrice;
-    double scalepointPrice;
+
+    private String brand;
+    private String catalogCategory;
+    private String code;
+    private double retailPrice;
+    private double scalepointPrice;
+
 }

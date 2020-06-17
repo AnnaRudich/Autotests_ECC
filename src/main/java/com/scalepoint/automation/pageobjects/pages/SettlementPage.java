@@ -17,10 +17,10 @@ import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.GenericItem;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.GenericItem;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.*;
@@ -231,7 +231,7 @@ public class SettlementPage extends BaseClaimPage {
                     .withSubCategory(pseudoCategory.getCategoryName())
                     .withNewPrice(PRICE_2400)
                     .withAge(AGE_YEAR, AGE_MONTH)
-                    .withVoucher(claimItem.getExistingVoucher_10()))
+                    .withVoucher(claimItem.getExistingVoucher1()))
                     .closeSidWithOk();
         }
         return this;

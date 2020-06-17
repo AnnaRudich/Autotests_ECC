@@ -2,16 +2,14 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
-import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-548")
@@ -39,7 +37,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
                                                        Voucher voucher,
                                                        ClaimItem claimItem) {
 
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
         createVoucherAgreement(trygParentUser, supplier, voucher, claimItem.getCategoryBabyItems());
 
         loginAndCheckVoucherPresence(trygChildUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
@@ -70,7 +68,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
                                                          Voucher voucher,
                                                          ClaimItem claimItem) {
 
-        String voucherName = voucher.getVoucherGeneratedName();
+        String voucherName = voucher.getVoucherNameSP();
         createVoucherAgreement(scalepointUser, supplier, voucher, claimItem.getCategoryBabyItems());
 
         loginAndCheckVoucherPresence(trygUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);

@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Data
 @XmlRootElement(name = "rnvtasktype")
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class RnvTaskType {
 
     @XmlElement

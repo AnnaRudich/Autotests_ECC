@@ -8,8 +8,8 @@ import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDep
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -70,7 +70,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                             .withCustomerDemandPrice(Constants.PRICE_100_000)
                             .withNewPrice(Constants.PRICE_2400)
                             .withDepreciation(Constants.DEPRECIATION_10)
-                            .withVoucher(claimItem.getExistingVoucher_10());
+                            .withVoucher(claimItem.getExistingVoucher1());
                 });
 
         if (setDiscountAndDepreciation) {

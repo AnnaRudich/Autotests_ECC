@@ -9,7 +9,7 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.ExtraModifier;
@@ -31,7 +31,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
     @BeforeMethod
     public void setUpForEccIntegrationsTest() {
         ClaimRequest claimRequest = TestData.getClaimRequest();
-        claimRequest.getExtraModifiers().add(new ExtraModifier().withType("cwaServiceId").withValue("1234"));
+        claimRequest.getExtraModifiers().add(ExtraModifier.builder().type("cwaServiceId").value("1234").build());
         claimToken = createCwaClaimAndGetClaimToken(claimRequest);
         userIdByClaimToken = databaseApi.getUserIdByClaimToken(claimToken.replace("c.", ""));
     }

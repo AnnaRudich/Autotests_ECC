@@ -1,6 +1,5 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
-import com.scalepoint.automation.utils.RandomUtils;
 import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,13 +10,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
-public class GenericItem {
+public class ClaimLineGroup {
 
-    private String name = RandomUtils.randomName("GenericItem");
     @XmlElement
-    private String group;
+    private String excelWithGroupsFilePath;
     @XmlElement
-    private String category;
+    private String[] excelLineGroups;
 
-    private String price = "100";
 }

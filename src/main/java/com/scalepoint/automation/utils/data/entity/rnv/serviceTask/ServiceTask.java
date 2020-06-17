@@ -1,30 +1,20 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "serviceTask")
 public class ServiceTask {
 
+    @XmlAttribute(name = "uniqueId", required = true)
     private String GUID;
+    @XmlAttribute(required = true)
     private String createdDate;
 
-
-    @XmlAttribute(name = "uniqueId", required = true)
-    public String getGUID() {
-        return GUID;
-    }
-
-    public void setGUID(String GUID) {
-        this.GUID = GUID;
-    }
-
-    @XmlAttribute(required = true)
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
 }

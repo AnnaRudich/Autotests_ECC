@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
+import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;

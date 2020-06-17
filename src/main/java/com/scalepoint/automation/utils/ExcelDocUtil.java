@@ -4,7 +4,7 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -110,7 +110,7 @@ public class ExcelDocUtil {
     public void updateFirstCLInExcel(ServiceAgreement serviceAgreement) {
         setCellValue(mainTemplateSheet, description, serviceAgreement.getUpdDesc());
         setCellValue(mainTemplateSheet, categoryGroup, serviceAgreement.getUpdCat());
-        setCellValue(mainTemplateSheet, subCategory, serviceAgreement.getUpdSubCategory());
+        setCellValue(mainTemplateSheet, subCategory, serviceAgreement.getUpdSubcat());
         setCellValue(mainTemplateSheet, quantity, serviceAgreement.getUpdQuantity());
         setCellValue(mainTemplateSheet, ageMonth, serviceAgreement.getUpdMonth());
         setCellValue(mainTemplateSheet, ageYears, serviceAgreement.getUpdYear());

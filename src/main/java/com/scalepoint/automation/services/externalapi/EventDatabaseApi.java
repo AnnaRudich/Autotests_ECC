@@ -141,14 +141,14 @@ public class EventDatabaseApi {
     }
 
     public void assertThatCloseCaseEventWasCreated(ClaimRequest claimRequest, int eventIndex) {
-        assertThat(getEventClaimUpdated(claimRequest, eventIndex).getCase().getNumber())
+        assertThat(getEventClaimUpdated(claimRequest, eventIndex).getACase().getNumber())
                 .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was created in event-api")
                 .isEqualTo(claimRequest.getCaseNumber());
     }
 
 
     public void assertThatCaseSettledEventWasCreated(ClaimRequest claimRequest) {
-        assertThat(getEventClaimSettled(claimRequest).getCase().getNumber())
+        assertThat(getEventClaimSettled(claimRequest).getACase().getNumber())
                 .as("Check if event with case number: " + claimRequest.getCaseNumber() + " was created in event-api")
                 .isEqualTo(claimRequest.getCaseNumber());
     }
@@ -232,6 +232,6 @@ public class EventDatabaseApi {
     }
 
     private boolean hasCaseNumber(EventClaimUpdated event, String caseNumber) {
-        return event.getCase().getNumber().equals(caseNumber);
+        return event.getACase().getNumber().equals(caseNumber);
     }
 }

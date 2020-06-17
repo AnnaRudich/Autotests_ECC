@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class RRLinesFields {
 
     @XmlElement
@@ -32,4 +32,5 @@ public class RRLinesFields {
     private String claimReduction;
     @XmlElement
     private String cashReduction;
+
 }

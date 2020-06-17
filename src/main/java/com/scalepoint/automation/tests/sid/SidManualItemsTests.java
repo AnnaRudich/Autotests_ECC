@@ -15,10 +15,10 @@ import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
@@ -128,7 +128,7 @@ public class SidManualItemsTests extends BaseTest {
                 .openSidAndFill(pseudoCategory, sid -> {
                     sid.withText(claimItem.getTextFieldSP())
                             .withCustomerDemandPrice(Constants.PRICE_500)
-                            .withVoucher(voucher.getVoucherGeneratedName())
+                            .withVoucher(voucher.getVoucherNameSP())
                             .withDepreciation(Constants.DEPRECIATION_10)
                             .withValuation(CUSTOMER_DEMAND);
                 });

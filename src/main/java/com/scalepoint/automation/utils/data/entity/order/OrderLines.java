@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderLines {
+
     @XmlElement(name = "OrderLine")
     List<OrderLine> orderLine = new ArrayList<>();
+
 }

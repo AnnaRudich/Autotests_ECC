@@ -3,43 +3,31 @@ package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
 import com.scalepoint.automation.tests.api.unifiedpayments.v3.BaseUnifiedPaymentsApiTest;
+import lombok.Data;
 import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ToString
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "$ref"
 })
+
 public class PartyRef {
 
     /**
      * Reference id to object. Defined in object by $id.
      */
     @JsonProperty("$ref")
-    private String $ref;
+    private String ref;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
-    /**
-     * Reference id to object. Defined in object by $id.
-     */
-    public String get$ref() {
-        return $ref;
-    }
-
-    /**
-     * Reference id to object. Defined in object by $id.
-     */
-    public void set$ref(String $ref) {
-        this.$ref = $ref;
-    }
-
     @Override
     public String toString() {
-        return BaseUnifiedPaymentsApiTest.PartyReference.getByValue(Integer.parseInt($ref.replaceAll("\\D+", ""))).name();
+        return BaseUnifiedPaymentsApiTest.PartyReference.getByValue(Integer.parseInt(ref.replaceAll("\\D+", ""))).name();
     }
 
     @JsonAnyGetter

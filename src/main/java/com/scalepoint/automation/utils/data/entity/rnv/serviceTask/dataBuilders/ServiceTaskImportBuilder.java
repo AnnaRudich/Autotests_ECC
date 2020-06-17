@@ -1,7 +1,7 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
 
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;

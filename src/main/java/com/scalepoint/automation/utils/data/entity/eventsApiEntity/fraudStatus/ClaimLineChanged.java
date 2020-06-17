@@ -6,11 +6,13 @@ import lombok.Data;
 
 @Data
 public class ClaimLineChanged extends EventClaim {
-    String eventId;
-    String eventType;
-    String payloadVersion;
-    String correlationId;
-    String timestamp;
+
+    private String eventId;
+    private String eventType;
+    private String payloadVersion;
+    private String correlationId;
+    private String timestamp;
     @JsonProperty("case")
-    CaseClaimLineChanged caseClaimLineChanged;
+    private CaseClaimLineChanged caseClaimLineChanged;
+
 }

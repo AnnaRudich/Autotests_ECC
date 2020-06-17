@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class Loss {
-    Deductible deductible;
-    Content content;
+
+    private Deductible deductible;
+    private Content content;
+
 }

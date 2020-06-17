@@ -9,9 +9,9 @@ import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -53,7 +53,7 @@ public class RnVSmokeTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()
@@ -91,7 +91,7 @@ public class RnVSmokeTest extends BaseTest {
                 .openRecentClaim()
                 .reopenClaim()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()

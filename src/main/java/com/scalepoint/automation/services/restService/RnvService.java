@@ -5,7 +5,7 @@ import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;

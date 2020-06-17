@@ -1,8 +1,11 @@
 package com.scalepoint.automation.utils.data.entity.eccIntegration;
 
+import lombok.Data;
+
 import javax.xml.bind.annotation.*;
 import java.util.UUID;
 
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Claime")
 public class Claim {
@@ -13,45 +16,8 @@ public class Claim {
     private String claimNumber = UUID.randomUUID().toString();
     @XmlAttribute
     private String allowAutoClose;
-
     @XmlElement(name = "ClaimedItems")
     private ClaimedItems claimedItems;
-
-    public ClaimedItems getClaimedItems() {
-        return claimedItems;
-    }
-
-    public Claim setClaimedItems(ClaimedItems claimedItems) {
-        this.claimedItems = claimedItems;
-        return this;
-    }
-
-    public String getClaimNumber() {
-        return claimNumber;
-    }
-
-    public Claim setClaimNumber(String claimNumber) {
-        this.claimNumber = claimNumber;
-        return this;
-    }
-
-    public String getAllowAutoClose() {
-        return allowAutoClose;
-    }
-
-    public Claim setAllowAutoClose(String allowAutoClose) {
-        this.allowAutoClose = allowAutoClose;
-        return this;
-    }
-
-    public Damage getDamage() {
-        return damage;
-    }
-
-    public Claim setDamage(Damage damage) {
-        this.damage = damage;
-        return this;
-    }
 
     @Override
     public String toString() {

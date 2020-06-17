@@ -9,10 +9,10 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -107,11 +107,11 @@ public class SidShowVoucherDetails extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(assignedCategory)
                 .setDepreciation(Constants.DEPRECIATION_5)
-                .fillVoucher(voucher.getVoucherGeneratedName())
+                .fillVoucher(voucher.getVoucherNameSP())
                 .openVoucherValuationCard()
                 .doAssert(editVoucherValuation -> {
-                    editVoucherValuation.assertBrandsTextIs(voucher.getBrandsText());
-                    editVoucherValuation.assertTagsTextIs(voucher.getTagsText());
+                    editVoucherValuation.assertBrandsTextIs(voucher.getBrands());
+                    editVoucherValuation.assertTagsTextIs(voucher.getTags());
                 });
     }
 

@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Http;
-import com.scalepoint.automation.utils.data.entity.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.fluent.Response;
 
@@ -42,15 +42,15 @@ public class VoucherAgreementApi extends AuthenticationApi {
 
     private String createNewVoucherAgreement(String supplierId, Voucher voucher) {
         List<NameValuePair> params = Http.ParamsBuilder.create().
-                add("voucherName", voucher.getVoucherGeneratedName()).
+                add("voucherName", voucher.getVoucherNameSP()).
                 add("agreementStatus", "ACTIVE").
                 add("useSupplierLogo", "true").
                 add("useSupplierUrl", "true").
                 add("agreementDiscount", voucher.getDiscount().toString()).
                 add("minimumAmount", "1").
                 add("stepAmount", "1").
-                add("brands", voucher.getBrandsText()).
-                add("tags", voucher.getTagsText()).
+                add("brands", voucher.getBrands()).
+                add("tags", voucher.getTags()).
                 add("orderFeeId", "-1").get();
 
         try {

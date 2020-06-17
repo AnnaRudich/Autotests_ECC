@@ -1,33 +1,18 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AttachmentExport {
 
-
+    @XmlAttribute(required = true)
     private String name;
+    @XmlAttribute(required = true)
     private String link;
 
-    public AttachmentExport(String name, String link) {
-        this.name = name;
-        this.link = link;
-    }
-
-    @XmlAttribute(required = true)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @XmlAttribute(required = true)
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
 }

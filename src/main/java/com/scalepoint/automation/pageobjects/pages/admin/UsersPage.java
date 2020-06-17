@@ -4,7 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.SystemUser;
+import com.scalepoint.automation.utils.data.entity.input.SystemUser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;

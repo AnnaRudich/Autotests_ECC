@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SubOrders {
+
     @XmlElement(name = "SubOrder")
-    List<SubOrder> suborder = new ArrayList<>();
+    List<SubOrder> suborder;
+
 }

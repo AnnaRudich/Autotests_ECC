@@ -6,7 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementCategoriesTab;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.data.entity.PseudoCategory;
+import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

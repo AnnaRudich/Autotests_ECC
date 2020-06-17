@@ -12,30 +12,24 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AgreementData {
+
     @XmlAttribute
     String priceModelID;
-
     @XmlAttribute
     String priceModelType;
-
     @XmlAttribute
     String agreementID;
-
     @XmlAttribute
     Double discountValue;
-
     @XmlAttribute
     String priceSourceType;
-
     @XmlAttribute
     String priceSourceSupplierID;
-
     @XmlElement(name="RecommendedPrice")
     RecommendedPrice recommendedPrice;
-
     @XmlElement(name="MarketPrice")
     MarketPrice marketPrice;
-
     @XmlElement(name="SupplierShopPrice")
     SupplierShopPrice supplierShopPrice;
+
 }

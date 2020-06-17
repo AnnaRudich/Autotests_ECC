@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ShippingAddress {
+
     @XmlAttribute
     String firstName;
     @XmlAttribute
@@ -40,4 +41,5 @@ public class ShippingAddress {
     @XmlAttribute
     @Builder.Default
     String phone = "";
+
 }

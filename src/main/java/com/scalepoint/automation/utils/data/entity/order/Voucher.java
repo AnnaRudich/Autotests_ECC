@@ -14,19 +14,15 @@ public class Voucher {
 
     @XmlAttribute(name="CustomerEmail")
     String customerEmail;
-
     @XmlAttribute(name="CustomerPhone")
     String customerPhone;
-
     @XmlAttribute(name ="CustomerPersonalCode")
     String customerPersonalCode;
-
     @XmlAttribute
     String voucherID;
-
     @XmlAttribute
     Double purchaseDiscount;
-
     @XmlAttribute
     String voucherType;
+
 }

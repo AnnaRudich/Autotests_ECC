@@ -8,8 +8,8 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -53,7 +53,7 @@ public class SidReductionRulesTests extends BaseTest {
                 .enableAge("2")
                 .setValuation(NEW_PRICE);
 
-        SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule_30());
+        SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule());
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
         Double calculatedReduction = valuationWithReduction.getReduction();
@@ -66,7 +66,7 @@ public class SidReductionRulesTests extends BaseTest {
                     sid.assertDepreciationValueIs(Constants.DEPRECIATION_10.doubleValue());
                 })
                 .automaticDepreciation(true)
-                .applyReductionRuleByValue(claimItem.getReductionRule_30())
+                .applyReductionRuleByValue(claimItem.getReductionRule())
                 .doAssert(sid -> {
                     sid.assertCashValueIs(calculatedCashValueReduction);
                     sid.assertDepreciationAmountIs(calculatedReduction);
@@ -100,7 +100,7 @@ public class SidReductionRulesTests extends BaseTest {
                 .enterAgeYears("2")
                 .setValuation(NEW_PRICE);
 
-        SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule_30());
+        SidCalculator.ValuationWithReduction valuationWithReduction = SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, Constants.DEPRECIATION_10, claimItem.getReductionRule());
         Double calculatedCashValue = valuationWithReduction.getCashCompensation();
         Double calculatedDepreciation = valuationWithReduction.getDepreciation();
         Double calculatedReduction = valuationWithReduction.getReduction();

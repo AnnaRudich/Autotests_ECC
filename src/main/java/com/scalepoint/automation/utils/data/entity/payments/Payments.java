@@ -1,6 +1,8 @@
 
 package com.scalepoint.automation.utils.data.entity.payments;
 
+import lombok.Data;
+
 import javax.xml.bind.annotation.*;
 
 
@@ -23,13 +25,14 @@ import javax.xml.bind.annotation.*;
  * &lt;/complexType>
  * </pre>
  */
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 @XmlType(name = "payments", propOrder = {
         "masterCard",
         "dankort",
         "rabobank"
 })
-@XmlRootElement
 public class Payments {
 
     @XmlElement(required = true)
@@ -38,65 +41,5 @@ public class Payments {
     protected Dankort dankort;
     @XmlElement(required = true)
     protected Rabobank rabobank;
-
-    /**
-     * Gets the value of the masterCard property.
-     *
-     * @return possible object is
-     * {@link MasterCard }
-     */
-    public MasterCard getMasterCard() {
-        return masterCard;
-    }
-
-    /**
-     * Sets the value of the masterCard property.
-     *
-     * @param value allowed object is
-     *              {@link MasterCard }
-     */
-    public void setMasterCard(MasterCard value) {
-        this.masterCard = value;
-    }
-
-    /**
-     * Gets the value of the dankort property.
-     *
-     * @return possible object is
-     * {@link Dankort }
-     */
-    public Dankort getDankort() {
-        return dankort;
-    }
-
-    /**
-     * Sets the value of the dankort property.
-     *
-     * @param value allowed object is
-     *              {@link Dankort }
-     */
-    public void setDankort(Dankort value) {
-        this.dankort = value;
-    }
-
-    /**
-     * Gets the value of the rabobank property.
-     *
-     * @return possible object is
-     * {@link Rabobank }
-     */
-    public Rabobank getRabobank() {
-        return rabobank;
-    }
-
-    /**
-     * Sets the value of the rabobank property.
-     *
-     * @param value allowed object is
-     *              {@link Rabobank }
-     */
-    public void setRabobank(Rabobank value) {
-        this.rabobank = value;
-    }
 
 }

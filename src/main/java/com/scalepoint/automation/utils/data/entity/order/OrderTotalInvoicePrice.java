@@ -11,8 +11,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderTotalInvoicePrice {
+
     @XmlAttribute
     Double amount;
     @XmlAttribute
     Double amountNet;
+
 }

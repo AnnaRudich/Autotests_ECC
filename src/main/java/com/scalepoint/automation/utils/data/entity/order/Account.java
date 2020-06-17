@@ -11,6 +11,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Account {
+
     @XmlAttribute
     String accountID;
+
 }

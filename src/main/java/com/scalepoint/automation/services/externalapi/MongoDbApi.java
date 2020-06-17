@@ -1,6 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.utils.data.entity.VoucherPredictionObject;
+import com.scalepoint.automation.utils.data.entity.input.VoucherPredictionObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.mongodb.core.MongoTemplate;

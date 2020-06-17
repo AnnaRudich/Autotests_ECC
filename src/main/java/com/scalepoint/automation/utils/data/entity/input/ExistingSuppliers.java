@@ -1,9 +1,12 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
+
+import lombok.Data;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "exisitingSuppliers", propOrder = {
         "simpleSuppliers"

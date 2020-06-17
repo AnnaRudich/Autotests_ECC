@@ -11,10 +11,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RecommendedPrice {
+
     @XmlAttribute
     @Builder.Default
     Double amount = 0.0;
     @XmlAttribute
     @Builder.Default
     Double amountNet = 0.0;
+
 }

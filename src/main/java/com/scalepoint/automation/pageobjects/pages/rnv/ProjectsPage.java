@@ -8,7 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.EvaluateTaskDialo
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -87,21 +87,21 @@ public class ProjectsPage extends Page {
         }
 
         public Assertion assertTaskHasFeedbackReceivedStatus(ServiceAgreement agreement) {
-            String taskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
-            Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatusName(), "Task has " + taskStatus + " status. Must be feedback received");
+            String taskStatus = getTaskStatus(agreement.getTestAgrNameForRnV());
+            Assert.assertEquals(taskStatus, agreement.getFeedbackReceivedStatus(), "Task has " + taskStatus + " status. Must be feedback received");
             return this;
         }
 
         public Assertion assertTaskHasCompletedStatus(ServiceAgreement agreement){
-            String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            String actualTaskStatus = getTaskStatus(agreement.getTestAgrNameForRnV());
             assertThat(actualTaskStatus)
                     .as("Task has " + actualTaskStatus + " status. Must be completed")
-                    .isEqualTo(agreement.getCompletedStatusName());
+                    .isEqualTo(agreement.getFeedbackCompletedStatus());
             return this;
         }
 
         public Assertion assertTaskHasFailStatus(ServiceAgreement agreement){
-            String actualTaskStatus = getTaskStatus(agreement.getTestAgreementForRnV());
+            String actualTaskStatus = getTaskStatus(agreement.getTestAgrNameForRnV());
             assertThat(actualTaskStatus)
                     .as("Task has " + actualTaskStatus + " status. Must be failed.")
                     .isEqualTo(agreement.getSendTaskFailStatus());

@@ -1,7 +1,10 @@
 package com.scalepoint.automation.utils.data.entity.eccIntegration;
 
+import lombok.Data;
+
 import javax.xml.bind.annotation.*;
 
+@Data
 @XmlRootElement(name = "ECCIntegration")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EccIntegration {
@@ -12,33 +15,6 @@ public class EccIntegration {
     private Claim claim;
     @XmlElement(name = "Claimant")
     private Claimant claimant;
-
-    public Claim getClaim() {
-        return claim;
-    }
-
-    public EccIntegration setClaim(Claim claim) {
-        this.claim = claim;
-        return this;
-    }
-
-    public Claimant getClaimant() {
-        return claimant;
-    }
-
-    public EccIntegration setClaimant(Claimant claimant) {
-        this.claimant = claimant;
-        return this;
-    }
-
-    public String getUpdateAction() {
-        return updateAction;
-    }
-
-    public EccIntegration setUpdateAction(String updateAction) {
-        this.updateAction = updateAction;
-        return this;
-    }
 
     @Override
     public String toString() {

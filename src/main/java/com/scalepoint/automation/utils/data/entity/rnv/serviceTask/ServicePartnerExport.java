@@ -1,39 +1,21 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ServicePartnerExport extends ServicePartner {
 
+    @XmlAttribute
     private String serviceAgreementName;
+    @XmlElement(nillable = true)
     private BankExport bank;
+    @XmlElement(nillable = true)
     private Location location;
 
-
-    @XmlAttribute
-    public String getServiceAgreementName() {
-        return serviceAgreementName;
-    }
-
-    public void setServiceAgreementName(String serviceAgreementName) {
-        this.serviceAgreementName = serviceAgreementName;
-    }
-
-    @XmlElement(nillable = true)
-    public BankExport getBank() {
-        return bank;
-    }
-
-    public void setBank(BankExport bank) {
-        this.bank = bank;
-    }
-
-    @XmlElement(nillable = true)
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
 }

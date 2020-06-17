@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
 import com.scalepoint.automation.utils.RandomUtils;
 import lombok.Data;
@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * NewSystemUser: kke
  */
+@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
 public class InsuranceCompany {
 
     private String icID = Integer.toString(RandomUtils.randomInt());
@@ -41,4 +41,5 @@ public class InsuranceCompany {
     private String sendTimeFrom;
     @XmlElement
     private String sendTimeTo;
+
 }

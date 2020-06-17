@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
-import com.scalepoint.automation.utils.data.entity.Shop;
+import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

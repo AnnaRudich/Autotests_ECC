@@ -6,24 +6,25 @@ import java.util.List;
 
 @Data
 public class Item {
-    String category;
-    String subCategory;
-    String subCategoryToken;
-    String description;
-    String itemId;
-    Long uiItemId;
-    Long depreciationPercentage;
-    Double depreciationAmount;
-    String createType;
-    Boolean draft;
-    Boolean rejected;
-    Long quantity;
-    Double replacementAmount;
-    Long ageMonths;
-    Double basePrice;
-    List<Valuation> valuations;
-    Voucher voucher;
-    Product product;
+
+    private String category;
+    private String subCategory;
+    private String subCategoryToken;
+    private String description;
+    private String itemId;
+    private Long uiItemId;
+    private Long depreciationPercentage;
+    private Double depreciationAmount;
+    private String createType;
+    private Boolean draft;
+    private Boolean rejected;
+    private Long quantity;
+    private Double replacementAmount;
+    private Long ageMonths;
+    private Double basePrice;
+    private List<Valuation> valuations;
+    private Voucher voucher;
+    private Product product;
 
     public Valuation getValuationByType(String type){
         return valuations
@@ -33,4 +34,5 @@ public class Item {
                 .findFirst()
                 .get();
     }
+
 }

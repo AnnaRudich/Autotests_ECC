@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderLine {
+
     @XmlAttribute
     int quantity;
     @XmlAttribute
     String description;
-
     @XmlElement(name = "OrderedItem")
     OrderedItem orderedItem;
     @XmlElement(name = "BasePurchasePrice")
@@ -27,4 +27,5 @@ public class OrderLine {
     TotalInvoicePrice totalInvoicePrice;
     @XmlElement(name = "Freightprice")
     Freightprice freightprice;
+
 }

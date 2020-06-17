@@ -1,114 +1,37 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "invoice")
 public class Invoice {
-    private String invoiceType;
-    private String invoiceNumber;
-    private String invoiceDate;
-    private String paymentDueDate;
-    private String creditNoteNumber;
-    private String nameOfValuationResponsible;
-    private String dateOfValuation;
 
+    @XmlAttribute
+    private String invoiceType;
+    @XmlAttribute
+    private String invoiceNumber;
+    @XmlAttribute
+    private String invoiceDate;
+    @XmlAttribute
+    private String paymentDueDate;
+    @XmlAttribute
+    private String creditNoteNumber;
+    @XmlAttribute
+    private String nameOfValuationResponsible;
+    @XmlAttribute
+    private String dateOfValuation;
+    @XmlAttribute
     private BigDecimal netAmount;
+    @XmlAttribute
     private BigDecimal vat;
+    @XmlAttribute
     private BigDecimal totalAmount;
 
-    public Invoice() {
-    }
-
-
-    @XmlAttribute
-    public String getInvoiceType() {
-        return invoiceType;
-    }
-
-    public void setInvoiceType(String invoiceType) {
-        this.invoiceType = invoiceType;
-    }
-
-    @XmlAttribute
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
-
-    @XmlAttribute
-    public String getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate(String invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    @XmlAttribute
-    public String getPaymentDueDate() {
-        return paymentDueDate;
-    }
-
-    public void setPaymentDueDate(String paymentDueDate) {
-        this.paymentDueDate = paymentDueDate;
-    }
-
-    @XmlAttribute
-    public String getCreditNoteNumber() {
-        return creditNoteNumber;
-    }
-
-    public void setCreditNoteNumber(String creditNoteNumber) {
-        this.creditNoteNumber = creditNoteNumber;
-    }
-
-    @XmlAttribute
-    public String getNameOfValuationResponsible() {
-        return nameOfValuationResponsible;
-    }
-
-    public void setNameOfValuationResponsible(String nameOfValuationResponsible) {
-        this.nameOfValuationResponsible = nameOfValuationResponsible;
-    }
-
-    @XmlAttribute
-    public String getDateOfValuation() {
-        return dateOfValuation;
-    }
-
-    public void setDateOfValuation(String dateOfValuation) {
-        this.dateOfValuation = dateOfValuation;
-    }
-
-    @XmlAttribute
-    public BigDecimal getNetAmount() {
-        return netAmount;
-    }
-
-    public void setNetAmount(BigDecimal netAmount) {
-        this.netAmount = netAmount;
-    }
-
-    @XmlAttribute
-    public BigDecimal getVat() {
-        return vat;
-    }
-
-    public void setVat(BigDecimal vat) {
-        this.vat = vat;
-    }
-
-    @XmlAttribute
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
 }

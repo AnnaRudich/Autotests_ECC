@@ -1,6 +1,5 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
@@ -10,11 +9,11 @@ import java.util.Map;
 @Data
 public class Change {
 
-    Property property;
-    String attachmentGUID;
-    String attachmentLink;
-    String fileType;
-    String fileName;
+    private Property property;
+    private String attachmentGUID;
+    private String attachmentLink;
+    private String fileType;
+    private String fileName;
 
     public enum Property {
 
@@ -48,16 +47,6 @@ public class Change {
         @JsonValue
         public String value() {
             return this.value;
-        }
-
-        @JsonCreator
-        public static Change.Property fromValue(String value) {
-            Change.Property constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
         }
     }
 }

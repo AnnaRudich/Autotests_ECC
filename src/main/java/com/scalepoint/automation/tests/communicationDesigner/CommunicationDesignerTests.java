@@ -19,10 +19,10 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.ServiceAgreement;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
+import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.annotations.BeforeClass;
@@ -266,7 +266,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setBaseData(claimItem)
                 .closeSidWithOk()
                 .openSid()
-                .fill(lineDescription, agreement.getClaimLineCat_PersonligPleje(), agreement.getClaimLineSubCat_Medicin(), RnVMock.OK_PRICE)
+                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()
                 .findClaimLine(lineDescription)
                 .selectLine()

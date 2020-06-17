@@ -1,77 +1,29 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
+import lombok.Data;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.math.BigDecimal;
 
+@Data
+@XmlAccessorType(XmlAccessType.FIELD)
 public class InvoiceLine {
+
+    @XmlAttribute
     private String description;
+    @XmlAttribute
     private String units;
+    @XmlAttribute
     private BigDecimal unitNetAmount;
+    @XmlAttribute
     private BigDecimal unitVatAmount;
+    @XmlAttribute
     private BigDecimal unitPrice;
+    @XmlAttribute
     private BigDecimal quantity;
+    @XmlAttribute
     private BigDecimal lineTotal;
 
-    @XmlAttribute
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @XmlAttribute
-    public String getUnits() {
-        return units;
-    }
-
-    public void setUnits(String units) {
-        this.units = units;
-    }
-
-    @XmlAttribute
-    public BigDecimal getUnitNetAmount() {
-        return unitNetAmount;
-    }
-
-    public void setUnitNetAmount(BigDecimal unitNetAmount) {
-        this.unitNetAmount = unitNetAmount;
-    }
-
-    @XmlAttribute
-    public BigDecimal getUnitVatAmount() {
-        return unitVatAmount;
-    }
-
-    public void setUnitVatAmount(BigDecimal unitVatAmount) {
-        this.unitVatAmount = unitVatAmount;
-    }
-
-    @XmlAttribute
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    @XmlAttribute
-    public BigDecimal getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
-    }
-
-    @XmlAttribute
-    public BigDecimal getLineTotal() {
-        return lineTotal;
-    }
-
-    public void setLineTotal(BigDecimal lineTotal) {
-        this.lineTotal = lineTotal;
-    }
 }

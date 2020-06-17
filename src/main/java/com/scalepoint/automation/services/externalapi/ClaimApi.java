@@ -2,7 +2,7 @@ package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.exceptions.ServerApiException;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.Claim;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.http.Header;

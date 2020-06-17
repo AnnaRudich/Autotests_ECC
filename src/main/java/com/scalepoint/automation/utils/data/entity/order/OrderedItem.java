@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderedItem {
+
     @XmlElement(name = "Product")
     Product product;
-
     @XmlElement(name="Voucher")
     Voucher voucher;
 }

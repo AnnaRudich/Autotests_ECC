@@ -2,11 +2,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "approvedBy",
@@ -24,30 +26,6 @@ public class Settlement {
     private String revisionToken;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    public ApprovedBy getApprovedBy() {
-        return approvedBy;
-    }
-
-    public void setApprovedBy(ApprovedBy approvedBy) {
-        this.approvedBy = approvedBy;
-    }
-
-    public Summary getSummary() {
-        return summary;
-    }
-
-    public void setSummary(Summary summary) {
-        this.summary = summary;
-    }
-
-    public String getRevisionToken() {
-        return revisionToken;
-    }
-
-    public void setRevisionToken(String revisionToken) {
-        this.revisionToken = revisionToken;
-    }
 
     @Override
     public String toString() {

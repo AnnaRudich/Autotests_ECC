@@ -8,9 +8,9 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.Claim;
-import com.scalepoint.automation.utils.data.entity.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.Translations;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
@@ -64,7 +64,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withVoucher(claimItem.getExistingVoucher_10())
+                        .withVoucher(claimItem.getExistingVoucher1())
                         .withDepreciation(depreciationValue))
                 .doAssert(asserts -> {
                     asserts.assertIsVoucherDiscountApplied(claimItem.getTrygNewPrice());
@@ -198,7 +198,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
                         .withNewPrice(claimItem.getTrygNewPrice())
-                        .withVoucher(claimItem.getExistingVoucher_10())
+                        .withVoucher(claimItem.getExistingVoucher1())
                         .withDepreciation(depreciationValue))
                 .closeSidWithOk();
         settlementPage.parseFirstClaimLine()

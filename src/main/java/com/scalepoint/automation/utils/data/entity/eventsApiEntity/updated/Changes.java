@@ -1,11 +1,13 @@
 package com.scalepoint.automation.utils.data.entity.eventsApiEntity.updated;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "property",
@@ -18,22 +20,6 @@ public class Changes {
 
     @JsonProperty("shouldBeClosedInOwnSystem")
     private boolean shouldBeClosedInOwnSystem;
-
-    public Property getProperty() {
-        return property;
-    }
-
-    public void setProperty(Property property) {
-        this.property = property;
-    }
-
-    public boolean getShouldBeClosedInOwnSystem() {
-        return shouldBeClosedInOwnSystem;
-    }
-
-    public void setShouldBeClosedInOwnSystem() {
-        this.shouldBeClosedInOwnSystem = shouldBeClosedInOwnSystem;
-    }
 
     @Override
     public String toString() {

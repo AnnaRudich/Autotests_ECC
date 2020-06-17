@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity;
+package com.scalepoint.automation.utils.data.entity.input;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,7 @@ import java.util.List;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PseudoCategory {
+
     @XmlElement(required = true)
     @NonNull
     private String groupName;
@@ -23,4 +24,5 @@ public class PseudoCategory {
     @XmlElementWrapper
     @XmlElement(name = "damageType")
     private List<String> damageTypes;
+
 }

@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlElement;
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Product {
+
     @XmlAttribute
     String productID;
     @XmlAttribute
     String skuNumber;
-
     @XmlElement(name = "AgreementData")
     AgreementData agreementData;
 

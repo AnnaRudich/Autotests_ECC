@@ -4,7 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.InsuranceCompany;
+import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;

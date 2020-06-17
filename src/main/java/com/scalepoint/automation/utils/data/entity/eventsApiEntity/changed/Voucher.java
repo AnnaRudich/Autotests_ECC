@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class Voucher {
-    Double discount;
-    Double faceValue;
-    Double cashValue;
+
+    private Double discount;
+    private Double faceValue;
+    private Double cashValue;
+
 }
