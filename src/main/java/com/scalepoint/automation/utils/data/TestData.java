@@ -286,7 +286,7 @@ public class TestData {
         ECC_INTEGRATION("request/Claim/EccIntegration.xml", EccIntegration.class),
         CLAIM_STATUS("ClaimStatuses.json", ClaimStatuses.class),
         TRANSLATIONS("input/Translations.xml", Translations.class),
-        SELF_SERVICE_REQUEST("request/selfServiceSelfServiceRequest.json", SelfServiceRequest.class),
+        SELF_SERVICE_REQUEST("request/selfService/SelfServiceRequest.json", SelfServiceRequest.class),
         SELF_SERVICE_LOSS_ITEMS("request/selfService/SelfServiceLossItems.json", SelfServiceLossItems.class),
         FUTURE_DEFAULT_FT_SETTINGS("DefaultFTSettings/Future.xml", DefaultFTOperations.DefaultFTSettings.class),
         ALKA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Alka.xml", DefaultFTOperations.DefaultFTSettings.class),
