@@ -50,7 +50,7 @@ public class SidTests extends BaseTest {
      * THAN: Cash compensation is P1 - V1 discount - D1
      * THAN: Depreciation is D1 amount of Cash Compensation
      */
-     @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
+    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
             " - depreciation percent if voucher selected in Add settlement dialogs")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, Voucher voucher) {
