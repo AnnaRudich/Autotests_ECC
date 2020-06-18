@@ -149,7 +149,7 @@
         <guava.version>23.0</guava.version>
         <htmlelements.version>1.20.0</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
-        <java.version>1.8</java.version>
+        <java.version>1.11</java.version>
         <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.9.2</jsoup.version>
         <jaxb.version>2.2.12</jaxb.version>
@@ -578,42 +578,13 @@
             <version>4.6</version>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
 
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
-        </repository>
-        <repository>
-            <id>ecc-tools</id>
-            <url>https://ecc-tools.spcph.local/nexus/repository/public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>internal</id>
-            <url>http://ecc-tools.spcph.local/nexus/content/repositories/internal</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>internal-snapshot</id>
-            <url>https://ecc-tools.spcph.local/nexus/repository/internal-snapshot/</url>
-        </repository>
-        <repository>
-            <id>public</id>
-            <url>http://ecc-tools.spcph.local/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-        </repository>
-    </repositories>
+    </dependencies>
 
 </project>
