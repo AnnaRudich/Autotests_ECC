@@ -445,7 +445,8 @@ public class SettlementDialog extends BaseDialog {
                 & $("#vouchers-combobox").is(not(visible))) {
             return this;
         } else {
-            availableVoucher.select(voucherName);
+            $("#vouchers-combobox-inputEl").shouldBe(visible);
+            voucherCombo.select(voucherName);
         }
         waitForJavascriptRecalculation();
         return this;
