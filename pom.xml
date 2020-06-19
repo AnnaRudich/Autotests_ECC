@@ -149,7 +149,7 @@
         <guava.version>23.0</guava.version>
         <htmlelements.version>1.20.0</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
-        <java.version>1.11</java.version>
+        <java.version>11</java.version>
         <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.9.2</jsoup.version>
         <jaxb.version>2.2.12</jaxb.version>
@@ -220,10 +220,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
