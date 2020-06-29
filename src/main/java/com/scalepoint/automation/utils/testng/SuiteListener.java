@@ -8,6 +8,7 @@ import org.testng.xml.XmlSuite;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class SuiteListener implements ISuiteListener {
 
@@ -30,23 +31,34 @@ public class SuiteListener implements ISuiteListener {
 
         users = suite.getParameter("users");
 
-        int test = suite.getResults().values().stream().findFirst().get().getTestContext().getFailedTests().size();
+        if(!suite.getName().equals("Performance")) {
 
-        if(test == 0){
-            Integer incrementedUsers = Integer.valueOf(users) + 10;
-            Map parameters = new HashMap();
-            parameters.put("users", incrementedUsers.toString());
-            XmlSuite updatedSuite = suite.getXmlSuite();
-            updatedSuite.setParameters(parameters);
+            int test = suite
+                    .getResults()
+                    .values()
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException())
+                    .getTestContext()
+                    .getFailedTests()
+                    .size();
 
-            XmlSuite xmlSuite = suite.getXmlSuite();
-            xmlSuite = updatedSuite;
+            if (test == 0) {
+                Integer incrementedUsers = Integer.valueOf(users) + 10;
+                Map parameters = new HashMap();
+                parameters.put("users", incrementedUsers.toString());
+                XmlSuite updatedSuite = suite.getXmlSuite();
+                updatedSuite.setParameters(parameters);
 
-            suite.run();
+                XmlSuite xmlSuite = suite.getXmlSuite();
+                xmlSuite = updatedSuite;
 
-        } else {
+                suite.run();
 
-            log.warn("Failing users: {}", users);
+            } else {
+
+                log.warn("Failing users: {}", users);
+            }
         }
     }
 
