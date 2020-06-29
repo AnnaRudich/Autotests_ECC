@@ -6,30 +6,36 @@ import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.testng.xml.XmlSuite;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SuiteListener implements ISuiteListener {
 
     protected Logger log = LogManager.getLogger(SuiteListener.class);
+    String users;
 
     @Override
     public void onStart(ISuite iSuite) {
 
+        if(iSuite.getXmlSuite().getName().equals("Load")){
+            Integer decrementedUsers = (Integer.valueOf(users) - 10);
+            Map parameters = new HashMap();
+            parameters.put("users", decrementedUsers.toString());
+            iSuite.getXmlSuite().setParameters(parameters);
+        }
     }
 
     @Override
     public void onFinish(ISuite suite) {
 
-        String users = suite.getParameter("users");
+        users = suite.getParameter("users");
 
         int test = suite.getResults().values().stream().findFirst().get().getTestContext().getFailedTests().size();
 
         if(test == 0){
-            Integer newUsers = Integer.valueOf(users) + 10;
+            Integer incrementedUsers = Integer.valueOf(users) + 10;
             Map parameters = new HashMap();
-            parameters.put("users", newUsers.toString());
+            parameters.put("users", incrementedUsers.toString());
             XmlSuite updatedSuite = suite.getXmlSuite();
             updatedSuite.setParameters(parameters);
 
