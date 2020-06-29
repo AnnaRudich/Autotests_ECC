@@ -29,10 +29,9 @@ public class SuiteListener implements ISuiteListener {
     @Override
     public void onFinish(ISuite suite) {
 
-        users = suite.getParameter("users");
+        if(suite.getName().equals("Stress")) {
 
-        if(!suite.getName().equals("Performance")) {
-
+            users = suite.getParameter("users");
             int test = suite
                     .getResults()
                     .values()

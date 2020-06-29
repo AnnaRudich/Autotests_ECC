@@ -5,4 +5,7 @@
             <class name="com.scalepoint.automation.tests.performance.PerformanceTest" />
         </classes>
     </test>
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.SuiteListener"/>
+    </listeners>
 </suite>
