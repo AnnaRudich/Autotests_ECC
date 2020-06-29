@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.performance;
 
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.http.HttpStatus;
@@ -32,21 +33,21 @@ public class PerformanceTest extends BaseApiTest {
 
 //        ClaimRequest claimRequest = TestData.getClaimRequest();
 //
-//        BaseService
-//                .loginUser(user);
+        BaseService
+                .loginUser(user);
 
-        String token = given()
-                .baseUri(baseUri)
-                .log().all()
-                .redirects().follow(false)
-                .queryParam("eccAdminUrl", eccAdminUrl)
-                .queryParam("login", user.getLogin())
-                .queryParam("pass", user.getPassword())
-                .queryParam("selfServiceUrl", selfService)
-                .get("/login/login")
-                .then().log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .extract().response().getBody().asString();
+//        String token = given()
+//                .baseUri(baseUri)
+//                .log().all()
+//                .redirects().follow(false)
+//                .queryParam("eccAdminUrl", eccAdminUrl)
+//                .queryParam("login", user.getLogin())
+//                .queryParam("pass", user.getPassword())
+//                .queryParam("selfServiceUrl", selfService)
+//                .get("/login/login")
+//                .then().log().all()
+//                .statusCode(HttpStatus.SC_OK)
+//                .extract().response().getBody().asString();
 
 //        given()
 //                .baseUri(baseUri)
