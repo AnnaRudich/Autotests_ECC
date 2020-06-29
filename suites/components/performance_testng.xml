@@ -1,8 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Performance" configfailurepolicy="continue" parallel="methods">
-    <parameter name="users"  value="10"/>
+    <parameter name="users"  value="5"/>
     <suite-files>
         <suite-file path="stress_testng.xml" />
+        <suite-file path="performanceStep_testng.xml" />
         <suite-file path="load_testng.xml" />
     </suite-files>
 </suite>

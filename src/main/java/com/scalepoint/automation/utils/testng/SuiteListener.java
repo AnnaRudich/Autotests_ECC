@@ -14,12 +14,13 @@ public class SuiteListener implements ISuiteListener {
 
     protected Logger log = LogManager.getLogger(SuiteListener.class);
     String users;
+    static final int step = 5;
 
     @Override
     public void onStart(ISuite iSuite) {
 
         if(iSuite.getXmlSuite().getName().equals("Load")){
-            Integer decrementedUsers = (Integer.valueOf(users) - 10);
+            Integer decrementedUsers = (Integer.valueOf(users) - step);
             Map parameters = new HashMap();
             parameters.put("users", decrementedUsers.toString());
             iSuite.getXmlSuite().setParameters(parameters);
@@ -43,7 +44,7 @@ public class SuiteListener implements ISuiteListener {
                     .size();
 
             if (test == 0) {
-                Integer incrementedUsers = Integer.valueOf(users) + 10;
+                Integer incrementedUsers = Integer.valueOf(users) + step;
                 Map parameters = new HashMap();
                 parameters.put("users", incrementedUsers.toString());
                 XmlSuite updatedSuite = suite.getXmlSuite();
