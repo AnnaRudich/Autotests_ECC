@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FraudAlertTest extends BaseTest {
 
-    private static final String SONY_HDR_CX450 = "Sony HDR-CX450";
+    private static final String SONY_HDR_CX450 = "Sony Handycam HDR-CX450";
     private static final String IPHONE = "iPhone 8";
 
     static final String TENANT = "topdanmark";
@@ -200,8 +200,8 @@ public class FraudAlertTest extends BaseTest {
 
         assertThat(item.getDescription()).contains(SONY_HDR_CX450);
         assertThat(item.getCategory()).isEqualTo(claimItem.getCategoryVideoCamera().getGroupName());
-        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2260.00);
-        assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2699.00);
+        assertThat(item.getValuationByType("CATALOG_PRICE").getPrice()).isEqualTo(2324.07);
+        assertThat(item.getValuationByType("MARKET_PRICE").getPrice()).isEqualTo(2499.00);
 
         fraudStatus(events.get(0), claimRequest.getCaseNumber(),fraudStatus);
 
