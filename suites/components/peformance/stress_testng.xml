@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Stress" configfailurepolicy="continue">
+    <parameter name="limit" value="1000"/>
+    <suite-files>
+        <suite-file path="stress/incremental_testng.xml" />
+    </suite-files>
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.StressSuiteListener"/>
+    </listeners>
+</suite>

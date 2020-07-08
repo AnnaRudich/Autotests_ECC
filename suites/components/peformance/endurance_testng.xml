@@ -1,0 +1,7 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Endurance" configfailurepolicy="continue">
+    <parameter name="testTime" value="1"/>
+    <suite-files>
+        <suite-file path="endurance/constant_testng.xml" />
+    </suite-files>
+</suite>
