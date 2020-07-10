@@ -6,20 +6,20 @@ import lombok.Data;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 @Builder
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Deposit {
+public class PaymentGateway {
+    @XmlAttribute
+    @Builder.Default
+    String transasctionID="2793920490";
 
     @XmlAttribute
-    Double amount;
+    @Builder.Default
+    String paymentGateway="DIBS";
 
-    @XmlElement(name = "ScalepointAccount")
-    ScalepointAccount scalepointAccount;
-
-    @XmlElement(name = "PaymentGateway")
-    PaymentGateway paymentGateway;
-
+    @XmlAttribute
+    @Builder.Default
+    String orderReferenceID="63729729610097617529629";
 }
