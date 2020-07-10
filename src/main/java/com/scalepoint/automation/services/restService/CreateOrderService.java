@@ -62,7 +62,7 @@ public class CreateOrderService extends BaseService {
     public void createOrderForProductExtraPay(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
         given().log().all()
                 .contentType("application/xml")
-                .body(buildProductOrderExtraPayRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
+                .body(buildVoucherOrderExtraPayRequestBody(voucherInfo, claimNumber, customerPhone, customerMail, isEvoucher))
                 .when()
                 .post(Configuration.getCreateOrderWebServiceUrl())
                 .then().statusCode(200).log();
@@ -94,7 +94,7 @@ public class CreateOrderService extends BaseService {
         return CreateOrderRequest.builder().order(buildOrder(payments, orderedItem, xpriceInfo.getSupplierId())).account(account).build();
     }
 
-    public CreateOrderRequest buildProductOrderExtraPayRequestBody(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
+    public CreateOrderRequest buildVoucherOrderExtraPayRequestBody(VoucherInfo voucherInfo, String claimNumber, String customerPhone, String customerMail, Boolean isEvoucher){
 
         VoucherType voucherType = isEvoucher ? VoucherType.EVOUCHER : VoucherType.PHYSICAL_VOUCHER;
 

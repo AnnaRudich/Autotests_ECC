@@ -10,13 +10,11 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -26,9 +24,8 @@ public class UCommerceShopTests extends BaseTest {
 
     private final Double orderedProductPrice = Constants.PRICE_100;
     private final Double orderedVoucherPrice = Constants.PRICE_100;
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
+    private final Double extraPayAmount = Constants.PRICE_50;
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
     public void orderProduct_positiveBalance(User user, Claim claim, ClaimItem claimItem) {
@@ -39,7 +36,7 @@ public class UCommerceShopTests extends BaseTest {
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(900.00)
+                .setNewPrice(100.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
@@ -62,7 +59,6 @@ public class UCommerceShopTests extends BaseTest {
                 });
     }
 
-@RunOn(DriverType.CHROME)
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
@@ -74,7 +70,7 @@ public class UCommerceShopTests extends BaseTest {
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(900.00)
+                .setNewPrice(100.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 
@@ -93,6 +89,8 @@ public class UCommerceShopTests extends BaseTest {
                 .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage -> {
                     orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
+                    orderDetailsPage.assertAmountScalepointHasPaidToSupplier(orderedProductPrice+extraPayAmount);
+                    orderDetailsPage.assertAmountCustomerHasPaidToScalepoint(extraPayAmount);
                     orderDetailsPage.assertCompensationAmount(activeValuation);
                 });
     }
@@ -100,7 +98,7 @@ public class UCommerceShopTests extends BaseTest {
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "create order with physical voucher and verify orderTotals")
-    public void orderPhisicalVoucher(User user, Claim claim, ClaimItem claimItem) {
+    public void orderPhysicalVoucher(User user, Claim claim, ClaimItem claimItem) {
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
@@ -108,7 +106,7 @@ public class UCommerceShopTests extends BaseTest {
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(900.00)
+                .setNewPrice(100.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .setValuation(NEW_PRICE);
 

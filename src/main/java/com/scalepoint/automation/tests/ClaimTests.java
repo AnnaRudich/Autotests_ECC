@@ -15,14 +15,12 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -446,7 +444,7 @@ public class ClaimTests extends BaseTest {
                     claimLine.assertSubCategoryTextIs(categoryMobilePhones.getCategoryName());
                 });
     }
-@RunOn(DriverType.CHROME)
+
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
     @Test(dataProvider = "testDataProvider")
     public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
