@@ -10,11 +10,13 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -24,7 +26,9 @@ public class UCommerceShopTests extends BaseTest {
 
     private final Double orderedProductPrice = Constants.PRICE_100;
     private final Double orderedVoucherPrice = Constants.PRICE_100;
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
     public void orderProduct_positiveBalance(User user, Claim claim, ClaimItem claimItem) {
@@ -53,10 +57,46 @@ public class UCommerceShopTests extends BaseTest {
         new OrderDetailsPage()
                 .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage -> {
-                        orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
+                        orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);//voucher
                         orderDetailsPage.assertCompensationAmount(activeValuation);
                 });
     }
+
+@RunOn(DriverType.CHROME)
+    @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "create order with product and verify orderTotals")
+    public void orderProductWithExtraPay(User user, Claim claim, ClaimItem claimItem) {
+    Boolean isEvoucher = false;
+    VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementDialog dialog = settlementPage
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(900.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(NEW_PRICE);
+
+        Double activeValuation = dialog.getCashCompensationValue();
+
+        dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .toOrdersDetailsPage();
+
+        new CreateOrderService().createOrderForProductExtraPay(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+
+        new OrderDetailsPage()
+                .refreshPageToGetOrders()
+                .doAssert(orderDetailsPage -> {
+                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation - orderedProductPrice);
+                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                });
+    }
+
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "create order with physical voucher and verify orderTotals")
