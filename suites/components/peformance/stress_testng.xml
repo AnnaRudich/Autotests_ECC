@@ -4,7 +4,4 @@
     <suite-files>
         <suite-file path="stress/incremental_testng.xml" />
     </suite-files>
-    <listeners>
-        <listener class-name="com.scalepoint.automation.utils.testng.StressSuiteListener"/>
-    </listeners>
 </suite>

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.utils.data.request;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;

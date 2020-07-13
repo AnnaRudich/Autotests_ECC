@@ -33,6 +33,7 @@ public class CreateClaimService extends BaseService {
     public CreateClaimService addClaim(ClaimRequest claimRequest) {
 
         this.response = given()
+                .log().all()
                 .baseUri(getEccUrl())
                 .basePath(UNIFIED_INTEGRATION)
                 .body(claimRequest)
@@ -40,6 +41,8 @@ public class CreateClaimService extends BaseService {
                 .when()
                 .post()
                 .then()
+                .log().all()
+                .statusCode(HttpStatus.SC_OK)
                 .extract().response();
         data.setClaimToken(response.jsonPath().get("token"));
         return this;

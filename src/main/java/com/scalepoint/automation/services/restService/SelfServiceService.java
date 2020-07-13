@@ -26,6 +26,7 @@ public class SelfServiceService extends BaseService {
     public SelfServiceService requestSelfService(SelfServiceRequest selfServiceRequest) {
 
         this.response = given()
+                .log().all()
                 .baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
@@ -33,6 +34,7 @@ public class SelfServiceService extends BaseService {
                 .body(selfServiceRequest)
                 .post(SELF_SERVICE_REQUEST)
                 .then()
+                .log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 

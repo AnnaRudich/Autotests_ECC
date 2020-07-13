@@ -6,6 +6,8 @@
         </classes>
     </test>
     <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.ConstantSuiteListener"/>
         <listener class-name="com.scalepoint.automation.utils.testng.IncrementalSuiteListener"/>
+        <listener class-name="com.scalepoint.automation.utils.testng.StressSuiteListener"/>
     </listeners>
 </suite>
