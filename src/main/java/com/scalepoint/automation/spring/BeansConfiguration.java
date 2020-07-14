@@ -26,6 +26,9 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableAutoConfiguration
@@ -147,5 +150,4 @@ public class BeansConfiguration {
                 .port(new Integer(port))
                 .build();
     }
-
 }

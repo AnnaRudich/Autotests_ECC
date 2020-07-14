@@ -1,29 +1,42 @@
 package com.scalepoint.automation.tests.performance;
 
 import com.scalepoint.automation.services.restService.common.BaseService;
+import com.scalepoint.automation.spring.PerformanceTestConfig;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
 import org.testng.annotations.*;
+import org.testng.xml.XmlTest;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class PerformanceTest extends BaseApiTest {
-
-    String baseUri = "http://localhost:88/databot";
-    String eccAdminUrl = "https://qa14.scalepoint.com/eccAdmin/dk";
-    String selfService = "https://qa14.scalepoint.com/self-service/dk";
 
     static int users;
 
     @Parameters({"users"})
     @BeforeClass
-    public void startWireMock(String users) {
+    public void startWireMock(String users, ITestContext iTestContext) {
 
         this.users = Integer.valueOf(users);
+
+
+//        Collection<ITestNGMethod> excludedMethods = iTestContext.getExcludedMethods();
+//        excludedMethods.remove(iTestContext.getAllTestMethods()[0]);
+//
+//        Arrays.stream(iTestContext.getAllTestMethods())
+//                .filter(iTestNGMethod -> Arrays.stream(iTestNGMethod.getGroups())
+//                        .anyMatch(s -> enabledPerformanceTest.contains(PerformanceTestConfig.PerformanceTestsNames.findTest(s))))
+//                .forEach(iTestNGMethod -> excludedMethods.remove(iTestNGMethod));
+//        System.out.println("test");
     }
 
     @AfterMethod
@@ -32,14 +45,13 @@ public class PerformanceTest extends BaseApiTest {
         PerformanceUsers.releaseUser((User) objects[0]);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false, priority=1)
+    @Test(dataProvider = "usersDataProvider", priority=1, groups = {PerformanceTestConfig.TEST_LOGIN_USER}, enabled = true)
     public void loginUser(User user) {
-
         BaseService
                 .loginUser(user);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = true, priority=2)
+    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, enabled = false)
     public void loginAndOpenClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -50,7 +62,7 @@ public class PerformanceTest extends BaseApiTest {
                 .loginAndOpenClaim(user, claimRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false, priority=3)
+    @Test(dataProvider = "usersDataProvider", priority=3, groups = {PerformanceTestConfig.TEST_SELFSERVICE}, enabled = false)
     public void selfService(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -63,7 +75,7 @@ public class PerformanceTest extends BaseApiTest {
                 .requestSelfService(selfServiceRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false, priority = 4)
+    @Test(dataProvider = "usersDataProvider", priority = 4, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, enabled = false)
     public void loginAndOpenClaimWithItems(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();

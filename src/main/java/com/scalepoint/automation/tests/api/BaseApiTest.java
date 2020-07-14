@@ -7,6 +7,7 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.spring.Application;
+import com.scalepoint.automation.spring.PerformanceTestConfig;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
 import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
 
@@ -43,6 +46,9 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected WireMock wireMock;
 
+    @Autowired
+    protected List<PerformanceTestConfig.PerformanceTestsNames> enabledPerformanceTest;
+
     @Value("${driver.type}")
     protected String browserMode;
 
@@ -51,6 +57,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
 
     @Value("${subscription.fraud_status.id}")
     protected String fraudStatusSubscriptionId;
+
 
     @BeforeMethod
     public void setUpData(Method method) {
