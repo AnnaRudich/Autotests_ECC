@@ -206,11 +206,11 @@ public class TextSearchPage extends Page {
         return at(BestFitPage.class);
     }
 
-    public ProductDetailsPage openProductDetailsOfFirstProduct() {
+    public ProductDetailsDialog openProductDetailsOfFirstProduct() {
         Wait.waitForVisible(match);
         Wait.waitForAjaxCompleted();
-        openDialog(firstProductDetails);
-        return at(ProductDetailsPage.class);
+        $(firstProductDetails).click();
+        return BaseDialog.at(ProductDetailsDialog.class);
     }
 
     public SettlementDialog openSidForFirstProduct() {
