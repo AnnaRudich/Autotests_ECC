@@ -7,15 +7,7 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -32,14 +24,6 @@ public interface Actions {
     Logger logger = LogManager.getLogger(Actions.class);
 
     int DELAY = 200;
-
-    default boolean openDialog(WebElement openButton) {
-        return Window.get().openDialog(openButton);
-    }
-
-    default void closeDialog(WebElement closeButton) {
-        Window.get().closeDialog(closeButton);
-    }
 
     default void switchToLast() {
         Window.get().switchToLast();
@@ -88,6 +72,16 @@ public interface Actions {
 
     default void scrollToElement(WebElement element) {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    default void switchToFrame(){
+
+        Browser.driver().switchTo().frame(0);
+    }
+
+    default void switchToParentFrame(){
+
+        Browser.driver().switchTo().parentFrame();
     }
 
     default void refresh(){
@@ -274,35 +268,35 @@ public interface Actions {
     }
 
     default void clickUsingJavaScriptIfClickDoesNotWork(WebElement element){
-         try {
-                waitForVisibleAndEnabled(element);
-                element.click();
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Element is not attached to the page document " + e);
-                clickUsingJS(element);
-            } catch (NoSuchElementException e) {
-                logger.warn("Element was not found in DOM " + e);
-                clickUsingJS(element);
-            } catch (Exception e) {
-                logger.warn("Unable to click on element " + e);
-                clickUsingJS(element);
-            }
+        try {
+            waitForVisibleAndEnabled(element);
+            element.click();
+        } catch (StaleElementReferenceException e) {
+            logger.warn("Element is not attached to the page document " + e);
+            clickUsingJS(element);
+        } catch (NoSuchElementException e) {
+            logger.warn("Element was not found in DOM " + e);
+            clickUsingJS(element);
+        } catch (Exception e) {
+            logger.warn("Unable to click on element " + e);
+            clickUsingJS(element);
+        }
     }
 
     default void doubleClick(WebElement element) {
-            try {
-                waitForVisibleAndEnabled(element);
-                org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
-                action.doubleClick(element);
-                action.perform();
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Element is not attached to the page document " + e);
-            } catch (NoSuchElementException e) {
-                logger.warn("Element was not found in DOM " + e);
-            } catch (Exception e) {
-                logger.error("Unable to doubleClick on element " + e);
-            }
+        try {
+            waitForVisibleAndEnabled(element);
+            org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
+            action.doubleClick(element);
+            action.perform();
+        } catch (StaleElementReferenceException e) {
+            logger.warn("Element is not attached to the page document " + e);
+        } catch (NoSuchElementException e) {
+            logger.warn("Element was not found in DOM " + e);
+        } catch (Exception e) {
+            logger.error("Unable to doubleClick on element " + e);
         }
+    }
 
     default void doubleClick(By by) {
         doubleClick(find(by));
