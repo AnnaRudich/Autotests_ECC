@@ -45,13 +45,13 @@ public class PerformanceTest extends BaseApiTest {
         PerformanceUsers.releaseUser((User) objects[0]);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=1, groups = {PerformanceTestConfig.TEST_LOGIN_USER}, enabled = true)
+    @Test(dataProvider = "usersDataProvider", priority=1, groups = {PerformanceTestConfig.TEST_LOGIN_USER}, enabled = false)
     public void loginUser(User user) {
         BaseService
                 .loginUser(user);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, enabled = false)
+    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, enabled = true)
     public void loginAndOpenClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
