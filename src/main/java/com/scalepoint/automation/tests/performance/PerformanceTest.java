@@ -51,7 +51,7 @@ public class PerformanceTest extends BaseApiTest {
                 .loginUser(user);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, enabled = true)
+    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, enabled = false)
     public void loginAndOpenClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -62,7 +62,7 @@ public class PerformanceTest extends BaseApiTest {
                 .loginAndOpenClaim(user, claimRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=3, groups = {PerformanceTestConfig.TEST_SELFSERVICE}, enabled = false)
+    @Test(dataProvider = "usersDataProvider", priority=3, groups = {PerformanceTestConfig.TEST_SELFSERVICE}, enabled = true)
     public void selfService(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
