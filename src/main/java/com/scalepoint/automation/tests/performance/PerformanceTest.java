@@ -44,7 +44,7 @@ public class PerformanceTest  extends BaseApiTest{
                 .loginUser(user);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS})
+    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM})
     public void loginAndOpenClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -79,6 +79,8 @@ public class PerformanceTest  extends BaseApiTest{
         BaseService
                 .loginAndOpenClaimWithItems(user, claimRequest,insertSettlementItem);
     }
+
+
 
     @DataProvider(name = "usersDataProvider", parallel = true)
     public static Object[][] usersDataProvider(Method method) throws InterruptedException {

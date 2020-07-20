@@ -161,7 +161,9 @@
         <suiteXmlFile/>
         <buildInfo/>
         <activatedProperties/>
-        <tests.performance.enabledPerformanceTests/>
+        <tests.performance.enabledPerformanceTests>loginUser</tests.performance.enabledPerformanceTests>
+        <tests.performance.limit>1000</tests.performance.limit>
+        <tests.performance.testTime>1</tests.performance.testTime>
     </properties>
 
     <build>
@@ -195,7 +197,9 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <systemPropertyVariables>
                         <buildInfo>${buildInfo}</buildInfo>
-                        <tests.performance.enabledPerformanceTests>loginUser</tests.performance.enabledPerformanceTests>
+                        <tests.performance.enabledPerformanceTests>${tests.performance.enabledPerformanceTests}</tests.performance.enabledPerformanceTests>
+                        <tests.performance.limit>${tests.performance.limit}</tests.performance.limit>
+                        <tests.performance.testTime>${tests.performance.testTime}</tests.performance.testTime>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>

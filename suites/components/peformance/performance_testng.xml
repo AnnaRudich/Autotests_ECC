@@ -2,10 +2,15 @@
 <suite name="Performance" configfailurepolicy="continue">
     <parameter name="tests.performance.users"  value="5"/>
     <parameter name="tests.performance.enabledPerformanceTests" value="${tests.performance.enabledPerformanceTests}"/>
+    <parameter name="tests.performance.limit" value="${tests.performance.limit}"/>
+    <parameter name="tests.performance.testTime" value="${tests.performance.testTime}"/>
     <suite-files>
         <suite-file path="stress_testng.xml" />
         <suite-file path="load_testng.xml" />
         <suite-file path="endurance_testng.xml" />
         <suite-file path="spike_testng.xml" />
     </suite-files>
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.PerformanceSuiteListener"/>
+    </listeners>
 </suite>
