@@ -1,27 +1,10 @@
 package com.scalepoint.automation.spring;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-@Configuration
-@EnableAutoConfiguration
 public class PerformanceTestConfig{
 
-    @Bean
-    public static List<PerformanceTestsNames> enabledPerformanceTest(@Value("${enabledPerformanceTest}") String enabledList){
-
-        return Arrays.stream(enabledList.split(","))
-                .map(name -> PerformanceTestConfig.PerformanceTestsNames.findTest(name))
-                .collect(Collectors.toList());
-
-    }
 
     public static final String TEST_LOGIN_USER = "loginUser";
     public static final String TEST_LOGIN_AND_OPEN_CLAIM = "loginAndOpenClaim";

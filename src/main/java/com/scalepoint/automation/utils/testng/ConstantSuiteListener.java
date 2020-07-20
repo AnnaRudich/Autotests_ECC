@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ConstantSuiteListener extends PerformanceSuiteListener implements ISuiteListener {
 
     private Logger log = LogManager.getLogger(ConstantSuiteListener.class);
-    private static final String TEST_TIME = "testTime";
+    private static final String TEST_TIME = "performance.test.testTime";
     private static Integer testTime = null;
 
 

@@ -1,6 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Performance" configfailurepolicy="continue">
-    <parameter name="users"  value="5"/>
+    <parameter name="tests.performance.users"  value="5"/>
+    <parameter name="tests.performance.enabledPerformanceTests" value="${tests.performance.enabledPerformanceTests}"/>
     <suite-files>
         <suite-file path="stress_testng.xml" />
         <suite-file path="load_testng.xml" />

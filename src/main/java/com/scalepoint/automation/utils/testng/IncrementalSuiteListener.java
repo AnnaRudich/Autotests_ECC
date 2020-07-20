@@ -9,20 +9,8 @@ public class IncrementalSuiteListener extends PerformanceSuiteListener implement
 
     protected Logger log = LogManager.getLogger(IncrementalSuiteListener.class);
 
-    private static Integer limit = null;
-
-
     @Override
     public void onStart(ISuite iSuite) {
-
-        log.info("test");
-//        switch (PerformanceSuite.findSuite(iSuite.getName())) {
-//
-//            case INCREMENTAL:
-//                limit = Integer.valueOf(iSuite.getParameter(LIMIT));
-//                break;
-//        }
-
 
     }
 

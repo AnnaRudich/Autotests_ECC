@@ -161,6 +161,7 @@
         <suiteXmlFile/>
         <buildInfo/>
         <activatedProperties/>
+        <tests.performance.enabledPerformanceTests/>
     </properties>
 
     <build>
@@ -194,7 +195,7 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <systemPropertyVariables>
                         <buildInfo>${buildInfo}</buildInfo>
-                        <usedTestSuite>${suiteXmlFile}</usedTestSuite>
+                        <tests.performance.enabledPerformanceTests>loginUser</tests.performance.enabledPerformanceTests>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>

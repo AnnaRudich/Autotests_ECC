@@ -3,7 +3,6 @@ package com.scalepoint.automation.utils.testng;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ISuite;
-import org.testng.ISuiteListener;
 import org.testng.xml.XmlSuite;
 
 import java.time.LocalDateTime;
@@ -17,69 +16,13 @@ public class PerformanceSuiteListener {
     protected Logger log = LogManager.getLogger(PerformanceSuiteListener.class);
 
     protected static final int STEP = 5;
-    protected static final String USERS = "users";
-    protected static final String LIMIT = "limit";
-    protected static  LocalDateTime END_TIME = null;
+    protected static final String USERS = "tests.performance.users";
+    protected static final String LIMIT = "tests.performance.limit";
 
+    protected static  LocalDateTime END_TIME = null;
     protected static Integer breakPoint;
     protected static Integer maxLoad;
     protected static Integer maxLoad0_5;
-
-//    @Override
-//    public void onStart(ISuite iSuite) {
-//        log.info("test");
-//    }
-
-//    @Override
-//    public void onFinish(ISuite suite) {
-//
-//        switch (PerformanceSuite.findSuite(suite.getName())) {
-//
-//            case STRESS:
-//
-//                XmlSuite incrementalSuite = suite
-//                        .getXmlSuite()
-//                        .getChildSuites()
-//                        .stream()
-//                        .filter(xmlSuite -> PerformanceSuite.findSuite(xmlSuite.getName()).equals(PerformanceSuite.INCREMENTAL))
-//                        .findFirst()
-//                        .orElseThrow();
-//
-//                Integer users = Integer.valueOf(suite.getParameter(USERS));
-//                breakPoint = users;
-//                maxLoad = users - STEP;
-//                maxLoad0_5 = maxLoad % 10 == 0 ? maxLoad / 2 : ((int) Math.floor((maxLoad / 10)) + 1) * 5;
-//
-//                XmlSuite performanceSuite = suite.getXmlSuite().getParentSuite();
-//
-//                XmlSuite loadSuite = getChildSuite(performanceSuite, PerformanceSuite.LOAD);
-//                setUsers(loadSuite, maxLoad.toString());
-//
-//                XmlSuite enduranceSuite = getChildSuite(performanceSuite, PerformanceSuite.ENDURANCE);
-//                setUsers(getChildSuite(enduranceSuite, PerformanceSuite.CONSTANT), maxLoad.toString());
-//
-//                XmlSuite spikeSuite = getChildSuite(performanceSuite, PerformanceSuite.SPIKE);
-//                spikeSuite
-//                        .getChildSuites()
-//                        .stream()
-//                        .filter(xmlSuite -> PerformanceSuite.findSuite(xmlSuite.getName()).equals(PerformanceSuite.CONSTANT))
-//                        .forEach(xmlSuite -> setUsers(xmlSuite, maxLoad0_5.toString()));
-//                spikeSuite
-//                        .getChildSuites()
-//                        .stream()
-//                        .filter(xmlSuite -> PerformanceSuite.findSuite(xmlSuite.getName()).equals(PerformanceSuite.INCREMENTAL))
-//                        .forEach(xmlSuite -> setLimit(xmlSuite, maxLoad0_5.toString()));
-//                spikeSuite
-//                        .getChildSuites()
-//                        .stream()
-//                        .filter(xmlSuite -> PerformanceSuite.findSuite(xmlSuite.getName()).equals(PerformanceSuite.INCREMENTAL))
-//                        .forEach(xmlSuite -> setLimit(xmlSuite, maxLoad.toString()));
-//
-//
-//                log.warn("Break point: {}", breakPoint);
-//                break;
-//        }
-//    }
 
     protected XmlSuite getChildSuite(XmlSuite xmlSuite, PerformanceSuite performanceSuite){
 
@@ -100,6 +43,7 @@ public class PerformanceSuiteListener {
 
             log.info("Minutes left :{}", now.until(END_TIME, ChronoUnit.MINUTES));
             suite.run();
+
         }else {
 
             END_TIME = null;
@@ -141,7 +85,7 @@ public class PerformanceSuiteListener {
         return Integer.valueOf(limit);
     }
 
-    enum PerformanceSuite{
+    public enum PerformanceSuite{
 
         STRESS("Stress"),
         LOAD("Load"),

@@ -2,10 +2,8 @@ package com.scalepoint.automation.tests.performance;
 
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 
-import java.util.concurrent.*;
-
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class PerformanceUsers {
 
@@ -18,18 +16,18 @@ public class PerformanceUsers {
 
         int testCompaniesLength = TestCompanies.values().length;
 
-            for (int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++){
 
-                TestCompanies testCompany = TestCompanies.values()[i % testCompaniesLength];
+            TestCompanies testCompany = TestCompanies.values()[i % testCompaniesLength];
 
-                User user = User.builder()
-                        .login("autotest-future" + testCompany.ftId + (Math.round(Math.floor(i / testCompaniesLength)) + 1))
-                        .password(PASSWORD)
-                        .companyCode(testCompany.companyCode)
-                        .companyName(testCompany.companyName)
-                        .companyId(testCompany.companyId)
-                        .ftId(testCompany.ftId)
-                        .build();
+            User user = User.builder()
+                    .login("autotest-future" + testCompany.ftId + (Math.round(Math.floor(i / testCompaniesLength)) + 1))
+                    .password(PASSWORD)
+                    .companyCode(testCompany.companyCode)
+                    .companyName(testCompany.companyName)
+                    .companyId(testCompany.companyId)
+                    .ftId(testCompany.ftId)
+                    .build();
 
             availableUsers.add(user);
         }
@@ -37,7 +35,7 @@ public class PerformanceUsers {
 
     public static synchronized User takeUser() throws InterruptedException {
 
-            return availableUsers.take();
+        return availableUsers.take();
     }
 
     public static synchronized void releaseUser(User user){

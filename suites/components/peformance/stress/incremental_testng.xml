@@ -1,13 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Incremental_stress" configfailurepolicy="continue" data-provider-thread-count="1000">
     <test verbose="1" name="Performance Test" enabled="true" preserve-order="true">
-<!--        <groups>-->
-<!--            <run>-->
-<!--                <exclude name="loginUser" />-->
-<!--                <exclude name="loginAndOpenClaim" />-->
-<!--                <exclude name="selfService" />-->
-<!--            </run>-->
-<!--        </groups>-->
         <classes>
             <class name="com.scalepoint.automation.tests.performance.PerformanceTest" />
         </classes>
@@ -16,5 +9,6 @@
         <listener class-name="com.scalepoint.automation.utils.testng.ConstantSuiteListener"/>
         <listener class-name="com.scalepoint.automation.utils.testng.IncrementalSuiteListener"/>
         <listener class-name="com.scalepoint.automation.utils.testng.StressSuiteListener"/>
+        <listener class-name="com.scalepoint.automation.utils.testng.MethodExcluder"/>
     </listeners>
 </suite>
