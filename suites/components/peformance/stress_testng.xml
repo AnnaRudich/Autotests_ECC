@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Stress" configfailurepolicy="continue">
-    <parameter name="tests.performance.limit" value="50"/>
+    <parameter name="tests.performance.limit" value="1000"/>
     <suite-files>
         <suite-file path="stress/incremental_testng.xml" />
     </suite-files>
