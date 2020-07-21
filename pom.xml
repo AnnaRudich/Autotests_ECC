@@ -150,9 +150,9 @@
         <htmlelements.version>1.20.0</htmlelements.version>
         <httpclient.version>4.5.2</httpclient.version>
         <java.version>11</java.version>
-        <jackson.version>2.11.1</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.9.2</jsoup.version>
-        <jaxb.version>2.3.1</jaxb.version>
+        <jaxb.version>2.2.12</jaxb.version>
         <qatools.properties.version>2.0.RC3</qatools.properties.version>
         <log4j.version>2.6.2</log4j.version>
         <selenium.version>3.141.59</selenium.version>
@@ -197,6 +197,7 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <systemPropertyVariables>
                         <buildInfo>${buildInfo}</buildInfo>
+                        <usedTestSuite>${suiteXmlFile}</usedTestSuite>
                         <tests.performance.enabledPerformanceTests>${tests.performance.enabledPerformanceTests}</tests.performance.enabledPerformanceTests>
                         <tests.performance.limit>${tests.performance.limit}</tests.performance.limit>
                         <tests.performance.testTime>${tests.performance.testTime}</tests.performance.testTime>
@@ -454,12 +455,6 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-osgi</artifactId>
-            <version>2.3.3</version>
         </dependency>
 
         <dependency>

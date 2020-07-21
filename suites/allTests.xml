@@ -19,6 +19,7 @@
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance"/>
                 <exclude name="com.scalepoint.automation.tests.filesService" />
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance" />
+                <exclude name="com.scalepoint.automation.tests.performance"/>
             </package>
         </packages>
 
