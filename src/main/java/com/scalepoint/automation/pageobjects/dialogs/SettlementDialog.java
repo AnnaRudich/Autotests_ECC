@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
+import com.scalepoint.automation.pageobjects.components.AgeDataPickerComponent;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -13,6 +14,7 @@ import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Settlement;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -472,6 +474,11 @@ public class SettlementDialog extends BaseDialog {
         waitForJavascriptRecalculation();
         return this;
     }
+
+//    public SettlementDialog.AgeDatePicker openAgeDatePicker(){
+//        $("#purchase-date-button-btnInnerEl").click();
+//        return at(SettlementDialog.AgeDatePicker.class)
+//    }
 
     public SettlementDialog disableAge() {
         age.select(0);
@@ -951,6 +958,37 @@ public class SettlementDialog extends BaseDialog {
 
         public int getPercentage() {
             return percentage;
+        }
+    }
+
+    public static class AgeDatePicker {
+
+        AgeDatePicker isDataPickerOpened() {
+            $(".x-datepicker").shouldBe(Condition.visible);
+            return this;
+        }
+
+        AgeDatePicker openMonthYearSelector() {
+            $(".x-datepicker-month a span span").find(By.cssSelector("data-ref=btnInnerEl")).click();
+            $(".x-monthpicker").shouldBe(Condition.visible);
+            return this;
+        }
+
+        AgeDatePicker selectYear(String yearToSelect) {
+            ElementsCollection listOfYears = $$(".x-monthpicker-item .x-monthpicker-year a");
+            for (SelenideElement year : listOfYears) {
+                if (year.getText().equals(yearToSelect)) {
+                    year.click();
+                    //confirm by OK, CRAZY selector
+                }
+            }
+            return this;
+        }
+    }
+
+        SettlementDialog closePicker(){
+            $(".x-datepicker-footer .x-btn").click();
+            return at(SettlementDialog.class);
         }
     }
 
