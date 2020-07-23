@@ -181,7 +181,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .openAgeDatePicker()
                 .isDataPickerOpened()
                 .openMonthYearSelector()
-                .selectYear(String.valueOf(LocalDate.now().getYear()-4))
+                .selectYear(String.valueOf(LocalDate.now().getYear()-5))
                 .closePicker()
 
                 .setValuation(NEW_PRICE);

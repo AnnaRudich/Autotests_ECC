@@ -517,7 +517,7 @@ public class SettlementDialog extends BaseDialog {
         ElementsCollection listOfYears = $$(".x-monthpicker-year a");
         Optional<SelenideElement> yearInTheList = listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny();
         if (yearInTheList.isPresent()) {
-            listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
+            listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny().get().click();
         } else {
             $(".x-monthpicker-yearnav-prev").click();
             $$(".x-monthpicker-year a").stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
@@ -528,7 +528,7 @@ public class SettlementDialog extends BaseDialog {
 
 
     public SettlementDialog closePicker() {
-        $(".x-datepicker-footer .x-btn").click();
+        $(".x-datepicker-selected").click();
         return at(SettlementDialog.class);
     }
 
