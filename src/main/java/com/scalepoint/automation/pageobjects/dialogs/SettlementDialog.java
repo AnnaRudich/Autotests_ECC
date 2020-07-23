@@ -5,8 +5,11 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
-import com.scalepoint.automation.pageobjects.components.AgeDataPickerComponent;
-import com.scalepoint.automation.pageobjects.extjs.*;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtElement;
+import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -14,18 +17,26 @@ import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.JavascriptHelper.Snippet;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Settlement;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.*;
+import ru.yandex.qatools.htmlelements.element.Button;
+import ru.yandex.qatools.htmlelements.element.CheckBox;
+import ru.yandex.qatools.htmlelements.element.Link;
+import ru.yandex.qatools.htmlelements.element.Table;
+import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +55,18 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.waitForEnabled;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertEqualsNoOrder;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 
 public class SettlementDialog extends BaseDialog {
@@ -316,7 +336,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     @Override
-   protected void ensureWeAreAt() {
+    protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
         $(cancelButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         JavascriptHelper.loadSnippet(Snippet.SID_GROUPS_LOADED);
@@ -475,10 +495,50 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-//    public SettlementDialog.AgeDatePicker openAgeDatePicker(){
-//        $("#purchase-date-button-btnInnerEl").click();
-//        return at(SettlementDialog.AgeDatePicker.class)
-//    }
+    public SettlementDialog openAgeDatePicker() {
+        $("#purchase-date-button-btnInnerEl").click();
+        return this;
+    }
+
+    public SettlementDialog isDataPickerOpened() {
+        $(".x-datepicker").shouldBe(Condition.visible);
+        return this;
+    }
+
+    public SettlementDialog openMonthYearSelector() {
+        //$(".x-datepicker-month a span span").find(By.cssSelector("data-ref=btnInnerEl")).click();
+        $(".x-btn-split").click();
+        $(".x-monthpicker").shouldBe(Condition.visible);
+        return this;
+    }
+
+    public SettlementDialog selectYear(String yearToSelect) {
+        ElementsCollection listOfYears = $$(".x-monthpicker-year a");
+        for (SelenideElement year : listOfYears) {
+            if (year.getText().equals(yearToSelect)) {
+                year.click();
+            }else {
+                $(".x-monthpicker-yearnav-prev").click();
+            }
+
+            String actualSelectedYear = $$(".x-monthpicker-years").find(Condition.cssClass(".x-monthpicker-selected")).getText();
+            if (!actualSelectedYear.equals(yearToSelect)) {
+                $(".x-monthpicker-yearnav-prev").click();
+                if (year.getText().equals(yearToSelect)) {
+                    year.click();
+                    $$(".x-monthpicker-buttons a").get(0).click();
+                }
+            }
+        }
+        $$(".x-monthpicker-buttons a").get(0).click();
+        return this;
+    }
+
+
+    public SettlementDialog closePicker() {
+        $(".x-datepicker-footer .x-btn").click();
+        return at(SettlementDialog.class);
+    }
 
     public SettlementDialog disableAge() {
         age.select(0);
@@ -958,37 +1018,6 @@ public class SettlementDialog extends BaseDialog {
 
         public int getPercentage() {
             return percentage;
-        }
-    }
-
-    public static class AgeDatePicker {
-
-        AgeDatePicker isDataPickerOpened() {
-            $(".x-datepicker").shouldBe(Condition.visible);
-            return this;
-        }
-
-        AgeDatePicker openMonthYearSelector() {
-            $(".x-datepicker-month a span span").find(By.cssSelector("data-ref=btnInnerEl")).click();
-            $(".x-monthpicker").shouldBe(Condition.visible);
-            return this;
-        }
-
-        AgeDatePicker selectYear(String yearToSelect) {
-            ElementsCollection listOfYears = $$(".x-monthpicker-item .x-monthpicker-year a");
-            for (SelenideElement year : listOfYears) {
-                if (year.getText().equals(yearToSelect)) {
-                    year.click();
-                    //confirm by OK, CRAZY selector
-                }
-            }
-            return this;
-        }
-    }
-
-        SettlementDialog closePicker(){
-            $(".x-datepicker-footer .x-btn").click();
-            return at(SettlementDialog.class);
         }
     }
 

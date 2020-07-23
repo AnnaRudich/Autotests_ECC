@@ -6,12 +6,16 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
+
+import java.time.LocalDate;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
@@ -159,7 +163,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 })
                 .cancel();
     }
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule discretionary type after ticking Depreciation automatically updated checkbox")
     public void ecc3031_4_reductionRulePolicyTypeDiscretionaryAutomaticDataPicker(@UserCompany(CompanyCode.ALKA) User user,
                                                                         Claim claim,
@@ -173,7 +177,13 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryLuxuryWatches())
                 //.enableAge(reductionRule.getAgeFrom2())
+
                 .openAgeDatePicker()
+                .isDataPickerOpened()
+                .openMonthYearSelector()
+                .selectYear(String.valueOf(LocalDate.now().getYear()-4))
+                .closePicker()
+
                 .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
