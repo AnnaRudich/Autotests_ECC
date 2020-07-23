@@ -40,6 +40,7 @@ import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -514,21 +515,12 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog selectYear(String yearToSelect) {
         ElementsCollection listOfYears = $$(".x-monthpicker-year a");
-        for (SelenideElement year : listOfYears) {
-            if (year.getText().equals(yearToSelect)) {
-                year.click();
-            }else {
-                $(".x-monthpicker-yearnav-prev").click();
-            }
-
-            String actualSelectedYear = $$(".x-monthpicker-years").find(Condition.cssClass(".x-monthpicker-selected")).getText();
-            if (!actualSelectedYear.equals(yearToSelect)) {
-                $(".x-monthpicker-yearnav-prev").click();
-                if (year.getText().equals(yearToSelect)) {
-                    year.click();
-                    $$(".x-monthpicker-buttons a").get(0).click();
-                }
-            }
+        Optional<SelenideElement> yearInTheList = listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny();
+        if (yearInTheList.isPresent()) {
+            listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
+        } else {
+            $(".x-monthpicker-yearnav-prev").click();
+            $$(".x-monthpicker-year a").stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
         }
         $$(".x-monthpicker-buttons a").get(0).click();
         return this;
