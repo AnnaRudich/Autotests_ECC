@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.data.request;
 
+import com.scalepoint.automation.utils.data.entity.eccIntegration.ValuationTypes;
 import lombok.Data;
 
 import javax.xml.bind.annotation.*;
@@ -23,17 +24,19 @@ public class Valuation {
     @XmlAttribute
     private String dirty;
     @XmlAttribute
-    private String valuationType;
+    private ValuationTypes valuationType;
     @XmlAttribute
     private String active;
     @XmlAttribute
     private String priceAfterAllDeductions;
-    @XmlElement(name = "VoucherReplacement")
+    @XmlElement(nillable=true, name = "VoucherReplacement")
     private VoucherReplacement VoucherReplacement;
     @XmlAttribute
     private String quantity;
     @XmlAttribute
     private String preDepreciation;
+    @XmlElement(nillable=true, name = "ProductMatch")
+    private ProductMatch ProductMatch;
 
     @Override
     public String toString() {

@@ -143,7 +143,11 @@ public class TestData {
     }
 
     public static InsertSettlementItem getInsertSettlementItem() {
-        return (InsertSettlementItem) getData(Data.CLAIM_ITEM);
+        return getData(Data.CLAIM_ITEM);
+    }
+
+    public static InsertSettlementItem getPerformanceInsertSettlementItem() {
+        return getData(Data.PERFORMANCE_INSERT_SETTLEMENT_ITEM);
     }
 
     public static UpdateSettlementItem getUpdateSettlementItem() {
@@ -195,7 +199,9 @@ public class TestData {
         InputStream inputStream = getInputStreamFromResources(locale, data.fileName);
         try {
             if (data.fileName.endsWith(".xml")) {
-                resultObject = data.context.createUnmarshaller().unmarshal(inputStream);
+                resultObject = data.context
+                        .createUnmarshaller()
+                        .unmarshal(inputStream);
             } else if (data.fileName.endsWith(".json")) {
                 resultObject = new ObjectMapper().readValue(inputStream, data.dataClass);
             } else {
@@ -294,7 +300,8 @@ public class TestData {
         SCALEPOINT_DEFAULT_FT_SETTINGS("DefaultFTSettings/Scalepoint.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGFORSIKRING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygforsikring.xml", DefaultFTOperations.DefaultFTSettings.class),
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
-        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class);
+        TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class),
+        PERFORMANCE_INSERT_SETTLEMENT_ITEM("request/Claim/PerformanceInsertSettlementItem.xml", InsertSettlementItem.class);
 
         private String fileName;
         private JAXBContext context;

@@ -11,6 +11,7 @@ public interface BasePath {
     String UPDATE_SETTLEMENT_ITEM = "/{userId}/UpdateSettlementItem";
     String REMOVE_SETTLEMENT_ITEM = "/{userId}/rest/settlement/removeSelected.json";
     String SAVE_CLAIM = "/{userId}/SaveUserInfo";
+    String SAVE_CUSTOMER = "/{userId}/SaveCustomer";
     String CLOSE_EXTERNAL = "/{userId}/CloseCaseExternal";
     String CLOSE_WITH_MAIL = "/{userId}/SettleCustomer?sendMailAndSms=true";
     String CLOSE_WITHOUT_MAIL = "/{userId}/SettleCustomer?sendMailAndSms=false";
@@ -30,4 +31,8 @@ public interface BasePath {
     String SELF_SERVICE_LOSS_ITEMS = "/self-service/dk/lossItems/";
     String SELF_SERVICE_SUBMITTED = "/self-service/dk/submitted";
     String ATTACHMENTS = "/{userId}/rest/settlement/attachments";
+    String TEXT_SEARCH = "/{userId}/search/TextSearch";
+    String SECURED_IMAGE = "/rest/settlement/resource/securedimage";
+    String SID_STATISTICS = "/{userId}/webshop/jsp/matching_engine/dialog/get_settlement_item_dialog_statics.jsp";
+    String SID_ITEM = "/{userId}/webshop/jsp/matching_engine/dialog/get_settlement_item_dialog_item.jsp";
 }
