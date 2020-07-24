@@ -7,11 +7,13 @@ import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
+
+import java.time.LocalDate;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
@@ -133,6 +135,51 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
                 .setNewPrice(Constants.PRICE_2400)
                 .setCategory(claimItem.getCategoryLuxuryWatches())
                 .enableAge(reductionRule.getAgeFrom2())
+                .setValuation(NEW_PRICE);
+
+        Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
+        ValuationWithReduction valuationWithReduction =
+                SidCalculator.calculatePriceValuationWithReduction(Constants.PRICE_2400, depreciationPercentage, claimItem.getAlkaUserReductionRule());
+
+        Double calculatedCashValue = valuationWithReduction.getCashCompensation();
+        Double calculatedDepreciation = valuationWithReduction.getDepreciation();
+        Double calculatedCashWithReduction = valuationWithReduction.getCashCompensationWithReduction();
+        Double calculatedReduction = valuationWithReduction.getReduction();
+
+        settlementDialog
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashValue);
+                    sid.assertDepreciationAmountIs(calculatedDepreciation);
+                    sid.assertDepreciationValueIs(0d);
+                })
+                .automaticDepreciation(true)
+                .setValuation(NEW_PRICE)
+                .doAssert(sid -> {
+                    sid.assertCashValueIs(calculatedCashWithReduction);
+                    sid.assertDepreciationAmountIs(calculatedReduction);
+                    sid.assertDepreciationValueIs(claimItem.getAlkaUserReductionRule().doubleValue());
+                })
+                .cancel();
+    }
+
+    @Test(dataProvider = "testDataProvider", description = "ECC-3031 Verify reduction rule and automatic depreciation when age is selected in date picker")
+    public void setAgeUsingDatePicker(@UserCompany(CompanyCode.ALKA) User user,
+                                                                        Claim claim,
+                                                                        ClaimItem claimItem,
+                                                                        ReductionRule reductionRule) {
+        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
+                .openSid()
+                .automaticDepreciation(false)
+                .setDescription(claimItem.getTextFieldSP())
+                .setCustomerDemand(Constants.PRICE_100_000)
+                .setNewPrice(Constants.PRICE_2400)
+                .setCategory(claimItem.getCategoryLuxuryWatches())
+
+                .openAgeDatePicker()
+                .openMonthYearLists()
+                .selectYear(String.valueOf(LocalDate.now().getYear()-5))
+                .closePicker()
+
                 .setValuation(NEW_PRICE);
 
         Integer depreciationPercentage = settlementDialog.getDepreciationPercentage();
