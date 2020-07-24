@@ -37,8 +37,8 @@ public class PerformanceTest  extends BaseApiTest{
 
     @Test(dataProvider = "usersDataProvider", priority=1, groups = {PerformanceTestConfig.TEST_LOGIN_USER})
     public void loginUser(User user) {
-        BaseService
-                .loginUser(user);
+
+        BaseService.loginUser(user);
     }
 
     @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM})
@@ -48,8 +48,7 @@ public class PerformanceTest  extends BaseApiTest{
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
         claimRequest.setCompany(user.getCompanyName().toLowerCase());
 
-        BaseService
-                .loginAndOpenClaim(user, claimRequest);
+        BaseService.loginAndOpenClaim(user, claimRequest);
     }
 
     @Test(dataProvider = "usersDataProvider", priority=3, groups = {PerformanceTestConfig.TEST_SELFSERVICE})
@@ -77,8 +76,7 @@ public class PerformanceTest  extends BaseApiTest{
         claimRequest.setCompany(user.getCompanyName().toLowerCase());
         InsertSettlementItem insertSettlementItem = TestData.getInsertSettlementItem();
 
-        BaseService
-                .loginAndOpenClaimWithItems(user, claimRequest,insertSettlementItem);
+        BaseService.loginAndOpenClaimWithItems(user, claimRequest,insertSettlementItem);
     }
 
     @Test(dataProvider = "usersDataProvider", priority = 5, groups = {PerformanceTestConfig.TEST_CLOSE_WITH_EMAIL})
@@ -132,7 +130,6 @@ public class PerformanceTest  extends BaseApiTest{
 
         TextSearchService textSearchService = BaseService
                 .loginAndOpenClaim(user, claimRequest)
-                .textSearch()
                 .searchText("samsung galaxy s7");
 
         ProductResult productResult = textSearchService
@@ -153,7 +150,7 @@ public class PerformanceTest  extends BaseApiTest{
 
         for (int i = 0; i < users; i++) {
 
-            objects[i][0] = new PerformanceUsers().takeUser();
+            objects[i][0] = PerformanceUsers.takeUser();
         }
 
         return objects;

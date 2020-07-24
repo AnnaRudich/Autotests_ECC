@@ -1,5 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
@@ -105,9 +106,9 @@ public class CreateClaimService extends BaseService {
         return new ClaimSettlementItemsService();
     }
 
-    public TextSearchService textSearch(){
+    public TextSearchService searchText(String text) throws JsonProcessingException {
 
-        return new TextSearchService();
+        return new TextSearchService().searchText(text);
     }
 }
 

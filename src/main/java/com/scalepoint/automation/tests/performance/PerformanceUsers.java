@@ -66,10 +66,5 @@ public class PerformanceUsers {
             this.companyId = companyId;
             this.ftId = ftId;
         }
-
-        public String getCompanyCode(){
-
-            return companyCode;
-        }
     }
 }
