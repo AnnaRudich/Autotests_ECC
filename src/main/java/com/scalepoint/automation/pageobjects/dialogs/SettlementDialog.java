@@ -496,41 +496,39 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementDialog openAgeDatePicker() {
-        $("#purchase-date-button-btnInnerEl").click();
-        return this;
-    }
-
-    public SettlementDialog isDataPickerOpened() {
-        $(".x-datepicker").shouldBe(Condition.visible);
-        return this;
-    }
-
-    public SettlementDialog openMonthYearSelector() {
-        //$(".x-datepicker-month a span span").find(By.cssSelector("data-ref=btnInnerEl")).click();
-        $(".x-btn-split").click();
-        $(".x-monthpicker").shouldBe(Condition.visible);
-        return this;
-    }
-
-    public SettlementDialog selectYear(String yearToSelect) {
-        ElementsCollection listOfYears = $$(".x-monthpicker-year a");
-        Optional<SelenideElement> yearInTheList = listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny();
-        if (yearInTheList.isPresent()) {
-            listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny().get().click();
-        } else {
-            $(".x-monthpicker-yearnav-prev").click();
-            $$(".x-monthpicker-year a").stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
-        }
-        $$(".x-monthpicker-buttons a").get(0).click();
-        return this;
-    }
-
-
-    public SettlementDialog closePicker() {
-        $(".x-datepicker-selected").click();
-        return at(SettlementDialog.class);
-    }
+//    public SettlementDialog openAgeDatePicker() {
+//        $("#purchase-date-button-btnInnerEl").click();
+//        isDataPickerOpened();
+//        return this;
+//    }
+//
+//    private void isDataPickerOpened() {
+//        $(".x-datepicker").shouldBe(Condition.visible);
+//    }
+//
+//    public SettlementDialog openMonthYearLists() {
+//        $(".x-btn-split").click();
+//        $(".x-monthpicker").shouldBe(Condition.visible);
+//        return this;
+//    }
+//
+//    public SettlementDialog selectYear(String yearToSelect) {
+//        ElementsCollection listOfYears = $$(".x-monthpicker-year a");
+//        Optional<SelenideElement> yearInTheList = listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny();
+//        if (yearInTheList.isPresent()) {
+//            listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny().get().click();
+//        } else {
+//            $(".x-monthpicker-yearnav-prev").click();
+//            $$(".x-monthpicker-year a").stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
+//        }
+//        $$(".x-monthpicker-buttons a").get(0).click();
+//        return this;
+//    }
+//
+//    public SettlementDialog closePicker() {
+//        $(".x-datepicker-selected").click();
+//        return at(SettlementDialog.class);
+//    }
 
     public SettlementDialog disableAge() {
         age.select(0);
@@ -1010,6 +1008,55 @@ public class SettlementDialog extends BaseDialog {
 
         public int getPercentage() {
             return percentage;
+        }
+    }
+
+    public AgeDatePicker openAgeDatePicker() {
+        $("#purchase-date-button-btnInnerEl").click();
+        isDataPickerOpened();
+        return new AgeDatePicker();
+    }
+
+    private void isDataPickerOpened() {
+        $(".x-datepicker").shouldBe(Condition.visible);
+    }
+
+
+    public class AgeDatePicker {
+
+        public AgeDatePicker openMonthYearLists() {
+            $(".x-btn-split").click();
+            $(".x-monthpicker").shouldBe(Condition.visible);
+            return this;
+        }
+
+        public AgeDatePicker selectYear(String yearToSelect) {
+            if (findYearInTheList(yearToSelect).isPresent()) {
+                findYearInTheList(yearToSelect).get().click();
+            } else {
+                navigateToPreviousPeriodPage();
+                findYearInTheList(yearToSelect).get().click();
+            }
+            confirmSelection();
+            return this;
+        }
+
+        private void confirmSelection() {
+            $$(".x-monthpicker-buttons a").get(0).click();
+        }
+
+        private Optional<SelenideElement> findYearInTheList(String year) {
+            ElementsCollection listOfYears = $$(".x-monthpicker-year a");
+            return listOfYears.stream().filter(y -> y.getText().equals(year)).findAny();
+        }
+
+        private void navigateToPreviousPeriodPage() {
+            $(".x-monthpicker-yearnav-prev").click();
+        }
+
+        public SettlementDialog closePicker() {
+            $(".x-datepicker-selected").click();
+            return at(SettlementDialog.class);
         }
     }
 

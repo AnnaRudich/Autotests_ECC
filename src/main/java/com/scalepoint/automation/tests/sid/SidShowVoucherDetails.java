@@ -8,14 +8,12 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-557")
@@ -81,7 +79,6 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Select again another voucher
      * THEN: Check that another voucher is displayed
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify shared voucher")
     public void ecc5519_1_sharedVoucherAndTagsBrandInSID(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         checkBrandsAndTags(user, claim, claimItem, voucher);
@@ -95,7 +92,7 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Click View voucher details
      * THEN: Brands and Tags contain correct info (entered in SM Admin)
      */
-//@RunOn(DriverType.CHROME)
+
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify exclusive voucher")
     public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserCompany(CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         checkBrandsAndTags(user, claim, claimItem, voucher);
@@ -128,7 +125,6 @@ public class SidShowVoucherDetails extends BaseTest {
      * AND: Open Terms and conditions dialog
      * THEN: Verify that terms and conditions are visible and equals the ones previous
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify 'Trade and conditions' buttons and window")
     public void ecc5519_2_voucherTradeTermsAndConditions(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
