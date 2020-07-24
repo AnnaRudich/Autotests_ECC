@@ -998,10 +998,10 @@ public class SettlementDialog extends BaseDialog {
 
         public AgeDatePicker selectYear(String yearToSelect) {
             if (findYearInTheList(yearToSelect).isPresent()) {
-                findYearInTheList(yearToSelect).get().click();
+                findYearInTheListAndClick(yearToSelect);
             } else {
                 navigateToPreviousPeriodPage();
-                findYearInTheList(yearToSelect).get().click();
+                findYearInTheListAndClick(yearToSelect);
             }
             confirmSelection();
             return this;
@@ -1014,6 +1014,11 @@ public class SettlementDialog extends BaseDialog {
         private Optional<SelenideElement> findYearInTheList(String year) {
             ElementsCollection listOfYears = $$(".x-monthpicker-year a");
             return listOfYears.stream().filter(y -> y.getText().equals(year)).findAny();
+        }
+
+        private void findYearInTheListAndClick(String year){
+            findYearInTheList(year)
+                    .orElseThrow(java.util.NoSuchElementException::new).click();
         }
 
         private void navigateToPreviousPeriodPage() {
