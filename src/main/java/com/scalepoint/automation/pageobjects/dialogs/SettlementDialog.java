@@ -496,40 +496,6 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-//    public SettlementDialog openAgeDatePicker() {
-//        $("#purchase-date-button-btnInnerEl").click();
-//        isDataPickerOpened();
-//        return this;
-//    }
-//
-//    private void isDataPickerOpened() {
-//        $(".x-datepicker").shouldBe(Condition.visible);
-//    }
-//
-//    public SettlementDialog openMonthYearLists() {
-//        $(".x-btn-split").click();
-//        $(".x-monthpicker").shouldBe(Condition.visible);
-//        return this;
-//    }
-//
-//    public SettlementDialog selectYear(String yearToSelect) {
-//        ElementsCollection listOfYears = $$(".x-monthpicker-year a");
-//        Optional<SelenideElement> yearInTheList = listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny();
-//        if (yearInTheList.isPresent()) {
-//            listOfYears.stream().filter(year -> year.getText().equals(yearToSelect)).findAny().get().click();
-//        } else {
-//            $(".x-monthpicker-yearnav-prev").click();
-//            $$(".x-monthpicker-year a").stream().filter(year -> year.getText().equals(yearToSelect)).findFirst().get().click();
-//        }
-//        $$(".x-monthpicker-buttons a").get(0).click();
-//        return this;
-//    }
-//
-//    public SettlementDialog closePicker() {
-//        $(".x-datepicker-selected").click();
-//        return at(SettlementDialog.class);
-//    }
-
     public SettlementDialog disableAge() {
         age.select(0);
         waitForJavascriptRecalculation();
