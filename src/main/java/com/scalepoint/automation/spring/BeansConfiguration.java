@@ -93,7 +93,6 @@ public class BeansConfiguration {
                         .setHubLocalZalenium(hubLocalZaleniumUrl)
                         .setHubRemoteZalenium(hubRemoteZaleniumUrl);
                 UsersManager.initManager(TestData.getSystemUsers());
-                PerformanceUsers.init(1000);
             }
         };
     }

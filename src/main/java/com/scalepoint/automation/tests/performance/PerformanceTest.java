@@ -17,6 +17,9 @@ import org.testng.*;
 import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class PerformanceTest  extends BaseApiTest{
 
@@ -27,6 +30,10 @@ public class PerformanceTest  extends BaseApiTest{
     public void startWireMock(String users, ITestContext iTestContext) {
 
         this.users = Integer.valueOf(users);
+        LocalDateTime start = LocalDateTime.now();
+        PerformanceUsers.init(this.users);
+
+        log.info("Duration: {}", Duration.between(start, LocalDateTime.now()).getNano());
     }
 
     @AfterMethod
@@ -35,13 +42,13 @@ public class PerformanceTest  extends BaseApiTest{
         PerformanceUsers.releaseUser((User) objects[0]);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=1, groups = {PerformanceTestConfig.TEST_LOGIN_USER})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_USER})
     public void loginUser(User user) {
 
         BaseService.loginUser(user);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=2, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM})
     public void loginAndOpenClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -51,7 +58,7 @@ public class PerformanceTest  extends BaseApiTest{
         BaseService.loginAndOpenClaim(user, claimRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority=3, groups = {PerformanceTestConfig.TEST_SELFSERVICE})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_SELFSERVICE})
     public void selfService(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -68,7 +75,7 @@ public class PerformanceTest  extends BaseApiTest{
                 .submitted();
     }
 
-    @Test(dataProvider = "usersDataProvider", priority = 4, groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS})
     public void loginAndOpenClaimWithItems(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -79,7 +86,7 @@ public class PerformanceTest  extends BaseApiTest{
         BaseService.loginAndOpenClaimWithItems(user, claimRequest,insertSettlementItem);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority = 5, groups = {PerformanceTestConfig.TEST_CLOSE_WITH_EMAIL})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_CLOSE_WITH_EMAIL})
     public void closeWithEmail(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -93,7 +100,7 @@ public class PerformanceTest  extends BaseApiTest{
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority = 6, groups = {PerformanceTestConfig.TEST_REOPEN_SAVED_CLAIM})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_REOPEN_SAVED_CLAIM})
     public void reopenSavedClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -106,7 +113,7 @@ public class PerformanceTest  extends BaseApiTest{
                 .reopenClaim();
     }
 
-    @Test(dataProvider = "usersDataProvider", priority = 6, groups = {PerformanceTestConfig.TEST_CANCEL_CLAIM})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_CANCEL_CLAIM})
     public void cancelClaim(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -121,7 +128,7 @@ public class PerformanceTest  extends BaseApiTest{
                 .cancel(claimRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", priority = 7, groups = {PerformanceTestConfig.TEST_TEXT_SEARCH})
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_TEXT_SEARCH})
     public void textSearch(User user) throws JsonProcessingException {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
