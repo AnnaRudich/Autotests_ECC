@@ -6,17 +6,41 @@ import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.*;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;
+import com.scalepoint.automation.utils.data.entity.rnv.webService.OrderPrepare;
+import com.scalepoint.automation.utils.data.entity.rnv.webService.ServiceLine;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
+import static com.scalepoint.automation.services.restService.common.BasePath.*;
+import static com.scalepoint.automation.utils.Configuration.getRnvWebServiceUrl;
 import static io.restassured.RestAssured.given;
 
 public class RnvService extends BaseService {
 
     private String supplierSecurityToken = TestData.getServiceAgreement().getSupplierSecurityToken();
+
+    private Response response;
+
+    private Claimant claimant;
+    private com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claim claim;
+    private Order order;
+    private Task[] tasks;
+
+    public Response getResponse() {
+        return this.response;
+    }
+
 
     public void sendDefaultFeedbackWithInvoice(Claim claim, ServiceTasksExport serviceTasksExport) {
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, serviceTasksExport).buildDefaultWithInvoice();
@@ -42,5 +66,202 @@ public class RnvService extends BaseService {
                 .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
                 .when()
                 .post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
+    }
+
+    public RnvService claimant(){
+
+        claimant = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
+                .queryParam("orderToken", data.getOrderToken())
+                .sessionId(data.getRnvSessionId())
+                .when()
+                .get(CLAIMANT)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().as(Claimant.class);
+
+        return this;
+    }
+
+    public RnvService claim(){
+
+        claim = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .contentType("application/json;charset=UTF-8")
+                .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
+                .queryParam("orderToken", data.getOrderToken())
+                .sessionId(data.getRnvSessionId())
+                .when()
+                .get(CLAIM)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().as(com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claim.class);
+
+        return this;
+    }
+
+    public RnvService sendToRepairAndValuation(){
+
+        claimant()
+                .claim()
+                .orderStatus()
+                .order();
+
+        return this;
+    }
+
+    public RnvService rnvNextStep(){
+
+        orderPrepareAction()
+                .orderPrepare();
+
+        return this;
+    }
+
+    public RnvService send(){
+
+        orderAction()
+                .tasksStatuses();
+
+        return this;
+    }
+
+    public RnvService order(){
+
+        order = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
+                .queryParam("orderToken", data.getOrderToken())
+                .sessionId(data.getRnvSessionId())
+                .when()
+                .get(ORDER)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().as(Order.class);
+
+        return this;
+    }
+
+    public RnvService orderStatus(){
+
+        this.response = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
+                .queryParam("orderToken", data.getOrderToken())
+                .sessionId(data.getRnvSessionId())
+                .when()
+                .get(ORDER_STATUS)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().response();
+
+        return this;
+    }
+
+    public RnvService orderPrepareAction(){
+
+        OrderPrepare orderPrepare = OrderPrepare.builder()
+                .claim(claim)
+                .claimant(claimant)
+                .serviceLines(order.getServiceLines())
+                .build();
+
+        this.response = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .redirects().follow(false)
+                .sessionId(data.getRnvSessionId())
+                .contentType(ContentType.JSON)
+                .queryParam("orderToken", data.getOrderToken())
+                .body(orderPrepare)
+                .when()
+                .post(ORDER_PREPARE_ACTION)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().response();
+
+        return this;
+    }
+
+    public RnvService orderPrepare(){
+
+        tasks = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .redirects().follow(false)
+                .sessionId(data.getRnvSessionId())
+                .queryParam("orderToken", data.getOrderToken())
+                .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
+                .when()
+                .get(ORDER_PREPARE)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().as(Task[].class);
+
+        return this;
+    }
+
+    public RnvService orderAction(){
+
+        ServiceLine serviceLine = order
+                .getServiceLines()
+                .stream()
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+
+        Arrays.stream(tasks)
+                .forEach(task -> {
+
+                    task.setDamageType(Optional.ofNullable(task.getDamageType()).orElse(""));
+                    task.setDamageTypeList(Optional.ofNullable(task.getDamageTypeList()).orElse(""));
+                });
+
+        OrderAction orderAction = OrderAction.builder()
+                .damageTypes(Collections.singletonList(DamageType.builder()
+                        .damageType(Optional.ofNullable(serviceLine.getDamageType()).orElse(""))
+                        .matchId(serviceLine.getMatchId())
+                        .taskTypeId(serviceLine.getTaskTypeId())
+                        .build()))
+                .tasks(Arrays.asList(tasks))
+                .build();
+
+        this.response = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .redirects().follow(false)
+                .contentType(ContentType.JSON)
+                .sessionId(data.getRnvSessionId())
+                .queryParam("orderToken", data.getOrderToken())
+                .body(orderAction)
+                .when()
+                .post(ORDER_ACTION)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().response();
+
+        return this;
+    }
+
+    public RnvService tasksStatuses(){
+
+        this.response = given().baseUri(getRnvWebServiceUrl())
+                .log().all()
+                .redirects().follow(false)
+                .sessionId(data.getRnvSessionId())
+                .queryParam("orderToken", data.getOrderToken())
+                .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
+                .when()
+                .get(TASKS_STATUSES)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .log().all()
+                .extract().response();
+
+        return this;
     }
 }

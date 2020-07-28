@@ -91,7 +91,7 @@ public class CreateClaimService extends BaseService {
         return this;
     }
 
-    public ReopenClaimService reopenClaim(){
+    public ClaimSettlementItemsService reopenClaim(){
 
         return new ReopenClaimService().reopenClaim();
     }
@@ -109,6 +109,13 @@ public class CreateClaimService extends BaseService {
     public TextSearchService searchText(String text) throws JsonProcessingException {
 
         return new TextSearchService().searchText(text);
+    }
+
+    public CreateClaimService closeCase(Object claimRequest, SettlementClaimService.CloseCaseReason reason) {
+
+        new SettlementClaimService().close(claimRequest, reason);
+
+        return this;
     }
 }
 

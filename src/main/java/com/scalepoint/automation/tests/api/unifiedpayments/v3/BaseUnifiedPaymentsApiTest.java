@@ -19,7 +19,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
     ClaimRequest claimRequest;
     SettlementClaimService settlementClaimService;
-    EccSettlementSummaryService eccSettlementSummaryService;
+    EccSettlement eccSettlementSummaryService;
     ClaimSettlementItemsService claimSettlementItemsService;
 
 
@@ -164,7 +164,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items) {
         settlementClaimService =
                 loginAndOpenClaimWithItems(user, claimRequest, items).closeCase();
-        eccSettlementSummaryService = new EccSettlementSummaryService()
+        eccSettlementSummaryService = new EccSettlement()
                 .getSummaryTotals();
         claimSettlementItemsService = new ClaimSettlementItemsService();
         return settlementClaimService;

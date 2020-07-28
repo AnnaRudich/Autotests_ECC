@@ -89,8 +89,8 @@ public class TextSearchService extends BaseService {
         return this;
     }
 
-    public SettlementItemDialogService sid(ProductResult productResult){
+    public ClaimSettlementItemsService addLine(ProductResult productResult){
 
-        return new SettlementItemDialogService().sid(productResult);
+        return new SettlementItemDialogService().addLineFromTextSearch(productResult);
     }
 }

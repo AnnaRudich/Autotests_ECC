@@ -35,4 +35,16 @@ public interface BasePath {
     String SECURED_IMAGE = "/rest/settlement/resource/securedimage";
     String SID_STATISTICS = "/{userId}/webshop/jsp/matching_engine/dialog/get_settlement_item_dialog_statics.jsp";
     String SID_ITEM = "/{userId}/webshop/jsp/matching_engine/dialog/get_settlement_item_dialog_item.jsp";
+    String CHECK_SELF_SERVICE_RESPONSES = "/{userId}/rest/settlement/checkSelfServiceResponses.json";
+    String AUDIT_REQUEST_DATA = "/{userId}/rest/settlement/getAuditRequestData.json";
+    String CLAIM_LINES = "/{userId}/rest/settlement/getClaimLines.json";
+    String SEND_TO_REPAIR_AND_VALUATION = "/{userId}/rest/settlement/sendToRepairAndValuation.json";
+    String ORDER_PREPARE_ACTION = "orderPrepare.action";
+    String ORDER_PREPARE = "orderPrepare.json";
+    String CLAIMANT = "claimant.json";
+    String CLAIM = "claim.json";
+    String ORDER_STATUS = "orderStatus.json";
+    String ORDER = "order.json";
+    String ORDER_ACTION = "order.action";
+    String TASKS_STATUSES = "tasksStatuses.json";
 }

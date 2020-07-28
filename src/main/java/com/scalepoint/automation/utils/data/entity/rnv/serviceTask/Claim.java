@@ -42,5 +42,9 @@ public class Claim {
     private String customerNoteToClaim;
     @XmlAttribute
     private String policyNumber;
+    @XmlAttribute
+    private String policyType;
+    @XmlAttribute
+    private String cultureId;
 
 }

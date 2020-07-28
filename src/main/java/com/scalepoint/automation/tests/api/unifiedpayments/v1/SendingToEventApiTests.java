@@ -22,7 +22,7 @@ public class SendingToEventApiTests extends BaseApiTest {
 
     private ClaimRequest claimRequest;
     private SettlementClaimService settlementClaimService;
-    private EccSettlementSummaryService eccSettlementSummaryService;
+    private EccSettlement eccSettlementSummaryService;
 
     @BeforeMethod
     private void prepareClaimRequest() {
@@ -136,7 +136,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     private SettlementClaimService createClaimWithItem(User user, InsertSettlementItem item) {
         settlementClaimService =
                 loginAndOpenClaimWithItems(user, claimRequest, item).closeCase();
-        eccSettlementSummaryService = new EccSettlementSummaryService()
+        eccSettlementSummaryService = new EccSettlement()
                 .getSummaryTotals();
         return settlementClaimService;
     }

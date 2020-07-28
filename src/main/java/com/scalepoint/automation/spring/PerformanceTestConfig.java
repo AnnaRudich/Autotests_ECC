@@ -14,6 +14,7 @@ public class PerformanceTestConfig{
     public static final String TEST_REOPEN_SAVED_CLAIM = "reopenSavedClaim";
     public static final String TEST_CANCEL_CLAIM = "cancelClaim";
     public static final String TEST_TEXT_SEARCH = "textSearch";
+    public static final String TEST_RNV = "rnv";
 
     public enum PerformanceTestsNames{
 
@@ -24,7 +25,8 @@ public class PerformanceTestConfig{
         CLOSE_WITH_EMAIL(TEST_CLOSE_WITH_EMAIL),
         REOPEN_SAVED_CLAIM(TEST_REOPEN_SAVED_CLAIM),
         CANCEL_CLAIM(TEST_CANCEL_CLAIM),
-        TEXT_SEARCH(TEST_TEXT_SEARCH);
+        TEXT_SEARCH(TEST_TEXT_SEARCH),
+        RNV(TEST_RNV);
 
         private String testName;
 

@@ -11,6 +11,7 @@ public class Data {
     private String rnvSessionId;
     private String claimToken;
     private Integer userId;
+    private String orderToken;
     private String selfServiceAccessToken;
     private static DatabaseApi databaseApi;
 
@@ -19,6 +20,14 @@ public class Data {
 
     public String getEccSessionId() {
         return eccSessionId;
+    }
+
+    public void setOrderToken(String orderToken) {
+        this.orderToken = orderToken;
+    }
+
+    public String getOrderToken() {
+        return orderToken;
     }
 
     public void setEccSessionId(String eccSessionId) {

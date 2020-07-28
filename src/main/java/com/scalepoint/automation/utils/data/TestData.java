@@ -150,6 +150,10 @@ public class TestData {
         return getData(Data.PERFORMANCE_INSERT_SETTLEMENT_ITEM);
     }
 
+    public static InsertSettlementItem getRnvInsertSettlementItem() {
+        return getData(Data.RNV_INSERT_SETTLEMENT_ITEM);
+    }
+
     public static UpdateSettlementItem getUpdateSettlementItem() {
         return (UpdateSettlementItem) getData(Data.UPDATED_CLAIM_ITEM);
     }
@@ -301,7 +305,8 @@ public class TestData {
         TRYGFORSIKRING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygforsikring.xml", DefaultFTOperations.DefaultFTSettings.class),
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class),
-        PERFORMANCE_INSERT_SETTLEMENT_ITEM("request/Claim/PerformanceInsertSettlementItem.xml", InsertSettlementItem.class);
+        PERFORMANCE_INSERT_SETTLEMENT_ITEM("request/Claim/PerformanceInsertSettlementItem.xml", InsertSettlementItem.class),
+        RNV_INSERT_SETTLEMENT_ITEM("request/Claim/RnvInsertSettlementItem.xml", InsertSettlementItem.class);
 
         private String fileName;
         private JAXBContext context;

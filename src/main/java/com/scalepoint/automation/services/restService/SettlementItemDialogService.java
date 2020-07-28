@@ -4,6 +4,7 @@ import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.PriceTypes;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.ValuationTypes;
+import com.scalepoint.automation.utils.data.entity.order.Product;
 import com.scalepoint.automation.utils.data.request.*;
 import com.scalepoint.automation.utils.data.response.TextSearchResult.ProductResult;
 import io.restassured.response.Response;
@@ -27,8 +28,6 @@ import static io.restassured.RestAssured.given;
 
 public class SettlementItemDialogService extends BaseService {
 
-    private static final String ZONE_OFFSET = "+02:00";
-
     private Response response;
     private Double taxRate;
     private Integer pseudoCategoryId;
@@ -38,19 +37,39 @@ public class SettlementItemDialogService extends BaseService {
         return this.response;
     }
 
-    public SettlementItemDialogService sid(ProductResult productResult){
+    private SettlementItemDialogService sidTextSearch(ProductResult productResult){
 
         this.productResult = productResult;
 
-        sidStatistics();
+        sidStatistics("", "", "", String.valueOf(productResult.getId()));
+        taxRate = Double.valueOf(getVariableFromJSP(TAX_RATE));
+
+        sid("","","",String.valueOf(productResult.getId()));
+
+        pseudoCategoryId = Integer.valueOf(getVariableFromJSP(PSEUDO_CATEGORY_ID));
+
+        return this;
+    }
+
+
+    private SettlementItemDialogService sidManual(){
+
+        sidStatistics("-1", "-1", "-1", "");
+
+        sid("-1", "-1", "-1", "");
+
+        return this;
+    }
+
+    private SettlementItemDialogService sid(String itemId, String pseudoCategoryId, String published, String productId){
 
         Map<String,String> queryParams = new HashMap<>();
         queryParams.put("_dc", String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET))));
         queryParams.put("caseid", String.valueOf(data.getUserId()));
-        queryParams.put("itemid", "");
-        queryParams.put("pseudocatID", "");
-        queryParams.put("published", "");
-        queryParams.put("productid", String.valueOf(productResult.getId()));
+        queryParams.put("itemid", itemId);
+        queryParams.put("pseudocatID", pseudoCategoryId);
+        queryParams.put("published", published);
+        queryParams.put("productid", productId);
         queryParams.put("replacedproductid", "");
         queryParams.put("claimDescription", "");
         queryParams.put("selectedCategory", "");
@@ -68,20 +87,21 @@ public class SettlementItemDialogService extends BaseService {
                 .extract()
                 .response();
 
-        pseudoCategoryId = Integer.valueOf(getVariableFromJSP(PSEUDO_CATEGORY_ID));
-
         return this;
     }
 
-    private SettlementItemDialogService sidStatistics() {
+
+
+
+    private SettlementItemDialogService sidStatistics(String itemId, String pseudoCategoryId, String published, String productId) {
 
         Map<String,String> queryParams = new HashMap<>();
         queryParams.put("_dc", String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET))));
         queryParams.put("caseid", String.valueOf(data.getUserId()));
-        queryParams.put("itemid", "");
-        queryParams.put("pseudocatID", "");
-        queryParams.put("published", "");
-        queryParams.put("productid", String.valueOf(productResult.getId()));
+        queryParams.put("itemid", itemId);
+        queryParams.put("pseudocatID", pseudoCategoryId);
+        queryParams.put("published", published);
+        queryParams.put("productid", productId);
         queryParams.put("replacedproductid", "");
         queryParams.put("claimDescription", "");
         queryParams.put("selectedCategory", "");
@@ -97,15 +117,29 @@ public class SettlementItemDialogService extends BaseService {
                 .extract()
                 .response();
 
-        taxRate = Double.valueOf(getVariableFromJSP(TAX_RATE));
-
         return this;
     }
 
-    public ClaimSettlementItemsService addLines(){
+    public ClaimSettlementItemsService addLineFromTextSearch(ProductResult productResult){
+
+        sidTextSearch(productResult);
 
         return new ClaimSettlementItemsService()
-                .addLines(testItem());
+                .addLines(textSearchItem())
+                .getClaimLines();
+    }
+
+    public ClaimSettlementItemsService addLineManually(InsertSettlementItem insertSettlementItem){
+
+        insertSettlementItem.setCaseId(data.getUserId().toString());
+        Claim claim = insertSettlementItem.getSettlementItem().getClaim();
+        claim.setClaimToken(data.getClaimToken());
+
+        sidManual();
+
+        return new ClaimSettlementItemsService()
+                .addLines(insertSettlementItem)
+                .getClaimLines();
     }
 
     private String getVariableFromJSP(VariableFromJSP variable){
@@ -136,7 +170,7 @@ public class SettlementItemDialogService extends BaseService {
         }
     }
 
-    private InsertSettlementItem testItem() {
+    private InsertSettlementItem textSearchItem() {
 
         InsertSettlementItem insertSettlementItem = TestData.getPerformanceInsertSettlementItem();
         insertSettlementItem.setCaseId(data.getUserId().toString());

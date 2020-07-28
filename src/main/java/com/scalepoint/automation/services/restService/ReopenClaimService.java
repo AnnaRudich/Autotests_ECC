@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 
 public class ReopenClaimService extends BaseService {
 
-    public ReopenClaimService reopenClaim() {
+    public ClaimSettlementItemsService reopenClaim() {
 
         given().baseUri(getEccUrl()).log().all()
                 .sessionId(data.getEccSessionId())
@@ -25,6 +25,6 @@ public class ReopenClaimService extends BaseService {
                 .get("/{shnbr}/webshop/jsp/matching_engine/settlement.jsp")
                 .then().statusCode(HttpStatus.SC_OK);
 
-        return this;
+        return new ClaimSettlementItemsService();
     }
 }

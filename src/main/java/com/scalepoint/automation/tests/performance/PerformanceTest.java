@@ -1,10 +1,12 @@
 package com.scalepoint.automation.tests.performance;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.services.restService.TextSearchService;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.spring.PerformanceTestConfig;
+import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -13,27 +15,39 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.SelfServiceLossItems;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
 import com.scalepoint.automation.utils.data.response.TextSearchResult.ProductResult;
-import org.testng.*;
+import org.testng.ITestContext;
 import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 public class PerformanceTest  extends BaseApiTest{
 
     static int users;
 
+    RnVMock.RnvStub rnvStub;
+
+    @BeforeClass
+    public void startWireMock() {
+
+        WireMock.configureFor(wireMock);
+        wireMock.resetMappings();
+        rnvStub = new RnVMock(wireMock)
+                .addStub();
+        wireMock.allStubMappings()
+                .getMappings()
+                .stream()
+                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+    }
+
     @Parameters({"tests.performance.users"})
     @BeforeTest
-    public void startWireMock(String users, ITestContext iTestContext) {
+    public void setUsers(String users, ITestContext iTestContext) {
 
         this.users = Integer.valueOf(users);
-        LocalDateTime start = LocalDateTime.now();
         PerformanceUsers.init(this.users);
-
-        log.info("Duration: {}", Duration.between(start, LocalDateTime.now()).getNano());
     }
 
     @AfterMethod
@@ -146,8 +160,28 @@ public class PerformanceTest  extends BaseApiTest{
                 .get(0);
 
         textSearchService
-                .sid(productResult)
-                .addLines();
+                .addLine(productResult);
+    }
+
+    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_RNV})
+    public void rnv(User user) throws MalformedURLException {
+
+        ClaimRequest claimRequest = TestData.getClaimRequest();
+        claimRequest.setTenant(user.getCompanyName().toLowerCase());
+        claimRequest.setCompany(user.getCompanyName().toLowerCase());
+
+        InsertSettlementItem insertSettlementItem = TestData.getRnvInsertSettlementItem();
+
+        BaseService
+                .loginAndOpenClaim(user, claimRequest)
+                .closeCase(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL)
+                .reopenClaim()
+                .sid()
+                .addLineManually(insertSettlementItem)
+                .getClaimLines()
+                .sendToRepairAndValuation(insertSettlementItem)
+                .rnvNextStep()
+                .send();
     }
 
     @DataProvider(name = "usersDataProvider", parallel = true)
