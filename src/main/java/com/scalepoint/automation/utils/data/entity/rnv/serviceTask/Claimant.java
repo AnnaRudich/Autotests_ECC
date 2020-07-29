@@ -29,8 +29,4 @@ public class Claimant {
     private String city;
     @XmlAttribute
     private String email;
-    @XmlAttribute
-    private String claimGUID;
-    @XmlAttribute
-    private String zipCodeValidationPattern;
 }

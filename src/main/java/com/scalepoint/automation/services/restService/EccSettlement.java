@@ -18,6 +18,18 @@ public class EccSettlement extends BaseService {
 
     private ValidatableResponse response;
 
+    public EccSettlement getSettlement() {
+
+        response = given().baseUri(getEccUrl())
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .get(SETTLEMENT)
+                .then()
+                .statusCode(HttpStatus.SC_OK);
+
+        return this;
+    }
+
     public EccSettlement getSummaryTotals() {
 
         response = given().baseUri(getEccUrl())

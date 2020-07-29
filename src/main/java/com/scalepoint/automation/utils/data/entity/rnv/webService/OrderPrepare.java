@@ -1,7 +1,5 @@
 package com.scalepoint.automation.utils.data.entity.rnv.webService;
 
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claim;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claimant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

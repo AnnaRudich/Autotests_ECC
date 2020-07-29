@@ -180,7 +180,6 @@ public class PerformanceTest  extends BaseApiTest{
                 .reopenClaim()
                 .sid()
                 .addLineManually(insertSettlementItem)
-                .getClaimLines()
                 .sendToRepairAndValuation(insertSettlementItem)
                 .rnvNextStep()
                 .send();

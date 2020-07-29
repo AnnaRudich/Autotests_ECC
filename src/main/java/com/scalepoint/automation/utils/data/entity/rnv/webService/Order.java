@@ -1,4 +1,4 @@
-package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
+package com.scalepoint.automation.utils.data.entity.rnv.webService;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ public class Order {
 
     private Claimant claimant;
     private Claim claim;
-    private List<com.scalepoint.automation.utils.data.entity.rnv.webService.ServiceLine> serviceLines;
+    private List<ServiceLine> serviceLines;
     private String creationType;
     private boolean someAgreementsNotFound;
 }

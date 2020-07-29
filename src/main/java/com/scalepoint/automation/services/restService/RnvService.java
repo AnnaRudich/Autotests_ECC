@@ -6,10 +6,10 @@ import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.*;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;
-import com.scalepoint.automation.utils.data.entity.rnv.webService.OrderPrepare;
-import com.scalepoint.automation.utils.data.entity.rnv.webService.ServiceLine;
+import com.scalepoint.automation.utils.data.entity.rnv.webService.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -33,7 +33,7 @@ public class RnvService extends BaseService {
     private Response response;
 
     private Claimant claimant;
-    private com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claim claim;
+    private com.scalepoint.automation.utils.data.entity.rnv.webService.Claim claim;
     private Order order;
     private Task[] tasks;
 
@@ -126,7 +126,7 @@ public class RnvService extends BaseService {
                 .get(CLAIM)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().as(com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claim.class);
+                .extract().as(com.scalepoint.automation.utils.data.entity.rnv.webService.Claim.class);
 
         return this;
     }

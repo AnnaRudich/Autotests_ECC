@@ -106,6 +106,7 @@ public class ClaimSettlementItemsService extends BaseService {
     public ClaimSettlementItemsService getClaimLines(){
 
         new EccSettlement()
+                .getSettlement()
                 .getCheckSelfServiceResponses()
                 .getSummaryTotals()
                 .getAuditRequestData()
