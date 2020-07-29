@@ -38,11 +38,13 @@ public class RnvService extends BaseService {
     private Task[] tasks;
 
     public Response getResponse() {
+
         return this.response;
     }
 
 
     public void sendDefaultFeedbackWithInvoice(Claim claim, ServiceTasksExport serviceTasksExport) {
+
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, serviceTasksExport).buildDefaultWithInvoice();
         sendFeedback(serviceTaskImport);
     }
@@ -55,23 +57,52 @@ public class RnvService extends BaseService {
     }
 
     public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
+
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
                 .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }
 
     private void sendFeedback(ServiceTaskImport serviceTaskImport){
-        given().log().all()
+
+        given()
                 .multiPart("securityToken", supplierSecurityToken)
                 .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
                 .when()
-                .post(Configuration.getRnvTaskFeedbackUrl()).then().assertThat().statusCode(201);
+                .post(Configuration.getRnvTaskFeedbackUrl())
+                .then()
+                .statusCode(HttpStatus.SC_CREATED);
     }
 
-    public RnvService claimant(){
+    public RnvService sendToRepairAndValuation(){
+
+        claimant();
+        claim();
+        orderStatus();
+        order();
+
+        return this;
+    }
+
+    public RnvService rnvNextStep(){
+
+        orderPrepareAction();
+        orderPrepare();
+
+        return this;
+    }
+
+    public RnvService send(){
+
+        orderAction();
+        tasksStatuses();
+
+        return this;
+    }
+
+    private RnvService claimant(){
 
         claimant = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .queryParam("orderToken", data.getOrderToken())
                 .sessionId(data.getRnvSessionId())
@@ -79,16 +110,14 @@ public class RnvService extends BaseService {
                 .get(CLAIMANT)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .log().all()
                 .extract().as(Claimant.class);
 
         return this;
     }
 
-    public RnvService claim(){
+    private RnvService claim(){
 
         claim = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
                 .contentType("application/json;charset=UTF-8")
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .queryParam("orderToken", data.getOrderToken())
@@ -97,42 +126,14 @@ public class RnvService extends BaseService {
                 .get(CLAIM)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .log().all()
                 .extract().as(com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Claim.class);
 
         return this;
     }
 
-    public RnvService sendToRepairAndValuation(){
-
-        claimant()
-                .claim()
-                .orderStatus()
-                .order();
-
-        return this;
-    }
-
-    public RnvService rnvNextStep(){
-
-        orderPrepareAction()
-                .orderPrepare();
-
-        return this;
-    }
-
-    public RnvService send(){
-
-        orderAction()
-                .tasksStatuses();
-
-        return this;
-    }
-
-    public RnvService order(){
+    private RnvService order(){
 
         order = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .queryParam("orderToken", data.getOrderToken())
                 .sessionId(data.getRnvSessionId())
@@ -140,30 +141,26 @@ public class RnvService extends BaseService {
                 .get(ORDER)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .log().all()
                 .extract().as(Order.class);
 
         return this;
     }
 
-    public RnvService orderStatus(){
+    private RnvService orderStatus(){
 
-        this.response = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
+        given().baseUri(getRnvWebServiceUrl())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .queryParam("orderToken", data.getOrderToken())
                 .sessionId(data.getRnvSessionId())
                 .when()
                 .get(ORDER_STATUS)
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all()
-                .extract().response();
+                .statusCode(HttpStatus.SC_OK);
 
         return this;
     }
 
-    public RnvService orderPrepareAction(){
+    private RnvService orderPrepareAction(){
 
         OrderPrepare orderPrepare = OrderPrepare.builder()
                 .claim(claim)
@@ -171,8 +168,7 @@ public class RnvService extends BaseService {
                 .serviceLines(order.getServiceLines())
                 .build();
 
-        this.response = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
+        given().baseUri(getRnvWebServiceUrl())
                 .redirects().follow(false)
                 .sessionId(data.getRnvSessionId())
                 .contentType(ContentType.JSON)
@@ -181,17 +177,14 @@ public class RnvService extends BaseService {
                 .when()
                 .post(ORDER_PREPARE_ACTION)
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all()
-                .extract().response();
+                .statusCode(HttpStatus.SC_OK);
 
         return this;
     }
 
-    public RnvService orderPrepare(){
+    private RnvService orderPrepare(){
 
         tasks = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
                 .redirects().follow(false)
                 .sessionId(data.getRnvSessionId())
                 .queryParam("orderToken", data.getOrderToken())
@@ -200,13 +193,12 @@ public class RnvService extends BaseService {
                 .get(ORDER_PREPARE)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .log().all()
                 .extract().as(Task[].class);
 
         return this;
     }
 
-    public RnvService orderAction(){
+    private RnvService orderAction(){
 
         ServiceLine serviceLine = order
                 .getServiceLines()
@@ -230,8 +222,7 @@ public class RnvService extends BaseService {
                 .tasks(Arrays.asList(tasks))
                 .build();
 
-        this.response = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
+        given().baseUri(getRnvWebServiceUrl())
                 .redirects().follow(false)
                 .contentType(ContentType.JSON)
                 .sessionId(data.getRnvSessionId())
@@ -240,17 +231,14 @@ public class RnvService extends BaseService {
                 .when()
                 .post(ORDER_ACTION)
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all()
-                .extract().response();
+                .statusCode(HttpStatus.SC_OK);
 
         return this;
     }
 
     public RnvService tasksStatuses(){
 
-        this.response = given().baseUri(getRnvWebServiceUrl())
-                .log().all()
+        given().baseUri(getRnvWebServiceUrl())
                 .redirects().follow(false)
                 .sessionId(data.getRnvSessionId())
                 .queryParam("orderToken", data.getOrderToken())
@@ -258,9 +246,7 @@ public class RnvService extends BaseService {
                 .when()
                 .get(TASKS_STATUSES)
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .log().all()
-                .extract().response();
+                .statusCode(HttpStatus.SC_OK);
 
         return this;
     }

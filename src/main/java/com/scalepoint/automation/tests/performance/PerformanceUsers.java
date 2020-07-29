@@ -7,8 +7,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class PerformanceUsers {
 
-    private static BlockingQueue<User> availableUsers;
     private static final String PASSWORD = "12341234";
+
+    private static BlockingQueue<User> availableUsers;
 
     public static synchronized void init(int size) {
 

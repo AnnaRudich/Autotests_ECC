@@ -13,4 +13,3 @@ public class SendToRepairAndValuation{
     private List<String> selectedLines;
     private List<SelectedLinesAndCategories> selectedLinesAndCategories;
 }
-

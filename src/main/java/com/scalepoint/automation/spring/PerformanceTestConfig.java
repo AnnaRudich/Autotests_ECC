@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 
 public class PerformanceTestConfig{
 
-
     public static final String TEST_LOGIN_USER = "loginUser";
     public static final String TEST_LOGIN_AND_OPEN_CLAIM = "loginAndOpenClaim";
     public static final String TEST_SELFSERVICE = "selfService";

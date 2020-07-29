@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public enum PriceTypes {
 
     PRICE("price"),
-    RECOMMENDED_REATAIL_PRICE("recommendedRetailPrice"),
+    RECOMMENDED_RETAIL_PRICE("recommendedRetailPrice"),
     FREIGHT_PRICE("freightPrice");
 
     private String name;

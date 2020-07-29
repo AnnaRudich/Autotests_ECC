@@ -19,18 +19,21 @@ public class EccSettlement extends BaseService {
     private ValidatableResponse response;
 
     public EccSettlement getSummaryTotals() {
-        response = given().baseUri(getEccUrl()).log().all()
+
+        response = given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .pathParam("userId", data.getUserId())
                 .get(BasePath.SETTLEMENT_TOTALS)
-                .then().statusCode(HttpStatus.SC_OK);
+                .then()
+                .statusCode(HttpStatus.SC_OK);
+
         return this;
     }
 
     public EccSettlement getCheckSelfServiceResponses() {
 
-        response = given().baseUri(getEccUrl()).log().all()
+        response = given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .pathParam("userId", data.getUserId())
@@ -43,7 +46,7 @@ public class EccSettlement extends BaseService {
 
     public EccSettlement getAuditRequestData() {
 
-        response = given().baseUri(getEccUrl()).log().all()
+        response = given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .pathParam("userId", data.getUserId())
@@ -56,7 +59,7 @@ public class EccSettlement extends BaseService {
 
     public EccSettlement getClaimLines() {
 
-        response = given().baseUri(getEccUrl()).log().all()
+        response = given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .pathParam("userId", data.getUserId())
@@ -69,7 +72,7 @@ public class EccSettlement extends BaseService {
 
     public EccSettlement getVoucherAmountTotal(String isGroup) {
 
-        response = given().baseUri(getEccUrl()).log().all()
+        response = given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
                 .queryParam("is_group", isGroup)
@@ -82,6 +85,9 @@ public class EccSettlement extends BaseService {
     }
 
     public Double getSubtotalCashPayoutValue() {
-        return response.extract().jsonPath().getDouble(SUBTOTAL_CASH_PAYOUT_VALUE);
+
+        return response.extract()
+                .jsonPath()
+                .getDouble(SUBTOTAL_CASH_PAYOUT_VALUE);
     }
 }

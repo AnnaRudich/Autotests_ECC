@@ -4,7 +4,6 @@ import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.PriceTypes;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.ValuationTypes;
-import com.scalepoint.automation.utils.data.entity.order.Product;
 import com.scalepoint.automation.utils.data.request.*;
 import com.scalepoint.automation.utils.data.response.TextSearchResult.ProductResult;
 import io.restassured.response.Response;
@@ -37,26 +36,48 @@ public class SettlementItemDialogService extends BaseService {
         return this.response;
     }
 
-    private SettlementItemDialogService sidTextSearch(ProductResult productResult){
+    public ClaimSettlementItemsService addLineFromTextSearch(ProductResult productResult){
 
-        this.productResult = productResult;
+        sidTextSearch(productResult);
 
-        sidStatistics("", "", "", String.valueOf(productResult.getId()));
-        taxRate = Double.valueOf(getVariableFromJSP(TAX_RATE));
-
-        sid("","","",String.valueOf(productResult.getId()));
-
-        pseudoCategoryId = Integer.valueOf(getVariableFromJSP(PSEUDO_CATEGORY_ID));
-
-        return this;
+        return new ClaimSettlementItemsService()
+                .addLines(textSearchItem())
+                .getClaimLines();
     }
 
+    public ClaimSettlementItemsService addLineManually(InsertSettlementItem insertSettlementItem){
+
+        insertSettlementItem.setCaseId(data.getUserId().toString());
+        Claim claim = insertSettlementItem.getSettlementItem().getClaim();
+        claim.setClaimToken(data.getClaimToken());
+
+        sidManual();
+
+        return new ClaimSettlementItemsService()
+                .addLines(insertSettlementItem)
+                .getClaimLines();
+    }
 
     private SettlementItemDialogService sidManual(){
 
         sidStatistics("-1", "-1", "-1", "");
 
         sid("-1", "-1", "-1", "");
+
+        return this;
+    }
+
+    private SettlementItemDialogService sidTextSearch(ProductResult productResult){
+
+        this.productResult = productResult;
+
+        sidStatistics("", "", "", String.valueOf(productResult.getId()));
+
+        taxRate = Double.valueOf(getVariableFromJSP(TAX_RATE));
+
+        sid("","","",String.valueOf(productResult.getId()));
+
+        pseudoCategoryId = Integer.valueOf(getVariableFromJSP(PSEUDO_CATEGORY_ID));
 
         return this;
     }
@@ -82,16 +103,11 @@ public class SettlementItemDialogService extends BaseService {
                 .queryParams(queryParams)
                 .post(SID_ITEM)
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_OK)
-                .extract()
-                .response();
+                .extract().response();
 
         return this;
     }
-
-
-
 
     private SettlementItemDialogService sidStatistics(String itemId, String pseudoCategoryId, String published, String productId) {
 
@@ -114,32 +130,9 @@ public class SettlementItemDialogService extends BaseService {
                 .post(SID_STATISTICS)
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .extract()
-                .response();
+                .extract().response();
 
         return this;
-    }
-
-    public ClaimSettlementItemsService addLineFromTextSearch(ProductResult productResult){
-
-        sidTextSearch(productResult);
-
-        return new ClaimSettlementItemsService()
-                .addLines(textSearchItem())
-                .getClaimLines();
-    }
-
-    public ClaimSettlementItemsService addLineManually(InsertSettlementItem insertSettlementItem){
-
-        insertSettlementItem.setCaseId(data.getUserId().toString());
-        Claim claim = insertSettlementItem.getSettlementItem().getClaim();
-        claim.setClaimToken(data.getClaimToken());
-
-        sidManual();
-
-        return new ClaimSettlementItemsService()
-                .addLines(insertSettlementItem)
-                .getClaimLines();
     }
 
     private String getVariableFromJSP(VariableFromJSP variable){
@@ -189,6 +182,7 @@ public class SettlementItemDialogService extends BaseService {
 
         Arrays.stream(catalogPrice.getPrice()).forEach(price -> {
             switch (PriceTypes.findPrice(price.getName())) {
+
                 case PRICE:
                     setPrice(price, productResult.getInvoicePrice());
                     break;
@@ -197,9 +191,11 @@ public class SettlementItemDialogService extends BaseService {
 
         Arrays.stream(catalogPrice.getProductMatch().getPrice()).forEach(price -> {
             switch (PriceTypes.findPrice(price.getName())) {
-                case RECOMMENDED_REATAIL_PRICE:
+
+                case RECOMMENDED_RETAIL_PRICE:
                     setPrice(price, productResult.getMarketPrice());
                     break;
+
                 case FREIGHT_PRICE:
                     setPrice(price, productResult.getFreightPrice());
                     break;
@@ -210,6 +206,7 @@ public class SettlementItemDialogService extends BaseService {
 
         Arrays.stream(marketPrice.getPrice()).forEach(price -> {
             switch (PriceTypes.findPrice(price.getName())) {
+
                 case PRICE:
                     setPrice(price, productResult.getMarketPrice());
                     break;

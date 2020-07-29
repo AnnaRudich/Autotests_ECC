@@ -9,8 +9,8 @@ import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.Valuation;
 
-import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
+import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.testng.Assert.assertTrue;
 

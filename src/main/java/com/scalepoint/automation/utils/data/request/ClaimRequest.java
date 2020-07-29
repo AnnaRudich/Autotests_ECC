@@ -1,10 +1,10 @@
 package com.scalepoint.automation.utils.data.request;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
-import lombok.Getter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.List;

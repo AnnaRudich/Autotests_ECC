@@ -35,22 +35,70 @@ public class ClaimSettlementItemsService extends BaseService {
 
 
     public ClaimSettlementItemsService addLines(InsertSettlementItem... items) {
+
         Arrays.stream(items)
                 .forEach(i ->
                         addLine(i));
+
         return this;
     }
 
     public ClaimSettlementItemsService removeLines(InsertSettlementItem... items) {
-        Arrays.stream(items).filter(i -> i.eccItemId != null).forEach(i -> removeLine(i.eccItemId));
+
+        Arrays.stream(items)
+                .filter(i -> i.eccItemId != null)
+                .forEach(i -> removeLine(i.eccItemId));
+
         return this;
     }
 
     public ClaimSettlementItemsService editLines(InsertSettlementItem... items) {
-        Arrays.stream(items).filter(i -> i.eccItemId != null).forEach(i -> {
-            removeLine(i.eccItemId);
-            addLine(i);
-        });
+
+        Arrays.stream(items)
+                .filter(i -> i.eccItemId != null)
+                .forEach(i -> {
+                    removeLine(i.eccItemId);
+                    addLine(i);
+                });
+
+        return this;
+    }
+
+    public ClaimSettlementItemsService addLine(InsertSettlementItem item) {
+
+        item.setCaseId(data.getUserId().toString());
+        item.getSettlementItem().getClaim().setClaimToken(UUID.randomUUID().toString());
+
+        this.response = given().baseUri(getEccUrl())
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .formParam("xml", TestData.objectAsXml(item))
+                .formParam("productId", -1)
+                .formParam("replacedProductId", -1)
+                .formParam("GenericItemsreturnValue", "")
+                .formParam("fromNewSid", true)
+                .when()
+                .post(INSERT_SETTLEMENT_ITEM)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
+
+        item.eccItemId = response.jsonPath().get("itemId");
+
+        return this;
+    }
+
+    private ClaimSettlementItemsService removeLine(Integer id) {
+
+        this.response = given().baseUri(getEccUrl())
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .contentType("application/json")
+                .body("{\"selectedGroups\":[], \"selectedLines\":[\"" + id + "\"]}")
+                .post(REMOVE_SETTLEMENT_ITEM)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
 
         return this;
     }
@@ -67,45 +115,6 @@ public class ClaimSettlementItemsService extends BaseService {
         return this;
     }
 
-    public SettlementItemDialogService sid(){
-
-        return new SettlementItemDialogService();
-    }
-
-
-    public ClaimSettlementItemsService addLine(InsertSettlementItem item) {
-        item.setCaseId(data.getUserId().toString());
-        item.getSettlementItem().getClaim().setClaimToken(UUID.randomUUID().toString());
-
-        this.response = given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getEccSessionId())
-                .pathParam("userId", data.getUserId())
-                .formParam("xml", TestData.objectAsXml(item))
-                .formParam("productId", -1)
-                .formParam("replacedProductId", -1)
-                .formParam("GenericItemsreturnValue", "")
-                .formParam("fromNewSid", true)
-                .when()
-                .post(INSERT_SETTLEMENT_ITEM)
-                .then().log().all().statusCode(HttpStatus.SC_OK).extract().response();
-        item.eccItemId = response.jsonPath().get("itemId");
-        return this;
-    }
-
-
-    private ClaimSettlementItemsService removeLine(Integer id) {
-
-        this.response = given().baseUri(getEccUrl()).log().all()
-                .sessionId(data.getEccSessionId())
-                .pathParam("userId", data.getUserId())
-                .contentType("application/json")
-                .body("{\"selectedGroups\":[], \"selectedLines\":[\"" + id + "\"]}")
-                .post(REMOVE_SETTLEMENT_ITEM)
-                .then().statusCode(HttpStatus.SC_OK).extract().response();
-
-        return this;
-    }
-
     public RnvService sendToRepairAndValuation(InsertSettlementItem insertSettlementItem) throws MalformedURLException {
 
         SelectedLinesAndCategories selectedLineCategory = SelectedLinesAndCategories.builder()
@@ -118,10 +127,10 @@ public class ClaimSettlementItemsService extends BaseService {
         SendToRepairAndValuation sendToRepairAndValuation = SendToRepairAndValuation.builder()
                 .selectedGroups(new ArrayList<>())
                 .selectedLines(Arrays.asList(insertSettlementItem.getEccItemId().toString()))
-                .selectedLinesAndCategories(Arrays.asList(selectedLineCategory)).build();
+                .selectedLinesAndCategories(Arrays.asList(selectedLineCategory))
+                .build();
 
         this.response = given().baseUri(getEccUrl())
-                .log().all()
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
                 .contentType(ContentType.JSON)
@@ -129,17 +138,15 @@ public class ClaimSettlementItemsService extends BaseService {
                 .when()
                 .post(SEND_TO_REPAIR_AND_VALUATION)
                 .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK).extract().response();
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
 
         this.response = given()
-                .log().all()
                 .sessionId(data.getEccSessionId())
                 .redirects().follow(false)
                 .when()
                 .get(new URL(response.body().jsonPath().get("data")))
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 
@@ -155,26 +162,28 @@ public class ClaimSettlementItemsService extends BaseService {
         data.setOrderToken(orderToken);
 
         this.response = given()
-                .log().all()
                 .sessionId(data.getRnvSessionId())
                 .when()
                 .get(new URL(location))
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
         return new RnvService().sendToRepairAndValuation();
     }
 
+    public SettlementItemDialogService sid(){
 
-
+        return new SettlementItemDialogService();
+    }
 
     public AttachmentsService toAttachments() throws IOException {
+
         return new AttachmentsService();
     }
 
     public SettlementClaimService closeCase() {
+
         return new SettlementClaimService();
     }
 }

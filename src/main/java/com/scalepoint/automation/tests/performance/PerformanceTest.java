@@ -20,8 +20,6 @@ import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class PerformanceTest  extends BaseApiTest{
 
@@ -78,7 +76,9 @@ public class PerformanceTest  extends BaseApiTest{
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
         claimRequest.setCompany(user.getCompanyName().toLowerCase());
+
         SelfServiceRequest selfServiceRequest = TestData.getSelfServiceRequest();
+
         SelfServiceLossItems selfServiceLossItems = TestData.getSelfServiceLossItems();
 
         BaseService
@@ -95,6 +95,7 @@ public class PerformanceTest  extends BaseApiTest{
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
         claimRequest.setCompany(user.getCompanyName().toLowerCase());
+
         InsertSettlementItem insertSettlementItem = TestData.getInsertSettlementItem();
 
         BaseService.loginAndOpenClaimWithItems(user, claimRequest,insertSettlementItem);
@@ -106,6 +107,7 @@ public class PerformanceTest  extends BaseApiTest{
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
         claimRequest.setCompany(user.getCompanyName().toLowerCase());
+
         InsertSettlementItem insertSettlementItem = TestData.getInsertSettlementItem();
 
         BaseService

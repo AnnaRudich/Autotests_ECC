@@ -31,13 +31,13 @@ public class CreateClaimService extends BaseService {
     public CreateClaimService setToken(Token token) {
 
         this.token = token;
+
         return this;
     }
 
     public CreateClaimService addClaim(ClaimRequest claimRequest) {
 
-        this.response = given()
-                .baseUri(getEccUrl())
+        this.response = given().baseUri(getEccUrl())
                 .basePath(UNIFIED_INTEGRATION)
                 .body(claimRequest)
                 .header(token.getAuthorizationHeader())
@@ -53,6 +53,7 @@ public class CreateClaimService extends BaseService {
     }
 
     public CreateClaimService openClaim() {
+
         setUserIdByClaimToken();
 
         response = given().baseUri(getEccUrl())
@@ -63,6 +64,7 @@ public class CreateClaimService extends BaseService {
                 .then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
+
         return this;
     }
 
@@ -103,6 +105,7 @@ public class CreateClaimService extends BaseService {
     }
 
     public ClaimSettlementItemsService claimLines() {
+
         return new ClaimSettlementItemsService();
     }
 

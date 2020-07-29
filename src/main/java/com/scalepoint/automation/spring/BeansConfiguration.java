@@ -8,7 +8,6 @@ import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.WiremockServer;
-import com.scalepoint.automation.tests.performance.PerformanceUsers;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +25,6 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableAutoConfiguration

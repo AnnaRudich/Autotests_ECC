@@ -9,7 +9,5 @@ public enum ValuationTypes {
     MARKET_PRICE,
     NEW_PRICE;
 
-    ValuationTypes() {
-    }
-
+    ValuationTypes() {}
 }
