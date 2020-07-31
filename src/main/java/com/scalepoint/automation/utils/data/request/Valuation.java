@@ -24,18 +24,18 @@ public class Valuation {
     @XmlAttribute
     private String dirty;
     @XmlAttribute
-    private ValuationTypes valuationType;
+    private String valuationType;
     @XmlAttribute
     private String active;
     @XmlAttribute
     private String priceAfterAllDeductions;
-    @XmlElement(nillable=true, name = "VoucherReplacement")
+    @XmlElement(name = "VoucherReplacement")
     private VoucherReplacement VoucherReplacement;
     @XmlAttribute
     private String quantity;
     @XmlAttribute
     private String preDepreciation;
-    @XmlElement(nillable=true, name = "ProductMatch")
+    @XmlElement( name = "ProductMatch")
     private ProductMatch ProductMatch;
 
     @Override

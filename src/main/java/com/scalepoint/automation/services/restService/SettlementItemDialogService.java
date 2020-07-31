@@ -227,7 +227,7 @@ public class SettlementItemDialogService extends BaseService {
     private Valuation getValuationByType(Valuation[] valuations, ValuationTypes valuationType){
 
         return Arrays.stream(valuations)
-                .filter(valuation -> valuation.getValuationType().equals(valuationType))
+                .filter(valuation -> valuation.getValuationType().equals(valuationType.toString()))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
     }

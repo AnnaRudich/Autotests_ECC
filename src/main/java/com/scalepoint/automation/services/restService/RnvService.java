@@ -76,31 +76,31 @@ public class RnvService extends BaseService {
 
     public RnvService sendToRepairAndValuation(){
 
-        claimant();
-        claim();
-        orderStatus();
-        order();
+        getClaimant();
+        getClaim();
+        getOrderStatus();
+        getOrder();
 
         return this;
     }
 
     public RnvService rnvNextStep(){
 
-        orderPrepareAction();
-        orderPrepare();
+        postOrderPrepareAction();
+        getOrderPrepare();
 
         return this;
     }
 
     public RnvService send(){
 
-        orderAction();
-        tasksStatuses();
+        postOrderAction();
+        getTasksStatuses();
 
         return this;
     }
 
-    private RnvService claimant(){
+    private RnvService getClaimant(){
 
         claimant = given().baseUri(getRnvWebServiceUrl())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
@@ -115,7 +115,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    private RnvService claim(){
+    private RnvService getClaim(){
 
         claim = given().baseUri(getRnvWebServiceUrl())
                 .contentType("application/json;charset=UTF-8")
@@ -131,7 +131,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    private RnvService order(){
+    private RnvService getOrder(){
 
         order = given().baseUri(getRnvWebServiceUrl())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
@@ -146,7 +146,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    private RnvService orderStatus(){
+    private RnvService getOrderStatus(){
 
         given().baseUri(getRnvWebServiceUrl())
                 .queryParam("_dc", LocalDateTime.now().toEpochSecond(ZoneOffset.of(ZONE_OFFSET)))
@@ -160,7 +160,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    private RnvService orderPrepareAction(){
+    private RnvService postOrderPrepareAction(){
 
         OrderPrepare orderPrepare = OrderPrepare.builder()
                 .claim(claim)
@@ -182,7 +182,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    private RnvService orderPrepare(){
+    private RnvService getOrderPrepare(){
 
         tasks = given().baseUri(getRnvWebServiceUrl())
                 .redirects().follow(false)
@@ -198,7 +198,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    private RnvService orderAction(){
+    private RnvService postOrderAction(){
 
         ServiceLine serviceLine = order
                 .getServiceLines()
@@ -236,7 +236,7 @@ public class RnvService extends BaseService {
         return this;
     }
 
-    public RnvService tasksStatuses(){
+    public RnvService getTasksStatuses(){
 
         given().baseUri(getRnvWebServiceUrl())
                 .redirects().follow(false)

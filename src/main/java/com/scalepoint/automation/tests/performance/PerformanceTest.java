@@ -55,13 +55,13 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_USER})
-    public void loginUser(User user) {
+    public void loginUserTest(User user) {
 
         BaseService.loginUser(user);
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM})
-    public void loginAndOpenClaim(User user) {
+    public void loginAndOpenClaimTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -71,7 +71,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_SELFSERVICE})
-    public void selfService(User user) {
+    public void requestAndSubmitSelfServiceTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -90,7 +90,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS})
-    public void loginAndOpenClaimWithItems(User user) {
+    public void loginAndOpenClaimWithItemsTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -102,7 +102,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_CLOSE_WITH_EMAIL})
-    public void closeWithEmail(User user) {
+    public void closeClaimWithEmailTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -117,7 +117,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_REOPEN_SAVED_CLAIM})
-    public void reopenSavedClaim(User user) {
+    public void reopenSavedClaimTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -130,7 +130,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_CANCEL_CLAIM})
-    public void cancelClaim(User user) {
+    public void cancelClaimTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -145,7 +145,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_TEXT_SEARCH})
-    public void textSearch(User user) throws JsonProcessingException {
+    public void textSearchTest(User user) throws JsonProcessingException {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());
@@ -166,7 +166,7 @@ public class PerformanceTest  extends BaseApiTest{
     }
 
     @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_RNV})
-    public void rnv(User user) throws MalformedURLException {
+    public void sendLineToRnvTest(User user) throws MalformedURLException {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
         claimRequest.setTenant(user.getCompanyName().toLowerCase());

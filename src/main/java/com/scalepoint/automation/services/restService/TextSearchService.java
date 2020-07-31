@@ -67,7 +67,7 @@ public class TextSearchService extends BaseService {
                 .getProductResultList()
                 .getProductResults()
                 .stream()
-                .forEach(productResult -> securedImage(String.valueOf(productResult.getProductId())));
+                .forEach(productResult -> getSecuredImage(String.valueOf(productResult.getProductId())));
 
         return this;
     }
@@ -77,7 +77,7 @@ public class TextSearchService extends BaseService {
         return textSearchResult;
     }
 
-    private TextSearchService securedImage(String id){
+    private TextSearchService getSecuredImage(String id){
 
         given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
