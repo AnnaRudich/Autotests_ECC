@@ -8,10 +8,10 @@ covers UI flows of ECC with some parts of Self Service.
 Clone repo from git:
     `` ssh://git@bitbucket.spcph.local:7999/ecc/automatedtest.git ``
 
-JDK 1.8 required<br>
-https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+OpenJDK 11 required<br>
+https://adoptopenjdk.net/
 
-Maven 3.x required<br>
+It is recommended to use recent version of Maven 3.6.1+ (3.6.1 is bundled in Intellij Idea 2019.3.4)<br>
 https://maven.apache.org/download.cgi
 
 ### DB config
