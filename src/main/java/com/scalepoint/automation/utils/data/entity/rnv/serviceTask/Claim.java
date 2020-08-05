@@ -1,8 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.xml.bind.annotation.*;
 import java.math.BigDecimal;
@@ -42,5 +40,4 @@ public class Claim {
     private String customerNoteToClaim;
     @XmlAttribute
     private String policyNumber;
-
 }

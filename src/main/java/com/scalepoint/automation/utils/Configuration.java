@@ -133,7 +133,7 @@ public class Configuration {
         return pullTaskDataUrl;
     }
 
-    private static String getRnvWebServiceUrl() {
+    public static String getRnvWebServiceUrl() {
         return getServerUrl() + SLASH + getRepairValuationUrl() + SLASH + getLocale().getValue() + SLASH;
     }
 

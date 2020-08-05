@@ -21,6 +21,8 @@ import static com.scalepoint.automation.utils.Configuration.getEccAdminUrl;
  */
 public class BaseService {
 
+    protected static final String ZONE_OFFSET = "+02:00";
+
     protected Logger logger = LogManager.getLogger(getClass());
     protected Data data;
 

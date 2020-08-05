@@ -1,13 +1,14 @@
 
 package com.scalepoint.automation.utils.data.entity.credentials;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -29,7 +30,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  */
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 //@XmlType(name = "user", propOrder = {
 //        "companyCode"

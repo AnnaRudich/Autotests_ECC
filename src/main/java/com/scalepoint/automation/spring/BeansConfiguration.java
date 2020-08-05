@@ -145,5 +145,4 @@ public class BeansConfiguration {
                 .port(new Integer(port))
                 .build();
     }
-
 }

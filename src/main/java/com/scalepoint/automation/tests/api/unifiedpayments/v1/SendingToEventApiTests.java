@@ -12,9 +12,9 @@ import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.*;
 import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
 import static com.scalepoint.automation.services.restService.common.BaseService.loginUser;
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -22,7 +22,7 @@ public class SendingToEventApiTests extends BaseApiTest {
 
     private ClaimRequest claimRequest;
     private SettlementClaimService settlementClaimService;
-    private EccSettlementSummaryService eccSettlementSummaryService;
+    private EccSettlement eccSettlementSummaryService;
 
     @BeforeMethod
     private void prepareClaimRequest() {
@@ -136,7 +136,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     private SettlementClaimService createClaimWithItem(User user, InsertSettlementItem item) {
         settlementClaimService =
                 loginAndOpenClaimWithItems(user, claimRequest, item).closeCase();
-        eccSettlementSummaryService = new EccSettlementSummaryService()
+        eccSettlementSummaryService = new EccSettlement()
                 .getSummaryTotals();
         return settlementClaimService;
     }

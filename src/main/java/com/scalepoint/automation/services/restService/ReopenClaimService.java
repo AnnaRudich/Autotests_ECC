@@ -9,22 +9,24 @@ import static io.restassured.RestAssured.given;
 
 public class ReopenClaimService extends BaseService {
 
-    public ReopenClaimService reopenClaim() {
+    public ClaimSettlementItemsService reopenClaim() {
 
-        given().baseUri(getEccUrl()).log().all()
+        given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .redirects().follow(false)
                 .queryParam("shnbr", data.getUserId())
                 .get(BasePath.REOPEN)
-                .then().statusCode(HttpStatus.SC_MOVED_TEMPORARILY).extract().response();
+                .then()
+                .statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
 
-        given().baseUri(getEccUrl()).log().all()
+        given().baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .redirects().follow(false)
                 .pathParam("shnbr", data.getUserId())
                 .get("/{shnbr}/webshop/jsp/matching_engine/settlement.jsp")
-                .then().statusCode(HttpStatus.SC_OK);
+                .then()
+                .statusCode(HttpStatus.SC_OK);
 
-        return this;
+        return new ClaimSettlementItemsService();
     }
 }

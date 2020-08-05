@@ -29,5 +29,4 @@ public class Claimant {
     private String city;
     @XmlAttribute
     private String email;
-
 }

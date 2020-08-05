@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Spike" configfailurepolicy="continue">
+    <suite-files>
+        <suite-file path="spike/incrementaSpike_testng.xml" />
+        <suite-file path="spike/constantSpikeStep1_testng.xml"/>
+        <suite-file path="spike/loadSpikeStep1_testng.xml" />
+        <suite-file path="spike/constantSpikeStep2_testng.xml" />
+        <suite-file path="spike/loadSpikeStep2_testng.xml" />
+        <suite-file path="spike/constantSpikeStep3_testng.xml"/>
+    </suite-files>
+</suite>

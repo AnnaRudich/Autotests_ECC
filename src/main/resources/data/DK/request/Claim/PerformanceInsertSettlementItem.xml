@@ -1,0 +1,11 @@
+<InsertSettlementItem caseId="9026">
+    <SettlementItem id="-1" totalDamage="false" active="true" reviewed="false" rejected="false" documentationOk="true" reductionRuleLineId="null" preDepreciation="0" postDepreciation="0" depreciateDiscounted="false" depreciationType="1" policyRuleDepreciation="0" discretionaryRuleDepreciation="0" cashReduction="0" automaticDepreciation="true" depreciationChanged="false" taxRate="0.25" includeTax="true">
+        <Claim description="Samsung Galaxy S7 32GB Rosaguld" quantity="1" newItem="false" category="200116" claimToken="9f830147-6176-47d9-8eeb-5b33ce9d782b" room="0" originalDescription="Samsung Galaxy S7 32GB Rosaguld"/>
+        <Valuations>
+            <Valuation id="-2" quantity="1" preDepreciation="0" active="true" dirty="true" hidden="false" valuationType="CATALOG_PRICE" priceAfterAllDeductions="2841.02"><Price name="price" netAmount="2272.816" amount="2841.02"/><ProductMatch variant="4119984">
+                <Price name="recommendedRetailPrice" netAmount="2319.2" amount="2899"/><Price name="freightPrice" netAmount="140" amount="175"/></ProductMatch></Valuation>
+            <Valuation id="-3" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="MARKET_PRICE" priceAfterAllDeductions="2899" baseValuation="-2">
+                <Price name="price" netAmount="2319.2" amount="2899"/></Valuation>
+        </Valuations>
+    </SettlementItem>
+</InsertSettlementItem>

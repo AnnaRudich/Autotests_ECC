@@ -52,6 +52,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Value("${subscription.fraud_status.id}")
     protected String fraudStatusSubscriptionId;
 
+
     @BeforeMethod
     public void setUpData(Method method) {
         Thread.currentThread().setName("Thread " + method.getName());

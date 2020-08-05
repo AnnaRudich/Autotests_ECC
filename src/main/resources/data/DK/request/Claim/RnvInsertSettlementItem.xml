@@ -1,0 +1,7 @@
+<InsertSettlementItem caseId="9101"><SettlementItem id="-1" totalDamage="false" active="true" reviewed="false" rejected="false" documentationOk="true" reductionRuleLineId="null" preDepreciation="0" postDepreciation="0" depreciateDiscounted="false" depreciationType="1" policyRuleDepreciation="0" discretionaryRuleDepreciation="0" cashReduction="0" automaticDepreciation="true" depreciationChanged="false" taxRate="0.25" includeTax="true">
+    <Claim description="RnVLine" quantity="1" newItem="false" category="209083" claimToken="fee5d94e-506a-4276-b4da-5179129f9b8f" room="0" originalDescription=""/>
+    <Valuations>
+        <Valuation id="-3" quantity="1" preDepreciation="0" active="true" dirty="true" hidden="false" valuationType="VOUCHER" priceAfterAllDeductions="90" baseValuation="-2"><Price name="price" netAmount="72" amount="90"/><VoucherReplacement voucher="2405254"><Price name="cashValue" netAmount="72" amount="90"/><Price name="faceValue" netAmount="80" amount="100"/></VoucherReplacement></Valuation>
+        <Valuation id="-2" quantity="1" preDepreciation="0" active="false" dirty="true" hidden="false" valuationType="NEW_PRICE" priceAfterAllDeductions="100"><Price name="price" netAmount="80" amount="100"/></Valuation>
+    </Valuations>
+</SettlementItem></InsertSettlementItem>

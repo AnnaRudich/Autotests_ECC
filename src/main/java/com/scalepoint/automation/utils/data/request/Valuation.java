@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.data.request;
 
+import com.scalepoint.automation.utils.data.entity.eccIntegration.ValuationTypes;
 import lombok.Data;
 
 import javax.xml.bind.annotation.*;
@@ -34,6 +35,8 @@ public class Valuation {
     private String quantity;
     @XmlAttribute
     private String preDepreciation;
+    @XmlElement( name = "ProductMatch")
+    private ProductMatch ProductMatch;
 
     @Override
     public String toString() {
