@@ -100,12 +100,12 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
         }
 
         suiteType = PerformanceSuite.findSuite(suite.getName());
+
         XmlSuite parentSuite = getParentSuite(suite);
-        PerformanceSuite parentSuiteType = PerformanceSuite.findSuite(parentSuite.getName());
-
-
 
         if(suiteType.equals(PerformanceSuite.LOAD)) {
+
+            PerformanceSuite parentSuiteType = PerformanceSuite.findSuite(parentSuite.getName());
 
             if(parentSuiteType.equals(PerformanceSuite.PERFORMANCE)) {
 
