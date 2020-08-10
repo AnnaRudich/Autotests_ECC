@@ -5,7 +5,6 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class Report {
 
@@ -32,14 +31,6 @@ public class Report {
         return INSTANCE;
     }
 
-    private Test addTest(String testName){
-
-        Test test = new Test(report.createTest(testName));
-        testsList.add(test);
-
-        return test;
-    }
-
     public Test getTest(String testName){
 
         synchronized (this) {
@@ -54,5 +45,13 @@ public class Report {
 
     public void flush(){
         report.flush();
+    }
+
+    private Test addTest(String testName){
+
+        Test test = new Test(report.createTest(testName));
+        testsList.add(test);
+
+        return test;
     }
 }
