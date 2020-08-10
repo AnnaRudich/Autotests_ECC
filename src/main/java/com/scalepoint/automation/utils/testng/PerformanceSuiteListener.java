@@ -2,12 +2,12 @@ package com.scalepoint.automation.utils.testng;
 
 import com.scalepoint.automation.spring.PerformanceTestConfig;
 import com.scalepoint.automation.utils.reports.Report;
+import com.scalepoint.automation.utils.reports.Test;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.*;
 import org.testng.xml.XmlSuite;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -84,7 +84,6 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
         Integer users = Integer.valueOf(suite.getParameter(USERS));
         Integer limit = Integer.valueOf(suite.getParameter(LIMIT));
         ITestContext iTestContext = null;
-        Date startDate = null;
 
         try {
 
@@ -93,7 +92,6 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
                     .orElseThrow(NoSuchElementException::new)
                     .getTestContext();
 
-            startDate = iTestContext.getStartDate();
         }catch (NoSuchElementException e){
 
             log.info("Suite without ITestContext: {}", suite.getName());
@@ -103,46 +101,9 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
 
         XmlSuite parentSuite = getParentSuite(suite);
 
-        if(suiteType.equals(PerformanceSuite.LOAD)) {
-
-            PerformanceSuite parentSuiteType = PerformanceSuite.findSuite(parentSuite.getName());
-
-            if(parentSuiteType.equals(PerformanceSuite.PERFORMANCE)) {
-
-                report.getTest(suite.getName())
-                        .getNode(suite.getName().concat("_").concat(users.toString()), startDate)
-                        .setTestResults(iTestContext);
-                    report.getTest(suite.getName()).createChart();
-            }
-            if(parentSuiteType.equals(PerformanceSuite.SPIKE)){
-
-                report.getTest(parentSuite.getName())
-                        .getNode(suite.getName().concat("_").concat(users.toString()), startDate)
-                        .setTestResults(iTestContext);
-            }
-
-            report.flush();
-        }
-
-        if(suiteType.equals(PerformanceSuite.ENDURANCE)) {
-
-                report.getTest(suite.getName()).createChart();
-            report.flush();
-        }
-
-        if(suiteType.equals(PerformanceSuite.SPIKE)) {
-
-                report.getTest(suite.getName()).createChart();
-
-            report.flush();
-        }
-
         if(suiteType.equals(PerformanceSuite.INCREMENTAL)) {
 
-            report.getTest(parentSuite.getName())
-                    .getNode(suite.getName().concat("_").concat(users.toString()), startDate)
-                    .setTestResults(iTestContext);
-            report.flush();
+            setResults(parentSuite.getName(), suite.getName().concat("_").concat(users.toString()), iTestContext);
 
             if (isSuitePassed(suite) && users < limit) {
 
@@ -154,12 +115,36 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
 
         if(suiteType.equals(PerformanceSuite.CONSTANT)) {
 
-            report.getTest(parentSuite.getName())
-                    .getNode(suite.getName().concat("_").concat(users.toString()).concat(String.valueOf(iTestContext.getStartDate().toInstant().toEpochMilli())), startDate)
-                    .setTestResults(iTestContext);
-            report.flush();
+            setResults(
+                    parentSuite.getName(),
+                    suite.getName()
+                            .concat("_")
+                            .concat(users.toString())
+                            .concat(String.valueOf(iTestContext.getStartDate().toInstant().toEpochMilli())),
+                    iTestContext);
 
             repeatTestUntil(suite);
+        }
+
+        if(suiteType.equals(PerformanceSuite.LOAD)) {
+
+            PerformanceSuite parentSuiteType = PerformanceSuite.findSuite(parentSuite.getName());
+
+            if(parentSuiteType.equals(PerformanceSuite.PERFORMANCE)) {
+
+                setResults(suite.getName(), suite.getName().concat("_").concat(users.toString()), iTestContext)
+                        .createChart();
+            }
+            if(parentSuiteType.equals(PerformanceSuite.SPIKE)){
+
+                setResults(parentSuite.getName(), suite.getName().concat("_").concat(users.toString()), iTestContext);
+            }
+        }
+
+        if(suiteType.equals(PerformanceSuite.ENDURANCE) || suiteType.equals(PerformanceSuite.SPIKE)) {
+
+            report.getTest(suite.getName()).createChart();
+            report.flush();
         }
 
         if(suiteType.equals(PerformanceSuite.STRESS)) {
@@ -194,13 +179,27 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
                     .forEach(xmlSuite -> setUsers(xmlSuite, maxLoad.toString()));
 
             log.warn("Break point: {}", breakPoint);
-            
-                report.getTest(suite.getName()).createChart();
-                report.flush();
+
+            report.getTest(suite.getName()).createChart();
+            report.flush();
         }
     }
 
-    protected XmlSuite getChildSuite(XmlSuite xmlSuite, PerformanceSuite performanceSuite){
+    private Test setResults(String testName, String nodeName, ITestContext iTestContext){
+
+        Date startDate = iTestContext.getStartDate();
+        Test test = report.getTest(testName);
+
+        test
+                .getNode(nodeName, startDate)
+                .setTestResults(iTestContext);
+
+        report.flush();
+
+        return test;
+    }
+
+    private XmlSuite getChildSuite(XmlSuite xmlSuite, PerformanceSuite performanceSuite){
 
         return xmlSuite
                 .getChildSuites()
@@ -210,12 +209,12 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    protected XmlSuite getParentSuite(ISuite iSuite){
+    private XmlSuite getParentSuite(ISuite iSuite){
 
         return iSuite.getXmlSuite().getParentSuite();
     }
 
-    protected void repeatTestUntil(ISuite suite){
+    private void repeatTestUntil(ISuite suite){
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -231,7 +230,7 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
         }
     }
 
-    protected boolean isSuitePassed(ISuite iSuite){
+    private boolean isSuitePassed(ISuite iSuite){
 
         return iSuite
                 .getResults()
@@ -244,26 +243,28 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
                 .size() == 0;
     }
 
-    protected void incrementUsersLoad(XmlSuite suite){
+    private void incrementUsersLoad(XmlSuite suite){
 
         Integer incrementedUsers = Integer.valueOf(suite.getParameter(USERS)) + STEP;
         setUsers(suite, incrementedUsers.toString());
     }
 
-    protected Integer setUsers(XmlSuite suite, String users){
+    private Integer setIntegerParameter(XmlSuite suite, String parameterName, String parameterValue){
 
         Map parameters = suite.getParameters();
-        parameters.put(USERS, users);
+        parameters.put(parameterName, parameterValue);
 
-        return Integer.valueOf(users);
+        return Integer.valueOf(parameterValue);
     }
 
-    protected Integer setLimit(XmlSuite suite, String limit){
+    private Integer setUsers(XmlSuite suite, String users){
 
-        Map parameters = suite.getParameters();
-        parameters.put(LIMIT, limit);
+        return setIntegerParameter(suite, USERS, users);
+    }
 
-        return Integer.valueOf(limit);
+    private Integer setLimit(XmlSuite suite, String limit){
+
+        return setIntegerParameter(suite, LIMIT, limit);
     }
 
     public enum PerformanceSuite{

@@ -2,6 +2,8 @@ package com.scalepoint.automation.utils.reports;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.Test;
+import lombok.AllArgsConstructor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -22,48 +24,65 @@ import java.util.stream.Collectors;
 
 public class Chart {
 
-    public void createChart(ExtentTest extentTest) throws IOException {
+    private static final String FILE_EXTENSION = ".jpeg";
+    private static final String SUB_CATEGORY_AXIS_LABEL = "LABEL";
+    private static final String DOMAIN_AXIS_LABEL = "y";
+    private static final String RANGE_AXIS_LABEL = "LOAD";
+    private static final int WIDTH= 1000;
+    private static final int HEIGHT= 600;
+    private static final double CATEGORY_MARGIN = 0.05;
+    private static final double ITEM_MARGIN = 0.0;
 
-        File file = new File(extentTest.getModel().getName().concat(".jpeg"));
+    private ExtentTest extentTest;
+    private File file;
+    private DefaultCategoryDataset dataset;
+    private GroupedStackedBarRenderer renderer;
+    private SubCategoryAxis domainAxis;
+    private KeyToGroupMap map;
+    private JFreeChart histogram;
 
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    public Chart(ExtentTest extentTest){
 
-        GroupedStackedBarRenderer renderer = new GroupedStackedBarRenderer();
-        SubCategoryAxis domainAxis = new SubCategoryAxis("method");
-        domainAxis.setCategoryMargin(0.05);
+        this.extentTest = extentTest;
+        file = new File(extentTest.getModel().getName().concat(FILE_EXTENSION));
+        dataset = new DefaultCategoryDataset();
+        renderer = new GroupedStackedBarRenderer();
+        domainAxis = new SubCategoryAxis(SUB_CATEGORY_AXIS_LABEL);
+    }
 
+    public void createChart() throws IOException {
 
         List<String> methods = extentTest.getModel().getChildren().stream()
                 .map(node ->
                         node.getChildren().stream()
-                                .map(method ->
-                                {
-                                    Long passed = method.getLogs().stream().filter(log ->
-
-                                            log.getStatus().equals(Status.PASS))
-                                            .count();
-
-                                    Long failed = method.getLogs().stream().filter(log ->
-
-                                            log.getStatus().equals(Status.FAIL))
-                                            .count();
-
-                                    Long skipped = method.getLogs().stream().filter(log ->
-
-                                            log.getStatus().equals(Status.SKIP))
-                                            .count();
-
-                                    dataset.addValue(passed.doubleValue(), method.getName().concat(Status.PASS.getName()), node.getName());
-                                    dataset.addValue(failed.doubleValue(),  method.getName().concat(Status.FAIL.getName()), node.getName());
-                                    dataset.addValue(skipped.doubleValue(),  method.getName().concat(Status.SKIP.getName()), node.getName());
-
-                                    return method.getName();
-                                })
+                                .map(method -> new ResultsPopulator(method, node.getName()).populateResults())
                                 .collect(Collectors.toList()))
                 .collect(Collectors.toList())
                 .stream()
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
+
+        map = getKeyToGroupMap(methods);
+
+        histogram = ChartFactory
+                .createStackedBarChart(
+                        extentTest.getModel().getName(),
+                        DOMAIN_AXIS_LABEL, RANGE_AXIS_LABEL,
+                        dataset,
+                        PlotOrientation.VERTICAL,
+                        true,
+                        true,
+                        true);
+
+        configureDomainAxis();
+        configureRenderer();
+        configureCategoryPlot();
+
+        ChartUtilities.saveChartAsJPEG(file, histogram, WIDTH,HEIGHT);
+        extentTest.addScreenCaptureFromPath(file.getPath());
+    }
+
+    private KeyToGroupMap getKeyToGroupMap(List<String> methods){
 
         KeyToGroupMap map = new KeyToGroupMap(methods.iterator().next());
 
@@ -76,45 +95,72 @@ public class Chart {
                     domainAxis.addSubCategory(methodName);
                 });
 
-        renderer.setSeriesToGroupMap(map);
-        renderer.setItemMargin(0.0);
+        return map;
+    }
 
-        System.out.println("Row keys: " + dataset.getRowKeys());
+    private void configureDomainAxis(){
+
+        domainAxis.setCategoryMargin(CATEGORY_MARGIN);
+    }
+
+    private void configureCategoryPlot(){
+
+        CategoryPlot plot = (CategoryPlot) histogram.getPlot();
+        plot.setDomainAxis(domainAxis);
+        plot.setRenderer(renderer);
+        plot.setFixedLegendItems(new LegendItemCollection());
+    }
+
+    private void configureRenderer(){
+
+        renderer.setSeriesToGroupMap(map);
+        renderer.setItemMargin(ITEM_MARGIN);
+        setSeriesPaints();
+    }
+
+    private void setSeriesPaints(){
 
         dataset.getRowKeys().stream()
                 .forEach(key -> {
 
-                    if(((String) key).contains(Status.PASS.toString())){
-
-                        int rowIndex = dataset.getRowIndex((Comparable) key);
-                        renderer.setSeriesPaint(rowIndex, Color.GREEN);
-                    }
-                    if(((String) key).contains(Status.FAIL.toString())){
-
-                        int rowIndex = dataset.getRowIndex((Comparable) key);
-                        renderer.setSeriesPaint(rowIndex, Color.RED);
-                    }
-                    if(((String) key).contains(Status.SKIP.toString())){
-
-                        int rowIndex = dataset.getRowIndex((Comparable) key);
-                        renderer.setSeriesPaint(rowIndex, Color.YELLOW);
-                    }
-
+                    setPaintByStatus(key, Status.PASS, Color.GREEN);
+                    setPaintByStatus(key, Status.FAIL, Color.RED);
+                    setPaintByStatus(key, Status.SKIP, Color.YELLOW);
                 });
+    }
 
-        JFreeChart hisogram = ChartFactory.createStackedBarChart("Norma", "y", "x", dataset, PlotOrientation.VERTICAL, true,true,true);
+    private void setPaintByStatus(Object key, Status status, Color color){
 
-        CategoryPlot plot = (CategoryPlot) hisogram.getPlot();
-        plot.setDomainAxis(domainAxis);
-        //plot.setDomainAxisLocation(AxisLocation.TOP_OR_RIGHT);
-        plot.setRenderer(renderer);
-        plot.setFixedLegendItems(new LegendItemCollection());
+        if(((String) key).contains(status.toString())){
 
+            int rowIndex = dataset.getRowIndex((Comparable) key);
+            renderer.setSeriesPaint(rowIndex, color);
+        }
+    }
 
-        System.out.println("Groups: " + map.getGroups());
+    @AllArgsConstructor
+    private class ResultsPopulator{
 
+        Test method;
+        String nodeName;
 
-        ChartUtilities.saveChartAsJPEG(file, hisogram, 1000,600);
-        extentTest.addScreenCaptureFromPath(file.getPath());
+        public String populateResults(){
+
+            setValue(Status.FAIL);
+            setValue(Status.PASS);
+            setValue(Status.SKIP);
+
+            return method.getName();
+        }
+
+        private void setValue(Status status){
+
+            Long passed = method.getLogs().stream().filter(log ->
+
+                    log.getStatus().equals(status))
+                    .count();
+
+            dataset.addValue(passed.doubleValue(), method.getName().concat(status.getName()), nodeName);
+        }
     }
 }

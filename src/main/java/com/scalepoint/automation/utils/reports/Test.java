@@ -21,7 +21,7 @@ public class Test {
 
         try {
 
-            new Chart().createChart(extentTest);
+            new Chart(extentTest).createChart();
         } catch (IOException e) {
 
             throw new RuntimeException(e);
