@@ -112,12 +112,7 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
                 report.getTest(suite.getName())
                         .getNode(suite.getName().concat("_").concat(users.toString()), startDate)
                         .setTestResults(iTestContext);
-                try {
-                    report.getTest(suite.getName()).createStressChart("Load");
-                } catch (IOException e) {
-
-                    throw new RuntimeException(e);
-                }
+                    report.getTest(suite.getName()).createChart();
             }
             if(parentSuiteType.equals(PerformanceSuite.SPIKE)){
 
@@ -131,23 +126,14 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
 
         if(suiteType.equals(PerformanceSuite.ENDURANCE)) {
 
-            try {
-                report.getTest(suite.getName()).createStressChart("Endurance");
-            } catch (IOException e) {
-
-                throw new RuntimeException(e);
-            }
+                report.getTest(suite.getName()).createChart();
             report.flush();
         }
 
         if(suiteType.equals(PerformanceSuite.SPIKE)) {
 
-            try {
-                report.getTest(suite.getName()).createStressChart("Spike");
-            } catch (IOException e) {
+                report.getTest(suite.getName()).createChart();
 
-                throw new RuntimeException(e);
-            }
             report.flush();
         }
 
@@ -169,7 +155,7 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
         if(suiteType.equals(PerformanceSuite.CONSTANT)) {
 
             report.getTest(parentSuite.getName())
-                    .addNode(suite.getName().concat("_").concat(users.toString()).concat(String.valueOf(iTestContext.getStartDate().toInstant().toEpochMilli())), startDate)
+                    .getNode(suite.getName().concat("_").concat(users.toString()).concat(String.valueOf(iTestContext.getStartDate().toInstant().toEpochMilli())), startDate)
                     .setTestResults(iTestContext);
             report.flush();
 
@@ -208,15 +194,9 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
                     .forEach(xmlSuite -> setUsers(xmlSuite, maxLoad.toString()));
 
             log.warn("Break point: {}", breakPoint);
-
-            try {
-
-                report.getTest(suite.getName()).createStressChart("Stress");
+            
+                report.getTest(suite.getName()).createChart();
                 report.flush();
-            } catch (IOException e) {
-
-                throw new RuntimeException(e);
-            }
         }
     }
 
