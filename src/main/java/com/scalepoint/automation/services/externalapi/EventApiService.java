@@ -42,7 +42,7 @@ public class EventApiService{
     public void sendFraudStatus(ClaimLineChanged claimLineChanged, String status){
 
         Token token = new OauthTestAccountsApi()
-                .sendRequest(OauthTestAccountsApi.Scope.EVENTS, "topdanmark_dk_integration", "fT8nw3fMVWryIFTmjUqcWgSmb9wki4YNRcoBAG53uZQ")
+                .sendRequest(OauthTestAccountsApi.Scope.EVENTS, "topdanmark_dk_integration", "bVHJV2qLzkzVOlFrAg72hbiwLOdUWxgIKvyvrlyacQE")
                 .getToken();
 
         CaseClaimLineChanged caseClaimLineChanged = claimLineChanged.getCaseClaimLineChanged();

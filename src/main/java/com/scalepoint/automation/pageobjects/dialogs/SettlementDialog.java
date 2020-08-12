@@ -85,7 +85,7 @@ public class SettlementDialog extends BaseDialog {
     public static final String REJECT_REASON_COMBOBOX_INPUT_WRAP = "reject-reason-combobox-inputWrap";
 
     @FindBy(id = "description-textfield-inputEl")
-    private ExtInput description;
+    private WebElement description;
 
     @FindBy(id = "group-combobox")
     private ExtComboBox category;
@@ -106,16 +106,16 @@ public class SettlementDialog extends BaseDialog {
     private ExtInput quantity;
 
     @FindBy(id = "customer-demand-textfield-inputEl")
-    private ExtInput customerDemand;
+    private WebElement customerDemand;
 
     @FindBy(id = "new-price-textfield-inputEl")
     private WebElement newPrice;
 
     @FindBy(id = "depreciation-textfield-inputEl")
-    private ExtInput depreciationPercentage;
+    private WebElement depreciationPercentage;
 
     @FindBy(id = "discretionary-replacement-textfield-inputEl")
-    private ExtInput discretionaryPrice;
+    private WebElement discretionaryPrice;
 
     @FindBy(id = "age-defined-radiogroup")
     private ExtRadioGroup age;
@@ -163,7 +163,7 @@ public class SettlementDialog extends BaseDialog {
     private Link addValuation;
 
     @FindBy(id = "age-years-textfield-inputEl")
-    private ExtInput ageYears;
+    private WebElement ageYears;
 
     @FindBy(css = "#voucher-supplier-link a")
     private Link voucherLink;
@@ -380,12 +380,13 @@ public class SettlementDialog extends BaseDialog {
         });
     }
 
-    private SettlementDialog setExtInputValue(ExtInput input, String value) {
+    private SettlementDialog setInputValue(SelenideElement input, String value) {
         waitForVisible(input);
+        input.waitUntil(visible, TIME_OUT_IN_MILISECONDS);
         input.clear();
-        input.enter(value);
-        simulateBlurEvent(input);
-        waitForJavascriptRecalculation();
+        input.setValue(value);
+        JavascriptHelper.blur();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -403,13 +404,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    private void simulateBlurEvent(ExtElement input) {
-        ExtInput inputForClick = input == quantity ? description : quantity;
-        inputForClick.getRootElement().click();
-    }
-
     public SettlementDialog setDescription(String descriptionText) {
-        return setExtInputValue(description, descriptionText);
+        return setInputValue($(description), descriptionText);
     }
 
     public SettlementDialog setDescriptionAndWaitForCategoriesToAutoSelect(String descriptionText) {
@@ -430,15 +426,15 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setDiscretionaryPrice(Double amount) {
-        return setExtInputValue(discretionaryPrice, OperationalUtils.format(amount));
+        return setInputValue($(discretionaryPrice), OperationalUtils.format(amount));
     }
 
     public SettlementDialog setCustomerDemand(Double amount) {
-        return setExtInputValue(customerDemand, OperationalUtils.format(amount));
+        return setInputValue($(customerDemand), OperationalUtils.format(amount));
     }
 
     public SettlementDialog setDepreciation(Integer amount) {
-        return setExtInputValue(depreciationPercentage, amount.toString());
+        return setInputValue($(depreciationPercentage), amount.toString());
     }
 
     public SettlementDialog setCategory(String categoryName) {
@@ -487,7 +483,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog enterAgeYears(String _ageYears) {
-        return setExtInputValue(ageYears, _ageYears);
+        return setInputValue($(ageYears), _ageYears);
     }
 
     public SettlementDialog selectMonth(String monthName) {

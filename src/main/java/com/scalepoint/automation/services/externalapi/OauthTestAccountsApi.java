@@ -17,7 +17,7 @@ public class OauthTestAccountsApi {
         this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
                 .formParam("grant_type", "client_credentials")
                 .formParam("client_id", "test_integration_all_tenants")
-                .formParam("client_secret", "uwznghkCQu3smKvkHVWBZ0S-sOSsCHEVx5UUHPyTVcM")
+                .formParam("client_secret", "Yif1uarnJnc2YiiUX3eapWtT5Cd32PKWbQZ9j-MCkZg")
                 .formParam("scope", scope.getScope())
                 .formParam("tenantId")
                 .when()
@@ -27,14 +27,15 @@ public class OauthTestAccountsApi {
     }
 
     public OauthTestAccountsApi sendRequest(Scope scope, String clientId, String clientSecret) {
-        this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token").log().all()
+        this.token = given().baseUri("https://test-accounts.scalepoint.com").basePath("/connect/token")
                 .formParam("grant_type", "client_credentials")
                 .formParam("client_id", clientId)
                 .formParam("client_secret", clientSecret)
                 .formParam("scope", scope.getScope())
                 .when()
                 .post()
-                .then().log().all().statusCode(HttpStatus.SC_OK).extract().as(Token.class);
+                .then()
+                .statusCode(HttpStatus.SC_OK).extract().as(Token.class);
         return this;
     }
 
