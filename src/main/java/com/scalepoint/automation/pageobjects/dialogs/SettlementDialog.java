@@ -7,7 +7,6 @@ import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -22,21 +21,12 @@ import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.UnhandledAlertException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.CheckBox;
-import ru.yandex.qatools.htmlelements.element.Link;
-import ru.yandex.qatools.htmlelements.element.Table;
-import ru.yandex.qatools.htmlelements.element.TextBlock;
+import ru.yandex.qatools.htmlelements.element.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,26 +38,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
-import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
-import static com.scalepoint.automation.utils.Wait.waitForEnabled;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertEqualsNoOrder;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 
 public class SettlementDialog extends BaseDialog {
@@ -85,7 +65,7 @@ public class SettlementDialog extends BaseDialog {
     public static final String REJECT_REASON_COMBOBOX_INPUT_WRAP = "reject-reason-combobox-inputWrap";
 
     @FindBy(id = "description-textfield-inputEl")
-    private ExtInput description;
+    private WebElement description;
 
     @FindBy(id = "group-combobox")
     private ExtComboBox category;
@@ -106,16 +86,16 @@ public class SettlementDialog extends BaseDialog {
     private ExtInput quantity;
 
     @FindBy(id = "customer-demand-textfield-inputEl")
-    private ExtInput customerDemand;
+    private WebElement customerDemand;
 
     @FindBy(id = "new-price-textfield-inputEl")
     private WebElement newPrice;
 
     @FindBy(id = "depreciation-textfield-inputEl")
-    private ExtInput depreciationPercentage;
+    private WebElement depreciationPercentage;
 
     @FindBy(id = "discretionary-replacement-textfield-inputEl")
-    private ExtInput discretionaryPrice;
+    private WebElement discretionaryPrice;
 
     @FindBy(id = "age-defined-radiogroup")
     private ExtRadioGroup age;
@@ -163,7 +143,7 @@ public class SettlementDialog extends BaseDialog {
     private Link addValuation;
 
     @FindBy(id = "age-years-textfield-inputEl")
-    private ExtInput ageYears;
+    private WebElement ageYears;
 
     @FindBy(css = "#voucher-supplier-link a")
     private Link voucherLink;
@@ -380,12 +360,13 @@ public class SettlementDialog extends BaseDialog {
         });
     }
 
-    private SettlementDialog setExtInputValue(ExtInput input, String value) {
+    private SettlementDialog setInputValue(SelenideElement input, String value) {
         waitForVisible(input);
+        input.waitUntil(visible, TIME_OUT_IN_MILISECONDS);
         input.clear();
-        input.enter(value);
-        simulateBlurEvent(input);
-        waitForJavascriptRecalculation();
+        input.setValue(value);
+        JavascriptHelper.blur();
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -403,13 +384,8 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    private void simulateBlurEvent(ExtElement input) {
-        ExtInput inputForClick = input == quantity ? description : quantity;
-        inputForClick.getRootElement().click();
-    }
-
     public SettlementDialog setDescription(String descriptionText) {
-        return setExtInputValue(description, descriptionText);
+        return setInputValue($(description), descriptionText);
     }
 
     public SettlementDialog setDescriptionAndWaitForCategoriesToAutoSelect(String descriptionText) {
@@ -430,15 +406,15 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setDiscretionaryPrice(Double amount) {
-        return setExtInputValue(discretionaryPrice, OperationalUtils.format(amount));
+        return setInputValue($(discretionaryPrice), OperationalUtils.format(amount));
     }
 
     public SettlementDialog setCustomerDemand(Double amount) {
-        return setExtInputValue(customerDemand, OperationalUtils.format(amount));
+        return setInputValue($(customerDemand), OperationalUtils.format(amount));
     }
 
     public SettlementDialog setDepreciation(Integer amount) {
-        return setExtInputValue(depreciationPercentage, amount.toString());
+        return setInputValue($(depreciationPercentage), amount.toString());
     }
 
     public SettlementDialog setCategory(String categoryName) {
@@ -487,7 +463,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog enterAgeYears(String _ageYears) {
-        return setExtInputValue(ageYears, _ageYears);
+        return setInputValue($(ageYears), _ageYears);
     }
 
     public SettlementDialog selectMonth(String monthName) {
@@ -614,8 +590,8 @@ public class SettlementDialog extends BaseDialog {
 
     public Double customerDemandValue() {
         Wait.waitForLoaded();
-        waitForVisible(customerDemand);
-        return OperationalUtils.getDoubleValue(customerDemand.getText());
+        SelenideElement selenideElement = $(customerDemand).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+        return OperationalUtils.getDoubleValue(selenideElement.getValue());
     }
 
     public Double getCashCompensationValue() {
@@ -642,8 +618,8 @@ public class SettlementDialog extends BaseDialog {
 
     public String getDescriptionText() {
         Wait.waitForLoaded();
-        waitForVisible(description);
-        return description.getText();
+        SelenideElement selenideElement = $(description).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+        return selenideElement.getValue();
     }
 
     public AddValuationDialog openAddValuationForm() {
@@ -715,7 +691,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public Integer getDepreciationPercentage() {
-        return Integer.valueOf(depreciationPercentage.getText());
+        return Integer.valueOf($(depreciationPercentage).getValue());
     }
 
     private boolean isMarketPriceSupplierDisplayed() {
@@ -1202,12 +1178,12 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertYearsValueIs(String expectedValue) {
-            assertEquals(ageYears.getText(), expectedValue, "The age year is not saved");
+            assertEquals($(ageYears).getValue(), expectedValue, "The age year is not saved");
             return this;
         }
 
         public Asserts assertDepreciationValueIs(Double expectedDepreciationValue) {
-            assertEqualsDouble(Double.valueOf(depreciationPercentage.getText()), expectedDepreciationValue, "Depreciation percentage incorrect");
+            assertEqualsDouble(Double.valueOf($(depreciationPercentage).getValue()), expectedDepreciationValue, "Depreciation percentage incorrect");
             return this;
         }
 
@@ -1350,7 +1326,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertDepreciationPercentageIs(String percentage) {
-            assertEquals(depreciationPercentage.getText(), percentage);
+            assertEquals($(depreciationPercentage).getValue(), percentage);
             return this;
         }
 

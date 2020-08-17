@@ -235,7 +235,7 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog match(String productDescription) {
-        Wait.waitForAjaxCompleted();
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         waitForStaleElement(By.cssSelector("#productsTable table td"));
         List<WebElement> matchButtons = driver.findElements(By.xpath(".//*[@id='productsTable']//button[@class='matchbutton']"));
         if (matchButtons.isEmpty()) {
