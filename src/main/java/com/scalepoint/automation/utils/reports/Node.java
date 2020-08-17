@@ -17,16 +17,20 @@ public class Node {
     private Long latest;
     private ExtentTest extentTest;
     private List<ExtentTest> testMethodNodeList = new LinkedList<>();
+    private ITestContext iTestContext;
 
 
-    public Node(ExtentTest extentTest, Date startDate) {
+    public Node(ExtentTest extentTest, ITestContext iTestContext) {
 
-        limit = startDate.toInstant().toEpochMilli();
-        latest = startDate.toInstant().toEpochMilli();
+        Long epochMilli = iTestContext.getStartDate().toInstant().toEpochMilli();
+
+        limit = epochMilli;
+        latest = epochMilli;
         this.extentTest = extentTest;
+        this.iTestContext = iTestContext;
     }
 
-    public Node setTestResults(ITestContext iTestContext) {
+    public Node setTestResults() {
 
         Set<ITestResult> passedTests = iTestContext.getPassedTests().getAllResults();
         Set<ITestResult> skippedTests = iTestContext.getSkippedTests().getAllResults();

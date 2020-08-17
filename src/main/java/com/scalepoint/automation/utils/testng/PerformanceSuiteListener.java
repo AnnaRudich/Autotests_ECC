@@ -180,19 +180,18 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
 
             log.warn("Break point: {}", breakPoint);
 
-            report.getTest(suite.getName()).createChart();
+            Test test = report.getTest(suite.getName());
+            test.getExtentTest().info(String.format("Break point: %s", breakPoint));
+            test.createChart();
             report.flush();
         }
     }
 
     private Test setResults(String testName, String nodeName, ITestContext iTestContext){
 
-        Date startDate = iTestContext.getStartDate();
         Test test = report.getTest(testName);
 
-        test
-                .getNode(nodeName, startDate)
-                .setTestResults(iTestContext);
+        test.setNode(nodeName, iTestContext);
 
         report.flush();
 
@@ -273,7 +272,6 @@ public class PerformanceSuiteListener implements ISuiteListener, IMethodIntercep
         LOAD("Load"),
         ENDURANCE("Endurance"),
         SPIKE("Spike"),
-        TRANSITION("Transition"),
         INCREMENTAL("Incremental"),
         CONSTANT("Constant"),
         PERFORMANCE("Performance");
