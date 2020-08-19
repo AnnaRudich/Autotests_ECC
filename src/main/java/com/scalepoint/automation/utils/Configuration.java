@@ -72,6 +72,11 @@ public class Configuration {
         return locale;
     }
 
+    public static String getProtocol(){
+
+        return protocol;
+    }
+
     public static String getServerUrl() {
         return serverUrl;
     }
