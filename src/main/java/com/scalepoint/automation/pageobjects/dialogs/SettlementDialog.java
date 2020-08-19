@@ -535,18 +535,13 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
-        try {
-            WebElement button = driver.findElement(buttonBy);
-            forCondition(ExpectedConditions.elementToBeClickable(button));
-            try {
-                clickAndWait(buttonBy, button);
-            } catch (TimeoutException e) {
-                logger.error(e.getMessage());
-                clickAndWait(buttonBy, button);
-            }
-            Wait.waitForJavascriptRecalculation();
-        } catch (UnhandledAlertException ignored) {
-        }
+            SelenideElement button = $(buttonBy);
+            Condition clickable = and("can be clickable", visible, enabled);
+            button.waitUntil(clickable, TIME_OUT_IN_MILISECONDS);
+            button.click();
+            waitForAjaxCompletedAndJsRecalculation();
+            button.waitUntil(disappears, TIME_OUT_IN_MILISECONDS);
+            Wait.waitForAjaxCompletedAndJsRecalculation();
 
         if (acceptAlert) {
             acceptAlert();
@@ -555,10 +550,10 @@ public class SettlementDialog extends BaseDialog {
         return Page.at(pageClass);
     }
 
-    private void clickAndWait(By buttonBy, WebElement button) {
-        clickUsingJavaScriptIfClickDoesNotWork(button);
-        waitForAjaxCompleted();
-        waitElementDisappeared(buttonBy);
+    private void clickAndWait(SelenideElement button) {
+        button.click();
+        waitForAjaxCompletedAndJsRecalculation();
+        button.waitUntil(disappears, TIME_OUT_IN_MILISECONDS);
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
