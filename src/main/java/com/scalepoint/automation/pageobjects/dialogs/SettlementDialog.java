@@ -536,9 +536,10 @@ public class SettlementDialog extends BaseDialog {
 
     private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
             SelenideElement button = $(buttonBy);
-            Condition clickable = and("can be clickable", visible, enabled);
-            button.waitUntil(clickable, TIME_OUT_IN_MILISECONDS);
-            button.click();
+            button
+                    .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                    .hover()
+                    .click();
             waitForAjaxCompletedAndJsRecalculation();
             button.waitUntil(disappears, TIME_OUT_IN_MILISECONDS);
             Wait.waitForAjaxCompletedAndJsRecalculation();
