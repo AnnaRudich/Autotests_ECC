@@ -553,11 +553,7 @@ public class SettlementDialog extends BaseDialog {
 
     private void clickButton(SelenideElement button,  boolean acceptAlert){
 
-        button
-                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
-                .hover()
-                .click();
-        waitForAjaxCompletedAndJsRecalculation();
+        hoverAndClick(button);
 
         if (acceptAlert) {
             acceptAlert();
