@@ -19,6 +19,7 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;

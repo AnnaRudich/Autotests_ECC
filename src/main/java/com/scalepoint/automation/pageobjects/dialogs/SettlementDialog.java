@@ -21,7 +21,10 @@ import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -361,7 +364,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private SettlementDialog setInputValue(SelenideElement input, String value) {
-        waitForVisible(input);
+
         input.waitUntil(visible, TIME_OUT_IN_MILISECONDS);
         input.clear();
         input.setValue(value);
@@ -489,8 +492,12 @@ public class SettlementDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementPage addOneMoreManualLine() {
-        return closeSid(SettlementPage.class, ADD_BUTTON, false);
+    public SettlementDialog addOneMoreManualLine() {
+
+        SelenideElement button = $(ADD_BUTTON);
+        clickButton(button, false);
+
+        return BaseDialog.at(SettlementDialog.class);
     }
 
     public SettlementPage closeSidWithOk() {
@@ -535,26 +542,26 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private <T extends Page> T closeSid(Class<T> pageClass, By buttonBy, boolean acceptAlert) {
-            SelenideElement button = $(buttonBy);
-            button
-                    .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
-                    .hover()
-                    .click();
-            waitForAjaxCompletedAndJsRecalculation();
-            button.waitUntil(disappears, TIME_OUT_IN_MILISECONDS);
-            Wait.waitForAjaxCompletedAndJsRecalculation();
 
-        if (acceptAlert) {
-            acceptAlert();
-        }
+        SelenideElement button = $(buttonBy);
+        clickButton(button, acceptAlert);
+        button.waitUntil(disappears, TIME_OUT_IN_MILISECONDS);
+        Wait.waitForAjaxCompletedAndJsRecalculation();
 
         return Page.at(pageClass);
     }
 
-    private void clickAndWait(SelenideElement button) {
-        button.click();
+    private void clickButton(SelenideElement button,  boolean acceptAlert){
+
+        button
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         waitForAjaxCompletedAndJsRecalculation();
-        button.waitUntil(disappears, TIME_OUT_IN_MILISECONDS);
+
+        if (acceptAlert) {
+            acceptAlert();
+        }
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {

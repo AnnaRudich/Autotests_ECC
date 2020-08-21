@@ -660,15 +660,11 @@ public class SidManualItemsTests extends BaseTest {
                 .setBaseData(claimItem1)
                 .setValuation(NEW_PRICE)
                 .addOneMoreManualLine()
-                .doAssert(sid->{
-                    sid.assertItemIsPresent(claimItem1.getTextFieldSP());
-                });
-
-        new SettlementDialog()
                 .setBaseData(claimItem2)
                 .setValuation(NEW_PRICE)
                 .closeSidWithOk()
                 .doAssert(sid->{
+                    sid.assertItemIsPresent(claimItem1.getTextFieldSP());
                     sid.assertItemIsPresent(claimItem2.getTextFieldSP());
                 });
 

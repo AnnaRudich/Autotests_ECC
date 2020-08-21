@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.client.WireMockBuilder;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
@@ -25,6 +26,9 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 @Configuration
 @EnableAutoConfiguration
@@ -87,7 +91,8 @@ public class BeansConfiguration {
                         .setSolrBaseUrl(solrBaseUrl)
                         .setHubRemote(hubRemoteUrl)
                         .setHubLocalZalenium(hubLocalZaleniumUrl)
-                        .setHubRemoteZalenium(hubRemoteZaleniumUrl);
+                        .setHubRemoteZalenium(hubRemoteZaleniumUrl)
+                        .setCsvWriter(csvWriter());
                 UsersManager.initManager(TestData.getSystemUsers());
             }
         };
@@ -144,5 +149,15 @@ public class BeansConfiguration {
                 .urlPathPrefix(urlPathPrefix)
                 .port(new Integer(port))
                 .build();
+    }
+
+    @Bean
+    public CSVWriter csvWriter(){
+
+        try {
+            return new CSVWriter(new FileWriter(new File("SettlementPage".concat(".csv"))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

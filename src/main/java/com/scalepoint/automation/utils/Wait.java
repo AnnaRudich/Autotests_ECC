@@ -48,9 +48,12 @@ public class Wait {
     }
 
     public static void waitForAjaxCompletedAndJsRecalculation(){
+
         try{
+
             waitForAjaxCompleted();
         }catch (TimeoutException e){
+
             log.warn("waitForAjaxCompleted Timeout");
         }
         waitForJavascriptRecalculation();
