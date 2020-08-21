@@ -116,7 +116,9 @@ public class SettlementPage extends BaseClaimPage {
 
         writer.writeNext(new String[]{String.valueOf(Duration.between(startTime, urlTime).toSeconds()),
                 String.valueOf(Duration.between(startTime, scriptTime).toSeconds()),
-                String.valueOf(Duration.between(startTime, buttonTime).toSeconds())});
+                String.valueOf(Duration.between(startTime, buttonTime).toSeconds()), startTime.toString(), buttonTime.toString()});
+
+        logger.info("Settlement dialog start time: %s, end Time: %s", startTime, buttonTime);
 
         try {
 
