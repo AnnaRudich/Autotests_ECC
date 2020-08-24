@@ -103,30 +103,9 @@ public class SettlementPage extends BaseClaimPage {
     @Override
     protected void ensureWeAreOnPage() {
 
-        CSVWriter writer = Configuration.getCsvWriter();
-
-        LocalDateTime startTime = LocalDateTime.now();
         waitForUrl(getRelativeUrl());
-        LocalDateTime urlTime = LocalDateTime.now();
         waitForAjaxCompletedAndJsRecalculation();
-        LocalDateTime scriptTime = LocalDateTime.now();
-
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
-        LocalDateTime buttonTime = LocalDateTime.now();
-
-        writer.writeNext(new String[]{String.valueOf(Duration.between(startTime, urlTime).toSeconds()),
-                String.valueOf(Duration.between(startTime, scriptTime).toSeconds()),
-                String.valueOf(Duration.between(startTime, buttonTime).toSeconds()), startTime.toString(), buttonTime.toString()});
-
-        logger.info("Settlement dialog start time: %s, end Time: %s", startTime, buttonTime);
-
-        try {
-
-            writer.flush();
-        } catch (IOException e) {
-            throw  new RuntimeException(e);
-        }
-
     }
 
     public ClaimLine findClaimLine(String description) {

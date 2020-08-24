@@ -91,8 +91,7 @@ public class BeansConfiguration {
                         .setSolrBaseUrl(solrBaseUrl)
                         .setHubRemote(hubRemoteUrl)
                         .setHubLocalZalenium(hubLocalZaleniumUrl)
-                        .setHubRemoteZalenium(hubRemoteZaleniumUrl)
-                        .setCsvWriter(csvWriter());
+                        .setHubRemoteZalenium(hubRemoteZaleniumUrl);
                 UsersManager.initManager(TestData.getSystemUsers());
             }
         };
@@ -149,15 +148,5 @@ public class BeansConfiguration {
                 .urlPathPrefix(urlPathPrefix)
                 .port(new Integer(port))
                 .build();
-    }
-
-    @Bean
-    public CSVWriter csvWriter(){
-
-        try {
-            return new CSVWriter(new FileWriter(new File("SettlementPage".concat(".csv"))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

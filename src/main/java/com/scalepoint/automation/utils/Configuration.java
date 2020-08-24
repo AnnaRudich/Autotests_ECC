@@ -49,8 +49,6 @@ public class Configuration {
     private static String hubRemoteZalenium;
     private static String hubLocalZalenium;
 
-    private static CSVWriter csvWriter;
-
     private static Configuration instance;
 
     private Configuration() {
@@ -78,11 +76,6 @@ public class Configuration {
     public static String getProtocol(){
 
         return protocol;
-    }
-
-    public static CSVWriter getCsvWriter(){
-
-        return csvWriter;
     }
 
     public static String getServerUrl() {
@@ -164,12 +157,6 @@ public class Configuration {
 
     public static String getSolrBaseUrl() {
         return solrBaseUrl;
-    }
-
-    public Configuration setCsvWriter(CSVWriter csvWriter){
-
-        Configuration.csvWriter = csvWriter;
-        return this;
     }
 
     public Configuration setProtocol(String protocol) {
