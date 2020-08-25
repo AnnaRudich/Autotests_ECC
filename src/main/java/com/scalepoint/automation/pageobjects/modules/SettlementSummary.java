@@ -26,7 +26,7 @@ import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 public class SettlementSummary extends Module {
 
-    private static final int WAIT_TIMEOUT_MS = 6000;
+    private static final int FRAUD_ALERT_WAIT_TIMEOUT_MS = 30000;
 
     @FindBy(xpath = "//div[@id='settlementSummaryTotalTable-targetEl']//table")
     private Table claimsResult;
@@ -127,7 +127,7 @@ public class SettlementSummary extends Module {
             expand();
         }
         return $(fraudStatus)
-                .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
+                .waitUntil(Condition.text(text), FRAUD_ALERT_WAIT_TIMEOUT_MS).getText().equals(text);
     }
 
     private boolean isNotFraudulent(){
@@ -138,7 +138,7 @@ public class SettlementSummary extends Module {
         }
 
         return $(fraudStatus)
-                .waitUntil(Condition.text(text), WAIT_TIMEOUT_MS).getText().equals(text);
+                .waitUntil(Condition.text(text), FRAUD_ALERT_WAIT_TIMEOUT_MS).getText().equals(text);
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
@@ -158,11 +158,11 @@ public class SettlementSummary extends Module {
         }
 
         $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"))
-                .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
+                .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
                 .click();
 
         $(By.xpath("//input[@role='textbox']"))
-                .waitUntil(Condition.visible, WAIT_TIMEOUT_MS)
+                .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
                 .setValue(newValue);
 
         $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();

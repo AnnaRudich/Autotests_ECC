@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils;
 
+import com.opencsv.CSVWriter;
 import com.scalepoint.automation.shared.Locale;
 import org.springframework.util.Assert;
 
