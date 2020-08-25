@@ -5,7 +5,8 @@ import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
-import com.scalepoint.automation.services.restService.CreateOrderService;
+import com.scalepoint.automation.services.ucommerce.CreateOrderService;
+import com.scalepoint.automation.services.ucommerce.GetBalanceService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.tests.BaseTest;
@@ -128,4 +129,28 @@ public class UCommerceShopTests extends BaseTest {
                     orderDetailsPage.assertCompensationAmount(activeValuation);
                 });
     }
+
+    @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify data received from verifGetBalance")
+    public void verifyGetBalance(User user, Claim claim, ClaimItem claimItem) {
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+        SettlementDialog dialog = settlementPage
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(100.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(NEW_PRICE);
+
+        Double activeValuation = dialog.getCashCompensationValue();
+
+        dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true);
+                new GetBalanceService()
+                        .getBalance(claim.getClaimNumber())
+                        .assertBalanceIs(activeValuation);
+        }
 }
