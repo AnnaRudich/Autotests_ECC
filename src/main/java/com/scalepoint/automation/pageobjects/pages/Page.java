@@ -19,6 +19,7 @@ import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,6 @@ import java.util.function.Consumer;
 public abstract class Page implements Actions {
 
     private static Map<Class, String> pageAnnotationToBaseUrl = new HashMap<>();
-    protected static final int TIME_OUT_IN_MILISECONDS = 30000;
 
     static {
         pageAnnotationToBaseUrl.put(EccPage.class, Configuration.getEccUrl());

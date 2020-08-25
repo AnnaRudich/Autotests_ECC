@@ -21,7 +21,7 @@ import org.testng.annotations.*;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
-public class PerformanceTest  extends BaseApiTest{
+public class PerformanceTest extends BaseApiTest{
 
     static int users;
 

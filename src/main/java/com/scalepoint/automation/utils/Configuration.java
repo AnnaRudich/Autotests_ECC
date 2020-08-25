@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils;
 
+import com.opencsv.CSVWriter;
 import com.scalepoint.automation.shared.Locale;
 import org.springframework.util.Assert;
 
@@ -71,6 +72,11 @@ public class Configuration {
 
     public static Locale getLocale() {
         return locale;
+    }
+
+    public static String getProtocol(){
+
+        return protocol;
     }
 
     public static String getServerUrl() {

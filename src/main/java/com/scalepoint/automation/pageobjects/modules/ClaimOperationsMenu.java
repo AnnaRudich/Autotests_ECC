@@ -5,14 +5,17 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SendSelfServiceRequestDialog;
 import com.scalepoint.automation.utils.Wait;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public class ClaimOperationsMenu extends Module {
 
     @FindBy(id = "selfServiceBtn")
-    private Button selfService;
+    private WebElement selfService;
 
     @FindBy(id = "addGenericItemBtn")
     private Button addGenericItemBtn;
@@ -21,7 +24,7 @@ public class ClaimOperationsMenu extends Module {
     private Button excelImportBtn;
 
     public SendSelfServiceRequestDialog requestSelfService() {
-        selfService.click();
+        hoverAndClick($(selfService));
         return BaseDialog.at(SendSelfServiceRequestDialog.class);
     }
 

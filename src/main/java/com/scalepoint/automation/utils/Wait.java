@@ -27,9 +27,9 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllE
 
 @SuppressWarnings({"Guava", "ConstantConditions"})
 public class Wait {
-    private static final int TIME_OUT_IN_SECONDS = 30;
+    private static final int TIME_OUT_IN_SECONDS = 12;
     private static final int POLL_IN_MS = 1000;
-    private static final int DEFAULT_TIMEOUT = 30;
+    private static final int DEFAULT_TIMEOUT = 12;
 
     private static Logger log = LogManager.getLogger(Wait.class);
 
@@ -48,9 +48,12 @@ public class Wait {
     }
 
     public static void waitForAjaxCompletedAndJsRecalculation(){
+
         try{
+
             waitForAjaxCompleted();
         }catch (TimeoutException e){
+
             log.warn("waitForAjaxCompleted Timeout");
         }
         waitForJavascriptRecalculation();

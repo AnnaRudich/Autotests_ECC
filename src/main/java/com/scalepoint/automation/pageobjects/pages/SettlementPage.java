@@ -3,15 +3,13 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.ex.ElementNotFound;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
-import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.SettlementGroupDialog;
+import com.opencsv.CSVWriter;
+import com.scalepoint.automation.pageobjects.dialogs.*;
 import com.scalepoint.automation.pageobjects.modules.*;
 import com.scalepoint.automation.pageobjects.pages.rnv.TaskWizardPage1;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ClaimStatus;
+import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
@@ -30,6 +28,11 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -98,13 +101,10 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     @Override
-   protected void ensureWeAreOnPage() {
+    protected void ensureWeAreOnPage() {
+
         waitForUrl(getRelativeUrl());
-        try{
-            waitForAjaxCompletedAndJsRecalculation();
-        }catch (TimeoutException e){
-            logger.warn("waitForAjaxCompleted Timeout");
-        }
+        waitForAjaxCompletedAndJsRecalculation();
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

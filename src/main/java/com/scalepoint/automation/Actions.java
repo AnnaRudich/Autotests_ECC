@@ -1,6 +1,7 @@
 package com.scalepoint.automation;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -15,15 +16,15 @@ import org.openqa.selenium.support.ui.FluentWait;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
-import static com.scalepoint.automation.utils.Wait.waitForVisibleAndEnabled;
+import static com.scalepoint.automation.utils.Wait.*;
 
 public interface Actions {
 
     Logger logger = LogManager.getLogger(Actions.class);
 
-    int DELAY = 200;
+    int TIME_OUT_IN_MILISECONDS = 12000;
 
     default void switchToLast() {
         Window.get().switchToLast();
@@ -296,6 +297,15 @@ public interface Actions {
         } catch (Exception e) {
             logger.error("Unable to doubleClick on element " + e);
         }
+    }
+
+    default void hoverAndClick(SelenideElement element){
+
+        element
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
+        waitForAjaxCompletedAndJsRecalculation();
     }
 
     default void doubleClick(By by) {
