@@ -132,7 +132,7 @@ public class UCommerceShopTests extends BaseTest {
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @Test(dataProvider = "testDataProvider",
-            description = "verify data received from verifGetBalance")
+            description = "verify data received from getBalance endpoint")
     public void verifyGetBalance(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
