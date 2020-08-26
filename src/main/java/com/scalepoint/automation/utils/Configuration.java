@@ -32,6 +32,7 @@ public class Configuration {
     private static final String pullTaskDataUrl = "ws/tasks.xml";
     private static final String repairValuationUrl = "repairValuation";
     private static final String createOrderBasePath = "resteasy/uCommerce/CreateOrder";
+    private static final String createGetBalanceBasePath = "resteasy/uCommerce/GetBalance";
 
     private static final String SLASH = "/";
 
@@ -267,6 +268,15 @@ public class Configuration {
     public static String getCreateOrderWebServiceUrl(){
         return getEccUrl()+getCreateOrderBasePath();
     }
+
+    private static String getGetBalanceBasePath() {
+        return createGetBalanceBasePath;
+    }
+
+    public static String getGetBalanceWebServiceUrl(){
+        return getEccUrl()+getGetBalanceBasePath();
+    }
+
 
 }
 
