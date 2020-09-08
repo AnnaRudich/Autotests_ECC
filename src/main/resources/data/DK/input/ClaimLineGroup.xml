@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <claimLineGroup>
 
-    <excelWithGroupsFilePath>src\main\resources\excelImport\ClaimSheetDK2003_withGrouping.xls</excelWithGroupsFilePath>
+    <excelWithGroupsFilePath>src\main\resources\excelImport\Excel_4_0_0_DK_withGrouping.xlsx</excelWithGroupsFilePath>
 
     <excelLineGroups>DEFAULT</excelLineGroups>
     <excelLineGroups>Test_Group_Overview111</excelLineGroups>
