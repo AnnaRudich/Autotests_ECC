@@ -3,6 +3,17 @@
 Project for automating tests mostly
 covers UI flows of ECC with some parts of Self Service.
 
+#NOT covered by autotests
+1. RnV excel
+2. branding(mails, SS, etc)
+3. mails content. We check the specific mail was just generated
+4. DM features (PriceRunner and IceCat)
+
+waiting to be automated:
+1. IP2
+
+
+
 ## Setup and Configuration
 
 Clone repo from git:
