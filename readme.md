@@ -3,7 +3,7 @@
 Project for automating tests mostly
 covers UI flows of ECC with some parts of Self Service.
 
-#NOT covered by autotests
+# NOT covered by autotests
 1. RnV excel
 2. branding(mails, SS, etc)
 3. mails content. We check the specific mail was just generated
