@@ -1,13 +1,17 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
@@ -16,6 +20,7 @@ import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -309,49 +314,43 @@ public class OrderDetailsTests extends BaseTest {
      * add product from search
      * complete order using Credit card
      */
-
+@RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP)
+@RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
     public void shopSmokeE2E(User user, Claim claim, Translations translations, Payments payments, ClaimItem claimItem, Voucher voucher) {
+        Double lineTotalValue = 900.00;
+        Boolean isEvoucher = false;
+        VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(900.00)
+                .setNewPrice(lineTotalValue)
                 .setDescription(claimItem.getTextFieldSP())
                 .fillVoucher(voucher.getExistingVoucherForDistances());
 
         Double activeValuation = dialog.getCashCompensationValue();
-        ShopProductSearchPage searchPage = dialog.closeSidWithOk(SettlementPage.class)
+
+        dialog.closeSidWithOk(SettlementPage.class)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard(true)
-                .goToShop()
-                .addFirstRecommendedItemToCart()
-                .toProductSearchPage();
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim();
 
-        Double productPrice = searchPage.getProductPrice(0);
-        OrderDetailsPage ordersPage = searchPage
-                .addProductToCart(0)
-                .checkoutWithCreditCardWizard(payments.getDankort())
-                .toOrdersDetailsPage();
-
-        OrderDetails orderDetails = translations.getOrderDetails();
-        Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
-        Assert.assertEquals(Math.abs(ordersPage.getIdemnityValue() - activeValuation), 0.0, "Idemnity value " + ordersPage.getIdemnityValue() + " must be equal to cashValue " + activeValuation + " of the voucher");
-
-        Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
-        Assert.assertEquals(ordersPage.getOrderedItemsValue() - (productPrice + activeValuation), 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is voucher price=" + activeValuation + " + product price=" + productPrice);
-
-        Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
-
-        Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
-        Assert.assertEquals(ordersPage.getDepositValue() - productPrice, 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is equal to " + productPrice);
-
-        Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
-        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
+        new CreateOrderService().createOrderForProductExtraPay
+                (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+        new CustomerDetailsPage()
+                .toOrdersDetailsPage()
+                .refreshPageToGetOrders()
+                .doAssert(orderDetailsPage -> {
+                    orderDetailsPage.assertRemainingCompensationTotal(0.0);
+                    orderDetailsPage.assertAmountScalepointHasPaidToSupplier(activeValuation);
+                    orderDetailsPage.assertAmountCustomerHasPaidToScalepoint(0.0);
+                    orderDetailsPage.assertCompensationAmount(activeValuation);
+                });
     }
-}
+    }
+
 
