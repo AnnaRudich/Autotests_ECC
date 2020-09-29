@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.communicationDesigner;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -11,7 +12,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
+import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
@@ -19,11 +22,11 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -356,12 +359,13 @@ public class CommunicationDesignerTests extends BaseTest {
                         schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
                         ));
     }
-
     @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare order confirmation mails")
     public void orderConfirmationWhenWeUseCreditCard(User user, Claim claim, ClaimItem claimItem, Payments payments) {
+        Boolean isEvoucher = false;
+        VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
         final String ORDER_CONFIRMATION = "[OrderConfirmation]";
 
@@ -383,19 +387,12 @@ public class CommunicationDesignerTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimFormWithPassword(claim)
                 .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
-                .findLoginToShopLinkAndOpenIt()
-                .enterPassword(Constants.DEFAULT_PASSWORD)
-                .login()
-                .toProductSearchPage()
-                .addProductToCart(0)
-                .checkoutWithCreditCardMail(payments.getDankort());
+                .openRecentClaim();
 
-        login(user)
-                .openRecentClaim()
-                .toMailsPage()
+        new CreateOrderService().createOrderForProductExtraPay
+                (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+
+                new CustomerDetailsPage().toMailsPage()
                 .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, ORDER_CONFIRMATION)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
