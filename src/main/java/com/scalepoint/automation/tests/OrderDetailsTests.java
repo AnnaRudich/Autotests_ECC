@@ -148,7 +148,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  350
      * Tilbageværende erstatning :  0,00
      */
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CC-4202 ME: Order page; Order: excess amount. Credit card")
     public void charlie540_ordersPageWhenWeUseCreditCard(User user, Claim claim, Payments payments, Translations translations) {
@@ -320,14 +320,14 @@ public class OrderDetailsTests extends BaseTest {
     @Test(dataProvider = "testDataProvider",
             description = "shopSmokeE2E")
     public void shopSmokeE2E(User user, Claim claim, Translations translations, Payments payments, ClaimItem claimItem, Voucher voucher) {
-        Double lineTotalValue = 900.00;
+    Double orderVoucherValue = 100.0;
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(lineTotalValue)
+                .setNewPrice(900.00)
                 .setDescription(claimItem.getTextFieldSP())
                 .fillVoucher(voucher.getExistingVoucherForDistances());
 
@@ -339,18 +339,19 @@ public class OrderDetailsTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim();
 
-        new CreateOrderService().createOrderForProductExtraPay
-                (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+        new CreateOrderService().
+                createOrderForVoucher(voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
         new CustomerDetailsPage()
                 .toOrdersDetailsPage()
                 .refreshPageToGetOrders()
                 .doAssert(orderDetailsPage -> {
-                    orderDetailsPage.assertRemainingCompensationTotal(0.0);
-                    orderDetailsPage.assertAmountScalepointHasPaidToSupplier(activeValuation);
-                    orderDetailsPage.assertAmountCustomerHasPaidToScalepoint(0.0);
                     orderDetailsPage.assertCompensationAmount(activeValuation);
+                    orderDetailsPage.assertAmountScalepointHasPaidToSupplier(orderVoucherValue);
+                    orderDetailsPage.assertAmountScalepointPaidToCustomer(0.0);
+                    orderDetailsPage.assertAmountCustomerHasPaidToScalepoint(0.0);
+                    orderDetailsPage.assertRemainingCompensationTotal(activeValuation-orderVoucherValue);
                 });
     }
-    }
+}
 
 
