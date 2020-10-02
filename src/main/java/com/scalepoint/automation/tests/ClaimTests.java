@@ -2,12 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
-import com.scalepoint.automation.pageobjects.pages.LoginShopPage;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.*;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
@@ -29,15 +24,9 @@ import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REPLACEMENT_WITH_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -462,4 +451,72 @@ public class ClaimTests extends BaseTest {
                 .doAssert(notesPage -> notesPage.assertNoteIsCopied(noteText));
     }
 
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests that the deductible warning information doesn't appear if amount is not zero")
+    @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
+    public void nonZeroAmountDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .getSettlementSummary().editSelfRisk("50")
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests the warning information that deductible amount is zero - the confirm case.")
+    @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
+    public void confirmInDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toDeductibleWarning()
+                .confirm()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests the warning information that deductible amount is zero - the cancel case.")
+    @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
+    public void cancelInDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toDeductibleWarning()
+                .cancel()
+                .toDeductibleWarning()
+                .confirm()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+    }
+
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests the warning information that deductible amount is zero - the text serach case.")
+    @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
+    public void searchProductDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
+
+        loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(claimLineDescription)
+                .openSidForFirstProduct()
+                .closeSidWithOk()
+                .toDeductibleWarning()
+                .confirm()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+    }
 }
