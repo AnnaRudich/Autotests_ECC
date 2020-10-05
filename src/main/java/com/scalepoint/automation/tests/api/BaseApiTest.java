@@ -19,8 +19,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 
 import java.lang.reflect.Method;
 
@@ -52,9 +54,9 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Value("${subscription.fraud_status.id}")
     protected String fraudStatusSubscriptionId;
 
-
     @BeforeMethod
     public void setUpData(Method method) {
+
         Thread.currentThread().setName("Thread " + method.getName());
         ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());

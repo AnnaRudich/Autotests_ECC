@@ -1,0 +1,93 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods">
+
+    <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
+        <packages>
+            <package name="com.scalepoint.automation.tests.suppliermanager"/>
+            <package name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
+            <package name=".*">
+                <exclude name="com.scalepoint.automation.tests.api"/>
+                <exclude name="com.scalepoint.automation.tests.rnv"/>
+                <exclude name="com.scalepoint.automation.tests.rnv.rnv2"/>
+                <exclude name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
+                <exclude name="com.scalepoint.automation.tests.api.unifiedpayments.v3"/>
+                <exclude name="com.scalepoint.automation.tests.suppliermanager"/>
+                <exclude name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>
+                <exclude name="com.scalepoint.automation.tests.selfservice"/>
+                <exclude name="com.scalepoint.automation.tests.sidQUnit"/>
+                <exclude name="com.scalepoint.automation.tests.communicationDesigner"/>
+                <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance"/>
+                <exclude name="com.scalepoint.automation.tests.filesService" />
+                <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance" />
+                <exclude name="com.scalepoint.automation.tests.performance"/>
+            </package>
+        </packages>
+
+        <classes>
+            <class name="com.scalepoint.automation.tests.RecommendedItemsTests">
+                <methods>
+                    <exclude name="ecc3278_productPricesInShopCatalog"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.admin.GenericItemsTests">
+                <methods>
+                    <exclude name="charlie535_testWeCanManageGenericItems"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.ShowScalepointSupplierTests">
+                <methods>
+                    <exclude name="charlie_589_2_showScalepointSupplierNameEnabled"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="Files Service" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.filesService.FilesServiceTest" />
+        </classes>
+    </test>
+
+    <test verbose="1" name="Communication Designer" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.communicationDesigner.CommunicationDesignerTests" />
+        </classes>
+    </test>
+
+    <test verbose="1" name="IntelligentRepair" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.rnv2.IntelligentRepair2WebServiceTest"/>
+        </classes>
+    </test>
+    <test verbose="1" name="RnvSmoke" group-by-instances="false" enabled="true" preserve-order="true" thread-count="2">
+        <classes>
+            <class name="com.scalepoint.automation.tests.rnv.RnVSmokeTest"/>
+        </classes>
+    </test>
+
+    <test verbose="1" name="api" enabled="true" preserve-order="true" thread-count="1">
+        <packages>
+            <package name="com.scalepoint.automation.tests.api">
+                <exclude name="com.scalepoint.automation.tests.api.HealthCheckTest"/>
+            </package>
+        </packages>
+    </test>
+
+    <test verbose="1" name="UnifiedPayment" enabled="true" preserve-order="true" thread-count="1">
+        <packages>
+            <package name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
+            <package name="com.scalepoint.automation.tests.api.unifiedpayments.v3"/>
+        </packages>
+    </test>
+
+    <test verbose="1" name="SecurityHeaders" enabled="true" preserve-order="true" thread-count="1">
+        <packages>
+            <package name="com.scalepoint.automation.tests.headers"/>
+        </packages>
+    </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+
+</suite>
