@@ -1,8 +1,9 @@
-package com.scalepoint.automation.tests.api;
+package com.scalepoint.automation.tests.api.healthCheck;
 
 import com.scalepoint.automation.services.restService.HealthCheckService;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.api.BaseApiTest;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 

@@ -2,7 +2,7 @@
 <suite name="HealthCheck" configfailurepolicy="continue">
     <test name="HealthCheckTest">
         <classes>
-            <class name="com.scalepoint.automation.tests.api.HealthCheckTest"/>
+            <class name="com.scalepoint.automation.tests.api.healthCheck.HealthCheckTest"/>
         </classes>
     </test>
 </suite>
