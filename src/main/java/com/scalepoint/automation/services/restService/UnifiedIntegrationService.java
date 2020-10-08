@@ -104,6 +104,17 @@ public class UnifiedIntegrationService{
                 .get("token");
     }
 
+    public Response healthCheck(){
+
+        return given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
+                .log().all()
+                .when()
+                .get("/healthCheck")
+                .then()
+                .log().all()
+                .extract().response();
+    }
+
     public Duration getDuration(){
         return duration;
     }

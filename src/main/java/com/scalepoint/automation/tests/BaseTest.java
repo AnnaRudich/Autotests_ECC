@@ -52,10 +52,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
+import org.testng.SkipException;
+import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -100,6 +98,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context) throws Exception {
+
         Thread.currentThread().setName("Thread " + method.getName());
         ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
