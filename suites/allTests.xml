@@ -1,10 +1,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="All" configfailurepolicy="continue">
     <suite-files>
-        <suite-file path="critical_testng.xml" />
+<!--        <suite-file path="critical_testng.xml" />-->
         <suite-file path="regression_testng.xml" />
     </suite-files>
     <listeners>
-        <listener class-name="com.scalepoint.automation.utils.testng.HealthCheckListener"/>
+<!--        <listener class-name="com.scalepoint.automation.utils.testng.HealthCheckListener"/>-->
     </listeners>
 </suite>
