@@ -1,9 +1,14 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Files Service" configfailurepolicy="continue" parallel="methods">
+    <groups>
+        <run>
+            <exclude name="ecc"/>
+        </run>
+    </groups>
     <test verbose="1" name="Files Service" enabled="true" preserve-order="true" thread-count="6">
-        <classes>
-            <class name="com.scalepoint.automation.tests.filesService.FilesServiceTest" />
-        </classes>
+        <packages>
+            <package name="com.scalepoint.automation.tests.filesService" />
+        </packages>
     </test>
 
     <listeners>
