@@ -3,7 +3,6 @@ package com.scalepoint.automation.tests.filesService;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -11,7 +10,6 @@ import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpd
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -27,7 +25,7 @@ public class FilesServiceSystemTest extends BaseTest {
     private String[] lineDescriptions = new String[]{"item1", "item2"};
     private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");
     private static final String IPHONE = "iPhone";
-@RunOn(DriverType.CHROME)
+
     @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentAddedFromClaimLineLevelToClaimLineLevel", groups = {"uni"})
     public void attachmentAddedFromClaimLineLevelToClaimLineLevelSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));

@@ -1,10 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="All" configfailurepolicy="continue">
-    <groups>
-        <run>
-            <exclude name="ecc"/>
-        </run>
-    </groups>
     <suite-files>
         <suite-file path="critical_testng.xml" />
         <suite-file path="regression_testng.xml" />
