@@ -26,5 +26,6 @@
     <user login="autotest-topdanmark3"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
     <user login="autotest-topdanmark4"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
     <user login="autotest-topdanmark5"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
+    <user login="autotest-gjensidige"     password="12341234" companyCode="GJENSIDIGE"           companyId="309" companyName="Gjensidige"     ftId="79052"/>
 
 </existingUsers>

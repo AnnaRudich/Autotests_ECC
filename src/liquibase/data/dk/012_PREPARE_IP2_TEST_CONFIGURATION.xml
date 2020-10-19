@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="ipo" runOnChange="true">
+
+        <comment>Prepare ip2 test configuration</comment>
+
+        <sql>
+            EXEC autotests_add_ip2_test_transport
+
+            DECLARE @MockHost nvarchar(256) =  '${wiremock.host}'
+            DECLARE @MockPath nvarchar(256)) = '/externalIntegration/testic'
+            DECLARE @MockUrl nvarchar(256) = ''
+            SET @MockUrl = 'https://' + @MockHost + '/mock' + @MockPath
+            DECLARE @companyIdFuture50 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE50')
+            DECLARE @companyIdFuture51 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE51')
+            DECLARE @companyIdFuture52 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE52')
+
+
+
+
+            /*eventId*/
+            DECLARE @eventClaimCanceledId int = (SELECT EventId from [dbo].[ExternalIntegrationConfiguration_Event] where Code ='CLAIM_CANCELLED') /* 1 */
+            DECLARE @eventClaimSettledId int = (SELECT EventId from [dbo].[ExternalIntegrationConfiguration_Event] where Code ='CLAIM_SETTLED') /* 2 */
+            DECLARE @eventCompletedOrderSendSupplierId int = (SELECT EventId from [dbo].[ExternalIntegrationConfiguration_Event] where Code ='COMPLETED_ORDER_SEND_SUPPLIER') /* 7 */
+            DECLARE @eventTaskNotificationId int = (SELECT EventId from [dbo].[ExternalIntegrationConfiguration_Event] where Code ='TASK_NOTIFICATION') /*11 */
+
+
+            /*base document id*/
+            DECLARE @settlementDocBuilderId int = (SELECT DocumentBuilderID from [dbo].[ExternalIntegrationConfiguration_DocumentBuilder] WHERE Code = 'SettlementDoc') /* 1 */
+            DECLARE @supplierCompletedOrderDocExcelVoucherDocBuilderId int = (SELECT DocumentBuilderID from [dbo].[ExternalIntegrationConfiguration_DocumentBuilder] WHERE Code = 'SupplierCompletedOrderDocExcludeVouchers') /* 8 */
+            DECLARE @settlementInclusiveRepairDocBuilderId int = (SELECT DocumentBuilderID from [dbo].[ExternalIntegrationConfiguration_DocumentBuilder] WHERE Code = 'SettlementInclusiveRepairDoc')/* 12 */
+            DECLARE @taskNotificationDocumentDocBuilderId int = (SELECT DocumentBuilderID from [dbo].[ExternalIntegrationConfiguration_DocumentBuilder] WHERE Code = 'TaskNotificationDocument')/* 13 */
+
+
+            EXEC autotests_add_ip2_test_entries @companyIdFuture50, @eventClaimCanceledId, @settlementDocBuilderId, @MockUrl /* 1-1 */
+            EXEC autotests_add_ip2_test_entries @companyIdFuture51, @eventClaimCanceledId, @settlementInclusiveRepairDocBuilderId, @MockUrl /* 1-12 */
+            EXEC autotests_add_ip2_test_entries @companyIdFuture50, @eventClaimSettledId, @settlementDocBuilderId, @MockUrl /* 2-1 */
+            EXEC autotests_add_ip2_test_entries @companyIdFuture51, @eventClaimSettledId, @settlementInclusiveRepairDocBuilderId, @MockUrl /* 2-12 */
+            EXEC autotests_add_ip2_test_entries NULL, @eventClaimSettledId, @settlementInclusiveRepairDocBuilderId, @MockUrl, 3981 /* 7-8 */
+            EXEC autotests_add_ip2_test_entries @companyIdFuture50, @eventTaskNotificationId, @taskNotificationDocumentDocBuilderId, @MockUrl /* 11-13 */
+
+
+        </sql>
+
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

@@ -48,6 +48,11 @@ public enum FTSetting {
     VALIDATE_AGE("input[name=ftSelfServiceFlag][value='2']", CHECKBOX),
     SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH("input[name=ftSelfServiceFlag][value='131072']", CHECKBOX),
 
+    //Integration settings
+
+    CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS("input[id='integrationSetting']", CHECKBOX),
+    ENABLE_ALL_PAYMENT_INTEGRATION("input[id='enableAllPaymentIntegrations']", CHECKBOX),
+
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value='1']", CHECKBOX),
     ALLOW_NONORDERABLE_PRODUCTS("select[name=ftnoselflags]", SELECT),
