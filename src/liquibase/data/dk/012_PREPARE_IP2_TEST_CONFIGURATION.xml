@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <changeSet id="1" author="ipo" runOnChange="true">
+    <changeSet id="1" author="aru" runOnChange="true">
 
         <comment>Prepare ip2 test configuration</comment>
 

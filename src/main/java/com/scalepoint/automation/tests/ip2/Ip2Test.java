@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.ip2;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.stubs.Ip2Mock;
@@ -32,7 +31,7 @@ public class Ip2Test extends BaseTest {
     @RequiredSetting(type = FTSetting.CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS)
     @RequiredSetting(type = FTSetting.ENABLE_ALL_PAYMENT_INTEGRATION)
 
-    public void ecc3031_3_reductionRulePolicyTypeDiscretionary(@UserCompany(CompanyCode.TOPDANMARK) User user,
+    public void ecc3031_3_reductionRulePolicyTypeDiscretionary(@UserCompany(CompanyCode.FUTURE55) User user,
                                                                Claim claim,
                                                                ClaimItem claimItem) {
        loginAndCreateClaim(user, claim)
@@ -40,9 +39,7 @@ public class Ip2Test extends BaseTest {
                 .setBaseData(claimItem)
                 .disableAge()
                 .closeSidWithOk()
-               .cancelClaim();
-
-       new SettlementPage();
+               .toCompleteClaimPage().completeWithEmail(claim, databaseApi, false);
 
 
     }
