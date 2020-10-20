@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Fraud Alert" configfailurepolicy="continue" parallel="methods">
     <test verbose="1" name="Fraud Alert" enabled="true" preserve-order="true" thread-count="6">
-        <classes>
-            <class name="com.scalepoint.automation.tests.fraudAlert.FraudAlertTest" />
-        </classes>
+            <packages>
+                <package name="com.scalepoint.automation.tests.fraudAlert"/>
+            </packages>
     </test>
 
     <listeners>

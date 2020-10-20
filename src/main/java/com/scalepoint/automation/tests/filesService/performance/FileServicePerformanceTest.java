@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.filesService;
+package com.scalepoint.automation.tests.filesService.performance;
 
 import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
