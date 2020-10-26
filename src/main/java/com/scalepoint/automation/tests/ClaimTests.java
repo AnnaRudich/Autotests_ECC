@@ -444,9 +444,9 @@ public class ClaimTests extends BaseTest {
                 .getToolBarMenu()
                 .openClaimLineNotes()
                 .toClaimLineNotesPage()
-                .clickClaimLine()
+                .clickClaimLine("item1")
                 .enterClaimLineNote(noteText)
-                .clickCopyNoteTextButton()
+                .clickCopyNoteTextButton(noteText)
                 .pasteClipboardInNoteWindow()
                 .doAssert(notesPage -> notesPage.assertNoteIsCopied(noteText));
     }

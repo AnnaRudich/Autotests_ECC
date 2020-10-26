@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.pageobjects.dialogs.*;
 import com.scalepoint.automation.pageobjects.modules.*;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Constants.*;
@@ -456,6 +458,8 @@ public class SettlementPage extends BaseClaimPage {
 
         private Table claimLine;
 
+        private SelenideElement  claimLineNotesIconElement;
+
         private String tooltip = "";
         private String description;
         private String category;
@@ -471,6 +475,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public ClaimLine(Table claimLine) {
             this.claimLine = claimLine;
+            claimLineNotesIconElement = $(claimLine.getWrappedElement()).find("img[src*=notes_claim_line]");
             ElementsCollection elements = $(claimLine).findAll("[data-columnid='voucherImageColumn'] img[title]");
             if (elements.size() > 0) {
                 this.tooltip = elements.get(0).getAttribute("title");
@@ -555,6 +560,16 @@ public class SettlementPage extends BaseClaimPage {
                 logger.error(e.getMessage());
                 ((JavascriptExecutor) driver).executeScript(dblClick, descriptionElement);
             }
+        }
+
+        SelenideElement claimLineNotesIconElementShouldBe(Condition condition){
+            return claimLineNotesIconElement
+                    .waitUntil(condition, 6000);
+        }
+
+        public ClaimLineNotesDialog toClaimLineNote(){
+            hoverAndClick(claimLineNotesIconElement);
+            return BaseDialog.at(ClaimLineNotesDialog.class);
         }
 
         private void doubleClickGroupLine() {
@@ -649,6 +664,7 @@ public class SettlementPage extends BaseClaimPage {
             assertFunc.accept(new Asserts());
             return this;
         }
+
 
         public class Asserts {
             public Asserts assertDiscretionaryPresent() {
@@ -764,6 +780,19 @@ public class SettlementPage extends BaseClaimPage {
                 assertThat(actualCategory)
                         .as("expected category is "+ expectedCategoryGroup + " - " + expectedCategory+ " but was " + actualCategory)
                         .isEqualTo(expectedCategoryGroup+ " - " + expectedCategory);
+                return this;
+            }
+            public Asserts assertClaimLineNotesIconPresent() {
+                assertThat(claimLineNotesIconElementShouldBe(Condition.visible)
+                        .isDisplayed())
+                        .as("Claim line notes icon is missing for lineName: " + description).isTrue();
+                return this;
+            }
+
+            public Asserts assertClaimLineNotesIconMissing() {
+                assertThat(claimLineNotesIconElementShouldBe(not(Condition.visible))
+                        .isDisplayed())
+                        .as("Claim line notes icon exists for lineName: " + description).isFalse();
                 return this;
             }
         }
