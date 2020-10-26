@@ -24,20 +24,20 @@ public class RemoveClaimLineNoteWarningDialog extends BaseDialog{
 
     public ClaimLineNotesDialog confirm(){
 
-        clickButton(Button.YES);
+        clickButton(DialogButton.YES);
         return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog cancel(){
 
-        clickButton(Button.NO);
+        clickButton(DialogButton.NO);
         return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
-    private void clickButton(Button button){
+    private void clickButton(DialogButton button){
 
         $$(".x-message-box a[role=button][aria-hidden=false]").stream()
-                .filter(element -> Button.findByText(element.getText()).equals(button))
+                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .hover()

@@ -29,13 +29,13 @@ public class EditClaimLineNoteDialog extends BaseDialog {
 
     public ClaimLineNotesDialog confirm(){
 
-        clickButton(Button.SAVE);
+        clickButton(DialogButton.SAVE);
         return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog cancel(){
 
-        clickButton(Button.ABORT);
+        clickButton(DialogButton.ABORT);
         return BaseDialog.at(ClaimLineNotesDialog.class);
     }
 
@@ -50,11 +50,11 @@ public class EditClaimLineNoteDialog extends BaseDialog {
         return $(elementEditClaimLineNoteDialogElement).find(textAreaPath).getValue();
     }
 
-    private void clickButton(Button button){
+    private void clickButton(DialogButton button){
         $(elementEditClaimLineNoteDialogElement)
                 .findAll("a[role=button][aria-hidden=false]")
                 .stream()
-                .filter(element -> Button.findByText(element.getText()).equals(button))
+                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .hover()

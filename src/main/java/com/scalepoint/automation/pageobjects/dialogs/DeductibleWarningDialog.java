@@ -27,20 +27,20 @@ public class DeductibleWarningDialog extends BaseDialog{
 
     public CompleteClaimPage confirm(){
 
-        clickButton(Button.OK);
+        clickButton(DialogButton.OK);
         return Page.at(CompleteClaimPage.class);
     }
 
     public SettlementPage cancel(){
 
-        clickButton(Button.CANCEL);
+        clickButton(DialogButton.CANCEL);
         return Page.at(SettlementPage.class);
     }
 
-    private void clickButton(Button button){
+    private void clickButton(DialogButton button){
 
         $$(".x-message-box a[role=button][aria-hidden=false]").stream()
-                .filter(element -> Button.findByText(element.getText()).equals(button))
+                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .hover()

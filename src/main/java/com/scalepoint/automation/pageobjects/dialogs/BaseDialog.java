@@ -55,7 +55,7 @@ public abstract class BaseDialog implements Actions {
         return at(currentClass);
     }
 
-    protected enum Button {
+    protected enum DialogButton {
 
         OK("OK"),
         CANCEL("Fortryd"),
@@ -66,14 +66,14 @@ public abstract class BaseDialog implements Actions {
 
         private String text;
 
-        Button(String text) {
+        DialogButton(String text) {
 
             this.text = text;
         }
 
-        public static Button findByText(String text) {
+        public static DialogButton findByText(String text) {
 
-            return Arrays.stream(Button.values())
+            return Arrays.stream(DialogButton.values())
                     .filter(button -> button.text.equals(text))
                     .findFirst()
                     .orElseThrow(NoSuchElementException::new);
