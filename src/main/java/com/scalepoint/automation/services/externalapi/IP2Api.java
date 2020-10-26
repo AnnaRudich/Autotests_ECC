@@ -31,7 +31,7 @@ public class IP2Api extends BaseService {
 
     public void assertTransactionWasProcessed(Integer claimNumber){
         assertThat(ifTransactionIsSuccess(claimNumber))
-                .as("ip2 transaction for claim with number: " + claimNumber + "was not success")
+                .as("ip2 transaction for claim with number: " + claimNumber + "was not successful")
                 .isTrue();
     }
 

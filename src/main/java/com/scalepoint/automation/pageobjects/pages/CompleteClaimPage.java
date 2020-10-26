@@ -162,7 +162,7 @@ public class CompleteClaimPage extends Page {
                     at(GdprConfirmationDialog.class)
                     .confirm();
         }
-      //  databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
+        databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.COMPLETED);
         return at(MyPage.class);
     }
 
