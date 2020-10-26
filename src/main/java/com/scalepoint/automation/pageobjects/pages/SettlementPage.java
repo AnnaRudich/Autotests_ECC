@@ -245,6 +245,9 @@ public class SettlementPage extends BaseClaimPage {
 
     public void cancelClaim() {
         settlementSummary.cancel();
+        if($(".x-window").is(Condition.visible)){
+            $(".x-window a").click();
+        }
     }
 
     public MyPage saveClaim(Claim claim) {

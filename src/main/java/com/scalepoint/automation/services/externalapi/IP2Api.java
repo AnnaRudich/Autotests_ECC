@@ -7,11 +7,11 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class IP2Api extends BaseService {
 
-    private Integer getTransactionStatusBy(String claimNumber){
+    private Integer getTransactionStatusBy(Integer claimNumber){
         return getData().getDatabaseApi().getExternalIntegrationTransactionStatusCodeBy(claimNumber);
     }
 
-    private Boolean ifTransactionIsSuccess(String claimNumber){
+    private Boolean ifTransactionIsSuccess(Integer claimNumber){
         Integer transactionStatusCode = getTransactionStatusBy(claimNumber);
         TransactionStatus transactionStatus = getTransactionStatusByCode(transactionStatusCode);
 
@@ -29,7 +29,7 @@ public class IP2Api extends BaseService {
         return false;
     }
 
-    public void assertTransactionWasProcessed(String claimNumber){
+    public void assertTransactionWasProcessed(Integer claimNumber){
         assertThat(ifTransactionIsSuccess(claimNumber))
                 .as("ip2 transaction for claim with number: " + claimNumber + "was not success")
                 .isTrue();

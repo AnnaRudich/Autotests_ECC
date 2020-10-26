@@ -60,7 +60,7 @@ public class DatabaseApi {
         return jdbcTemplate.queryForObject("select UserId from [dbo].[User] where UserToken = ?", Integer.class, claimToken);
     }
 
-    public Integer getExternalIntegrationTransactionStatusCodeBy(String claimNumber) {
+    public Integer getExternalIntegrationTransactionStatusCodeBy(Integer claimNumber) {
         return jdbcTemplate.queryForObject("Select StatusCode from [dbo].[ExternalIntegrationQueue_Transaction] where QueueItem =(" +
                 "  Select ItemID from [dbo].[ExternalIntegrationQueue_Item] where Shopper = ?)", Integer.class, claimNumber);
     }

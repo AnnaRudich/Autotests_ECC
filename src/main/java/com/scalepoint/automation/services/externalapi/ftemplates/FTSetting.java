@@ -35,6 +35,7 @@ public enum FTSetting {
     DISALLOW_DUPLICATE_CLAIMS_NUMBER("input[name=ftfunctionflag3][value='2']", CHECKBOX),
     ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT("input[name=ftfunctionflag3][value='1048576']", CHECKBOX),
     ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD("input[name=ftfunctionflag3][value='8388608']", CHECKBOX),
+    ENABLE_CANCEL_BUTTON_IN_SETTLEMENT_PAGE("input[name=ftfunctionflag3][value='2097152']", CHECKBOX),
     DO_NOT_DEPRECIATE_CUSTOMER_DEMAND("input[name=ftfunctionflag][value='4']", CHECKBOX),
     ENABLE_VOUCHER_PREDICTION("input[name=ftfunctionflag3][value='4096']", CHECKBOX),
 
