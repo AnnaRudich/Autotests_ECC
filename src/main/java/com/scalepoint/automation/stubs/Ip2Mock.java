@@ -38,7 +38,7 @@ public class Ip2Mock {
         public Ip2Stubs ip2GjensidigeWs(){
             stubFor(post(urlPathEqualTo(ip2GjensidigeWebServiceUrl))
                     .willReturn(aResponse()
-                            .withStatus(202)));
+                            .withStatus(200)));
 
             return this;
         }

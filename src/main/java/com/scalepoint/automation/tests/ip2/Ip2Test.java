@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.ip2;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.stubs.Ip2Mock;
@@ -20,27 +19,72 @@ public class Ip2Test extends BaseTest {
 
     @BeforeClass
     public void startWireMock() {
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        ip2Stubs = new Ip2Mock(wireMock)
-                .add();
+        wireMock.allStubMappings()
+                .getMappings()
+                .stream()
+                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+
     }
 
     @RunOn(DriverType.CHROME)
-    @Test(dataProvider = "testDataProvider", description = " ")
+    @Test(dataProvider = "testDataProvider", description = "Event type CLAIM_SETTLED docId SettlementDoc")
     @RequiredSetting(type = FTSetting.CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS)
     @RequiredSetting(type = FTSetting.ENABLE_ALL_PAYMENT_INTEGRATION)
 
-    public void ecc3031_3_reductionRulePolicyTypeDiscretionary(@UserCompany(CompanyCode.FUTURE55) User user,
-                                                               Claim claim,
-                                                               ClaimItem claimItem) {
+    public void claimSettledEventSettlementDoc(@UserCompany(CompanyCode.FUTURE50) User user,
+                                               Claim claim,
+                                               ClaimItem claimItem) {
        loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
                 .closeSidWithOk()
-               .toCompleteClaimPage().completeWithEmail(claim, databaseApi, false);
+               .toCompleteClaimPage()
+               .fillClaimForm(claim)
+               .completeWithEmail(claim, databaseApi, true)
+               .openRecentClaim();
+    }
 
+    @RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider", description = "Event type CLAIM_SETTLED docId SettlementInclusiveRepairDoc")
+    @RequiredSetting(type = FTSetting.CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS)
+    @RequiredSetting(type = FTSetting.ENABLE_ALL_PAYMENT_INTEGRATION)
 
+    public void claimSettledEventSettlementInclusiveRepairDoc(@UserCompany(CompanyCode.FUTURE51) User user,
+                                                              Claim claim,
+                                                              ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .disableAge()
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim();
+    }
+
+    @RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider", description = "Event type CLAIM_CANCELED, docId SettlementDoc")
+    @RequiredSetting(type = FTSetting.CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS)
+    @RequiredSetting(type = FTSetting.ENABLE_ALL_PAYMENT_INTEGRATION)
+
+    public void claimCanceledEventSettlementDoc(@UserCompany(CompanyCode.FUTURE50) User user,
+                                                Claim claim,
+                                                ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .cancelClaim();
+    }
+
+    @RunOn(DriverType.CHROME)
+    @Test(dataProvider = "testDataProvider", description = "Event type CLAIM_CANCELED, docId SettlementInclusiveRepairDoc")
+    @RequiredSetting(type = FTSetting.CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS)
+    @RequiredSetting(type = FTSetting.ENABLE_ALL_PAYMENT_INTEGRATION)
+
+    public void claimCanceledEventSettlementInclusiveRepairDoc(@UserCompany(CompanyCode.FUTURE51) User user,
+                                                               Claim claim,
+                                                               ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .cancelClaim();
     }
 }

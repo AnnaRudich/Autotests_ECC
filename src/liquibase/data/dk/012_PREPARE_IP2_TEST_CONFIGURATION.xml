@@ -13,7 +13,7 @@
             EXEC autotests_add_ip2_test_transport
 
             DECLARE @MockHost nvarchar(256) =  '${wiremock.host}'
-            DECLARE @MockPath nvarchar(256)) = '/externalIntegration/testic'
+            DECLARE @MockPath nvarchar(256) = '/externalIntegration/testic'
             DECLARE @MockUrl nvarchar(256) = ''
             SET @MockUrl = 'https://' + @MockHost + '/mock' + @MockPath
             DECLARE @companyIdFuture50 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE50')
@@ -36,7 +36,7 @@
             DECLARE @settlementInclusiveRepairDocBuilderId int = (SELECT DocumentBuilderID from [dbo].[ExternalIntegrationConfiguration_DocumentBuilder] WHERE Code = 'SettlementInclusiveRepairDoc')/* 12 */
             DECLARE @taskNotificationDocumentDocBuilderId int = (SELECT DocumentBuilderID from [dbo].[ExternalIntegrationConfiguration_DocumentBuilder] WHERE Code = 'TaskNotificationDocument')/* 13 */
 
-
+            /*one IC can not have more then 1 event of the same type*/
             EXEC autotests_add_ip2_test_entries @companyIdFuture50, @eventClaimCanceledId, @settlementDocBuilderId, @MockUrl /* 1-1 */
             EXEC autotests_add_ip2_test_entries @companyIdFuture51, @eventClaimCanceledId, @settlementInclusiveRepairDocBuilderId, @MockUrl /* 1-12 */
             EXEC autotests_add_ip2_test_entries @companyIdFuture50, @eventClaimSettledId, @settlementDocBuilderId, @MockUrl /* 2-1 */
