@@ -2,7 +2,6 @@ package com.scalepoint.automation.tests.ip2;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.stubs.Ip2Mock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -15,7 +14,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class Ip2Test extends BaseTest {
-    Ip2Mock.Ip2Stubs ip2Stubs;
 
     @BeforeClass
     public void startWireMock() {
@@ -43,6 +41,8 @@ public class Ip2Test extends BaseTest {
                .fillClaimForm(claim)
                .completeWithEmail(claim, databaseApi, true)
                .openRecentClaim();
+
+
     }
 
     @RunOn(DriverType.CHROME)
