@@ -169,6 +169,9 @@
         <entry>
             <key>SPLIT_REPLACEMENT_EMAIL</key><value>DISABLE</value>
         </entry>
+        <entry>
+            <key>WARNING_DEDUCTIBLE</key><value>DISABLE</value>
+        </entry>
     </defaultSettings>
 </defaultFTSettings>
 
