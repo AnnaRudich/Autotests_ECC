@@ -196,7 +196,7 @@ public class ClaimLineNotesDialog extends BaseDialog {
 
         private class ClaimLineNotesGridRow{
 
-            private By copyNoteTextButtonPath = By.cssSelector("copy-note-text");
+            private By copyNoteTextButtonPath = By.cssSelector(".copy-note-text");
             private By editNoteButtonPath = By.cssSelector(".edit-note");
             private By noteTextPath = By.cssSelector("[role=gridcell] div");
             private By removeNoteButtonPath = By.cssSelector(".remove-note");
