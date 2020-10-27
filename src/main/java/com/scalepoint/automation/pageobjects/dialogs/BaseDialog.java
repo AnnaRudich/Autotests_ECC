@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 public abstract class BaseDialog implements Actions {
@@ -51,5 +53,30 @@ public abstract class BaseDialog implements Actions {
     public <T extends BaseDialog> T apply(Class<T> currentClass, Consumer<T> func) {
         func.accept((T) this);
         return at(currentClass);
+    }
+
+    protected enum DialogButton {
+
+        OK("OK"),
+        CANCEL("Fortryd"),
+        YES("Ja"),
+        NO("Nej"),
+        SAVE("Gem"),
+        ABORT("Annuller");
+
+        private String text;
+
+        DialogButton(String text) {
+
+            this.text = text;
+        }
+
+        public static DialogButton findByText(String text) {
+
+            return Arrays.stream(DialogButton.values())
+                    .filter(button -> button.text.equals(text))
+                    .findFirst()
+                    .orElseThrow(NoSuchElementException::new);
+        }
     }
 }
