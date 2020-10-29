@@ -14,6 +14,8 @@
     <user login="autotest-future59" password="12341234" companyCode="FUTURE59" companyName="Future59" companyId="59" ftId="59" basic="true"/>
     <user login="autotest-future60" password="12341234" companyCode="FUTURE60" companyName="Future60" companyId="60" ftId="60" basic="true"/>
 
+    <user login="autotest-basic-admin-role1" password="12341234" companyCode="BASIC_ADMIN_ROLE" companyName="BASIC_ADMIN_ROLE" companyId="61" ftId="61" />
+
     <user login="autotest-sp"       password="12341234" companyCode="SCALEPOINT"     companyName="Scalepoint" companyId="7"     ftId="1"/>
     <user login="autotest-lb"       password="12341234" companyCode="LB"             companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052"/>
     <user login="autotest-bauta"    password="12341234" companyCode="BAUTA"          companyName="Bauta Forsikring" companyId="14"    ftId="140053"/>

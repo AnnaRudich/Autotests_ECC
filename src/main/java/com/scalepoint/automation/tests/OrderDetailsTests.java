@@ -1,26 +1,36 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.oldshop.ShopProductSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.VoucherInfo;
+import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
+import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
+import static com.scalepoint.automation.services.usersmanagement.CompanyCode.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -249,6 +259,70 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
+    }
+    @RunOn(DriverType.CHROME)
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
+    @Test(dataProvider = "testDataProvider",
+            description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")
+    public void orderDetailsInvisibilityTest(@UserCompany(BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
+
+        Boolean isEvoucher = false;
+        VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim();
+
+        new CreateOrderService().createOrderForProductExtraPay
+                (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+
+        new CustomerDetailsPage()
+                .toOrdersDetailsPage()
+                .doAssert(orderDetailsPage -> orderDetailsPage.assertDetailsAreInvisible())
+                .toMailsPage()
+                .doAssert(mailsPage ->
+                        mailsPage.noOtherMailsOnThePage(Arrays.asList(SETTLEMENT_NOTIFICATION_TO_IC, CUSTOMER_WELCOME
+                        )));
+    }
+
+    @RunOn(DriverType.CHROME)
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
+    @Test(dataProvider = "testDataProvider",
+            description = "The order details should only be visible when having VIEW_CUSTOMER_ORDERS permission")
+    public void orderDetailsVisibilityTest(User user, Claim claim, ClaimItem claimItem) {
+
+        Boolean isEvoucher = false;
+        VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
+
+        loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimFormWithPassword(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim();
+
+        new CreateOrderService().createOrderForProductExtraPay
+                (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
+
+        new CustomerDetailsPage()
+                .toOrdersDetailsPage()
+                .doAssert(orderDetailsPage -> orderDetailsPage.assertDetailsAreVisible())
+                .toMailsPage()
+                .doAssert(mailsPage ->
+                        mailsPage.noOtherMailsOnThePage(Arrays.asList(
+                                SETTLEMENT_NOTIFICATION_TO_IC,
+                                CUSTOMER_WELCOME,
+                                ORDER_CONFIRMATION
+                        )));
     }
 }
 
