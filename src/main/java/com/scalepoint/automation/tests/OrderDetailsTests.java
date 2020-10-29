@@ -260,7 +260,7 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
     }
-    @RunOn(DriverType.CHROME)
+
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "testDataProvider",
@@ -290,8 +290,7 @@ public class OrderDetailsTests extends BaseTest {
                         mailsPage.noOtherMailsOnThePage(Arrays.asList(SETTLEMENT_NOTIFICATION_TO_IC, CUSTOMER_WELCOME
                         )));
     }
-
-    @RunOn(DriverType.CHROME)
+    
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "testDataProvider",
