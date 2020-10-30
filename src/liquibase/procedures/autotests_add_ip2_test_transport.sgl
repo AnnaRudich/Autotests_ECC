@@ -6,16 +6,13 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_
 GO
 
 CREATE PROCEDURE [dbo].[autotests_add_ip2_test_transport]
+
 AS
 
 SET NOCOUNT ON
 
-/* adding ip2 test transport*/
-
-DECLARE @testTransportModuleGuid int = 14;
-SET IDENTITY_INSERT [dbo].[ExternalIntegrationConfiguration_TransportModule]  ON
-
-
 INSERT INTO [dbo].[ExternalIntegrationConfiguration_TransportModule]
-(TransportModuleGUID, Code, [Description])
-VALUES (@testTransportModuleGuid, 'TEST_DK_WS', 'Test transport for autotests');
+(Code, [Description])
+VALUES ('TEST_DK_WS_test', 'Test transport for autotests test');
+
+SET NOCOUNT OFF
