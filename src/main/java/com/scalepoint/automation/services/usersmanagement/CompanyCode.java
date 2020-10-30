@@ -20,5 +20,4 @@ public enum CompanyCode {
     ALKA,
     TOPDANMARK,
     BASIC_ADMIN_ROLE;
-
 }
