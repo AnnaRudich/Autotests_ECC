@@ -254,7 +254,7 @@ public class MailsPage extends BaseClaimPage {
         }
 
         public void noOtherMailsOnThePage(List<MailType> expectedMails){
-            List<MailType> mails =parseMails().getMails().stream().map(mail -> mail.getMailType()).collect(Collectors.toList());
+            List<MailType> mails = parseMails().getMails().stream().map(mail -> mail.getMailType()).collect(Collectors.toList());
             assertThat(mails.containsAll(expectedMails))
                     .as(String.format("Following mails should be sent: %s, but were: %s", expectedMails, mails))
                     .isTrue();

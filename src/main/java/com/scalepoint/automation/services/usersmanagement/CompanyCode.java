@@ -18,6 +18,6 @@ public enum CompanyCode {
     TRYGFORSIKRING,
     TRYGHOLDING,
     ALKA,
-    TOPDANMARK;
-
+    TOPDANMARK,
+    BASIC_ADMIN_ROLE;
 }

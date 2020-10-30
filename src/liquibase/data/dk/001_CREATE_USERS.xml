@@ -35,6 +35,9 @@
             exec autotests_prepare_future_company 59, @adminUserRights, @MockUrl = '${wiremock.host}'
             exec autotests_prepare_future_company 60, @adminUserRights, @MockUrl = '${wiremock.host}'
 
+            EXEC autotests_create_ic 61, 'BASIC_ADMIN_ROLE'
+            EXEC autotests_create_user 61, 'autotest-basic-admin-role1', @chUserRights
+
             declare @lb_id int = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'LB')
             EXEC autotests_create_user @lb_id, 'autotest-lb', @chUserRights
 
