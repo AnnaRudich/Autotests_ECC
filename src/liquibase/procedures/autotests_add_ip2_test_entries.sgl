@@ -16,9 +16,11 @@ AS
 
 SET NOCOUNT ON
 
+IF NOT EXISTS (Select TransportModuleGUID from [dbo].[ExternalIntegrationConfiguration_TransportModule] where Code ='TEST_DK_WS')
 INSERT INTO [dbo].[ExternalIntegrationConfiguration_TransportModule]
 (Code, [Description])
 VALUES ('TEST_DK_WS', 'Test transport for autotests test');
+
 /* adding events configuration for test IC*/
 
 

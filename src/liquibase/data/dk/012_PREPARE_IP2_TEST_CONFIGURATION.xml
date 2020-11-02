@@ -10,6 +10,7 @@
         <comment>Prepare ip2 test configuration</comment>
 
         <sql>
+
             DECLARE @MockHost nvarchar(256) =  '${wiremock.host}'
             DECLARE @MockPath nvarchar(256) = '/externalIntegration/testic'
             DECLARE @MockUrl nvarchar(256) = ''
