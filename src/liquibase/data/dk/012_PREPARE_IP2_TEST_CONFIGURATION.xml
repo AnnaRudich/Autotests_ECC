@@ -10,7 +10,9 @@
         <comment>Prepare ip2 test configuration</comment>
 
         <sql>
-            EXEC autotests_add_ip2_test_transport
+            INSERT INTO [dbo].[ExternalIntegrationConfiguration_TransportModule]
+            (Code, [Description])
+            VALUES ('TEST_DK_WS_test', 'Test transport for autotests test');
 
             DECLARE @MockHost nvarchar(256) =  '${wiremock.host}'
             DECLARE @MockPath nvarchar(256) = '/externalIntegration/testic'
