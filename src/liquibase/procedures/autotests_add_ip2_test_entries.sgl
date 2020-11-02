@@ -18,7 +18,7 @@ SET NOCOUNT ON
 
 INSERT INTO [dbo].[ExternalIntegrationConfiguration_TransportModule]
 (Code, [Description])
-VALUES ('TEST_DK_WS_test', 'Test transport for autotests test');
+VALUES ('TEST_DK_WS', 'Test transport for autotests test');
 /* adding events configuration for test IC*/
 
 
