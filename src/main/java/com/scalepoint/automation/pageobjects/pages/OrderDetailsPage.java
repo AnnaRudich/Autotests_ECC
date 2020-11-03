@@ -1,6 +1,8 @@
 package com.scalepoint.automation.pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -13,12 +15,14 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
-public class OrderDetailsPage extends Page {
+public class OrderDetailsPage extends BaseClaimPage {
 
     @FindBy(xpath = "//div[@class='table-header']")
     private WebElement legendItem;
@@ -62,6 +66,8 @@ public class OrderDetailsPage extends Page {
     @FindBy(xpath = "//input[contains(@name,'article')]")
     private WebElement articleCheckbox;
 
+    @FindBy(css = ".order-wrapper-table")
+    private WebElement orderDetails;
 
     ElementsCollection orderTotalRows = $$("#total table tr");
 
@@ -137,6 +143,13 @@ public class OrderDetailsPage extends Page {
         return this;
     }
 
+    private SelenideElement orderDetailsShouldBe(Condition condition){
+
+        return $("#orders")
+                .find(".order-wrapper-table .suborder-header tbody")
+                .shouldBe(condition);
+    }
+
     public OrderDetailsPage doAssert(Consumer<OrderDetailsPage.Asserts> assertFunc) {
         assertFunc.accept(new OrderDetailsPage.Asserts());
         return OrderDetailsPage.this;
@@ -144,41 +157,54 @@ public class OrderDetailsPage extends Page {
 
     public class Asserts {
 
-    public void assertCompensationAmount(Double expectedCompensationAmount){
-           Double actualCompensationAmount = new OrderTotals().getCompensationAmount();
-           assertThat(expectedCompensationAmount.equals(actualCompensationAmount))
-                   .as("compensationAmount was: " + actualCompensationAmount + " but should be: " + expectedCompensationAmount)
-                   .isTrue();
-    }
-    public void assertAmountScalepointHasPaidToSupplier(Double expectedGoodsAmount){
-           Double actualGoodsAmount = new OrderTotals().getGoods();
-           assertThat(expectedGoodsAmount.equals(actualGoodsAmount))
-                .as("amount Scalepoint has paid to Supplier was: " + actualGoodsAmount + " but should be: " + expectedGoodsAmount)
-                .isTrue();
-    }
+        public void assertCompensationAmount(Double expectedCompensationAmount){
+            Double actualCompensationAmount = new OrderTotals().getCompensationAmount();
+            assertThat(expectedCompensationAmount.equals(actualCompensationAmount))
+                    .as("compensationAmount was: " + actualCompensationAmount + " but should be: " + expectedCompensationAmount)
+                    .isTrue();
+        }
+        public void assertAmountScalepointHasPaidToSupplier(Double expectedGoodsAmount){
+            Double actualGoodsAmount = new OrderTotals().getGoods();
+            assertThat(expectedGoodsAmount.equals(actualGoodsAmount))
+                    .as("amount Scalepoint has paid to Supplier was: " + actualGoodsAmount + " but should be: " + expectedGoodsAmount)
+                    .isTrue();
+        }
 
-    public void assertAmountScalepointPaidToCustomer(Double expectedPayouts){
-        Double actualPayouts = new OrderTotals().getPayouts();
-        assertThat(expectedPayouts.equals(actualPayouts))
-                .as("amount Scalepoint paid to customer was: " + actualPayouts + "but should be: " + expectedPayouts)
-                .isTrue();
-    }
+        public void assertAmountScalepointPaidToCustomer(Double expectedPayouts){
+            Double actualPayouts = new OrderTotals().getPayouts();
+            assertThat(expectedPayouts.equals(actualPayouts))
+                    .as("amount Scalepoint paid to customer was: " + actualPayouts + "but should be: " + expectedPayouts)
+                    .isTrue();
+        }
 
-    public void assertAmountCustomerHasPaidToScalepoint(Double expectedDeposit){
-        Double actualDeposit = new OrderTotals().getDeposits();
-        assertThat(expectedDeposit.equals(actualDeposit))
-                .as("amount customer has paid to Scalepoint was :" + "but should be: " + expectedDeposit)
-                .isTrue();
-    }
+        public void assertAmountCustomerHasPaidToScalepoint(Double expectedDeposit){
+            Double actualDeposit = new OrderTotals().getDeposits();
+            assertThat(expectedDeposit.equals(actualDeposit))
+                    .as("amount customer has paid to Scalepoint was :" + "but should be: " + expectedDeposit)
+                    .isTrue();
+        }
 
-    public void assertRemainingCompensationTotal(Double expectedRemainingCompensation) {
-        Double actualRemainingCompensation = new OrderTotals().getRemainingCompensation();
-        assertThat(expectedRemainingCompensation.equals(actualRemainingCompensation)).
-                as("remaining compensation was: " + actualRemainingCompensation + " but should be :" + expectedRemainingCompensation)
-                .isTrue();
-    }
+        public void assertRemainingCompensationTotal(Double expectedRemainingCompensation) {
+            Double actualRemainingCompensation = new OrderTotals().getRemainingCompensation();
+            assertThat(expectedRemainingCompensation.equals(actualRemainingCompensation)).
+                    as("remaining compensation was: " + actualRemainingCompensation + " but should be :" + expectedRemainingCompensation)
+                    .isTrue();
+        }
 
-}
+        public void assertDetailsAreVisible(){
+
+            assertThat(orderDetailsShouldBe(Condition.visible).exists()).
+                    as("Order details should be displayed")
+                    .isTrue();
+        }
+        public void assertDetailsAreInvisible(){
+
+            assertThat(orderDetailsShouldBe(not(Condition.exist)).exists()).
+                    as("Order details should not be displayed")
+                    .isFalse();
+        }
+
+    }
 
     class OrderTotals{
         private Double compensationAmount; //IC to Scalepoint

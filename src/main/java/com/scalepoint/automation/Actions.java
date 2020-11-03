@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -299,13 +300,14 @@ public interface Actions {
         }
     }
 
-    default void hoverAndClick(SelenideElement element){
+    default SelenideElement hoverAndClick(SelenideElement element){
 
         element
                 .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
                 .hover()
                 .click();
         waitForAjaxCompletedAndJsRecalculation();
+        return element;
     }
 
     default void doubleClick(By by) {
