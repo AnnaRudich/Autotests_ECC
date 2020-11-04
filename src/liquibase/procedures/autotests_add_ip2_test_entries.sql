@@ -16,10 +16,10 @@ AS
 
 SET NOCOUNT ON
 
-IF NOT EXISTS (Select TransportModuleGUID from [dbo].[ExternalIntegrationConfiguration_TransportModule] where Code ='TEST_DK_WS')
+IF NOT EXISTS (Select TransportModuleGUID from [dbo].[ExternalIntegrationConfiguration_TransportModule] where Code ='GENERIC_DK_WS')
 INSERT INTO [dbo].[ExternalIntegrationConfiguration_TransportModule]
 (Code, [Description])
-VALUES ('TEST_DK_WS', 'Test transport for autotests test');
+VALUES ('GENERIC_DK_WS', 'Test transport for autotests test');
 
 /* adding events configuration for test IC*/
 
@@ -27,7 +27,7 @@ VALUES ('TEST_DK_WS', 'Test transport for autotests test');
 --SET IDENTITY_INSERT [dbo].[ExternalIntegrationConfiguration_Entry]  OFF
 
 
-DECLARE @testTransportModuleGuid int = (Select TransportModuleGUID from [dbo].[ExternalIntegrationConfiguration_TransportModule] where Code ='TEST_DK_WS')
+DECLARE @testTransportModuleGuid int = (Select TransportModuleGUID from [dbo].[ExternalIntegrationConfiguration_TransportModule] where Code ='GENERIC_DK_WS')
 
 INSERT INTO [dbo].[ExternalIntegrationConfiguration_Entry] (
        [CompanyId]

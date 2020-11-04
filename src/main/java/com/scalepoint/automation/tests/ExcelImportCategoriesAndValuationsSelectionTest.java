@@ -2,11 +2,13 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
@@ -27,7 +29,7 @@ public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
                 .findClaimLine(claimLineDescription)
                 .doAssert(claimLine -> claimLine.assertCategory(claimItem.getCategoryMobilePhones().getGroupName(), claimItem.getCategoryMobilePhones().getCategoryName()));
     }
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "Import Excel where categories are not specified, and also line description has no sense" +
                     "so categories should be selected manually")
