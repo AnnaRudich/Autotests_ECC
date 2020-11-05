@@ -19,5 +19,6 @@ public enum CompanyCode {
     TRYGHOLDING,
     ALKA,
     TOPDANMARK,
+    GJENSIDIGE,
     BASIC_ADMIN_ROLE;
 }

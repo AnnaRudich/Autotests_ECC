@@ -35,6 +35,7 @@ public enum FTSetting {
     DISALLOW_DUPLICATE_CLAIMS_NUMBER("input[name=ftfunctionflag3][value='2']", CHECKBOX),
     ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT("input[name=ftfunctionflag3][value='1048576']", CHECKBOX),
     ENABLE_CHANGING_OF_VOUCHER_PRICE_IN_REPLACEMENT_WIZARD("input[name=ftfunctionflag3][value='8388608']", CHECKBOX),
+    ENABLE_CANCEL_BUTTON_IN_SETTLEMENT_PAGE("input[name=ftfunctionflag3][value='2097152']", CHECKBOX),
     DO_NOT_DEPRECIATE_CUSTOMER_DEMAND("input[name=ftfunctionflag][value='4']", CHECKBOX),
     ENABLE_VOUCHER_PREDICTION("input[name=ftfunctionflag3][value='4096']", CHECKBOX),
 
@@ -47,6 +48,11 @@ public enum FTSetting {
     INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='512']", CHECKBOX),
     VALIDATE_AGE("input[name=ftSelfServiceFlag][value='2']", CHECKBOX),
     SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH("input[name=ftSelfServiceFlag][value='131072']", CHECKBOX),
+
+    //Integration settings
+
+    CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS("input[id='integrationSetting']", CHECKBOX),
+    ENABLE_ALL_PAYMENT_INTEGRATION("input[id='enableAllPaymentIntegrations']", CHECKBOX),
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value='1']", CHECKBOX),
