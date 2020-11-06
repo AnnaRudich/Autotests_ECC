@@ -11,7 +11,7 @@ import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.services.ucommerce.GetBalanceService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
-import com.scalepoint.automation.stubs.EVPMock;
+import com.scalepoint.automation.stubs.EVBMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
@@ -37,7 +37,7 @@ public class UCommerceShopTests extends BaseTest {
     public void startWireMock() throws IOException {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
-        new EVPMock(wireMock).addStub();
+        new EVBMock(wireMock).addStub();
         wireMock.allStubMappings()
                 .getMappings()
                 .stream()

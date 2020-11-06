@@ -16,33 +16,33 @@ import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-public class EVPMock {
+public class EVBMock {
 
-    protected Logger log = LogManager.getLogger(EVPMock.class);
+    protected Logger log = LogManager.getLogger(EVBMock.class);
 
     private static WireMock wireMock;
 
-    public EVPMock(WireMock wireMock){
+    public EVBMock(WireMock wireMock){
         this.wireMock = wireMock;
     }
 
-    public synchronized EVPStubs addStub() throws IOException {
+    public synchronized EVBStubs addStub() throws IOException {
 
-            return new EVPStubs()
+            return new EVBStubs()
                     .issuedStub();
     }
 
-    public class EVPStubs {
+    public class EVBStubs {
 
         private static final String CONTENT_TYPE = "application/json";
         public static final String ISSUED = "/evb/issue";
 
 
-        public EVPStubs() {
-            WireMock.configureFor(wireMock);
-        }
+//        public EVBStubs evbStubs() {
+//            WireMock.configureFor(wireMock);
+//        }
 
-        public EVPStubs issuedStub() throws IOException {
+        public EVBStubs issuedStub() throws IOException {
             stubFor(post(urlMatching(ISSUED))
                     .willReturn(aResponse()
                             .withHeader("Content-Type", CONTENT_TYPE)
