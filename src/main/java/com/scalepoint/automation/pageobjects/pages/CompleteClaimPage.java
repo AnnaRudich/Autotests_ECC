@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -74,7 +75,7 @@ public class CompleteClaimPage extends Page {
     private Button saveClaim;
 
     @FindBy(id = "genlever")
-    private Button replace;
+    private WebElement replace;
 
     @FindBy(xpath = "//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")
     private Button goToShop;
@@ -206,7 +207,7 @@ public class CompleteClaimPage extends Page {
     public ReplacementDialog openReplacementWizard(boolean gdpr) {
         Wait.waitForAjaxCompleted();
         Wait.waitForJavascriptRecalculation();
-        replace.click();
+        hoverAndClick($(replace));
         if(gdpr) {
             BaseDialog
                     .at(GdprConfirmationDialog.class)
