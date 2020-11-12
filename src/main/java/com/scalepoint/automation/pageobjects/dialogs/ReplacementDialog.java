@@ -11,6 +11,7 @@ import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
@@ -22,6 +23,8 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.openqa.selenium.Keys.CONTROL;
+import static org.openqa.selenium.Keys.DELETE;
 
 public class ReplacementDialog extends BaseDialog {
 
@@ -34,7 +37,7 @@ public class ReplacementDialog extends BaseDialog {
     @FindBy(xpath = "//td[contains(@class,'grid-cell-row-checker')]")
     private Radio selectItemCheckbox;
 
-    @FindBy(css = ".x-grid-cell-faceValue")
+    @FindBy(css = ".x-grid-cell-faceValue div")
     private WebElement voucherFaceValue;
 
     @FindBy(css = ".x-grid-cell-cashValue")
@@ -64,7 +67,7 @@ public class ReplacementDialog extends BaseDialog {
     private By nextButtonPath = By.id("replacement-button-next-btnInnerEl");
     private By finishButtonByXpath = By.id("replacement-button-finish-btnInnerEl");
     private By itemsListByXpath = By.cssSelector("#replacement-first-step-body [role=button");
-    private By voucherFaceValueInputByXpath = By.xpath("//input[@name='faceValue']");
+    private By voucherFaceValueInputByXpath = By.cssSelector("[name='faceValue']");
     private By selectItemCheckboxByXpath = By.xpath("//td[contains(@class,'grid-cell-row-checker')]");
     private By goToShopButtonByXpath = By.xpath("//span[@id='replacement-button-shop-btnEl']");
     private By closeButtonByXpath = By.xpath("//div[contains(@class,'x-message-box')]//div[contains(@id,'messagebox')]//span[contains(@id,'button')][1]");
@@ -88,8 +91,17 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     public ReplacementDialog editVoucherFaceValue(Double newPrice) {
-        hoverAndClick($(voucherFaceValue));
-        $(voucherFaceValueInputByXpath).setValue(newPrice.toString()).pressEnter();
+        SelenideElement element = $(voucherFaceValue);
+        hoverAndClick(element);
+        SelenideElement subElement = $(voucherFaceValueInputByXpath);
+        subElement
+                .sendKeys(CONTROL + "a");
+        subElement
+                .sendKeys(DELETE);
+        subElement
+                .sendKeys(Integer.valueOf(newPrice.intValue()).toString());
+        subElement
+                .pressEnter();
         return this;
     }
 
