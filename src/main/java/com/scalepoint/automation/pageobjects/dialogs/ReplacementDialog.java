@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
@@ -109,11 +108,6 @@ public class ReplacementDialog extends BaseDialog {
 
     private void acceptReplacementAlert(){
         $(By.xpath("//span[contains(text(), 'OK')]//following-sibling::span")).click();
-    }
-
-    public ShopWelcomePage goToShop() {
-        goToShopButton.click();
-        return Page.at(ShopWelcomePage.class);
     }
 
     public CustomerDetailsPage replaceAllItems() {

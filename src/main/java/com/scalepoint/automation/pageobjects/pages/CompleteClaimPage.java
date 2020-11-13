@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
@@ -181,16 +180,6 @@ public class CompleteClaimPage extends Page {
                 .confirm();
         databaseApi.waitForClaimStatusChangedTo(claim, ClaimStatus.CLOSED_EXTERNALLY);
         return at(MyPage.class);
-    }
-
-    public ShopWelcomePage completeWithEmailAndLoginToShop(Claim claim, DatabaseApi databaseApi) {
-        return completeWithEmail(claim, databaseApi, true).
-                openRecentClaim().
-                toMailsPage().
-                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
-                findLoginToShopLinkAndOpenIt().
-                enterPassword(Constants.DEFAULT_PASSWORD).
-                login();
     }
 
     public MyPage saveClaim(boolean gdpr) {
