@@ -9,11 +9,9 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
-import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
-import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.stubs.RnVMock;
@@ -27,7 +25,6 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.payments.Payments;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -38,13 +35,9 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.Arrays;
 
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_LOWER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerTests extends BaseTest {
@@ -363,7 +356,7 @@ public class CommunicationDesignerTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare order confirmation mails")
-    public void orderConfirmationWhenWeUseCreditCard(User user, Claim claim, ClaimItem claimItem, Payments payments) {
+    public void orderConfirmation(User user, Claim claim, ClaimItem claimItem) {
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
@@ -392,63 +385,7 @@ public class CommunicationDesignerTests extends BaseTest {
         new CreateOrderService().createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
-                new CustomerDetailsPage().toMailsPage()
-                .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, ORDER_CONFIRMATION)
-                .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
-
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
-    }
-
-    @CommunicationDesignerCleanUp
-    @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-    @Test(dataProvider = "stubDataProvider",
-            description = "Use communication designer to prepare order confirmation mails")
-    public void orderConfirmationWhenWeUseProductWithdrawal(User user, Claim claim, ClaimItem claimItem) {
-
-        final String ORDER_CONFIRMATION = "[OrderConfirmation]";
-
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omOrderConfirmation(true)
-                .build();
-
-        login(user)
-                .to(InsCompaniesPage.class)
-                .editCompany(user.getCompanyName())
-                .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption(false);
-
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
-
-        loginAndCreateClaim(user, claim)
-                .openSid()
-                .setCategory(claimItem.getCategoryBabyItems())
-                .setNewPrice(productInfo.getInvoicePrice() + 1000)
-                .setDescription(claimItem.getTextFieldSP())
-                .setValuation(NEW_PRICE)
-                .closeSidWithOk(SettlementPage.class)
-                .toCompleteClaimPage()
-                .fillClaimFormWithPassword(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
-                .findLoginToShopLinkAndOpenIt()
-                .enterPassword(Constants.DEFAULT_PASSWORD)
-                .login()
-                .toProductSearchPage()
-                .searchForProduct(productInfo.getModel())
-                .addProductToCart(0)
-                .checkoutProductWithdrawalMail();
-
-        login(user)
-                .openRecentClaim()
-                .toMailsPage()
+        new CustomerDetailsPage().toMailsPage()
                 .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, ORDER_CONFIRMATION)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
