@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.shop;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
@@ -224,6 +225,7 @@ public class UCommerceShopTests extends BaseTest {
     public void verifyGetBalance(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
         SettlementDialog dialog = settlementPage
                 .openSid()
                 .setCategory(claimItem.getCategoryBabyItems())
@@ -237,8 +239,200 @@ public class UCommerceShopTests extends BaseTest {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true);
+
         new GetBalanceService()
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(activeValuation);
+    }
+
+    @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify data received from getBalance endpoint for cancelled claim")
+    public void verifyGetBalanceCancelledClaim(User user, Claim claim, ClaimItem claimItem) {
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        SettlementDialog dialog = settlementPage
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(100.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(NEW_PRICE);
+
+        Double balance = dialog.getCashCompensationValue();
+
+        MyPage myPage = dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithoutEmail();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+
+        myPage.openRecentClaim()
+                .cancelClaim();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(0.0);
+    }
+
+    @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify data received from getBalance endpoint for cancelled order")
+    public void verifyGetBalanceCancelledItem(User user, Claim claim, ClaimItem claimItem) {
+
+        XpriceInfo productInfo = getXPriceInfoForProduct();
+
+        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(100.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(NEW_PRICE);
+
+        Double balance = dialog.getCashCompensationValue();
+
+        dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .toOrdersDetailsPage();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+
+        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
+
+        OrderDetailsPage orderDetailsPage =  new OrderDetailsPage()
+                .refreshPageToGetOrders()
+                .doAssert(orderDetailsPage1 -> {
+                    orderDetailsPage1.assertRemainingCompensationTotal(balance - orderedProductPrice);//voucher
+                    orderDetailsPage1.assertCompensationAmount(balance);
+                });
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(0.0);
+
+        orderDetailsPage.cancelItem();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+    }
+
+    @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify data received from getBalance endpoint for reopened claim")
+    public void verifyGetBalanceReopenClaim(User user, Claim claim, ClaimItem claimItem) {
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        SettlementDialog dialog = settlementPage
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(100.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(NEW_PRICE);
+
+        Double balance = dialog.getCashCompensationValue();
+
+        MyPage myPage = dialog
+                .closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true);
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+
+        settlementPage = myPage
+                .openRecentClaim()
+                .reopenClaim();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+
+        dialog = settlementPage
+                .openSidAndFill(sid ->
+                        sid
+                                .withCategory(claimItem.getCategoryMobilePhones())
+                                .withNewPrice(300.00)
+                                .withText("Second item")
+                                .withValuation(NEW_PRICE)
+                );
+
+        balance = balance + dialog.getCashCompensationValue();
+
+        dialog
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, false);
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+    }
+
+    @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
+    @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify data received from getBalance endpoint for saved claim")
+    public void verifyGetBalanceSavedClaim(User user, Claim claim, ClaimItem claimItem) {
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        SettlementDialog dialog = settlementPage
+                .openSid()
+                .setCategory(claimItem.getCategoryBabyItems())
+                .setNewPrice(100.00)
+                .setDescription(claimItem.getTextFieldSP())
+                .setValuation(NEW_PRICE);
+
+        Double balance = dialog.getCashCompensationValue();
+
+        MyPage myPage = dialog.closeSidWithOk(SettlementPage.class)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithoutEmail();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+
+        settlementPage = myPage
+                .openRecentClaim()
+                .reopenClaim();
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
+
+        dialog = settlementPage
+                .openSidAndFill(sid ->
+                        sid
+                                .withCategory(claimItem.getCategoryMobilePhones())
+                                .withNewPrice(300.00)
+                                .withText("Second item")
+                                .withValuation(NEW_PRICE)
+                );
+
+        dialog
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .saveClaim(false);
+
+        new GetBalanceService()
+                .getBalance(claim.getClaimNumber())
+                .assertBalanceIs(balance);
     }
 }
