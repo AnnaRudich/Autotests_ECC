@@ -89,14 +89,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
-                .findLoginToShopLinkAndOpenIt()
-                .enterPassword(Constants.DEFAULT_PASSWORD)
-                .login()
-                .doAssert(shopWelcomePage -> {
-                    shopWelcomePage.assertProductCashValueIs(expectedCashValue);
-                    shopWelcomePage.assertProductFaceValueIs(expectedNewPrice);
-                });
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
         login(user).openRecentClaim()
                 .doAssert(customerDetailsPage -> {
