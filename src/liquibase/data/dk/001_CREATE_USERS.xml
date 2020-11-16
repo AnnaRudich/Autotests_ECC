@@ -34,6 +34,8 @@
             exec autotests_prepare_future_company 58, @adminUserRights, @MockUrl = '${wiremock.host}'
             exec autotests_prepare_future_company 59, @adminUserRights, @MockUrl = '${wiremock.host}'
             exec autotests_prepare_future_company 60, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 70, @adminUserRights, @MockUrl = '${wiremock.host}'
+            exec autotests_prepare_future_company 71, @adminUserRights, @MockUrl = '${wiremock.host}'
 
             EXEC autotests_create_ic 61, 'BASIC_ADMIN_ROLE'
             EXEC autotests_create_user 61, 'autotest-basic-admin-role1', @chUserRights

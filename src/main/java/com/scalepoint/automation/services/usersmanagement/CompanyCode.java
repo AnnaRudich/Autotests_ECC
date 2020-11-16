@@ -13,6 +13,11 @@ public enum CompanyCode {
     FUTURE58,
     FUTURE59,
     FUTURE60,
+
+    FUTURE70,
+    FUTURE71,
+    FUTURE72,
+
     LB,
     BAUTA,
     TRYGFORSIKRING,
