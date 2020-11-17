@@ -25,11 +25,6 @@
         </packages>
 
         <classes>
-            <class name="com.scalepoint.automation.tests.RecommendedItemsTests">
-                <methods>
-                    <exclude name="ecc3278_productPricesInShopCatalog"/>
-                </methods>
-            </class>
             <class name="com.scalepoint.automation.tests.admin.GenericItemsTests">
                 <methods>
                     <exclude name="charlie535_testWeCanManageGenericItems"/>

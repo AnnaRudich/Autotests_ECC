@@ -104,15 +104,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
-                .findLoginToShopLinkAndOpenIt()
-                .enterPassword(Constants.DEFAULT_PASSWORD)
-                .login()
-                .doAssert(shopWelcomePage -> {
-                    shopWelcomePage.assertProductCashValueIs(expectedVoucherCashValue);
-                    shopWelcomePage.assertProductFaceValueIs(expectedVoucherFaceValue);
-                })
-                .logout();
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
         login(user).openRecentClaim()
                 .doAssert(customerDetailsPage -> {
