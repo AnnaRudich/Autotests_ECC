@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 public class Ip2Test extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "Event type CLAIM_SETTLED docId SettlementDoc")
-    public void claimSettledEventSettlementDoc(@UserCompany(CompanyCode.FUTURE50) User user,
+    public void claimSettledEventSettlementDoc(@UserCompany(CompanyCode.FUTURE70) User user,
                                                Claim claim,
                                                ClaimItem claimItem) {
        loginAndCreateClaim(user, claim)
@@ -36,7 +36,7 @@ public class Ip2Test extends BaseTest {
     }
 
     @Test(dataProvider = "testDataProvider", description = "Event type CLAIM_SETTLED docId SettlementInclusiveRepairDoc")
-    public void claimSettledEventSettlementInclusiveRepairDoc(@UserCompany(CompanyCode.FUTURE51) User user,
+    public void claimSettledEventSettlementInclusiveRepairDoc(@UserCompany(CompanyCode.FUTURE71) User user,
                                                               Claim claim,
                                                               ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
