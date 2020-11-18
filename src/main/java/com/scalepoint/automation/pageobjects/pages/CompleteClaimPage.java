@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.pages.oldshop.ShopWelcomePage;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
@@ -14,6 +13,7 @@ import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
@@ -74,7 +74,7 @@ public class CompleteClaimPage extends Page {
     private Button saveClaim;
 
     @FindBy(id = "genlever")
-    private Button replace;
+    private WebElement replace;
 
     @FindBy(xpath = "//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")
     private Button goToShop;
@@ -183,16 +183,6 @@ public class CompleteClaimPage extends Page {
         return at(MyPage.class);
     }
 
-    public ShopWelcomePage completeWithEmailAndLoginToShop(Claim claim, DatabaseApi databaseApi) {
-        return completeWithEmail(claim, databaseApi, true).
-                openRecentClaim().
-                toMailsPage().
-                viewMail(MailsPage.MailType.CUSTOMER_WELCOME).
-                findLoginToShopLinkAndOpenIt().
-                enterPassword(Constants.DEFAULT_PASSWORD).
-                login();
-    }
-
     public MyPage saveClaim(boolean gdpr) {
         saveClaim.click();
         if(gdpr) {
@@ -206,7 +196,7 @@ public class CompleteClaimPage extends Page {
     public ReplacementDialog openReplacementWizard(boolean gdpr) {
         Wait.waitForAjaxCompleted();
         Wait.waitForJavascriptRecalculation();
-        replace.click();
+        hoverAndClick($(replace));
         if(gdpr) {
             BaseDialog
                     .at(GdprConfirmationDialog.class)

@@ -2,12 +2,15 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
-import com.scalepoint.automation.pageobjects.pages.*;
+import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
-import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -16,7 +19,6 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -170,31 +172,6 @@ public class ClaimTests extends BaseTest {
                 .doAssert(SettlementPage.Asserts::assertSettlementPageIsInFlatView);
         new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("Approved");//"APPROVED" does not work. Change later.
-    }
-
-    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
-    public void charlie544_not_possible_login_to_cancelled_claim(User user, Claim claim) {
-
-        CustomerDetailsPage customerDetailsPage = loginAndCreateClaim(user, claim)
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim();
-
-        String loginToShopLink = customerDetailsPage
-                .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME)
-                .findLoginToShopLink();
-
-        customerDetailsPage.toCustomerDetails().cancelClaim();
-
-        Browser.driver().get(loginToShopLink);
-
-        Page.at(LoginShopPage.class)
-                .enterPassword(Constants.DEFAULT_PASSWORD)
-                .loginWithFail();
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
@@ -386,11 +363,12 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with shop
      * THEN: C1 status is "Completed"
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
+        XpriceInfo productInfo = getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE);
         claimItem.setNewPriceSP(productInfo.getInvoicePrice() + 1000);
 
         loginAndCreateClaim(user, claim)
@@ -400,16 +378,11 @@ public class ClaimTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-                .openReplacementWizard(true)
-                .goToShop()
-                .toProductSearchPage()
-                .searchForProduct(productInfo.getModel())
-                .addProductToCart(0)
-                .toShoppingCart()
-                .toCashPayoutPage()
-                .keepMoneyOnAccountAndProceed()
-                .selectAgreeOption()
-                .selectPlaceMyOrderOption()
+                .openReplacementWizard(true);
+
+        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
+
+        new MailsPage()
                 .toMailsPage()
                 .doAssert(mail -> {
                     mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);
