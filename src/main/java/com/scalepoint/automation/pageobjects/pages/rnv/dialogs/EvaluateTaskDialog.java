@@ -1,16 +1,18 @@
 package com.scalepoint.automation.pageobjects.pages.rnv.dialogs;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 
 import java.util.function.Consumer;
 
 import static ch.lambdaj.Lambda.on;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -27,12 +29,13 @@ public class EvaluateTaskDialog extends BaseDialog {
     }
 
     public ProjectsPage acceptFeedback(){
-        $(By.xpath("//span[contains(text(), 'Godkend opgave')]/following-sibling::span")).click();
-        pressKeys(Keys.ENTER);
-        Wait.waitForLoaded();
-        return on(ProjectsPage.class);
+        SelenideElement element = $$(".x-window a[role=button] span[role=img]")
+                .get(0);
+        hoverAndClick(element);
+        hoverAndClick($(By.xpath("//span[contains(text(),'Ja')]/ancestor::a")));
+        Wait.waitForAjaxCompletedAndJsRecalculation();
+        return Page.at(ProjectsPage.class);
     }
-
 
     public EvaluateTaskDialog doAssert(Consumer<EvaluateTaskDialog.Asserts> assertFunc) {
         assertFunc.accept(new EvaluateTaskDialog.Asserts());
