@@ -62,12 +62,6 @@ public interface Actions {
         }
     }
 
-    default void pressKeys(Keys... keys) {
-        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
-        action.sendKeys((CharSequence[]) keys);
-        action.perform();
-    }
-
     default void scrollTo(WebElement element) {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView();", element);
     }
