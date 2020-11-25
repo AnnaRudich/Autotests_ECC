@@ -19,7 +19,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     @FindBy(id = "btnOk")
     private WebElement saveOption;
 
-    private String byCategoryNameXpath = "//div/label[contains(.,'$1')]/input";
+    private String byCategoryNameXpath = "//div/label[contains(.,'%s')]/input";
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -50,10 +50,11 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelAddEditPage selectCategory(String catName) {
-        WebElement option = find(byCategoryNameXpath, catName);
+
+        By locator = By.xpath(String.format(byCategoryNameXpath, catName));
+        WebElement option = $(locator).getWrappedElement();
         scrollTo(option);
-        By xpath = By.xpath(byCategoryNameXpath.replace("$1", catName));
-        Wait.waitForStaleElement(xpath);
+        Wait.waitForStaleElement(locator);
         if (!option.isSelected()) {
             option.click();
         }
