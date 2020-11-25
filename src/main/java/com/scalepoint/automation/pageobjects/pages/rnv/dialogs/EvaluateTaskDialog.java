@@ -27,8 +27,8 @@ public class EvaluateTaskDialog extends BaseDialog {
     }
 
     public ProjectsPage acceptFeedback(){
-        $(By.xpath("//span[contains(text(), 'Godkend opgave')]/following-sibling::span")).click();
-        pressKeys(Keys.ENTER);
+        hoverAndClick($(By.xpath("//span[contains(text(), 'Godkend opgave')]/following-sibling::span")));
+        hoverAndClick($(By.xpath("//span[contains(text(), 'Ja')]/ancestor::a")));
         Wait.waitForLoaded();
         return on(ProjectsPage.class);
     }
