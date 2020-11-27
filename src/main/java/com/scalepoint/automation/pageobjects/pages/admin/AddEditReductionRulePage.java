@@ -340,15 +340,13 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage selectDocumentationDropValue(int lineNumber, String documentationValue) {
-        clickAndWaitForDisplaying(By.xpath("//select[@id='documentation|" + lineNumber + "']"), By.xpath("//select[@id='documentation|0']/option[contains(text(),'" + documentationValue + "')]"));
-        find(By.xpath("//select[@id='documentation|" + lineNumber + "']/option[contains(text(),'" + documentationValue + "')]")).click();
+        hoverAndClick($(By.xpath("//select[@id='documentation|" + lineNumber + "']"))).selectOption(documentationValue);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage selectRatingDropValue(int lineNumber, String ratingValue) {
-        clickAndWaitForDisplaying(By.xpath("//select[@id='claimantRating|" + lineNumber + "']"), By.xpath("//select[@id='claimantRating|0']/option[contains(text(),'" + ratingValue + "')]"));
-        find(By.xpath("//select[@id='claimantRating|" + lineNumber + "']/option[contains(text(),'" + ratingValue + "')]")).click();
+        hoverAndClick($(By.xpath("//select[@id='claimantRating|" + lineNumber + "']"))).selectOption(ratingValue);
         return this;
     }
 

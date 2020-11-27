@@ -172,7 +172,7 @@ public class RoleAddEditPage extends AdminBasePage {
     }
 
     public RolesPage selectSaveOption() {
-        clickAndWaitForDisplaying(saveButton, By.id("btnAdd"));
+        hoverAndClick($(saveButton));
         return at(RolesPage.class);
     }
 

@@ -65,7 +65,8 @@ public class ProjectsPage extends Page {
     }
 
     public ProjectsPage expandTopTaskDetails() {
-        clickAndWaitForDisplaying(firstTaskExpander, By.cssSelector("div#taskNestedGrid-body"));
+        hoverAndClick($(firstTaskExpander));
+        $("div#taskNestedGrid-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
     private String getAuditInfoPanelText() {

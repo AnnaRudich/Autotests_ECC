@@ -5,6 +5,7 @@ import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
@@ -25,7 +26,7 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     private TextInput priceField;
 
     @FindBy(id = "btnOk")
-    private Button saveOption;
+    private WebElement saveOption;
 
     @FindBy(name = "ispublished")
     private CheckBox publishedCheckBox;
@@ -52,7 +53,7 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     }
 
     public void save() {
-        clickAndWaitForDisplaying(saveOption, By.id("btnEdit"));
+        hoverAndClick($(saveOption));
     }
 
     public GenericItemsEditAdminPage selectGroup(String groupName) {

@@ -71,7 +71,7 @@ public class ReductionRulesPage extends AdminBasePage {
     }
 
     public void selectRefreshOption() {
-        clickAndWaitForDisplaying(refreshButton, By.id("btnNew"));
+        hoverAndClick($(refreshButton));
     }
 
 

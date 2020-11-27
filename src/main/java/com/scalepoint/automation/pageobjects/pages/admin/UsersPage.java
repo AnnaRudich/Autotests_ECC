@@ -51,8 +51,7 @@ public class UsersPage extends AdminBasePage {
     }
 
     public UserAddEditPage toUserCreatePage() {
-        $(createUserButton).scrollTo();
-        clickAndWaitForDisplaying(createUserButton, By.id("userLoginId"));
+        hoverAndClick($(createUserButton).scrollTo());
         return at(UserAddEditPage.class);
     }
 

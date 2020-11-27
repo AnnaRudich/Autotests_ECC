@@ -44,7 +44,7 @@ public class TaskWizardPage1 extends Page {
     }
 
     public TaskWizardPage2 nextRnVstep() {
-        clickAndWaitForDisplaying(nextBtn, By.cssSelector("span[id*='second-step_header']"));
+        hoverAndClick($(nextBtn));
         return at(TaskWizardPage2.class);
     }
 

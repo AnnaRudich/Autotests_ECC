@@ -49,7 +49,7 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
         int currentSize = listpanelAttachmentView.attachmentsSize();
 
-        enterToHiddenUploadFileField($("input[name=attachmentName]").getWrappedElement(), file.getAbsolutePath());
+        $("input[name=attachmentName]").uploadFile(file);
 
         Wait.waitForJavascriptRecalculation();
         Wait.waitForAjaxCompleted();

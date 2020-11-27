@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.rnv;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.RVPage;
@@ -46,7 +47,8 @@ public class TaskWizardPage2 extends Page {
     }
 
     private void sendTaskAndWaitForStatus(String status){
-        clickAndWaitForDisplaying(sendBtn, By.xpath("//div[contains(text(), '" + status + "')]"));
+        hoverAndClick($(sendBtn));
+        $(By.xpath("//div[contains(text(), '" + status + "')]")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $("a.tasks-statuses-close-button").click();
     }
 }

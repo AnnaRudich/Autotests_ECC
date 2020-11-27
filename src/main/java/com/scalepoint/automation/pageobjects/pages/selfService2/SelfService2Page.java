@@ -14,6 +14,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -143,7 +144,7 @@ public class SelfService2Page extends Page {
         WebElement selectItemElement = Wait.forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
         waitForVisible(selectItemElement);
-        scrollToElement(selectItemElement);
+        $(selectItemElement).scrollTo();
         waitForVisible(selectItemElement);
         clickUsingJavaScriptIfClickDoesNotWork(selectItemElement);
         waitForVisible(selectElement);
@@ -210,7 +211,7 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page addDocumentation() {
         SelenideElement uploadDocBtn = $(By.xpath("//input[contains(@data-for, 'attachment')]"));
-        enterToHiddenUploadFileFieldSS(uploadDocBtn, TestData.getAttachmentFiles().getJpgFile2Loc());
+        $(uploadDocBtn).uploadFile(new File(TestData.getAttachmentFiles().getJpgFile2Loc()));
         return this;
     }
 

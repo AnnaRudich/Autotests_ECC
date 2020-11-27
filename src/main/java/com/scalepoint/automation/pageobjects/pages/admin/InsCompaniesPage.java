@@ -38,7 +38,7 @@ public class InsCompaniesPage extends AdminBasePage {
     }
 
     public InsCompAddEditPage toAddNewCompanyPage() {
-        clickAndWaitForDisplaying(addButton, By.name("icname"));
+        hoverAndClick($(addButton));
         return at(InsCompAddEditPage.class);
     }
 
@@ -52,7 +52,7 @@ public class InsCompaniesPage extends AdminBasePage {
     }
 
     private void selectEditOption() {
-        clickAndWaitForDisplaying(editButton, By.name("icname"));
+        hoverAndClick($(editButton));
     }
 
     public InsCompAddEditPage editCompany(String icName) {

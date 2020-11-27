@@ -57,7 +57,7 @@ public class GenericItemsAdminPage extends AdminBasePage {
 
 
     public GenericItemsEditAdminPage clickCreateNewItem() {
-        clickAndWaitForDisplaying(newButton, By.name("ispublished"));
+        hoverAndClick($(newButton));
         return at(GenericItemsEditAdminPage.class);
     }
 

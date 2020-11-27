@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.io.File;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -83,14 +84,14 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
         public FormFiller withLogo(String logoPath) {
             dialog.useCustomLogoRadio.click();
             WebElement elem = dialog.find(By.xpath("//input[contains(@id, 'voucherLogoFileId') and contains(@type, 'file')]"));
-            dialog.enterToHiddenUploadFileField(elem, logoPath);
+            $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(dialog.logoImageXpath);
             return this;
         }
 
         public FormFiller withImage(String logoPath) {
             WebElement elem = dialog.find(By.xpath("//input[contains(@id, 'voucherImageFileId') and contains(@type, 'file')]"));
-            dialog.enterToHiddenUploadFileField(elem, logoPath);
+            $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(dialog.imageXpath);
             return this;
         }

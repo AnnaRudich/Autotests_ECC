@@ -22,7 +22,7 @@ public class PseudoCategoryAddEditPage extends AdminBasePage {
     private WebElement publishedCheckBox;
 
     @FindBy(id = "btnOk")
-    private Button saveOption;
+    private WebElement saveOption;
 
     @FindBy(name = "PseudoCatGroupId")
     private Select pseudoCategoryGroups;
@@ -40,7 +40,7 @@ public class PseudoCategoryAddEditPage extends AdminBasePage {
     }
 
     private PseudoCategoriesPage save() {
-        clickAndWaitForDisplaying(saveOption, By.name("searchField"));
+        hoverAndClick($(saveOption));
         return at(PseudoCategoriesPage.class);
     }
 

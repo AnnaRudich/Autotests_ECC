@@ -20,10 +20,10 @@ public class PseudoCategoriesPage extends AdminBasePage {
     private WebElement quickSearchField;
 
     @FindBy(id = "btnAdd")
-    private Button addButton;
+    private WebElement addButton;
 
     @FindBy(id = "btnEdit")
-    private Button editButton;
+    private WebElement editButton;
 
     @FindBy(id = "pseudoCategoryList")
     private Select pseudoCategoryList;
@@ -41,7 +41,7 @@ public class PseudoCategoriesPage extends AdminBasePage {
     }
 
     public PseudoCategoryAddEditPage toAddCategoryPage() {
-        clickAndWaitForDisplaying(addButton, By.xpath("//input[contains(@id, 'pcname')]"));
+        hoverAndClick($(addButton));
         return at(PseudoCategoryAddEditPage.class);
     }
 
@@ -56,7 +56,7 @@ public class PseudoCategoriesPage extends AdminBasePage {
 
     public PseudoCategoryAddEditPage editCategory(String categoryName) {
         pseudoCategoryList.selectByVisibleText(categoryName);
-        clickAndWaitForDisplaying(editButton, By.xpath("//input[contains(@id, 'pcname')]"));
+        hoverAndClick($(editButton));
         return at(PseudoCategoryAddEditPage.class);
     }
 

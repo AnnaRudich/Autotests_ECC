@@ -16,6 +16,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -178,7 +179,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public BannerTab uploadBanner(String bannerPath) {
             WebElement elem = find(By.xpath("//input[contains(@id, 'supplierBannerFileId') and contains(@type, 'file')]"));
-            enterToHiddenUploadFileField(elem, bannerPath);
+            $(elem).uploadFile(new File(bannerPath));
             return this;
         }
 
@@ -274,7 +275,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public GeneralTab uploadLogo(String logoPath) {
             WebElement elem = find(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
-            enterToHiddenUploadFileField(elem, logoPath);
+            $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(By.cssSelector(("img.imageUploadImg")));
             return this;
         }

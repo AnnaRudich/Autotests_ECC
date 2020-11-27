@@ -13,7 +13,6 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -62,10 +61,6 @@ public interface Actions {
         }
     }
 
-    default void scrollToElement(WebElement element) {
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);", element);
-    }
-
     default void switchToFrame(){
 
         Browser.driver().switchTo().frame(0);
@@ -80,39 +75,39 @@ public interface Actions {
         Browser.driver().navigate().refresh();
     }
 
-    default String getCookies() {
-        Set<Cookie> cookies = Browser.driver().manage().getCookies();
-        StringBuilder cookieString = new StringBuilder();
-        for (Cookie cookie : cookies) {
-            cookieString.append(cookie.getName());
-            cookieString.append("=");
-            cookieString.append(cookie.getValue());
-            cookieString.append(";");
-        }
-        return cookieString.toString();
-    }
+//    default String getCookies() {
+//        Set<Cookie> cookies = Browser.driver().manage().getCookies();
+//        StringBuilder cookieString = new StringBuilder();
+//        for (Cookie cookie : cookies) {
+//            cookieString.append(cookie.getName());
+//            cookieString.append("=");
+//            cookieString.append(cookie.getValue());
+//            cookieString.append(";");
+//        }
+//        return cookieString.toString();
+//    }
 
-    default void enterToHiddenUploadFileField(WebElement element, String filePath) {
-        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
-        js.executeScript("arguments[0].setAttribute('class', ' ');", element);
-        element.sendKeys(filePath);
-    }
-
-    default void enterToHiddenUploadFileFieldSS(WebElement element, String filePath) {
-        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
-        js.executeScript("arguments[0].setAttribute('style', '');", element);
-        element.sendKeys(filePath);
-    }
+//    default void enterToHiddenUploadFileField(WebElement element, String filePath) {
+//        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
+//        js.executeScript("arguments[0].setAttribute('class', ' ');", element);
+//        element.sendKeys(filePath);
+//    }
+//
+//    default void enterToHiddenUploadFileFieldSS(WebElement element, String filePath) {
+//        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
+//        js.executeScript("arguments[0].setAttribute('style', '');", element);
+//        element.sendKeys(filePath);
+//    }
 
     default void dragAndDrop(WebElement element, WebElement elementWhereToMove) {
         org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         Action dragAndDrop = action.clickAndHold(element).moveToElement(elementWhereToMove).release(elementWhereToMove).build();
         dragAndDrop.perform();
     }
-
-    default void mouseOver(WebElement webElement) {
-        new org.openqa.selenium.interactions.Actions(Browser.driver()).moveToElement(webElement, 5, 5).perform();
-    }
+//
+//    default void mouseOver(WebElement webElement) {
+//        new org.openqa.selenium.interactions.Actions(Browser.driver()).moveToElement(webElement, 5, 5).perform();
+//    }
 
 
     default void clear(By byElement) {
@@ -148,9 +143,9 @@ public interface Actions {
         $(byWaitForElement).waitUntil(Condition.visible, 60000);
     }
 
-    default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
-        clickAndWaitForDisplaying(find(byElement), byWaitForElement);
-    }
+//    default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
+//        clickAndWaitForDisplaying(find(byElement), byWaitForElement);
+//    }
 
     default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
         element.click();

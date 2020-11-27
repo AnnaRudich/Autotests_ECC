@@ -40,7 +40,7 @@ public class RolesPage extends AdminBasePage {
     }
 
     public RoleAddEditPage toAddRolePage() {
-        clickAndWaitForDisplaying(addButton, By.name("roleName"));
+        hoverAndClick($(addButton));
         return at(RoleAddEditPage.class);
     }
 
@@ -53,15 +53,15 @@ public class RolesPage extends AdminBasePage {
         return true;
     }
 
-    public void selectEditOption() {
-        clickAndWaitForDisplaying(editButton, By.id("btnOk"));
-    }
+//    public void selectEditOption() {
+//        clickAndWaitForDisplaying(editButton, By.id("btnOk"));
+//    }
 
-    public RoleAddEditPage editRole(String roleName) {
-        roles.selectByVisibleText(roleName);
-        selectEditOption();
-        return at(RoleAddEditPage.class);
-    }
+//    public RoleAddEditPage editRole(String roleName) {
+//        roles.selectByVisibleText(roleName);
+//        selectEditOption();
+//        return at(RoleAddEditPage.class);
+//    }
 
     public RolesPage assertRoleDisplayed(String roleName) {
         Assert.assertTrue(isRoleDisplayed(roleName));
