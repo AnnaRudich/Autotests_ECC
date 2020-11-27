@@ -14,6 +14,10 @@
     <user login="autotest-future59" password="12341234" companyCode="FUTURE59" companyName="Future59" companyId="59" ftId="59" basic="true"/>
     <user login="autotest-future60" password="12341234" companyCode="FUTURE60" companyName="Future60" companyId="60" ftId="60" basic="true"/>
 
+    <user login="autotest-future70" password="12341234" companyCode="FUTURE70" companyName="FUTURE70" companyId="70" ftId="70" basic="false"/>
+    <user login="autotest-future71" password="12341234" companyCode="FUTURE71" companyName="FUTURE71" companyId="71" ftId="71" basic="false"/>
+    <user login="autotest-future72" password="12341234" companyCode="FUTURE72" companyName="FUTURE72" companyId="72" ftId="72" basic="false"/>
+
     <user login="autotest-basic-admin-role1" password="12341234" companyCode="BASIC_ADMIN_ROLE" companyName="BASIC_ADMIN_ROLE" companyId="61" ftId="61" />
 
     <user login="autotest-sp"       password="12341234" companyCode="SCALEPOINT"     companyName="Scalepoint" companyId="7"     ftId="1"/>

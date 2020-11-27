@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
@@ -8,7 +9,6 @@ import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -17,10 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -41,7 +38,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     @FindBy(css = "div#suppliersGridId-body table tr:first-of-type td:nth-of-type(2) div")
     private WebElement firstSupplierItem;
 
-    @FindBy(xpath = "//input[contains(@name,'searchfield')]")
+    @FindBy(css = "input[id^=searchfield]")
     private WebElement suppliersSearchField;
 
     @FindBy(xpath = "//div[@id='suppliersGridId']//div[contains(@id,'targetEl')and contains(@id, 'headercontainer')]")
@@ -59,7 +56,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     @FindBy(xpath = ".//a[contains(@href, 'logout')]")
     private Link signOutLink;
 
-    private String bySupplierNameXpath = "//tbody[contains(@id,'gridview')]//tr[contains(.,'$1')]";
+    private String bySupplierNameXpath = "//tbody[contains(@id,'gridview')]//tr[contains(.,'%s')]";
     private String byVoucherXpath = "//td[contains(@class, 'x-grid-cell-supplierListVouchersId ')]";
     private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-supplierListExclusiveId ')]";
 
@@ -102,7 +99,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     private WebElement getOption(String supplierName) {
-        return find(bySupplierNameXpath, supplierName);
+        return $(By.xpath(String.format(bySupplierNameXpath, supplierName)));
     }
 
     public SupplierDialog.GeneralTab editSupplier(String supplierName) {
@@ -118,9 +115,10 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public void makeSupplierSearch(String query) {
-        suppliersSearchField.clear();
-        setValue(suppliersSearchField, query);
-        suppliersSearchField.sendKeys(Keys.ENTER);
+        SelenideElement element = $(suppliersSearchField);
+        element.clear();
+        element.setValue(query);
+        element.pressEnter();
         Wait.waitForAjaxCompleted();
     }
 
@@ -128,7 +126,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         clickUsingJavaScriptIfClickDoesNotWork(find(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        String xpath = bySupplierNameXpath.replace("$1", supplierName);
+        String xpath = String.format(bySupplierNameXpath, supplierName);
         try {
             WebElement option = find(By.xpath(xpath));
             return option.getText().contains(supplierName);

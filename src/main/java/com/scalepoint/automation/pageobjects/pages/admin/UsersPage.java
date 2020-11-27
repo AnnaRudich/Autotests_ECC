@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 
 @EccPage
 public class UsersPage extends AdminBasePage {
@@ -34,7 +33,7 @@ public class UsersPage extends AdminBasePage {
     @FindBy(id = "btnRefresh")
     private WebElement refreshButton;
 
-    private String byUserLoginXpath = "id('user-grid')//table[@class='x-grid3-row-table']//tr[contains(.,'$1')]";
+    private String byUserLoginXpath = "id('user-grid')//table[@class='x-grid3-row-table']//tr[contains(.,'%s')]";
 
     private String filterByIcXpath = "//select[contains(@name, 'company')]/option[contains(text(), '$1')]";
 
@@ -68,32 +67,17 @@ public class UsersPage extends AdminBasePage {
         waitForAjaxCompleted();
     }
 
-    public boolean isUserExists(SystemUser user) {
-        filterByIC(user.getCompany());
-        makeUserSearchByName(user.getLogin());
-        WebElement item = find(byUserLoginXpath, user.getLogin());
-        return item.getText().contains(user.getLogin());
-    }
-
-    public boolean isUserDisplayed(SystemUser user) {
-        filterByIC(user.getCompany());
-        makeUserSearchByName(user.getLogin());
-        waitForStaleElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
-        WebElement item = find(byUserLoginXpath, user.getLogin());
-        return item.getText().contains(user.getLogin());
-    }
-
     public boolean isDisplayed(SystemUser user) {
         refreshUsersList();
         waitForAjaxCompleted();
         makeUserSearchByName(user.getLogin());
-        WebElement item;
+        SelenideElement item;
         try {
-            item = find(byUserLoginXpath, user.getLogin());
+            item = $(By.xpath(String.format(byUserLoginXpath, user.getLogin())));
         } catch (TimeoutException e) {
             logger.error(e.getMessage());
             makeUserSearchByName(user.getLogin());
-            item = find(byUserLoginXpath, user.getLogin());
+            item = $(By.xpath(String.format(byUserLoginXpath, user.getLogin())));
         }
         return item.getText().contains(user.getLogin()) &&
                 item.getText().contains((user.getFirstName())) &&
@@ -104,7 +88,7 @@ public class UsersPage extends AdminBasePage {
         makeUserSearchByName(userName);
         waitForAjaxCompleted();
         SelenideElement element = $(By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr[1]/td[2]"));
-        WebElement item = find(byUserLoginXpath, userName);
+        SelenideElement item = $(By.xpath(String.format(byUserLoginXpath, userName)));
         if (item.getText().contains(userName)) {
             scrollTo(item);
             element.doubleClick();

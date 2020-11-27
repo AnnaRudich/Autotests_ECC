@@ -545,7 +545,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(id = "supplierShopsGridId")
         private WebElement shopsGridId;
 
-        private String byShopNameXpath = "id('supplierShopsGridId')//div[contains(text(),'$1')]";
+        private String byShopNameXpath = "id('supplierShopsGridId')//div[contains(text(),'%s')]";
 
         @Override
         protected void ensureWeAreAt() {
@@ -560,39 +560,32 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         boolean isNewShopExists(Shop shop) {
             try {
-                WebElement item = find(byShopNameXpath, shop.getShopName());
+                SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
                 scrollTo(item);
                 return true;
-            } catch (Exception e) {
+            } catch (Error e) {
                 return false;
             }
         }
 
         ShopsTab selectShop(Shop shop) {
-            WebElement item = find(byShopNameXpath, shop.getShopName());
+            SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
             scrollTo(item);
             clickAndWaitForEnabling(item, By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]"));
             return this;
         }
 
-        public AddShopDialog openShop(String shopName) {
-            WebElement item = find(byShopNameXpath, shopName);
-            scrollTo(item);
-            doubleClick(item);
-            return at(AddShopDialog.class);
-        }
-
         public AddShopDialogViewMode openShopViewModel(String shopName) {
-            WebElement item = find(byShopNameXpath, shopName);
+            SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shopName)));
             scrollTo(item);
-            doubleClick(item);
+            item.doubleClick();
             return at(AddShopDialogViewMode.class);
         }
 
         public AddShopDialog openEditShopDialog(String shopName) {
-            WebElement item = find(byShopNameXpath, shopName);
+            SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shopName)));
             scrollTo(item);
-            doubleClick(item);
+            item.doubleClick();
             Wait.waitForVisibleAndEnabled(By.name("shopName"));
             return at(AddShopDialog.class);
         }
@@ -622,6 +615,4 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
         }
     }
-
-
 }
