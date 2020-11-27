@@ -63,24 +63,24 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         return "#vouchers";
     }
 
-    /**
-     * This method opens new voucher for editing
-     */
-    public void openNewVoucherForEditing(Voucher voucher) {
-        find(By.xpath("//input[contains(@class,'voucherListSearchField')]")).click();
-        makeVouchersSearch(voucher.getVoucherNameSP());
-        List<WebElement> elements = Wait.waitForStaleElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
-        for (WebElement item : elements) {
-            if (item.getText().contains(voucher.getVoucherNameSP())) {
-                scrollTo(item);
-                doubleClick(item);
-                Wait.waitForDisplayed(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
-                Wait.waitForAjaxCompleted();
-                break;
-            }
-        }
-
-    }
+//    /**
+//     * This method opens new voucher for editing
+//     */
+//    public void openNewVoucherForEditing(Voucher voucher) {
+//        find(By.xpath("//input[contains(@class,'voucherListSearchField')]")).click();
+//        makeVouchersSearch(voucher.getVoucherNameSP());
+//        List<WebElement> elements = Wait.waitForStaleElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
+//        for (WebElement item : elements) {
+//            if (item.getText().contains(voucher.getVoucherNameSP())) {
+//                $(item).scrollTo().doubleClick();
+//                doubleClick(item);
+//                Wait.waitForDisplayed(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
+//                Wait.waitForAjaxCompleted();
+//                break;
+//            }
+//        }
+//
+//    }
 
     public void addVoucherSearchQuery(String query) {
         vouchersSearchField.sendKeys(query);

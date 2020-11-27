@@ -71,18 +71,18 @@ public class SelfServicePage extends Page {
         driver.findElement(By.xpath("//div[@class='body_text']")).click();
     }
 
-    public boolean isSuggestionsContainQuery(String query) {
-        waitForAjaxCompleted();
-        for (WebElement suggestion : allDescriptionSuggestions) {
-            scrollTo(suggestion);
-            System.out.println("Query: " + unifyStr(query) + "present in " + unifyStr(suggestion.getText()) + "?");
-            if (!unifyStr(suggestion.getText()).contains(unifyStr(query))) {
-                System.out.println(suggestion.getText().toUpperCase() + "- doesn't contain " + unifyStr(query).toUpperCase());
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean isSuggestionsContainQuery(String query) {
+//        waitForAjaxCompleted();
+//        for (WebElement suggestion : allDescriptionSuggestions) {
+//            scrollTo(suggestion);
+//            System.out.println("Query: " + unifyStr(query) + "present in " + unifyStr(suggestion.getText()) + "?");
+//            if (!unifyStr(suggestion.getText()).contains(unifyStr(query))) {
+//                System.out.println(suggestion.getText().toUpperCase() + "- doesn't contain " + unifyStr(query).toUpperCase());
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     public boolean isFirst10SuggestionContainQuery(String query) {
         String[] queryList = query.split(" ");

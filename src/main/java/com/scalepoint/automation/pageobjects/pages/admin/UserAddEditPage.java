@@ -357,14 +357,14 @@ public class UserAddEditPage extends AdminBasePage {
     /**
      * The method selects ScalePoint Company. The method is jest technical.
      */
-    public UserAddEditPage selectSPCompany(SystemUser user) {
-        WebElement option = find(byCompanyXpath, user.getCompany());
-        if (option.getText().equals(user.getCompany())) {
-            scrollTo(option);
-            option.click();
-        }
-        return this;
-    }
+//    public UserAddEditPage selectSPCompany(SystemUser user) {
+//        WebElement option = find(byCompanyXpath, user.getCompany());
+//        if (option.getText().equals(user.getCompany())) {
+//            scrollTo(option);
+//            option.click();
+//        }
+//        return this;
+//    }
 
     /**
      * This method disable  It manager role and clicks new Role
@@ -375,7 +375,8 @@ public class UserAddEditPage extends AdminBasePage {
         }
         WebElement option = find(byRolesXpath, roleName);
         if (option.getText().equals(roleName)) {
-            scrollTo(option);
+            $(option).scrollTo();
+//            scrollTo(option);
             existingRolesBox.get(existingRolesBox.size() - 1).click();
         }
     }

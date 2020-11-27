@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
@@ -109,9 +110,14 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         $(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
-        if (getOption(supplierName).getText().contains(supplierName)) {
-            scrollTo(getOption(supplierName));
-            doubleClick(getOption(supplierName));
+
+        SelenideElement element = $(getOption(supplierName));
+        if (element.getText().contains(supplierName)) {
+            element
+                    .scrollTo()
+                    .doubleClick();
+//            scrollTo(getOption(supplierName));
+//            doubleClick(getOption(supplierName));
         }
 
         return BaseDialog.at(SupplierDialog.GeneralTab.class);

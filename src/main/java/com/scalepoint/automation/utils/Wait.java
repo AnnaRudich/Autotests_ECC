@@ -55,6 +55,9 @@ public class Wait {
         }catch (TimeoutException e){
 
             log.warn("waitForAjaxCompleted Timeout");
+        }catch (JavascriptException e){
+
+            log.warn("Javascript exception: ", e);
         }
         waitForJavascriptRecalculation();
     }

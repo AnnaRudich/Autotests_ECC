@@ -62,10 +62,6 @@ public interface Actions {
         }
     }
 
-    default void scrollTo(WebElement element) {
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView();", element);
-    }
-
     default void scrollToElement(WebElement element) {
         ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);", element);
     }

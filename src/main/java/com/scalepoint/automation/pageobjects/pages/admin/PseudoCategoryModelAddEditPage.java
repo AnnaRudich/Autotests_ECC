@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
@@ -19,7 +20,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     @FindBy(id = "btnOk")
     private WebElement saveOption;
 
-    private String byCategoryNameXpath = "//div/label[contains(.,'$1')]/input";
+    private String byCategoryNameXpath = "//div/label[contains(.,'%s')]/input";
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -50,12 +51,10 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelAddEditPage selectCategory(String catName) {
-        WebElement option = find(byCategoryNameXpath, catName);
-        scrollTo(option);
-        By xpath = By.xpath(byCategoryNameXpath.replace("$1", catName));
-        Wait.waitForStaleElement(xpath);
-        if (!option.isSelected()) {
-            option.click();
+        SelenideElement element = $(By.xpath(String.format(byCategoryNameXpath, catName)));
+        element.scrollTo();
+        if (!element.isSelected()) {
+            hoverAndClick(element);
         }
         return this;
     }

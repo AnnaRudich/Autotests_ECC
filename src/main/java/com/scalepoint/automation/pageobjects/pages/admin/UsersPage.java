@@ -51,7 +51,7 @@ public class UsersPage extends AdminBasePage {
     }
 
     public UserAddEditPage toUserCreatePage() {
-        scrollTo(createUserButton);
+        $(createUserButton).scrollTo();
         clickAndWaitForDisplaying(createUserButton, By.id("userLoginId"));
         return at(UserAddEditPage.class);
     }
@@ -106,7 +106,7 @@ public class UsersPage extends AdminBasePage {
         SelenideElement element = $(By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr[1]/td[2]"));
         WebElement item = find(byUserLoginXpath, userName);
         if (item.getText().contains(userName)) {
-            scrollTo(item);
+            $(item).scrollTo();
             element.doubleClick();
         }
         return at(UserAddEditPage.class);
