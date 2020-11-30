@@ -65,7 +65,7 @@ public class ReplacementDialog extends BaseDialog {
 
     private By nextButtonPath = By.id("replacement-button-next-btnInnerEl");
     private By finishButtonByXpath = By.id("replacement-button-finish-btnInnerEl");
-    private By itemsListByXpath = By.cssSelector("#replacement-first-step-body [role=button");
+    private By itemsListByXpath = By.cssSelector("#replacement-first-step-body [role=button]");
     private By voucherFaceValueInputByXpath = By.cssSelector("[name='faceValue']");
     private By selectItemCheckboxByXpath = By.xpath("//td[contains(@class,'grid-cell-row-checker')]");
     private By goToShopButtonByXpath = By.xpath("//span[@id='replacement-button-shop-btnEl']");
@@ -145,8 +145,7 @@ public class ReplacementDialog extends BaseDialog {
     }
 
     private WebElement findReplacementOptionByText(String replacementTypeLabel) {
-        return $$(itemsListByXpath).find(Condition.text(replacementTypeLabel))
-                .find(By.xpath(".//tr/td/input[contains(@class, 'x-form-radio')]"));
+        return $(By.xpath(String.format("//b[contains(text(), '%s')]/ancestor::label/preceding-sibling::span", replacementTypeLabel)));
     }
 
     public CustomerDetailsPage getAccessToShopForRemainingAmount() {
