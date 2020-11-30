@@ -545,7 +545,7 @@ public class SettlementPage extends BaseClaimPage {
 
             try {
                 clickUsingJavaScriptIfClickDoesNotWork(descriptionElement);
-                doubleClick(descriptionElement);
+                $(descriptionElement).doubleClick();
                 waitForAjaxCompleted();
                 String js =
                         "var callback = arguments[arguments.length - 1];" +
@@ -577,8 +577,8 @@ public class SettlementPage extends BaseClaimPage {
 
         private void doubleClickGroupLine() {
             try {
-                doubleClick(descriptionElement);
-                waitForAjaxCompleted();
+                $(descriptionElement).doubleClick();
+                waitForAjaxCompletedAndJsRecalculation();
             } catch (ScriptTimeoutException e) {
                 logger.error(e.getMessage());
             }

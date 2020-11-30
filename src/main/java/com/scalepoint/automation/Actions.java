@@ -138,10 +138,10 @@ public interface Actions {
         Wait.waitForJavascriptRecalculation();
     }
 
-    default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
-        clickUsingJavaScriptIfClickDoesNotWork(element);
-        $(byWaitForElement).waitUntil(Condition.visible, 60000);
-    }
+//    default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
+//        clickUsingJavaScriptIfClickDoesNotWork(element);
+//        $(byWaitForElement).waitUntil(Condition.visible, 60000);
+//    }
 
 //    default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
 //        clickAndWaitForDisplaying(find(byElement), byWaitForElement);
@@ -158,9 +158,9 @@ public interface Actions {
         Wait.waitForStaleElement(byWaitForElement);
     }
 
-    default void clickAndWaitForStable(By element, By byWaitForElement) {
-        clickAndWaitForStable(Browser.driver().findElement(element), byWaitForElement);
-    }
+//    default void clickAndWaitForStable(By element, By byWaitForElement) {
+//        clickAndWaitForStable(Browser.driver().findElement(element), byWaitForElement);
+//    }
 
     default boolean isSelected(WebElement element) {
         try {
@@ -295,9 +295,9 @@ public interface Actions {
         return element;
     }
 
-    default void doubleClick(By by) {
-        doubleClick(find(by));
-    }
+//    default void doubleClick(By by) {
+//        doubleClick(find(by));
+//    }
 
     default void replaceAmpInUrl() {
         String currentUrl = Browser.driver().getCurrentUrl();

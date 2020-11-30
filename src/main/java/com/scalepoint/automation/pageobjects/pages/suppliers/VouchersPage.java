@@ -114,25 +114,25 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      */
     public void openFirstVoucher() {
         Wait.waitForStaleElement(By.xpath("//div[1]/table/tbody/tr/td[2]/div"));
-        doubleClick(firstVoucherItem);
+        $(firstVoucherItem).doubleClick();
         Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
     }
 
-    public String openRandomVoucher() {
-        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//tr"));
-        WebElement voucher = allVouchersList.get(RandomUtils.randomInt(allVouchersList.size()));
-        doubleClick(voucher);
-        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
-        return getInputValue(find(By.xpath("//input[@name='voucherName']")));
-    }
+//    public String openRandomVoucher() {
+//        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//tr"));
+//        WebElement voucher = allVouchersList.get(RandomUtils.randomInt(allVouchersList.size()));
+//        doubleClick(voucher);
+//        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
+//        return getInputValue(find(By.xpath("//input[@name='voucherName']")));
+//    }
 
-    public String openVoucherByCount(int count) {
-        Wait.waitForStaleElements(By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr"));
-        WebElement voucher = allVouchersList.get(count);
-        doubleClick(voucher);
-        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
-        return getInputValue(find(By.name("voucherName")));
-    }
+//    public String openVoucherByCount(int count) {
+//        Wait.waitForStaleElements(By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr"));
+//        WebElement voucher = allVouchersList.get(count);
+//        doubleClick(voucher);
+//        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
+//        return getInputValue(find(By.name("voucherName")));
+//    }
 
     public boolean isExclusiveColumnDisplayed() {
         for (WebElement element : columnsTitles) {
@@ -162,10 +162,10 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         }
     }
 
-    public void openVoucherForEdit(String voucherName) {
-        makeVouchersSearch(voucherName);
-        openFirstVoucher();
-    }
+//    public void openVoucherForEdit(String voucherName) {
+//        makeVouchersSearch(voucherName);
+//        openFirstVoucher();
+//    }
 
     public LoginPage signOut() {
         signOutLink.click();

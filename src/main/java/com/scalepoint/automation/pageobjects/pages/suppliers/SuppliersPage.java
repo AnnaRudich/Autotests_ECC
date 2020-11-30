@@ -97,7 +97,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     public SupplierDialog openFirstSupplier() {
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         WebElement supplier = allSuppliersList.get(0);
-        doubleClick(supplier);
+        $(supplier).doubleClick();
         waitForStaleElement(By.xpath("//span[contains(text(),'General')]"));
         return BaseDialog.at(SupplierDialog.class);
     }
