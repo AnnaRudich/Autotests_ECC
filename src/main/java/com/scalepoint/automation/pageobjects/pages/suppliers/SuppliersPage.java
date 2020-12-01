@@ -124,14 +124,20 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public void makeSupplierSearch(String query) {
-        suppliersSearchField.clear();
-        setValue(suppliersSearchField, query);
-        suppliersSearchField.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxCompleted();
+
+        SelenideElement element = $(suppliersSearchField);
+        element.clear();
+        element
+                .setValue(query)
+                .pressEnter();
+//        suppliersSearchField.clear();
+//        setValue(suppliersSearchField, query);
+//        suppliersSearchField.sendKeys(Keys.ENTER);
+        Wait.waitForAjaxCompletedAndJsRecalculation();
     }
 
     public boolean isSupplierCreated(String supplierName) {
-        clickUsingJavaScriptIfClickDoesNotWork(find(By.xpath("//input[contains(@name,'searchfield')]")));
+        hoverAndClick($(find(By.xpath("//input[contains(@name,'searchfield')]"))));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         String xpath = bySupplierNameXpath.replace("$1", supplierName);

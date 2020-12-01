@@ -18,7 +18,7 @@ public class ClaimOperationsMenu extends Module {
     private WebElement selfService;
 
     @FindBy(id = "addGenericItemBtn")
-    private Button addGenericItemBtn;
+    private WebElement addGenericItemBtn;
 
     @FindBy(id = "excelImportBtn")
     private Button excelImportBtn;
@@ -29,8 +29,7 @@ public class ClaimOperationsMenu extends Module {
     }
 
     public AddGenericItemDialog addGenericItem() {
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(addGenericItemBtn));
-        clickUsingJavaScriptIfClickDoesNotWork(addGenericItemBtn);
+        hoverAndClick($(addGenericItemBtn));
         return BaseDialog.at(AddGenericItemDialog.class);
     }
 

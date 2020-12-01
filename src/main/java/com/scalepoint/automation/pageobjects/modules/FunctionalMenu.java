@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.modules;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -12,10 +13,10 @@ import static com.codeborne.selenide.Selenide.$;
 public class FunctionalMenu extends Module {
 
     @FindBy(xpath = "//span[contains(@style,'findInCatalogIcon.png')]/ancestor::a")
-    private Link findInCatalogue;
+    private WebElement findInCatalogue;
 
     @FindBy(id = "addByHandBtn")
-    private Button addManually;
+    private WebElement addManually;
 
     @FindBy(xpath = "//span[contains(@style,'selfServiceRequestIcon.png')]/ancestor::a")
     private Link requestSelfService;
@@ -24,11 +25,11 @@ public class FunctionalMenu extends Module {
     private Button importExcel;
 
     public void findInCatalogue() {
-        clickUsingJavaScriptIfClickDoesNotWork(findInCatalogue);
+        hoverAndClick($(findInCatalogue));
     }
 
     public SettlementDialog addManually() {
-        clickUsingJavaScriptIfClickDoesNotWork(addManually);
+        hoverAndClick($(addManually));
         return BaseDialog.at(SettlementDialog.class);
     }
 

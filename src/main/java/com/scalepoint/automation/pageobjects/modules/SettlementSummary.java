@@ -32,16 +32,16 @@ public class SettlementSummary extends Module {
     private Table claimsResult;
 
     @FindBy(id = "cancelCaseBtn")
-    private Button cancel;
+    private WebElement cancel;
 
     @FindBy(id = "saveCaseBtn")
     private WebElement saveClaim;
 
     @FindBy(id = "finishCaseBtn")
-    private Button completeClaim;
+    private WebElement completeClaim;
 
     @FindBy(id = "settleExternallyBtn")
-    private Button completeClaimExternally;
+    private WebElement completeClaimExternally;
 
     @FindBy(id="sendToAuditBtn-btnInnerEl")
     private WebElement sentToAudit;
@@ -68,7 +68,7 @@ public class SettlementSummary extends Module {
     private WebElement settlementSummaryTotalsPanel;
 
     public void cancel() {
-        clickUsingJavaScriptIfClickDoesNotWork(cancel);
+        hoverAndClick($(cancel));
     }
 
     public void saveClaim() {
@@ -83,14 +83,14 @@ public class SettlementSummary extends Module {
         if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
             expand();
         }
-        clickUsingJavaScriptIfClickDoesNotWork(completeClaim);
+        hoverAndClick($(completeClaim));
     }
 
     public void completeClaimWithoutMail() {
         if (!completeClaimExternally.isDisplayed()) {
             expand();
         }
-        clickUsingJavaScriptIfClickDoesNotWork(completeClaimExternally);
+        hoverAndClick($(completeClaimExternally));
     }
 
     private void expand() {

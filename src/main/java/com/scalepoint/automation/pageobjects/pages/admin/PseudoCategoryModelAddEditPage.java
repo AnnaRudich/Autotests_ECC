@@ -40,7 +40,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelPage save() {
-        clickUsingJavaScriptIfClickDoesNotWork(saveOption);
+        hoverAndClick($(saveOption));
         return at(PseudoCategoryModelPage.class);
     }
 

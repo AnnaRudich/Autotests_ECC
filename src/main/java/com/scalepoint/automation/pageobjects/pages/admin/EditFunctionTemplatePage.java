@@ -27,7 +27,7 @@ import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 public class EditFunctionTemplatePage extends AdminBasePage {
 
     @FindBy(xpath = "//input[@value='Save values']")
-    private Button saveValues;
+    private WebElement saveValues;
 
     @FindBy(xpath = "//button[(text() = 'show hidden')]")
     private Button showHidden;
@@ -43,7 +43,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     }
 
     public FunctionalTemplatesPage saveTemplate() {
-        clickUsingJavaScriptIfClickDoesNotWork(saveValues);
+        hoverAndClick($(saveValues));
         return at(FunctionalTemplatesPage.class);
     }
 
@@ -99,13 +99,13 @@ public class EditFunctionTemplatePage extends AdminBasePage {
 
         if (enable && !checkBox.isSelected()) {
             logger.info("Enabling: " + description);
-            clickUsingJavaScriptIfClickDoesNotWork(element);
+            hoverAndClick($(element));
             checkBox.select();
         }
 
         if (!enable && checkBox.isSelected()) {
             logger.info("Disabling: " + description);
-            clickUsingJavaScriptIfClickDoesNotWork(element);
+            hoverAndClick($(element));
         }
         logger.debug("CheckBox state is {} for {} ", checkBox.isSelected(), ftSetting);
     }

@@ -52,17 +52,11 @@ public interface VoucherAgreementTabs extends Actions {
     }
 
     default SupplierDialog.AgreementsTab saveVoucherAgreement() {
-        zoom(0.5);
         SelenideElement element = $(".supplier-save-voucher-btn")
                 .waitUntil(Condition.visible, TIMEOUT_MS);
-        try {
-            element.click();
-        }catch (Throwable e) {
-            logger.warn("Click throws following exception: {}", e);
-            clickUsingJS(element);
-        }finally {
-            zoom(1);
-        }
+
+            hoverAndClick(element);
+
         return at(SupplierDialog.AgreementsTab.class);
     }
 }

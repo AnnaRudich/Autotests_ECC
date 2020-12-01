@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.forCondition;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
@@ -107,12 +108,12 @@ public class UserAddEditPage extends AdminBasePage {
      * This method fills all required text fields for new user
      */
     public void fillUserGeneralData(SystemUser user) {
-        setValue(loginField, user.getLogin());
-        setValue(passwordField, user.getPassword());
-        setValue(passwordRetField, user.getPassword());
-        setValue(firstNameField, user.getFirstName());
-        setValue(lastNameField, user.getLastName());
-        setValue(emailField, user.getEmail());
+        $(loginField).setValue(user.getLogin());
+        $(passwordField).setValue(user.getPassword());
+        $(passwordRetField).setValue(user.getPassword());
+        $(firstNameField).setValue(user.getFirstName());
+        $(lastNameField).setValue(user.getLastName());
+        $(emailField).setValue(user.getEmail());
     }
 
     public void checkPasswordRule(SystemUser user, String password) {
@@ -219,7 +220,10 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public <T extends Page> T selectSaveOption(Class<T> page) {
-        clickUsingJavaScriptIfClickDoesNotWork(saveButton);
+        $(saveButton)
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         return at(page);
     }
 
@@ -386,7 +390,10 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public String generateAndGetNewPassword() {
-        clickUsingJavaScriptIfClickDoesNotWork(generatePasswordButton);
+        $(generatePasswordButton)
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         return getAlertTextAndAccept().split(" ")[1];
     }
 

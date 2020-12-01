@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtInput;
@@ -41,7 +42,7 @@ public class TextSearchPage extends Page {
     private Link sortByOrderable;
 
     @FindBy(css = ".matchbutton")
-    private Button match;
+    private WebElement match;
 
     @FindBy(css = ".matchbutton")
     private List<Button> matchButtons;
@@ -215,9 +216,10 @@ public class TextSearchPage extends Page {
 
     public SettlementDialog openSidForFirstProduct() {
         Wait.waitForAjaxCompleted();
-        clickUsingJavaScriptIfClickDoesNotWork(match);
+        SelenideElement element = $(match);
+        hoverAndClick(element);
         if (!BaseDialog.isOn(SettlementDialog.class)) {
-            clickUsingJavaScriptIfClickDoesNotWork(match);
+            hoverAndClick(element);
         }
         return BaseDialog.at(SettlementDialog.class);
     }
@@ -225,7 +227,7 @@ public class TextSearchPage extends Page {
     public SettlementDialog openSidForProductWithVoucher() {
         Wait.waitForAjaxCompleted();
         Wait.waitForVisible(match);
-        match.click();
+        hoverAndClick($(match));
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
         if (!settlementDialog.isDiscountDistributionDisplayed()) {
             settlementDialog.cancel(TextSearchPage.class);

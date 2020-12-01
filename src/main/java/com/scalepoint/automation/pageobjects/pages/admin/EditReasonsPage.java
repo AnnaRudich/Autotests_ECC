@@ -50,7 +50,7 @@ public class EditReasonsPage extends AdminBasePage {
     @FindBy(xpath = "//input[contains(@id,'reasonNameAdd')]")
     private ExtInput addReasonField;
     @FindBy(xpath = "//button[contains(text(),'Save')]")
-    private Button save;
+    private WebElement save;
     @FindBy(xpath = "//button[contains(@id,'changeStatusBtn')]")
     private Button changeStatus;
     @FindBy(id = "reasons_table")
@@ -80,7 +80,7 @@ public class EditReasonsPage extends AdminBasePage {
 
     public EditReasonsPage addReason(String reason) {
         addReasonField.enter(reason);
-        clickUsingJavaScriptIfClickDoesNotWork(save);
+        hoverAndClick($(save));
         return at(EditReasonsPage.class);
     }
 

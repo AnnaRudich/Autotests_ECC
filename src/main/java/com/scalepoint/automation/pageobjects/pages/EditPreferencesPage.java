@@ -7,9 +7,9 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -37,7 +37,10 @@ public class EditPreferencesPage extends Page {
     }
 
     public String generateNewPassword() {
-        clickUsingJavaScriptIfClickDoesNotWork(buttonGenerate);
+        $(buttonGenerate)
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         return getAlertTextAndAccept().split(" ")[1];
     }
 

@@ -111,7 +111,7 @@ public class SelfServicePage extends Page {
 
     public SelfServicePage addCustomerNote(String noteText) {
         unfocusField();
-        clickUsingJavaScriptIfClickDoesNotWork($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
+        hoverAndClick($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
         $("#cutomer_note").sendKeys(noteText);
         $(By.xpath(".//button[.='OK']")).click();
         return this;

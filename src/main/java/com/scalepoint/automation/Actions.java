@@ -223,18 +223,18 @@ public interface Actions {
         return Wait.waitForDisplayed(By.xpath(xpath));
     }
 
-    default void setValue(WebElement element, String value) {
-        waitForVisible(element);
-        logger.info("SetValue {} --> {}", getElementIdentifier(element), value);
-        JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
-        for (int i = 0; i < 3; i++) {
-            if (element.getText().equals(value)) {
-                break;
-            } else {
-                executor.executeScript("arguments[0].value=arguments[1];", element, value);
-            }
-        }
-    }
+//    default void setValue(WebElement element, String value) {
+//        waitForVisible(element);
+//        logger.info("SetValue {} --> {}", getElementIdentifier(element), value);
+//        JavascriptExecutor executor = (JavascriptExecutor) Browser.driver();
+//        for (int i = 0; i < 3; i++) {
+//            if (element.getText().equals(value)) {
+//                break;
+//            } else {
+//                executor.executeScript("arguments[0].value=arguments[1];", element, value);
+//            }
+//        }
+//    }
 
     default String getElementIdentifier(WebElement element) {
         String value = null;
@@ -270,20 +270,20 @@ public interface Actions {
         }
     }
 
-    default void doubleClick(WebElement element) {
-        try {
-            waitForVisibleAndEnabled(element);
-            org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
-            action.doubleClick(element);
-            action.perform();
-        } catch (StaleElementReferenceException e) {
-            logger.warn("Element is not attached to the page document " + e);
-        } catch (NoSuchElementException e) {
-            logger.warn("Element was not found in DOM " + e);
-        } catch (Exception e) {
-            logger.error("Unable to doubleClick on element " + e);
-        }
-    }
+//    default void doubleClick(WebElement element) {
+//        try {
+//            waitForVisibleAndEnabled(element);
+//            org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
+//            action.doubleClick(element);
+//            action.perform();
+//        } catch (StaleElementReferenceException e) {
+//            logger.warn("Element is not attached to the page document " + e);
+//        } catch (NoSuchElementException e) {
+//            logger.warn("Element was not found in DOM " + e);
+//        } catch (Exception e) {
+//            logger.error("Unable to doubleClick on element " + e);
+//        }
+//    }
 
     default SelenideElement hoverAndClick(SelenideElement element){
 

@@ -13,7 +13,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.at;
 public class ClaimNavigationMenu extends Module {
 
     @FindBy(id = "settlementButton")
-    private Link settelment;
+    private WebElement settelment;
 
     @FindBy(id = "mailsButton")
     private WebElement mails;
@@ -22,25 +22,25 @@ public class ClaimNavigationMenu extends Module {
     private Button imports;
 
     @FindBy(id = "repairValuationButton")
-    private Link repairValuation;
+    private WebElement repairValuation;
 
     @FindBy(id = "settlementSummaryButton")
     private Link settlementSummary;
 
     @FindBy(id = "orderButton")
-    private Link order;
+    private WebElement order;
 
     @FindBy(id = "detailsButton")
-    private Link details;
+    private WebElement details;
 
     @FindBy(id = "notesButton")
-    private Link notes;
+    private WebElement notes;
 
     @FindBy(id = "historyButton")
     private Link history;
 
     public SettlementPage toSettlementPage() {
-        clickUsingJavaScriptIfClickDoesNotWork(settelment);
+        hoverAndClick($(settelment));
         return at(SettlementPage.class);
     }
 
@@ -55,39 +55,39 @@ public class ClaimNavigationMenu extends Module {
     }
 
     public CustomerDetailsPage toCustomerDetailsPage() {
-        clickUsingJavaScriptIfClickDoesNotWork(details);
+        hoverAndClick($(details));
         return at(CustomerDetailsPage.class);
     }
 
-    public void ClickImports() {
-        clickUsingJavaScriptIfClickDoesNotWork(imports);
-    }
+//    public void ClickImports() {
+//        clickUsingJavaScriptIfClickDoesNotWork(imports);
+//    }
 
     public ProjectsPage toRepairValuationProjectsPage() {
-        clickUsingJavaScriptIfClickDoesNotWork(repairValuation);
+        hoverAndClick($(repairValuation));
         return at(ProjectsPage.class);
     }
 
-    public void ClickSettlementSummary() {
-        clickUsingJavaScriptIfClickDoesNotWork(settlementSummary);
-    }
+//    public void ClickSettlementSummary() {
+//        clickUsingJavaScriptIfClickDoesNotWork(settlementSummary);
+//    }
 
     public OrderDetailsPage toOrderDetailsPage() {
-        clickUsingJavaScriptIfClickDoesNotWork(order);
+        hoverAndClick($(order));
         return at(OrderDetailsPage.class);
     }
 
-    public void ClickDetails() {
-        clickUsingJavaScriptIfClickDoesNotWork(details);
-    }
+//    public void ClickDetails() {
+//        clickUsingJavaScriptIfClickDoesNotWork(details);
+//    }
 
     public NotesPage toNotesPage() {
-        clickUsingJavaScriptIfClickDoesNotWork(notes);
+        hoverAndClick($(notes));
         return at(NotesPage.class);
     }
 
-    public void ClickHistory() {
-        clickUsingJavaScriptIfClickDoesNotWork(history);
-    }
+//    public void ClickHistory() {
+//        clickUsingJavaScriptIfClickDoesNotWork(history);
+//    }
 
 }

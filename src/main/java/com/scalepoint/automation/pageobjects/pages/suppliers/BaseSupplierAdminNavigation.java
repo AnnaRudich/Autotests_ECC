@@ -6,6 +6,8 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public abstract class BaseSupplierAdminNavigation extends Page {
 
     @FindBy(className = "mainMenuSuppliersClass")
@@ -28,7 +30,7 @@ public abstract class BaseSupplierAdminNavigation extends Page {
     }
 
     public LoginPage logout() {
-        clickUsingJavaScriptIfClickDoesNotWork(logoutLink);
+        hoverAndClick($(logoutLink));
         return at(LoginPage.class);
     }
 }

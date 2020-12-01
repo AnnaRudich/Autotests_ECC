@@ -26,7 +26,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     private ExtInput tags;
 
     @FindBy(id = "edit-voucher-ok-button")
-    private Button ok;
+    private WebElement ok;
 
     @FindBy(id = "edit-voucher-terms-button")
     private Button termsAndConditions;
@@ -69,7 +69,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public EditDiscountDistributionDialog updatePercentageFromDialog(DistributeTo distributeTo, Integer percentage) {
-        clickUsingJavaScriptIfClickDoesNotWork(editDistributionButton);
+        hoverAndClick($(editDistributionButton));
         return BaseDialog.at(EditDiscountDistributionDialog.class).updatePercentage(distributeTo, percentage);
     }
 
@@ -82,7 +82,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public SettlementDialog closeDialogWithOk() {
-        ok.click();
+        hoverAndClick($(ok));
         return at(SettlementDialog.class);
     }
 
@@ -97,7 +97,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public SettlementDialog saveVoucherValuation() {
-        clickUsingJavaScriptIfClickDoesNotWork(ok);
+        hoverAndClick($(ok));
         return at(SettlementDialog.class);
     }
 

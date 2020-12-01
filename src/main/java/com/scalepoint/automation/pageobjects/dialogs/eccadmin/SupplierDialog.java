@@ -540,7 +540,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(xpath = "//a[contains(@class,'supplier-import-shop-btn')]")
         private WebElement importShopButton;
 
-        @FindBy(xpath = "//div[contains(@class,'supplier-delete-shop-confirm-window')]//span[contains(text(),'Yes')]")
+        @FindBy(xpath = "//div[contains(@class,'supplier-delete-shop-confirm-window')]//span[contains(text(),'Yes')]/ancestor::a")
         private WebElement deleteShopYesButton;
 
         @FindBy(id = "supplierShopsGridId")
@@ -603,7 +603,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public SupplierDialog.ShopsTab deleteShop(Shop shop) {
             selectShop(shop);
             deleteShopButton.click();
-            clickUsingJavaScriptIfClickDoesNotWork(deleteShopYesButton);
+            hoverAndClick($(deleteShopYesButton));
             waitForAjaxCompleted();
             return this;
         }

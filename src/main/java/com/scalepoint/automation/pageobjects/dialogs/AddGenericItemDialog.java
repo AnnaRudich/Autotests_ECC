@@ -25,7 +25,7 @@ public class AddGenericItemDialog extends BaseDialog {
     private Button ok;
 
     @FindBy(id = "generic-item-dialog-close-button")
-    private Button cancel;
+    private WebElement cancel;
 
     @Override
     protected void ensureWeAreAt() {
@@ -53,10 +53,10 @@ public class AddGenericItemDialog extends BaseDialog {
         return this;
     }
 
-    public SettlementPage close() {
-        clickUsingJavaScriptIfClickDoesNotWork(cancel);
-        return Page.at(SettlementPage.class);
-    }
+//    public SettlementPage close() {
+//        hoverAndClick($(cancel));
+//        return Page.at(SettlementPage.class);
+//    }
 
     public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
         this.category.select(categoryGroup + " - " + category);

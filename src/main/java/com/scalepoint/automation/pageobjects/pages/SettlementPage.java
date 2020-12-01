@@ -245,12 +245,12 @@ public class SettlementPage extends BaseClaimPage {
     }
 
 
-    public void cancelClaim() {
-        settlementSummary.cancel();
-        if($(".x-window").is(Condition.visible)){
-            $(".x-window a").click();
-        }
-    }
+//    public void cancelClaim() {
+//        settlementSummary.cancel();
+//        if($(".x-window").is(Condition.visible)){
+//            $(".x-window a").click();
+//        }
+//    }
 
     public MyPage saveClaim(Claim claim) {
         settlementSummary.saveClaim();
@@ -544,7 +544,7 @@ public class SettlementPage extends BaseClaimPage {
                     "targLink.dispatchEvent (clickEvent);";
 
             try {
-                clickUsingJavaScriptIfClickDoesNotWork(descriptionElement);
+                hoverAndClick($(descriptionElement));
                 $(descriptionElement).doubleClick();
                 waitForAjaxCompleted();
                 String js =

@@ -137,7 +137,7 @@ public class SelfService2Page extends Page {
 
     private void selectItem(WebElement element, String text) {
         WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
-        clickUsingJavaScriptIfClickDoesNotWork(selectElement);
+        hoverAndClick($(selectElement));
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
@@ -146,7 +146,7 @@ public class SelfService2Page extends Page {
         waitForVisible(selectItemElement);
         $(selectItemElement).scrollTo();
         waitForVisible(selectItemElement);
-        clickUsingJavaScriptIfClickDoesNotWork(selectItemElement);
+        hoverAndClick($(selectItemElement));
         waitForVisible(selectElement);
         Wait.forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }
