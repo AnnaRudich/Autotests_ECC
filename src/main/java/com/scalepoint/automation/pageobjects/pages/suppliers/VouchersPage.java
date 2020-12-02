@@ -2,10 +2,8 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
-import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -63,25 +61,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         return "#vouchers";
     }
 
-//    /**
-//     * This method opens new voucher for editing
-//     */
-//    public void openNewVoucherForEditing(Voucher voucher) {
-//        find(By.xpath("//input[contains(@class,'voucherListSearchField')]")).click();
-//        makeVouchersSearch(voucher.getVoucherNameSP());
-//        List<WebElement> elements = Wait.waitForStaleElements((By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr")));
-//        for (WebElement item : elements) {
-//            if (item.getText().contains(voucher.getVoucherNameSP())) {
-//                $(item).scrollTo().doubleClick();
-//                doubleClick(item);
-//                Wait.waitForDisplayed(By.xpath("//li[contains(@id,'categoriesVoucherTabId')]"));
-//                Wait.waitForAjaxCompleted();
-//                break;
-//            }
-//        }
-//
-//    }
-
     public void addVoucherSearchQuery(String query) {
         vouchersSearchField.sendKeys(query);
     }
@@ -101,13 +80,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
     }
 
-//    public boolean isVouchersListContainsNewVoucher(String voucherName) {
-//        find(By.xpath("//input[contains(@id,'searchfield')]")).click();
-//        makeVouchersSearch(voucherName);
-//        String xpath = byVoucherNameXpath.replace("$1", voucherName);
-//        return find(By.xpath(xpath)).isDisplayed();
-//    }
-
     /**
      * This method implemented for technical use - if you don't want to create new voucher to verify categories mapping etc.
      * It waits for Categories tab element visibility to be confident that voucher is opened
@@ -117,22 +89,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         $(firstVoucherItem).doubleClick();
         Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
     }
-
-//    public String openRandomVoucher() {
-//        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//tr"));
-//        WebElement voucher = allVouchersList.get(RandomUtils.randomInt(allVouchersList.size()));
-//        doubleClick(voucher);
-//        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
-//        return getInputValue(find(By.xpath("//input[@name='voucherName']")));
-//    }
-
-//    public String openVoucherByCount(int count) {
-//        Wait.waitForStaleElements(By.xpath("id('vouchersGridId')//table[@class='x-grid3-row-table']//tr"));
-//        WebElement voucher = allVouchersList.get(count);
-//        doubleClick(voucher);
-//        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
-//        return getInputValue(find(By.name("voucherName")));
-//    }
 
     public boolean isExclusiveColumnDisplayed() {
         for (WebElement element : columnsTitles) {
@@ -145,27 +101,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
     public boolean isActiveOrExclFieldTicked() {
         return tickedActiveOrExclField.isDisplayed();
     }
-
-    /**
-     * This method checks if Active or Exclusive fields ticked depending on vouchers data
-     */
-//    public boolean isActiveOrExclFieldTickedVouchersList(Voucher voucher) {
-//        find(By.xpath("//input[contains(@id,'searchfield')]")).click();
-//        makeVouchersSearch(voucher.getVoucherNameSP());
-//        Wait.waitForStaleElements((By.xpath("id('vouchersGridId')")));
-//        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherNameSP());
-//        try {
-//            WebElement item = $($(By.xpath(xpath)));
-//            return item.getText().contains(voucher.getVoucherNameSP()) && isActiveOrExclFieldTicked();
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-
-//    public void openVoucherForEdit(String voucherName) {
-//        makeVouchersSearch(voucherName);
-//        openFirstVoucher();
-//    }
 
     public LoginPage signOut() {
         signOutLink.click();

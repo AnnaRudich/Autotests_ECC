@@ -1,10 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -216,19 +213,4 @@ public class RoleAddEditPage extends AdminBasePage {
         return selectSaveOption();
     }
 
-//    public void enablePopularityPage() {
-//        SelenideElement element = $(enableTSPopularityButton);
-//        if (!element.isSelected()) {
-//            hoverAndClick(element);
-//        }
-//        selectSaveOption();
-//    }
-
-//    public void disablePopularityPage() {
-//        scrollTo(disableTSPopularityButton);
-//        if (!disableTSPopularityButton.isSelected()) {
-//            disableTSPopularityButton.click();
-//        }
-//        selectSaveOption();
-//    }
 }

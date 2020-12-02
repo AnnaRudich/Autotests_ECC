@@ -9,14 +9,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
@@ -177,6 +174,7 @@ public class SettlementSummary extends Module {
 
     public class Asserts {
         public Asserts assertClaimSumValueIs(double value) {
+
             Assert.assertEquals(toNumber(getClaimSumValue()), formatDoubleToHaveTwoDigits(value), "Claim sum must be: " + value);
             return this;
         }

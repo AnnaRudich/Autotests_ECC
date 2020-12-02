@@ -74,7 +74,6 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
         SelenideElement element = $(descriptionField);
         element.clear();
         element.sendKeys(description);
-//        sendKeys(descriptionField, description);
         return this;
     }
 
@@ -82,7 +81,6 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
         SelenideElement element = $(priceField);
         element.clear();
         element.sendKeys(price);
-//        sendKeys(priceField, price);
         return this;
     }
 

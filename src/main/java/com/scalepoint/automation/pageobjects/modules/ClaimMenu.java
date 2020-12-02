@@ -65,10 +65,6 @@ public class ClaimMenu extends Module {
         return $(By.xpath("//a[@id='signOutButton']")).isDisplayed();
     }
 
-//    public void selectCalculationItem() {
-//        clickAndWaitForDisplaying(By.xpath("//button[@onclick='backToSettlement()']"), By.id("finishCaseBtn-btnInnerEl"));
-//    }
-
     public void selectMyPageItem() {
         if ($(By.xpath("//button[@onclick='onEditPreferencesClick()']")).isDisplayed()) return;
         $(By.xpath("//a[@id='myPageButton']")).click();
@@ -79,20 +75,4 @@ public class ClaimMenu extends Module {
         $(By.xpath("//span[contains(@style, 'findInCatalogIcon')]/ancestor::a")).click();
         Wait.waitForAjaxCompleted();
     }
-
-    /**
-     * This method navigates to Vouchers List
-     */
-//    public void openVouchersListPage() {
-//        $(By.id("produkterLabel")).click();
-//        clickAndWaitForDisplaying(By.id("submenugavekort"), By.id("btn_voucher_terms"));
-//    }
-
-    /**
-     * selects Search option in Claims menu item
-     */
-//    public void selectSearchClaimItem() {
-//        clickAndWaitForDisplaying(By.id("sager"), By.id("soegsager"));
-//        clickAndWaitForDisplaying(By.id("soegsager"), By.id("soeg"));
-//    }
 }

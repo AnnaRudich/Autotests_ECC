@@ -53,11 +53,6 @@ public class AddGenericItemDialog extends BaseDialog {
         return this;
     }
 
-//    public SettlementPage close() {
-//        hoverAndClick($(cancel));
-//        return Page.at(SettlementPage.class);
-//    }
-
     public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
         this.category.select(categoryGroup + " - " + category);
         Wait.waitForAjaxCompleted();

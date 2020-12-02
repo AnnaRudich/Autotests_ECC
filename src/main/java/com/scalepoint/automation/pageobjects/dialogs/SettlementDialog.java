@@ -39,7 +39,6 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Condition.*;

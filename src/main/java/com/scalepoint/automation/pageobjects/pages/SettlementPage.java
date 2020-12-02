@@ -244,14 +244,6 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
-
-//    public void cancelClaim() {
-//        settlementSummary.cancel();
-//        if($(".x-window").is(Condition.visible)){
-//            $(".x-window a").click();
-//        }
-//    }
-
     public MyPage saveClaim(Claim claim) {
         settlementSummary.saveClaim();
         SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.OPEN);
@@ -639,14 +631,6 @@ public class SettlementPage extends BaseClaimPage {
         boolean isTooltipPresent(String expectedText) {
             return expectedText.equals(getTooltip());
         }
-
-//        public boolean isClaimLineSentToRepair() {
-//            return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", "")));
-//        }
-
-//        public boolean isClaimLineSendNotToRepairAndIconDisplays() {
-//            return isElementPresent(By.xpath(sendNotToRepairLineIconByDescriptionXpath.replace("$1", "")));
-//        }
 
         public boolean isLineExcludedAndReviewed() {
             return descriptionElement.getAttribute("class").equals("divNotActive")

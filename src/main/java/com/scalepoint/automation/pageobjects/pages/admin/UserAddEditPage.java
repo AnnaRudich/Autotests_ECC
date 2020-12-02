@@ -6,13 +6,10 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.SystemUser;
-import com.sun.xml.bind.StringInputStream;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +17,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.forCondition;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -90,7 +85,6 @@ public class UserAddEditPage extends AdminBasePage {
 
     private String byCompanyXpath = "//select/option[normalize-space(text()) = '%s']";
     private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[normalize-space(text())='%s']";
-//    private String bySubDepartmentXpath = "//div[@id='SubDepartmentDiv']/select/option[contains(.,'$1')]";
     private String byRolesXpath = "//*[@id='rolesDiv']/table/tbody/tr/td[1][contains(.,'%s')]";
 
     @Override
@@ -228,71 +222,6 @@ public class UserAddEditPage extends AdminBasePage {
         return at(page);
     }
 
-    /**
-     * This method verifies Rule restrictions (happy flow)
-     */
-//    public void verifyRuleRestrictions(SystemUser user, String login, String password) {
-//        WebElement option = find(byCompanyXpath, user.getCompany());
-//        waitForAjaxCompleted();
-//
-//        if (option.getText().equals(user.getCompany())) {
-//            option.click();
-//        }
-//        waitForAjaxCompleted();
-//        WebElement option1 = $(By.xpath(String.format(byDepartmentXpath, user.getDepartment())));
-//        if (option1.getText().equals(user.getDepartment())) {
-//            option1.click();
-//        }
-//        checkPasswordRule(user, password);
-//        selectSaveOption();
-//        waitForAjaxCompleted();
-//    }
-
-    /**
-     * This method verifies Rule restrictions (incorrect password and check for alert)
-     */
-//    public void verifyRuleRestrictionsWithAlert(SystemUser user, String login, String password, String message) {
-//        WebElement option = find(byCompanyXpath, user.getCompany());
-//        if (option.getText().equals(user.getCompany())) {
-//            option.click();
-//        }
-//        WebElement option1 = $(By.xpath(String.format(byDepartmentXpath, user.getDepartment())));
-//        if (option1.getText().equals(user.getDepartment())) {
-//            option1.click();
-//        }
-//        checkPasswordRule(user, password);
-//        saveButton.click();
-//        String alertTextAndAccept = getAlertTextAndAccept();
-//        Assert.assertEquals(alertTextAndAccept, message);
-//        waitForAjaxCompleted();
-//
-//    }
-
-    /**
-     * This method verifies Rule restrictions (incorrect password and check for info box)
-     */
-//    public void verifyRuleRestrictionsWithInfo(SystemUser user, String login, String password) {
-//        WebElement option = find(byCompanyXpath, user.getCompany());
-//        waitForAjaxCompleted();
-//        if (option.getText().equals(user.getCompany())) {
-//            option.click();
-//        }
-//        WebElement option1 = find(byDepartmentXpath, user.getDepartment());
-//        if (option1.getText().equals(user.getDepartment())) {
-//            option1.click();
-//        }
-//        checkPasswordRule(user, password);
-//        saveButton.click();
-//        try {
-//            getAlertTextAndAccept();
-//        } catch (Exception ignored) {
-//        }
-//        $(By.xpath("//i[contains(text(),'Your password must follow the rules')]"));
-//        waitForAjaxCompleted();
-//
-//    }
-
-
     public UsersPage update(SystemUser user) {
         WebElement option1 = $(By.xpath(String.format(byDepartmentXpath, user.getDepartment())));
         if (option1.getText().equals(user.getDepartment())) {
@@ -350,27 +279,6 @@ public class UserAddEditPage extends AdminBasePage {
         SUPPLYMANAGER
     }
 
-
-    /**
-     * This method checks if new role proposed for new user or not
-     */
-//    public boolean isNewRoleDisplayed(String roleName) {
-//        WebElement option = find(byRolesXpath, roleName);
-//        return option.getText().contains(roleName);
-//    }
-
-    /**
-     * The method selects ScalePoint Company. The method is jest technical.
-     */
-//    public UserAddEditPage selectSPCompany(SystemUser user) {
-//        WebElement option = find(byCompanyXpath, user.getCompany());
-//        if (option.getText().equals(user.getCompany())) {
-//            scrollTo(option);
-//            option.click();
-//        }
-//        return this;
-//    }
-
     /**
      * This method disable  It manager role and clicks new Role
      */
@@ -381,7 +289,6 @@ public class UserAddEditPage extends AdminBasePage {
         WebElement option = $(By.xpath(String.format(byRolesXpath, roleName)));
         if (option.getText().equals(roleName)) {
             $(option).scrollTo();
-//            scrollTo(option);
             existingRolesBox.get(existingRolesBox.size() - 1).click();
         }
     }

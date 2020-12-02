@@ -9,7 +9,6 @@ import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -18,10 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElement;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -116,8 +112,6 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
             element
                     .scrollTo()
                     .doubleClick();
-//            scrollTo(getOption(supplierName));
-//            doubleClick(getOption(supplierName));
         }
 
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
@@ -130,9 +124,6 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         element
                 .setValue(query)
                 .pressEnter();
-//        suppliersSearchField.clear();
-//        setValue(suppliersSearchField, query);
-//        suppliersSearchField.sendKeys(Keys.ENTER);
         Wait.waitForAjaxCompletedAndJsRecalculation();
     }
 

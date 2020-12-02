@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -52,16 +51,6 @@ public class RolesPage extends AdminBasePage {
         }
         return true;
     }
-
-//    public void selectEditOption() {
-//        clickAndWaitForDisplaying(editButton, By.id("btnOk"));
-//    }
-
-//    public RoleAddEditPage editRole(String roleName) {
-//        roles.selectByVisibleText(roleName);
-//        selectEditOption();
-//        return at(RoleAddEditPage.class);
-//    }
 
     public RolesPage assertRoleDisplayed(String roleName) {
         Assert.assertTrue(isRoleDisplayed(roleName));

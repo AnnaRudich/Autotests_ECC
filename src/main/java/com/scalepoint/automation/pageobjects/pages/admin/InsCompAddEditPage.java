@@ -160,13 +160,6 @@ public class InsCompAddEditPage extends AdminBasePage {
         selectSaveOption(true);
     }
 
-//    public void selectParentCompany(InsuranceCompany insuranceCompany) {
-//        WebElement option = find(byFTXpath, insuranceCompany.getIcName());
-//        if (option.getText().equals(insuranceCompany.getIcName())) {
-//            option.click();
-//        }
-//    }
-
     public InsCompAddEditPage setCommunicationDesignerSection(CommunicationDesigner communicationDesigner){
 
         $("#chkUseOutputManagement").setSelected(communicationDesigner.useOutputManagement);

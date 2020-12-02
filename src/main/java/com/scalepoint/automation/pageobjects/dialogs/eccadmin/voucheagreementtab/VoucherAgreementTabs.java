@@ -10,7 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.zoom;
 import static com.scalepoint.automation.pageobjects.dialogs.BaseDialog.at;
 
 public interface VoucherAgreementTabs extends Actions {
@@ -52,10 +51,8 @@ public interface VoucherAgreementTabs extends Actions {
     }
 
     default SupplierDialog.AgreementsTab saveVoucherAgreement() {
-//        SelenideElement element = $(".supplier-save-voucher-btn")
-//                .waitUntil(Condition.visible, TIMEOUT_MS);
 
-            hoverAndClick($(".supplier-save-voucher-btn").waitUntil(Condition.visible, TIMEOUT_MS));
+        hoverAndClick($(".supplier-save-voucher-btn").waitUntil(Condition.visible, TIMEOUT_MS));
 
         return at(SupplierDialog.AgreementsTab.class);
     }

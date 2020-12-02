@@ -59,35 +59,19 @@ public class ClaimNavigationMenu extends Module {
         return at(CustomerDetailsPage.class);
     }
 
-//    public void ClickImports() {
-//        clickUsingJavaScriptIfClickDoesNotWork(imports);
-//    }
-
     public ProjectsPage toRepairValuationProjectsPage() {
         hoverAndClick($(repairValuation));
         return at(ProjectsPage.class);
     }
-
-//    public void ClickSettlementSummary() {
-//        clickUsingJavaScriptIfClickDoesNotWork(settlementSummary);
-//    }
 
     public OrderDetailsPage toOrderDetailsPage() {
         hoverAndClick($(order));
         return at(OrderDetailsPage.class);
     }
 
-//    public void ClickDetails() {
-//        clickUsingJavaScriptIfClickDoesNotWork(details);
-//    }
-
     public NotesPage toNotesPage() {
         hoverAndClick($(notes));
         return at(NotesPage.class);
     }
-
-//    public void ClickHistory() {
-//        clickUsingJavaScriptIfClickDoesNotWork(history);
-//    }
 
 }

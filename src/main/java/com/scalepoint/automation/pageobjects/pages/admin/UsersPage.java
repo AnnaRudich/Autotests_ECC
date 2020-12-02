@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForStaleElements;
 
 @EccPage
 public class UsersPage extends AdminBasePage {
@@ -66,21 +65,6 @@ public class UsersPage extends AdminBasePage {
         quickSearchField.sendKeys(Keys.ENTER);
         waitForAjaxCompleted();
     }
-
-//    public boolean isUserExists(SystemUser user) {
-//        filterByIC(user.getCompany());
-//        makeUserSearchByName(user.getLogin());
-//        WebElement item = Str(byUserLoginXpath, user.getLogin());
-//        return item.getText().contains(user.getLogin());
-//    }
-
-//    public boolean isUserDisplayed(SystemUser user) {
-//        filterByIC(user.getCompany());
-//        makeUserSearchByName(user.getLogin());
-//        waitForStaleElements((By.xpath("id('user-grid')//table[@class='x-grid3-row-table']//tr")));
-//        WebElement item = find(byUserLoginXpath, user.getLogin());
-//        return item.getText().contains(user.getLogin());
-//    }
 
     public boolean isDisplayed(SystemUser user) {
         refreshUsersList();

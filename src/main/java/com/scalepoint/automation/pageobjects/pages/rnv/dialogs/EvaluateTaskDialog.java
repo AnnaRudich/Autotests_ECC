@@ -5,7 +5,6 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 
 import java.util.function.Consumer;
 
