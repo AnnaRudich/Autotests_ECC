@@ -70,7 +70,7 @@ public class UsersPage extends AdminBasePage {
         refreshUsersList();
         waitForAjaxCompleted();
         makeUserSearchByName(user.getLogin());
-        WebElement item;
+        SelenideElement item;
         try {
             item = $(By.xpath(String.format(byUserLoginXpath, user.getLogin())));
         } catch (TimeoutException e) {

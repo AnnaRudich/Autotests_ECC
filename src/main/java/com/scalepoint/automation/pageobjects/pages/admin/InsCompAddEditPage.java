@@ -9,7 +9,6 @@ import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -73,13 +72,13 @@ public class InsCompAddEditPage extends AdminBasePage {
     @FindBy(xpath = "//input[contains(@id, 'localizedName')]")
     private WebElement localizedNameInput;
 
-    private String byFTXpath = "//select[@name='icftnbr']/option[contains(.,'%s')]";
+    private String byFTPath = "select[name='icftnbr']";
 
-    private String byGUIXpath = "//select[@name='icgtnbr']/option[contains(.,'%s')]";
+    private String byGUIPath = "select[name='icgtnbr']";
 
-    private String byICCultureXpath = "//select[@name='icCulture']/option[contains(.,'$s')]";
+    private String byICCulturePath = "select[name='icCulture']";
 
-    private String byAuditXpath = "//select[@name='auditEnabled']/option[contains(.,'%s')]";
+    private String byAuditPath = "select[name='auditEnabled']";
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -124,20 +123,9 @@ public class InsCompAddEditPage extends AdminBasePage {
             sendTimeToField.sendKeys(insuranceCompany.getSendTimeTo());
         }
 
-        WebElement option = $(By.xpath(String.format(byFTXpath, insuranceCompany.getFunctionTemplate())));
-        if (option.getText().equals(insuranceCompany.getFunctionTemplate())) {
-            option.click();
-        }
-
-        WebElement option1 = $(By.xpath(String.format(byGUIXpath, insuranceCompany.getGuiTemplate())));
-        if (option1.getText().equals(insuranceCompany.getGuiTemplate())) {
-            option1.click();
-
-        }
-        WebElement option2 = $(By.xpath(String.format(byICCultureXpath, insuranceCompany.getIcCulture())));
-        if (option2.getText().equals(insuranceCompany.getIcCulture())) {
-            option2.click();
-        }
+        $(byFTPath).selectOption(insuranceCompany.getFunctionTemplate());
+        $(byGUIPath).selectOption(insuranceCompany.getGuiTemplate());
+        $(byICCulturePath).selectOption(insuranceCompany.getIcCulture());
 
         companyContactNumberField.sendKeys(insuranceCompany.getContactNumber());
         companyOfficeHoursField.sendKeys(insuranceCompany.getOfficeHours());
@@ -153,10 +141,7 @@ public class InsCompAddEditPage extends AdminBasePage {
     }
 
     public void enableAuditOptionAndSave() {
-        WebElement option = $(By.xpath(String.format(byAuditXpath, "Enabled")));
-        if (option.getText().equals("Enabled")) {
-            option.click();
-        }
+        $(byAuditPath).selectOption("Enabled");
         selectSaveOption(true);
     }
 

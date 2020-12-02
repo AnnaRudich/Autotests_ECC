@@ -38,7 +38,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     @FindBy(css = "div#suppliersGridId-body table tr:first-of-type td:nth-of-type(2) div")
     private WebElement firstSupplierItem;
 
-    @FindBy(xpath = "//input[contains(@name,'searchfield')]")
+    @FindBy(css = "input[id^=searchfield]")
     private WebElement suppliersSearchField;
 
     @FindBy(xpath = "//div[@id='suppliersGridId']//div[contains(@id,'targetEl')and contains(@id, 'headercontainer')]")
@@ -118,13 +118,11 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public void makeSupplierSearch(String query) {
-
         SelenideElement element = $(suppliersSearchField);
         element.clear();
-        element
-                .setValue(query)
-                .pressEnter();
-        Wait.waitForAjaxCompletedAndJsRecalculation();
+        element.setValue(query);
+        element.pressEnter();
+        Wait.waitForAjaxCompleted();
     }
 
     public boolean isSupplierCreated(String supplierName) {

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -83,8 +84,8 @@ public class UserAddEditPage extends AdminBasePage {
     @FindBy(id = "btnGenerate")
     private WebElement generatePasswordButton;
 
-    private String byCompanyXpath = "//select/option[normalize-space(text()) = '%s']";
-    private String byDepartmentXpath = "//*[@id='DepartmentDiv']/select/option[normalize-space(text())='%s']";
+    private String byCompanyPath = "select[name=userCompanyId]";
+    private String byDepartmentPath = "select[name=userDepartmentToken]";
     private String byRolesXpath = "//*[@id='rolesDiv']/table/tbody/tr/td[1][contains(.,'%s')]";
 
     @Override
@@ -103,27 +104,13 @@ public class UserAddEditPage extends AdminBasePage {
      * This method fills all required text fields for new user
      */
     public void fillUserGeneralData(SystemUser user) {
+
         $(loginField).setValue(user.getLogin());
         $(passwordField).setValue(user.getPassword());
         $(passwordRetField).setValue(user.getPassword());
         $(firstNameField).setValue(user.getFirstName());
         $(lastNameField).setValue(user.getLastName());
         $(emailField).setValue(user.getEmail());
-    }
-
-    public void checkPasswordRule(SystemUser user, String password) {
-        loginField.clear();
-        loginField.sendKeys(user.getLogin());
-        passwordField.clear();
-        passwordField.sendKeys(password);
-        passwordRetField.clear();
-        passwordRetField.sendKeys(password);
-        firstNameField.clear();
-        firstNameField.sendKeys(user.getFirstName());
-        lastNameField.clear();
-        lastNameField.sendKeys(user.getLastName());
-        emailField.clear();
-        emailField.sendKeys(user.getEmail());
     }
 
     /**
@@ -194,12 +181,6 @@ public class UserAddEditPage extends AdminBasePage {
         return this;
     }
 
-    public void selectCancelOption() {
-        $(saveButton).click();
-        acceptAlert();
-        $(By.xpath("//button[contains(@class,'icon-create')]")).shouldBe(Condition.visible);
-    }
-
     public UsersPage selectSaveOption() {
         try {
             $(saveButton).click();
@@ -223,10 +204,7 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public UsersPage update(SystemUser user) {
-        WebElement option1 = $(By.xpath(String.format(byDepartmentXpath, user.getDepartment())));
-        if (option1.getText().equals(user.getDepartment())) {
-            option1.click();
-        }
+        $(byDepartmentPath).selectOption(user.getDepartment());
         fillUserGeneralData(user);
         enableSMType();
         selectITManagerRole();
@@ -246,8 +224,8 @@ public class UserAddEditPage extends AdminBasePage {
 
     public UserAddEditPage createUserWithoutSaving(SystemUser user, UserType[] userTypesArr) {
         ArrayList<UserType> userTypes = Lists.newArrayList(userTypesArr);
-        hoverAndClick($(By.xpath(String.format(byCompanyXpath, user.getCompany()))));
-        hoverAndClick($(By.xpath(String.format(byDepartmentXpath, user.getDepartment()))));
+        $(byCompanyPath).selectOption(user.getCompany());
+        $(byDepartmentPath).selectOption(user.getDepartment());
         fillUserGeneralData(user);
         if (userTypes.contains(UserType.ADMIN)) {
             enableAdminType();
@@ -286,9 +264,11 @@ public class UserAddEditPage extends AdminBasePage {
         if (itManCheckBox.isSelected()) {
             itManCheckBox.click();
         }
-        WebElement option = $(By.xpath(String.format(byRolesXpath, roleName)));
+
+        SelenideElement option = $(By.xpath(String.format(byRolesXpath, roleName)));
+
         if (option.getText().equals(roleName)) {
-            $(option).scrollTo();
+            option.scrollTo();
             existingRolesBox.get(existingRolesBox.size() - 1).click();
         }
     }
@@ -306,15 +286,9 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public UsersPage createNewSPAdminNewRole(SystemUser user, String roleName) {
-        WebElement option = $(By.xpath(String.format(byCompanyXpath, user.getCompany())));
-        if (option.getText().trim().equals(user.getCompany())) {
-            option.click();
-        }
 
-        WebElement option1 = $(By.xpath(String.format(byDepartmentXpath, user.getDepartment())));
-        if (option1.getText().trim().equals(user.getDepartment())) {
-            option1.click();
-        }
+        $(byCompanyPath).selectOption(user.getCompany());
+        $(byDepartmentPath).selectOption(user.getDepartment());
 
         fillUserGeneralData(user);
         selectNewRoleSPUser(roleName);

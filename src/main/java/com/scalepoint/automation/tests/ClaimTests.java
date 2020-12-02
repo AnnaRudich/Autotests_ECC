@@ -13,12 +13,14 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -355,41 +357,6 @@ public class ClaimTests extends BaseTest {
                 .openReplacementWizard(true)
                 .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
                 .to(MyPage.class)
-                .doAssert(MyPage.Asserts::assertClaimCompleted);
-    }
-
-    /**
-     * GIVEN: SP User, active claim C1
-     * WHEN: User completes claim with shop
-     * THEN: C1 status is "Completed"
-     */
-
-    @Test(dataProvider = "testDataProvider",
-            description = "CHARLIE-544 It's possible to complete simple claim with with shop for SP user. " +
-                    "Claim status is Completed in the claims list")
-    public void charlie544_completeSimpleClaimWithShopExistingData(User user, Claim claim, ClaimItem claimItem) {
-        XpriceInfo productInfo = getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE);
-        claimItem.setNewPriceSP(productInfo.getInvoicePrice() + 1000);
-
-        loginAndCreateClaim(user, claim)
-                .openSid()
-                .setBaseData(claimItem)
-                .setValuation(NEW_PRICE)
-                .closeSidWithOk()
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .openReplacementWizard(true);
-
-        new CreateOrderService().createOrderForProduct(productInfo, claim.getClaimNumber());
-
-        new MailsPage()
-                .toMailsPage()
-                .doAssert(mail -> {
-                    mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC);
-                    mail.isMailExist(REPLACEMENT_WITH_MAIL);
-                });
-
-        Page.to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
 
