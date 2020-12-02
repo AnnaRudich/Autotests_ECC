@@ -27,7 +27,7 @@ public class AddShopDialogViewMode extends BaseDialog {
     }
 
     public SupplierDialog.ShopsTab cancelViewShopDialog() {
-        find(By.xpath(SUPPLIER_CANCEL_VIEW_SHOP_BTN)).click();
+        hoverAndClick($(By.xpath(SUPPLIER_CANCEL_VIEW_SHOP_BTN)));
         return at(SupplierDialog.ShopsTab.class);
     }
 

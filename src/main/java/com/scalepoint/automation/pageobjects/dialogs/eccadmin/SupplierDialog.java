@@ -178,7 +178,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
     public static class BannerTab extends BaseDialog implements SupplierTabs {
 
         public BannerTab uploadBanner(String bannerPath) {
-            WebElement elem = find(By.xpath("//input[contains(@id, 'supplierBannerFileId') and contains(@type, 'file')]"));
+            WebElement elem = $(By.xpath("//input[contains(@id, 'supplierBannerFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(bannerPath));
             return this;
         }
@@ -274,7 +274,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public GeneralTab uploadLogo(String logoPath) {
-            WebElement elem = find(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
+            WebElement elem = $(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(By.cssSelector(("img.imageUploadImg")));
             return this;
@@ -572,7 +572,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         ShopsTab selectShop(Shop shop) {
             SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
             element.scrollTo();
-            clickAndWaitForEnabling(element, By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]"));
+            hoverAndClick(element);
+            $(By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
             return this;
         }
 

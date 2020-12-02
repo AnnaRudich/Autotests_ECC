@@ -248,43 +248,43 @@ public class AddEditReductionRulePage extends AdminBasePage {
     }
 
     public String getDescriptionColumnHeader() {
-        return getText(descriptionColumnName);
+        return $(descriptionColumnName).getText();
     }
 
     public String getAgeFromColumnHeader() {
-        return getText(ageFromColumnName);
+        return $(ageFromColumnName).getText();
     }
 
     public String getAgeToColumnHeader() {
-        return getText(ageToColumnName);
+        return $(ageToColumnName).getText();
     }
 
     public String getNewItemColumnHeader() {
-        return getText(newItemColumnName);
+        return $(newItemColumnName).getText();
     }
 
     public String getPriceFromColumnHeader() {
-        return getText(priceFromColumnName);
+        return $(priceFromColumnName).getText();
     }
 
     public String getPriceToColumnHeader() {
-        return getText(priceToColumnName);
+        return $(priceToColumnName).getText();
     }
 
     public String getDocumetationColumnHeader() {
-        return getText(documentationColumnName);
+        return $(documentationColumnName).getText();
     }
 
     public String getClaimantRatingColumnHeader() {
-        return getText(claimantRatingColumnName);
+        return $(claimantRatingColumnName).getText();
     }
 
     public String getClaimReductionColumnHeader() {
-        return getText(claimReductionColumnName);
+        return $(claimReductionColumnName).getText();
     }
 
     public String getCashReductionColumnHeader() {
-        return getText(cashReductionColumnName);
+        return $(cashReductionColumnName).getText();
     }
 
 
@@ -352,27 +352,27 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage fillPriceRangeForLine(int lineNumber, String priceFromValue, String priceToValue) {
-        sendKeys(By.xpath("//input[@id='priceFrom|" + lineNumber + "']"), priceFromValue);
-        sendKeys(By.xpath("//input[@id='priceTo|" + lineNumber + "']"), priceToValue);
+        $(By.xpath("//input[@id='priceFrom|" + lineNumber + "']")).sendKeys(priceFromValue);
+        $(By.xpath("//input[@id='priceTo|" + lineNumber + "']")).sendKeys(priceToValue);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage fillAgeRangeForLine(int lineNumber, String ageFromValue, String ageToValue) {
-        sendKeys(By.xpath("//input[@id='from|" + lineNumber + "']"), ageFromValue);
-        sendKeys(By.xpath("//input[@id='to|" + lineNumber + "']"), ageToValue);
+        $(By.xpath("//input[@id='from|" + lineNumber + "']")).sendKeys(ageFromValue);
+        $(By.xpath("//input[@id='to|" + lineNumber + "']")).sendKeys(ageToValue);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage fillDescriptionForLine(int lineNumber, String descriptionValue) {
-        sendKeys(By.xpath("//input[@id='desc|" + lineNumber + "']"), descriptionValue);
+        $(By.xpath("//input[@id='desc|" + lineNumber + "']")).sendKeys(descriptionValue);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage fillClaimReductionForLine(int lineNumber, String reductionValue) {
-        sendKeys(By.xpath("//input[@id='claimreduction|" + lineNumber + "']"), reductionValue);
+        $(By.xpath("//input[@id='claimreduction|" + lineNumber + "']")).sendKeys(reductionValue);
         return this;
     }
 
@@ -380,7 +380,7 @@ public class AddEditReductionRulePage extends AdminBasePage {
         int i = 1;
         String[] documentationComboboxValues = new String[3];
         while (i < 4) {
-            documentationComboboxValues[i - 1] = getText(By.xpath("//select[@id='documentation|0']/option" + "[" + i + "]"));
+            documentationComboboxValues[i - 1] = $(By.xpath("//select[@id='documentation|0']/option" + "[" + i + "]")).getText();
             i++;
         }
         return documentationComboboxValues;
@@ -390,7 +390,7 @@ public class AddEditReductionRulePage extends AdminBasePage {
         int i = 1;
         String[] ratingComboboxValues = new String[4];
         while (i < 5) {
-            ratingComboboxValues[i - 1] = getText(By.xpath("//select[@id='claimantRating|0']/option" + "[" + i + "]"));
+            ratingComboboxValues[i - 1] = $(By.xpath("//select[@id='claimantRating|0']/option" + "[" + i + "]")).getText();
             i++;
         }
         return ratingComboboxValues;

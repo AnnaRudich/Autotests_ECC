@@ -92,7 +92,7 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
      * @param query Query value
      */
     public void makeVouchersSearch(String query) {
-        find(By.xpath("//input[contains(@name,'searchfield')]")).click();
+        hoverAndClick($(By.xpath("//input[contains(@name,'searchfield')]")));
         vouchersSearchField.clear();
         logger.info("Search for voucher " + query);
         vouchersSearchField.sendKeys(query);
@@ -101,12 +101,12 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
     }
 
-    public boolean isVouchersListContainsNewVoucher(String voucherName) {
-        find(By.xpath("//input[contains(@id,'searchfield')]")).click();
-        makeVouchersSearch(voucherName);
-        String xpath = byVoucherNameXpath.replace("$1", voucherName);
-        return find(By.xpath(xpath)).isDisplayed();
-    }
+//    public boolean isVouchersListContainsNewVoucher(String voucherName) {
+//        find(By.xpath("//input[contains(@id,'searchfield')]")).click();
+//        makeVouchersSearch(voucherName);
+//        String xpath = byVoucherNameXpath.replace("$1", voucherName);
+//        return find(By.xpath(xpath)).isDisplayed();
+//    }
 
     /**
      * This method implemented for technical use - if you don't want to create new voucher to verify categories mapping etc.
@@ -149,18 +149,18 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
     /**
      * This method checks if Active or Exclusive fields ticked depending on vouchers data
      */
-    public boolean isActiveOrExclFieldTickedVouchersList(Voucher voucher) {
-        find(By.xpath("//input[contains(@id,'searchfield')]")).click();
-        makeVouchersSearch(voucher.getVoucherNameSP());
-        Wait.waitForStaleElements((By.xpath("id('vouchersGridId')")));
-        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherNameSP());
-        try {
-            WebElement item = find(By.xpath(xpath));
-            return item.getText().contains(voucher.getVoucherNameSP()) && isActiveOrExclFieldTicked();
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    public boolean isActiveOrExclFieldTickedVouchersList(Voucher voucher) {
+//        find(By.xpath("//input[contains(@id,'searchfield')]")).click();
+//        makeVouchersSearch(voucher.getVoucherNameSP());
+//        Wait.waitForStaleElements((By.xpath("id('vouchersGridId')")));
+//        String xpath = byVoucherNameXpath.replace("$1", voucher.getVoucherNameSP());
+//        try {
+//            WebElement item = $($(By.xpath(xpath)));
+//            return item.getText().contains(voucher.getVoucherNameSP()) && isActiveOrExclFieldTicked();
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 
 //    public void openVoucherForEdit(String voucherName) {
 //        makeVouchersSearch(voucherName);
@@ -176,7 +176,7 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         makeVouchersSearch(voucherName);
         String xpath = byVoucherNameXpath.replace("$1", voucherName);
         try {
-            WebElement option = find(By.xpath(xpath));
+            WebElement option = $(By.xpath(xpath));
             return Wait.forCondition(ExpectedConditions.textToBePresentInElement(option, voucherName));
         } catch (Exception e) {
             return false;

@@ -47,33 +47,33 @@ public class CommunicationTab extends BaseClaimPage {
         return "webshop/jsp/matching_engine/projects.jsp";
     }
 
-    public Boolean isMessageSent() {
-        return isDisplayed(By.cssSelector("div[class='bubble sent']"));
-    }
+//    public Boolean isMessageSent() {
+//        return isDisplayed(By.cssSelector("div[class='bubble sent']"));
+//    }
 
     public CommunicationTab assertLatestMessageContains(String textMessage) {
         $(latestMessageText).shouldHave(exactTextCaseSensitive(textMessage));
         return this;
     }
 
-    private void downloadTemplate(User user, String fileLocation) {
-        firstAttachIcon.click();
-        String href = find(By.cssSelector("div[id*='attachmentsDownloadList'] a")).getAttribute("href");
-        EccFileApi eccFileApi = new EccFileApi(user);
-        eccFileApi.downloadFile(href, fileLocation);
-        find(By.cssSelector("span#button-close-chat-attachment-btnInnerEl")).click();
-    }
+//    private void downloadTemplate(User user, String fileLocation) {
+//        firstAttachIcon.click();
+//        String href = $(By.cssSelector("div[id*='attachmentsDownloadList'] a")).getAttribute("href");
+//        EccFileApi eccFileApi = new EccFileApi(user);
+//        eccFileApi.downloadFile(href, fileLocation);
+//        hoverAndClick($(By.cssSelector("span#button-close-chat-attachment-btnInnerEl")));
+//    }
 
-    public CommunicationTab doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType) {
-        try {
-            downloadTemplate(user, serviceAgreement.getSaveTemplateTo());
-            ExcelDocUtil doc = new ExcelDocUtil();
-            doc.doFeedback(actionType, serviceAgreement);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-        return this;
-    }
+//    public CommunicationTab doFeedback(User user, ServiceAgreement serviceAgreement, ExcelDocUtil.FeedbackActionType actionType) {
+//        try {
+//            downloadTemplate(user, serviceAgreement.getSaveTemplateTo());
+//            ExcelDocUtil doc = new ExcelDocUtil();
+//            doc.doFeedback(actionType, serviceAgreement);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e.getMessage(), e);
+//        }
+//        return this;
+//    }
 
 
     public CommunicationTab sendTextMailToSePa(String textMsg) {

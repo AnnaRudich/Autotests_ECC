@@ -1,13 +1,12 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.annotations.page.RequiredParameters;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Select;
 import ru.yandex.qatools.htmlelements.element.TextInput;
@@ -72,14 +71,18 @@ public class GenericItemsEditAdminPage extends AdminBasePage {
     }
 
     public GenericItemsEditAdminPage setDescription(String description) {
-        clear(descriptionField);
-        sendKeys(descriptionField, description);
+        SelenideElement element = $(descriptionField);
+        element.clear();
+        element.sendKeys(description);
+//        sendKeys(descriptionField, description);
         return this;
     }
 
     public GenericItemsEditAdminPage addPrice(String price) {
-        clear(priceField);
-        sendKeys(priceField, price);
+        SelenideElement element = $(priceField);
+        element.clear();
+        element.sendKeys(price);
+//        sendKeys(priceField, price);
         return this;
     }
 

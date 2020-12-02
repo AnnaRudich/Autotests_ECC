@@ -89,7 +89,7 @@ public class OrderDetailsPage extends BaseClaimPage {
     }
 
     public String getIdemnityText() {
-        return getText(idemnityText);
+        return $(idemnityText).getText();
     }
 
     public Double getIdemnityValue() {
@@ -97,7 +97,7 @@ public class OrderDetailsPage extends BaseClaimPage {
     }
 
     public String getOrderedItemsText() {
-        return getText(orderedItemsText);
+        return $(orderedItemsText).getText();
     }
 
     public Double getOrderedItemsValue() {
@@ -105,7 +105,7 @@ public class OrderDetailsPage extends BaseClaimPage {
     }
 
     public String getWithdrawText() {
-        return getText(withdrawallsText);
+        return $(withdrawallsText).getText();
     }
 
     public Double getWithdrawValue() {
@@ -113,7 +113,7 @@ public class OrderDetailsPage extends BaseClaimPage {
     }
 
     public String getDepositText() {
-        return getText(depositsText);
+        return $(depositsText).getText();
     }
 
     public Double getDepositValue() {
@@ -121,7 +121,7 @@ public class OrderDetailsPage extends BaseClaimPage {
     }
 
     public String getRemainingIdemnityText() {
-        return getText(remainingIdemnityText);
+        return $(remainingIdemnityText).getText();
     }
 
     public Double getRemainingValue() {

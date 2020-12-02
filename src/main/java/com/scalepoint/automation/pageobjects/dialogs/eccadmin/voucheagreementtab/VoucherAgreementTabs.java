@@ -52,10 +52,10 @@ public interface VoucherAgreementTabs extends Actions {
     }
 
     default SupplierDialog.AgreementsTab saveVoucherAgreement() {
-        SelenideElement element = $(".supplier-save-voucher-btn")
-                .waitUntil(Condition.visible, TIMEOUT_MS);
+//        SelenideElement element = $(".supplier-save-voucher-btn")
+//                .waitUntil(Condition.visible, TIMEOUT_MS);
 
-            hoverAndClick(element);
+            hoverAndClick($(".supplier-save-voucher-btn").waitUntil(Condition.visible, TIMEOUT_MS));
 
         return at(SupplierDialog.AgreementsTab.class);
     }

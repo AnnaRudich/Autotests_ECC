@@ -60,7 +60,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     @FindBy(xpath = ".//a[contains(@href, 'logout')]")
     private Link signOutLink;
 
-    private String bySupplierNameXpath = "//tbody[contains(@id,'gridview')]//tr[contains(.,'$1')]";
+    private String bySupplierNameXpath = "//tbody[contains(@id,'gridview')]//tr[contains(.,'%s')]";
     private String byVoucherXpath = "//td[contains(@class, 'x-grid-cell-supplierListVouchersId ')]";
     private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-supplierListExclusiveId ')]";
 
@@ -103,7 +103,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     private WebElement getOption(String supplierName) {
-        return find(bySupplierNameXpath, supplierName);
+        return $(By.xpath(String.format(bySupplierNameXpath, supplierName)));
     }
 
     public SupplierDialog.GeneralTab editSupplier(String supplierName) {
@@ -137,12 +137,12 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public boolean isSupplierCreated(String supplierName) {
-        hoverAndClick($(find(By.xpath("//input[contains(@name,'searchfield')]"))));
+        hoverAndClick($(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-        String xpath = bySupplierNameXpath.replace("$1", supplierName);
+        String xpath = String.format(bySupplierNameXpath, supplierName);
         try {
-            WebElement option = find(By.xpath(xpath));
+            WebElement option = $(By.xpath(xpath));
             return option.getText().contains(supplierName);
         } catch (Exception e) {
             return false;

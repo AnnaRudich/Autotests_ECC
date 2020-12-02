@@ -110,33 +110,33 @@ public interface Actions {
 //    }
 
 
-    default void clear(By byElement) {
-        find(byElement).clear();
-    }
+//    default void clear(By byElement) {
+//        $(byElement).clear();
+//    }
 
-    default void clear(WebElement element) {
-        element.clear();
-    }
+//    default void clear(WebElement element) {
+//        element.clear();
+//    }
 
-    default void sendKeys(WebElement element, String keys) {
-        element.sendKeys(keys);
-    }
+//    default void sendKeys(WebElement element, String keys) {
+//        element.sendKeys(keys);
+//    }
 
-    default void sendKeys(By byElement, String keys) {
-        find(byElement).sendKeys(keys);
-    }
+//    default void sendKeys(By byElement, String keys) {
+//        find(byElement).sendKeys(keys);
+//    }
 
-    default String getText(By byElement) {
-        return find(byElement).getText();
-    }
+//    default String getText(By byElement) {
+//        return find(byElement).getText();
+//    }
 
-    default String getText(WebElement element) {
-        return element.getText();
-    }
+//    default String getText(WebElement element) {
+//        return element.getText();
+//    }
 
-    default void waitForJavascriptRecalculation() {
-        Wait.waitForJavascriptRecalculation();
-    }
+//    default void waitForJavascriptRecalculation() {
+//        Wait.waitForJavascriptRecalculation();
+//    }
 
 //    default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
 //        clickUsingJavaScriptIfClickDoesNotWork(element);
@@ -147,16 +147,16 @@ public interface Actions {
 //        clickAndWaitForDisplaying(find(byElement), byWaitForElement);
 //    }
 
-    default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
-        element.click();
-        Wait.waitForVisibleAndEnabled(byEnabledElement);
-    }
+//    default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
+//        element.click();
+//        Wait.waitForVisibleAndEnabled(byEnabledElement);
+//    }
 
 
-    default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
-        element.click();
-        Wait.waitForStaleElement(byWaitForElement);
-    }
+//    default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
+//        element.click();
+//        Wait.waitForStaleElement(byWaitForElement);
+//    }
 
 //    default void clickAndWaitForStable(By element, By byWaitForElement) {
 //        clickAndWaitForStable(Browser.driver().findElement(element), byWaitForElement);
@@ -164,64 +164,60 @@ public interface Actions {
 
     default boolean isSelected(WebElement element) {
         try {
-            return element.isSelected();
-        } catch (Exception e) {
+            return $(element).is(selected);
+        } catch (Error e) {
             return false;
         }
     }
 
-    default boolean isElementPresent(By by) {
-        try {
-            Browser.driver().findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
+//    default boolean isElementPresent(By by) {
+//        try {
+//            Browser.driver().findElement(by);
+//            return true;
+//        } catch (NoSuchElementException e) {
+//            return false;
+//        }
+//    }
 
-    default boolean isDisplayed(By locator) {
-        try {
-            return Browser.driver().findElement(locator).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    default boolean isDisplayed(By locator) {
+//        try {
+//            return Browser.driver().findElement(locator).isDisplayed();
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 
     default boolean isDisplayed(WebElement element) {
         try {
-            new FluentWait<>(element).
-                    withTimeout(5, TimeUnit.SECONDS).
-                    pollingEvery(1000, TimeUnit.MILLISECONDS).
-                    until(e -> element.isDisplayed());
-            return element.isDisplayed();
-        } catch (Exception e) {
+            return $(element).waitUntil(visible, TIME_OUT_IN_MILISECONDS).isDisplayed();
+        } catch (Error e) {
             return false;
         }
     }
 
-    default WebElement find(By by) {
-        return Browser.driver().findElement(by);
-    }
+//    default WebElement find(By by) {
+//        return Browser.driver().findElement(by);
+//    }
 
-    default String getInputValue(WebElement webElement) {
-        return webElement.getAttribute("value");
-    }
+//    default String getInputValue(WebElement webElement) {
+//        return webElement.getAttribute("value");
+//    }
 
-    default WebElement find(String xpath, String... params) {
-        for (int i = 1; i <= params.length; i++) {
-            xpath = xpath.replace("$" + i, params[i - 1]);
-        }
-        return Wait.waitForDisplayed(By.xpath(xpath));
-    }
+//    default WebElement find(String xpath, String... params) {
+//        for (int i = 1; i <= params.length; i++) {
+//            xpath = xpath.replace("$" + i, params[i - 1]);
+//        }
+//        return Wait.waitForDisplayed(By.xpath(xpath));
+//    }
 
     /**
      * this method decrements element index to translate java enumeration to human readable one
      */
-    default WebElement find(String xpath, int param) {
-        String decrementedParam = Integer.toString(--param);
-        xpath = xpath.replace("$", decrementedParam);
-        return Wait.waitForDisplayed(By.xpath(xpath));
-    }
+//    default WebElement find(String xpath, int param) {
+//        String decrementedParam = Integer.toString(--param);
+//        xpath = xpath.replace("$", decrementedParam);
+//        return Wait.waitForDisplayed(By.xpath(xpath));
+//    }
 
 //    default void setValue(WebElement element, String value) {
 //        waitForVisible(element);
@@ -236,18 +232,18 @@ public interface Actions {
 //        }
 //    }
 
-    default String getElementIdentifier(WebElement element) {
-        String value = null;
-        try {
-            value = element.getAttribute("name");
-            if (StringUtils.isBlank(value)) {
-                value = element.getAttribute("id");
-            }
-        } catch (Exception ignored) {
-        }
-
-        return StringUtils.isBlank(value) ? "unknown" : value;
-    }
+//    default String getElementIdentifier(WebElement element) {
+//        String value = null;
+//        try {
+//            value = element.getAttribute("name");
+//            if (StringUtils.isBlank(value)) {
+//                value = element.getAttribute("id");
+//            }
+//        } catch (Exception ignored) {
+//        }
+//
+//        return StringUtils.isBlank(value) ? "unknown" : value;
+//    }
 
     default void clickUsingJS(WebElement element) {
         logger.warn("clicking on element with java script click");

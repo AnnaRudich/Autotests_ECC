@@ -66,15 +66,15 @@ public class MailsPage extends BaseClaimPage {
         $(latestMailSubject).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
-    public boolean isRequiredMailSent(String subj) {
-        String mailSubjectXpath = "//div[contains(.,'$1')]".replace("$1", subj);
-        boolean result = isElementPresent(By.xpath(mailSubjectXpath));
-        if (!result) {
-            logger.info("Mail with subject {}  was not found", subj.toUpperCase());
-            return false;
-        }
-        return true;
-    }
+//    public boolean isRequiredMailSent(String subj) {
+//        String mailSubjectXpath = "//div[contains(.,'$1')]".replace("$1", subj);
+//        boolean result = isElementPresent(By.xpath(mailSubjectXpath));
+//        if (!result) {
+//            logger.info("Mail with subject {}  was not found", subj.toUpperCase());
+//            return false;
+//        }
+//        return true;
+//    }
 
     public Mails parseMails() {
         List<WebElement> elements = driver.findElements(By.cssSelector(".x-grid-item tbody"));

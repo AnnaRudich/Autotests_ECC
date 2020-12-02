@@ -60,7 +60,7 @@ public class AddShopDialog extends BaseDialog {
     public SupplierDialog.ShopsTab createShop(Shop shop, ShopType shopType, boolean gdpr) {
         fillShopForm(shop);
         chooseShopType(shopType);
-        find(By.xpath(SUPPLIER_CREATE_SHOP_BTN)).click();
+        hoverAndClick($(By.xpath(SUPPLIER_CREATE_SHOP_BTN)));
         if(gdpr){
             at(GdprConfirmationDialog.class)
                     .confirm();
@@ -69,12 +69,12 @@ public class AddShopDialog extends BaseDialog {
     }
 
     private boolean isShopDataEqualsWith(Shop shop) {
-        return (getInputValue(nameField).contains(shop.getShopName()) &&
-                getInputValue(address1Field).contains(shop.getShopAddress1()) &&
-                getInputValue(address2Field).contains(shop.getShopAddress2()) &&
-                getInputValue(postalCodeField).contains(shop.getPostalCode()) &&
-                getInputValue(cityField).contains(shop.getShopCity()) &&
-                getInputValue(phoneField).contains(shop.getPhone()));
+        return ($(nameField).getValue().contains(shop.getShopName()) &&
+                $(address1Field).getValue().contains(shop.getShopAddress1()) &&
+                $(address2Field).getValue().contains(shop.getShopAddress2()) &&
+                $(postalCodeField).getValue().contains(shop.getPostalCode()) &&
+                $(cityField).getValue().contains(shop.getShopCity()) &&
+                $(phoneField).getValue().contains(shop.getPhone()));
     }
 
 
@@ -86,12 +86,12 @@ public class AddShopDialog extends BaseDialog {
     public SupplierDialog.ShopsTab updateShop(Shop shop) {
         clearShopForm();
         fillShopForm(shop);
-        find(By.xpath(SUPPLIER_SAVE_SHOP_BTN)).click();
+        hoverAndClick($(By.xpath(SUPPLIER_SAVE_SHOP_BTN)));
         return at(SupplierDialog.ShopsTab.class);
     }
 
     public SupplierDialog.ShopsTab cancel() {
-        find(By.xpath(SUPPLIER_CANCEL_EDIT_SHOP_BTN)).click();
+        hoverAndClick($(By.xpath(SUPPLIER_CANCEL_EDIT_SHOP_BTN)));
         return at(SupplierDialog.ShopsTab.class);
     }
 

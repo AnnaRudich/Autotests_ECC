@@ -67,7 +67,7 @@ public class ReductionRulesPage extends AdminBasePage {
     }
 
     private WebElement findRule(ReductionRule rr) {
-        return find(By.xpath(".//*[@id='ruleItemsList']/option[text() = '" + rr.getRrName() + "']"));
+        return $(By.xpath(".//*[@id='ruleItemsList']/option[text() = '" + rr.getRrName() + "']"));
     }
 
     public void selectRefreshOption() {

@@ -83,14 +83,14 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
 
         public FormFiller withLogo(String logoPath) {
             dialog.useCustomLogoRadio.click();
-            WebElement elem = dialog.find(By.xpath("//input[contains(@id, 'voucherLogoFileId') and contains(@type, 'file')]"));
+            WebElement elem = $(By.xpath("//input[contains(@id, 'voucherLogoFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(dialog.logoImageXpath);
             return this;
         }
 
         public FormFiller withImage(String logoPath) {
-            WebElement elem = dialog.find(By.xpath("//input[contains(@id, 'voucherImageFileId') and contains(@type, 'file')]"));
+            WebElement elem = $(By.xpath("//input[contains(@id, 'voucherImageFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(dialog.imageXpath);
             return this;

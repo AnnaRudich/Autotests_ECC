@@ -16,6 +16,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage

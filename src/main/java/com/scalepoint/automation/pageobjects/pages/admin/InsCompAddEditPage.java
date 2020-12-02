@@ -9,6 +9,7 @@ import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -72,13 +73,13 @@ public class InsCompAddEditPage extends AdminBasePage {
     @FindBy(xpath = "//input[contains(@id, 'localizedName')]")
     private WebElement localizedNameInput;
 
-    private String byFTXpath = "//select[@name='icftnbr']/option[contains(.,'$1')]";
+    private String byFTXpath = "//select[@name='icftnbr']/option[contains(.,'%s')]";
 
-    private String byGUIXpath = "//select[@name='icgtnbr']/option[contains(.,'$1')]";
+    private String byGUIXpath = "//select[@name='icgtnbr']/option[contains(.,'%s')]";
 
-    private String byICCultureXpath = "//select[@name='icCulture']/option[contains(.,'$1')]";
+    private String byICCultureXpath = "//select[@name='icCulture']/option[contains(.,'$s')]";
 
-    private String byAuditXpath = "//select[@name='auditEnabled']/option[contains(.,'$1')]";
+    private String byAuditXpath = "//select[@name='auditEnabled']/option[contains(.,'%s')]";
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -123,17 +124,17 @@ public class InsCompAddEditPage extends AdminBasePage {
             sendTimeToField.sendKeys(insuranceCompany.getSendTimeTo());
         }
 
-        WebElement option = find(byFTXpath, insuranceCompany.getFunctionTemplate());
+        WebElement option = $(By.xpath(String.format(byFTXpath, insuranceCompany.getFunctionTemplate())));
         if (option.getText().equals(insuranceCompany.getFunctionTemplate())) {
             option.click();
         }
 
-        WebElement option1 = find(byGUIXpath, insuranceCompany.getGuiTemplate());
+        WebElement option1 = $(By.xpath(String.format(byGUIXpath, insuranceCompany.getGuiTemplate())));
         if (option1.getText().equals(insuranceCompany.getGuiTemplate())) {
             option1.click();
 
         }
-        WebElement option2 = find(byICCultureXpath, insuranceCompany.getIcCulture());
+        WebElement option2 = $(By.xpath(String.format(byICCultureXpath, insuranceCompany.getIcCulture())));
         if (option2.getText().equals(insuranceCompany.getIcCulture())) {
             option2.click();
         }
@@ -152,19 +153,19 @@ public class InsCompAddEditPage extends AdminBasePage {
     }
 
     public void enableAuditOptionAndSave() {
-        WebElement option = find(byAuditXpath, "Enabled");
+        WebElement option = $(By.xpath(String.format(byAuditXpath, "Enabled")));
         if (option.getText().equals("Enabled")) {
             option.click();
         }
         selectSaveOption(true);
     }
 
-    public void selectParentCompany(InsuranceCompany insuranceCompany) {
-        WebElement option = find(byFTXpath, insuranceCompany.getIcName());
-        if (option.getText().equals(insuranceCompany.getIcName())) {
-            option.click();
-        }
-    }
+//    public void selectParentCompany(InsuranceCompany insuranceCompany) {
+//        WebElement option = find(byFTXpath, insuranceCompany.getIcName());
+//        if (option.getText().equals(insuranceCompany.getIcName())) {
+//            option.click();
+//        }
+//    }
 
     public InsCompAddEditPage setCommunicationDesignerSection(CommunicationDesigner communicationDesigner){
 

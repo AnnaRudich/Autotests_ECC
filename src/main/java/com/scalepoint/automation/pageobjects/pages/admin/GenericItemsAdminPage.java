@@ -78,7 +78,8 @@ public class GenericItemsAdminPage extends AdminBasePage {
     }
 
     public GenericItemsAdminPage refreshList() {
-        clickAndWaitForStable(refreshButton, By.id("btnNew"));
+        hoverAndClick($(refreshButton));
+        $(By.id("btnNew")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

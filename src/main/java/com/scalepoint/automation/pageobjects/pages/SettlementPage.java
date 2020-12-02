@@ -640,13 +640,13 @@ public class SettlementPage extends BaseClaimPage {
             return expectedText.equals(getTooltip());
         }
 
-        public boolean isClaimLineSentToRepair() {
-            return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", "")));
-        }
+//        public boolean isClaimLineSentToRepair() {
+//            return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", "")));
+//        }
 
-        public boolean isClaimLineSendNotToRepairAndIconDisplays() {
-            return isElementPresent(By.xpath(sendNotToRepairLineIconByDescriptionXpath.replace("$1", "")));
-        }
+//        public boolean isClaimLineSendNotToRepairAndIconDisplays() {
+//            return isElementPresent(By.xpath(sendNotToRepairLineIconByDescriptionXpath.replace("$1", "")));
+//        }
 
         public boolean isLineExcludedAndReviewed() {
             return descriptionElement.getAttribute("class").equals("divNotActive")
