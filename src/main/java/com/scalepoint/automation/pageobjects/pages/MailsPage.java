@@ -61,7 +61,6 @@ public class MailsPage extends BaseClaimPage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        replaceAmpInUrl();
         waitForAjaxCompletedAndJsRecalculation();
         $(latestMailSubject).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }

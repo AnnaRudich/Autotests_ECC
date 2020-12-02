@@ -46,7 +46,6 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        replaceAmpInUrl();
         waitForPageLoaded();
         waitForJavascriptRecalculation();
     }

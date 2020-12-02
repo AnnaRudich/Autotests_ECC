@@ -75,7 +75,6 @@ public class OrderDetailsPage extends BaseClaimPage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        replaceAmpInUrl();
         waitForPageLoaded();
     }
 
