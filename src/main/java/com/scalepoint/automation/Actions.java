@@ -101,7 +101,7 @@ public interface Actions {
     default void clickUsingJavaScriptIfClickDoesNotWork(WebElement element){
         try {
             waitForVisibleAndEnabled(element);
-            $(element).click();
+            element.click();
         } catch (StaleElementReferenceException e) {
             logger.warn("Element is not attached to the page document " + e);
             clickUsingJS(element);
