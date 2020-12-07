@@ -150,7 +150,7 @@ public enum DriversFactory {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("operations-type");
         options.addArguments("--window-size=1920,1080");
-        options.addArguments(" --window-position=0,0");
+        options.addArguments("--window-position=0,0");
         options.addArguments("--disable-popup-blocking");
 //        options.addArguments("-incognito");
         options.addArguments("--disable-web-security");

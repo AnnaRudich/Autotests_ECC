@@ -113,7 +113,7 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
         try {
             WebElement option = $(By.xpath(xpath));
             return Wait.forCondition(ExpectedConditions.textToBePresentInElement(option, voucherName));
-        } catch (Exception e) {
+        } catch (Error e) {
             return false;
         }
     }

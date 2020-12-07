@@ -133,7 +133,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         try {
             WebElement option = $(By.xpath(xpath));
             return option.getText().contains(supplierName);
-        } catch (Exception e) {
+        } catch (Error e) {
             return false;
         }
     }

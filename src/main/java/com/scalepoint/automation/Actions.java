@@ -1,6 +1,7 @@
 package com.scalepoint.automation;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.zoom;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForVisibleAndEnabled;
 
@@ -121,6 +123,24 @@ public interface Actions {
                 .hover()
                 .click();
         waitForAjaxCompletedAndJsRecalculation();
+        return element;
+    }
+
+    default SelenideElement zoomIfClickDoesNotWork(SelenideElement element){
+
+        try {
+
+            element = hoverAndClick(element);
+        }catch (ElementShould e){
+
+            zoom(0.25);
+            element = hoverAndClick(element);
+        }
+        finally {
+
+            zoom(1);
+        }
+
         return element;
     }
 }
