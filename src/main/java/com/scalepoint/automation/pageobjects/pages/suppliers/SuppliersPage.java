@@ -93,7 +93,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     public SupplierDialog openFirstSupplier() {
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         WebElement supplier = allSuppliersList.get(0);
-        doubleClick(supplier);
+        $(supplier).doubleClick();
         waitForStaleElement(By.xpath("//span[contains(text(),'General')]"));
         return BaseDialog.at(SupplierDialog.class);
     }
@@ -106,9 +106,12 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         $(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
-        if (getOption(supplierName).getText().contains(supplierName)) {
-            scrollTo(getOption(supplierName));
-            doubleClick(getOption(supplierName));
+
+        SelenideElement element = $(getOption(supplierName));
+        if (element.getText().contains(supplierName)) {
+            element
+                    .scrollTo()
+                    .doubleClick();
         }
 
         return BaseDialog.at(SupplierDialog.GeneralTab.class);
@@ -123,14 +126,14 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     }
 
     public boolean isSupplierCreated(String supplierName) {
-        clickUsingJavaScriptIfClickDoesNotWork(find(By.xpath("//input[contains(@name,'searchfield')]")));
+        hoverAndClick($(By.xpath("//input[contains(@name,'searchfield')]")));
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("id('suppliersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
         String xpath = String.format(bySupplierNameXpath, supplierName);
         try {
-            WebElement option = find(By.xpath(xpath));
+            WebElement option = $(By.xpath(xpath));
             return option.getText().contains(supplierName);
-        } catch (Exception e) {
+        } catch (Error e) {
             return false;
         }
     }

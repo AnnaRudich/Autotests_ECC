@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -38,7 +37,7 @@ public class InsCompaniesPage extends AdminBasePage {
     }
 
     public InsCompAddEditPage toAddNewCompanyPage() {
-        clickAndWaitForDisplaying(addButton, By.name("icname"));
+        hoverAndClick($(addButton));
         return at(InsCompAddEditPage.class);
     }
 
@@ -52,7 +51,7 @@ public class InsCompaniesPage extends AdminBasePage {
     }
 
     private void selectEditOption() {
-        clickAndWaitForDisplaying(editButton, By.name("icname"));
+        hoverAndClick($(editButton));
     }
 
     public InsCompAddEditPage editCompany(String icName) {

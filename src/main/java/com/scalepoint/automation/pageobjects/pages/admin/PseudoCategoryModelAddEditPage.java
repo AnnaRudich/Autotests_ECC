@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.utils.Wait;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -39,7 +39,7 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelPage save() {
-        clickUsingJavaScriptIfClickDoesNotWork(saveOption);
+        hoverAndClick($(saveOption));
         return at(PseudoCategoryModelPage.class);
     }
 
@@ -50,13 +50,10 @@ public class PseudoCategoryModelAddEditPage extends AdminBasePage {
     }
 
     public PseudoCategoryModelAddEditPage selectCategory(String catName) {
-
-        By locator = By.xpath(String.format(byCategoryNameXpath, catName));
-        WebElement option = $(locator).getWrappedElement();
-        scrollTo(option);
-        Wait.waitForStaleElement(locator);
-        if (!option.isSelected()) {
-            option.click();
+        SelenideElement element = $(By.xpath(String.format(byCategoryNameXpath, catName)));
+        element.scrollTo();
+        if (!element.isSelected()) {
+            hoverAndClick(element);
         }
         return this;
     }

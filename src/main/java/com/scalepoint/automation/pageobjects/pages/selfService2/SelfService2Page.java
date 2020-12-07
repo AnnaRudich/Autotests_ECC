@@ -14,13 +14,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -136,16 +136,16 @@ public class SelfService2Page extends Page {
 
     private void selectItem(WebElement element, String text) {
         WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
-        clickUsingJavaScriptIfClickDoesNotWork(selectElement);
+        hoverAndClick($(selectElement));
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
         waitForVisible(element.findElement(By.xpath(menuLocator)));
         String itemLocator = ".//span[contains(text(),'%s')]";
         WebElement selectItemElement = Wait.forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
         waitForVisible(selectItemElement);
-        scrollToElement(selectItemElement);
+        $(selectItemElement).scrollTo();
         waitForVisible(selectItemElement);
-        clickUsingJavaScriptIfClickDoesNotWork(selectItemElement);
+        hoverAndClick($(selectItemElement));
         waitForVisible(selectElement);
         Wait.forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
     }
@@ -210,7 +210,7 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page addDocumentation() {
         SelenideElement uploadDocBtn = $(By.xpath("//input[contains(@data-for, 'attachment')]"));
-        enterToHiddenUploadFileFieldSS(uploadDocBtn, TestData.getAttachmentFiles().getJpgFile2Loc());
+        $(uploadDocBtn).uploadFile(new File(TestData.getAttachmentFiles().getJpgFile2Loc()));
         return this;
     }
 

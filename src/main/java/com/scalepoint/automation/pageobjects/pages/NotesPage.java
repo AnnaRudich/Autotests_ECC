@@ -16,6 +16,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
@@ -45,7 +46,6 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        replaceAmpInUrl();
         waitForPageLoaded();
         waitForJavascriptRecalculation();
     }

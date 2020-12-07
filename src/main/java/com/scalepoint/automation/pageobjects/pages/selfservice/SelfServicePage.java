@@ -18,9 +18,10 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.OperationalUtils.unifyStr;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,19 +72,6 @@ public class SelfServicePage extends Page {
         driver.findElement(By.xpath("//div[@class='body_text']")).click();
     }
 
-    public boolean isSuggestionsContainQuery(String query) {
-        waitForAjaxCompleted();
-        for (WebElement suggestion : allDescriptionSuggestions) {
-            scrollTo(suggestion);
-            System.out.println("Query: " + unifyStr(query) + "present in " + unifyStr(suggestion.getText()) + "?");
-            if (!unifyStr(suggestion.getText()).contains(unifyStr(query))) {
-                System.out.println(suggestion.getText().toUpperCase() + "- doesn't contain " + unifyStr(query).toUpperCase());
-                return false;
-            }
-        }
-        return true;
-    }
-
     public boolean isFirst10SuggestionContainQuery(String query) {
         String[] queryList = query.split(" ");
         waitForStaleElement(By.xpath("//div[contains(@class, 'x-combo-list-item')]"));
@@ -111,7 +99,7 @@ public class SelfServicePage extends Page {
 
     public SelfServicePage addCustomerNote(String noteText) {
         unfocusField();
-        clickUsingJavaScriptIfClickDoesNotWork($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
+        hoverAndClick($(By.xpath(".//a[contains(@href, 'showCustomerNoteDialog')]")));
         $("#cutomer_note").sendKeys(noteText);
         $(By.xpath(".//button[.='OK']")).click();
         return this;

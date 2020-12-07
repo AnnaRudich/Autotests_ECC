@@ -57,7 +57,7 @@ public class GenericItemsAdminPage extends AdminBasePage {
 
 
     public GenericItemsEditAdminPage clickCreateNewItem() {
-        clickAndWaitForDisplaying(newButton, By.name("ispublished"));
+        hoverAndClick($(newButton));
         return at(GenericItemsEditAdminPage.class);
     }
 
@@ -78,7 +78,8 @@ public class GenericItemsAdminPage extends AdminBasePage {
     }
 
     public GenericItemsAdminPage refreshList() {
-        clickAndWaitForStable(refreshButton, By.id("btnNew"));
+        hoverAndClick($(refreshButton));
+        $(By.id("btnNew")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
 

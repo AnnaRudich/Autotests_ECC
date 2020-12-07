@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -195,7 +196,10 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public <T extends Page> T selectSaveOption(Class<T> page) {
-        clickUsingJavaScriptIfClickDoesNotWork(saveButton);
+        $(saveButton)
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         return at(page);
     }
 
@@ -274,7 +278,10 @@ public class UserAddEditPage extends AdminBasePage {
     }
 
     public String generateAndGetNewPassword() {
-        clickUsingJavaScriptIfClickDoesNotWork(generatePasswordButton);
+        $(generatePasswordButton)
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         return getAlertTextAndAccept().split(" ")[1];
     }
 

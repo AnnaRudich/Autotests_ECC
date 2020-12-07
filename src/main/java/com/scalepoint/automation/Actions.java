@@ -1,7 +1,7 @@
 package com.scalepoint.automation;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -11,12 +11,10 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-
-import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.zoom;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForVisibleAndEnabled;
 
@@ -61,14 +59,6 @@ public interface Actions {
         }
     }
 
-    default void scrollTo(WebElement element) {
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView();", element);
-    }
-
-    default void scrollToElement(WebElement element) {
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].scrollIntoView(true);", element);
-    }
-
     default void switchToFrame(){
 
         Browser.driver().switchTo().frame(0);
@@ -83,115 +73,26 @@ public interface Actions {
         Browser.driver().navigate().refresh();
     }
 
-    default void enterToHiddenUploadFileField(WebElement element, String filePath) {
-        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
-        js.executeScript("arguments[0].setAttribute('class', ' ');", element);
-        element.sendKeys(filePath);
-    }
-
-    default void enterToHiddenUploadFileFieldSS(WebElement element, String filePath) {
-        JavascriptExecutor js = (JavascriptExecutor) Browser.driver();
-        js.executeScript("arguments[0].setAttribute('style', '');", element);
-        element.sendKeys(filePath);
-    }
-
     default void dragAndDrop(WebElement element, WebElement elementWhereToMove) {
         org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
         Action dragAndDrop = action.clickAndHold(element).moveToElement(elementWhereToMove).release(elementWhereToMove).build();
         dragAndDrop.perform();
     }
 
-    default void clear(By byElement) {
-        find(byElement).clear();
-    }
-
-    default void clear(WebElement element) {
-        element.clear();
-    }
-
-    default void sendKeys(WebElement element, String keys) {
-        element.sendKeys(keys);
-    }
-
-    default void sendKeys(By byElement, String keys) {
-        find(byElement).sendKeys(keys);
-    }
-
-    default String getText(By byElement) {
-        return find(byElement).getText();
-    }
-
-    default String getText(WebElement element) {
-        return element.getText();
-    }
-
-    default void waitForJavascriptRecalculation() {
-        Wait.waitForJavascriptRecalculation();
-    }
-
-    default void clickAndWaitForDisplaying(WebElement element, By byWaitForElement) {
-        clickUsingJavaScriptIfClickDoesNotWork(element);
-        $(byWaitForElement).waitUntil(Condition.visible, 60000);
-    }
-
-    default void clickAndWaitForDisplaying(By byElement, By byWaitForElement) {
-        clickAndWaitForDisplaying(find(byElement), byWaitForElement);
-    }
-
-    default void clickAndWaitForEnabling(WebElement element, By byEnabledElement) {
-        element.click();
-        Wait.waitForVisibleAndEnabled(byEnabledElement);
-    }
-
-
-    default void clickAndWaitForStable(WebElement element, By byWaitForElement) {
-        element.click();
-        Wait.waitForStaleElement(byWaitForElement);
-    }
-
     default boolean isSelected(WebElement element) {
         try {
-            return element.isSelected();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    default boolean isElementPresent(By by) {
-        try {
-            Browser.driver().findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    default boolean isDisplayed(By locator) {
-        try {
-            return Browser.driver().findElement(locator).isDisplayed();
-        } catch (Exception e) {
+            return $(element).is(selected);
+        } catch (Error e) {
             return false;
         }
     }
 
     default boolean isDisplayed(WebElement element) {
         try {
-            new FluentWait<>(element).
-                    withTimeout(5, TimeUnit.SECONDS).
-                    pollingEvery(1000, TimeUnit.MILLISECONDS).
-                    until(e -> element.isDisplayed());
-            return element.isDisplayed();
-        } catch (Exception e) {
+            return $(element).waitUntil(visible, TIME_OUT_IN_MILISECONDS).isDisplayed();
+        } catch (Error e) {
             return false;
         }
-    }
-
-    default WebElement find(By by) {
-        return Browser.driver().findElement(by);
-    }
-
-    default String getInputValue(WebElement webElement) {
-        return webElement.getAttribute("value");
     }
 
     default void clickUsingJS(WebElement element) {
@@ -215,21 +116,6 @@ public interface Actions {
         }
     }
 
-    default void doubleClick(WebElement element) {
-        try {
-            waitForVisibleAndEnabled(element);
-            org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
-            action.doubleClick(element);
-            action.perform();
-        } catch (StaleElementReferenceException e) {
-            logger.warn("Element is not attached to the page document " + e);
-        } catch (NoSuchElementException e) {
-            logger.warn("Element was not found in DOM " + e);
-        } catch (Exception e) {
-            logger.error("Unable to doubleClick on element " + e);
-        }
-    }
-
     default SelenideElement hoverAndClick(SelenideElement element){
 
         element
@@ -240,15 +126,22 @@ public interface Actions {
         return element;
     }
 
-    default void doubleClick(By by) {
-        doubleClick(find(by));
-    }
+    default SelenideElement zoomIfClickDoesNotWork(SelenideElement element){
 
-    default void replaceAmpInUrl() {
-        String currentUrl = Browser.driver().getCurrentUrl();
-        if (currentUrl.contains("&amp;")) {
-            Browser.driver().get(currentUrl.replace("&amp;", "&"));
+        try {
+
+            element = hoverAndClick(element);
+        }catch (ElementShould e){
+
+            zoom(0.25);
+            element = hoverAndClick(element);
         }
+        finally {
+
+            zoom(1);
+        }
+
+        return element;
     }
 }
 

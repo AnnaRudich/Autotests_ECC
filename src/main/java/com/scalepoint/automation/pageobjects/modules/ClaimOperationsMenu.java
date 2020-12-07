@@ -4,10 +4,8 @@ import com.scalepoint.automation.pageobjects.dialogs.AddGenericItemDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.LossImportDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SendSelfServiceRequestDialog;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -18,7 +16,7 @@ public class ClaimOperationsMenu extends Module {
     private WebElement selfService;
 
     @FindBy(id = "addGenericItemBtn")
-    private Button addGenericItemBtn;
+    private WebElement addGenericItemBtn;
 
     @FindBy(id = "excelImportBtn")
     private Button excelImportBtn;
@@ -29,8 +27,7 @@ public class ClaimOperationsMenu extends Module {
     }
 
     public AddGenericItemDialog addGenericItem() {
-        Wait.forCondition(ExpectedConditions.elementToBeClickable(addGenericItemBtn));
-        clickUsingJavaScriptIfClickDoesNotWork(addGenericItemBtn);
+        hoverAndClick($(addGenericItemBtn));
         return BaseDialog.at(AddGenericItemDialog.class);
     }
 

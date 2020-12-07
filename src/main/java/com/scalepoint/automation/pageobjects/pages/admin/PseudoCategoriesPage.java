@@ -2,12 +2,10 @@ package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -20,10 +18,10 @@ public class PseudoCategoriesPage extends AdminBasePage {
     private WebElement quickSearchField;
 
     @FindBy(id = "btnAdd")
-    private Button addButton;
+    private WebElement addButton;
 
     @FindBy(id = "btnEdit")
-    private Button editButton;
+    private WebElement editButton;
 
     @FindBy(id = "pseudoCategoryList")
     private Select pseudoCategoryList;
@@ -41,7 +39,7 @@ public class PseudoCategoriesPage extends AdminBasePage {
     }
 
     public PseudoCategoryAddEditPage toAddCategoryPage() {
-        clickAndWaitForDisplaying(addButton, By.xpath("//input[contains(@id, 'pcname')]"));
+        hoverAndClick($(addButton));
         return at(PseudoCategoryAddEditPage.class);
     }
 
@@ -56,7 +54,7 @@ public class PseudoCategoriesPage extends AdminBasePage {
 
     public PseudoCategoryAddEditPage editCategory(String categoryName) {
         pseudoCategoryList.selectByVisibleText(categoryName);
-        clickAndWaitForDisplaying(editButton, By.xpath("//input[contains(@id, 'pcname')]"));
+        hoverAndClick($(editButton));
         return at(PseudoCategoryAddEditPage.class);
     }
 

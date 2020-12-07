@@ -39,7 +39,6 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Condition.*;
@@ -845,10 +844,10 @@ public class SettlementDialog extends BaseDialog {
                 (driver.findElement(By.id(REJECT_REASON_COMBOBOX_INPUT_WRAP)).getCssValue(BORDER_COLOR).contains(redBorderRGB)));
     }
 
-    String discountDistributionLocator = ".//tr[contains(@class, '%s')]//img";
+    String discountDistributionLocator = ".//tr[contains(@class, '%s')]/td[contains(@data-columnid,'editValuation')]/div";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        IntStream.range(0, 3).forEach(i -> clickUsingJavaScriptIfClickDoesNotWork(waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))));
+        hoverAndClick($(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName()))));
         return at(EditVoucherValuationDialog.class);
     }
 

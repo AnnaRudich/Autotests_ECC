@@ -6,8 +6,8 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
 import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextBlock;
 
 import java.util.function.Consumer;
@@ -24,7 +24,7 @@ public class NotCheapestChoiceDialog extends BaseDialog {
     private ExtComboBox reason;
 
     @FindBy(id = "not-cheapest-reason-ok-button")
-    private Button ok;
+    private WebElement ok;
 
     @FindBy(id = "not-cheapest-reason-valuation-amount")
     private TextBlock amount;
@@ -52,12 +52,12 @@ public class NotCheapestChoiceDialog extends BaseDialog {
     }
 
     public SettlementDialog ok() {
-        ok.click();
+        hoverAndClick($(ok));
         return at(SettlementDialog.class);
     }
 
     public SettlementPage okGoToSettlementPage() {
-        ok.click();
+        hoverAndClick($(ok));
         return Page.at(SettlementPage.class);
     }
 
@@ -73,12 +73,12 @@ public class NotCheapestChoiceDialog extends BaseDialog {
         }
 
         public Asserts assertNotPossibleToCloseDialog() {
-            clickUsingJavaScriptIfClickDoesNotWork(ok);
             try {
-                at(NotCheapestChoiceDialog.class);
-            } catch (Exception e) {
-                Assert.fail("We were able to close NotCheapestChoiceDialog");
+                hoverAndClick($(ok));
+            } catch (Error e) {
+                return this;
             }
+            Assert.fail("We were able to close NotCheapestChoiceDialog");
             return this;
         }
     }

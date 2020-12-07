@@ -9,14 +9,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.util.function.Consumer;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
@@ -32,16 +29,16 @@ public class SettlementSummary extends Module {
     private Table claimsResult;
 
     @FindBy(id = "cancelCaseBtn")
-    private Button cancel;
+    private WebElement cancel;
 
     @FindBy(id = "saveCaseBtn")
     private WebElement saveClaim;
 
     @FindBy(id = "finishCaseBtn")
-    private Button completeClaim;
+    private WebElement completeClaim;
 
     @FindBy(id = "settleExternallyBtn")
-    private Button completeClaimExternally;
+    private WebElement completeClaimExternally;
 
     @FindBy(id="sendToAuditBtn-btnInnerEl")
     private WebElement sentToAudit;
@@ -68,7 +65,7 @@ public class SettlementSummary extends Module {
     private WebElement settlementSummaryTotalsPanel;
 
     public void cancel() {
-        clickUsingJavaScriptIfClickDoesNotWork(cancel);
+        hoverAndClick($(cancel));
     }
 
     public void saveClaim() {
@@ -83,14 +80,14 @@ public class SettlementSummary extends Module {
         if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
             expand();
         }
-        clickUsingJavaScriptIfClickDoesNotWork(completeClaim);
+        zoomIfClickDoesNotWork($(completeClaim));
     }
 
     public void completeClaimWithoutMail() {
         if (!completeClaimExternally.isDisplayed()) {
             expand();
         }
-        clickUsingJavaScriptIfClickDoesNotWork(completeClaimExternally);
+        hoverAndClick($(completeClaimExternally));
     }
 
     private void expand() {
@@ -177,6 +174,7 @@ public class SettlementSummary extends Module {
 
     public class Asserts {
         public Asserts assertClaimSumValueIs(double value) {
+
             Assert.assertEquals(toNumber(getClaimSumValue()), formatDoubleToHaveTwoDigits(value), "Claim sum must be: " + value);
             return this;
         }

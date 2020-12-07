@@ -16,6 +16,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -177,8 +178,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
     public static class BannerTab extends BaseDialog implements SupplierTabs {
 
         public BannerTab uploadBanner(String bannerPath) {
-            WebElement elem = find(By.xpath("//input[contains(@id, 'supplierBannerFileId') and contains(@type, 'file')]"));
-            enterToHiddenUploadFileField(elem, bannerPath);
+            WebElement elem = $(By.xpath("//input[contains(@id, 'supplierBannerFileId') and contains(@type, 'file')]"));
+            $(elem).uploadFile(new File(bannerPath));
             return this;
         }
 
@@ -273,8 +274,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public GeneralTab uploadLogo(String logoPath) {
-            WebElement elem = find(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
-            enterToHiddenUploadFileField(elem, logoPath);
+            WebElement elem = $(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
+            $(elem).uploadFile(new File(logoPath));
             Wait.waitForDisplayed(By.cssSelector(("img.imageUploadImg")));
             return this;
         }
@@ -446,7 +447,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public VoucherAgreementGeneralTab editVoucherAgreement(String agreementName) {
             Wait.waitForAjaxCompleted();
-            doubleClick(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'" + agreementName + "')]"));
+            $(By.xpath("id('supplierVouchersGridId-body')//div[contains(text(),'" + agreementName + "')]")).doubleClick();
             isOn(VoucherAgreementGeneralTab.class);
             Wait.waitForAjaxCompleted();
             return at(VoucherAgreementGeneralTab.class);
@@ -539,13 +540,13 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(xpath = "//a[contains(@class,'supplier-import-shop-btn')]")
         private WebElement importShopButton;
 
-        @FindBy(xpath = "//div[contains(@class,'supplier-delete-shop-confirm-window')]//span[contains(text(),'Yes')]")
+        @FindBy(xpath = "//div[contains(@class,'supplier-delete-shop-confirm-window')]//span[contains(text(),'Yes')]/ancestor::a")
         private WebElement deleteShopYesButton;
 
         @FindBy(id = "supplierShopsGridId")
         private WebElement shopsGridId;
 
-        private String byShopNameXpath = "id('supplierShopsGridId')//div[contains(text(),'%s')]";
+        private String byShopNameXpath = " //div[@id='supplierShopsGridId']//div[contains(text(),'%s')]";
 
         @Override
         protected void ensureWeAreAt() {
@@ -560,8 +561,8 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         boolean isNewShopExists(Shop shop) {
             try {
-                SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
-                scrollTo(item);
+                SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
+                element.scrollTo();
                 return true;
             } catch (Error e) {
                 return false;
@@ -569,23 +570,26 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         ShopsTab selectShop(Shop shop) {
-            SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
-            scrollTo(item);
-            clickAndWaitForEnabling(item, By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]"));
+            SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shop.getShopName())));
+            element.scrollTo();
+            hoverAndClick(element);
+            $(By.xpath("//div[contains(@class,'SupplierWindow ')]//span[contains(text(),'Delete shop')]")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
             return this;
         }
 
         public AddShopDialogViewMode openShopViewModel(String shopName) {
-            SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shopName)));
-            scrollTo(item);
-            item.doubleClick();
+            SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shopName)));
+            element
+                    .scrollTo()
+                    .doubleClick();
             return at(AddShopDialogViewMode.class);
         }
 
         public AddShopDialog openEditShopDialog(String shopName) {
-            SelenideElement item = $(By.xpath(String.format(byShopNameXpath, shopName)));
-            scrollTo(item);
-            item.doubleClick();
+            SelenideElement element = $(By.xpath(String.format(byShopNameXpath, shopName)));
+            element
+                    .scrollTo()
+                    .doubleClick();
             Wait.waitForVisibleAndEnabled(By.name("shopName"));
             return at(AddShopDialog.class);
         }
@@ -593,7 +597,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         public SupplierDialog.ShopsTab deleteShop(Shop shop) {
             selectShop(shop);
             deleteShopButton.click();
-            clickUsingJavaScriptIfClickDoesNotWork(deleteShopYesButton);
+            hoverAndClick($(deleteShopYesButton));
             waitForAjaxCompleted();
             return this;
         }
@@ -615,4 +619,6 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
         }
     }
+
+
 }

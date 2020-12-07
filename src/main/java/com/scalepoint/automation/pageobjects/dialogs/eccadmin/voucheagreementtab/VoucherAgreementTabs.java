@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementta
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
@@ -52,17 +53,9 @@ public interface VoucherAgreementTabs extends Actions {
     }
 
     default SupplierDialog.AgreementsTab saveVoucherAgreement() {
-        zoom(0.5);
-        SelenideElement element = $(".supplier-save-voucher-btn")
-                .waitUntil(Condition.visible, TIMEOUT_MS);
-        try {
-            element.click();
-        }catch (Throwable e) {
-            logger.warn("Click throws following exception: {}", e);
-            clickUsingJS(element);
-        }finally {
-            zoom(1);
-        }
+
+        SelenideElement element = $(".supplier-save-voucher-btn");
+        zoomIfClickDoesNotWork(element);
         return at(SupplierDialog.AgreementsTab.class);
     }
 }

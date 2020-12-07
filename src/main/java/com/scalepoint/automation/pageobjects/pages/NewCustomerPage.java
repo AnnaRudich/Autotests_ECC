@@ -16,10 +16,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForInvisible;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -124,7 +121,7 @@ public class NewCustomerPage extends Page {
         waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
-        clickUsingJavaScriptIfClickDoesNotWork($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']/parent::span")));
+        hoverAndClick($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']/parent::span")));
         waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='" + date.getDayOfMonth() + "']")).click();
         return this;

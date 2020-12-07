@@ -244,14 +244,6 @@ public class SettlementPage extends BaseClaimPage {
         return this;
     }
 
-
-    public void cancelClaim() {
-        settlementSummary.cancel();
-        if($(".x-window").is(Condition.visible)){
-            $(".x-window a").click();
-        }
-    }
-
     public MyPage saveClaim(Claim claim) {
         settlementSummary.saveClaim();
         SolrApi.waitForClaimStatusChangedTo(claim, ClaimStatus.OPEN);
@@ -544,8 +536,8 @@ public class SettlementPage extends BaseClaimPage {
                     "targLink.dispatchEvent (clickEvent);";
 
             try {
-                clickUsingJavaScriptIfClickDoesNotWork(descriptionElement);
-                doubleClick(descriptionElement);
+                hoverAndClick($(descriptionElement));
+                $(descriptionElement).doubleClick();
                 waitForAjaxCompleted();
                 String js =
                         "var callback = arguments[arguments.length - 1];" +
@@ -577,8 +569,8 @@ public class SettlementPage extends BaseClaimPage {
 
         private void doubleClickGroupLine() {
             try {
-                doubleClick(descriptionElement);
-                waitForAjaxCompleted();
+                $(descriptionElement).doubleClick();
+                waitForAjaxCompletedAndJsRecalculation();
             } catch (ScriptTimeoutException e) {
                 logger.error(e.getMessage());
             }
@@ -638,14 +630,6 @@ public class SettlementPage extends BaseClaimPage {
 
         boolean isTooltipPresent(String expectedText) {
             return expectedText.equals(getTooltip());
-        }
-
-        public boolean isClaimLineSentToRepair() {
-            return isElementPresent(By.xpath(lockForRepairLineIconByDescriptionXpath.replace("$1", "")));
-        }
-
-        public boolean isClaimLineSendNotToRepairAndIconDisplays() {
-            return isElementPresent(By.xpath(sendNotToRepairLineIconByDescriptionXpath.replace("$1", "")));
         }
 
         public boolean isLineExcludedAndReviewed() {

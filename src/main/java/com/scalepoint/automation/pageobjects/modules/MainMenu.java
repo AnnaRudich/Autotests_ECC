@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.NewCustomerPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -24,7 +25,7 @@ public class MainMenu extends Module {
     private Link admin;
 
     @FindBy(id = "signOutButton")
-    private Link signOut;
+    private WebElement signOut;
 
     @FindBy(id = "myPageButton")
     private Link myPage;
@@ -49,7 +50,7 @@ public class MainMenu extends Module {
     }
 
     public void logOut() {
-        clickUsingJavaScriptIfClickDoesNotWork(signOut);
+        hoverAndClick($(signOut));
         acceptAlert();
     }
 

@@ -54,7 +54,7 @@ public class VoucherAgreementCategoriesTab extends BaseDialog implements Voucher
     }
 
     public EditCategoryMappingsDialog openEditMappingsDialog() {
-        clickUsingJavaScriptIfClickDoesNotWork(editMappingsBtn);
+        hoverAndClick($(editMappingsBtn));
         return BaseDialog.at(EditCategoryMappingsDialog.class);
     }
 

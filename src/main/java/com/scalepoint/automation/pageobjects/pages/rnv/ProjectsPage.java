@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EccPage
 public class ProjectsPage extends Page {
 
-    private String byTaskStatusAgrXpath = "//div[contains(@id,'project_view_id')]//tr[1]//tr[1]/td/div[contains(text(), '$1')]/ancestor::tr[1]/td[5]/div";
+    private String byTaskStatusAgrXpath = "//div[contains(@id,'project_view_id')]//tr[1]//tr[1]/td/div[contains(text(), '%s')]/ancestor::tr[1]/td[5]/div";
 
     @FindBy(css = "table[class*='x-grid-with-row-lines'] tr:first-of-type tr div.x-grid-row-expander")
     private WebElement firstTaskExpander;
@@ -44,7 +44,7 @@ public class ProjectsPage extends Page {
     }
 
     public String getTaskStatus(String agrName) {
-        return getText(By.xpath(byTaskStatusAgrXpath.replace("$1", agrName)));
+        return $(By.xpath(String.format(byTaskStatusAgrXpath, agrName))).getText();
     }
 
     public CommunicationTab toCommunicationTab() {
@@ -65,7 +65,8 @@ public class ProjectsPage extends Page {
     }
 
     public ProjectsPage expandTopTaskDetails() {
-        clickAndWaitForDisplaying(firstTaskExpander, By.cssSelector("div#taskNestedGrid-body"));
+        hoverAndClick($(firstTaskExpander));
+        $("div#taskNestedGrid-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         return this;
     }
     private String getAuditInfoPanelText() {
