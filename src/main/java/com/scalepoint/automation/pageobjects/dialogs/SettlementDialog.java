@@ -847,7 +847,9 @@ public class SettlementDialog extends BaseDialog {
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]/td[contains(@data-columnid,'editValuation')]/div";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        hoverAndClick($(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName()))));
+        $(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))
+                .hover()
+                .doubleClick();
         return at(EditVoucherValuationDialog.class);
     }
 
