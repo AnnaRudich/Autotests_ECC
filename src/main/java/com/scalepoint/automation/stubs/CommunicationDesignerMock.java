@@ -78,7 +78,7 @@ public class CommunicationDesignerMock {
             stubFor(post(urlPathEqualTo(templatesGenerate))
                     .willReturn(aResponse()
                             .withHeader("Content-Type", CONTENT_TYPE)
-                            .withBody(JsonUtils.getJSONasString("__files/communicationDesignerMock/selfServiceCustomerWelcomTemplate.json"))
+                            .withBody(JsonUtils.getJSONasString("__files/communicationDesignerMock/omMailTemplate.json"))
                             .withStatus(200)));
             return this;
         }

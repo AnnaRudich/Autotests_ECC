@@ -35,8 +35,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.Arrays;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
@@ -96,10 +95,7 @@ public class CommunicationDesignerTests extends BaseTest {
                     mailViewDialog.isTextVisible("[SelfServiceCustomerWelcome]");
                 });
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
     @CommunicationDesignerCleanUp
@@ -159,10 +155,7 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(ITEMIZATION_SAVE_LOSS_ITEMS)
                 );
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
     @CommunicationDesignerCleanUp
@@ -195,10 +188,7 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME_REJECTION)
                 );
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
     @CommunicationDesignerCleanUp
@@ -234,10 +224,7 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
                 );
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = false)
@@ -299,10 +286,7 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME_WITH_OUTSTANDING)
                 );
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
     @CommunicationDesignerCleanUp
@@ -326,18 +310,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .setCommunicationDesignerSection(communicationDesigner)
                 .selectSaveOption(false);
 
-        loginAndCreateClaim(user, claim)
-                .openSid()
-                .setBaseData(claimItem)
-                .closeSidWithOk()
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .openReplacementWizard(true)
-                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
-                .to(MyPage.class)
-                .doAssert(MyPage.Asserts::assertClaimCompleted)
-                .openRecentClaim()
-                .toMailsPage()
+        replacement(user, claim, claimItem)
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
@@ -347,10 +320,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
@@ -390,9 +360,61 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
 
-        communicationDesignerMock.getStub(user.getCompanyName().toLowerCase())
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    }
+
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+    @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare replacement mail")
+    public void replacementMail(User user, Claim claim, ClaimItem claimItem) {
+
+        final String REPLACEMENT_MAIL = "[ReplacementMail]";
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omReplacementMail(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption(false);
+
+        replacement(user, claim, claimItem)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.noOtherMailsOnThePage(
+                                Arrays.asList(
+                                        REPLACEMENT_WITH_MAIL,
+                                        SETTLEMENT_NOTIFICATION_TO_IC)))
+                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(REPLACEMENT_MAIL)
+                );
+
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    }
+
+    private void schemaValidation(String companyName, String clamNumber){
+
+        communicationDesignerMock.getStub(companyName)
                 .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(claim.getClaimNumber()
-                        ));
+                        schemaValidation.validateTemplateGenerateSchema(clamNumber));
+    }
+
+    private MailsPage replacement(User user, Claim claim, ClaimItem claimItem){
+        return loginAndCreateClaim(user, claim)
+                .openSid()
+                .setBaseData(claimItem)
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard(true)
+                .completeClaimUsingCashPayoutToBankAccount("1","12345678890")
+                .to(MyPage.class)
+                .doAssert(MyPage.Asserts::assertClaimCompleted)
+                .openRecentClaim()
+                .toMailsPage();
     }
 }
