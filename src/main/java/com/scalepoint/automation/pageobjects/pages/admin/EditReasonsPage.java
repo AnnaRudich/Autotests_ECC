@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -48,7 +47,7 @@ public class EditReasonsPage extends AdminBasePage {
     @FindBy(id = "addLine")
     private Button addReason;
     @FindBy(xpath = "//input[contains(@id,'reasonNameAdd')]")
-    private ExtInput addReasonField;
+    private WebElement addReasonField;
     @FindBy(xpath = "//button[contains(text(),'Save')]")
     private WebElement save;
     @FindBy(xpath = "//button[contains(@id,'changeStatusBtn')]")
@@ -79,7 +78,7 @@ public class EditReasonsPage extends AdminBasePage {
     }
 
     public EditReasonsPage addReason(String reason) {
-        addReasonField.enter(reason);
+        $(addReasonField).setValue(reason);
         hoverAndClick($(save));
         return at(EditReasonsPage.class);
     }

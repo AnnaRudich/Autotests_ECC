@@ -4,10 +4,12 @@ import com.scalepoint.automation.pageobjects.pages.admin.AddEditReductionRulePag
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.input.Assignment;
 import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.translations.RRLinesFields;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
@@ -685,7 +687,7 @@ public class ReductionRulesTest extends BaseTest {
                 .fillSimpleDiscretionaryRRAndSave(rule)
                 .assertRuleDisplayed(rule);
     }
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
     public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(ReductionRule rule) {
         toNewReductionRulePage()

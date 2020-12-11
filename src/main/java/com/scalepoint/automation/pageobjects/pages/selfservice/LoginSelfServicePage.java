@@ -1,19 +1,20 @@
 package com.scalepoint.automation.pageobjects.pages.selfservice;
 
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
 
 @EccPage
 public class LoginSelfServicePage extends Page {
 
     @FindBy(id = "password")
-    private ExtInput passwordField;
+    private WebElement passwordField;
 
     @FindBy(css = ".LoginBox_button .button")
     private Button login;
@@ -35,12 +36,12 @@ public class LoginSelfServicePage extends Page {
     }
 
     public LoginSelfServicePage enterPassword(String password) {
-        this.passwordField.enter(password);
+        $(this.passwordField).setValue(password);
         return this;
     }
 
     public SelfServicePage login(String password) {
-        this.passwordField.setValue(password);
+        $(this.passwordField).setValue(password);
         login.click();
         Wait.waitForLoaded();
         return at(SelfServicePage.class);

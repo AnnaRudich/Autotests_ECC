@@ -2,7 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import org.openqa.selenium.WebElement;
@@ -15,10 +15,10 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class UpdateCategoriesDialog extends BaseDialog {
 
     @FindBy(id = "bulk-group-combobox")
-    private ExtComboBox category;
+    private ExtComboBoxBoundView category;
 
     @FindBy(id = "bulk-pseudocategory-combobox")
-    private ExtComboBox subcategory;
+    private ExtComboBoxBoundView subcategory;
 
     @FindBy(id = "bulk-ok-button")
     private WebElement okButton;

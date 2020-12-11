@@ -8,7 +8,10 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -16,7 +19,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.zoom;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForVisibleAndEnabled;
 
 public interface Actions {
 
@@ -79,6 +81,17 @@ public interface Actions {
         dragAndDrop.perform();
     }
 
+    default void sendKeys(String keys){
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
+        Action sendKeys = action
+                .keyDown(Keys.CONTROL )
+                .sendKeys("a")
+                .keyUp(Keys.CONTROL)
+                .sendKeys(Keys.DELETE)
+                .sendKeys(keys).build();
+        sendKeys.perform();
+    }
+
     default boolean isSelected(WebElement element) {
         try {
             return $(element).is(selected);
@@ -92,27 +105,6 @@ public interface Actions {
             return $(element).waitUntil(visible, TIME_OUT_IN_MILISECONDS).isDisplayed();
         } catch (Error e) {
             return false;
-        }
-    }
-
-    default void clickUsingJS(WebElement element) {
-        logger.warn("clicking on element with java script click");
-        ((JavascriptExecutor) Browser.driver()).executeScript("arguments[0].click();", element);
-    }
-
-    default void clickUsingJavaScriptIfClickDoesNotWork(WebElement element){
-        try {
-            waitForVisibleAndEnabled(element);
-            element.click();
-        } catch (StaleElementReferenceException e) {
-            logger.warn("Element is not attached to the page document " + e);
-            clickUsingJS(element);
-        } catch (NoSuchElementException e) {
-            logger.warn("Element was not found in DOM " + e);
-            clickUsingJS(element);
-        } catch (Exception e) {
-            logger.warn("Unable to click on element " + e);
-            clickUsingJS(element);
         }
     }
 

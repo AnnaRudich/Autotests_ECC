@@ -1,31 +1,35 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class VoucherAgreementDiscountDistributionTab extends BaseDialog implements VoucherAgreementTabs {
 
     @FindBy(name = "discountToIC")
-    private ExtInput discountToICInput;
+    private WebElement discountToICInput;
 
     @FindBy(name = "discountToClaimant")
-    private ExtInput discountToClaimantInput;
+    private WebElement discountToClaimantInput;
 
     public VoucherAgreementDiscountDistributionTab setDiscountToIc(Integer discount) {
-        discountToICInput.clear();
-        discountToICInput.sendKeys(discount.toString());
+        SelenideElement element = $(discountToICInput);
+        element.clear();
+        element.setValue(discount.toString());
         return this;
     }
 
     public VoucherAgreementDiscountDistributionTab setDiscountToClaimant(Integer discount) {
-        discountToClaimantInput.clear();
-        discountToClaimantInput.sendKeys(discount.toString());
+        SelenideElement element = $(discountToClaimantInput);
+        element.clear();
+        element.setValue(discount.toString());
         return this;
     }
 
@@ -42,12 +46,12 @@ public class VoucherAgreementDiscountDistributionTab extends BaseDialog implemen
     public class Asserts {
 
         public Asserts assertDiscountToIc(Integer discount) {
-            Assert.assertEquals(discountToICInput.getText(), discount.toString());
+            Assert.assertEquals($(discountToICInput).getValue(), discount.toString());
             return this;
         }
 
         public Asserts assertDiscountToClaimant(Integer discount) {
-            Assert.assertEquals(discountToClaimantInput.getText(), discount.toString());
+            Assert.assertEquals($(discountToClaimantInput).getValue(), discount.toString());
             return this;
         }
     }

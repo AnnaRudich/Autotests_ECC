@@ -66,7 +66,7 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
-
+@RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
@@ -406,7 +406,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
     }
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "Tests the warning information that deductible amount is zero - the confirm case.")
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)

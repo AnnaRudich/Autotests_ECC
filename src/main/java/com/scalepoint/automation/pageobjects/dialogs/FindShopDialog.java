@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -21,7 +21,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAllElementsVisible;
 public class FindShopDialog extends BaseDialog {
 
     @FindBy(id = "search-voucher-vouchers-combo")
-    private ExtComboBox vouchersCombo;
+    private ExtComboBoxBoundView vouchersCombo;
 
     @FindBy(id = "search-voucher-search-button")
     private WebElement searchVoucherButton;

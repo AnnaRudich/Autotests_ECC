@@ -1,10 +1,11 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioButton;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
@@ -25,37 +26,37 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
     private ExtRadioButton scalepointHandlesEvouchersRadio;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-delivery-cost-checkbox')]")
-    private ExtCheckbox useDeliveryCostCheckbox;
+    private ExtCheckboxTypeDiv useDeliveryCostCheckbox;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-electronic-voucher-checkbox')]")
-    private ExtCheckbox useElectronicVoucherCheckbox;
+    private ExtCheckboxTypeDiv useElectronicVoucherCheckbox;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-email-checkbox')]")
-    private ExtCheckbox eVoucherEmailRequired;
+    private ExtCheckboxTypeDiv eVoucherEmailRequired;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-phone-checkbox')]")
-    private ExtCheckbox eVoucherPhoneRequired;
+    private ExtCheckboxTypeDiv eVoucherPhoneRequired;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-code-checkbox')]")
-    private ExtCheckbox eVoucherPersonalCodeRequired;
+    private ExtCheckboxTypeDiv eVoucherPersonalCodeRequired;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-evoucher-portal-checkbox')]")
-    private ExtCheckbox useEVoucherPortal;
+    private ExtCheckboxTypeDiv useEVoucherPortal;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-add-delivery-cost-in-email-checkbox')]")
-    private ExtCheckbox addDeliveryCostImSupplierMailCheckBox;
+    private ExtCheckboxTypeDiv addDeliveryCostImSupplierMailCheckBox;
 
     @FindBy(name = "otherEmail")
-    private ExtInput otherEmailInput;
+    private WebElement otherEmailInput;
 
     @FindBy(name = "deliveryCost")
-    private ExtInput deliveryCostInput;
+    private WebElement deliveryCostInput;
 
     @FindBy(name = "deliveryType")
-    private ExtInput deliveryTypeInput;
+    private WebElement deliveryTypeInput;
 
     @FindBy(name = "popularity")
-    private ExtInput popularityInput;
+    private WebElement popularityInput;
 
     public enum OrderMailType {
         SUPPLIER,
@@ -86,8 +87,9 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
             switch (orderMailType) {
                 case OTHER:
                     dialog.useOtherEmailRadio.set(true);
-                    dialog.otherEmailInput.clear();
-                    dialog.otherEmailInput.sendKeys(otherEmail);
+                    SelenideElement element = $(dialog.otherEmailInput);
+                    element.clear();
+                    element.setValue(otherEmail);
                     break;
                 case SCALEPOINT_HANDLES:
                     dialog.scalepointHandlesEvouchersRadio.set(true);
@@ -101,19 +103,21 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
 
         public FormFiller withDeliveryCost(Integer deliveryCost) {
             dialog.useDeliveryCostCheckbox.set(true);
-            dialog.deliveryCostInput.sendKeys(deliveryCost.toString());
+            $(dialog.deliveryCostInput).setValue(deliveryCost.toString());
             return this;
         }
 
         public FormFiller withDeliveryType(String deliveryType) {
-            dialog.deliveryTypeInput.clear();
-            dialog.deliveryTypeInput.sendKeys(deliveryType);
+            SelenideElement element = $(dialog.deliveryTypeInput);
+            element.clear();
+            element.setValue(deliveryType);
             return this;
         }
 
         public FormFiller withPopularity(Integer popularity) {
-            dialog.popularityInput.clear();
-            dialog.popularityInput.sendKeys(popularity.toString());
+            SelenideElement element = $(dialog.popularityInput);
+            element.clear();
+            element.setValue(popularity.toString());
             return this;
         }
 
@@ -171,48 +175,48 @@ public class VoucherAgreementAdvancedTab extends BaseDialog implements VoucherAg
         public Asserts assertOrderType(OrderMailType orderMailType) {
             switch (orderMailType) {
                 case OTHER:
-                    Assert.assertTrue(useOtherEmailRadio.isSelected());
+                    Assert.assertTrue(useOtherEmailRadio.isChecked());
                     break;
                 case SCALEPOINT_HANDLES:
-                    Assert.assertTrue(scalepointHandlesEvouchersRadio.isSelected());
+                    Assert.assertTrue(scalepointHandlesEvouchersRadio.isChecked());
                     break;
                 case SUPPLIER:
-                    Assert.assertTrue(useSupplierOrderEmailRadio.isSelected());
+                    Assert.assertTrue(useSupplierOrderEmailRadio.isChecked());
                     break;
             }
             return this;
         }
 
         public Asserts assertOtherEmail(String email) {
-            Assert.assertEquals(otherEmailInput.getText(), email);
+            Assert.assertEquals($(otherEmailInput).getValue(), email);
             return this;
         }
 
         public Asserts assertDeliveryType(String deliveryType) {
-            Assert.assertEquals(deliveryTypeInput.getText(), deliveryType);
+            Assert.assertEquals($(deliveryTypeInput).getValue(), deliveryType);
             return this;
         }
 
         public Asserts assertPopularity(Integer popularity) {
-            Assert.assertEquals(popularityInput.getText(), popularity.toString());
+            Assert.assertEquals($(popularityInput).getValue(), popularity.toString());
             return this;
         }
 
         public Asserts assertUsedAsEVoucher(EVoucherOptions... eVoucherOptions) {
-            Assert.assertTrue(useElectronicVoucherCheckbox.isSelected());
+            Assert.assertTrue(useElectronicVoucherCheckbox.isChecked());
             for (EVoucherOptions eVoucherOption : eVoucherOptions) {
                 switch (eVoucherOption) {
                     case EMAIL_REQUIRED:
-                        Assert.assertTrue(eVoucherEmailRequired.isSelected());
+                        Assert.assertTrue(eVoucherEmailRequired.isChecked());
                         break;
                     case PERSONAL_CODE_REQUIRED:
-                        Assert.assertTrue(eVoucherPersonalCodeRequired.isSelected());
+                        Assert.assertTrue(eVoucherPersonalCodeRequired.isChecked());
                         break;
                     case PHONE_REQUIRED:
-                        Assert.assertTrue(eVoucherPhoneRequired.isSelected());
+                        Assert.assertTrue(eVoucherPhoneRequired.isChecked());
                         break;
                     case USE_PORTAL_REQUIRED:
-                        Assert.assertTrue(useEVoucherPortal.isSelected());
+                        Assert.assertTrue(useEVoucherPortal.isChecked());
                         break;
                 }
             }

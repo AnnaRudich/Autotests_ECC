@@ -5,10 +5,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroupTypeDiv;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -27,7 +26,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.*;
 
@@ -40,8 +38,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -70,22 +68,22 @@ public class SettlementDialog extends BaseDialog {
     private WebElement description;
 
     @FindBy(id = "group-combobox")
-    private ExtComboBox category;
+    private ExtComboBoxBoundView category;
 
     @FindBy(id = "pseudocategory-combobox")
-    private ExtComboBox subCategory;
+    private ExtComboBoxBoundView subCategory;
 
     @FindBy(id = "age-months-combobox")
-    private ExtComboBox ageMonth;
+    private ExtComboBoxBoundView ageMonth;
 
     @FindBy(id = "available-vouchers-combobox")
-    private ExtComboBox availableVoucher;
+    private ExtComboBoxBoundView availableVoucher;
 
     @FindBy(id = "vouchers-combobox")
-    private ExtComboBox voucherCombo;
+    private ExtComboBoxBoundView voucherCombo;
 
     @FindBy(id = "quantity-textfield-inputEl")
-    private ExtInput quantity;
+    private WebElement quantity;
 
     @FindBy(id = "customer-demand-textfield-inputEl")
     private WebElement customerDemand;
@@ -100,10 +98,10 @@ public class SettlementDialog extends BaseDialog {
     private WebElement discretionaryPrice;
 
     @FindBy(id = "age-defined-radiogroup")
-    private ExtRadioGroup age;
+    private ExtRadioGroupTypeDiv age;
 
     @FindBy(id = "reviewed-checkbox")
-    private ExtCheckbox reviewed;
+    private ExtCheckboxTypeDiv reviewed;
 
     @FindBy(id = "total-cash-compensation-text")
     private TextBlock cashCompensationValue;
@@ -127,10 +125,10 @@ public class SettlementDialog extends BaseDialog {
     private WebElement voucherCashValue;
 
     @FindBy(id = "depreciate-discounted-checkbox")
-    private ExtCheckbox combineDiscountDepreciation;
+    private ExtCheckboxTypeDiv combineDiscountDepreciation;
 
     @FindBy(id = "active-checkbox")
-    private ExtCheckbox includeInClaim;
+    private ExtCheckboxTypeDiv includeInClaim;
 
     @FindBy(css = "#valuations-grid-body table")
     private List<Table> valuations;
@@ -163,7 +161,7 @@ public class SettlementDialog extends BaseDialog {
     private Table ruleSuggestion;
 
     @FindBy(id = "automatic-depreciation-checkbox")
-    private ExtCheckbox automaticDepreciation;
+    private ExtCheckboxTypeDiv automaticDepreciation;
 
     @FindBy(id = "automatic-depreciation-checkbox-labelEl")
     private WebElement automaticDepreciationLabel;
@@ -175,19 +173,19 @@ public class SettlementDialog extends BaseDialog {
     private TextBlock statusSupplier;
 
     @FindBy(id = "reject-reason-combobox")
-    private ExtComboBox rejectReason;
+    private ExtComboBoxBoundView rejectReason;
 
     @FindBy(id = "damage-type-combobox")
-    private ExtComboBox damageType;
+    private ExtComboBoxBoundView damageType;
 
     @FindBy(id = "damage-type-combobox-trigger-picker")
     private WebElement damageTypePicker;
 
     @FindBy(id = "discretionary-reason-combobox")
-    private ExtComboBox discretionaryReason;
+    private ExtComboBoxBoundView discretionaryReason;
 
     @FindBy(id = "depreciation-type-combobox")
-    private ExtComboBox depreciationTypeComboBox;
+    private ExtComboBoxBoundView depreciationTypeComboBox;
 
     @FindBy(id = "not-cheapest-reason-display-inputEl")
     private TextBlock notCheapestReasonDisplay;
@@ -195,8 +193,8 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(xpath = "//div[@id='status_product_match_card']//div[contains(@id, 'displayfield')]/b")
     private WebElement statusMatchedDisplayField;
 
-    @FindBy(id = "documentation-ok-checkbox-inputEl")
-    private CheckBox sufficientDocumentation;
+    @FindBy(id = "documentation-ok-checkbox")
+    private ExtCheckboxTypeDiv sufficientDocumentation;
 
     @FindBy(id = "reject-checkbox-displayEl")
     private CheckBox rejectCheckbox;
@@ -378,11 +376,13 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog uncheckedDocumentation() {
-        if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
-            forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
-            clickUsingJavaScriptIfClickDoesNotWork(sufficientDocumentation);
-        }
-        waitForJavascriptRecalculation();
+//        if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
+//            forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
+//            (sufficientDocumentation)
+//        }
+//        waitForJavascriptRecalculation();
+
+        sufficientDocumentation.set(false);
         return this;
     }
 
@@ -441,14 +441,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillVoucher(String voucherName) {
-        waitForAjaxCompletedAndJsRecalculation();
-        if ($("#voucher-supplier-link a").has(text(voucherName))
-                & $("#vouchers-combobox").is(not(visible))) {
-            return this;
-        } else {
-            voucherCombo.select(voucherName);
-        }
-        waitForJavascriptRecalculation();
+        voucherCombo.select(String.format("%s (ukendt km", voucherName));
         return this;
     }
 
@@ -560,7 +553,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
-        waitForVisible(combineDiscountDepreciation);
+//        waitForVisible(combineDiscountDepreciation);
         combineDiscountDepreciation.set(state);
         waitForJavascriptRecalculation();
         return this;
@@ -568,7 +561,7 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog includeInClaim(Boolean state) {
         Wait.waitForLoaded();
-        Wait.waitForEnabled(includeInClaim);
+//        Wait.waitForEnabled(includeInClaim);
         includeInClaim.set(state);
         waitForJavascriptRecalculation();
         return this;
@@ -682,7 +675,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog automaticDepreciation(boolean state) {
-        Wait.waitForEnabled(automaticDepreciation);
+//        Wait.waitForEnabled(automaticDepreciation);
         automaticDepreciation.set(state);
         Wait.waitForLoaded();
         return this;
@@ -1072,7 +1065,7 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertReviewedNotPresent() {
             try {
-                assertFalse(reviewed.isEnabled(), "Reviewed checkbox msu be disabled");
+                assertFalse(reviewed.isChecked(), "Reviewed checkbox msu be disabled");
             } catch (Exception ignored) {
             }
             return this;
@@ -1113,12 +1106,12 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertIncludeInClaimSelected() {
-            Assert.assertTrue(includeInClaim.isSelected(), "The 'Include in Claim' must be selected'");
+            Assert.assertTrue(includeInClaim.isChecked(), "The 'Include in Claim' must be selected'");
             return this;
         }
 
         public Asserts assertIncludeInClaimNotSelected() {
-            Assert.assertFalse(includeInClaim.isSelected(), "The 'Include in Claim' must be unselected'");
+            Assert.assertFalse(includeInClaim.isChecked(), "The 'Include in Claim' must be unselected'");
             return this;
         }
 
@@ -1330,17 +1323,21 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertAutomaticDepreciationLabelColor() {
             boolean isLabelInRedColor = automaticDepreciationLabel.getAttribute("style").contains("color: red;");
-            assertEquals(automaticDepreciation.isSelected(), !isLabelInRedColor);
+            assertEquals(automaticDepreciation.isChecked(), !isLabelInRedColor);
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked() {
-            assertEquals("true", sufficientDocumentation.getAttribute(ARIA_CHECKED));
+            assertThat(sufficientDocumentation.isChecked())
+                    .as("Sufficient documentation is unchecked")
+                    .isTrue();
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsUnchecked() {
-            assertEquals("false", sufficientDocumentation.getAttribute(ARIA_CHECKED));
+            assertThat(sufficientDocumentation.isChecked())
+                    .as("Sufficient documentation is checked")
+                    .isFalse();
             return this;
         }
 

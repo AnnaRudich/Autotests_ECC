@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
@@ -23,7 +22,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     private TextInput brandsText;
 
     @FindBy(id = "edit-voucher-tags-text-inputEl")
-    private ExtInput tags;
+    private WebElement tags;
 
     @FindBy(id = "edit-voucher-ok-button")
     private WebElement ok;
@@ -78,7 +77,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
     }
 
     public String getTags() {
-        return tags.getText();
+        return $(tags).getValue();
     }
 
     public SettlementDialog closeDialogWithOk() {

@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
@@ -26,19 +25,19 @@ public class NewCustomerPage extends Page {
     private WebElement damageDate;
 
     @FindBy(name = "salutation")
-    private ExtInput title;
+    private WebElement title;
 
     @FindBy(name = "last_name")
-    private ExtInput surname;
+    private WebElement surname;
 
     @FindBy(name = "first_name")
-    private ExtInput firstNames;
+    private WebElement firstNames;
 
     @FindBy(name = "policy_number")
-    private ExtInput policyNumber;
+    private WebElement policyNumber;
 
     @FindBy(name = "claim_number")
-    private ExtInput claimsNumber;
+    private WebElement claimsNumber;
 
     @FindBy(id = "policy_type")
     private Select policyType;
@@ -68,27 +67,27 @@ public class NewCustomerPage extends Page {
     }
 
     public NewCustomerPage enterTitle(String titleName) {
-        title.enter(titleName);
+        $(title).setValue(titleName);
         return this;
     }
 
     public NewCustomerPage enterSurname(String surnameText) {
-        surname.enter(surnameText);
+        $(surname).setValue(surnameText);
         return this;
     }
 
     public NewCustomerPage enterFirstName(String firstNameText) {
-        firstNames.enter(firstNameText);
+        $(firstNames).setValue(firstNameText);
         return this;
     }
 
     public NewCustomerPage enterPolicyNumber(String policyNumberText) {
-        policyNumber.enter(policyNumberText);
+        $(policyNumber).setValue(policyNumberText);
         return this;
     }
 
     public NewCustomerPage enterClaimNumber(String claimNumberText) {
-        claimsNumber.enter(claimNumberText);
+        $(claimsNumber).setValue(claimNumberText);
         return this;
     }
 
