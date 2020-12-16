@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -46,14 +47,29 @@ public class ExtComboBox extends ExtElement implements Actions {
      * @param index place number of option text which should be selected from list of combo box
      */
     public void select(int index) {
-        hoverAndClick(picker);
+        picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();;
         SelenideElement option = getOptions()
                 .get(index);
         hoverAndClick(option);
     }
 
+    private boolean isPickerFieldOpen(){
+
+        return $(getWrappedElement())
+                .find("[data-ref='bodyEl']")
+                .attr("class")
+                .contains("x-pickerfield-open");
+    }
+
     @SuppressWarnings("unchecked")
     public List<String> getComboBoxOptions() {
+        if(!isPickerFieldOpen()) {
+            picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                    .hover()
+                    .click();;
+        }
         return getOptions().stream()
                 .map(element -> element.getText())
                 .collect(Collectors.toList());

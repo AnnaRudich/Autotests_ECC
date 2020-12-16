@@ -9,11 +9,11 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-531")
@@ -52,7 +52,7 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedFaceValue = Constants.PRICE_2400;
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
 
-        String voucherName = voucher.getVoucherNameSP();
+        String voucherName = String.format("%s (ukendt km", voucher.getVoucherNameSP());
 
         verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, categoryInfo, voucherName);
     }

@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroupTypeDiv;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -77,7 +78,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtComboBoxBoundView ageMonth;
 
     @FindBy(id = "available-vouchers-combobox")
-    private ExtComboBoxBoundView availableVoucher;
+    private ExtComboBoxBoundList availableVoucher;
 
     @FindBy(id = "vouchers-combobox")
     private ExtComboBoxBoundView voucherCombo;
@@ -263,6 +264,11 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public FormFiller withAvailableVoucher(String voucher) {
+            sid.fillAvailableVoucher(voucher);
+            return this;
+        }
+
         public FormFiller withDepreciation(int depreciation, DepreciationType depreciationType) {
             sid.setDepreciation(depreciation);
             sid.setDepreciationType(depreciationType);
@@ -441,7 +447,12 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillVoucher(String voucherName) {
-        voucherCombo.select(String.format("%s (ukendt km", voucherName));
+        voucherCombo.select(voucherName);
+        return this;
+    }
+
+    public SettlementDialog fillAvailableVoucher(String voucherName) {
+        availableVoucher.select(voucherName);
         return this;
     }
 
@@ -840,7 +851,9 @@ public class SettlementDialog extends BaseDialog {
     String discountDistributionLocator = ".//tr[contains(@class, '%s')]/td[contains(@data-columnid,'editValuation')]/div";
 
     public EditVoucherValuationDialog openEditDiscountDistributionForVoucher() {
-        hoverAndClick($(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName()))));
+        $(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName())))
+                .hover()
+                .doubleClick();
         return at(EditVoucherValuationDialog.class);
     }
 

@@ -336,7 +336,7 @@ public class TextSearchPage extends Page {
     }
 
     public String getSearchInputText() {
-        return searchInput.getText();
+        return $(searchInput).getValue();
     }
 
     public String getFirstProductId() {
