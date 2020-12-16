@@ -165,6 +165,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         $("[name=OM_OrderConfirmation]").setSelected(communicationDesigner.omOrderConfirmation);
         $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
         $("[name=OM_OrderConfirmation_uCommerceEmployee]").setSelected(communicationDesigner.omOrderConfirmation_uCommerceEmployee);
+        $("[name=OM_ReplacementMail]").setSelected(communicationDesigner.omReplacementMail);
 //        $("[name=OM_InvoiceToIC]").setSelected(communicationDesigner.omInvoiceToIC);
 //        $("[name=OM_PayoutNotification]").setSelected(communicationDesigner.omPayoutNotification);
 //        $("[name=OM_ProcuraApprovalRequest]").setSelected(communicationDesigner.omProcuraApprovalRequest);
@@ -196,6 +197,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         boolean omOrderConfirmation;
         boolean omOrderConfirmationEmployee;
         boolean omOrderConfirmation_uCommerceEmployee;
+        boolean omReplacementMail;
 //        boolean omInvoiceToIC;
 //        boolean omPayoutNotification;
 //        boolean omProcuraApprovalRequest;
