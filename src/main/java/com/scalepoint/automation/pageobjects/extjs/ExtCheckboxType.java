@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.Actions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -20,13 +21,16 @@ public abstract class ExtCheckboxType extends TypifiedElement implements Actions
     }
 
     public boolean isChecked() {
+        try {
+            return element.attr("class").contains("x-form-cb-checked");
+        }catch (ElementNotFound e){
+            return false;
+        }
 
-        return element.attr("class").contains("x-form-cb-checked");
     }
 
     public void set(boolean state) {
         if (state != isChecked()) {
-
             hoverAndClick(element.find(locator));
         }
     }

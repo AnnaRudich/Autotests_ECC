@@ -49,7 +49,7 @@ public class ExtComboBox extends ExtElement implements Actions {
     public void select(int index) {
         picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
                 .hover()
-                .click();;
+                .click();
         SelenideElement option = getOptions()
                 .get(index);
         hoverAndClick(option);
@@ -68,7 +68,7 @@ public class ExtComboBox extends ExtElement implements Actions {
         if(!isPickerFieldOpen()) {
             picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
                     .hover()
-                    .click();;
+                    .click();
         }
         return getOptions().stream()
                 .map(element -> element.getText())

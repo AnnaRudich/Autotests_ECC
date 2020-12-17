@@ -116,7 +116,6 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: Amount of depreciation is shown at the bottom of SID
      * THEN: Depreciation percent is shown on the settlement page after saving SID
      */
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify a manual depreciation can be entered into the field Depreciation")
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)

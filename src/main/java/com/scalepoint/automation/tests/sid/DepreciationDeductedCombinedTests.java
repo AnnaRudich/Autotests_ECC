@@ -7,10 +7,12 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 /**
@@ -54,7 +56,6 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
         Double expectedNewPrice = Constants.PRICE_2400;
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, false);
     }
-
     @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON(User user, Claim claim, ClaimItem claimItem) {
@@ -98,7 +99,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 })
                 .reopenClaim()
                 .toCompleteClaimPage()
-                .fillClaimFormWithPassword(claim)
+                .fillClaimForm(claim)
                 .openReplacementWizard(false)
                 .doAssert(replacementDialog -> {
                     replacementDialog.assertItemPriceValueIs(expectedCashValue);

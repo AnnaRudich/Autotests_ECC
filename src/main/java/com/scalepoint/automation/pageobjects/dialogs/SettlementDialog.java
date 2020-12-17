@@ -5,10 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroupTypeDiv;
+import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -78,7 +75,7 @@ public class SettlementDialog extends BaseDialog {
     private ExtComboBoxBoundView ageMonth;
 
     @FindBy(id = "available-vouchers-combobox")
-    private ExtComboBoxBoundList availableVoucher;
+    private ExtComboBoxDivBoundList availableVoucher;
 
     @FindBy(id = "vouchers-combobox")
     private ExtComboBoxBoundView voucherCombo;
@@ -382,12 +379,6 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog uncheckedDocumentation() {
-//        if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
-//            forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
-//            (sufficientDocumentation)
-//        }
-//        waitForJavascriptRecalculation();
-
         sufficientDocumentation.set(false);
         return this;
     }
@@ -1077,10 +1068,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertReviewedNotPresent() {
-            try {
-                assertFalse(reviewed.isChecked(), "Reviewed checkbox msu be disabled");
-            } catch (Exception ignored) {
-            }
+                assertFalse(reviewed.isChecked(), "Reviewed checkbox must be disabled");
             return this;
         }
 
