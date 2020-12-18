@@ -143,7 +143,7 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 creates role Role1
      * THEN: Role1 is displayed in roles list
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to create new role with all enabled options. The RR is displayed in Roles list")
     public void charlie551_createNewRoleAllOptionsEnabled(Translations translations) {
         String roleName = translations.getRoles().getRoleName();
@@ -161,7 +161,7 @@ public class UserRolesTest extends BaseTest {
      * THEN: It's possible to select Role1
      * THEN: User1 is created successfully
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to select new role for user creation. The new role is displayed on Add user page")
     public void charlie551_newRoleIsAvailableUserCreation(SystemUser user, Translations translations) {
         String roleName = translations.getRoles().getRoleName();

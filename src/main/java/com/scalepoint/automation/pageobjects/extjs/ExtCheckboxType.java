@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
 public abstract class ExtCheckboxType extends TypifiedElement implements Actions {
@@ -31,7 +32,10 @@ public abstract class ExtCheckboxType extends TypifiedElement implements Actions
 
     public void set(boolean state) {
         if (state != isChecked()) {
-            hoverAndClick(element.find(locator));
+            element.find(locator)
+                    .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                    .hover()
+                    .click();
         }
     }
 }

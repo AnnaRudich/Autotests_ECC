@@ -240,7 +240,7 @@ public class CommunicationDesignerTests extends BaseTest {
                         ));
     }
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
+    @Test(enabled = false, dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
     public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
