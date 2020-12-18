@@ -5,20 +5,17 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SUFFICIENT_DOCUMENTATION_CHECKBOX;
 
 @SuppressWarnings("AccessStaticViaInstance")
 public class SidMarkDocumentationTests extends BaseTest {
-@RunOn(DriverType.CHROME)
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(dataProvider = "testDataProvider", description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeChecked(User user, Claim claim, GenericItem genericItem) {
@@ -46,7 +43,6 @@ public class SidMarkDocumentationTests extends BaseTest {
                         SettlementDialog.Asserts::assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked
                 );
     }
-@RunOn(DriverType.CHROME)
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
     @Test(dataProvider = "testDataProvider", description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeUnchecked(User user, Claim claim, ClaimItem claimItem) {

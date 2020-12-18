@@ -8,15 +8,13 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.input.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.input.Supplier;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-521")
@@ -122,7 +120,6 @@ public class SupplierTests extends BaseTest {
      * WHEN: User saves S! and V1 changes
      * THEN: Orders Data is stored correctly
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to fill orders tab with valid values")
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
@@ -217,7 +214,6 @@ public class SupplierTests extends BaseTest {
                 .toVouchersPage()
                 .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(agreement));     // Exclusive tick should be visible in supply management, vouchers list
     }
-@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Check if invoiceSetting is set correctly")
     public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT) User user) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);

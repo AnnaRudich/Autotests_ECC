@@ -7,11 +7,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.input.SystemUser;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.CLAIMSHANDLER;
@@ -47,7 +45,6 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 updates all U2 details
      * THEN: U2 details are stored correctly
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to update new SP admin user")
     public void charlie537_updateNewSPAdminUser(SystemUser user) {
         SystemUser newUser = TestData.getSystemUser();

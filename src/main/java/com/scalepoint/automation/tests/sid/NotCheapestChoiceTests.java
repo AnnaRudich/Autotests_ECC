@@ -9,13 +9,11 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
@@ -37,7 +35,6 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class)
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(1.00));
     }
-@RunOn(DriverType.CHROME)
     /*10*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Selected reason is stored")
     public void charlie530SelectedReasonIsStored(User user, Claim claim, ClaimItem claimItem) {
@@ -131,7 +128,6 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .setValuation(CUSTOMER_DEMAND)
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
-@RunOn(DriverType.CHROME)
     /*21*/
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When reason is set then edit button appears and reason can be changed using popup")
     public void charlie530WhenReasonIsSetThenEditButtonAppearsAndReasonCanBeChangedUsingPopup(User user, Claim claim, ClaimItem claimItem) {

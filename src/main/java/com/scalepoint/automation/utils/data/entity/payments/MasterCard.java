@@ -1,7 +1,6 @@
 
 package com.scalepoint.automation.utils.data.entity.payments;
 
-import com.scalepoint.automation.utils.annotations.RunOn;
 import lombok.Data;
 
 import javax.xml.bind.annotation.XmlAccessType;

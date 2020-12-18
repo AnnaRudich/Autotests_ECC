@@ -13,11 +13,9 @@ import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
@@ -108,7 +106,6 @@ public class VoucherAgreementTests extends BaseTest {
      * ecc3038_activeStatusNo
      * ecc3038_activeStatusYes
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to update all General tab data for new default voucher")
     public void ecc3038_newVoucherGeneralUpdate(User user, Voucher voucher, AttachmentFiles attachmentFiles) {
