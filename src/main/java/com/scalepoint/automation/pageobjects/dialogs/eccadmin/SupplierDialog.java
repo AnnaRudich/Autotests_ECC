@@ -133,7 +133,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public class Asserts {
             public Asserts assertOrderEmailIs(String email) {
-                Assert.assertEquals(emailField.getText(), email);
+                Assert.assertEquals($(emailField).getValue(), email);
                 return this;
             }
 
@@ -144,7 +144,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             public Asserts assertDeliveryTimeIs(Integer deliveryTime) {
                 Assert.assertTrue(deliverySupportedCheckbox.isChecked());
-                Assert.assertEquals(defaultDeliveryTimeField.getText(), deliveryTime.toString());
+                Assert.assertEquals($(defaultDeliveryTimeField).getValue(), deliveryTime.toString());
                 return this;
             }
 

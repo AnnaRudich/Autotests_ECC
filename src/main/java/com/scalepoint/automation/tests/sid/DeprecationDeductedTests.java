@@ -52,7 +52,7 @@ public class DeprecationDeductedTests extends BaseTest {
         Double expectedFaceValue = Constants.PRICE_2400;
         Double voucherValue = expectedCalculation.getCashCompensationWithDepreciation();
 
-        String voucherName = String.format("%s (ukendt km", voucher.getVoucherNameSP());
+        String voucherName =  voucher.getVoucherNameSP();
 
         verify(user, claim, expectedCashValue, expectedFaceValue, voucherValue, categoryInfo, voucherName);
     }

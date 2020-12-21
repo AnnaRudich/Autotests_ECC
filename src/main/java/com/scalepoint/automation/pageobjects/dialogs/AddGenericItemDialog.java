@@ -9,12 +9,11 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import lombok.Data;
 import lombok.Getter;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -60,16 +59,13 @@ public class AddGenericItemDialog extends BaseDialog {
     }
 
     public boolean isGenericItemPresent(String itemName, String categoryGroup, String category) {
-        this.category.select(categoryGroup + " - " + category);
-        Wait.waitForAjaxCompleted();
         try {
-            WebElement element = driver.findElement(By.xpath("//div[@id='generic-item-dialog-grid']//div[text() = '" + itemName + "']"));
-            if (element != null && element.isDisplayed()) {
-                return true;
-            }
-        } catch (NoSuchElementException ignored) {
+            selectCategory(categoryGroup, category);
+            genericItemDialogGrid.findRowByDescription(itemName);
+        }catch (NoSuchElementException e){
+            return false;
         }
-        return false;
+        return true;
     }
 
     public class GenericItemDialogGrid{
