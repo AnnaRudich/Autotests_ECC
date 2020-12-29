@@ -2,7 +2,9 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.extjs.*;
@@ -79,6 +81,9 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(id = "vouchers-combobox")
     private ExtComboBoxBoundView voucherCombo;
+
+    @FindBy(css = "#voucher-supplier-link a")
+    private WebElement voucherSupplierLink;
 
     @FindBy(id = "quantity-textfield-inputEl")
     private WebElement quantity;
@@ -438,7 +443,15 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillVoucher(String voucherName) {
-        voucherCombo.select(voucherName);
+
+        try {
+            if (!$(voucherSupplierLink).getText().contains(voucherName)){
+                voucherCombo.select(voucherName);
+            }
+        }catch (ElementShould e){
+            voucherCombo.select(voucherName);
+        }
+
         return this;
     }
 
