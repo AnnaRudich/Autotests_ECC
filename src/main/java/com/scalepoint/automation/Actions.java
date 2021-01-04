@@ -118,6 +118,16 @@ public interface Actions {
         return element;
     }
 
+
+    default SelenideElement hoverAndClickNoWait(SelenideElement element){
+
+        element
+                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
+        return element;
+    }
+
     default SelenideElement zoomIfClickDoesNotWork(SelenideElement element){
 
         try {

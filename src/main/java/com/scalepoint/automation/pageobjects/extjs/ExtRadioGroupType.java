@@ -21,7 +21,7 @@ public class ExtRadioGroupType extends TypifiedElement implements Actions {
     }
 
     public void select(int index) {
-        hoverAndClick(element.findAll(locator).get(index));
+        hoverAndClickNoWait(element.findAll(locator).get(index));
     }
 
     public int getSelected() {
