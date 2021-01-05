@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.Events;
@@ -68,7 +67,7 @@ public class SettlementDialog extends BaseDialog {
     private WebElement description;
 
     @FindBy(id = "group-combobox")
-    private ExtComboBoxBoundView category;
+    private GroupExtComboBox category;
 
     @FindBy(id = "pseudocategory-combobox")
     private ExtComboBoxBoundView subCategory;
@@ -422,7 +421,9 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setCategory(String categoryName) {
+
         category.select(categoryName);
+
         waitForJavascriptRecalculation();
         return this;
     }
@@ -1081,7 +1082,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertReviewedNotPresent() {
-                assertFalse(reviewed.isChecked(), "Reviewed checkbox must be disabled");
+            assertFalse(reviewed.isChecked(), "Reviewed checkbox must be disabled");
             return this;
         }
 

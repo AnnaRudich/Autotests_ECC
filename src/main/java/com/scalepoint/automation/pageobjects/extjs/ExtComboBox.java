@@ -7,6 +7,8 @@ import com.scalepoint.automation.Actions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -32,12 +34,13 @@ public class ExtComboBox extends ExtElement implements Actions {
      * @param visibleText option text which should be selected from list of combo box
      */
     public void select(String visibleText) {
+        LocalDateTime start = LocalDateTime.now();
         hoverAndClick(picker);
         SelenideElement option = getOptions()
-                .stream()
-                .filter(item -> item.getText().contains(visibleText))
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new);
+                .findBy(text(visibleText));
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        logger.info("Select ext {} time:, {}", visibleText, duration.getSeconds());
         hoverAndClick(option);
     }
 
