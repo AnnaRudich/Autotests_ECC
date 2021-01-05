@@ -32,13 +32,13 @@ public class ExtComboBox extends ExtElement implements Actions {
      * @param visibleText option text which should be selected from list of combo box
      */
     public void select(String visibleText) {
-        hoverAndClickNoWait(picker);
+        hoverAndClick(picker);
         SelenideElement option = getOptions()
                 .stream()
                 .filter(item -> item.getText().contains(visibleText))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
-        hoverAndClickNoWait(option);
+        hoverAndClick(option);
     }
 
     /**
@@ -47,10 +47,14 @@ public class ExtComboBox extends ExtElement implements Actions {
      * @param index place number of option text which should be selected from list of combo box
      */
     public void select(int index) {
-        hoverAndClickNoWait(picker);
+        picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
         SelenideElement option = getOptions()
                 .get(index);
-        hoverAndClickNoWait(option);
+        option.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .hover()
+                .click();
     }
 
     private boolean isPickerFieldOpen(){
@@ -64,7 +68,9 @@ public class ExtComboBox extends ExtElement implements Actions {
     @SuppressWarnings("unchecked")
     public List<String> getComboBoxOptions() {
         if(!isPickerFieldOpen()) {
-            hoverAndClickNoWait(picker);
+            picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                    .hover()
+                    .click();
         }
         return getOptions().stream()
                 .parallel()

@@ -32,7 +32,10 @@ public abstract class ExtCheckboxType extends TypifiedElement implements Actions
 
     public void set(boolean state) {
         if (state != isChecked()) {
-            hoverAndClickNoWait(element.find(locator));
+            element.find(locator)
+                    .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                    .hover()
+                    .click();
         }
     }
 }

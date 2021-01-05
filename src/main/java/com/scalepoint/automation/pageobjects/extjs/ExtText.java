@@ -16,7 +16,9 @@ public class ExtText extends ExtElement implements Actions {
 
     public void enter(String value) {
         SelenideElement element = $(getWrappedElement());
-        hoverAndClickNoWait(element);
+        element
+                .hover()
+                .click();
         sendKeys(value);
         JavascriptHelper.blur();
         Wait.waitForAjaxCompletedAndJsRecalculation();
