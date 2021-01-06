@@ -35,13 +35,13 @@ public class ExtComboBox extends ExtElement implements Actions {
      */
     public void select(String visibleText) {
         LocalDateTime start = LocalDateTime.now();
-        hoverAndClick(picker);
-        SelenideElement option = getOptions()
+        picker.click();
+        SelenideElement option = getOptionsTest()
                 .findBy(text(visibleText));
+        option.click();
         LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
-        logger.info("Select ext {} time:, {}", visibleText, duration.getSeconds());
-        hoverAndClick(option);
+        long duration = Duration.between(start, end).getSeconds();
+        logger.info("Select ext {} time:, {}", visibleText, duration);
     }
 
     /**
@@ -84,6 +84,11 @@ public class ExtComboBox extends ExtElement implements Actions {
     private ElementsCollection getOptions(){
         ElementsCollection collection = $$(optionSelector)
                 .filter(Condition.visible);
+        return collection;
+    }
+
+    private ElementsCollection getOptionsTest(){
+        ElementsCollection collection = $$(optionSelector);
         return collection;
     }
 
