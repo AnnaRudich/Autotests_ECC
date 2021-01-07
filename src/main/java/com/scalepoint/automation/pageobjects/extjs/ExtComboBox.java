@@ -70,15 +70,19 @@ public class ExtComboBox extends ExtElement implements Actions {
 
     @SuppressWarnings("unchecked")
     public List<String> getComboBoxOptions() {
+        LocalDateTime start = LocalDateTime.now();
         if(!isPickerFieldOpen()) {
-            picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
-                    .hover()
-                    .click();
+            picker.click();
         }
-        return getOptions().stream()
+        List<String> options =  getOptionsTest().stream()
                 .parallel()
                 .map(element -> element.getText())
                 .collect(Collectors.toList());
+        LocalDateTime end = LocalDateTime.now();
+        long duration = Duration.between(start, end).getSeconds();
+        logger.info("ComoboBoxOptions ext time:, {}", duration);
+
+        return options;
     }
 
     private ElementsCollection getOptions(){

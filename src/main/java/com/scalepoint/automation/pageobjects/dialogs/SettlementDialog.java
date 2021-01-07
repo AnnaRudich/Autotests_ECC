@@ -70,16 +70,16 @@ public class SettlementDialog extends BaseDialog {
     private GroupExtComboBox category;
 
     @FindBy(id = "pseudocategory-combobox")
-    private ExtComboBoxBoundView subCategory;
+    private PseudoCategoryComboBox subCategory;
 
     @FindBy(id = "age-months-combobox")
-    private ExtComboBoxBoundView ageMonth;
+    private AgeMonthsComboBox ageMonth;
 
     @FindBy(id = "available-vouchers-combobox")
-    private ExtComboBoxDivBoundList availableVoucher;
+    private AvailableVouchersExtComboBox availableVoucher;
 
     @FindBy(id = "vouchers-combobox")
-    private ExtComboBoxBoundView voucherCombo;
+    private VoucherComboBox voucherCombo;
 
     @FindBy(css = "#voucher-supplier-link a")
     private WebElement voucherSupplierLink;
@@ -184,7 +184,7 @@ public class SettlementDialog extends BaseDialog {
     private WebElement damageTypePicker;
 
     @FindBy(id = "discretionary-reason-combobox")
-    private ExtComboBoxBoundView discretionaryReason;
+    private DiscretionaryReasonExtComboBox discretionaryReason;
 
     @FindBy(id = "depreciation-type-combobox")
     private ExtComboBoxBoundView depreciationTypeComboBox;
