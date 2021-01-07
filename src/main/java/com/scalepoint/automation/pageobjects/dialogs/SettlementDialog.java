@@ -187,7 +187,7 @@ public class SettlementDialog extends BaseDialog {
     private DiscretionaryReasonExtComboBox discretionaryReason;
 
     @FindBy(id = "depreciation-type-combobox")
-    private ExtComboBoxBoundView depreciationTypeComboBox;
+    private DepreciationTypeExtComboBox depreciationTypeComboBox;
 
     @FindBy(id = "not-cheapest-reason-display-inputEl")
     private TextBlock notCheapestReasonDisplay;
