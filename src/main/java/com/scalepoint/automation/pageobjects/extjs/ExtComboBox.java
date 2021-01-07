@@ -36,7 +36,7 @@ public class ExtComboBox extends ExtElement implements Actions {
     public void select(String visibleText) {
         LocalDateTime start = LocalDateTime.now();
         picker.click();
-        SelenideElement option = getOptionsTest()
+        SelenideElement option = getOptions()
                 .findBy(text(visibleText));
         option.click();
         LocalDateTime end = LocalDateTime.now();
@@ -74,7 +74,7 @@ public class ExtComboBox extends ExtElement implements Actions {
         if(!isPickerFieldOpen()) {
             picker.click();
         }
-        List<String> options =  getOptionsTest().stream()
+        List<String> options =  getOptions().stream()
                 .parallel()
                 .map(element -> element.getText())
                 .collect(Collectors.toList());
@@ -86,14 +86,7 @@ public class ExtComboBox extends ExtElement implements Actions {
     }
 
     private ElementsCollection getOptions(){
-        ElementsCollection collection = $$(optionSelector)
-                .filter(Condition.visible);
-        return collection;
-    }
-
-    private ElementsCollection getOptionsTest(){
-        ElementsCollection collection = $$(optionSelector);
-        return collection;
+        return  $$(optionSelector);
     }
 
     private WebElement getInput() {
