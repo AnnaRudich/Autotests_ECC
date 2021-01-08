@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -62,7 +63,7 @@ public class AddGenericItemDialog extends BaseDialog {
         try {
             selectCategory(categoryGroup, category);
             genericItemDialogGrid.findRowByDescription(itemName);
-        }catch (NoSuchElementException e){
+        }catch (ElementNotFound e){
             return false;
         }
         return true;
