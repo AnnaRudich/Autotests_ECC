@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.Actions;
@@ -10,10 +9,9 @@ import org.openqa.selenium.WebElement;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -35,10 +33,10 @@ public class ExtComboBox extends ExtElement implements Actions {
      */
     public void select(String visibleText) {
         LocalDateTime start = LocalDateTime.now();
-        picker.click();
+        hoverAndClick(picker);
         SelenideElement option = getOptions()
                 .findBy(text(visibleText));
-        option.click();
+        hoverAndClick(option);
         LocalDateTime end = LocalDateTime.now();
         long duration = Duration.between(start, end).getSeconds();
         logger.info("Select ext {} time:, {}", visibleText, duration);
@@ -50,14 +48,10 @@ public class ExtComboBox extends ExtElement implements Actions {
      * @param index place number of option text which should be selected from list of combo box
      */
     public void select(int index) {
-        picker.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
-                .hover()
-                .click();
+        hoverAndClick(picker);
         SelenideElement option = getOptions()
                 .get(index);
-        option.waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
-                .hover()
-                .click();
+        hoverAndClick(option);
     }
 
     private boolean isPickerFieldOpen(){
@@ -72,7 +66,7 @@ public class ExtComboBox extends ExtElement implements Actions {
     public List<String> getComboBoxOptions() {
         LocalDateTime start = LocalDateTime.now();
         if(!isPickerFieldOpen()) {
-            picker.click();
+            hoverAndClick(picker);
         }
         List<String> options =  getOptions().stream()
                 .parallel()
