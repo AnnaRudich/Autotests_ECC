@@ -9,7 +9,7 @@ public class GroupExtComboBox extends ExtComboBox {
 
         super(
                 wrappedElement,
-                By.cssSelector("[id$=trigger-picker]"),
+                By.cssSelector("#group-combobox-trigger-picker"),
                 By.cssSelector("#group-combobox-picker .x-boundlist-item"));
     }
 }

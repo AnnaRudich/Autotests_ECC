@@ -8,7 +8,7 @@ public class DepreciationTypeExtComboBox extends ExtComboBox{
     public DepreciationTypeExtComboBox(WebElement wrappedElement) {
         super(
                 wrappedElement,
-                By.cssSelector("[id$=trigger-picker]"),
+                By.cssSelector("#depreciation-type-combobox-trigger-picker"),
                 By.cssSelector("#depreciation-type-combobox-picker [data-boundview]"));
     }
 }

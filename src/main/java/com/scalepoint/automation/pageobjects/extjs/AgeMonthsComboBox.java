@@ -8,7 +8,7 @@ public class AgeMonthsComboBox extends ExtComboBox{
     public AgeMonthsComboBox(WebElement wrappedElement) {
         super(
                 wrappedElement,
-                By.cssSelector("[id$=trigger-picker]"),
+                By.cssSelector("#age-months-combobox-trigger-picker"),
                 By.cssSelector("#age-months-combobox-picker [data-boundview]"));
     }
 }

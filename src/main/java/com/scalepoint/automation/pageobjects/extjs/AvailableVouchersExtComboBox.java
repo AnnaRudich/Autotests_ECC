@@ -9,7 +9,7 @@ public class AvailableVouchersExtComboBox extends ExtComboBox {
 
         super(
                 wrappedElement,
-                By.cssSelector("[id$=trigger-picker]"),
+                By.cssSelector("#available-vouchers-combobox-trigger-picker"),
                 By.cssSelector("#available-vouchers-combobox-picker .x-boundlist-item"));
     }
 }

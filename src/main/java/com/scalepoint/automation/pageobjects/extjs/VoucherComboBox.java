@@ -8,7 +8,7 @@ public class VoucherComboBox extends ExtComboBox{
     public VoucherComboBox(WebElement wrappedElement) {
         super(
                 wrappedElement,
-                By.cssSelector("[id$=trigger-picker]"),
+                By.cssSelector("#vouchers-combobox-trigger-picker"),
                 By.cssSelector("#vouchers-combobox-picker [data-boundview]"));
     }
 }
