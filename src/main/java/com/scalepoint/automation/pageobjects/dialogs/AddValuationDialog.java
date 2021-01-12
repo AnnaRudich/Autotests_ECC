@@ -2,7 +2,6 @@ package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.extjs.AddManualValuationTypeComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.support.FindBy;

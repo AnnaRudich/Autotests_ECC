@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.extjs.NotCheapestReasonExtComboBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;

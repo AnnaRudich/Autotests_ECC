@@ -530,31 +530,9 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         private void doubleClickClaimLine() {
-//            String dblClick = "var targLink    = arguments[0];\n" +
-//                    "var clickEvent  = document.createEvent ('MouseEvents');\n" +
-//                    "clickEvent.initEvent ('dblclick', true, true);\n" +
-//                    "targLink.dispatchEvent (clickEvent);";
-//
-//            try {
-                hoverAndClick($(descriptionElement));
-                $(descriptionElement).doubleClick();
-                waitForAjaxCompletedAndJsRecalculation();
-//                String js =
-//                        "var callback = arguments[arguments.length - 1];" +
-//                                "function groupsLoaded() {" +
-//                                "var groups = Ext.getCmp('group-combobox');" +
-//                                "if (!groups || (groups.getStore().count() <= 0)) {" +
-//                                "setTimeout(groupsLoaded, 1000);" +
-//                                "} else {" +
-//                                "callback();" +
-//                                "}" +
-//                                "}" +
-//                                "groupsLoaded();";
-//                ((JavascriptExecutor) driver).executeAsyncScript(js);
-//            } catch (ScriptTimeoutException e) {
-//                logger.error(e.getMessage());
-//                ((JavascriptExecutor) driver).executeScript(dblClick, descriptionElement);
-//            }
+            hoverAndClick($(descriptionElement));
+            $(descriptionElement).doubleClick();
+            waitForAjaxCompletedAndJsRecalculation();
         }
 
         SelenideElement claimLineNotesIconElementShouldBe(Condition condition){

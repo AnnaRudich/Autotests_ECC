@@ -130,7 +130,6 @@ public class SupplierTests extends BaseTest {
                 .setOrderEmail(supplier.getSupplierEmail())
                 .setOrderMailFormat(SupplierDialog.OrderMailFormat.XML_MAIL_BODY)
                 .setDefaultDeliveryTime(7)
-//                .useFreightPrice()
                 .useProductsAsVouchers()
                 .selectRadioOrderService()
                 .selectGeneralTab();
@@ -146,7 +145,6 @@ public class SupplierTests extends BaseTest {
                     ordersTab.assertOrderEmailIs(supplier.getSupplierEmail());
                     ordersTab.assertOrderEmailFormatIs(SupplierDialog.OrderMailFormat.XML_MAIL_BODY);
                     ordersTab.assertDeliveryTimeIs(7);
-//                    ordersTab.assertFreightPriceUsed();
                     ordersTab.assertProductsUsedAsVouchers();
                 });
     }

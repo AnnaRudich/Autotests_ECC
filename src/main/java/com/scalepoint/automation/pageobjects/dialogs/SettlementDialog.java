@@ -82,46 +82,6 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "description-textfield-inputEl")
     private WebElement description;
 
-//    @FindBy(id = "group-combobox")
-//    private GroupExtComboBox category;
-
-    private GroupExtComboBox getCategory(){
-
-        return new GroupExtComboBox($(GROUP_COMBOBOX));
-    }
-
-//    @FindBy(id = "pseudocategory-combobox")
-//    private PseudoCategoryComboBox subCategory;
-
-    private PseudoCategoryComboBox getSubCategory(){
-
-        return new PseudoCategoryComboBox($(PSEUDOCATEGORY_COMBOBOX));
-    }
-
-    private AgeMonthsComboBox getAgeMonth(){
-
-        return new AgeMonthsComboBox($(AGE_MONTHS_COMBOBOX));
-    }
-
-//    @FindBy(id = "age-months-combobox")
-//    private AgeMonthsComboBox ageMonth;
-
-//    @FindBy(id = "available-vouchers-combobox")
-//    private AvailableVouchersExtComboBox availableVoucher;
-
-    private AvailableVouchersExtComboBox getAvailableVoucher(){
-
-        return new AvailableVouchersExtComboBox($(AVAILABLE_VOUCHER_COMBOBOX));
-    }
-
-//    @FindBy(id = "vouchers-combobox")
-//    private VoucherComboBox voucherCombo;
-
-    private VoucherComboBox getVoucher(){
-
-        return new VoucherComboBox($(VOUCHER_COMBOBOX));
-    }
-
     @FindBy(css = "#voucher-supplier-link a")
     private WebElement voucherSupplierLink;
 
@@ -139,22 +99,6 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(id = "discretionary-replacement-textfield-inputEl")
     private WebElement discretionaryPrice;
-
-//    @FindBy(id = "age-defined-radiogroup")
-//    private ExtRadioGroupTypeDiv age;
-
-    private ExtRadioGroupTypeDiv getAge(){
-
-        return new ExtRadioGroupTypeDiv($(AGE_DEFINED_RADIOGROUP));
-    }
-
-//    @FindBy(id = "reviewed-checkbox")
-//    private ExtCheckboxTypeDiv reviewed;
-
-    private ExtCheckboxTypeDiv getReviewed(){
-
-        return new ExtCheckboxTypeDiv($(REVIEWED_CHECKBOX));
-    }
 
     @FindBy(id = "total-cash-compensation-text")
     private TextBlock cashCompensationValue;
@@ -177,29 +121,13 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "voucher-price-text")
     private WebElement voucherCashValue;
 
-//    @FindBy(id = "depreciate-discounted-checkbox")
-//    private ExtCheckboxTypeDiv combineDiscountDepreciation;
-
-    private ExtCheckboxTypeDiv getCombineDiscountDepreciation(){
-
-        return new ExtCheckboxTypeDiv($(DEPRECIATE_DISCOUNTED_CHECKBOX));
-    }
-
-//    @FindBy(id = "active-checkbox")
-//    private ExtCheckboxTypeDiv includeInClaim;
-
-    private ExtCheckboxTypeDiv getIncludeInClaim(){
-
-        return new ExtCheckboxTypeDiv($(ACTIVE_CHECKBOX));
-    }
-
     @FindBy(css = "#valuations-grid-body table")
     private List<Table> valuations;
 
     @FindBy(css = "#valuations-grid-body table:first-child")
     private Table firstValuation;
 
-    @FindBy(id = "cancel-button")//
+    @FindBy(id = "cancel-button")
     private WebElement cancelButton;
 
     @FindBy(id = "add-valuation-button")
@@ -223,14 +151,6 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(css = "#rule-suggestion-grid-body table")
     private Table ruleSuggestion;
 
-//    @FindBy(id = "automatic-depreciation-checkbox")
-//    private ExtCheckboxTypeDiv automaticDepreciation;
-
-    private ExtCheckboxTypeDiv getAutomaticDepreciation(){
-
-        return new ExtCheckboxTypeDiv($(AUTOMATIC_DEPRECATION_CHECKBOX));
-    }
-
     @FindBy(id = "automatic-depreciation-checkbox-labelEl")
     private WebElement automaticDepreciationLabel;
 
@@ -240,40 +160,8 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "productmatch-card-supplier")
     private TextBlock statusSupplier;
 
-//    @FindBy(id = "reject-reason-combobox")
-//    private ExtComboBoxBoundView rejectReason;
-
-    private RejectReasonComboBox getRejectReason(){
-
-        return new RejectReasonComboBox($(REJECTION_REASON_COMBOBOX));
-    }
-
-//    @FindBy(id = "damage-type-combobox")
-//    private DamageTypeComboBox damageType;
-
-    private DamageTypeComboBox damageType(){
-
-        return new DamageTypeComboBox($(DAMAGE_TYPE_COMBOBOX));
-    }
-
     @FindBy(id = "damage-type-combobox-trigger-picker")
     private WebElement damageTypePicker;
-
-//    @FindBy(id = "discretionary-reason-combobox")
-//    private DiscretionaryReasonExtComboBox discretionaryReason;
-
-    private DiscretionaryReasonExtComboBox getDiscretionaryReason(){
-
-        return new DiscretionaryReasonExtComboBox($(DISCRETIONARY_REASON_COMBOBOX));
-    }
-
-//    @FindBy(id = "depreciation-type-combobox")
-//    private DepreciationTypeExtComboBox depreciationTypeComboBox;
-
-    private DepreciationTypeExtComboBox getDepreciationTypeComboBox(){
-
-        return new DepreciationTypeExtComboBox($(DEPRECIATION_TYPE_COMBOBOX));
-    }
 
     @FindBy(id = "not-cheapest-reason-display-inputEl")
     private TextBlock notCheapestReasonDisplay;
@@ -281,19 +169,86 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(xpath = "//div[@id='status_product_match_card']//div[contains(@id, 'displayfield')]/b")
     private WebElement statusMatchedDisplayField;
 
-//    @FindBy(id = "documentation-ok-checkbox")
-//    private ExtCheckboxTypeDiv sufficientDocumentation;
-
-    private ExtCheckboxTypeDiv getSufficientDocumentation(){
-
-        return new ExtCheckboxTypeDiv($(DOCUMENTATION_OK_CHECKBOX));
-    }
-
     @FindBy(id = "reject-checkbox-displayEl")
     private CheckBox rejectCheckbox;
 
     @FindBy(id = "damage-checkbox-displayEl")
     private CheckBox damageCheckbox;
+
+    private GroupExtComboBox getCategory(){
+
+        return new GroupExtComboBox($(GROUP_COMBOBOX));
+    }
+
+    private PseudoCategoryComboBox getSubCategory(){
+
+        return new PseudoCategoryComboBox($(PSEUDOCATEGORY_COMBOBOX));
+    }
+
+    private AgeMonthsComboBox getAgeMonth(){
+
+        return new AgeMonthsComboBox($(AGE_MONTHS_COMBOBOX));
+    }
+
+    private AvailableVouchersExtComboBox getAvailableVoucher(){
+
+        return new AvailableVouchersExtComboBox($(AVAILABLE_VOUCHER_COMBOBOX));
+    }
+
+    private VoucherComboBox getVoucher(){
+
+        return new VoucherComboBox($(VOUCHER_COMBOBOX));
+    }
+
+    private ExtRadioGroupTypeDiv getAge(){
+
+        return new ExtRadioGroupTypeDiv($(AGE_DEFINED_RADIOGROUP));
+    }
+
+    private ExtCheckboxTypeDiv getReviewed(){
+
+        return new ExtCheckboxTypeDiv($(REVIEWED_CHECKBOX));
+    }
+
+    private ExtCheckboxTypeDiv getCombineDiscountDepreciation(){
+
+        return new ExtCheckboxTypeDiv($(DEPRECIATE_DISCOUNTED_CHECKBOX));
+    }
+
+    private ExtCheckboxTypeDiv getIncludeInClaim(){
+
+        return new ExtCheckboxTypeDiv($(ACTIVE_CHECKBOX));
+    }
+
+    private ExtCheckboxTypeDiv getAutomaticDepreciation(){
+
+        return new ExtCheckboxTypeDiv($(AUTOMATIC_DEPRECATION_CHECKBOX));
+    }
+
+    private RejectReasonComboBox getRejectReason(){
+
+        return new RejectReasonComboBox($(REJECTION_REASON_COMBOBOX));
+    }
+
+    private DamageTypeComboBox damageType(){
+
+        return new DamageTypeComboBox($(DAMAGE_TYPE_COMBOBOX));
+    }
+
+    private DiscretionaryReasonExtComboBox getDiscretionaryReason(){
+
+        return new DiscretionaryReasonExtComboBox($(DISCRETIONARY_REASON_COMBOBOX));
+    }
+
+    private DepreciationTypeExtComboBox getDepreciationTypeComboBox(){
+
+        return new DepreciationTypeExtComboBox($(DEPRECIATION_TYPE_COMBOBOX));
+    }
+
+    private ExtCheckboxTypeDiv getSufficientDocumentation(){
+
+        return new ExtCheckboxTypeDiv($(DOCUMENTATION_OK_CHECKBOX));
+    }
 
     public enum DepreciationType {
         POLICY(0),
@@ -660,7 +615,6 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
-//        waitForVisible(combineDiscountDepreciation);
         getCombineDiscountDepreciation().set(state);
         waitForJavascriptRecalculation();
         return this;
@@ -668,7 +622,6 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog includeInClaim(Boolean state) {
         Wait.waitForLoaded();
-//        Wait.waitForEnabled(includeInClaim);
         getIncludeInClaim().set(state);
         waitForJavascriptRecalculation();
         return this;
@@ -783,7 +736,6 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog automaticDepreciation(boolean state) {
-//        Wait.waitForEnabled(automaticDepreciation);
         getAutomaticDepreciation().set(state);
         Wait.waitForLoaded();
         return this;
