@@ -10,11 +10,11 @@ import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.input.SimpleSupplier;
 import com.scalepoint.automation.utils.data.entity.input.Supplier;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-521")
@@ -130,7 +130,6 @@ public class SupplierTests extends BaseTest {
                 .setOrderEmail(supplier.getSupplierEmail())
                 .setOrderMailFormat(SupplierDialog.OrderMailFormat.XML_MAIL_BODY)
                 .setDefaultDeliveryTime(7)
-                .useFreightPrice()
                 .useProductsAsVouchers()
                 .selectRadioOrderService()
                 .selectGeneralTab();
@@ -146,7 +145,6 @@ public class SupplierTests extends BaseTest {
                     ordersTab.assertOrderEmailIs(supplier.getSupplierEmail());
                     ordersTab.assertOrderEmailFormatIs(SupplierDialog.OrderMailFormat.XML_MAIL_BODY);
                     ordersTab.assertDeliveryTimeIs(7);
-                    ordersTab.assertFreightPriceUsed();
                     ordersTab.assertProductsUsedAsVouchers();
                 });
     }
@@ -214,7 +212,6 @@ public class SupplierTests extends BaseTest {
                 .toVouchersPage()
                 .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(agreement));     // Exclusive tick should be visible in supply management, vouchers list
     }
-
     @Test(dataProvider = "testDataProvider", description = "Check if invoiceSetting is set correctly")
     public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT) User user) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);

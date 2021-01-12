@@ -4,8 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.ReplacementDialog;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Constants;
@@ -29,37 +28,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CompleteClaimPage extends Page {
 
     @FindBy(name = "policy_number")
-    private ExtInput policyNumber;
+    private WebElement policyNumber;
 
     @FindBy(name = "claim_number")
-    private ExtInput claimNumber;
+    private WebElement claimNumber;
 
     @FindBy(name = "phone")
-    private ExtInput phoneField;
+    private WebElement phoneField;
 
     @FindBy(name = "cellPhoneNumber")
-    private ExtInput cellPhoneField;
+    private WebElement cellPhoneField;
 
     @FindBy(name = "adr1")
-    private ExtInput addressField;
+    private WebElement addressField;
 
     @FindBy(name = "adr2")
-    private ExtInput address2Field;
+    private WebElement address2Field;
 
     @FindBy(name = "city")
-    private ExtInput cityField;
+    private WebElement cityField;
 
     @FindBy(name = "zipcode")
-    private ExtInput zipcodeField;
+    private WebElement zipcodeField;
 
     @FindBy(name = "email")
-    private ExtInput emailField;
+    private WebElement emailField;
 
     @FindBy(name = "password")
-    private ExtInput customerPasswordField;
+    private WebElement customerPasswordField;
 
     @FindBy(id = "sendPasswordSMSspan")
-    private ExtCheckbox spSMSCheckBOX;
+    private ExtCheckboxTypeDiv spSMSCheckBOX;
 
     @FindBy(id = "send")
     private Button compWthMailButton;
@@ -108,35 +107,35 @@ public class CompleteClaimPage extends Page {
     }
 
     public CompleteClaimPage enterPhone(String phone) {
-        phoneField.setValue(phone);
+        $(phoneField).setValue(phone);
         return this;
     }
 
     public CompleteClaimPage enterCellPhone(String phone) {
-        cellPhoneField.setValue(phone);
+        $(cellPhoneField).setValue(phone);
         return this;
     }
 
     public CompleteClaimPage enterAddress(String addr, String addr2, String city, String zip) {
-        addressField.setValue(addr);
-        address2Field.setValue(addr2);
-        cityField.setValue(city);
-        zipcodeField.setValue(zip);
+        $(addressField).setValue(addr);
+        $(address2Field).setValue(addr2);
+        $(cityField).setValue(city);
+        $(zipcodeField).setValue(zip);
         return this;
     }
 
     public CompleteClaimPage enterZipCode(String zip) {
-        zipcodeField.setValue(zip);
+        $(zipcodeField).setValue(zip);
         return this;
     }
 
     public CompleteClaimPage enterEmail(String email) {
-        emailField.setValue(email);
+        $(emailField).setValue(email);
         return this;
     }
 
     public CompleteClaimPage enterPassword(String pass) {
-        customerPasswordField.setValue(pass);
+        $(customerPasswordField).setValue(pass);
         return this;
     }
 
@@ -146,12 +145,12 @@ public class CompleteClaimPage extends Page {
     }
 
     public CompleteClaimPage enterPolicyNumber(String policyNumber) {
-        this.policyNumber.enter(policyNumber);
+        $(this.policyNumber).setValue(policyNumber);
         return this;
     }
 
     public CompleteClaimPage enterClaimNumber(String claimNumber) {
-        this.claimNumber.enter(claimNumber);
+        $(this.claimNumber).setValue(claimNumber);
         return this;
     }
 

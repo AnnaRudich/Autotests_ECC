@@ -1,9 +1,8 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -23,28 +22,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SettlementGroupDialog extends BaseDialog {
 
     @FindBy(name = "groupName")
-    private ExtInput groupName;
+    private WebElement groupName;
 
     @FindBy(name = "customerDemand")
-    private ExtInput customerDemand;
+    private WebElement customerDemand;
 
     @FindBy(name = "newPrice")
-    private ExtInput newPrice;
+    private WebElement newPrice;
 
     @FindBy(name = "valuation")
-    private ExtInput valuation;
+    private WebElement valuation;
 
     @FindBy(xpath = "//*[contains(@id, 'show-line-amounts-in-mails-checkbox-inputEl')]")
-    private ExtCheckbox showLineAmountsInMail;
+    private ExtCheckboxTypeDiv showLineAmountsInMail;
 
     @FindBy(name = "reason")
-    private ExtComboBox reason;
+    private ExtComboBoxBoundView reason;
 
     @FindBy(name = "note")
     private ExtText note;
 
     @FindBy(xpath = "//*[contains(@id, 'include-in-claim-checkbox-inputEl')]")
-    private ExtCheckbox includeInClaim;
+    private ExtCheckboxTypeDiv includeInClaim;
 
     @FindBy(xpath = "//*[contains(@id, 'average-age-field-inputEl')]")
     private WebElement averageAge;
@@ -62,7 +61,7 @@ public class SettlementGroupDialog extends BaseDialog {
 
 
     public SettlementGroupDialog enterGroupName(String name) {
-        groupName.setValue(name);
+        $(groupName).setValue(name);
         return this;
     }
 
@@ -72,22 +71,22 @@ public class SettlementGroupDialog extends BaseDialog {
     }
 
     public SettlementGroupDialog enterNewPrice(Double newPrice) {
-        this.newPrice.setValue(OperationalUtils.toStringWithComma(newPrice));
+        $(this.newPrice).setValue(OperationalUtils.toStringWithComma(newPrice));
         return this;
     }
 
     public SettlementGroupDialog enterCustomerDemand(Double customerDemand) {
-        this.customerDemand.setValue(OperationalUtils.toStringWithComma(customerDemand));
+        $(this.customerDemand).setValue(OperationalUtils.toStringWithComma(customerDemand));
         return this;
     }
 
     public SettlementGroupDialog enterValuation(Double valuation) {
-        this.valuation.setValue(OperationalUtils.toStringWithComma(valuation));
+        $(this.valuation).setValue(OperationalUtils.toStringWithComma(valuation));
         return this;
     }
 
     public SettlementGroupDialog enterNote(String note) {
-        this.note.sendKeys(note);
+        this.note.enter(note);
         return this;
     }
 
@@ -110,12 +109,12 @@ public class SettlementGroupDialog extends BaseDialog {
     }
 
     public SettlementGroupDialog clearNewPriceField() {
-        newPrice.clear();
+        $(newPrice).clear();
         return this;
     }
 
     public SettlementGroupDialog clearCustomerDemand() {
-        customerDemand.clear();
+        $(customerDemand).clear();
         return this;
     }
 
@@ -157,12 +156,12 @@ public class SettlementGroupDialog extends BaseDialog {
         }
 
         public Asserts assertIsNewPriceFiledDisabled() {
-            assertThat(newPrice.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            assertThat($(newPrice).attr("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsCustomerDemandFiledDisabled() {
-            assertThat(customerDemand.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            assertThat($(customerDemand).attr("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
@@ -172,17 +171,17 @@ public class SettlementGroupDialog extends BaseDialog {
         }
 
         public Asserts assertIsValuationFiledDisabled() {
-            assertThat(valuation.getAttribute("aria-disabled")).isEqualToIgnoringCase("true");
+            assertThat($(valuation).attr("aria-disabled")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertIsNewPriceFiledEnabled() {
-            assertThat(newPrice.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            assertThat($(newPrice).attr("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
         public Asserts assertIsCustomerDemandFiledEnabled() {
-            assertThat(customerDemand.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            assertThat($(customerDemand).attr("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
@@ -192,22 +191,22 @@ public class SettlementGroupDialog extends BaseDialog {
         }
 
         public Asserts assertIsValuationFiledEnabled() {
-            assertThat(valuation.getAttribute("aria-disabled")).isEqualToIgnoringCase("false");
+            assertThat($(valuation).attr("aria-disabled")).isEqualToIgnoringCase("false");
             return this;
         }
 
         public Asserts assertIsIncludeInClaimChecked() {
-            assertThat(includeInClaim.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            assertThat(includeInClaim.isChecked());
             return this;
         }
 
         public Asserts assertIsShowLineAmountInMailChecked() {
-            assertThat(showLineAmountsInMail.getAttribute("aria-checked")).isEqualToIgnoringCase("true");
+            assertThat(showLineAmountsInMail.isChecked());
             return this;
         }
 
         public Asserts assertIsValuationRequired() {
-            assertThat(valuation.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+            assertThat($(valuation).attr("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
 
@@ -222,12 +221,12 @@ public class SettlementGroupDialog extends BaseDialog {
         }
 
         public Asserts assertNewPriceIsRequired() {
-            assertThat(newPrice.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+            assertThat($(newPrice).attr("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
 
         public Asserts assertCustomerDemandIsRequired() {
-            assertThat(customerDemand.getAttribute("aria-invalid")).isEqualToIgnoringCase("true");
+            assertThat($(customerDemand).attr("aria-invalid")).isEqualToIgnoringCase("true");
             return this;
         }
     }

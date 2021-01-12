@@ -4,10 +4,9 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroupTypeInput;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
@@ -52,7 +51,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
     public static class OrdersTab extends BaseDialog implements SupplierTabs {
 
         @FindBy(name = "orderEmail")
-        private ExtInput emailField;
+        private WebElement emailField;
 
         @FindBy(id = "orderFlowOldFlow")
         private WebElement radioOldOrderFlow;
@@ -60,25 +59,25 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         @FindBy(id = "orderFlowOrderService")
         private WebElement radioOrderService;
 
-        @FindBy(xpath = "//table[contains(@class, 'supplier-order-mail-format')]")
-        private ExtComboBox orderMailFormatSelect;
+        @FindBy(css = ".supplier-order-mail-format")
+        private ExtComboBoxBoundList orderMailFormatSelect;
 
         @FindBy(xpath = "//table[contains(@class, 'supplier-add-freight-price')]")
-        private ExtCheckbox addFreightPriceCheckbox;
+        private ExtCheckboxTypeInput addFreightPriceCheckbox;
 
         @FindBy(id = "deliverySupportedId")
-        private ExtCheckbox deliverySupportedCheckbox;
+        private ExtCheckboxTypeInput deliverySupportedCheckbox;
 
         @FindBy(name = "deliveryTime")
-        private ExtInput defaultDeliveryTimeField;
+        private WebElement defaultDeliveryTimeField;
 
         @FindBy(xpath = "//table[contains(@class, 'supplier-products-only-for-claim-handling')]")
-        private ExtCheckbox claimHandlingProductsCheckbox;
+        private ExtCheckboxTypeInput claimHandlingProductsCheckbox;
 
         @FindBy(id = "invoiceSettingRadioGroup")
-        private ExtRadioGroup invoiceSettings;
+        private ExtRadioGroupTypeInput invoiceSettings;
 
-        public ExtRadioGroup getInvoiceSettings() {
+        public ExtRadioGroupTypeInput getInvoiceSettings() {
             return invoiceSettings;
         }
 
@@ -88,8 +87,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
         }
 
         public OrdersTab setOrderEmail(String email) {
-            emailField.clear();
-            emailField.sendKeys(email);
+            SelenideElement element = $(emailField);
+            element.clear();
+            element.setValue(email);
             return this;
         }
 
@@ -110,8 +110,9 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public OrdersTab setDefaultDeliveryTime(Integer deliveryTime) {
             deliverySupportedCheckbox.set(true);
-            defaultDeliveryTimeField.clear();
-            defaultDeliveryTimeField.sendKeys(deliveryTime.toString());
+            SelenideElement element = $(defaultDeliveryTimeField);
+            element.clear();
+            element.setValue(deliveryTime.toString());
             return this;
         }
 
@@ -132,7 +133,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
         public class Asserts {
             public Asserts assertOrderEmailIs(String email) {
-                Assert.assertEquals(emailField.getText(), email);
+                Assert.assertEquals($(emailField).getValue(), email);
                 return this;
             }
 
@@ -142,18 +143,18 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
             }
 
             public Asserts assertDeliveryTimeIs(Integer deliveryTime) {
-                Assert.assertTrue(deliverySupportedCheckbox.isSelected());
-                Assert.assertEquals(defaultDeliveryTimeField.getText(), deliveryTime.toString());
+                Assert.assertTrue(deliverySupportedCheckbox.isChecked());
+                Assert.assertEquals($(defaultDeliveryTimeField).getValue(), deliveryTime.toString());
                 return this;
             }
 
             public Asserts assertFreightPriceUsed() {
-                Assert.assertTrue(addFreightPriceCheckbox.isSelected());
+                Assert.assertTrue(addFreightPriceCheckbox.isChecked());
                 return this;
             }
 
             public Asserts assertProductsUsedAsVouchers() {
-                Assert.assertTrue(claimHandlingProductsCheckbox.isSelected());
+                Assert.assertTrue(claimHandlingProductsCheckbox.isChecked());
                 return this;
             }
 
@@ -164,7 +165,7 @@ public class SupplierDialog extends BaseDialog implements SupplierTabs {
 
             public Asserts assertOldOrderFlowItemsDisabled() {
                 Assert.assertFalse(orderMailFormatSelect.isInputElementEnabled());
-                Assert.assertFalse(addFreightPriceCheckbox.isInputElementEnabled());
+                Assert.assertFalse(addFreightPriceCheckbox.isChecked());
                 return this;
             }
         }

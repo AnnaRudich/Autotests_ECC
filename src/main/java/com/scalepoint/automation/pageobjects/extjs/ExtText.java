@@ -1,28 +1,27 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
-import com.scalepoint.automation.utils.threadlocal.Browser;
-import org.openqa.selenium.JavascriptExecutor;
+import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.Actions;
+import com.scalepoint.automation.utils.JavascriptHelper;
+import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 
-public class ExtText extends ExtElement {
+import static com.codeborne.selenide.Selenide.$;
+
+public class ExtText extends ExtElement implements Actions {
 
     public ExtText(WebElement wrappedElement) {
         super(wrappedElement);
     }
 
-    public void enter(String text) {
-        Object[] args = {getWrappedElement(), text};
-        String js =
-                "var id = arguments[0].id," +
-                        "value = arguments[1]," +
-                        "cmp = Ext.getCmp(id);" +
-                        "cmp.setValue(value);" +
-                        "cmp.fireEvent('blur', cmp);";
-        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
-    }
-
-    public void sendKeys(CharSequence keys) {
-        getWrappedElement().sendKeys(keys);
+    public void enter(String value) {
+        SelenideElement element = $(getWrappedElement());
+        element
+                .hover()
+                .click();
+        sendKeys(value);
+        JavascriptHelper.blur();
+        Wait.waitForAjaxCompletedAndJsRecalculation();
     }
 
     public void clear() {

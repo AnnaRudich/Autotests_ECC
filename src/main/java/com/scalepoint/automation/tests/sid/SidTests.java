@@ -13,21 +13,14 @@ import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.input.Category;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.input.Supplier;
-import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
-import static com.scalepoint.automation.utils.Constants.PRICE_100_000;
-import static com.scalepoint.automation.utils.Constants.PRICE_2400;
+import static com.scalepoint.automation.utils.Constants.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-512")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)

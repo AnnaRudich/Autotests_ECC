@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
@@ -18,7 +18,7 @@ public class EditPolicyDialog extends BaseDialog {
     private WebElement ok;
 
     @FindBy(id = "edit-policy-combo")
-    private ExtComboBox policiesCombo;
+    private ExtComboBoxBoundView policiesCombo;
 
     @Override
     protected void ensureWeAreAt() {

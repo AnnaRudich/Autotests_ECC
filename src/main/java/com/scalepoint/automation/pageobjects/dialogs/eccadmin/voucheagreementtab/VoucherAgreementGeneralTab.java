@@ -1,9 +1,9 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
 import org.apache.log4j.LogManager;
@@ -31,23 +31,23 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
     @FindBy(name = "agreementDiscount")
     private WebElement agreementDiscount;
 
-    @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-agreement-status')]")
-    private ExtComboBox agreementStatusCombo;
+    @FindBy(css = ".supplier-voucher-agreement-status")
+    private ExtComboBoxBoundList agreementStatusCombo;
 
     @FindBy(name = "agreementDiscount")
-    private ExtInput discountInput;
+    private WebElement discountInput;
 
     @FindBy(xpath = "//table[contains(@class, 'supplier-voucher-custom-logo-radio')]//td[contains(@class, 'x-form-item-body')]//label")
     private WebElement useCustomLogoRadio;
 
     @FindBy(name = "minimumAmount")
-    private ExtInput minimumAmountInput;
+    private WebElement minimumAmountInput;
 
     private By logoImageXpath = By.xpath("//div[@id='voucherLogoImageId']//img[@class='voucherImageUploadImg']");
     private By imageXpath = By.xpath("//div[@id='voucherImageId']//img[@class='voucherImageUploadImg']");
 
     @FindBy(name = "stepAmount")
-    private ExtInput stepAmountInput;
+    private WebElement stepAmountInput;
 
     public static class FormFiller {
 
@@ -58,20 +58,23 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
         }
 
         public FormFiller withDiscount(Integer discount) {
-            dialog.discountInput.clear();
-            dialog.discountInput.setValue(discount.toString());
+            SelenideElement element = $(dialog.discountInput);
+            element.clear();
+            element.setValue(discount.toString());
             return this;
         }
 
         public FormFiller withFaceValue(Integer faceValue) {
-            dialog.minimumAmountInput.clear();
-            dialog.minimumAmountInput.setValue(faceValue.toString());
+            SelenideElement element = $(dialog.minimumAmountInput);
+            element.clear();
+            element.setValue(faceValue.toString());
             return this;
         }
 
         public FormFiller withFaceValueStep(Integer faceValueStep) {
-            dialog.stepAmountInput.clear();
-            dialog.stepAmountInput.setValue(faceValueStep.toString());
+            SelenideElement element = $(dialog.stepAmountInput);
+            element.clear();
+            element.setValue(faceValueStep.toString());
             return this;
         }
 
@@ -146,12 +149,12 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
         }
 
         public Asserts assertFaceValue(Integer faceValue) {
-            Assert.assertEquals(minimumAmountInput.getText(), faceValue.toString());
+            Assert.assertEquals($(minimumAmountInput).getValue(), faceValue.toString());
             return this;
         }
 
         public Asserts assertFaceValueStep(Integer faceValueStep) {
-            Assert.assertEquals(stepAmountInput.getText(), faceValueStep.toString());
+            Assert.assertEquals($(stepAmountInput).getValue(), faceValueStep.toString());
             return this;
         }
 

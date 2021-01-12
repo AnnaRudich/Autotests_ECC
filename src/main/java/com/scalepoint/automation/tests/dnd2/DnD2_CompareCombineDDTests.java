@@ -20,17 +20,8 @@ import org.testng.annotations.Test;
 import java.time.Year;
 import java.util.Objects;
 
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.USED_PRICE;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_EQUALS_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.ORDERABLE;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY;
-import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.PRODUCT_AS_VOUCHER_ONLY_FALSE;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
+import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceConditions.*;
 
 /**
  * The class represents smoke tests set for D&D2 functionality
@@ -67,7 +58,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
     public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 

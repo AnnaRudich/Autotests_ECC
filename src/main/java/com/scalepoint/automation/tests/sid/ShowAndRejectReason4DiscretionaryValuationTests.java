@@ -10,18 +10,14 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DEMAND;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NOT_SELECTED;
-import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
+import static com.scalepoint.automation.grid.ValuationGrid.Valuation.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.PRICE_500;
@@ -144,7 +140,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                             .withDiscretionaryPrice(PRICE_500)
                             .withDiscountAndDepreciation(false)
                             .withValuation(NOT_SELECTED)
-                            .withVoucher(voucher.getTrygVoucher());
+                            .withAvailableVoucher(voucher.getTrygVoucher());
                 })
                 .doAssert(SettlementDialog.Asserts::assertDiscretionaryReasonDisabled);
     }

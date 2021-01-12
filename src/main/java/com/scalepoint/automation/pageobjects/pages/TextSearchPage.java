@@ -5,7 +5,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
 import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
 import com.scalepoint.automation.pageobjects.modules.textSearch.TextSearchAttributesMenu;
 import com.scalepoint.automation.services.externalapi.SolrApi;
@@ -72,7 +71,7 @@ public class TextSearchPage extends Page {
     private WebElement sortByPopularity;
 
     @FindBy(id = "textSearchInput")
-    private ExtInput searchInput;
+    private WebElement searchInput;
 
     @FindBy(id = "searchButton")
     private Button search;
@@ -309,13 +308,14 @@ public class TextSearchPage extends Page {
     }
 
     private void searchProduct(String productName) {
+        SelenideElement element = $(searchInput);
         try {
             int attempt = 0;
             do {
-                searchInput.setValue(productName);
+                element.setValue(productName);
                 attempt++;
             }
-            while (!searchInput.getText().contains(productName) || attempt < 10);
+            while (!element.getValue().contains(productName) || attempt < 10);
         } catch (InvalidElementStateException e) {
             logger.error("The Product name has not been entered!");
         }
@@ -336,7 +336,7 @@ public class TextSearchPage extends Page {
     }
 
     public String getSearchInputText() {
-        return searchInput.getText();
+        return $(searchInput).getValue();
     }
 
     public String getFirstProductId() {

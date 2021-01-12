@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.NotCheapestReasonExtComboBox;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -21,7 +21,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class NotCheapestChoiceDialog extends BaseDialog {
 
     @FindBy(id = "not-cheapest-reason-combo")
-    private ExtComboBox reason;
+    private NotCheapestReasonExtComboBox reason;
 
     @FindBy(id = "not-cheapest-reason-ok-button")
     private WebElement ok;

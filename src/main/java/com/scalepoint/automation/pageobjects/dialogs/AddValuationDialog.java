@@ -1,7 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
+import com.scalepoint.automation.pageobjects.extjs.AddManualValuationTypeComboBox;
 import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.support.FindBy;
@@ -13,7 +13,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class AddValuationDialog extends BaseDialog {
 
     @FindBy(id = "add-manual-valuation-type-combo")
-    private ExtComboBox addValuationType;
+    private AddManualValuationTypeComboBox addValuationType;
 
     @FindBy(id = "add-manual-valuation-price-input")
     private ExtText addValuationPrice;

@@ -1,8 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
+import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -17,19 +16,19 @@ import static com.scalepoint.automation.utils.Wait.waitForInvisible;
 public class SendSelfServiceRequestDialog extends BaseDialog {
 
     @FindBy(name = "email")
-    private ExtInput email;
+    private WebElement email;
 
     @FindBy(name = "mobileNumber")
-    private ExtInput mobileNumber;
+    private WebElement mobileNumber;
 
     @FindBy(name = "password")
-    private ExtInput password;
+    private WebElement password;
 
     @FindBy(id = "sendPasswordSmsCheckbox-bodyEl")
-    private ExtCheckbox sendSms;
+    private ExtCheckboxTypeDiv sendSms;
 
     @FindBy(id = "closeAutomatically-bodyEl")
-    private ExtCheckbox closeAutomatically;
+    private ExtCheckboxTypeDiv closeAutomatically;
 
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
     private Button ok;
@@ -57,22 +56,22 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     private SendSelfServiceRequestDialog enterEmail(String email) {
-        this.email.enter(email);
+        $(this.email).setValue(email);
         return this;
     }
 
     private SendSelfServiceRequestDialog enterPassword(String password) {
-        this.password.enter(password);
+        $(this.password).setValue(password);
         return this;
     }
 
     private SendSelfServiceRequestDialog enterMobileNumber(String mobileNumber) {
-        this.mobileNumber.enter(mobileNumber);
+        $(this.mobileNumber).setValue(mobileNumber);
         return this;
     }
 
     private SendSelfServiceRequestDialog disableSendSms() {
-        if (sendSms.isSelected()) {
+        if (sendSms.isChecked()) {
             sendSms.set(false);
         }
         return this;

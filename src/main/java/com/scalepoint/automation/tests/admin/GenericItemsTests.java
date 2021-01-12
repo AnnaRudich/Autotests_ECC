@@ -6,9 +6,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -17,7 +17,6 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
 public class GenericItemsTests extends BaseTest {
-
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
@@ -50,7 +49,6 @@ public class GenericItemsTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
-
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Publish/Unpublish generic item")
     public void charlie535_testWeCanPublishGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();

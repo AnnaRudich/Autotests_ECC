@@ -15,11 +15,11 @@ import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.annotations.Test;
 
@@ -114,7 +114,6 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: Amount of depreciation is shown at the bottom of SID
      * THEN: Depreciation percent is shown on the settlement page after saving SID
      */
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(dataProvider = "testDataProvider", description = "ECC-3144 Verify a manual depreciation can be entered into the field Depreciation")
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)

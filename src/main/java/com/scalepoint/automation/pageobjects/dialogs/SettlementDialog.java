@@ -3,12 +3,11 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
-import com.scalepoint.automation.pageobjects.extjs.ExtCheckbox;
-import com.scalepoint.automation.pageobjects.extjs.ExtComboBox;
-import com.scalepoint.automation.pageobjects.extjs.ExtInput;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioGroup;
+import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
@@ -27,7 +26,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.*;
 
@@ -40,8 +38,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -57,6 +55,21 @@ public class SettlementDialog extends BaseDialog {
     private static final By OK_BUTTON = By.id("ok-button");
     private static final By ADD_BUTTON = By.id("add-button");
     private static final By CANCEL_BUTTON = By.id("cancel-button");
+    private static final By GROUP_COMBOBOX = By.id("group-combobox");
+    private static final By PSEUDOCATEGORY_COMBOBOX = By.id("pseudocategory-combobox");
+    private static final By AGE_MONTHS_COMBOBOX = By.id("age-months-combobox");
+    private static final By AVAILABLE_VOUCHER_COMBOBOX = By.id("available-vouchers-combobox");
+    private static final By VOUCHER_COMBOBOX = By.id("vouchers-combobox");
+    private static final By REJECTION_REASON_COMBOBOX = By.id("reject-reason-combobox");
+    private static final By DAMAGE_TYPE_COMBOBOX = By.id("damage-type-combobox");
+    private static final By DISCRETIONARY_REASON_COMBOBOX = By.id("discretionary-reason-combobox");
+    private static final By DEPRECIATION_TYPE_COMBOBOX = By.id("depreciation-type-combobox");
+    private static final By AGE_DEFINED_RADIOGROUP = By.id("age-defined-radiogroup");
+    private static final By REVIEWED_CHECKBOX = By.id("reviewed-checkbox");
+    private static final By DEPRECIATE_DISCOUNTED_CHECKBOX = By.id("depreciate-discounted-checkbox");
+    private static final By ACTIVE_CHECKBOX = By.id("active-checkbox");
+    private static final By AUTOMATIC_DEPRECATION_CHECKBOX = By.id("automatic-depreciation-checkbox");
+    private static final By DOCUMENTATION_OK_CHECKBOX = By.id("documentation-ok-checkbox");
     public static final String ARIA_CHECKED = "aria-checked";
     public static final String TR_CONTAINS_CLASS = ".//tr[contains(@class, '";
     public static final String REJECT_REASON_COMBOBOX_INPUT_EL = "reject-reason-combobox-inputEl";
@@ -69,23 +82,11 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "description-textfield-inputEl")
     private WebElement description;
 
-    @FindBy(id = "group-combobox")
-    private ExtComboBox category;
-
-    @FindBy(id = "pseudocategory-combobox")
-    private ExtComboBox subCategory;
-
-    @FindBy(id = "age-months-combobox")
-    private ExtComboBox ageMonth;
-
-    @FindBy(id = "available-vouchers-combobox")
-    private ExtComboBox availableVoucher;
-
-    @FindBy(id = "vouchers-combobox")
-    private ExtComboBox voucherCombo;
+    @FindBy(css = "#voucher-supplier-link a")
+    private WebElement voucherSupplierLink;
 
     @FindBy(id = "quantity-textfield-inputEl")
-    private ExtInput quantity;
+    private WebElement quantity;
 
     @FindBy(id = "customer-demand-textfield-inputEl")
     private WebElement customerDemand;
@@ -98,12 +99,6 @@ public class SettlementDialog extends BaseDialog {
 
     @FindBy(id = "discretionary-replacement-textfield-inputEl")
     private WebElement discretionaryPrice;
-
-    @FindBy(id = "age-defined-radiogroup")
-    private ExtRadioGroup age;
-
-    @FindBy(id = "reviewed-checkbox")
-    private ExtCheckbox reviewed;
 
     @FindBy(id = "total-cash-compensation-text")
     private TextBlock cashCompensationValue;
@@ -126,19 +121,13 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "voucher-price-text")
     private WebElement voucherCashValue;
 
-    @FindBy(id = "depreciate-discounted-checkbox")
-    private ExtCheckbox combineDiscountDepreciation;
-
-    @FindBy(id = "active-checkbox")
-    private ExtCheckbox includeInClaim;
-
     @FindBy(css = "#valuations-grid-body table")
     private List<Table> valuations;
 
     @FindBy(css = "#valuations-grid-body table:first-child")
     private Table firstValuation;
 
-    @FindBy(id = "cancel-button")//
+    @FindBy(id = "cancel-button")
     private WebElement cancelButton;
 
     @FindBy(id = "add-valuation-button")
@@ -162,9 +151,6 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(css = "#rule-suggestion-grid-body table")
     private Table ruleSuggestion;
 
-    @FindBy(id = "automatic-depreciation-checkbox")
-    private ExtCheckbox automaticDepreciation;
-
     @FindBy(id = "automatic-depreciation-checkbox-labelEl")
     private WebElement automaticDepreciationLabel;
 
@@ -174,20 +160,8 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "productmatch-card-supplier")
     private TextBlock statusSupplier;
 
-    @FindBy(id = "reject-reason-combobox")
-    private ExtComboBox rejectReason;
-
-    @FindBy(id = "damage-type-combobox")
-    private ExtComboBox damageType;
-
     @FindBy(id = "damage-type-combobox-trigger-picker")
     private WebElement damageTypePicker;
-
-    @FindBy(id = "discretionary-reason-combobox")
-    private ExtComboBox discretionaryReason;
-
-    @FindBy(id = "depreciation-type-combobox")
-    private ExtComboBox depreciationTypeComboBox;
 
     @FindBy(id = "not-cheapest-reason-display-inputEl")
     private TextBlock notCheapestReasonDisplay;
@@ -195,14 +169,86 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(xpath = "//div[@id='status_product_match_card']//div[contains(@id, 'displayfield')]/b")
     private WebElement statusMatchedDisplayField;
 
-    @FindBy(id = "documentation-ok-checkbox-inputEl")
-    private CheckBox sufficientDocumentation;
-
     @FindBy(id = "reject-checkbox-displayEl")
     private CheckBox rejectCheckbox;
 
     @FindBy(id = "damage-checkbox-displayEl")
     private CheckBox damageCheckbox;
+
+    private GroupExtComboBox getCategory(){
+
+        return new GroupExtComboBox($(GROUP_COMBOBOX));
+    }
+
+    private PseudoCategoryComboBox getSubCategory(){
+
+        return new PseudoCategoryComboBox($(PSEUDOCATEGORY_COMBOBOX));
+    }
+
+    private AgeMonthsComboBox getAgeMonth(){
+
+        return new AgeMonthsComboBox($(AGE_MONTHS_COMBOBOX));
+    }
+
+    private AvailableVouchersExtComboBox getAvailableVoucher(){
+
+        return new AvailableVouchersExtComboBox($(AVAILABLE_VOUCHER_COMBOBOX));
+    }
+
+    private VoucherComboBox getVoucher(){
+
+        return new VoucherComboBox($(VOUCHER_COMBOBOX));
+    }
+
+    private ExtRadioGroupTypeDiv getAge(){
+
+        return new ExtRadioGroupTypeDiv($(AGE_DEFINED_RADIOGROUP));
+    }
+
+    private ExtCheckboxTypeDiv getReviewed(){
+
+        return new ExtCheckboxTypeDiv($(REVIEWED_CHECKBOX));
+    }
+
+    private ExtCheckboxTypeDiv getCombineDiscountDepreciation(){
+
+        return new ExtCheckboxTypeDiv($(DEPRECIATE_DISCOUNTED_CHECKBOX));
+    }
+
+    private ExtCheckboxTypeDiv getIncludeInClaim(){
+
+        return new ExtCheckboxTypeDiv($(ACTIVE_CHECKBOX));
+    }
+
+    private ExtCheckboxTypeDiv getAutomaticDepreciation(){
+
+        return new ExtCheckboxTypeDiv($(AUTOMATIC_DEPRECATION_CHECKBOX));
+    }
+
+    private RejectReasonComboBox getRejectReason(){
+
+        return new RejectReasonComboBox($(REJECTION_REASON_COMBOBOX));
+    }
+
+    private DamageTypeComboBox damageType(){
+
+        return new DamageTypeComboBox($(DAMAGE_TYPE_COMBOBOX));
+    }
+
+    private DiscretionaryReasonExtComboBox getDiscretionaryReason(){
+
+        return new DiscretionaryReasonExtComboBox($(DISCRETIONARY_REASON_COMBOBOX));
+    }
+
+    private DepreciationTypeExtComboBox getDepreciationTypeComboBox(){
+
+        return new DepreciationTypeExtComboBox($(DEPRECIATION_TYPE_COMBOBOX));
+    }
+
+    private ExtCheckboxTypeDiv getSufficientDocumentation(){
+
+        return new ExtCheckboxTypeDiv($(DOCUMENTATION_OK_CHECKBOX));
+    }
 
     public enum DepreciationType {
         POLICY(0),
@@ -262,6 +308,11 @@ public class SettlementDialog extends BaseDialog {
 
         public FormFiller withVoucher(String voucher) {
             sid.fillVoucher(voucher);
+            return this;
+        }
+
+        public FormFiller withAvailableVoucher(String voucher) {
+            sid.fillAvailableVoucher(voucher);
             return this;
         }
 
@@ -373,16 +424,12 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public void setSubCategoryByIndex(int index) {
-        subCategory.select(index);
+        getSubCategory().select(index);
         waitForJavascriptRecalculation();
     }
 
     public SettlementDialog uncheckedDocumentation() {
-        if (sufficientDocumentation.getAttribute(ARIA_CHECKED).equals("true")) {
-            forCondition(ExpectedConditions.elementToBeClickable(sufficientDocumentation));
-            clickUsingJavaScriptIfClickDoesNotWork(sufficientDocumentation);
-        }
-        waitForJavascriptRecalculation();
+        getSufficientDocumentation().set(false);
         return this;
     }
 
@@ -420,7 +467,8 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setCategory(String categoryName) {
-        category.select(categoryName);
+
+        getCategory().select(categoryName);
         waitForJavascriptRecalculation();
         return this;
     }
@@ -429,7 +477,7 @@ public class SettlementDialog extends BaseDialog {
         if (subCategoryName == null) {
             return this;
         }
-        subCategory.select(subCategoryName);
+        getSubCategory().select(subCategoryName);
         waitForJavascriptRecalculation();
         return this;
     }
@@ -441,19 +489,26 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog fillVoucher(String voucherName) {
-        waitForAjaxCompletedAndJsRecalculation();
-        if ($("#voucher-supplier-link a").has(text(voucherName))
-                & $("#vouchers-combobox").is(not(visible))) {
-            return this;
-        } else {
-            voucherCombo.select(voucherName);
+
+        VoucherComboBox voucher = getVoucher();
+        try {
+            if (!$(voucherSupplierLink).getText().contains(voucherName)){
+                voucher.select(voucherName);
+            }
+        }catch (ElementShould e){
+            voucher.select(voucherName);
         }
-        waitForJavascriptRecalculation();
+
+        return this;
+    }
+
+    public SettlementDialog fillAvailableVoucher(String voucherName) {
+        getAvailableVoucher().select(voucherName);
         return this;
     }
 
     public SettlementDialog enableAge() {
-        age.select(1);
+        getAge().select(1);
         return this;
     }
 
@@ -469,13 +524,13 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog selectMonth(String monthName) {
-        ageMonth.select(monthName);
+        getAgeMonth().select(monthName);
         waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog disableAge() {
-        age.select(0);
+        getAge().select(0);
         waitForJavascriptRecalculation();
         return this;
     }
@@ -487,7 +542,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setReviewed(boolean state) {
-        reviewed.set(state);
+        getReviewed().set(state);
         return this;
     }
 
@@ -560,16 +615,14 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setDiscountAndDepreciation(Boolean state) {
-        waitForVisible(combineDiscountDepreciation);
-        combineDiscountDepreciation.set(state);
+        getCombineDiscountDepreciation().set(state);
         waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog includeInClaim(Boolean state) {
         Wait.waitForLoaded();
-        Wait.waitForEnabled(includeInClaim);
-        includeInClaim.set(state);
+        getIncludeInClaim().set(state);
         waitForJavascriptRecalculation();
         return this;
     }
@@ -604,11 +657,12 @@ public class SettlementDialog extends BaseDialog {
 
     private String getCategoryText() {
         Wait.waitForLoaded();
-        waitForVisible(category);
-        return category.getValue();
+        waitForVisible(getCategory());
+        return getCategory().getValue();
     }
 
     private String getSubCategoryText() {
+        PseudoCategoryComboBox subCategory = getSubCategory();
         Wait.waitForLoaded();
         waitForVisible(subCategory);
         return subCategory.getValue();
@@ -682,8 +736,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog automaticDepreciation(boolean state) {
-        Wait.waitForEnabled(automaticDepreciation);
-        automaticDepreciation.set(state);
+        getAutomaticDepreciation().set(state);
         Wait.waitForLoaded();
         return this;
     }
@@ -701,19 +754,19 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private boolean isRejectReasonVisible() {
-        return rejectReason.exists();
+        return getRejectReason().exists();
     }
 
     private boolean isDamageTypeVisible() {
-        return damageType.exists();
+        return damageType().exists();
     }
 
     private boolean isRejectReasonEnabled() {
-        return $(rejectReason).isEnabled();
+        return getRejectReason().isEnabled();
     }
 
     private boolean isDamageTypeEnabled() {
-        return damageType.isEnabled();
+        return damageType().isEnabled();
     }
 
     private boolean isRejectReasonDisabled(String visibleText) {
@@ -724,26 +777,33 @@ public class SettlementDialog extends BaseDialog {
 
     private boolean isDiscretionaryReasonVisible() {
         try {
-            return Wait.forCondition1s(driver -> discretionaryReason.isDisplayed());
+            return Wait.forCondition1s(driver -> getDiscretionaryReason().isDisplayed());
         } catch (Exception e) {
             return false;
         }
     }
 
     private boolean isDiscretionaryReasonEnabled() {
-        waitForVisible(discretionaryReason);
-        return discretionaryReason.isEnabled();
+        return getDiscretionaryReason().isEnabled();
     }
 
     public SettlementDialog selectDiscretionaryReason(String visibleText) {
-        waitForVisible(discretionaryReason);
-        discretionaryReason.select(visibleText);
+        int trials = 2;
+        do {
+            try {
+                getDiscretionaryReason().select(visibleText);
+                break;
+            } catch (ElementNotFound e) {
+                trials--;
+                continue;
+            }
+        }while (trials > 0);
         waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog selectRejectReason(String visibleText) {
-        waitForVisible(rejectReason);
+        waitForVisible(getRejectReason());
         new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
         $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
         new Actions(driver).click(driver.findElement(By.xpath("//span[text()='" + visibleText + "']"))).build().perform();
@@ -758,10 +818,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog selectDamageType(String visibleText){
-        waitForEnabled(damageType);
-        clickDamageTypePicker();
-        SelenideElement element = $(By.xpath(String.format("//ul[@id='damage-type-combobox-picker-listEl']/li[text()='%s']", visibleText)));
-        element.click();
+        damageType().select(visibleText);
         waitForJavascriptRecalculation();
         return this;
     }
@@ -773,15 +830,13 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog setDepreciationType(DepreciationType depreciation) {
-        waitForVisible(depreciationTypeComboBox);
-        depreciationTypeComboBox.select(depreciation.index);
+        getDepreciationTypeComboBox().select(depreciation.index);
         waitForJavascriptRecalculation();
         return this;
     }
 
     public SettlementDialog setDepreciationType(String visibleText) {
-        waitForVisible(depreciationTypeComboBox);
-        depreciationTypeComboBox.select(visibleText);
+        getDepreciationTypeComboBox().select(visibleText);
         return this;
     }
 
@@ -793,23 +848,23 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog selectOtherCategoryIfNotChosen() {
-        String value = category.getValue();
+        String value = getCategory().getValue();
         if (StringUtils.isBlank(value)) {
-            category.select("Øvrige");
+            getCategory().select("Øvrige");
         }
         return this;
     }
 
     private String getDiscretionaryReasonText() {
-        return discretionaryReason.getValue();
+        return getDiscretionaryReason().getValue();
     }
 
     private String getRejectReasonText() {
-        return rejectReason.getValue();
+        return getRejectReason().getValue();
     }
 
     private String getDamageTypeText() {
-        return damageType.getValue();
+        return damageType().getValue();
     }
 
     private boolean isDiscretionaryReasonHasRedBorder() {
@@ -886,7 +941,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public List<VoucherDropdownElement> parseVoucherDropdown() {
-        List<String> comboBoxOptions = voucherCombo.getComboBoxOptions();
+        List<String> comboBoxOptions = getVoucher().getComboBoxOptions();
         return comboBoxOptions.stream().map(VoucherDropdownElement::new).collect(Collectors.toList());
     }
 
@@ -1015,7 +1070,7 @@ public class SettlementDialog extends BaseDialog {
     public class Asserts {
 
         public Asserts assertDiscretionaryReasonValuePresent(String expectedValue) {
-            List<String> options = discretionaryReason.getComboBoxOptions();
+            List<String> options = getDiscretionaryReason().getComboBoxOptions();
             Assert.assertTrue(options.stream().anyMatch(i -> i.contains(expectedValue)));
             return this;
         }
@@ -1073,10 +1128,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertReviewedNotPresent() {
-            try {
-                assertFalse(reviewed.isEnabled(), "Reviewed checkbox msu be disabled");
-            } catch (Exception ignored) {
-            }
+            assertFalse(getReviewed().isChecked(), "Reviewed checkbox must be disabled");
             return this;
         }
 
@@ -1107,20 +1159,21 @@ public class SettlementDialog extends BaseDialog {
         }
 
         private List<String> getVouchersList() {
-            if (voucherCombo.isDisplayed()) {
-                return voucherCombo.getComboBoxOptions();
+            VoucherComboBox voucher = getVoucher();
+            if (voucher.isDisplayed()) {
+                return voucher.getComboBoxOptions();
             } else {
-                return availableVoucher.getComboBoxOptions();
+                return getAvailableVoucher().getComboBoxOptions();
             }
         }
 
         public Asserts assertIncludeInClaimSelected() {
-            Assert.assertTrue(includeInClaim.isSelected(), "The 'Include in Claim' must be selected'");
+            Assert.assertTrue(getIncludeInClaim().isChecked(), "The 'Include in Claim' must be selected'");
             return this;
         }
 
         public Asserts assertIncludeInClaimNotSelected() {
-            Assert.assertFalse(includeInClaim.isSelected(), "The 'Include in Claim' must be unselected'");
+            Assert.assertFalse(getIncludeInClaim().isChecked(), "The 'Include in Claim' must be unselected'");
             return this;
         }
 
@@ -1130,6 +1183,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertSubCategoriesListEqualTo(List<String> expectedSubCategoriesList) {
+            PseudoCategoryComboBox subCategory = getSubCategory();
             waitForVisible(subCategory);
             List<String> stringList = new ArrayList<>();
             List<String> allCategories = subCategory.getComboBoxOptions();
@@ -1153,12 +1207,12 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertAgeIs(int years, int months) {
             assertEquals($(ageYears).getText(), years + "");
-            assertEquals($(ageMonth).getText(), months + "");
+            assertEquals(getAgeMonth().getText(), months + "");
             return this;
         }
 
         public Asserts assertMonthMenuEnabled() {
-            assertTrue($(ageMonth).isEnabled(), "Month DropDown must be enabled");
+            assertTrue(getAgeMonth().isEnabled(), "Month DropDown must be enabled");
             return this;
         }
 
@@ -1168,12 +1222,12 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertMonthMenuDisabled() {
-            assertFalse(ageMonth.isEnabled(), "Month DropDown must be disabled");
+            assertFalse(getAgeMonth().isEnabled(), "Month DropDown must be disabled");
             return this;
         }
 
         public Asserts assertMonthValueIs(String expectedMonthValue) {
-            assertEquals(ageMonth.getValue().trim(), expectedMonthValue, "The month is not saved");
+            assertEquals(getAgeMonth().getValue().trim(), expectedMonthValue, "The month is not saved");
             return this;
         }
 
@@ -1332,17 +1386,21 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertAutomaticDepreciationLabelColor() {
             boolean isLabelInRedColor = automaticDepreciationLabel.getAttribute("style").contains("color: red;");
-            assertEquals(automaticDepreciation.isSelected(), !isLabelInRedColor);
+            assertEquals(getAutomaticDepreciation().isChecked(), !isLabelInRedColor);
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsChecked() {
-            assertEquals("true", sufficientDocumentation.getAttribute(ARIA_CHECKED));
+            assertThat(getSufficientDocumentation().isChecked())
+                    .as("Sufficient documentation is unchecked")
+                    .isTrue();
             return this;
         }
 
         public Asserts assertIsSufficientDocumentationCheckboxDisplayedAndItIsUnchecked() {
-            assertEquals("false", sufficientDocumentation.getAttribute(ARIA_CHECKED));
+            assertThat(getSufficientDocumentation().isChecked())
+                    .as("Sufficient documentation is checked")
+                    .isFalse();
             return this;
         }
 

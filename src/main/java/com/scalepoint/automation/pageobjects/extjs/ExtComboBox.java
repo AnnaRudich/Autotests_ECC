@@ -1,16 +1,29 @@
 package com.scalepoint.automation.pageobjects.extjs;
 
-import com.scalepoint.automation.utils.threadlocal.Browser;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.Actions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ExtComboBox extends ExtElement {
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
-    public ExtComboBox(WebElement wrappedElement) {
+public class ExtComboBox extends ExtElement implements Actions {
+
+    SelenideElement picker;
+    By optionSelector;
+
+    public ExtComboBox(WebElement wrappedElement, By pickerSelector, By optionSelector) {
         super(wrappedElement);
+        picker=$(wrappedElement).find(pickerSelector);
+        this.optionSelector = optionSelector;
     }
 
     /**
@@ -19,15 +32,14 @@ public class ExtComboBox extends ExtElement {
      * @param visibleText option text which should be selected from list of combo box
      */
     public void select(String visibleText) {
-        Object[] args = {getRootElement(), visibleText};
-        String js =
-                "var id = arguments[0].id," +
-                        "cmp = Ext.getCmp(id)," +
-                        "store = cmp.getStore()," +
-                        "option = arguments[1]," +
-                        "index = store.findBy(function(rec){ return rec.get(cmp.displayField).indexOf(option) > -1 });" +
-                        "cmp.select(store.getAt(index));";
-        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
+        LocalDateTime start = LocalDateTime.now();
+        hoverAndClick(picker);
+        SelenideElement option = getOptions()
+                .findBy(text(visibleText));
+        hoverAndClick(option);
+        LocalDateTime end = LocalDateTime.now();
+        long duration = Duration.between(start, end).getSeconds();
+        logger.info("Select ext {} time:, {}", visibleText, duration);
     }
 
     /**
@@ -36,27 +48,39 @@ public class ExtComboBox extends ExtElement {
      * @param index place number of option text which should be selected from list of combo box
      */
     public void select(int index) {
-        Object[] args = {getRootElement(), index};
-        String js =
-                "var id = arguments[0].id," +
-                        "cmp = Ext.getCmp(id)," +
-                        "store = cmp.getStore()," +
-                        "index = arguments[1];" +
-                        "cmp.select(store.getAt(index));";
-        ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
+        hoverAndClick(picker);
+        SelenideElement option = getOptions()
+                .get(index);
+        hoverAndClick(option);
+    }
+
+    private boolean isPickerFieldOpen(){
+
+        return $(getWrappedElement())
+                .find("[data-ref='bodyEl']")
+                .attr("class")
+                .contains("x-pickerfield-open");
     }
 
     @SuppressWarnings("unchecked")
     public List<String> getComboBoxOptions() {
-        Object[] args = {getRootElement()};
-        String js =
-                "var id = arguments[0].id," +
-                        "cmp = Ext.getCmp(id)," +
-                        "store = cmp.getStore()," +
-                        "options = [];" +
-                        "store.each(function(rec){ options.push(rec.get(cmp.displayField)) });" +
-                        "return options;";
-        return (List<String>) ((JavascriptExecutor) Browser.driver()).executeScript(js, args);
+        LocalDateTime start = LocalDateTime.now();
+        if(!isPickerFieldOpen()) {
+            hoverAndClick(picker);
+        }
+        List<String> options =  getOptions().stream()
+                .parallel()
+                .map(element -> element.getText())
+                .collect(Collectors.toList());
+        LocalDateTime end = LocalDateTime.now();
+        long duration = Duration.between(start, end).getSeconds();
+        logger.info("ComoboBoxOptions ext time:, {}", duration);
+
+        return options;
+    }
+
+    private ElementsCollection getOptions(){
+        return  $$(optionSelector);
     }
 
     private WebElement getInput() {
