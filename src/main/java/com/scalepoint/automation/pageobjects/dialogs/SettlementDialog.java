@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.Events;
 import com.scalepoint.automation.grid.ValuationGrid;
@@ -835,7 +836,16 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog selectDiscretionaryReason(String visibleText) {
-        getDiscretionaryReason().select(visibleText);
+        int trials = 2;
+        do {
+            try {
+                getDiscretionaryReason().select(visibleText);
+                break;
+            } catch (ElementNotFound e) {
+                trials--;
+                continue;
+            }
+        }while (trials > 0);
         waitForJavascriptRecalculation();
         return this;
     }
