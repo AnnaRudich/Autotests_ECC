@@ -8,10 +8,7 @@ import com.scalepoint.automation.utils.threadlocal.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -131,6 +128,20 @@ public interface Actions {
         finally {
 
             zoom(1);
+        }
+
+        return element;
+    }
+
+    default SelenideElement jsIfClickDoesNotWork(SelenideElement element){
+
+        try {
+
+            element = hoverAndClick(element);
+        }catch (ElementShould e){
+
+            JavascriptExecutor executor = (JavascriptExecutor)Browser.driver();
+            executor.executeScript("arguments[0].click();", element);
         }
 
         return element;

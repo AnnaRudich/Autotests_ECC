@@ -227,7 +227,7 @@ public class CommunicationDesignerTests extends BaseTest {
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = false)
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = true)
     public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 

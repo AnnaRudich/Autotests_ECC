@@ -80,7 +80,7 @@ public class SettlementSummary extends Module {
         if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
             expand();
         }
-        zoomIfClickDoesNotWork($(completeClaim));
+        jsIfClickDoesNotWork($(completeClaim));
     }
 
     public void completeClaimWithoutMail() {
