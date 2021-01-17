@@ -244,7 +244,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <configuration>
                     <systemProperties>
-                        <java.library.path>dll/</java.library.path>
+                        <java.library.path>${basedir}/src/main/resources/dll/</java.library.path>
                     </systemProperties>
                     <changeLogFile>${basedir}/src/liquibase/changelog.xml</changeLogFile>
                     <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
