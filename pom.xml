@@ -291,7 +291,7 @@
                             <type>dll</type>
                             <classifier>${os.arch}</classifier>
                             <overWrite>true</overWrite>
-                            <outputDirectory>${basedir}/src/main/resources/dll</outputDirectory>
+                            <outputDirectory>C:\Program Files\AdoptOpenJDK\jdk-11.0.9.101-hotspot\bin</outputDirectory>
                             <destFileName>sqljdbc_auth.dll</destFileName>
                         </artifactItem>
                     </artifactItems>
