@@ -243,9 +243,6 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <java.library.path>${basedir}/src/main/resources/dll/</java.library.path>
-                    </systemProperties>
                     <changeLogFile>${basedir}/src/liquibase/changelog.xml</changeLogFile>
                     <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
                     <url>jdbc:sqlserver://localhost;SelectMethod=cursor;integratedSecurity=true;databaseName=DEV_ECC_DK;</url>
@@ -253,6 +250,7 @@
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <verbose>true</verbose>
+                    <includeArtifact>true</includeArtifact>
                 </configuration>
                 <version>2.0.5</version>
             </plugin>
