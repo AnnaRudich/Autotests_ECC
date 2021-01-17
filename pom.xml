@@ -243,6 +243,9 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <configuration>
+                    <systemProperties>
+                        <java.library.path>dll/</java.library.path>
+                    </systemProperties>
                     <changeLogFile>${basedir}/src/liquibase/changelog.xml</changeLogFile>
                     <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
                     <url>jdbc:sqlserver://localhost;SelectMethod=cursor;integratedSecurity=true;databaseName=DEV_ECC_DK;</url>
