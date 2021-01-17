@@ -243,9 +243,6 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <java.library.path>${basedir}/src/main/resources/dll</java.library.path>
-                    </systemProperties>
                     <changeLogFile>${basedir}/src/liquibase/changelog.xml</changeLogFile>
                     <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
                     <url>jdbc:sqlserver://localhost;SelectMethod=cursor;integratedSecurity=true;databaseName=DEV_ECC_DK;</url>
@@ -285,6 +282,21 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>com.microsoft.sqlserver</groupId>
+                            <artifactId>sqljdbc_auth</artifactId>
+                            <version>6.0.7507.100</version>
+                            <type>dll</type>
+                            <classifier>${os.arch}</classifier>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${basedir}/src/main/resources/dll</outputDirectory>
+                            <destFileName>sqljdbc_auth.dll</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                    <!-- other configurations here -->
+                </configuration>
             </plugin>
 
         </plugins>
