@@ -61,7 +61,7 @@ public class ProjectsPage extends Page {
     }
 
     public OverviewTab toOverviewTab(){
-        $(By.xpath("//span[contains(text(),'Oversigt*') and contains(@class, 'x-tab-inner')]")).click();
+        $(By.xpath("//span[contains(text(),'Oversigt') and contains(@class, 'x-tab-inner')]")).click();
         return at(OverviewTab.class);
     }
 
