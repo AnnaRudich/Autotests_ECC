@@ -7,7 +7,17 @@ public class NumberFormatUtils {
 
     public static Double formatDoubleToHaveTwoDigits(Double value){
 
-        return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        return formatBigDecimalToHaveTwoDigits(value).doubleValue();
 
+    }
+
+    public static BigDecimal formatBigDecimalToHaveTwoDigits(Double value){
+
+        return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public static BigDecimal formatBigDecimalToHaveTwoDigits(String value){
+
+        return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
     }
 }

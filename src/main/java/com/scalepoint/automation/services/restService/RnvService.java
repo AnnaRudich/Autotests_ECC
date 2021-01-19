@@ -4,14 +4,17 @@ package com.scalepoint.automation.services.restService;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Invoice;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;
 import com.scalepoint.automation.utils.data.entity.rnv.webService.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 
 import java.math.BigDecimal;
@@ -25,6 +28,7 @@ import java.util.Optional;
 import static com.scalepoint.automation.services.restService.common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.getRnvWebServiceUrl;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class RnvService extends BaseService {
 
@@ -49,6 +53,16 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
+    public ValidatableResponse sendDefaultFeedbackWithCreditNote(ServiceTaskImport serviceTaskImport, BigDecimal totalAmount){
+
+        Invoice invoice = serviceTaskImport.getInvoice();
+        invoice.setCreditNoteNumber(String.valueOf(RandomUtils.randomInt()));
+        invoice.setTotalAmount(totalAmount);
+        invoice.setInvoiceType(String.valueOf(RnvInvoiceType.CREDIT_NOTE));
+        return sendFeedback(serviceTaskImport)
+                .body("Response.Status", equalTo("SUCCESS"));
+    }
+
     public void sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub){
 
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
@@ -56,21 +70,30 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
+    public ServiceTaskImport sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
+
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
+                .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
+        sendFeedback(serviceTaskImport)
+                .body("Response.Status", equalTo("SUCCESS"));
+        return serviceTaskImport;
+    }
+
+    public void test(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
 
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
                 .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }
 
-    private void sendFeedback(ServiceTaskImport serviceTaskImport){
+    private ValidatableResponse sendFeedback(ServiceTaskImport serviceTaskImport){
 
-        given()
+        return given().log().all()
                 .multiPart("securityToken", supplierSecurityToken)
                 .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
                 .when()
                 .post(Configuration.getRnvTaskFeedbackUrl())
-                .then()
+                .then().log().all()
                 .statusCode(HttpStatus.SC_CREATED);
     }
 
