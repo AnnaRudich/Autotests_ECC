@@ -282,6 +282,21 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>com.microsoft.sqlserver</groupId>
+                            <artifactId>sqljdbc_auth</artifactId>
+                            <version>6.0.7507.100</version>
+                            <type>dll</type>
+                            <classifier>${os.arch}</classifier>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>C:\Program Files\AdoptOpenJDK\jdk-11.0.9.101-hotspot\bin</outputDirectory>
+                            <destFileName>sqljdbc_auth.dll</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                    <!-- other configurations here -->
+                </configuration>
             </plugin>
 
         </plugins>
