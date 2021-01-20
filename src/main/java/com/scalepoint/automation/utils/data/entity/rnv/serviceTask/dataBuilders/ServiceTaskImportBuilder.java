@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders;
 
+import com.scalepoint.automation.services.restService.RnvInvoiceType;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskExport;
@@ -44,6 +45,16 @@ public class ServiceTaskImportBuilder {
         return this.serviceTaskImport;
     }
 
+    public ServiceTaskImport buildDefaultWithCreditNote(String invoiceNumber) {
+        buildDefaultWithoutInvoice();
+        this.serviceTaskImport.setInvoice(new InvoiceBuilder()
+                .withInvoiceType(String.valueOf(RnvInvoiceType.CREDIT_NOTE))
+                .withInvoiceNumber(invoiceNumber)
+                .build());
+        this.serviceTaskImport.setTakenSelfRisk(BigDecimal.valueOf(Constants.PRICE_10));
+        return this.serviceTaskImport;
+    }
+
     public ServiceTaskImport buildDefaultWithoutInvoice(){
         this.serviceTaskImport = new ServiceTaskImport();
         this.serviceTaskImport.setServiceLines(convertServiceLines(this.serviceTaskExport.getServiceLines()));
@@ -61,6 +72,12 @@ public class ServiceTaskImportBuilder {
 
     public ServiceTaskImport buildDefaultWithInvoiceWithRepairPrice(BigDecimal repairPrice) {
         buildDefaultWithInvoice();
+        this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
+        return this.serviceTaskImport;
+    }
+
+    public ServiceTaskImport buildDefaultWithCreditNoteWithRepairPrice(BigDecimal repairPrice, String invoiceNumber) {
+        buildDefaultWithCreditNote(invoiceNumber);
         this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
         return this.serviceTaskImport;
     }

@@ -1,18 +1,23 @@
 package com.scalepoint.automation.services.restService;
 
 
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Invoice;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;
 import com.scalepoint.automation.utils.data.entity.rnv.webService.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
+import org.openqa.selenium.By;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,10 +26,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.scalepoint.automation.services.restService.common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.getRnvWebServiceUrl;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+import static org.testng.Assert.assertTrue;
 
 public class RnvService extends BaseService {
 
@@ -49,6 +57,49 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
+    public RnvService sendDefaultFeedbackWithCreditNote(ServiceTaskImport serviceTaskImport, BigDecimal totalAmount){
+
+        Invoice invoice = serviceTaskImport.getInvoice();
+        invoice.setCreditNoteNumber(String.valueOf(RandomUtils.randomInt()));
+        invoice.setTotalAmount(totalAmount);
+        invoice.setInvoiceType(String.valueOf(RnvInvoiceType.CREDIT_NOTE));
+        sendFeedback(serviceTaskImport);
+        return this;
+    }
+
+    public RnvService doAssert(Consumer<RnvService.Asserts> assertFunc) {
+        assertFunc.accept(new RnvService.Asserts());
+        return this;
+    }
+
+
+    public class Asserts {
+        public RnvService.Asserts assertStatusCode(int statusCode) {
+            response.then().statusCode(statusCode);
+            return this;
+        }
+
+        public RnvService.Asserts assertValidationError(String errorMessage) {
+            response.then().assertThat().body("Response.ValidationErrors.ValidationError", containsString(errorMessage));
+            return this;
+        }
+
+        public RnvService.Asserts assertCreated() {
+            assertStatusCode(HttpStatus.SC_CREATED);
+            return this;
+        }
+
+        public RnvService.Asserts assertCreditNoteHigherThanInvoice() {
+            assertValidationError("The credit note amount is higher than the existing invoice with");
+            return this;
+        }
+
+        public RnvService.Asserts assertMissingInvoiceReferenceNumber() {
+            assertValidationError("Felt = invoiceNumber - feltet er obligatorisk, men er ikke udfyldt");
+            return this;
+        }
+    }
+
     public void sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub){
 
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
@@ -56,22 +107,28 @@ public class RnvService extends BaseService {
         sendFeedback(serviceTaskImport);
     }
 
-    public void sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
+    public ServiceTaskImport sendFeedbackWithInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
+
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
+                .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
+        sendFeedback(serviceTaskImport);
+        return serviceTaskImport;
+    }
+
+    public void test(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {
 
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
                 .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
     }
 
-    private void sendFeedback(ServiceTaskImport serviceTaskImport){
+    private Response sendFeedback(ServiceTaskImport serviceTaskImport){
 
-        given()
+        return response = given().log().all()
                 .multiPart("securityToken", supplierSecurityToken)
                 .multiPart("xmlString", TestData.objectAsXml(serviceTaskImport))
                 .when()
-                .post(Configuration.getRnvTaskFeedbackUrl())
-                .then()
-                .statusCode(HttpStatus.SC_CREATED);
+                .post(Configuration.getRnvTaskFeedbackUrl());
     }
 
     public RnvService sendToRepairAndValuation(){

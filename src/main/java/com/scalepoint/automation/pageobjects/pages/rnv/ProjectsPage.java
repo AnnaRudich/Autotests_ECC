@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.EvaluateTaskDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
+import com.scalepoint.automation.pageobjects.pages.rnv.tabs.OverviewTab;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import org.openqa.selenium.By;
@@ -34,8 +35,8 @@ public class ProjectsPage extends Page {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForAjaxCompletedAndJsRecalculation();
         waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
     }
 
     @Override
@@ -59,14 +60,21 @@ public class ProjectsPage extends Page {
         return at(InvoiceTab.class);
     }
 
+    public OverviewTab toOverviewTab(){
+        $(By.xpath("//span[contains(text(),'Oversigt') and contains(@class, 'x-tab-inner')]")).click();
+        return at(OverviewTab.class);
+    }
+
     public EvaluateTaskDialog openEvaluateTaskDialog(){
         $(By.xpath("//span[contains(text(), 'Evaluer opgave')]/following-sibling::span")).click();
         return BaseDialog.at(EvaluateTaskDialog.class);
     }
 
     public ProjectsPage expandTopTaskDetails() {
-        hoverAndClick($(firstTaskExpander));
-        $("div#taskNestedGrid-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        toOverviewTab()
+                .toPanelViewGrid()
+                .getPanelViewGridLine(0)
+                .clickExpander();
         return this;
     }
     private String getAuditInfoPanelText() {
