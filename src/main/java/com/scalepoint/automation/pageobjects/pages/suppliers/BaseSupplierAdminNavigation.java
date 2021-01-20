@@ -3,34 +3,36 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
 
 public abstract class BaseSupplierAdminNavigation extends Page {
 
-    @FindBy(className = "mainMenuSuppliersClass")
-    private WebElement suppliersLink;
+    private final static By SUPPLIERS_PATH = By.cssSelector("[data-recordid=mainMenuSuppliersId]");
+    private final static By VOUCHERS_PATH = By.cssSelector("[data-recordid=mainMenuVouchersId]");
+    private final static By LOGOUT_PATH = By.cssSelector("a[href$='logout'");
+    private final static By DEFAULT_SETTINGS = By.cssSelector("[data-recordid=mainDefaultSettingsId]");
 
-    @FindBy(className = "mainMenuVouchersClass")
-    private WebElement vouchersLink;
 
-    @FindBy(xpath = ".//a[contains(@href, 'logout')]")
-    private WebElement logoutLink;
 
     public SuppliersPage toSuppliersPage() {
-        suppliersLink.click();
+        $(SUPPLIERS_PATH).click();
         return at(SuppliersPage.class);
     }
 
+    public DefaultSettingsPage toDefaultSettings() {
+        $(DEFAULT_SETTINGS).click();
+        return at(DefaultSettingsPage.class);
+    }
+
     public VouchersPage toVouchersPage() {
-        vouchersLink.click();
+        $(VOUCHERS_PATH).click();
         return at(VouchersPage.class);
     }
 
     public LoginPage logout() {
-        hoverAndClick($(logoutLink));
+        $(LOGOUT_PATH).click();
         return at(LoginPage.class);
     }
 }
