@@ -3,10 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
-import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.InvoiceDialog;
-import com.scalepoint.automation.utils.NumberFormatUtils;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -36,31 +33,12 @@ public class OverviewTab extends BaseClaimPage {
         return "webshop/jsp/matching_engine/projects.jsp";
     }
 
-//    public InvoiceDialog openInvoiceDialogForLineWithIndex(int index){
-//        return toInvoiceGrid()
-//                .getGridLine(index)
-//                .clickViewInvoiceActive();
-//    }
-
     public OverviewTab doAssert(Consumer<OverviewTab.Asserts> assertFunc) {
         assertFunc.accept(new OverviewTab.Asserts());
         return OverviewTab.this;
     }
 
     public class Asserts {
-//        public OverviewTab.Asserts assertThereIsNoInvoiceGrid() {
-//            assertThat(toInvoiceGrid().gridSize())
-//                    .as("There should be no invoice lines")
-//                    .isEqualTo(0);
-//            return this;
-//        }
-//
-//        public OverviewTab.Asserts assertInvoiceGridSize(int expectedSize) {
-//            assertThat(toInvoiceGrid().gridSize())
-//                    .as(String .format("Invoice size should be %d", expectedSize))
-//                    .isEqualTo(expectedSize);
-//            return this;
-//        }
     }
 
     public PanelViewGrid toPanelViewGrid(){
