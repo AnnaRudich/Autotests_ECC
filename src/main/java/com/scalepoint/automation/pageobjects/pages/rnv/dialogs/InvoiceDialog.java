@@ -3,9 +3,11 @@ package com.scalepoint.automation.pageobjects.pages.rnv.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.utils.NumberFormatUtils;
 import lombok.Getter;
 import org.openqa.selenium.By;
 
+import java.math.BigDecimal;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -17,7 +19,7 @@ public class InvoiceDialog extends BaseDialog {
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompleted();
-        $(By.xpath("//div[contains(text(), 'Faktura')]")).shouldBe(Condition.visible);
+        $("#panel-invoice-view-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
     public InvoiceDialog doAssert(Consumer<InvoiceDialog.Asserts> assertFunc) {
@@ -32,9 +34,10 @@ public class InvoiceDialog extends BaseDialog {
             return this;
         }
 
-        public InvoiceDialog.Asserts assertTotalIs(Double totalExpectedValue) {
-            Double totalActualValue = new Double($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
-            assertThat(totalActualValue).as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
+        public InvoiceDialog.Asserts assertTotalIs(BigDecimal totalExpectedValue) {
+            BigDecimal totalActualValue = NumberFormatUtils.formatBigDecimalToHaveTwoDigits($(By.xpath("//label[contains(., 'Total:')]/../../td[2]/div")).getText());
+            assertThat(totalActualValue)
+                    .as("Task total should be " + totalExpectedValue + "but was: " + totalActualValue)
                     .isEqualTo(totalExpectedValue);
             return this;
         }

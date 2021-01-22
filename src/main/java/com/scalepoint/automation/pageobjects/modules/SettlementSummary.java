@@ -1,9 +1,14 @@
 package com.scalepoint.automation.pageobjects.modules;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.NumberFormatUtils;
+import com.scalepoint.automation.utils.OperationalUtils;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,15 +16,18 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Table;
 
+import java.math.BigDecimal;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {
 
@@ -117,6 +125,11 @@ public class SettlementSummary extends Module {
         return completeClaim.isEnabled();
     }
 
+    public RepairPanel getRepairPanel(){
+
+        return new RepairPanel();
+    }
+
     private boolean isFraudulent(){
 
         String text = "CentralScore ej ok";
@@ -165,6 +178,87 @@ public class SettlementSummary extends Module {
         $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
         waitForLoaded();
         return at(SettlementPage.class);
+    }
+    @Getter
+    public class RepairPanel{
+
+        final By repairPanelItemsPath = By.cssSelector("#settlementSummaryTotalsRepairPanel [role=textbox]");
+
+        private BigDecimal repairPrice;
+        private BigDecimal selfRiskTakenByServicePartner;
+        private BigDecimal subtractedFromStatement;
+        private BigDecimal payBackOverCollectedDeductible;
+        private BigDecimal selfRiskTakenByInsureanceCompany;
+        private BigDecimal outstandingSelfRiskTakenByInsureanceCompany;
+
+        RepairPanel(){
+            ElementsCollection  repairPanelItems =$$(repairPanelItemsPath);
+            repairPanelItems
+                    .stream()
+                    .filter(element -> element.has(visible))
+                    .forEach(element -> element.waitUntil(not(exactText("")), TIME_OUT_IN_MILISECONDS));
+            repairPrice = OperationalUtils.toBigDecimal(repairPanelItems.get(0).getText());
+            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(repairPanelItems.get(1).getText());
+            subtractedFromStatement = OperationalUtils.toBigDecimal(repairPanelItems.get(2).getText());
+            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(repairPanelItems.get(3).getText());
+            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(4).getText());
+            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(5).getText());
+        }
+
+        public RepairPanel doAssert(Consumer<Asserts> assertFunc) {
+            assertFunc.accept(new Asserts());
+            return RepairPanel.this;
+        }
+
+        public class Asserts {
+            public Asserts assertRepairPrice(BigDecimal expectedValue) {
+
+                assertThat(getRepairPrice())
+                        .as(String.format("Repair price should be : %s", expectedValue))
+                        .isEqualTo(repairPrice);
+                return this;
+            }
+
+            public Asserts assertSelfRiskTakenByServicePartner(BigDecimal expectedValue) {
+
+                assertThat(getSelfRiskTakenByServicePartner())
+                        .as(String.format("Deductible charged by repairer should be : %s", expectedValue))
+                        .isEqualTo(expectedValue);
+                return this;
+            }
+
+            public Asserts assertSubtractedFromStatement(BigDecimal expectedValue) {
+
+                assertThat(getSubtractedFromStatement())
+                        .as(String.format("Subtracted from statement should be : %s", expectedValue))
+                        .isEqualTo(expectedValue);
+                return this;
+            }
+
+            public Asserts assertPayBackOverCollectedDeductible(BigDecimal expectedValue) {
+
+                assertThat(getPayBackOverCollectedDeductible())
+                        .as(String.format("Pay back over collected deductible should be : %s", expectedValue))
+                        .isEqualTo(expectedValue);
+                return this;
+            }
+
+            public Asserts asserSelfRiskTakenByInsureanceCompany(BigDecimal expectedValue) {
+
+                assertThat(getSelfRiskTakenByInsureanceCompany())
+                        .as(String.format("Deductible charged by company should be : %s", expectedValue))
+                        .isEqualTo(expectedValue);
+                return this;
+            }
+
+            public Asserts assertOutstandingSelfRiskTakenByInsureanceCompany(BigDecimal expectedValue) {
+
+                assertThat(getOutstandingSelfRiskTakenByInsureanceCompany())
+                        .as(String.format("Outstanding deductible charged by company should be : %s", expectedValue))
+                        .isEqualTo(expectedValue);
+                return this;
+            }
+        }
     }
 
     public SettlementSummary doAssert(Consumer<Asserts> assertFunc) {

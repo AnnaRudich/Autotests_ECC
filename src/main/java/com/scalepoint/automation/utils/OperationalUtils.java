@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -27,6 +28,11 @@ public class OperationalUtils {
         } catch (ParseException e) {
             throw new IllegalArgumentException(e.getMessage(), e);
         }
+    }
+
+    public static BigDecimal toBigDecimal(String value){
+
+        return NumberFormatUtils.formatBigDecimalToHaveTwoDigits(toNumber(value));
     }
 
     public static String format(Double value) {

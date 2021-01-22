@@ -37,6 +37,11 @@ public class InvoiceBuilder {
         return this;
     }
 
+    public InvoiceBuilder withInvoiceNumber(String invoceNumber){
+        invoice.setInvoiceNumber(invoceNumber);
+        return this;
+    }
+
     public InvoiceImport build() {
         return invoice;
     }

@@ -1,46 +1,25 @@
 package com.scalepoint.automation.pageobjects.pages.suppliers;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.utils.Wait;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.pageobjects.extjs.ExtRadioButton;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
+import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 @EccAdminPage
 public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
-
-    @FindBy(xpath = ".//a[contains(@href, 'logout')]")
-    private Link signOutLink;
-    @FindBy(xpath = "//button[contains(@class,'open-selected-supplier-btn')]")
-    private WebElement openSelectedButton;
-    @FindBy(xpath = "//input[contains(@id,'searchfield')]")
-    private WebElement vouchersSearchField;
-    @FindBy(xpath = "//div[1]/table/tbody/tr/td[2]/div")
-    private WebElement firstVoucherItem;
-    @FindBy(xpath = "//span[contains(@class,'column-header-text')]")
-    private List<WebElement> columnsTitles;
-    @FindBy(xpath = "//td[contains(@class,'tick')]/div")
-    private WebElement tickedActiveOrExclField;
-    @FindBy(xpath = "id('vouchersGridId-body')//tr")
-    private List<WebElement> allVouchersList;
-
-    private String byVoucherNameXpath = "id('vouchersGridId')//div[contains(.,'$1')]";
-    private String byExclusiveXpath = "//td[contains(@class, 'x-grid-cell-voucherListExclusiveId ')]";
-    private String byActiveXpath = "//td[contains(@class, 'x-grid-cell-voucherListActiveId ')]";
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -52,111 +31,232 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
 
     @Override
     protected String getRelativeUrl() {
-        return "#vouchers";
+        return "#defaultSettings";
     }
 
-    public void addVoucherSearchQuery(String query) {
-        vouchersSearchField.sendKeys(query);
+    public DefaultSettingsGrid toDefaultSettingsGrid(){
+
+        return new DefaultSettingsGrid();
     }
 
-    /**
-     * This method execute Search via Search field on the top of the page and waits for some results
-     *
-     * @param query Query value
-     */
-    public void makeVouchersSearch(String query) {
-        hoverAndClick($(By.xpath("//input[contains(@name,'searchfield')]")));
-        vouchersSearchField.clear();
-        logger.info("Search for voucher " + query);
-        vouchersSearchField.sendKeys(query);
-        vouchersSearchField.sendKeys(Keys.ENTER);
-        Wait.waitForAjaxCompleted();
-        Wait.waitForStaleElements(By.xpath("id('vouchersGridId-body')//table[contains(@class,'x-grid-with-row-lines')]"));
-    }
+    public class DefaultSettingsGrid{
 
-    /**
-     * This method implemented for technical use - if you don't want to create new voucher to verify categories mapping etc.
-     * It waits for Categories tab element visibility to be confident that voucher is opened
-     */
-    public void openFirstVoucher() {
-        Wait.waitForStaleElement(By.xpath("//div[1]/table/tbody/tr/td[2]/div"));
-        $(firstVoucherItem).doubleClick();
-        Wait.waitForStaleElement(By.xpath("//div[@id='categoriesVoucherTabId']"));
-    }
+        private final By gridRowsPath = By.cssSelector("#contentAreaPanel table [role=row]");
 
-    public boolean isExclusiveColumnDisplayed() {
-        for (WebElement element : columnsTitles) {
-            if (element.getText().contains("Exclusive"))
-                return true;
-        }
-        return false;
-    }
+        private List<DefaultSettingsRow> rows;
 
-    public boolean isActiveOrExclFieldTicked() {
-        return tickedActiveOrExclField.isDisplayed();
-    }
+        DefaultSettingsGrid(){
 
-    public LoginPage signOut() {
-        signOutLink.click();
-        return at(LoginPage.class);
-    }
-
-    public boolean isVoucherCreated(String voucherName) {
-        makeVouchersSearch(voucherName);
-        String xpath = byVoucherNameXpath.replace("$1", voucherName);
-        try {
-            WebElement option = $(By.xpath(xpath));
-            return Wait.forCondition(ExpectedConditions.textToBePresentInElement(option, voucherName));
-        } catch (Error e) {
-            return false;
-        }
-    }
-
-    private boolean isTickDisplayed(String query, String XpathLocator) {
-        makeVouchersSearch(query);
-        return $(By.xpath(XpathLocator)).getAttribute("class").contains("tick");
-    }
-
-    public DefaultSettingsPage doAssert(Consumer<Asserts> assertsFunc) {
-        assertsFunc.accept(new Asserts());
-        return DefaultSettingsPage.this;
-    }
-
-    public class Asserts {
-        public Asserts assertVoucherPresent(String voucherName) {
-            assertTrue(isVoucherCreated(voucherName));
-            return this;
+            rows = $$(gridRowsPath).stream().map(DefaultSettingsRow::new).collect(Collectors.toList());
         }
 
-        public Asserts assertVoucherAbsent(String voucherName) {
-            assertFalse(isVoucherCreated(voucherName));
-            return this;
+        public DefaultSettingsRow getDefaultSettingsRow(int index){
+
+            return rows.get(index);
         }
 
-        public Asserts assertsIsExclusiveColumnDisplayed() {
-            assertTrue(isExclusiveColumnDisplayed());
-            return this;
-        }
+        public class DefaultSettingsRow{
 
-        public Asserts assertsIsExclusiveColumnNotDisplayed() {
-            assertFalse(isExclusiveColumnDisplayed());
-            return this;
-        }
+            private final By columnsPath = By.cssSelector("[role=gridcell]");
 
-        public Asserts assertsIsExclusiveTickForVoucherDisplayed(String voucherName) {
-            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
-            return this;
-        }
+            private InsuranceCompany insuranceCompany;
+            private SelfRiskCollectedBy selfRiskCollectedBy;
+            private PaymentOfInvoice paymentOfInvoice;
+            private OvercollectedDeductible overcollectedDeductible;
+            ExtRadioButton canServicePartnerUpdateSelfRisk;
+            String daysBeforeReminder;
+            String daysBeforeAutoApprove;
 
-        public Asserts assertsIsActiveTickForVoucherDisplayed(String voucherName) {
-            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
-            return this;
-        }
+            DefaultSettingsRow(SelenideElement row){
 
-        public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName) {
-            assertFalse(isTickDisplayed(voucherName, byActiveXpath));
-            return this;
+                ElementsCollection columns = row.findAll(columnsPath);
+                insuranceCompany = new InsuranceCompany(columns.get(0));
+                selfRiskCollectedBy = new SelfRiskCollectedBy(columns.get(1), columns.get(2));
+                paymentOfInvoice = new PaymentOfInvoice(columns.get(3), columns.get(4));
+                overcollectedDeductible = new OvercollectedDeductible(columns.get(5) , columns.get(6));
+                canServicePartnerUpdateSelfRisk  = new ExtRadioButton(columns.get(7));
+                daysBeforeReminder = columns.get(8).getText();
+                daysBeforeAutoApprove = columns.get(9).getText();
+                System.out.println();
+            }
+
+            public DefaultSettingsRow setSelfRiskCollectedByInsuranceCompany(){
+                selfRiskCollectedBy.setByInsuranceCompany();
+                return this;
+            }
+
+            public DefaultSettingsRow setSelfRiskCollectedByServicePartner(){
+                selfRiskCollectedBy.setByServicePartner();
+                return this;
+            }
+
+            public DefaultSettingsRow setPaymentOfInvoiceByInsuranceCompany(){
+                paymentOfInvoice.setByInsuranceCompany();
+                return this;
+            }
+
+            public DefaultSettingsRow setPaymentOfInvoiceByScalepoint(){
+                paymentOfInvoice.setByScalepoint();
+                return this;
+            }
+
+            private class InsuranceCompany{
+
+                private final By expanderPath = By.cssSelector("[class$=expander]");
+                private final By namePath = By.cssSelector("span");
+
+                private SelenideElement expander;
+                @Getter
+                String name;
+
+                InsuranceCompany(SelenideElement insuranceCompany){
+
+                    expander = insuranceCompany.find(expanderPath);
+                    name =  insuranceCompany.find(namePath).getText();
+                }
+            }
+
+            class SelfRiskCollectedBy{
+
+                private CheckBox insuranceCompany;
+                private CheckBox servicePartner;
+
+                SelfRiskCollectedBy(SelenideElement insuranceCompany, SelenideElement servicePartner){
+                    this.insuranceCompany = new CheckBox(insuranceCompany);
+                    this.servicePartner = new CheckBox(servicePartner);
+                }
+
+                public SelfRiskCollectedBy setByInsuranceCompany(){
+
+                    if(!insuranceCompany.isChecked()){
+                        insuranceCompany.click();
+                    }
+                    return this;
+                }
+                public SelfRiskCollectedBy setByServicePartner(){
+
+                    if(!servicePartner.isChecked()){
+                        servicePartner.click();
+                    }
+                    return this;
+                }
+            }
+
+            class PaymentOfInvoice{
+
+                private CheckBox insuranceCompany;
+                private CheckBox scalepoint;
+
+                PaymentOfInvoice(SelenideElement insuranceCompany, SelenideElement scalepoint){
+                    this.insuranceCompany = new CheckBox(insuranceCompany);
+                    this.scalepoint = new CheckBox(scalepoint);
+                }
+
+                public PaymentOfInvoice setByInsuranceCompany(){
+
+                    if(!insuranceCompany.isChecked()){
+                        insuranceCompany.click();
+                    }
+                    return this;
+                }
+                public PaymentOfInvoice setByScalepoint(){
+
+                    if(!scalepoint.isChecked()){
+                        scalepoint.click();
+                    }
+                    return this;
+                }
+            }
+
+            class OvercollectedDeductible{
+
+                CheckBox viaContent;
+                CheckBox viaInsuranceCompany;
+
+                OvercollectedDeductible(SelenideElement viaContent, SelenideElement viaInsuranceCompany){
+                    this.viaContent = new CheckBox(viaInsuranceCompany);
+                    this.viaInsuranceCompany = new CheckBox(viaInsuranceCompany);
+                }
+
+                public OvercollectedDeductible setViaContent(){
+
+                    if(!viaContent.isChecked()){
+                        viaContent.click();
+                    }
+                    return this;
+                }
+                public OvercollectedDeductible setViaInsuranceCompany(){
+
+                    if(!viaInsuranceCompany.isChecked()){
+                        viaInsuranceCompany.click();
+                    }
+                    return this;
+                }
+            }
+
+            class CheckBox{
+
+                SelenideElement checkBox;
+
+                CheckBox(SelenideElement checkBox){
+
+                    this.checkBox = checkBox;
+                }
+
+                boolean isChecked(){
+
+                    return checkBox.find("img").attr("class").contains("checked");
+                }
+
+                CheckBox click(){
+
+                    checkBox.click();
+                    return this;
+                }
+            }
         }
     }
+
+//    public DefaultSettingsPage doAssert(Consumer<Asserts> assertsFunc) {
+//        assertsFunc.accept(new Asserts());
+//        return DefaultSettingsPage.this;
+//    }
+
+//    public class Asserts {
+//        public Asserts assertVoucherPresent(String voucherName) {
+//            assertTrue(isVoucherCreated(voucherName));
+//            return this;
+//        }
+//
+//        public Asserts assertVoucherAbsent(String voucherName) {
+//            assertFalse(isVoucherCreated(voucherName));
+//            return this;
+//        }
+//
+//        public Asserts assertsIsExclusiveColumnDisplayed() {
+//            assertTrue(isExclusiveColumnDisplayed());
+//            return this;
+//        }
+//
+//        public Asserts assertsIsExclusiveColumnNotDisplayed() {
+//            assertFalse(isExclusiveColumnDisplayed());
+//            return this;
+//        }
+//
+//        public Asserts assertsIsExclusiveTickForVoucherDisplayed(String voucherName) {
+//            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
+//            return this;
+//        }
+//
+//        public Asserts assertsIsActiveTickForVoucherDisplayed(String voucherName) {
+//            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
+//            return this;
+//        }
+//
+//        public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName) {
+//            assertFalse(isTickDisplayed(voucherName, byActiveXpath));
+//            return this;
+//        }
+//    }
 }
 
