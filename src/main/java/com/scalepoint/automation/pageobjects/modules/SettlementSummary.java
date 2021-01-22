@@ -25,8 +25,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
-import static com.scalepoint.automation.utils.Wait.waitForLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {
@@ -126,7 +125,9 @@ public class SettlementSummary extends Module {
     }
 
     public RepairPanel getRepairPanel(){
-
+        if (RepairPanel.isDisplayed()) {
+            expand();
+        }
         return new RepairPanel();
     }
 
@@ -180,9 +181,10 @@ public class SettlementSummary extends Module {
         return at(SettlementPage.class);
     }
     @Getter
-    public class RepairPanel{
+    static public class RepairPanel{
 
-        final By repairPanelItemsPath = By.cssSelector("#settlementSummaryTotalsRepairPanel [role=textbox]");
+        private static final By repairPanelPath = By.cssSelector("#settlementSummaryTotalsRepairPanel");
+        private static final By repairPanelItemsPath = By.cssSelector("[role=textbox]");
 
         private BigDecimal repairPrice;
         private BigDecimal selfRiskTakenByServicePartner;
@@ -192,17 +194,18 @@ public class SettlementSummary extends Module {
         private BigDecimal outstandingSelfRiskTakenByInsureanceCompany;
 
         RepairPanel(){
-            ElementsCollection  repairPanelItems =$$(repairPanelItemsPath);
-            repairPanelItems
-                    .stream()
-                    .filter(element -> element.has(visible))
-                    .forEach(element -> element.waitUntil(not(exactText("")), TIME_OUT_IN_MILISECONDS));
+            ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
             repairPrice = OperationalUtils.toBigDecimal(repairPanelItems.get(0).getText());
             selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(repairPanelItems.get(1).getText());
             subtractedFromStatement = OperationalUtils.toBigDecimal(repairPanelItems.get(2).getText());
             payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(repairPanelItems.get(3).getText());
             selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(4).getText());
             outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(5).getText());
+        }
+
+        static boolean isDisplayed(){
+
+            return !$(repairPanelPath).has(visible);
         }
 
         public RepairPanel doAssert(Consumer<Asserts> assertFunc) {

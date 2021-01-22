@@ -1,7 +1,6 @@
 package com.scalepoint.automation.services.restService;
 
 
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.Configuration;
@@ -10,14 +9,11 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.Invoice;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
-import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.dataBuilders.ServiceTaskImportBuilder;
 import com.scalepoint.automation.utils.data.entity.rnv.webService.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.openqa.selenium.By;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -48,13 +44,6 @@ public class RnvService extends BaseService {
     public Response getResponse() {
 
         return this.response;
-    }
-
-
-    public void sendDefaultFeedbackWithInvoice(Claim claim, ServiceTasksExport serviceTasksExport) {
-
-        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, serviceTasksExport).buildDefaultWithInvoice();
-        sendFeedback(serviceTaskImport);
     }
 
     public RnvService sendDefaultFeedbackWithCreditNote(ServiceTaskImport serviceTaskImport, BigDecimal totalAmount){
@@ -98,6 +87,11 @@ public class RnvService extends BaseService {
             assertValidationError("Felt = invoiceNumber - feltet er obligatorisk, men er ikke udfyldt");
             return this;
         }
+
+        public RnvService.Asserts assertTakenSelfRiskNotWithinAllowedRange() {
+            assertValidationError("Felt = takenSelfRisk - værdi i feltet er ikke inden for tilladte interval");
+            return this;
+        }
     }
 
     public void sendFeedbackWithoutInvoiceWithRepairPrice(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub){
@@ -113,6 +107,14 @@ public class RnvService extends BaseService {
                 .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
         sendFeedback(serviceTaskImport);
         return serviceTaskImport;
+    }
+
+    public RnvService sendFeedbackWithInvoiceWithRepairPriceAndTakenSelfRisk(BigDecimal repairPrice, BigDecimal takenSelfRisk, Claim claim, RnVMock.RnvStub rnvStub) {
+
+        ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
+                .buildDefaultWithInvoiceWithRepairPriceAndTakenSelfRisk(repairPrice, takenSelfRisk);
+        sendFeedback(serviceTaskImport);
+        return this;
     }
 
     public void test(BigDecimal repairPrice, Claim claim, RnVMock.RnvStub rnvStub) {

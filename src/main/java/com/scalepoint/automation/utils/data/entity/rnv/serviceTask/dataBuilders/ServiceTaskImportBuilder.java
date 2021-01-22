@@ -76,8 +76,9 @@ public class ServiceTaskImportBuilder {
         return this.serviceTaskImport;
     }
 
-    public ServiceTaskImport buildDefaultWithCreditNoteWithRepairPrice(BigDecimal repairPrice, String invoiceNumber) {
-        buildDefaultWithCreditNote(invoiceNumber);
+    public ServiceTaskImport buildDefaultWithInvoiceWithRepairPriceAndTakenSelfRisk(BigDecimal repairPrice, BigDecimal takenSelfRisk) {
+        buildDefaultWithInvoice()
+                .setTakenSelfRisk(takenSelfRisk);
         this.serviceTaskImport.setServiceLines(convertServiceLinesWithRepairPrice(repairPrice, this.serviceTaskExport.getServiceLines()));
         return this.serviceTaskImport;
     }
