@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.Assignment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -21,7 +22,7 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     @FindBy(xpath = "//input[contains(@onclick,'resetCurrentValue()')]")
     private WebElement cancelButton;
 
-    @FindBy(xpath = "//input[contains(@onclick,'validateInput()')]")
+    @FindBy(css = "input[type='button'][value='Save']")
     private WebElement saveButton;
 
     @FindBy(name = "company")
@@ -54,12 +55,15 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     public ReductionRuleAssignmentsPage fillAssignment(Assignment assignment) {
         company.selectByVisibleText(assignment.getCompany());
         pseudoCategory.selectByVisibleText(assignment.getPseudoCategory());
+        category.selectByVisibleText(assignment.getCategory());
         policy.selectByVisibleText(assignment.getPolicy());
         return this;
     }
 
     public ReductionRuleAssignmentsPage save() {
-        saveButton.click();
+        $(saveButton).click();
+        Wait.waitMillis(2000);
+        acceptAlert();
         return this;
     }
 

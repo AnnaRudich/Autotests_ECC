@@ -70,8 +70,9 @@ public class ReductionRulesPage extends AdminBasePage {
         return $(By.xpath(".//*[@id='ruleItemsList']/option[text() = '" + rr.getRrName() + "']"));
     }
 
-    public void selectRefreshOption() {
-        hoverAndClick($(refreshButton));
+    public ReductionRulesPage selectRefreshOption() {
+            hoverAndClick($(refreshButton));
+            return at(ReductionRulesPage.class);
     }
 
 
@@ -87,8 +88,9 @@ public class ReductionRulesPage extends AdminBasePage {
         return at(ReductionRulesPage.class);
     }
 
-    public void selectExistingRR(ReductionRule rr) {
+    public ReductionRulesPage selectExistingRR(ReductionRule rr) {
         findRule(rr).click();
+        return this;
     }
 
     public ReductionRulesPage deleteRule(ReductionRule rr) {

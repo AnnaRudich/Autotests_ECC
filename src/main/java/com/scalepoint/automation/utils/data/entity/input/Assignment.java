@@ -21,6 +21,8 @@ public class Assignment {
     @XmlElement
     private String pseudoCategory;
     @XmlElement
+    private String category;
+    @XmlElement
     private String policy;
 
 }
