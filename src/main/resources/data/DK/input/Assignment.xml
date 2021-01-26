@@ -2,5 +2,6 @@
 <assignment>
     <company>ALKA</company>
     <pseudoCategory>test_category_group</pseudoCategory>
+    <category>test_category</category>
     <policy>FB-01</policy>
 </assignment>

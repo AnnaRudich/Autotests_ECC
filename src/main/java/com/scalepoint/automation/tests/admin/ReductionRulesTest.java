@@ -106,6 +106,7 @@ public class ReductionRulesTest extends BaseTest {
      * WHEN: U1 add reduction rule RR1 with overlap age for 2 lines; different priceRange
      * THEN: Warning appears, but validation passed RR1 succesfully created
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "ECCD-629 Extend reduction rules lines with PriceRange fields")
     public void ecc4007_verifyAddRRValidationAgeRangeOverlap(ReductionRule rule) throws Exception {
@@ -699,6 +700,7 @@ public class ReductionRulesTest extends BaseTest {
         toNewReductionRulePage()
                 .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
                 .assertRuleDisplayed(rule)
+                .selectExistingRR(rule)
                 .selectAssignmentsOption()
                 .fillAssignment(assignment)
                 .save()

@@ -125,14 +125,15 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
     public ReductionRulesPage save() {
         saveButton.click();
-        return at(ReductionRulesPage.class);
+        return at(ReductionRulesPage.class)
+                .selectRefreshOption();
     }
 
 
     public ReductionRulesPage saveAndExpectSuccess() {
-        saveButton.submit();
+        saveButton.click();
         acceptAlert();
-        return at(ReductionRulesPage.class);
+        return at(ReductionRulesPage.class).selectRefreshOption();
     }
 
     public AddEditReductionRulePage saveAndExpectWarning() {
