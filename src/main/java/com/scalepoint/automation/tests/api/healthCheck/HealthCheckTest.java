@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HealthCheckTest extends BaseApiTest {
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"healthCheck"})
     public void eccHealthCheckTest() {
 
         Response response = new HealthCheckService()
@@ -22,7 +22,7 @@ public class HealthCheckTest extends BaseApiTest {
         assertThat(status).isEqualTo("OK");
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"healthCheck"})
     public void uniHealthCheckTest() {
 
         Response response = new UnifiedIntegrationService()
