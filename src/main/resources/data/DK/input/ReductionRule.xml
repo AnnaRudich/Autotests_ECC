@@ -4,6 +4,7 @@
     <ageTo1>4</ageTo1>
     <ageFrom2>5</ageFrom2>
     <ageTo2>7</ageTo2>
+    <maxDepreciation>50</maxDepreciation>
     <claimReduction1>11</claimReduction1>
     <policyRangeFrom1>1000</policyRangeFrom1>
     <policyRangeFrom2>4000</policyRangeFrom2>

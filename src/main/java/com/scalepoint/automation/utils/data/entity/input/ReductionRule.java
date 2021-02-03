@@ -38,6 +38,8 @@ public class ReductionRule implements Cloneable {
     private String priceRangeFrom2;
     @XmlElement
     private String priceRangeTo2;
+    @XmlElement
+    private String maxDepreciation;
 
     public ReductionRule clone() throws CloneNotSupportedException {
         return (ReductionRule) super.clone();
