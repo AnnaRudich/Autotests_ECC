@@ -1,6 +1,6 @@
 package com.scalepoint.automation.tests.suppliermanager;
 
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
@@ -57,7 +57,7 @@ public class ShopTests extends BaseTest {
                 .doAssert(shopTab -> shopTab.assertNewShopNotExists(shop));
     }
 
-    private SupplierDialog.ShopsTab createRetailShop(Shop shop) {
+    private ShopsTab createRetailShop(Shop shop) {
         return login(getSystemUser())
                 .getMainMenu()
                 .toEccAdminPage()

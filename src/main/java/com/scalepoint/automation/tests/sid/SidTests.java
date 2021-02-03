@@ -2,7 +2,7 @@ package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.GeneralTab;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
@@ -233,7 +233,7 @@ public class SidTests extends BaseTest {
                 .getMainMenu()
                 .toEccAdminPage();
 
-        SupplierDialog.GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier);
+        GeneralTab generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier);
         SharedEccAdminFlows.createVoucherAgreement(generalTab,
                 SharedEccAdminFlows.VoucherAgreementData.newBuilder(voucher, discount)
                         .mapToCategory(claimItem.getCategoryBabyItems())

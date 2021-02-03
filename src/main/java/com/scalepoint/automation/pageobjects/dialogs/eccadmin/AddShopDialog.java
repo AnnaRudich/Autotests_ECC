@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.GdprConfirmationDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -57,7 +58,7 @@ public class AddShopDialog extends BaseDialog {
         $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
-    public SupplierDialog.ShopsTab createShop(Shop shop, ShopType shopType, boolean gdpr) {
+    public ShopsTab createShop(Shop shop, ShopType shopType, boolean gdpr) {
         fillShopForm(shop);
         chooseShopType(shopType);
         hoverAndClick($(By.xpath(SUPPLIER_CREATE_SHOP_BTN)));
@@ -65,7 +66,7 @@ public class AddShopDialog extends BaseDialog {
             at(GdprConfirmationDialog.class)
                     .confirm();
         }
-        return at(SupplierDialog.ShopsTab.class);
+        return at(ShopsTab.class);
     }
 
     private boolean isShopDataEqualsWith(Shop shop) {
@@ -83,16 +84,16 @@ public class AddShopDialog extends BaseDialog {
         return this;
     }
 
-    public SupplierDialog.ShopsTab updateShop(Shop shop) {
+    public ShopsTab updateShop(Shop shop) {
         clearShopForm();
         fillShopForm(shop);
         hoverAndClick($(By.xpath(SUPPLIER_SAVE_SHOP_BTN)));
-        return at(SupplierDialog.ShopsTab.class);
+        return at(ShopsTab.class);
     }
 
-    public SupplierDialog.ShopsTab cancel() {
+    public ShopsTab cancel() {
         hoverAndClick($(By.xpath(SUPPLIER_CANCEL_EDIT_SHOP_BTN)));
-        return at(SupplierDialog.ShopsTab.class);
+        return at(ShopsTab.class);
     }
 
     private void chooseShopType(ShopType shopType) {

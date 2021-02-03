@@ -4,7 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
@@ -102,7 +102,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
         return $(By.xpath(String.format(bySupplierNameXpath, supplierName)));
     }
 
-    public SupplierDialog.GeneralTab editSupplier(String supplierName) {
+    public SupplierDialog editSupplier(String supplierName) {
         $(By.xpath("//input[contains(@name, 'searchfield')]")).click();
         makeSupplierSearch(supplierName);
         waitForStaleElements(By.xpath("//tbody[contains(@id,'gridview')]//td[2]/div"));
@@ -114,7 +114,7 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
                     .doubleClick();
         }
 
-        return BaseDialog.at(SupplierDialog.GeneralTab.class);
+        return BaseDialog.at(SupplierDialog.class);
     }
 
     public void makeSupplierSearch(String query) {

@@ -2,7 +2,9 @@ package com.scalepoint.automation.tests.suppliermanager;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.AgreementsTab;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.GeneralTab;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementAdvancedTab;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
@@ -387,15 +389,15 @@ public class VoucherAgreementTests extends BaseTest {
 
         String vname = voucher.getVoucherNameSP();
 
-        SupplierDialog.AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
+        AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
         Objects.requireNonNull(agreementsTab)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, true))
-                .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
+                .doWithAgreement(vname, AgreementsTab.ActionType.LEAVE)
                 .closeSupplier()
                 .editSupplier(supplier.getSupplierName())
                 .selectAgreementsTab()
                 .doAssert(tab -> tab.assertVoucherStatus(vname, false))
-                .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.JOIN)
+                .doWithAgreement(vname, AgreementsTab.ActionType.JOIN)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, true));
     }
 
@@ -432,9 +434,9 @@ public class VoucherAgreementTests extends BaseTest {
                 .build();
 
         String vname = voucher.getVoucherNameSP();
-        SupplierDialog.AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
+        AgreementsTab agreementsTab = testVoucherVisibilityAcrossCompanies(data);
         Objects.requireNonNull(agreementsTab)
-                .doWithAgreement(vname, SupplierDialog.AgreementsTab.ActionType.LEAVE)
+                .doWithAgreement(vname, AgreementsTab.ActionType.LEAVE)
                 .doAssert(tab -> tab.assertVoucherStatus(vname, false))
                 .closeSupplier()
                 .logout();
@@ -589,15 +591,15 @@ public class VoucherAgreementTests extends BaseTest {
         }
     }
 
-    private SupplierDialog.AgreementsTab testVoucherVisibilityAcrossCompanies(VoucherAgreementData voucherAgreementData) {
+    private AgreementsTab testVoucherVisibilityAcrossCompanies(VoucherAgreementData voucherAgreementData) {
         SuppliersPage suppliersPage = loginToEccAdmin(voucherAgreementData.creator);
 
         String supplierName;
 
         /* open or create new supplier */
-        SupplierDialog.GeneralTab generalTab;
+        GeneralTab generalTab;
         if (voucherAgreementData.newSupplier == null) {
-            generalTab = suppliersPage.editSupplier(voucherAgreementData.existingSupplier);
+            generalTab = suppliersPage.editSupplier(voucherAgreementData.existingSupplier).selectGeneralTab();
             supplierName = voucherAgreementData.existingSupplier;
         } else {
             generalTab = SharedEccAdminFlows.createSupplier(suppliersPage, voucherAgreementData.newSupplier);
@@ -629,7 +631,7 @@ public class VoucherAgreementTests extends BaseTest {
         }
 
         /* close supplier and relogin */
-        SupplierDialog.AgreementsTab agreementsTab = voucherAgreementGeneralTab.saveVoucherAgreement();
+        AgreementsTab agreementsTab = voucherAgreementGeneralTab.saveVoucherAgreement();
         if (voucherAgreementData.newSupplier == null) {
             agreementsTab.closeSupplier();
         } else {
@@ -668,7 +670,7 @@ public class VoucherAgreementTests extends BaseTest {
                             tab.assertVoucherAbsent(voucherAgreementData.voucherName);
                     }
                 });
-        return BaseDialog.at(SupplierDialog.AgreementsTab.class);
+        return BaseDialog.at(AgreementsTab.class);
     }
 
     public enum VoucherAgreementState {

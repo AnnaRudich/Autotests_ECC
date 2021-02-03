@@ -3,7 +3,8 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateSupplierDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.CreateVoucherAgreementDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.AgreementsTab;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.GeneralTab;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementGeneralTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
@@ -12,7 +13,7 @@ import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import org.apache.commons.lang.StringUtils;
 
 public class SharedEccAdminFlows implements Actions {
-    public static SupplierDialog.GeneralTab createSupplier(SuppliersPage suppliersPage, Supplier supplier) {
+    public static GeneralTab createSupplier(SuppliersPage suppliersPage, Supplier supplier) {
         return suppliersPage.selectCreateSupplier()
                 .fill(supplierDialog -> new CreateSupplierDialog.FormFiller(supplierDialog)
                         .withSupplierName(supplier.getSupplierName())
@@ -23,10 +24,10 @@ public class SharedEccAdminFlows implements Actions {
                         .withPostalCode(supplier.getPostCode())
                         .withPhone(supplier.getSupplierPhone())
                         .withOrderEmail(supplier.getSupplierEmail()))
-                .createSupplier(SupplierDialog.GeneralTab.class);
+                .createSupplier(GeneralTab.class);
     }
 
-    public static SupplierDialog.AgreementsTab createVoucherAgreement(SupplierDialog.GeneralTab supplierTab, VoucherAgreementData voucherAgreementData) {
+    public static AgreementsTab createVoucherAgreement(GeneralTab supplierTab, VoucherAgreementData voucherAgreementData) {
         VoucherAgreementGeneralTab generalTab = supplierTab
                 .selectAgreementsTab()
                 .openCreateVoucherAgreementDialog()
