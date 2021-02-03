@@ -287,6 +287,7 @@ public class ReductionRulesTest extends BaseTest {
     public void ecc4007_verifyFailRRValidationThreeLinesOverlap(ReductionRule rule) {
         toNewReductionRulePage()
                 .fillGeneralForTwoLines(rule)
+                .addLine()
                 .fillDescriptionForLine(2, description)
                 .fillClaimReductionForLine(2, "32")
                 .fillAgeRangeForLine(0, "1", "2")
@@ -317,6 +318,7 @@ public class ReductionRulesTest extends BaseTest {
     public void ecc3951_verifyAddRRDocumentationComboboxValues() {
         String[] expectedDocumentationComboboxValues = {undefined, sufficientDocumentation, insufficient};
         toNewReductionRulePage()
+                .addLine()
                 .assertDocumentationComboboxValuesAre(expectedDocumentationComboboxValues);
     }
 
@@ -329,6 +331,7 @@ public class ReductionRulesTest extends BaseTest {
     public void ecc3951_verifyAddRRRatingComboboxValues() {
         String[] expectedRatingComboboxValues = {undefined, green, yellow, red};
         toNewReductionRulePage()
+                .addLine()
                 .assertRatingComboboxValuesAre(expectedRatingComboboxValues);
     }
 
@@ -624,6 +627,7 @@ public class ReductionRulesTest extends BaseTest {
     public void ecc3951_verifyAddRRValidationThreeLinesSamePriceAndDocumentationAndRatingButAgeDiffers(ReductionRule rule) {
         toNewReductionRulePage()
                 .fillGeneralForTwoLines(rule)
+                .addLine()
                 .fillDescriptionForLine(2, description)
                 .fillClaimReductionForLine(2, "32")
                 .fillAgeRangeForLine(0, "1", "12")
@@ -666,6 +670,7 @@ public class ReductionRulesTest extends BaseTest {
     public void ecc3951_verifyFailRRValidationThreeLinesSameAgeAndRatingAndDocumentationButPriceRangeOverlap(ReductionRule rule) {
         toNewReductionRulePage()
                 .fillGeneralForTwoLines(rule)
+                .addLine()
                 .fillDescriptionForLine(2, description)
                 .fillClaimReductionForLine(2, "32")
                 .fillAgeRangeForLine(0, "0", "12")
@@ -679,25 +684,24 @@ public class ReductionRulesTest extends BaseTest {
                 .searchRule(rule)
                 .assertRuleNotDisplayed(rule);
     }
-
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
     public void charlie_497_verifyCreateDiscretionaryRule(ReductionRule rule) {
         toNewReductionRulePage()
                 .fillSimpleDiscretionaryRRAndSave(rule)
                 .assertRuleDisplayed(rule);
     }
-
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
     public void charlie_497_verifyCreateDiscretionaryRuleWithRounding(ReductionRule rule) {
         toNewReductionRulePage()
+                .addLine()
                 .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
                 .assertRuleDisplayed(rule);
     }
-
     @Test(dataProvider = "testDataProvider", description = "Create simple discretionary rule")
     public void charlie_497_verifyCreateRuleAndAssignIt(ReductionRule rule, Assignment assignment) {
         databaseApi.removeAssignment(assignment);
         toNewReductionRulePage()
+                .addLine()
                 .fillSimpleDiscretionaryRRWithRoundingsAndSave(rule)
                 .assertRuleDisplayed(rule)
                 .selectExistingRR(rule)
