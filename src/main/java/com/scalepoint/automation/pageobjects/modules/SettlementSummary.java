@@ -1,12 +1,10 @@
 package com.scalepoint.automation.pageobjects.modules;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.OperationalUtils;
 import lombok.Getter;
 import org.openqa.selenium.By;
@@ -21,11 +19,11 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitForLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {

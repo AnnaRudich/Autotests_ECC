@@ -27,8 +27,7 @@ import java.util.function.Consumer;
 import static com.scalepoint.automation.services.restService.common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.getRnvWebServiceUrl;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.assertTrue;
+import static org.hamcrest.Matchers.containsString;
 
 public class RnvService extends BaseService {
 

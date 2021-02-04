@@ -4,7 +4,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.EvaluateTaskDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;

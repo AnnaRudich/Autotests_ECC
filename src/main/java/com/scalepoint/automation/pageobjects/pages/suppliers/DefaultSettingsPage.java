@@ -3,12 +3,9 @@ package com.scalepoint.automation.pageobjects.pages.suppliers;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.extjs.ExtRadioButton;
 import com.scalepoint.automation.utils.annotations.page.EccAdminPage;
 import lombok.Getter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,7 +60,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
             private SelfRiskCollectedBy selfRiskCollectedBy;
             private PaymentOfInvoice paymentOfInvoice;
             private OvercollectedDeductible overcollectedDeductible;
-            ExtRadioButton canServicePartnerUpdateSelfRisk;
+            SelenideElement canServicePartnerUpdateSelfRisk;
             String daysBeforeReminder;
             String daysBeforeAutoApprove;
 
@@ -74,7 +71,7 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
                 selfRiskCollectedBy = new SelfRiskCollectedBy(columns.get(1), columns.get(2));
                 paymentOfInvoice = new PaymentOfInvoice(columns.get(3), columns.get(4));
                 overcollectedDeductible = new OvercollectedDeductible(columns.get(5) , columns.get(6));
-                canServicePartnerUpdateSelfRisk  = new ExtRadioButton(columns.get(7));
+                canServicePartnerUpdateSelfRisk  = columns.get(7).find("img");
                 daysBeforeReminder = columns.get(8).getText();
                 daysBeforeAutoApprove = columns.get(9).getText();
                 System.out.println();
@@ -97,6 +94,21 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
 
             public DefaultSettingsRow setPaymentOfInvoiceByScalepoint(){
                 paymentOfInvoice.setByScalepoint();
+                return this;
+            }
+
+            public DefaultSettingsRow setOvercollectedDeductibleViaContent(){
+                overcollectedDeductible.setViaContent();
+                return this;
+            }
+
+            public DefaultSettingsRow setOvercollectedDeductibleViaInsuranceCompany(){
+                overcollectedDeductible.setViaInsuranceCompany();
+                return this;
+            }
+
+            public DefaultSettingsRow enableCanServicePartnerUpdateSelfRisk(){
+                canServicePartnerUpdateSelfRisk.click();
                 return this;
             }
 
@@ -216,47 +228,5 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
             }
         }
     }
-
-//    public DefaultSettingsPage doAssert(Consumer<Asserts> assertsFunc) {
-//        assertsFunc.accept(new Asserts());
-//        return DefaultSettingsPage.this;
-//    }
-
-//    public class Asserts {
-//        public Asserts assertVoucherPresent(String voucherName) {
-//            assertTrue(isVoucherCreated(voucherName));
-//            return this;
-//        }
-//
-//        public Asserts assertVoucherAbsent(String voucherName) {
-//            assertFalse(isVoucherCreated(voucherName));
-//            return this;
-//        }
-//
-//        public Asserts assertsIsExclusiveColumnDisplayed() {
-//            assertTrue(isExclusiveColumnDisplayed());
-//            return this;
-//        }
-//
-//        public Asserts assertsIsExclusiveColumnNotDisplayed() {
-//            assertFalse(isExclusiveColumnDisplayed());
-//            return this;
-//        }
-//
-//        public Asserts assertsIsExclusiveTickForVoucherDisplayed(String voucherName) {
-//            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
-//            return this;
-//        }
-//
-//        public Asserts assertsIsActiveTickForVoucherDisplayed(String voucherName) {
-//            assertTrue(isTickDisplayed(voucherName, byExclusiveXpath));
-//            return this;
-//        }
-//
-//        public Asserts assertsIsNotActiveTickForVoucherDisplayed(String voucherName) {
-//            assertFalse(isTickDisplayed(voucherName, byActiveXpath));
-//            return this;
-//        }
-//    }
 }
 
