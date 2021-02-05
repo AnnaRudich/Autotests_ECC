@@ -22,7 +22,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
         eccIntegrationService = new EccIntegrationService();
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void createClaimUsingXmlIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -31,7 +31,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void createClaimUsingXmlIntegrationWhenThisClaimWasPreviouslyClosed(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -45,7 +45,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void updateClaimUsingXmlIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -57,7 +57,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void createClaimUsingGetIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -65,7 +65,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
         openClaim().statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void createClaimUsingGetIntegrationWhenThisClaimWasPreviouslyClosed(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -79,7 +79,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void updateClaimUsingGetIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);

@@ -31,7 +31,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         claimRequest.setCompany("lb");
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closedExternalClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_EXTERNAL);
@@ -39,7 +39,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         assertEvent();
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closedWithMailClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
@@ -48,7 +48,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     }
 
     //TODO: fix
-    @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void replacedClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, REPLACEMENT);
@@ -56,7 +56,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         assertEvent();
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closeClaimWithSettlementWithAmountEqual0ShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item);
 
@@ -67,7 +67,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closeClaimWithNegativeSettlementAmountShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
@@ -87,7 +87,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest, 2);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void cancelNotSettledClaimShouldSendClaimUpdatedCaseClosedEvent(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .cancel(claimRequest);
@@ -95,7 +95,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void cancelSettledClaimShouldSendClaimUpdatedCaseClosedAndCaseSettledEvens(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
@@ -106,7 +106,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCaseSettledEventWasCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void cancelClaimShouldBeNotSendToEventApi(User user, EccIntegration eccIntegration) {
         loginUser(user);
         EccIntegrationService eccIntegrationService = new EccIntegrationService();
@@ -117,7 +117,7 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasNotCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void cancelClaimPreviouslySettledShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);

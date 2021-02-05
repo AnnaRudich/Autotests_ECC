@@ -18,17 +18,17 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaym
 public class SendingCaseSettledEventV3Case2_1 extends SendingCaseSettledEventV3Case2Base {
 
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closeWithMailSendingCaseSettledEventV3Case2_1(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         close(user, item1, item2, item3, CLOSE_WITH_MAIL);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closeWithoutMailSendingCaseSettledEventV3Case2_1(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         close(user, item1, item2, item3, CLOSE_WITHOUT_MAIL);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
+    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
     public void closeExternallySendingCaseSettledEventV3Case2_1(User user, InsertSettlementItem item1, InsertSettlementItem item2, InsertSettlementItem item3) {
         //GIVEN
         /*
