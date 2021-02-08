@@ -1,7 +1,11 @@
 package com.scalepoint.automation.tests.suppliermanager;
 
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialogViewMode;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.AgreementsTab;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.BannerTab;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.GeneralTab;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.OrdersTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
@@ -42,6 +46,7 @@ public class SupplierTests extends BaseTest {
      * WHEN: User updates general data
      * THEN: Updated General data stored correctly
      */
+
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
@@ -50,8 +55,9 @@ public class SupplierTests extends BaseTest {
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier1)
                 .saveSupplier()
                 .editSupplier(supplier1.getSupplierName())
+                .selectGeneralTab()
                 .fill(editSupplierDialog -> {
-                    new SupplierDialog.GeneralTab.FormFiller(editSupplierDialog)
+                    new GeneralTab.FormFiller(editSupplierDialog)
                             .withSupplierName(supplier2.getSupplierName())
                             .withCvr(supplier2.getSupplierCVR())
                             .withAddress1(supplier2.getAddress1())
@@ -62,6 +68,7 @@ public class SupplierTests extends BaseTest {
                 })
                 .saveSupplier()
                 .editSupplier(supplier2.getSupplierName())
+                .selectGeneralTab()
                 .doAssert(generalTab -> {
                     generalTab.assertCity(supplier2.getCity());
                     generalTab.assertPostalCode(supplier2.getPostCode());
@@ -88,7 +95,7 @@ public class SupplierTests extends BaseTest {
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .setWebsite(webSite)
                 .uploadLogo(attachmentImage)
-                .doAssert(SupplierDialog.GeneralTab.Asserts::assertLogoPresent)
+                .doAssert(GeneralTab.Asserts::assertLogoPresent)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()));
     }
@@ -107,7 +114,7 @@ public class SupplierTests extends BaseTest {
         SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .selectBannerTab()
                 .uploadBanner(attachmentImage)
-                .doAssert(SupplierDialog.BannerTab.Asserts::assertBannerIsPresent)
+                .doAssert(BannerTab.Asserts::assertBannerIsPresent)
                 .saveSupplier()
                 .doAssert(spage -> spage.assertSupplierPresent(supplier.getSupplierName()));
     }
@@ -125,7 +132,7 @@ public class SupplierTests extends BaseTest {
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
 
-        SupplierDialog.GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
+        GeneralTab generalTabTab = SharedEccAdminFlows.createSupplier(suppliersPage, supplier)
                 .selectOrdersTab()
                 .setOrderEmail(supplier.getSupplierEmail())
                 .setOrderMailFormat(SupplierDialog.OrderMailFormat.XML_MAIL_BODY)
@@ -139,7 +146,7 @@ public class SupplierTests extends BaseTest {
                 .toSuppliersPage()
                 .editSupplier(supplier.getSupplierName())
                 .selectOrdersTab()
-                .doAssert(SupplierDialog.OrdersTab.Asserts::assertOldOrderFlowItemsDisabled)
+                .doAssert(OrdersTab.Asserts::assertOldOrderFlowItemsDisabled)
                 .selectRadioOldOrderFlow()
                 .doAssert(ordersTab -> {
                     ordersTab.assertOrderEmailIs(supplier.getSupplierEmail());
@@ -250,7 +257,6 @@ public class SupplierTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(inactiveAgreement))  // Active tick should be not visible in supply management, vouchers list
                 .doAssert(VouchersPage.Asserts::assertsIsExclusiveColumnNotDisplayed);                      // Exclusive should not be visible in supply management, voucher list
     }
-
     @Test(dataProvider = "testDataProvider")
     public void ecc3039_sharedDataAreInViewModeForIC(@UserCompany(CompanyCode.BAUTA) User user, SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
@@ -264,7 +270,8 @@ public class SupplierTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierDisplayed(supplierName))    // Voucher tick should be visible in supply management, suppliers list
 
                 .editSupplier(supplierName)
-                .doAssert(SupplierDialog.GeneralTab.Asserts::assertIsDialogNotEditable)                 // GeneralTab data shouldn't be editable
+                .selectGeneralTab()
+                .doAssert(GeneralTab.Asserts::assertIsDialogNotEditable)                 // GeneralTab data shouldn't be editable
 
                 .selectShopsTab()
                 .openShopViewModel(simpleSupplier.getShopName())
@@ -272,7 +279,7 @@ public class SupplierTests extends BaseTest {
                 .cancelViewShopDialog()
 
                 .selectAgreementsTab()
-                .doAssert(SupplierDialog.AgreementsTab.Asserts::assertIsExclusiveTickForVoucherVisible) // Exclusive tick for voucher should be visible on agreements tab when open supplier from suppliers list
+                .doAssert(AgreementsTab.Asserts::assertIsExclusiveTickForVoucherVisible) // Exclusive tick for voucher should be visible on agreements tab when open supplier from suppliers list
                 .closeSupplier()
 
                 .toVouchersPage()
