@@ -8,14 +8,12 @@ import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.OverviewTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.DefaultSettingsPage;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
@@ -222,7 +220,6 @@ public class RnVSmokeTest extends BaseTest {
         verifyInvoicesDetails(projectsPage, 1, 0, invoicePrice, invoicePrice);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_COLLECTING_SELFRISK_BY_IC)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskLowerThanTotalAmounOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
@@ -262,7 +259,7 @@ public class RnVSmokeTest extends BaseTest {
                 selfRiskTakenByInsureanceCompany,
                 zero);
     }
-    @RequiredSetting(type = FTSetting.ENABLE_COLLECTING_SELFRISK_BY_IC)
+
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskEqualToTotalAmountOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
@@ -302,7 +299,6 @@ public class RnVSmokeTest extends BaseTest {
                 selfRiskTakenByInsureanceCompany,
                 zero);
     }
-    @RequiredSetting(type = FTSetting.ENABLE_COLLECTING_SELFRISK_BY_IC)
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskHigherThanTotalAmountOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
@@ -350,10 +346,7 @@ public class RnVSmokeTest extends BaseTest {
         defaultSettingsPage
                 .toDefaultSettingsGrid()
                 .getDefaultSettingsRow(0)
-                .setSelfRiskCollectedByServicePartner()
-                .setPaymentOfInvoiceByInsuranceCompany()
-                .setOvercollectedDeductibleViaInsuranceCompany()
-                .enableCanServicePartnerUpdateSelfRisk();
+                .setSelfRiskCollectedByServicePartner();
         defaultSettingsPage.logout();
 
         loginAndCreateClaim(user, claim)

@@ -111,7 +111,9 @@ public class RnvService extends BaseService {
     public RnvService sendFeedbackWithInvoiceWithRepairPriceAndTakenSelfRisk(BigDecimal repairPrice, BigDecimal takenSelfRisk, Claim claim, RnVMock.RnvStub rnvStub) {
 
         ServiceTaskImport serviceTaskImport = new ServiceTaskImportBuilder(claim, rnvStub.waitForServiceTask(claim.getClaimNumber()))
-                .buildDefaultWithInvoiceWithRepairPriceAndTakenSelfRisk(repairPrice, takenSelfRisk);
+                .buildDefaultWithInvoiceWithRepairPrice(repairPrice);
+        serviceTaskImport
+                .setTakenSelfRisk(takenSelfRisk);
         sendFeedback(serviceTaskImport);
         return this;
     }
