@@ -54,7 +54,7 @@ public enum FTSetting {
     CREATE_AND_PUSH_SETTLEMENT_DOCUMENTS("input[id='integrationSetting']", CHECKBOX),
     ENABLE_ALL_PAYMENT_INTEGRATION("input[id='enableAllPaymentIntegrations']", CHECKBOX),
     ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT("input[id='enablePushInvoice']", CHECKBOX),
-    DEFAULT_AUTOMATIC_INVOICE_PAYMENTS("select[name=RequiredValuationId]", SELECT),
+    DEFAULT_AUTOMATIC_INVOICE_PAYMENTS("select[id=DefaultInvoicePayerTypeId]", SELECT),
 
     //Match FTSetting
     ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS("input[name=ftnoflag][value='1']", CHECKBOX),
