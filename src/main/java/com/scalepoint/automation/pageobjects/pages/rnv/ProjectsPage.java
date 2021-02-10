@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.rnv;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.EvaluateTaskDialog;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.CommunicationTab;
 import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
@@ -22,7 +22,7 @@ import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
-public class ProjectsPage extends Page {
+public class ProjectsPage extends BaseClaimPage {
 
     private String byTaskStatusAgrXpath = "//div[contains(@id,'project_view_id')]//tr[1]//tr[1]/td/div[contains(text(), '%s')]/ancestor::tr[1]/td[5]/div";
 

@@ -3,7 +3,10 @@ package com.scalepoint.automation.pageobjects.pages.rnv.tabs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.pages.BaseClaimPage;
+import com.scalepoint.automation.pageobjects.pages.rnv.dialogs.EvaluateTaskDialog;
+import com.scalepoint.automation.utils.NumberFormatUtils;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -70,9 +73,11 @@ public class OverviewTab extends BaseClaimPage {
             private String taskNo;
             private String serviceAgreement;
             private String store;
+            @Getter
             private String taskStatus;
             private String unknown;
-            private String selfriskByServicePartner;
+            @Getter
+            private BigDecimal selfriskByServicePartner;
             @Getter
             private BigDecimal invoicePrice;
             @Getter
@@ -88,9 +93,9 @@ public class OverviewTab extends BaseClaimPage {
                 store = panelViewGridLineCells.get(3).getText();
                 taskStatus = panelViewGridLineCells.get(4).getText();
                 unknown = panelViewGridLineCells.get(5).getText();
-                selfriskByServicePartner = panelViewGridLineCells.get(6).getText();
-                invoicePrice = new BigDecimal(panelViewGridLineCells.get(7).getText());
-                totalRepairPrice = new BigDecimal(panelViewGridLineCells.get(8).getText());
+                selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(panelViewGridLineCells.get(6).getText());
+                invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(panelViewGridLineCells.get(7).getText());
+                totalRepairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(panelViewGridLineCells.get(8).getText());
                 evaluateAssignment = panelViewGridLineCells.get(9).find("a[role=button]");
             }
 
@@ -99,6 +104,12 @@ public class OverviewTab extends BaseClaimPage {
                 expander.click();
                 $("div#taskNestedGrid-body").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
                 return new PanelViewGridLine(panelViewGridLine);
+            }
+
+            public EvaluateTaskDialog clickEvaluateAssignment(){
+
+                evaluateAssignment.click();
+                return BaseDialog.at(EvaluateTaskDialog.class);
             }
 
             public PanelViewGridLine doAssert(Consumer<Asserts> assertFunc) {
@@ -111,6 +122,20 @@ public class OverviewTab extends BaseClaimPage {
                     assertThat(getInvoicePrice())
                             .as(String.format("Invoice price value should be %s", invoicePrice))
                             .isEqualTo(invoicePrice);
+                    return this;
+                }
+
+                public PanelViewGridLine.Asserts assertTaskStatus(String taskStatus) {
+                    assertThat(getTaskStatus())
+                            .as(String.format("Task status should be %s", taskStatus))
+                            .isEqualTo(taskStatus);
+                    return this;
+                }
+
+                public PanelViewGridLine.Asserts assertSelfriskByServicePartner(BigDecimal selfriskByServicePartner) {
+                    assertThat(getSelfriskByServicePartner())
+                            .as(String.format("Self risk by service partner value should be %s", selfriskByServicePartner))
+                            .isEqualTo(selfriskByServicePartner);
                     return this;
                 }
             }

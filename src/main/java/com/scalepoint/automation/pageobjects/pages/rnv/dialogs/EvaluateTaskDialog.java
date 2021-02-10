@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages.rnv.dialogs;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
@@ -29,7 +30,7 @@ public class EvaluateTaskDialog extends BaseDialog {
         hoverAndClick($(By.xpath("//span[contains(text(), 'Godkend opgave')]/following-sibling::span")));
         hoverAndClick($(By.xpath("//span[contains(text(), 'Ja')]/ancestor::a")));
         Wait.waitForLoaded();
-        return on(ProjectsPage.class);
+        return Page.at(ProjectsPage.class);
     }
 
 
