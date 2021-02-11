@@ -89,6 +89,16 @@ public interface Actions {
         sendKeys.perform();
     }
 
+    default void select(WebElement element){
+        org.openqa.selenium.interactions.Actions action = new org.openqa.selenium.interactions.Actions(Browser.driver());
+        Action sendKeys = action
+                .keyDown(Keys.CONTROL)
+                .click(element)
+                .keyUp(Keys.CONTROL)
+                .build();
+        sendKeys.perform();
+    }
+
     default boolean isSelected(WebElement element) {
         try {
             return $(element).is(selected);
