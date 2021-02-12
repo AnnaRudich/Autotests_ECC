@@ -8,7 +8,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -52,7 +55,6 @@ public class TaskWizardPage1 extends Page {
     }
 
     public TaskWizardPage1 selectDamageType(String lineDescription, String damageType) {
-
         getServiceLineByDescription(lineDescription).clickDamageType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(damageType);
@@ -65,6 +67,14 @@ public class TaskWizardPage1 extends Page {
                 .findAll("[role=option]")
                 .findBy(text(valueToSelect))
                 .click();
+    }
+
+    private List<ServiceLineHeader> getHeaders(){
+
+        return $$("#serviceLineListId .x-grid-header-ct span")
+                .stream()
+                .map(element -> ServiceLineHeader.findByText(element.getText()))
+                .collect(Collectors.toList());
     }
 
     public ServiceLine getServiceLineByDescription(String description){
@@ -85,9 +95,10 @@ public class TaskWizardPage1 extends Page {
 
         public ServiceLine(SelenideElement serviceLine){
             ElementsCollection serviceLines = serviceLine.findAll(By.cssSelector("td"));
-            description = serviceLines.get(2);
-            damageType = serviceLines.get(4);
-            taskType = serviceLines.get(5);
+            List<ServiceLineHeader> headers = getHeaders();
+            description = serviceLines.get(headers.indexOf(ServiceLineHeader.DESCRIPTION));
+            damageType = serviceLines.get(headers.indexOf(ServiceLineHeader.DAMAGE_TYPE));
+            taskType = serviceLines.get(headers.indexOf(ServiceLineHeader.TASK_TYPE));
         }
 
         public String getDescription(){
@@ -103,6 +114,33 @@ public class TaskWizardPage1 extends Page {
         public ServiceLine clickTaskType() {
             hoverAndClick(taskType);
             return this;
+        }
+    }
+
+    public enum ServiceLineHeader {
+
+        DESCRIPTION("Beskrivelse"),
+        CATEGORY("Kategori"),
+        DAMAGE_TYPE("Skadetype"),
+        TASK_TYPE("Opgavetype"),
+        UNKNOWN("Unknown");
+
+        private String text;
+
+        ServiceLineHeader(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public static ServiceLineHeader findByText(String text){
+
+            return Arrays.stream(ServiceLineHeader.values())
+                    .filter(serviceLineHeader -> serviceLineHeader.getText().equals(text))
+                    .findFirst()
+                    .orElse(UNKNOWN);
         }
     }
 }
