@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
@@ -72,6 +71,7 @@ public class TaskWizardPage1 extends Page {
     private List<ServiceLineHeader> getHeaders(){
 
         return $$("#serviceLineListId .x-grid-header-ct span")
+                .filter(visible)
                 .stream()
                 .map(element -> ServiceLineHeader.findByText(element.getText()))
                 .collect(Collectors.toList());
@@ -94,7 +94,9 @@ public class TaskWizardPage1 extends Page {
         private SelenideElement taskType;
 
         public ServiceLine(SelenideElement serviceLine){
-            ElementsCollection serviceLines = serviceLine.findAll(By.cssSelector("td"));
+            ElementsCollection serviceLines = serviceLine
+                    .findAll(By.cssSelector("td"))
+                    .filter(not(cssClass("x-action-col-cell")));
             List<ServiceLineHeader> headers = getHeaders();
             description = serviceLines.get(headers.indexOf(ServiceLineHeader.DESCRIPTION));
             damageType = serviceLines.get(headers.indexOf(ServiceLineHeader.DAMAGE_TYPE));
