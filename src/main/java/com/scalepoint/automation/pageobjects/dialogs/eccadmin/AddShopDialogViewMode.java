@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -26,9 +27,9 @@ public class AddShopDialogViewMode extends BaseDialog {
         $(nameLabel).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
-    public SupplierDialog.ShopsTab cancelViewShopDialog() {
+    public ShopsTab cancelViewShopDialog() {
         hoverAndClick($(By.xpath(SUPPLIER_CANCEL_VIEW_SHOP_BTN)));
-        return at(SupplierDialog.ShopsTab.class);
+        return at(ShopsTab.class);
     }
 
     public AddShopDialogViewMode doAssert(Consumer<Asserts> assertFunc) {

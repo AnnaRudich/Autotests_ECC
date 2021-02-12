@@ -1,17 +1,14 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.pageobjects.dialogs.eccadmin.SupplierDialog;
+import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.AgreementsTab;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.zoom;
 import static com.scalepoint.automation.pageobjects.dialogs.BaseDialog.at;
 
 public interface VoucherAgreementTabs extends Actions {
@@ -52,10 +49,10 @@ public interface VoucherAgreementTabs extends Actions {
         return at(tabClass);
     }
 
-    default SupplierDialog.AgreementsTab saveVoucherAgreement() {
+    default AgreementsTab saveVoucherAgreement() {
 
         SelenideElement element = $(".supplier-save-voucher-btn");
         zoomIfClickDoesNotWork(element);
-        return at(SupplierDialog.AgreementsTab.class);
+        return at(AgreementsTab.class);
     }
 }

@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.google.common.base.Strings;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.ReductionRule;
@@ -10,7 +11,11 @@ import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertEquals;
 
@@ -26,6 +31,9 @@ public class AddEditReductionRulePage extends AdminBasePage {
     @FindBy(id = "depreciation_type_policy")
     private WebElement policyRuleButton;
 
+    @FindBy(name = "max_depreciation")
+    private WebElement maxDepreciation;
+
     @FindBy(id = "depreciation_discretionary")
     private WebElement discretionaryButton;
 
@@ -35,35 +43,11 @@ public class AddEditReductionRulePage extends AdminBasePage {
     @FindBy(name = "roundbase")
     private WebElement roundbase;
 
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]/td[2]/input[@id='desc|0']")
-    private WebElement descriptionFirstField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[3]/td[2]/input[@id='desc|1']")
-    private WebElement descriptionSecondField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]/td[3]/input[@id='from|0']")
-    private WebElement ageFromFirstField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]/td[4]/input[@id='to|0']")
-    private WebElement ageToFirstField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]//input[@id='claimreduction|0']")
-    private WebElement clReductiontoFirstField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[3]//input[@id='claimreduction|1']")
-    private WebElement clReductiontoSecondField;
-
-    @FindBy(xpath = "//tr[2]/td/button[2]")
+    @FindBy(css = "input[value=Save]")
     private WebElement saveButton;
 
-    @FindBy(xpath = "//tr[2]/td/button[1]")
+    @FindBy(css = "input[value=Cancel]")
     private WebElement cancelButton;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]//input[@id='priceFrom|0']")
-    private WebElement priceFromFirstField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[2]//input[@id='priceTo|0']")
-    private WebElement priceToFirstField;
 
     @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[1]/th[2]")
     private WebElement descriptionColumnName;
@@ -95,21 +79,8 @@ public class AddEditReductionRulePage extends AdminBasePage {
     @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[1]/th[11]")
     private WebElement cashReductionColumnName;
 
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[3]//input[@id='priceFrom|1']")
-    private WebElement priceFromSecondField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[3]//input[@id='priceTo|1']")
-    private WebElement priceToSecondField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[3]/td[3]/input[@id='from|1']")
-    private WebElement ageFromSecondField;
-
-    @FindBy(xpath = "//table[@id='rulelines']/tbody/tr[3]/td[4]/input[@id='to|1']")
-    private WebElement ageToSecondField;
-
-    @FindBy(xpath = "//select[@id='documentation|0']")
-    private WebElement documentationFirstField;
-
+    @FindBy(css = "input[value=\"+\"]")
+    private WebElement addButton;
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -124,32 +95,32 @@ public class AddEditReductionRulePage extends AdminBasePage {
     }
 
     public ReductionRulesPage save() {
-        saveButton.click();
+        $(saveButton).click();
         return at(ReductionRulesPage.class)
                 .selectRefreshOption();
     }
 
+    public AddEditReductionRulePage addLine() {
+        $(addButton).click();
+        return this;
+    }
+
 
     public ReductionRulesPage saveAndExpectSuccess() {
-        saveButton.click();
+        $(saveButton).click();
         acceptAlert();
         return at(ReductionRulesPage.class).selectRefreshOption();
     }
 
     public AddEditReductionRulePage saveAndExpectWarning() {
-        saveButton.click();
+        $(saveButton).click();
         acceptAlert();
         return this;
     }
 
     public ReductionRulesPage cancel() {
-        cancelButton.click();
+        $(cancelButton).click();
         return at(ReductionRulesPage.class);
-    }
-
-    public void addPriceFrom(String priceFromValue) {
-        priceFromFirstField.clear();
-        priceFromFirstField.sendKeys(priceFromValue);
     }
 
     /**
@@ -173,72 +144,51 @@ public class AddEditReductionRulePage extends AdminBasePage {
         }
     }
 
-    public void fillSimplePolicyRRAndSave(ReductionRule rr) {
-        nameField.sendKeys(rr.getRrName());
-        publishRR();
-        selectPolicyRuleOption();
-        descriptionFirstField.sendKeys(rr.getDescription1());
-        ageFromFirstField.sendKeys(rr.getAgeFrom1());
-        ageToFirstField.sendKeys(rr.getAgeTo1());
-        clReductiontoFirstField.sendKeys(rr.getClaimReduction1());
-        priceFromFirstField.sendKeys(rr.getPriceRangeFrom1());
-        priceToFirstField.sendKeys(rr.getPriceRangeTo1());
-        save();
-    }
-
-    public void fillPolicyRRAndSave(ReductionRule rr, String ageFrom, String ageTo, String claimReduction, String priceRangeFrom,
-                                    String priceRangeTo, String documentationValue, String ratingDropValue) {
-        nameField.sendKeys(rr.getRrName());
-        publishRR();
-        selectPolicyRuleOption();
-        descriptionFirstField.sendKeys(rr.getDescription1());
-        ageFromFirstField.sendKeys(ageFrom);
-        ageToFirstField.sendKeys(ageTo);
-        clReductiontoFirstField.sendKeys(claimReduction);
-        priceFromFirstField.sendKeys(priceRangeFrom);
-        priceToFirstField.sendKeys(priceRangeTo);
-        selectDocumentationDropValue(0, documentationValue);
-        selectRatingDropValue(0, ratingDropValue);
-        save();
-    }
-
-
     public ReductionRulesPage fillSimpleDiscretionaryRRAndSave(ReductionRule rr) {
         nameField.sendKeys(rr.getRrName());
         publishRR();
         selectDiscretionaryRuleOption();
-        descriptionFirstField.sendKeys(rr.getDescription1());
-        ageFromFirstField.sendKeys(rr.getAgeFrom2());
-        ageToFirstField.sendKeys(rr.getAgeTo2());
-        clReductiontoFirstField.sendKeys(rr.getClaimReduction1());
-        priceFromFirstField.sendKeys(rr.getPriceRangeFrom2());
-        priceToFirstField.sendKeys(rr.getPriceRangeTo2());
+        $(maxDepreciation).setValue(rr.getMaxDepreciation());
+
+        addLine();
+
+        getReductionRuleLines().get(0)
+                .setDescription(rr.getDescription1())
+                .setAgeFrom(rr.getAgeFrom2())
+                .setAgeTo(rr.getAgeTo2())
+                .setClaimReduction(rr.getClaimReduction1())
+                .setPriceFrom(rr.getPriceRangeFrom2())
+                .setPriceTo(rr.getPriceRangeTo2());
+
         return save();
     }
 
     public ReductionRulesPage fillSimpleDiscretionaryRRWithRoundingsAndSave(ReductionRule rr) {
         return fillDiscretionaryRRAndSave(rr, "5", rr.getAgeFrom1(), rr.getAgeTo1(), rr.getClaimReduction1(),
-                rr.getPriceRangeFrom1(), rr.getPriceRangeTo1(), null, null);
+                rr.getPriceRangeFrom1(), rr.getPriceRangeTo1(), null, null, rr.getMaxDepreciation());
     }
 
     public ReductionRulesPage fillDiscretionaryRRAndSave(ReductionRule rr, String roundbase, String ageFrom, String ageTo,
                                                          String claimReduction, String priceRangeFrom, String priceRangeTo,
-                                                         String documentationValue, String ratingDropValue) {
+                                                         String documentationValue, String ratingDropValue, String maxDepreciationValue) {
         nameField.sendKeys(rr.getRrName());
         publishRR();
         selectDiscretionaryRuleOption();
-        descriptionFirstField.sendKeys(rr.getDescription1());
+        ReductionRuleLine reductionRuleLine = getReductionRuleLines().get(0);
+        reductionRuleLine.setDescription(rr.getDescription1());
+        $(maxDepreciation).setValue(maxDepreciationValue);
         if (Strings.isNullOrEmpty(roundbase)) {
             this.useRounding.deselect();
         } else {
             this.useRounding.select();
             this.roundbase.sendKeys(roundbase);
         }
-        ageFromFirstField.sendKeys(ageFrom);
-        ageToFirstField.sendKeys(ageTo);
-        clReductiontoFirstField.sendKeys(claimReduction);
-        priceFromFirstField.sendKeys(priceRangeFrom);
-        priceToFirstField.sendKeys(priceRangeTo);
+        reductionRuleLine
+                .setAgeFrom(ageFrom)
+                .setAgeTo(ageTo)
+                .setClaimReduction(claimReduction)
+                .setPriceFrom(priceRangeFrom)
+                .setPriceTo(priceRangeTo);
         if (!Strings.isNullOrEmpty(documentationValue)) {
             selectDocumentationDropValue(0, documentationValue);
         }
@@ -293,18 +243,15 @@ public class AddEditReductionRulePage extends AdminBasePage {
         nameField.sendKeys(rr.getRrName());
         publishRR();
         selectPolicyRuleOption();
-        $(descriptionFirstField).setValue(rr.getDescription1());
-        $(clReductiontoFirstField).setValue(rr.getClaimReduction1());
-        $(descriptionSecondField).setValue(rr.getDescription1());
-        $(clReductiontoSecondField).setValue(rr.getClaimReduction1());
-        return this;
-    }
-
-    public AddEditReductionRulePage fillClaimReductionForTwoLines(String claimReduction1, String claimReduction2) {
-        clReductiontoFirstField.clear();
-        clReductiontoFirstField.sendKeys(claimReduction1);
-        clReductiontoSecondField.clear();
-        clReductiontoSecondField.sendKeys(claimReduction2);
+        addLine();
+        addLine();
+        List<ReductionRuleLine> lines = getReductionRuleLines();
+        lines.get(0)
+                .setDescription(rr.getDescription1())
+                .setClaimReduction(rr.getClaimReduction1());
+        lines.get(1)
+                .setDescription(rr.getDescription1())
+                .setClaimReduction(rr.getClaimReduction1());
         return this;
     }
 
@@ -324,30 +271,36 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
 
     public AddEditReductionRulePage fillPriceRangeForTwoLines(String priceFromValueFirstLine, String priceToValueFirstLine, String priceFromValueSecondLine, String priceToValueSecondLine) {
-        $(priceFromFirstField).setValue(priceFromValueFirstLine);
-        $(priceToFirstField).setValue(priceToValueFirstLine);
-        $(priceFromSecondField).setValue(priceFromValueSecondLine);
-        $(priceToSecondField).setValue(priceToValueSecondLine);
+        List<ReductionRuleLine> reductionRuleLines = getReductionRuleLines();
+        reductionRuleLines.get(0)
+                .setPriceFrom(priceFromValueFirstLine)
+                .setPriceTo(priceToValueFirstLine);
+        reductionRuleLines.get(1)
+                .setPriceFrom(priceFromValueSecondLine)
+                .setPriceTo(priceToValueSecondLine);
         return this;
     }
 
     public AddEditReductionRulePage fillAgeRangeForTwoLines(String ageFromValueFirstLine, String ageToValueFirstLine, String ageFromValueSecondLine, String ageToValueSecondLine) {
-        $(ageFromFirstField).setValue(ageFromValueFirstLine);
-        $(ageToFirstField).setValue(ageToValueFirstLine);
-        $(ageFromSecondField).setValue(ageFromValueSecondLine);
-        $(ageToSecondField).setValue(ageToValueSecondLine);
+        List<ReductionRuleLine> reductionRuleLines = getReductionRuleLines();
+        reductionRuleLines.get(0)
+                .setAgeFrom(ageFromValueFirstLine)
+                .setAgeTo(ageToValueFirstLine);
+        reductionRuleLines.get(1)
+                .setAgeFrom(ageFromValueSecondLine)
+                .setAgeTo(ageToValueSecondLine);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage selectDocumentationDropValue(int lineNumber, String documentationValue) {
-        hoverAndClick($(By.xpath("//select[@id='documentation|" + lineNumber + "']"))).selectOption(documentationValue);
+        getReductionRuleLines().get(lineNumber).setDocumentation(documentationValue);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage selectRatingDropValue(int lineNumber, String ratingValue) {
-        hoverAndClick($(By.xpath("//select[@id='claimantRating|" + lineNumber + "']"))).selectOption(ratingValue);
+        getReductionRuleLines().get(lineNumber).setClaimantRating(ratingValue);
         return this;
     }
 
@@ -367,23 +320,20 @@ public class AddEditReductionRulePage extends AdminBasePage {
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage fillDescriptionForLine(int lineNumber, String descriptionValue) {
-        $(By.xpath("//input[@id='desc|" + lineNumber + "']")).sendKeys(descriptionValue);
+        getReductionRuleLines().get(lineNumber).setDescription(descriptionValue);
         return this;
     }
 
     //LineNumber is 0 for the first RR line
     public AddEditReductionRulePage fillClaimReductionForLine(int lineNumber, String reductionValue) {
-        $(By.xpath("//input[@id='claimreduction|" + lineNumber + "']")).sendKeys(reductionValue);
+        getReductionRuleLines().get(lineNumber).setClaimReduction(reductionValue);
         return this;
     }
 
     public String[] readDocumentationComboboxValues() {
-        int i = 1;
-        String[] documentationComboboxValues = new String[3];
-        while (i < 4) {
-            documentationComboboxValues[i - 1] = $(By.xpath("//select[@id='documentation|0']/option" + "[" + i + "]")).getText();
-            i++;
-        }
+
+        String[] documentationComboboxValues = $$("[id=\"documentation|0\"] > option").stream().map(element -> element.getText()).toArray(String[]::new);
+
         return documentationComboboxValues;
     }
 
@@ -395,6 +345,83 @@ public class AddEditReductionRulePage extends AdminBasePage {
             i++;
         }
         return ratingComboboxValues;
+    }
+
+    public List<ReductionRuleLine> getReductionRuleLines(){
+
+        return $$("#rulelines tr").stream()
+                .skip(1)
+                .map(ReductionRuleLine::new)
+                .collect(Collectors.toList());
+    }
+
+    class ReductionRuleLine{
+
+        private SelenideElement description;
+        private SelenideElement ageFrom;
+        private SelenideElement ageTo;
+        private SelenideElement newItem;
+        private SelenideElement priceFrom;
+        private SelenideElement priceTo;
+        private SelenideElement documentation;
+        private SelenideElement claimantRating;
+        private SelenideElement claimReduction;
+        private SelenideElement cashReduction;
+        private SelenideElement deleteLine;
+
+        public ReductionRuleLine(SelenideElement element){
+            description = element.find("[name=desc]");
+            ageFrom = element.find("[name=from]");
+            ageTo = element.find("[name=to]");
+            newItem = element.find("[name=newitem");
+            priceFrom = element.find("[name=priceFrom");
+            priceTo = element.find("[name=priceTo");
+            documentation = element.find("[name=documentation");
+            claimantRating = element.find("[name=claimantRating");
+            claimReduction = element.find("[name=claimreduction");
+            cashReduction = element.find("[name=cashreduction");
+            deleteLine = element.find("a");
+        }
+
+        public ReductionRuleLine setDescription(String value){
+            description.setValue(value);
+            return this;
+        }
+
+        public ReductionRuleLine setClaimReduction(String value){
+            claimReduction.setValue(value);
+            return this;
+        }
+
+        public ReductionRuleLine setAgeFrom(String value){
+            ageFrom.setValue(value);
+            return this;
+        }
+
+        public ReductionRuleLine setAgeTo(String value){
+            ageTo.setValue(value);
+            return this;
+        }
+
+        public ReductionRuleLine setPriceFrom(String value){
+            priceFrom.setValue(value);
+            return this;
+        }
+
+        public ReductionRuleLine setPriceTo(String value){
+            priceTo.setValue(value);
+            return this;
+        }
+
+        public ReductionRuleLine setClaimantRating(String value){
+            claimantRating.selectOption(value);
+            return this;
+        }
+
+        public ReductionRuleLine setDocumentation(String value){
+            documentation.selectOption(value);
+            return this;
+        }
     }
 
     public AddEditReductionRulePage assertDescriptionColumnHeaderPresent() {

@@ -61,14 +61,6 @@
         </classes>
     </test>
 
-    <test verbose="1" name="api" enabled="true" preserve-order="true" thread-count="1">
-        <packages>
-            <package name="com.scalepoint.automation.tests.api">
-                <exclude name="com.scalepoint.automation.tests.api.healthCheck"/>
-            </package>
-        </packages>
-    </test>
-
     <test verbose="1" name="UnifiedPayment" enabled="true" preserve-order="true" thread-count="1">
         <packages>
             <package name="com.scalepoint.automation.tests.api.unifiedpayments.v1"/>
