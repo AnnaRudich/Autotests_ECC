@@ -95,31 +95,31 @@ public class AddEditReductionRulePage extends AdminBasePage {
     }
 
     public ReductionRulesPage save() {
-        saveButton.click();
+        $(saveButton).click();
         return at(ReductionRulesPage.class)
                 .selectRefreshOption();
     }
 
     public AddEditReductionRulePage addLine() {
-        addButton.click();
+        $(addButton).click();
         return this;
     }
 
 
     public ReductionRulesPage saveAndExpectSuccess() {
-        saveButton.click();
+        $(saveButton).click();
         acceptAlert();
         return at(ReductionRulesPage.class).selectRefreshOption();
     }
 
     public AddEditReductionRulePage saveAndExpectWarning() {
-        saveButton.click();
+        $(saveButton).click();
         acceptAlert();
         return this;
     }
 
     public ReductionRulesPage cancel() {
-        cancelButton.click();
+        $(cancelButton).click();
         return at(ReductionRulesPage.class);
     }
 
