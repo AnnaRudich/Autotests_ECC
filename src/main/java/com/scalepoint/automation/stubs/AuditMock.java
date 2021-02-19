@@ -2,17 +2,15 @@ package com.scalepoint.automation.stubs;
 
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import com.github.tomakehurst.wiremock.matching.StringValuePattern;
+import com.scalepoint.automation.utils.JsonUtils;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 
 public class AuditMock {
 
@@ -43,25 +41,38 @@ public class AuditMock {
             WireMock.configureFor(wireMock);
         }
 
-        public AuditStub auditSelfServiceSubmitApprovedStub(){
+        public AuditStub auditSelfServiceSubmitApprovedStub() {
             wireMock.stubFor(post(urlPathEqualTo(baseUrl))
-                    .withRequestBody(equalToJson("{ \"triggerPoint\": \"selfServiceSubmit\"}", true, true))
-                    .willReturn(aResponse().withStatus(200).withBody("{\"success\":true,\"errorDescription\":null,\"payload\":{\"evaluationResult\":\"Approve\",\"newAssigneeType\":\"\",\"newAssigneeId\":\"\",\"isSelectedForTraining\":false,\"triggeredRules\":[]}}")));
+                    .withRequestBody(getTriggerPointPattern("selfServiceSubmit"))
+                    .willReturn(aResponse().withStatus(200).withBody(getAuditResponse())));
             return this;
         }
 
-        public AuditStub auditCloseClaimEventApprovedStub(){
+        public AuditStub auditCloseClaimEventApprovedStub() {
             wireMock.stubFor(post(urlPathEqualTo(baseUrl))
-                    .withRequestBody(equalToJson("{ \"triggerPoint\": \"closeClaimEvent\"}", true, true))
-                    .willReturn(aResponse().withStatus(200).withBody("{\"success\":true,\"errorDescription\":null,\"payload\":{\"evaluationResult\":\"Approve\",\"newAssigneeType\":\"\",\"newAssigneeId\":\"\",\"isSelectedForTraining\":false,\"triggeredRules\":[]}}")));
+                    .withRequestBody(getTriggerPointPattern("closeClaimEvent"))
+                    .willReturn(aResponse().withStatus(200).withBody(getAuditResponse())));
             return this;
         }
 
-        public AuditStub auditFnolSubmitEventApprovedStub(){
+        public AuditStub auditFnolSubmitEventApprovedStub() {
             wireMock.stubFor(post(urlPathEqualTo(baseUrl))
-                    .withRequestBody(equalToJson("{ \"triggerPoint\": \"fnolSubmit\"}", true, true))
-                    .willReturn(aResponse().withStatus(200).withBody("{\"success\":true,\"errorDescription\":null,\"payload\":{\"evaluationResult\":\"Approve\",\"newAssigneeType\":\"\",\"newAssigneeId\":\"\",\"isSelectedForTraining\":false,\"triggeredRules\":[]}}")));
+                    .withRequestBody(getTriggerPointPattern("fnolSubmit"))
+                    .willReturn(aResponse().withStatus(200).withBody(getAuditResponse())));
             return this;
+        }
+
+        private StringValuePattern getTriggerPointPattern(String value){
+
+            return equalToJson(String.format("{ \"triggerPoint\": \"%s\"}", value), true, true);
+        }
+
+        private String getAuditResponse() {
+            try {
+                return  JsonUtils.getJSONasString("__files/auditMock/auditResponse.json");
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
         }
     }
 }

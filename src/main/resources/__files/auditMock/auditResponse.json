@@ -1,0 +1,13 @@
+{
+  "success":true,
+  "errorDescription":null,
+  "payload":{
+    "evaluationResult":"Approve",
+    "newAssigneeType":"",
+    "newAssigneeId":"",
+    "isSelectedForTraining":false,
+    "triggeredRules":[
+
+    ]
+  }
+}
