@@ -13,6 +13,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.VoucherInfo;
+import com.scalepoint.automation.stubs.AuditMock;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
@@ -20,11 +21,13 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -42,6 +45,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 public class CommunicationDesignerTests extends BaseTest {
 
     RnVMock.RnvStub rnvStub;
+    AuditMock.AuditStub auditStub;
     CommunicationDesignerMock communicationDesignerMock;
 
     @BeforeClass
@@ -49,6 +53,8 @@ public class CommunicationDesignerTests extends BaseTest {
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
+                .addStub();
+        auditStub = new AuditMock(wireMock)
                 .addStub();
         wireMock.allStubMappings()
                 .getMappings()
@@ -226,6 +232,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
+
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = true)
     public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
@@ -401,6 +408,65 @@ public class CommunicationDesignerTests extends BaseTest {
         communicationDesignerMock.getStub(companyName)
                 .doValidation(schemaValidation ->
                         schemaValidation.validateTemplateGenerateSchema(clamNumber));
+    }
+
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare CustomerWelcome")
+    public void automaticCustomerWelcomeMail(User user, ClaimItem claimItem) {
+
+        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
+                .useOutputManagement(true)
+                .omAutomaticCustomerWelcome(true)
+                .build();
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption(false);
+
+        ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
+        ClaimRequest itemizationClaimRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
+        createClaimRequest.setCompany(user.getCompanyName());
+        createClaimRequest.setTenant(user.getCompanyName());
+        createClaimRequest.setAllowAutoClose(true);
+        itemizationClaimRequest.setCompany(user.getCompanyName());
+        itemizationClaimRequest.setTenant(user.getCompanyName());
+        itemizationClaimRequest.setAllowAutoClose(true);
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
+
+        String token = createFNOLClaimAndGetClaimToken(itemizationClaimRequest, createClaimRequest);
+
+        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+                .requestSelfServiceWithEnabledNewPassword(createClaimRequest, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescriptionWithOutSuggestions(claimLineDescription)
+                .selectPurchaseYear(String.valueOf(Year.now().getValue()))
+                .selectPurchaseMonth(JANUARY)
+                .addNewPrice(3000.00)
+                .selectCategory(claimItem.getCategoryMobilePhones())
+                .saveItem()
+                .sendResponseToEcc();
+
+        final String automaticCustomerWelcome = "[AutomaticCustomerWelcome]";
+
+        to(MyPage.class).openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail ->
+                        mail.noOtherMailsOnThePage(
+                                Arrays.asList(
+                                        ITEMIZATION_CUSTOMER_MAIL,
+                                        SELFSERVICE_CUSTOMER_WELCOME,
+                                        CUSTOMER_WELCOME))
+                )
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, automaticCustomerWelcome)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(automaticCustomerWelcome)
+                );
     }
 
     private MailsPage replacement(User user, Claim claim, ClaimItem claimItem){

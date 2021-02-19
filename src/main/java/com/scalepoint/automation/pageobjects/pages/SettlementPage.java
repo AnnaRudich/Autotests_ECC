@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openqa.selenium.*;
@@ -152,6 +153,13 @@ public class SettlementPage extends BaseClaimPage {
                 .enableNewPassword()
                 .fill(claim, password)
                 .send();
+    }
+
+    public SettlementPage requestSelfServiceWithEnabledNewPassword(ClaimRequest claimRequest, String password) {
+        return claimOperationsMenu.requestSelfService()
+                .enableNewPassword()
+                .fill(claimRequest, password)
+                .sendWithoutGdpr();
     }
 
     public SettlementPage addGenericItemToClaim(GenericItem genericItem) {
