@@ -171,6 +171,7 @@ public class InsCompAddEditPage extends AdminBasePage {
 //        $("[name=OM_ProcuraApprovalRequest]").setSelected(communicationDesigner.omProcuraApprovalRequest);
 //        $("[name=OM_ProcuraDecisionNotification]").setSelected(communicationDesigner.omProcuraDecisionNotification);
 //        $("[name=OM_ItemizationCustomerMail]").setSelected(communicationDesigner.omItemizationCustomerMail);
+        $("[name=OM_AutomaticCustomerWelcome]").setSelected(communicationDesigner.omAutomaticCustomerWelcome);
 
         return this;
     }
@@ -191,6 +192,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         boolean omItemizationReminderLossItems;
         boolean omItemizationSubmitLossItems;
         boolean omItemizationSaveLossItems;
+        boolean omAutomaticCustomerWelcome;
         //        boolean omSettlementNotification;
 //        boolean omSettlementNotificationClosedExternal;
 //        boolean omSettlementPreview;

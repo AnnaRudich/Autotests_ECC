@@ -5,6 +5,8 @@ import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import com.scalepoint.automation.utils.data.request.Customer;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -33,7 +35,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
     private Button ok;
 
-    @FindBy(id = "newPasswordCheckbox-displayEl")
+    @FindBy(name = "password")
     private WebElement newPasswordCheckbox;
 
     @Override
@@ -46,6 +48,14 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     public SendSelfServiceRequestDialog fill(Claim claim, String password) {
         return enterEmail(claim.getEmail())
                 .enterMobileNumber(claim.getCellNumber())
+                .enterPassword(password)
+                .disableSendSms();
+    }
+
+    public SendSelfServiceRequestDialog fill(ClaimRequest claimRequest, String password) {
+        Customer customer = claimRequest.getCustomer();
+        return enterEmail(customer.getEmail())
+                .enterMobileNumber(customer.getMobile())
                 .enterPassword(password)
                 .disableSendSms();
     }
@@ -91,6 +101,12 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
         ok.click();
         at(GdprConfirmationDialog.class)
                 .confirm();
+        waitForInvisible(ok);
+        return Page.at(SettlementPage.class);
+    }
+
+    public SettlementPage sendWithoutGdpr() {
+        ok.click();
         waitForInvisible(ok);
         return Page.at(SettlementPage.class);
     }

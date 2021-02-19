@@ -364,8 +364,8 @@ VALUES (@ICRFNBR,
       1,
       '01:00:00',
       '23:00:00',
-      10,
-        120)
+      0,
+        0)
 
 SET NOCOUNT OFF
 
