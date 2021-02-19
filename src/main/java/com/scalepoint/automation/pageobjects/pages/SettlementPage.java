@@ -521,6 +521,10 @@ public class SettlementPage extends BaseClaimPage {
             descriptionElement.click();
             return SettlementPage.this;
         }
+        public SettlementPage selectLineByControlKey() {
+            select(descriptionElement);
+            return SettlementPage.this;
+        }
 
         public SettlementPage toSettlementPage() {
             return SettlementPage.this;

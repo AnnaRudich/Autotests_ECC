@@ -16,11 +16,11 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -321,5 +321,96 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .expandTopTaskDetails()
                 .getAssertion()
                 .assertTaskHasFailStatus(agreement);
+    }
+
+    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
+    @Test(dataProvider = "testDataProvider", description = "One line is set as repair type in RnV")
+    public void onLineSentToRnVTaskLineTests(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+
+        String lineDescription1 = RandomUtils.randomName("RnVLine");
+        String lineDescription2 = RandomUtils.randomName("RnVLine");
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaim()
+                .openSid()
+                .fill(lineDescription1, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
+                .enableDamage()
+                .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
+                .closeSidWithOk()
+                .openSid()
+                .fill(lineDescription2, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
+                .enableDamage()
+                .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(lineDescription1, lineDescription2)
+                .sendToRnV()
+                .selectRnvType(lineDescription1, translations.getRnvTaskType().getRepair())
+                .nextRnVstep()
+                .sendRnvIsSuccess(agreement);
+
+        settlementPage
+                .findClaimLine(lineDescription1)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+        settlementPage
+                .findClaimLine(lineDescription2)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsNotSentToRepair);
+
+        settlementPage
+                .selectLinesByDescriptions(lineDescription2)
+                .sendToRnV()
+                .selectRnvType(lineDescription2,translations.getRnvTaskType().getRepair())
+                .nextRnVstep()
+                .sendRnvIsSuccess(agreement);
+
+        settlementPage
+                .findClaimLine(lineDescription1)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+        settlementPage
+                .findClaimLine(lineDescription2)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+    }
+
+    @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
+    @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
+    @Test(dataProvider = "testDataProvider", description = "Two lines are set as repair type in RnV")
+    public void multipleLinesSentToRnVTaskLineTests(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+
+        String lineDescription1 = RandomUtils.randomName("RnVLine");
+        String lineDescription2 = RandomUtils.randomName("RnVLine");
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaim()
+                .openSid()
+                .fill(lineDescription1, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
+                .enableDamage()
+                .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
+                .closeSidWithOk()
+                .openSid()
+                .fill(lineDescription2, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
+                .enableDamage()
+                .selectDamageType(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(0))
+                .closeSidWithOk()
+                .selectLinesByDescriptions(lineDescription1, lineDescription2)
+                .sendToRnV()
+                .selectRnvType(lineDescription1, translations.getRnvTaskType().getRepair())
+                .selectRnvType(lineDescription2, translations.getRnvTaskType().getRepair())
+                .nextRnVstep()
+                .sendRnvIsSuccess(agreement);
+
+        settlementPage
+                .findClaimLine(lineDescription1)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
+        settlementPage
+                .findClaimLine(lineDescription2)
+                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
     }
 }

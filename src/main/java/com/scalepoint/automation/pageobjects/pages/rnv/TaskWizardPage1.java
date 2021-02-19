@@ -1,6 +1,5 @@
 package com.scalepoint.automation.pageobjects.pages.rnv;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -9,13 +8,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
@@ -49,72 +47,102 @@ public class TaskWizardPage1 extends Page {
     }
 
     public TaskWizardPage1 selectRnvType(String lineDescription, String rnvType) {
-        selectValueFromDropdown(lineDescription, "Opgavetype", rnvType);
+        getServiceLineByDescription(lineDescription).clickTaskType();
+        waitForAjaxCompletedAndJsRecalculation();
+        selectValue(rnvType);
         return this;
     }
 
     public TaskWizardPage1 selectDamageType(String lineDescription, String damageType) {
-        selectValueFromDropdown(lineDescription, "Skadetype", damageType);
+        getServiceLineByDescription(lineDescription).clickDamageType();
+        waitForAjaxCompletedAndJsRecalculation();
+        selectValue(damageType);
         return this;
     }
 
-    private void selectValueFromDropdown(String lineDescription, String columnName, String valueToSelect) {
-        By dropDownListSelector = By.xpath("//div[contains(@class, 'x-boundlist-list-ct')]/ul/li");
-        SelenideElement column = new ServiceLines().getRowByDescription(lineDescription).get(columnName);
-        column.click();
-        column.findAll(dropDownListSelector).findBy(text(valueToSelect)).click();
+    private void selectValue(String valueToSelect) {
+        $$(".x-boundlist")
+                .findBy(visible)
+                .findAll("[role=option]")
+                .findBy(text(valueToSelect))
+                .click();
     }
 
-    class ServiceLines {
-        List<Map<String, SelenideElement>> serviceLines;
+    private List<ServiceLineHeader> getHeaders(){
 
-        ServiceLines() {
-            this.serviceLines = collectLinesData();
+        return $$("#serviceLineListId .x-grid-header-ct span")
+                .filter(visible)
+                .stream()
+                .map(element -> ServiceLineHeader.findByText(element.getText()))
+                .collect(Collectors.toList());
+    }
+
+    public ServiceLine getServiceLineByDescription(String description){
+
+        return $$("#serviceLineListId-body table [role=row]")
+                .stream()
+                .map(ServiceLine::new)
+                .filter(serviceLine -> serviceLine.getDescription().equals(description))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    class ServiceLine{
+
+        private SelenideElement description;
+        private SelenideElement damageType;
+        private SelenideElement taskType;
+
+        public ServiceLine(SelenideElement serviceLine){
+            ElementsCollection serviceLines = serviceLine
+                    .findAll(By.cssSelector("td"))
+                    .filter(not(cssClass("x-action-col-cell")));
+            List<ServiceLineHeader> headers = getHeaders();
+            description = serviceLines.get(headers.indexOf(ServiceLineHeader.DESCRIPTION));
+            damageType = serviceLines.get(headers.indexOf(ServiceLineHeader.DAMAGE_TYPE));
+            taskType = serviceLines.get(headers.indexOf(ServiceLineHeader.TASK_TYPE));
         }
 
-        private List<Map<String, SelenideElement>> collectLinesData() {
-            List<Map<String, SelenideElement>> serviceLines = new ArrayList<>();
+        public String getDescription(){
 
-            ElementsCollection rows = $$(By.xpath("//div[contains(@id, 'serviceLineListId-body')]//tr"));
-            By cellsSelector = By.xpath("(//div[contains(@class, 'x-grid-cell-inner')][not(contains(@class, 'x-grid-cell-inner-action-col'))])[position()>1]");
-
-            for (SelenideElement row : rows) {
-                ElementsCollection rowCells =
-                        row.findAll(cellsSelector);
-                serviceLines.add(mapCellsToHeaders(getColumnNames(), rowCells));
-            }
-            return serviceLines;
+            return description.getText();
         }
 
-        List<String> getColumnNames() {
-            By columnHeadersSelector = By.xpath("//span[following-sibling::div[contains(@class, 'x-column-header-trigger')]]");
-            ElementsCollection tableHeadersElements = $$(columnHeadersSelector).excludeWith(Condition.not(visible));
-
-            List<String> columnNames = new ArrayList<>();
-            for (WebElement tableHeaderElement : tableHeadersElements) {
-                columnNames.add(tableHeaderElement.getText());
-            }
-            return columnNames;
+        public ServiceLine clickDamageType() {
+            hoverAndClick(damageType);
+            return this;
         }
 
-        private Map<String, SelenideElement> mapCellsToHeaders(List<String> columnNames, ElementsCollection rowCells) {
-            Map<String, SelenideElement> lines = new HashMap<>();
-            for (int i = 0; i < columnNames.size(); i++) {
-                lines.put(columnNames.get(i), rowCells.get(i));
-            }
-            return lines;
+        public ServiceLine clickTaskType() {
+            hoverAndClick(taskType);
+            return this;
+        }
+    }
+
+    public enum ServiceLineHeader {
+
+        DESCRIPTION("Beskrivelse"),
+        CATEGORY("Kategori"),
+        DAMAGE_TYPE("Skadetype"),
+        TASK_TYPE("Opgavetype"),
+        UNKNOWN("Unknown");
+
+        private String text;
+
+        ServiceLineHeader(String text) {
+            this.text = text;
         }
 
-        Map<String, SelenideElement> getRowByDescription(String lineDescription) {
+        public String getText() {
+            return text;
+        }
 
-            Map<String, SelenideElement> row = new HashMap<>();
+        public static ServiceLineHeader findByText(String text){
 
-            for (Map<String, SelenideElement> serviceLine : serviceLines) {
-                if (serviceLine.get("Beskrivelse").getText().equals(lineDescription)) {
-                    row = serviceLine;
-                }
-            }
-            return row;
+            return Arrays.stream(ServiceLineHeader.values())
+                    .filter(serviceLineHeader -> serviceLineHeader.getText().equals(text))
+                    .findFirst()
+                    .orElse(UNKNOWN);
         }
     }
 }
