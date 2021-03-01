@@ -10,13 +10,14 @@ import java.util.NoSuchElementException;
 public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
     private boolean healthCheckFailed = false;
+    List<Suite> includedSuites = Arrays.asList(Suite.REGRESSION, Suite.QUNIT);
 
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> list, ITestContext iTestContext) {
 
         ISuite suite = iTestContext.getSuite();
 
-        if(Suite.findSuite(suite.getName()).equals(Suite.REGRESSION) && healthCheckFailed){
+        if(includedSuites.contains(Suite.findSuite(suite.getName())) && healthCheckFailed){
 
             return new LinkedList<>();
         }
@@ -55,6 +56,7 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
         HEALTH_CHECK("HealthCheck"),
         REGRESSION("allTestsExceptRnV"),
+        QUNIT("qunit"),
         ALL("All");
 
         private final String suiteName;
