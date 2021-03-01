@@ -221,6 +221,7 @@ public class RnVSmokeTest extends BaseTest {
         ProjectsPage projectsPage = new ClaimNavigationMenu().toRepairValuationProjectsPage();
         verifyInvoicesDetails(projectsPage, 1, 0, invoicePrice, invoicePrice);
     }
+
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
@@ -231,6 +232,8 @@ public class RnVSmokeTest extends BaseTest {
         final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
         final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
         final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfriskByServicePartner).subtract(selfRisk);
+
+        setSelfRiskCollectedByServicePartner(user);
 
         sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
 
@@ -262,6 +265,7 @@ public class RnVSmokeTest extends BaseTest {
                 selfRiskTakenByInsureanceCompany,
                 zero);
     }
+
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
     @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
@@ -272,6 +276,8 @@ public class RnVSmokeTest extends BaseTest {
         final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
         final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
         final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfriskByServicePartner).subtract(selfRisk);
+
+        setSelfRiskCollectedByServicePartner(user);
 
         sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
 
@@ -312,10 +318,143 @@ public class RnVSmokeTest extends BaseTest {
         final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
         final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
 
+        setSelfRiskCollectedByServicePartner(user);
+
         sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner)
                 .doAssert(rnvService -> rnvService.assertTakenSelfRiskNotWithinAllowedRange());
 
         verifyPanelView(agreement.getWaitingStatus(), zero);
+    }
+
+    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
+    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void selfRiskLowerThanRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+
+        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
+        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
+        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
+        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+        final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfRisk);
+
+        setSelfRiskCollectedByInsuranceCompany(user);
+
+        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
+
+        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), zero)
+                .clickEvaluateAssignment()
+                .acceptFeedback()
+                .toSettlementPage();
+
+        verifyRepairPanel(settlementPage,
+                repairPrice,
+                zero,
+                selfRisk,
+                zero,
+                zero,
+                selfRiskTakenByInsureanceCompany);
+
+        settlementPage = settlementPage
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaim();
+
+        verifyRepairPanel(settlementPage,
+                repairPrice,
+                zero,
+                selfRisk,
+                zero,
+                selfRiskTakenByInsureanceCompany,
+                zero);
+    }
+
+    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
+    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void selfRiskEqualToRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+
+        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
+        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
+        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
+        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+        final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfRisk);
+
+        setSelfRiskCollectedByInsuranceCompany(user);
+
+        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
+
+        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), zero)
+                .clickEvaluateAssignment()
+                .acceptFeedback()
+                .toSettlementPage();
+
+        verifyRepairPanel(settlementPage,
+                repairPrice,
+                zero,
+                selfRiskTakenByInsureanceCompany,
+                zero,
+                zero,
+                repairPrice);
+
+        settlementPage = settlementPage
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaim();
+
+        verifyRepairPanel(settlementPage,
+                repairPrice,
+                zero,
+                zero,
+                zero,
+                selfRisk,
+                zero);
+    }
+
+    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
+    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
+    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void selfRiskHigherThanRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+
+        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
+        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
+        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(20.00);
+        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+
+        setSelfRiskCollectedByInsuranceCompany(user);
+
+        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
+
+        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), zero)
+                .clickEvaluateAssignment()
+                .acceptFeedback()
+                .toSettlementPage();
+
+        verifyRepairPanel(settlementPage,
+                repairPrice,
+                zero,
+                zero,
+                zero,
+                zero,
+                repairPrice);
+
+        settlementPage = settlementPage
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaim();
+
+        verifyRepairPanel(settlementPage,
+                repairPrice,
+                zero,
+                zero,
+                zero,
+                repairPrice,
+                zero);
     }
 
     private void completeWithEmailAndSendRnV(User user, Claim claim, ServiceAgreement agreement, Translations translations){
@@ -341,9 +480,7 @@ public class RnVSmokeTest extends BaseTest {
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
     }
 
-    private RnvService sendRnVAndFeedbackWithTakenSelfRisk(User user, Claim claim, ServiceAgreement agreement, Translations translations, BigDecimal repairPrice, BigDecimal selfriskByServicePartner){
-
-        final String lineDescription = RandomUtils.randomName("RnVLine");
+    private void setSelfRiskCollectedByServicePartner(User user){
 
         DefaultSettingsPage defaultSettingsPage = login(user)
                 .getMainMenu()
@@ -354,6 +491,24 @@ public class RnVSmokeTest extends BaseTest {
                 .getDefaultSettingsRow(0)
                 .setSelfRiskCollectedByServicePartner();
         defaultSettingsPage.logout();
+    }
+
+    private void setSelfRiskCollectedByInsuranceCompany(User user){
+
+        DefaultSettingsPage defaultSettingsPage = login(user)
+                .getMainMenu()
+                .toEccAdminPage()
+                .toDefaultSettings();
+        defaultSettingsPage
+                .toDefaultSettingsGrid()
+                .getDefaultSettingsRow(0)
+                .setSelfRiskCollectedByInsuranceCompany();
+        defaultSettingsPage.logout();
+    }
+
+    private RnvService sendRnVAndFeedbackWithTakenSelfRisk(User user, Claim claim, ServiceAgreement agreement, Translations translations, BigDecimal repairPrice, BigDecimal selfriskByServicePartner){
+
+        final String lineDescription = RandomUtils.randomName("RnVLine");
 
         loginAndCreateClaim(user, claim)
                 .getSettlementSummary()
