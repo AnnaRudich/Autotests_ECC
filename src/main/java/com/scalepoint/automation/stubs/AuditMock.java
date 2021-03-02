@@ -6,21 +6,18 @@ import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import com.scalepoint.automation.utils.JsonUtils;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-public class AuditMock {
+public class AuditMock extends EccMock {
 
-    protected Logger logger = LogManager.getLogger(AuditMock.class);
-
-    private static WireMock wireMock;
     AuditStub stub;
 
     public AuditMock(WireMock wireMock){
-        this.wireMock = wireMock;
+        super(wireMock);
+        log = LogManager.getLogger(AuditMock.class);
     }
 
     public AuditStub addStub(){

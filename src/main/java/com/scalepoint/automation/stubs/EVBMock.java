@@ -5,21 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import lombok.Data;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-public class EVBMock {
-
-    protected Logger log = LogManager.getLogger(EVBMock.class);
-
-    private static WireMock wireMock;
+public class EVBMock extends EccMock{
 
     public EVBMock(WireMock wireMock){
-        this.wireMock = wireMock;
+        super(wireMock);
+        log = LogManager.getLogger(EVBMock.class);
     }
 
     public synchronized EVBStubs addStub() throws IOException {
