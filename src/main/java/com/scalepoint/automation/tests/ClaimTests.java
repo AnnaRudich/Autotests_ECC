@@ -75,6 +75,40 @@ public class ClaimTests extends BaseTest {
                 .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
     }
 
+    @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)
+    @Test(dataProvider = "testDataProvider",
+            description = "Verifies integration with agent info, send email to agent enabled")
+    public void includeAgentDataSendEmailEnabledTest(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimFormWithAgent(claim)
+                .sendAgendEmail(true)
+                .completeWithEmail(claim, databaseApi, true)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
+                .openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
+                .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
+                .doAssert(mailViewDialog -> mailViewDialog.isTextVisible(claim.getAgentEmail()));
+    }
+
+    @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "Verifies integration with agent info, send email to agent disabled")
+    public void includeAgentDataSendEmailDisabledTest(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimFormWithAgent(claim)
+                .sendAgendEmail(false)
+                .completeWithEmail(claim, databaseApi, true)
+                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
+                .openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
+                .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
+                .doAssert(mailViewDialog -> mailViewDialog.isTextInvisible(claim.getAgentEmail()));
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim externally. " +

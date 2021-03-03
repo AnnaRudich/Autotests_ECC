@@ -329,6 +329,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
+
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "stubDataProvider",

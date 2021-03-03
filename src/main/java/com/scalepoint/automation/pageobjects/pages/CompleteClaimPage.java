@@ -78,6 +78,15 @@ public class CompleteClaimPage extends Page {
     @FindBy(xpath = "//*[contains(@id, 'replacement-button-shop')][contains(@class, 'x-btn-icon')]")
     private Button goToShop;
 
+    @FindBy(name = "agent_name")
+    private WebElement agentName;
+
+    @FindBy(name = "agent_email")
+    private WebElement agentEmail;
+
+    @FindBy(name = "send_agent_email")
+    private WebElement sendAgentEmail;
+
     @Override
     protected String getRelativeUrl() {
         return "webshop/jsp/matching_engine/enter_base_info.jsp";
@@ -99,6 +108,13 @@ public class CompleteClaimPage extends Page {
                 enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode()).
                 enterEmail(claim.getEmail()).
                 sendSMS(false);
+        return this;
+    }
+
+    public CompleteClaimPage fillClaimFormWithAgent(Claim claim) {
+        fillClaimForm(claim)
+                .enterAgentName(claim.getAgentName())
+                .enterAgentEmail(claim.getAgentEmail());
         return this;
     }
 
@@ -139,8 +155,23 @@ public class CompleteClaimPage extends Page {
         return this;
     }
 
+    public CompleteClaimPage enterAgentName(String name) {
+        $(agentName).setValue(name);
+        return this;
+    }
+
+    public CompleteClaimPage enterAgentEmail(String email) {
+        $(agentEmail).setValue(email);
+        return this;
+    }
+
     public CompleteClaimPage sendSMS(boolean state) {
         spSMSCheckBOX.set(state);
+        return this;
+    }
+
+    public CompleteClaimPage sendAgendEmail(boolean state) {
+        $(sendAgentEmail).setSelected(state);
         return this;
     }
 
