@@ -7,6 +7,8 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.utils.JsonUtils;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 public class CommunicationDesignerMock {
+
+    protected Logger log = LogManager.getLogger(CommunicationDesignerMock.class);
 
     private static WireMock wireMock;
     private static Map<String, CommunicationDesignerStub> stubs = new HashMap<>();
@@ -70,6 +74,14 @@ public class CommunicationDesignerMock {
                             .withHeader("Content-Type", CONTENT_TYPE)
                             .withBody(JsonUtils.getJSONasString("__files/communicationDesignerMock/findTemplateResponse.json"))
                             .withStatus(200)));
+            return this;
+        }
+
+        public CommunicationDesignerStub printAllUnmatchedRequests(){
+            wireMock
+                    .findAllUnmatchedRequests()
+                    .stream()
+                    .forEach(loggedRequest -> log.info(loggedRequest.getBodyAsString()));
             return this;
         }
 

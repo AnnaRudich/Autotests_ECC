@@ -92,7 +92,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(mailViewDialog -> mailViewDialog.isTextVisible(claim.getAgentEmail()));
     }
 
-    @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA, enabled = false)
+    @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)
     @Test(dataProvider = "testDataProvider",
             description = "Verifies integration with agent info, send email to agent disabled")
     public void includeAgentDataSendEmailDisabledTest(User user, Claim claim) {
