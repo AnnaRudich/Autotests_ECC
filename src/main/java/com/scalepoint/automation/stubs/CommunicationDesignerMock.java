@@ -8,7 +8,6 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.utils.JsonUtils;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,15 +18,13 @@ import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
-public class CommunicationDesignerMock {
+public class CommunicationDesignerMock extends EccMock{
 
-    protected Logger log = LogManager.getLogger(CommunicationDesignerMock.class);
-
-    private static WireMock wireMock;
     private static Map<String, CommunicationDesignerStub> stubs = new HashMap<>();
 
     public CommunicationDesignerMock(WireMock wireMock){
-        this.wireMock = wireMock;
+        super(wireMock);
+        log = LogManager.getLogger(CommunicationDesignerMock.class);
     }
 
     public CommunicationDesignerStub getStub(String tenant){
@@ -77,14 +74,6 @@ public class CommunicationDesignerMock {
             return this;
         }
 
-        public CommunicationDesignerStub printAllUnmatchedRequests(){
-            wireMock
-                    .findAllUnmatchedRequests()
-                    .stream()
-                    .forEach(loggedRequest -> log.info(loggedRequest.getBodyAsString()));
-            return this;
-        }
-
         public CommunicationDesignerStub templatesGenerateStub() throws IOException {
 
             stubFor(post(urlPathEqualTo(templatesGenerate))
@@ -103,7 +92,6 @@ public class CommunicationDesignerMock {
         public class SchemaValidation {
 
             JsonSchema templateGenerate;
-            CommunicationDesignerStub communicationDesignerStubs;
 
             public SchemaValidation() {
                 try {

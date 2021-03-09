@@ -9,7 +9,6 @@ import com.scalepoint.automation.utils.JsonUtils;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,15 +22,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 
-public class FraudAlertMock {
+public class FraudAlertMock extends EccMock{
 
-    protected Logger log = LogManager.getLogger(FraudAlertMock.class);
-
-    private static WireMock wireMock;
     private static Map<String, FraudAlertStubs> stubs = new HashMap<>();
 
     public FraudAlertMock(WireMock wireMock){
-        this.wireMock = wireMock;
+        super(wireMock);
+        log = LogManager.getLogger(FraudAlertMock.class);
     }
 
     public FraudAlertStubs getStub(String tenant){
@@ -124,7 +121,6 @@ public class FraudAlertMock {
         public class SchemaValidation {
 
             JsonSchema templateGenerate;
-            FraudAlertStubs fraudAlertStubs;
 
             public SchemaValidation() {
                 try {

@@ -6,7 +6,6 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTasksExport;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -23,11 +22,8 @@ import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class RnVMock {
+public class RnVMock extends EccMock{
 
-    protected Logger logger = LogManager.getLogger(RnVMock.class);
-
-    private static WireMock wireMock;
     RnvStub stub;
 
     public static final int POLL_INTERVAL = 10;
@@ -37,7 +33,8 @@ public class RnVMock {
     public static final double OK_PRICE = 100.00;
 
     public RnVMock(WireMock wireMock){
-        this.wireMock = wireMock;
+        super(wireMock);
+        log = LogManager.getLogger(RnVMock.class);
     }
 
     public RnvStub addStub(){
@@ -120,7 +117,7 @@ public class RnVMock {
 
         private ServiceTasksExport loggedRequestToServiceTasksExport(LoggedRequest loggedRequest){
 
-            logger.info("Mock request: {}", loggedRequest);
+            log.info("Mock request: {}", loggedRequest);
 
             try {
                 String form = URLDecoder
