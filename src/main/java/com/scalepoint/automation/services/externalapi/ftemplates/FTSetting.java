@@ -38,6 +38,7 @@ public enum FTSetting {
     ENABLE_CANCEL_BUTTON_IN_SETTLEMENT_PAGE("input[name=ftfunctionflag3][value='2097152']", CHECKBOX),
     DO_NOT_DEPRECIATE_CUSTOMER_DEMAND("input[name=ftfunctionflag][value='4']", CHECKBOX),
     ENABLE_VOUCHER_PREDICTION("input[name=ftfunctionflag3][value='4096']", CHECKBOX),
+    INCLUDE_AGENT_DATA("input[name=ftfunctionflag2][value='536870912']", CHECKBOX),
 
     //Settings for Self Service
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='1']", CHECKBOX),

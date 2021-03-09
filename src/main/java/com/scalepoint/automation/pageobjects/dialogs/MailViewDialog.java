@@ -1,18 +1,19 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService2Page;
 import com.scalepoint.automation.pageobjects.pages.selfservice.LoginSelfServicePage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.threadlocal.Browser;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static com.scalepoint.automation.utils.Wait.waitForVisible;
@@ -75,8 +76,14 @@ public class MailViewDialog extends BaseDialog {
         public void isTextVisible(String text) {
 
             assertThat($("div[id|=panel][id$=innerCt]")
-                    .find(By.xpath(String.format("//*[contains(text(), '%s')]", text)))
-                    .exists())
+                    .has(Condition.text(text)))
+                    .isTrue();
+        }
+
+        public void isTextInvisible(String text) {
+
+            assertThat($("div[id|=panel][id$=innerCt]")
+                    .has(not(Condition.text(text))))
                     .isTrue();
         }
     }

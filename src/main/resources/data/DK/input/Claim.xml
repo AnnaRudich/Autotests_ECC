@@ -9,4 +9,6 @@
     <policyTypeTrygUser>Ny</policyTypeTrygUser>
     <policyTypeAF>AF-01</policyTypeAF>
     <policyTypeFF>FF-04</policyTypeFF>
+    <agentName>testAgentName</agentName>
+    <agentEmail>testAgentEmail</agentEmail>
 </claim>
