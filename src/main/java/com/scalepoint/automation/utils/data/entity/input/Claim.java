@@ -46,6 +46,8 @@ public class Claim {
     private String policyTypeTrygUser;
     private String policyTypeAF;
     private String policyTypeFF;
+    private String agentName;
+    private String agentEmail;
     private transient String claimId;
 
     @Override

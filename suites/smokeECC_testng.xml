@@ -73,6 +73,10 @@
         </classes>
     </test>
 
+    <suite-files>
+        <suite-file path="qunit_testng.xml" />
+    </suite-files>
+
     <listeners>
         <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
     </listeners>
