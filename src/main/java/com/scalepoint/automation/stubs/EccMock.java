@@ -12,4 +12,11 @@ public class EccMock {
     public EccMock(WireMock wireMock) {
         this.wireMock = wireMock;
     }
+
+    public void printAllUnmatchedRequests(){
+        wireMock
+                .findNearMissesForAllUnmatchedRequests()
+                .stream()
+                .forEach(loggedRequest -> log.info(loggedRequest));
+    }
 }

@@ -35,7 +35,8 @@ public class CommunicationDesignerMock extends EccMock{
         if(!stubs.containsKey(tenant)) {
             CommunicationDesignerStub communicationDesignerStubs = new CommunicationDesignerStub(tenant)
                     .templatesQueryStub()
-                    .templatesGenerateStub();
+                    .templatesGenerateStub()
+                    .pdfAttachmentStub();
             stubs.put(tenant, communicationDesignerStubs);
         }
         return stubs.get(tenant);
@@ -49,6 +50,8 @@ public class CommunicationDesignerMock extends EccMock{
         public final String templatesQuery;
         @Getter
         public final String templatesGenerate;
+        @Getter
+        public final String pdfAttachment;
         private final String CONTENT_TYPE = "application/json";
 
 
@@ -59,6 +62,7 @@ public class CommunicationDesignerMock extends EccMock{
             baseUrl = String.format("/outputManagementUrl/%s", tenant);
             templatesQuery = baseUrl.concat("/api/v1.1/Templates/Query");
             templatesGenerate = baseUrl.concat("/api/v1.1/Templates/Generate");
+            pdfAttachment = baseUrl.concat("/api/v1.1/Templates/GeneratePdf");
         }
 
         public CommunicationDesignerStub templatesQueryStub() throws IOException {
@@ -80,6 +84,16 @@ public class CommunicationDesignerMock extends EccMock{
                     .willReturn(aResponse()
                             .withHeader("Content-Type", CONTENT_TYPE)
                             .withBody(JsonUtils.getJSONasString("__files/communicationDesignerMock/omMailTemplate.json"))
+                            .withStatus(200)));
+            return this;
+        }
+
+        public CommunicationDesignerStub pdfAttachmentStub() throws IOException {
+
+            stubFor(post(urlPathEqualTo(pdfAttachment))
+                    .willReturn(aResponse()
+                            .withHeader("Content-Type", CONTENT_TYPE)
+                            .withBody(JsonUtils.getJSONasString("__files/communicationDesignerMock/pdfAttachment.json"))
                             .withStatus(200)));
             return this;
         }
