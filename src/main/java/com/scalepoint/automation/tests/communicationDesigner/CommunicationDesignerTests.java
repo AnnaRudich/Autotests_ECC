@@ -61,6 +61,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @BeforeClass
     public void startWireMock() {
+
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
@@ -76,6 +77,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @DataProvider(name = "stubDataProvider")
     public Object[][] stubDataProvider(Method method) throws IOException {
+
         Object[][] params = provide(method);
 
         User user = (User) Arrays
@@ -104,6 +106,7 @@ public class CommunicationDesignerTests extends BaseTest {
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email with attachments")
     public void selfServiceCustomerWelcomeWithAttachmentsTest(User user, Claim claim) {
+
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
                 .setUseOutputManagement(true)
                 .setSelfServiceCustomerWelcome(true, TWO_ATTACHMENTS);
@@ -193,7 +196,6 @@ public class CommunicationDesignerTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
@@ -255,7 +257,6 @@ public class CommunicationDesignerTests extends BaseTest {
                 .editSelfRisk("2000")
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
-
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_WITH_OUTSTANDING)
@@ -363,13 +364,6 @@ public class CommunicationDesignerTests extends BaseTest {
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
-    private void schemaValidation(String companyName, String clamNumber){
-
-        communicationDesignerMock.getStub(companyName)
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(clamNumber));
-    }
-
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcome")
@@ -427,6 +421,7 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     private MailsPage replacement(User user, Claim claim, ClaimItem claimItem){
+
         return loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -471,6 +466,7 @@ public class CommunicationDesignerTests extends BaseTest {
                 .selectSaveOption(false);
 
         String claimLineDescription = claimItem.getSetDialogTextMatch();
+
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
@@ -526,5 +522,12 @@ public class CommunicationDesignerTests extends BaseTest {
                         mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    }
+
+    private void schemaValidation(String companyName, String clamNumber){
+
+        communicationDesignerMock.getStub(companyName)
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(clamNumber));
     }
 }

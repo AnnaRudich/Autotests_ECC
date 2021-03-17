@@ -350,7 +350,7 @@ public class InsCompAddEditPage extends AdminBasePage {
                     "#OM_PDF_TEXT_AutomaticCustomerWelcome");
         }
     }
-    
+
     @RequiredArgsConstructor
     @Accessors(chain = true)
     public static class OMEmail{
