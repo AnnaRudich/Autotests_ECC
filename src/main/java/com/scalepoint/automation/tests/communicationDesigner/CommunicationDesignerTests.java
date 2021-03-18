@@ -38,11 +38,22 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.Arrays;
 
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerTests extends BaseTest {
+
+    private static final String CUSTOMER_WELCOME_REJECTION = "[CustomerWelcomeRejectionMail]";
+    private static final String CUSTOMER_WELCOME = "[CustomerWelcome]";
+    private static final String CUSTOMER_WELCOME_WITH_OUTSTANDING = "[CustomerWelcomeWithOutstanding]";
+    private static final String ORDER_CONFIRMATION = "[OrderConfirmation]";
+    private static final String REPLACEMENT_MAIL = "[ReplacementMail]";
+    private static final String AUTOMATIC_CUSTOMER_WELCOME = "[AutomaticCustomerWelcome]";
+    private static final String ITEMIZATION_SUBMIT_LOSS_ITEMS = "[ItemizationSubmitLossItems]";
+    private static final String ITEMIZATION_SAVE_LOSS_ITEMS = "[ItemizationSaveLossItems]";
+    private static final String SELFSERVICE_CUSTOMER_WELCOME = "[SelfServiceCustomerWelcome]";
+    private static final String ONE_ATTACHMENT = "testpdf.pdf";
+    private static final String TWO_ATTACHMENTS = "testpdf.pdf,testpdf.pdf";
 
     RnVMock.RnvStub rnvStub;
     AuditMock.AuditStub auditStub;
@@ -50,6 +61,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @BeforeClass
     public void startWireMock() {
+
         WireMock.configureFor(wireMock);
         wireMock.resetMappings();
         rnvStub = new RnVMock(wireMock)
@@ -65,6 +77,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @DataProvider(name = "stubDataProvider")
     public Object[][] stubDataProvider(Method method) throws IOException {
+
         Object[][] params = provide(method);
 
         User user = (User) Arrays
@@ -81,27 +94,24 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email")
-    public void SelfServiceCustomerWelcomeTest(User user, Claim claim) {
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omSelfServiceCustomerWelcome(true)
-                .build();
+    public void selfServiceCustomerWelcomeTest(User user, Claim claim) {
 
-        login(user)
-                .to(InsCompaniesPage.class)
-                .editCompany(user.getCompanyName())
-                .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption(false);
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setSelfServiceCustomerWelcome(false, null);
 
-        loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
-                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-                .doAssert(mailViewDialog -> {
-                    mailViewDialog.isTextVisible("[SelfServiceCustomerWelcome]");
-                });
+        sendSelfServiceCustomerWelcomeEmail(user, claim, communicationDesigner);
+    }
 
-        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email with attachments")
+    public void selfServiceCustomerWelcomeWithAttachmentsTest(User user, Claim claim) {
+
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setSelfServiceCustomerWelcome(true, TWO_ATTACHMENTS);
+
+        sendSelfServiceCustomerWelcomeEmail(user, claim, communicationDesigner);
     }
 
     @CommunicationDesignerCleanUp
@@ -112,56 +122,28 @@ public class CommunicationDesignerTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void itemizationSubmitAndSaveLossItemsTest(User user, Claim claim, ClaimItem claimItem) {
 
-        final String ITEMIZATION_SUBMIT_LOSS_ITEMS = "[ItemizationSubmitLossItems]";
-        final String ITEMIZATION_SAVE_LOSS_ITEMS = "[ItemizationSaveLossItems]";
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setItemizationSaveLossItems(false, null)
+                .setItemizationSubmitLossItems(false, null);
 
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omItemizationSubmitLossItems(true)
-                .omItemizationSaveLossItems(true)
-                .build();
+        sendItemizationSubmitAndSaveLossItemsEmails(user, claim, claimItem, communicationDesigner);
+    }
 
-        login(user)
-                .to(InsCompaniesPage.class)
-                .editCompany(user.getCompanyName())
-                .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption(false);
+    @CommunicationDesignerCleanUp
+    @Test(dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare Itemization Submit And Save Loss Items email with attachments")
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
+    public void itemizationSubmitAndSaveLossItemsWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem) {
 
-        String claimLineDescription = claimItem.getSetDialogTextMatch();
-        loginAndCreateClaim(user, claim)
-                .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
-                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-                .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.DEFAULT_PASSWORD)
-                .addDescriptionWithOutSuggestions(claimLineDescription)
-                .selectPurchaseYear(String.valueOf(Year.now().getValue()))
-                .selectPurchaseMonth(JANUARY)
-                .addNewPrice((double)3000)
-                .selectCategory(claimItem.getCategoryMobilePhones())
-                .saveItem()
-                .saveResponse()
-                .continueRegistration()
-                .login(Constants.DEFAULT_PASSWORD)
-                .sendResponseToEcc();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setItemizationSaveLossItems(true, TWO_ATTACHMENTS)
+                .setItemizationSubmitLossItems(true, ONE_ATTACHMENT);
 
-        to(MyPage.class).openActiveRecentClaim()
-                .toMailsPage()
-                .doAssert(mail -> {
-                    mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);
-                    mail.isMailExist(ITEMIZATION_CONFIRMATION_IC_MAIL);
-                })
-                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SUBMIT_LOSS_ITEMS)
-                .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ITEMIZATION_SUBMIT_LOSS_ITEMS)
-                )
-                .cancel()
-                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SAVE_LOSS_ITEMS)
-                .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ITEMIZATION_SAVE_LOSS_ITEMS)
-                );
-
-        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+        sendItemizationSubmitAndSaveLossItemsEmails(user, claim, claimItem, communicationDesigner);
     }
 
     @CommunicationDesignerCleanUp
@@ -169,12 +151,9 @@ public class CommunicationDesignerTests extends BaseTest {
             description = "Use communication designer to prepare CustomerWelcomeRejectionMail")
     public void customerWelcomeRejectionMail(User user, Claim claim) {
 
-        final String CUSTOMER_WELCOME_REJECTION = "[CustomerWelcomeRejectionMail]";
-
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omCustomerWelcomeRejectionMail(true)
-                .build();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setCustomerWelcomeRejectionMail(false, null);
 
         login(user)
                 .to(InsCompaniesPage.class)
@@ -185,7 +164,6 @@ public class CommunicationDesignerTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
@@ -200,14 +178,11 @@ public class CommunicationDesignerTests extends BaseTest {
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcome")
-    public void customerWelcomeMail(User user, Claim claim, ClaimItem claimItem) {
+    public void customerWelcomeTest(User user, Claim claim, ClaimItem claimItem) {
 
-        final String CUSTOMER_WELCOME = "[CustomerWelcome]";
-
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omCustomerWelcome(true)
-                .build();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setCustomerWelcome(false, null);
 
         login(user)
                 .to(InsCompaniesPage.class)
@@ -221,7 +196,6 @@ public class CommunicationDesignerTests extends BaseTest {
                 .closeSidWithOk()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
-
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
@@ -235,15 +209,13 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = true)
-    public void customerWelcomeWithOutstanding(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+    public void customerWelcomeWithOutstandingTest(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
+
         String lineDescription = RandomUtils.randomName("RnVLine");
 
-        final String CUSTOMER_WELCOME_WITH_OUTSTANDING = "[CustomerWelcomeWithOutstanding]";
-
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omCustomerWelcomeWithOutstanding(true)
-                .build();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setCustomerWelcomeWithOutstanding(false, null);
 
         login(user)
                 .to(InsCompaniesPage.class)
@@ -285,7 +257,6 @@ public class CommunicationDesignerTests extends BaseTest {
                 .editSelfRisk("2000")
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
-
                 .openRecentClaim()
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_WITH_OUTSTANDING)
@@ -300,50 +271,42 @@ public class CommunicationDesignerTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare split replacement mails")
-    public void splitReplacement(User user, Claim claim, ClaimItem claimItem) {
+    public void splitReplacementTest(User user, Claim claim, ClaimItem claimItem) {
 
-        final String CUSTOMER_WELCOME = "[CustomerWelcome]";
-        final String ORDER_CONFIRMATION = "[OrderConfirmation]";
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setCustomerWelcome(false, null)
+                .setOrderConfirmation(false, null);
 
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omCustomerWelcome(true)
-                .omOrderConfirmation(true)
-                .build();
+        sendSplitReplacementEmails(user, claim, claimItem, communicationDesigner);
+    }
 
-        login(user)
-                .to(InsCompaniesPage.class)
-                .editCompany(user.getCompanyName())
-                .setCommunicationDesignerSection(communicationDesigner)
-                .selectSaveOption(false);
+    @CommunicationDesignerCleanUp
+    @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
+    @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
+    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare split replacement mails with attachments")
+    public void splitReplacementWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem) {
 
-        replacement(user, claim, claimItem)
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
-                .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
-                )
-                .cancel()
-                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, ORDER_CONFIRMATION)
-                .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setCustomerWelcome(true, TWO_ATTACHMENTS)
+                .setOrderConfirmation(true, ONE_ATTACHMENT);
 
-        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+        sendSplitReplacementEmails(user, claim, claimItem, communicationDesigner);
     }
 
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare order confirmation mails")
-    public void orderConfirmation(User user, Claim claim, ClaimItem claimItem) {
+    public void orderConfirmationTest(User user, Claim claim, ClaimItem claimItem) {
+
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        final String ORDER_CONFIRMATION = "[OrderConfirmation]";
-
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omOrderConfirmation(true)
-                .build();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setOrderConfirmation(false, null);
 
         login(user)
                 .to(InsCompaniesPage.class)
@@ -375,14 +338,11 @@ public class CommunicationDesignerTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare replacement mail")
-    public void replacementMail(User user, Claim claim, ClaimItem claimItem) {
+    public void replacementMailTest(User user, Claim claim, ClaimItem claimItem) {
 
-        final String REPLACEMENT_MAIL = "[ReplacementMail]";
-
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omReplacementMail(true)
-                .build();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setReplacementMail(false, null);
 
         login(user)
                 .to(InsCompaniesPage.class)
@@ -394,8 +354,8 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(mailViewDialog ->
                         mailViewDialog.noOtherMailsOnThePage(
                                 Arrays.asList(
-                                        REPLACEMENT_WITH_MAIL,
-                                        SETTLEMENT_NOTIFICATION_TO_IC)))
+                                        MailsPage.MailType.REPLACEMENT_WITH_MAIL,
+                                        MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC)))
                 .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(REPLACEMENT_MAIL)
@@ -404,22 +364,14 @@ public class CommunicationDesignerTests extends BaseTest {
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
-    private void schemaValidation(String companyName, String clamNumber){
-
-        communicationDesignerMock.getStub(companyName)
-                .doValidation(schemaValidation ->
-                        schemaValidation.validateTemplateGenerateSchema(clamNumber));
-    }
-
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcome")
-    public void automaticCustomerWelcomeMail(User user, ClaimItem claimItem) {
+    public void automaticCustomerWelcomeTest(User user, ClaimItem claimItem) {
 
-        CommunicationDesigner communicationDesigner = CommunicationDesigner.builder()
-                .useOutputManagement(true)
-                .omAutomaticCustomerWelcome(true)
-                .build();
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setAutomaticCustomerWelcome(false, null);
 
         login(user)
                 .to(InsCompaniesPage.class)
@@ -453,24 +405,23 @@ public class CommunicationDesignerTests extends BaseTest {
                 .saveItem()
                 .sendResponseToEcc();
 
-        final String automaticCustomerWelcome = "[AutomaticCustomerWelcome]";
-
         to(MyPage.class).openRecentClaim()
                 .toMailsPage()
                 .doAssert(mail ->
                         mail.noOtherMailsOnThePage(
                                 Arrays.asList(
-                                        ITEMIZATION_CUSTOMER_MAIL,
-                                        SELFSERVICE_CUSTOMER_WELCOME,
-                                        CUSTOMER_WELCOME))
+                                        MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL,
+                                        MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME,
+                                        MailsPage.MailType.CUSTOMER_WELCOME))
                 )
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, automaticCustomerWelcome)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, AUTOMATIC_CUSTOMER_WELCOME)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(automaticCustomerWelcome)
+                        mailViewDialog.isTextVisible(AUTOMATIC_CUSTOMER_WELCOME)
                 );
     }
 
     private MailsPage replacement(User user, Claim claim, ClaimItem claimItem){
+
         return loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -483,5 +434,100 @@ public class CommunicationDesignerTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertClaimCompleted)
                 .openRecentClaim()
                 .toMailsPage();
+    }
+
+    private void sendSelfServiceCustomerWelcomeEmail(User user, Claim claim, CommunicationDesigner communicationDesigner){
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption(false);
+
+        MailsPage mailsPage = loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage();
+
+        mailsPage
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .doAssert(mailViewDialog -> {
+                    mailViewDialog.isTextVisible(SELFSERVICE_CUSTOMER_WELCOME);
+                });
+
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    }
+
+    private void sendItemizationSubmitAndSaveLossItemsEmails(User user, Claim claim, ClaimItem claimItem, CommunicationDesigner communicationDesigner){
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption(false);
+
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
+
+        loginAndCreateClaim(user, claim)
+                .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescriptionWithOutSuggestions(claimLineDescription)
+                .selectPurchaseYear(String.valueOf(Year.now().getValue()))
+                .selectPurchaseMonth(JANUARY)
+                .addNewPrice((double)3000)
+                .selectCategory(claimItem.getCategoryMobilePhones())
+                .saveItem()
+                .saveResponse()
+                .continueRegistration()
+                .login(Constants.DEFAULT_PASSWORD)
+                .sendResponseToEcc();
+
+        to(MyPage.class).openActiveRecentClaim()
+                .toMailsPage()
+                .doAssert(mail -> {
+                    mail.isMailExist(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL);
+                    mail.isMailExist(MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL);
+                })
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SUBMIT_LOSS_ITEMS)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ITEMIZATION_SUBMIT_LOSS_ITEMS)
+                )
+                .cancel()
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SAVE_LOSS_ITEMS)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ITEMIZATION_SAVE_LOSS_ITEMS)
+                );
+
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    }
+
+    private void sendSplitReplacementEmails(User user, Claim claim, ClaimItem claimItem, CommunicationDesigner communicationDesigner){
+
+        login(user)
+                .to(InsCompaniesPage.class)
+                .editCompany(user.getCompanyName())
+                .setCommunicationDesignerSection(communicationDesigner)
+                .selectSaveOption(false);
+
+        replacement(user, claim, claimItem)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
+                )
+                .cancel()
+                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, ORDER_CONFIRMATION)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+
+        schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
+    }
+
+    private void schemaValidation(String companyName, String clamNumber){
+
+        communicationDesignerMock.getStub(companyName)
+                .doValidation(schemaValidation ->
+                        schemaValidation.validateTemplateGenerateSchema(clamNumber));
     }
 }
