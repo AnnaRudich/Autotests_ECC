@@ -296,7 +296,7 @@ INSERT INTO [INSCOMP]
        ,[auditButtonEnabled]
        ,[auditAllowValidateRV]
        ,[omTenantAlias]
-       ,[omCompanyAlias],
+       ,[omCompanyAlias]
        ,[cwaTenant])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
