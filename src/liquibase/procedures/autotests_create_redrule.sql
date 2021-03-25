@@ -44,8 +44,8 @@ AS
   DECLARE @ReductionRuleId INT = SCOPE_IDENTITY()
 
   INSERT INTO [dbo].[ReductionRuleConfiguration]
-         ([PseudoCategory], [InsuranceCompany], [ReductionRule])
-  VALUES (@PseudoCategoryId, @CompanyID, @ReductionRuleId)
+         ([PseudoCategory], [InsuranceCompany], [ReductionRule], [Policy])
+  VALUES (@PseudoCategoryId, @CompanyID, @ReductionRuleId, 'testPolicy')
 
   INSERT INTO [dbo].[ReductionRuleLine]
          ([Description], [Sequence], [ClaimReduction], [CashReduction], [NewItemCode], [ReductionRule], [AgeFrom], [AgeTo], [priceRangeFrom], [priceRangeTo], [claimantRating])
