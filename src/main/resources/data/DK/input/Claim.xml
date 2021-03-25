@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <claim>
-    <cellNumber>+4520123804</cellNumber>
+    <cellNumber>+4560126981</cellNumber>
     <email>ecc_auto@scalepoint.com</email>
     <statusSaved>Åben</statusSaved>
     <statusClosedEx>Lukket eksternt</statusClosedEx>
@@ -11,4 +11,5 @@
     <policyTypeFF>FF-04</policyTypeFF>
     <agentName>testAgentName</agentName>
     <agentEmail>testAgentEmail</agentEmail>
+    <textArea>John Doe | CH-1234 Root, Oberwilstrasse 21; 05.07.1987 /G1238563 | T864310116 / 2021 7000801, ED, BA35-3;30-90AD, 21.12.2020, Erledigt, offen; Italienisch</textArea>
 </claim>

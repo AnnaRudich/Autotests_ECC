@@ -20,10 +20,14 @@ SET NOCOUNT ON
 
     declare @companyName nvarchar(254) = concat('Future', @companyId)
     declare @userName nvarchar(254) = concat('autotest-future', @companyId)
+    declare @categoryName nvarchar(254) = concat('autotest-category-future', @companyId)
+    declare @groupName nvarchar(254) = concat('autotest-group-future', @companyId)
 
     EXEC autotests_create_ic @companyId, @companyName
     EXEC autotests_create_user @companyId, @userName, @userRights
     EXEC autotests_create_choice_reasons @companyId
+    EXEC autotests_create_pseudo_category @categoryName, @groupName, 'All Categories'
+    EXEC autotests_create_redrule @userName, @companyName, @categoryName, @groupName, 'test1', 0, 10, NULL, NULL, 0.2, 0, 1
     --EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
     declare @SupplierId int

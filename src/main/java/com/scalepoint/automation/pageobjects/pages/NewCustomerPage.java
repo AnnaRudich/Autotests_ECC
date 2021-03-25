@@ -1,8 +1,12 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.utils.PastedData;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
+import lombok.Builder;
+import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,6 +18,8 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +39,15 @@ public class NewCustomerPage extends Page {
     @FindBy(name = "first_name")
     private WebElement firstNames;
 
+    @FindBy(name = "postal_code")
+    private WebElement postalCode;
+
+    @FindBy(id = "city")
+    private WebElement city;
+
+    @FindBy(id = "address")
+    private WebElement address;
+
     @FindBy(name = "policy_number")
     private WebElement policyNumber;
 
@@ -47,6 +62,9 @@ public class NewCustomerPage extends Page {
 
     @FindBy(id = "continue")
     private Button continueButton;
+
+    @FindBy(className = "copyPasteTextArea")
+    private WebElement copyPasteTextArea;
 
     @Override
     protected String getRelativeUrl() {
@@ -96,6 +114,11 @@ public class NewCustomerPage extends Page {
         return this;
     }
 
+    public NewCustomerPage enterCopyPasteTextArea(String text) {
+        $(copyPasteTextArea).setValue(text);
+        return this;
+    }
+
     public NewCustomerPage selectPolicyType(int index) {
         waitForVisible(policyType);
         policyType.selectByIndex(index);
@@ -135,6 +158,68 @@ public class NewCustomerPage extends Page {
 
         public Asserts assertThatDamageDateIsDisplayed() {
             assertThat(damageDate.isDisplayed()).isTrue();
+            return this;
+        }
+
+        public Asserts assertDamageDate(String expectedDamageDate) {
+            assertThat($(damageDate).getValue()).isEqualTo(expectedDamageDate);
+            return this;
+        }
+
+        public Asserts assertLastName(String expectedLastName) {
+            assertThat($(surname).getValue()).isEqualTo(expectedLastName);
+            return this;
+        }
+
+        public Asserts assertFirstName(String expectedFirstName) {
+            assertThat($(firstNames).getValue()).isEqualTo(expectedFirstName);
+            return this;
+        }
+
+        public Asserts assertCity(String expectedCity) {
+            assertThat($(city).getValue()).isEqualTo(expectedCity);
+            return this;
+        }
+
+        public Asserts assertAddress(String expectedAdress) {
+            assertThat($(address).getValue()).isEqualTo(expectedAdress);
+            return this;
+        }
+
+        public Asserts assertClaimNumber(String expectedClaimNumber) {
+            assertThat($(claimsNumber).getValue()).isEqualTo(expectedClaimNumber);
+            return this;
+        }
+
+        public Asserts assertPostalCode(String expectedPostalCode) {
+            assertThat($(postalCode).getValue()).isEqualTo(expectedPostalCode);
+            return this;
+        }
+
+        public Asserts assertPolicyNumber(String expectedPolicyNumber) {
+            SelenideElement policyNumberElement = $(policyNumber);
+            if(policyNumberElement.has(not(attribute("type", "hidden")))) {
+                assertThat($(policyNumber).getValue()).isEqualTo(expectedPolicyNumber);
+            }
+            return this;
+        }
+
+        public Asserts assertPolicyType(String expectedPolicyType) {
+            assertThat($(policyType).getText()).isEqualTo(expectedPolicyType);
+            return this;
+        }
+
+        public Asserts assertCopyPasteMechanism() {
+            PastedData pastedData = PastedData.parsePastedData($(copyPasteTextArea).getValue());
+            assertFirstName(pastedData.getFirstName());
+            assertLastName(pastedData.getLastName());
+            assertPostalCode(pastedData.getZipCode());
+            assertClaimNumber(pastedData.getClaimNumber());
+            assertCity(pastedData.getCity());
+            assertAddress(pastedData.getAddress());
+            assertPolicyNumber(pastedData.getPolicyNumber());
+            assertDamageDate(pastedData.getDamageDate());
+            assertPolicyType(pastedData.getPolicyType());
             return this;
         }
     }
