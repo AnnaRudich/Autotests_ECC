@@ -9,14 +9,12 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -35,7 +33,6 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         1. using bulk category update change category to some without rules mapped
         EXPECTED: in SID depreciation is NOT displayed, no rules also
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesAutomatically(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
@@ -72,7 +69,6 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         1. using bulk category update change category to some without rules mapped
         EXPECTED: in SID depreciation IS displayed, but no rules
       */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesManually(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
@@ -106,7 +102,6 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected);
     }
-
 
 
     private SettlementPage addTwoLineWithReductionRules(ClaimItem claimItem, Boolean automaticDepreciationSetting) {

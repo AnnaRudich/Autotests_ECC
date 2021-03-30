@@ -136,6 +136,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "age-years-textfield-inputEl")
     private WebElement ageYears;
 
+    @FindBy(id="age-months-combobox-inputEl")
+    private WebElement ageMonths;
+
     @FindBy(css = "#voucher-supplier-link a")
     private Link voucherLink;
 
@@ -1206,8 +1209,8 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertAgeIs(int years, int months) {
-            assertEquals($(ageYears).getText(), years + "");
-            assertEquals(getAgeMonth().getText(), months + "");
+            assertEquals($(ageYears).attr("value"), years + "");
+            assertEquals($(ageMonths).attr("value"), months + "");
             return this;
         }
 
