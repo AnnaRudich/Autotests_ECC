@@ -1354,6 +1354,12 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertThereIsNoReductionRules(){
+            assertThat($("#rule-suggestion-grid-body div.x-grid-item-container")
+                    .attr("id").startsWith("ext-element")).as("message").isTrue();
+            return this;
+        }
+
         public Asserts assertScalepointSupplierVisible(String supplier) {
             waitForAjaxCompleted();
             assertTrue(statusSupplier.getText().contains(supplier), "Scalepoint supplier must be visible");
@@ -1432,6 +1438,12 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertIsVoucherDiscountApplied(Double newPrice) {
+            ValuationGrid.ValuationRow valuationRow = new ValuationGrid().parseValuationRow(VOUCHER);
+            assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
+            return this;
+        }
+
+        public Asserts assertIsVoucherDiscountAppliedToNewPrice(Double newPrice) {
             ValuationGrid.ValuationRow valuationRow = new ValuationGrid().parseValuationRow(VOUCHER);
             assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;

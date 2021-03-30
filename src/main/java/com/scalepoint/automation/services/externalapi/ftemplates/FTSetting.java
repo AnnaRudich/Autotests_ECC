@@ -39,6 +39,7 @@ public enum FTSetting {
     DO_NOT_DEPRECIATE_CUSTOMER_DEMAND("input[name=ftfunctionflag][value='4']", CHECKBOX),
     ENABLE_VOUCHER_PREDICTION("input[name=ftfunctionflag3][value='4096']", CHECKBOX),
     INCLUDE_AGENT_DATA("input[name=ftfunctionflag2][value='536870912']", CHECKBOX),
+    ENABLE_BULK_UPDATE_CATEGORY("input[name=enableBulkUpdateCategory]",CHECKBOX),
 
     //Settings for Self Service
     ENABLE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='1']", CHECKBOX),
