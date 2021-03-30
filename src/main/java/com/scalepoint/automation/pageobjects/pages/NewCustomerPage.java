@@ -5,8 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.PastedData;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import lombok.Builder;
-import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

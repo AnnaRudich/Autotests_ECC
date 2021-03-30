@@ -1,6 +1,5 @@
 package com.scalepoint.automation.utils.data.entity.input;
 
-import com.scalepoint.automation.utils.PastedData;
 import com.scalepoint.automation.utils.RandomUtils;
 import lombok.Data;
 
