@@ -1359,7 +1359,12 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertThereIsNoReductionRules(){
             assertThat($("#rule-suggestion-grid-body div.x-grid-item-container")
-                    .attr("id").startsWith("ext-element")).as("message").isTrue();
+                    .attr("id").startsWith("ext-element")).as("there should be no reduction rules suggested").isTrue();
+            return this;
+        }
+
+        public Asserts assertThereIsReductionRuleSuggested(){
+            assertThat($("#rule-suggestion-grid-body table.x-grid-item").isDisplayed()).as("there should be reduction rule suggested").isTrue();
             return this;
         }
 
