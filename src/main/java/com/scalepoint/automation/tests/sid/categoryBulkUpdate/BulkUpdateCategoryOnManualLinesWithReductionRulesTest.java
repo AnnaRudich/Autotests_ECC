@@ -100,10 +100,10 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         Apply reduction rules automatically was NOT checked
 
         1. using bulk category update change category to some without rules mapped
-        EXPECTED: in SID - depreciation IS applied, but no rules
+        EXPECTED: in SID - depreciation IS applied, but no rules suggested
 
         2. using bulk category update change category back to one with reduction rules mapped
-        EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested?
+        EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested
       */
     @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
@@ -154,7 +154,19 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                 .selectSubcategory(categoryWithReductionRulesMapped.getCategoryName())
                 .closeUpdateCategoriesDialog()
 
-                .editFirstClaimLine();
+                .editFirstClaimLine()
+                .doAssert(
+                        sid -> {
+                            sid.assertDepreciationAmountIs(Double.valueOf(depreciationPercentageFromReductionRule));
+                            sid.assertDepreciationPercentageIs(String.valueOf(depreciationPercentageFromReductionRule));
+                            sid.assertThereIsReductionRuleSuggested();
+                            sid.assertAgeIs(lineAgeYears, lineAgeMonths);
+                            sid.assertIsVoucherDiscountAppliedToNewPrice(newPriceValue);//there is voucher valuation but no voucher! bug
+                            sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
+                        })
+                .valuationGrid()
+                .parseValuationRow(ValuationGrid.Valuation.NEW_PRICE)
+                .doAssert(ValuationGrid.ValuationRow.Asserts::assertValuationIsSelected);
     }
 }
 
