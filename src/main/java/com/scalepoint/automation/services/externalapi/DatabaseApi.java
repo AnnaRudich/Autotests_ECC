@@ -1,9 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
-import com.scalepoint.automation.shared.ClaimStatus;
-import com.scalepoint.automation.shared.CwaTaskLog;
-import com.scalepoint.automation.shared.VoucherInfo;
-import com.scalepoint.automation.shared.XpriceInfo;
+import com.scalepoint.automation.shared.*;
 import com.scalepoint.automation.utils.data.entity.input.Assignment;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
@@ -21,14 +18,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @SuppressWarnings("SqlDialectInspection")
 public class DatabaseApi {
 
     private static final int POLL_MS = 10;
     private static final int STATUS_CHANGE_TIMEOUT = 120;
+    private static final int FAILED_MAIL_SERVIECE_REQUEST_TIMEOUT = 5;
 
     private static Logger logger = LogManager.getLogger(DatabaseApi.class);
     private JdbcTemplate jdbcTemplate;
@@ -54,6 +51,11 @@ public class DatabaseApi {
                         "xp.discountCategoryID,xp.discountFromDate, xp.discountToDate, xp.discountValue, " +
                         "xp.priceSourceType,xp.priceSourceSupplierID, xp.productOriginalId, xp.supplierId, xp.agreementId " +
                         "FROM XPrice as xp join Product as pr on xp.productId = pr.ProductID WHERE xp.productId!=xp.productOriginalId AND pr.Published=1", new XpriceInfoMapper());
+    }
+
+    public List<TestMobileNumber> findTestMobileNumbers(){
+        return jdbcTemplate.query(
+                "SELECT * FROM [dbo].[TestMobileNumber]", new TestMobileNumberMapper());
     }
 
     public Integer getUserIdByClaimToken(String claimToken) {
@@ -129,6 +131,14 @@ public class DatabaseApi {
                         "  FROM [User] WHERE [ClaimNumber] = ?", int.class, claimNumber), equalTo(status));
     }
 
+    public String waitForFailedMailServiceRequest(String userId, int status){
+        return
+                await()
+                        .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
+                        .timeout(FAILED_MAIL_SERVIECE_REQUEST_TIMEOUT, TimeUnit.SECONDS)
+                        .until(() -> jdbcTemplate.queryForObject("SELECT [response] FROM [dbo].[FailedMailServiceRequests] WHERE [userId] = ?", String.class, userId), containsString(String.valueOf(status)));
+    }
+
     public void waitForClaimStatusChangedTo(Claim claim, ClaimStatus claimStatus){
 
         await()
@@ -188,6 +198,16 @@ public class DatabaseApi {
             voucherInfo.setVoucherSupplierId(rs.getString("SupplierId"));
             voucherInfo.setPurchaseDiscount(rs.getDouble("RebatePercentage"));
             return voucherInfo;
+        }
+    }
+
+    private static final class TestMobileNumberMapper implements RowMapper<TestMobileNumber>{
+        public TestMobileNumber mapRow(ResultSet rs, int i) throws SQLException {
+            TestMobileNumber testMobileNumber = new TestMobileNumber();
+            testMobileNumber.setTestMobileNumber(rs.getString("TestMobileNumber"));
+            testMobileNumber.setTestMobileNumberId(rs.getLong("TestMobileNumberId"));
+            testMobileNumber.setTestMobileOwner(rs.getString("TestMobileOwner"));
+            return testMobileNumber;
         }
     }
 
