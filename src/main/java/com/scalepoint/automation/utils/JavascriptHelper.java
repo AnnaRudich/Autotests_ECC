@@ -3,9 +3,7 @@ package com.scalepoint.automation.utils;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.io.InputStream;

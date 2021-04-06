@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundView;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -37,7 +38,13 @@ public class UpdateCategoriesDialog extends BaseDialog {
 
     public UpdateCategoriesDialog selectSubcategory(String subcategoryText) {
         subcategory.select(subcategoryText);
+        loadVouchersList();
         return this;
+    }
+
+    private void loadVouchersList(){
+        $("#bulk-vouchers-combobox-trigger-picker").click();
+        Wait.waitForExtJsListIsNotEmpty("bulk-vouchers-combobox-picker-listEl");
     }
 
     public SettlementPage closeUpdateCategoriesDialog() {

@@ -8,7 +8,14 @@ import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -76,6 +83,12 @@ public class Wait {
         getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
+
+    public static void waitForExtJsListIsNotEmpty(String listId){//bulk-vouchers-combobox-picker-listEl
+        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
+        ((JavascriptExecutor) Browser.driver())
+                .executeScript("return !document.getElementById('"+listId +"').getElementsByTagName('li').length").equals("false"));
+        }
 
     public static void waitMillis(int milliseconds) {
         try {
