@@ -217,13 +217,6 @@ public class SelfService2Tests extends BaseTest {
         sendSMSandVerifyResponse(user, claim, HttpStatus.SC_OK);
     }
 
-    @Test(dataProvider = "testDataProvider",
-            description = "Failed Mail service request - No Content")
-    public void sendSMSNoContentTest(User user, Claim claim) {
-
-        sendSMSandVerifyResponse(user, claim, HttpStatus.SC_NO_CONTENT);
-    }
-
     private void sendSMSandVerifyResponse(User user, Claim claim, int httpStatus){
 
         claim.setCellNumber(mailserviceMock.getTestMobileNumberForStatusCode(httpStatus));
