@@ -51,7 +51,7 @@ public class MailserviceMock extends EccMock {
         }
 
         public MailserviceStub stubMissingToken() {
-            stub(HttpStatus.SC_NO_CONTENT);
+            stub(HttpStatus.SC_OK);
             return this;
         }
 
