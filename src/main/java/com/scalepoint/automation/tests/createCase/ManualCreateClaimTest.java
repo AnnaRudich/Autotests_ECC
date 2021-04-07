@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class ManualCreateClaimTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_COPY_PASTE_TEXTAREA)
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @Test(dataProvider = "testDataProvider", description = "Check textArea on 'NewClaim' page that allows to copy-paste claim in specific format")
     public void createClaimUsingCopyPasteOnCreateClaimPageTest(User user, Claim claim) {
 
@@ -40,6 +41,7 @@ public class ManualCreateClaimTest extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.SHOW_COPY_PASTE_TEXTAREA)
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @Test(dataProvider = "testDataProvider", description = "Check textArea on 'NewClaim' page that allows to copy-paste claim in specific format")
     public void createClaimUsingCopyPasteOnCreateClaimPageEmptyTextAreaTest(User user, Claim claim) {
 

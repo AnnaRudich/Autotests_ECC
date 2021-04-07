@@ -3,10 +3,12 @@ package com.scalepoint.automation.tests.sid;
 import com.google.common.collect.Lists;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.services.externalapi.IP1Api;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -29,6 +31,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         return format(initialDamageDate, API_FORMAT);
     }
 
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed and can be setup on creating new claim and on customer details page")
     public void charlie_554_verifyDamageDateIsDisplayedAndCanBeSetOnCreatingAndDetails(User user, Claim claim) {
         LocalDate threeDaysBefore = LocalDate.now().minusDays(3);
