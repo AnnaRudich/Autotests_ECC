@@ -84,12 +84,6 @@ public class Wait {
                 ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
     }
 
-    public static void waitForExtJsListIsNotEmpty(String listId){//bulk-vouchers-combobox-picker-listEl
-        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
-        ((JavascriptExecutor) Browser.driver())
-                .executeScript("return !document.getElementById('"+listId +"').getElementsByTagName('li').length").equals("false"));
-        }
-
     public static void waitMillis(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
