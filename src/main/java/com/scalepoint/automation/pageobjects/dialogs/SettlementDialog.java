@@ -1450,12 +1450,6 @@ public class SettlementDialog extends BaseDialog {
             assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;
         }
-
-        public Asserts assertIsVoucherDiscountAppliedToNewPrice(Double newPrice) {
-            ValuationGrid.ValuationRow valuationRow = new ValuationGrid().parseValuationRow(VOUCHER);
-            assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
-            return this;
-        }
-    }
+      }
 }
 
