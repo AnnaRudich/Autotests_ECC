@@ -25,7 +25,7 @@ public class DatabaseApi {
 
     private static final int POLL_MS = 10;
     private static final int STATUS_CHANGE_TIMEOUT = 120;
-    private static final int FAILED_MAIL_SERVIECE_REQUEST_TIMEOUT = 5;
+    private static final int FAILED_MAIL_SERVIECE_REQUEST_TIMEOUT = 25;
 
     private static Logger logger = LogManager.getLogger(DatabaseApi.class);
     private JdbcTemplate jdbcTemplate;

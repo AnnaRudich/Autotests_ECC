@@ -34,6 +34,8 @@ public class MailserviceMock extends EccMock {
 
     public class MailserviceStub {
 
+        private static final String URL = "/api/.*/sms";
+
         public MailserviceStub() {
 
             WireMock.configureFor(wireMock);
@@ -58,7 +60,7 @@ public class MailserviceMock extends EccMock {
         public MailserviceStub stub(int responseCode) {
 
             wireMock.stubFor(
-                    any(urlMatching("/api/.*/sms"))
+                    any(urlMatching(URL))
                             .withRequestBody(containing(getTestMobileNumberForStatusCode(responseCode)))
                             .atPriority(1)
                             .willReturn(aResponse().withStatus(responseCode).withBody(String.format(response, responseCode))));
@@ -74,12 +76,6 @@ public class MailserviceMock extends EccMock {
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .getTestMobileNumber();
-    }
-
-    public  void print() {
-        wireMock.find(anyRequestedFor(urlMatching("/api/.*/sms")))
-                .stream()
-                .forEach(loggedRequest -> log.info(loggedRequest));
     }
 }
 
