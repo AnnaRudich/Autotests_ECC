@@ -18,8 +18,8 @@ CREATE PROCEDURE [dbo].[autotests_create_redrule]
   @ClaimReduction FLOAT,
   @CashReduction FLOAT,
   @Sequence INT,
-  @Policy VARCHAR(100),
-  @DepreciationType INT = 1
+  @DepreciationType INT,
+  @Policy VARCHAR(100)
 AS
 
 	SET NOCOUNT ON
