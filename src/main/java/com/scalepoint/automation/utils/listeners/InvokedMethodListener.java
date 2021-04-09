@@ -218,33 +218,35 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, User user) {
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
-
-
         String companyCode = user.getCompanyCode();
-        List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
 
-        if (!allSettings.isEmpty()) {
-            for (RequiredSetting setting : allSettings) {
-                FTSetting settingType = setting.type();
-                defaultList = defaultList
-                        .stream()
-                        .filter(ftOperation ->
-                                !ftOperation.getSetting().equals(settingType))
-                        .collect(Collectors.toList());
-                switch (settingType.getOperationType()) {
-                    case CHECKBOX:
-                        defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
-                        break;
-                    case INPUT:
-                        defaultList.add(FTSettings.setValue(settingType, setting.value()));
-                        break;
-                    case SELECT:
-                        defaultList.add(FTSettings.select(settingType, setting.value()));
+        if(companyCode != null) {
+
+            List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
+
+            if (!allSettings.isEmpty()) {
+                for (RequiredSetting setting : allSettings) {
+                    FTSetting settingType = setting.type();
+                    defaultList = defaultList
+                            .stream()
+                            .filter(ftOperation ->
+                                    !ftOperation.getSetting().equals(settingType))
+                            .collect(Collectors.toList());
+                    switch (settingType.getOperationType()) {
+                        case CHECKBOX:
+                            defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                            break;
+                        case INPUT:
+                            defaultList.add(FTSettings.setValue(settingType, setting.value()));
+                            break;
+                        case SELECT:
+                            defaultList.add(FTSettings.select(settingType, setting.value()));
+                    }
                 }
             }
-        }
 
-        updateFtTemplateWithRequiredSettings(user, defaultList);
+            updateFtTemplateWithRequiredSettings(user, defaultList);
+        }
     }
 
     private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations) {
