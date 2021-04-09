@@ -27,7 +27,7 @@ SET NOCOUNT ON
     EXEC autotests_create_user @companyId, @userName, @userRights
     EXEC autotests_create_choice_reasons @companyId
     EXEC autotests_create_pseudo_category @categoryName, @groupName, 'All Categories'
-    EXEC autotests_create_redrule @userName, @companyName, @categoryName, @groupName, 'test1', 0, 10, NULL, NULL, 0.2, 0, 1
+    EXEC autotests_create_redrule @userName, @companyName, @categoryName, @groupName, 'test1', 0, 10, NULL, NULL, 0.2, 0, 1, 'testPolicy'
     --EXEC autotests_create_service_agreements @companyId, @masterTemplateName, @serviceAgreementName, @serviceAgreementNameForWizard
 
     declare @SupplierId int

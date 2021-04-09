@@ -18,7 +18,8 @@ CREATE PROCEDURE [dbo].[autotests_create_redrule]
   @ClaimReduction FLOAT,
   @CashReduction FLOAT,
   @Sequence INT,
-  @DepreciationType INT = 1
+  @DepreciationType INT = 1,
+  @Policy VARCHAR(100) = NULL
 AS
 
 	SET NOCOUNT ON
@@ -45,7 +46,7 @@ AS
 
   INSERT INTO [dbo].[ReductionRuleConfiguration]
          ([PseudoCategory], [InsuranceCompany], [ReductionRule], [Policy])
-  VALUES (@PseudoCategoryId, @CompanyID, @ReductionRuleId, 'testPolicy')
+  VALUES (@PseudoCategoryId, @CompanyID, @ReductionRuleId, @Policy)
 
   INSERT INTO [dbo].[ReductionRuleLine]
          ([Description], [Sequence], [ClaimReduction], [CashReduction], [NewItemCode], [ReductionRule], [AgeFrom], [AgeTo], [priceRangeFrom], [priceRangeTo], [claimantRating])
