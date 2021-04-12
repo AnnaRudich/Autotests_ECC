@@ -297,7 +297,8 @@ INSERT INTO [INSCOMP]
        ,[auditAllowValidateRV]
        ,[omTenantAlias]
        ,[omCompanyAlias]
-       ,[cwaTenant])
+       ,[cwaTenant]
+       ,[mailserviceAlias])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -335,6 +336,7 @@ INSERT INTO [INSCOMP]
            ,@icAuditAllowAutoComplete
            ,@auditButtonEnabled
            ,@auditAllowValidateRV
+           ,lower(@ICNAME)
            ,lower(@ICNAME)
            ,lower(@ICNAME)
            ,lower(@ICNAME))
