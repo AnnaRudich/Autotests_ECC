@@ -363,7 +363,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
-
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @CommunicationDesignerCleanUp
     @Test(dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcome")
@@ -392,6 +392,7 @@ public class CommunicationDesignerTests extends BaseTest {
         String token = createFNOLClaimAndGetClaimToken(itemizationClaimRequest, createClaimRequest);
 
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+                .cancelPolicy()
                 .requestSelfServiceWithEnabledNewPassword(createClaimRequest, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
