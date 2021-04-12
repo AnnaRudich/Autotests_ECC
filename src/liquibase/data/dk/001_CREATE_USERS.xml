@@ -115,6 +115,13 @@
             WHERE ICRFNBR=@lb_id
         </sql>
 
+        <sql>
+            --set test mobile numbers
+            EXEC autotests_add_test_mobile_number 81555507, 'Mock Internal Server Error 500'
+            EXEC autotests_add_test_mobile_number 51555168, 'Mock Not Found 404'
+            EXEC autotests_add_test_mobile_number 25556634, 'Mock Missing Token 200'
+        </sql>
+
         <rollback/>
     </changeSet>
 </databaseChangeLog>
