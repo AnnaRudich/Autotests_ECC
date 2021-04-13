@@ -26,10 +26,10 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         Apply reduction rules automatically was checked
 
         1. using bulk category update change category to some without rules mapped
-        EXPECTED: in SID - no depreciation applied, no reduction rules
+        EXPECTED: in SID - no reduction rules suggested, but manual depreciation value(from previous rule) is still displayed
 
         2. using bulk update change category back to one with reduction rules mapped
-        EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested
+        EXPECTED: in SID - there is reduction rule suggested
      */
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
@@ -82,7 +82,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                         sid -> {
                             sid.assertDepreciationAmountIs(Double.valueOf(depreciationPercentageFromReductionRule));
                             sid.assertDepreciationPercentageIs(String.valueOf(depreciationPercentageFromReductionRule));
-                            sid.assertThereIsNoReductionRules();
+                            sid.assertThereIsReductionRuleSuggested();
                             sid.assertAgeIs(lineAgeYears, lineAgeMonths);
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })
@@ -152,7 +152,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                         sid -> {
                             sid.assertDepreciationAmountIs(Double.valueOf(depreciationPercentageFromReductionRule));
                             sid.assertDepreciationPercentageIs(String.valueOf(depreciationPercentageFromReductionRule));
-                            sid.assertThereIsReductionRuleSuggested();
+                            sid.assertThereIsNoReductionRules();
                             sid.assertAgeIs(lineAgeYears, lineAgeMonths);
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })
