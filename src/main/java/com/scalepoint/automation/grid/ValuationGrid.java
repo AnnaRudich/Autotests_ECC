@@ -151,6 +151,11 @@ public class ValuationGrid implements Actions {
                 assertEquals(depreciationPercentage, expectedDepreciationPercentage);
                 return this;
             }
+
+            public Asserts assertValuationIsSelected(){
+                assertTrue(isValuationChecked());
+                return this;
+            }
         }
     }
 

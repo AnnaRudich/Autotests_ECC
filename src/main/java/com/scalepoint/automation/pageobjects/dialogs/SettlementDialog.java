@@ -136,6 +136,9 @@ public class SettlementDialog extends BaseDialog {
     @FindBy(id = "age-years-textfield-inputEl")
     private WebElement ageYears;
 
+    @FindBy(id="age-months-combobox-inputEl")
+    private WebElement ageMonths;
+
     @FindBy(css = "#voucher-supplier-link a")
     private Link voucherLink;
 
@@ -1206,8 +1209,8 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertAgeIs(int years, int months) {
-            assertEquals($(ageYears).getText(), years + "");
-            assertEquals(getAgeMonth().getText(), months + "");
+            assertEquals($(ageYears).attr("value"), years + "");
+            assertEquals($(ageMonths).attr("value"), months + "");
             return this;
         }
 
@@ -1354,6 +1357,17 @@ public class SettlementDialog extends BaseDialog {
             return this;
         }
 
+        public Asserts assertThereIsNoReductionRules(){
+            assertThat($("#rule-suggestion-grid-body div.x-grid-item-container")
+                    .attr("id").startsWith("ext-element")).as("there should be no reduction rules suggested").isTrue();
+            return this;
+        }
+
+        public Asserts assertThereIsReductionRuleSuggested(){
+            assertThat($("#rule-suggestion-grid-body table.x-grid-item").isDisplayed()).as("there should be reduction rule suggested").isTrue();
+            return this;
+        }
+
         public Asserts assertScalepointSupplierVisible(String supplier) {
             waitForAjaxCompleted();
             assertTrue(statusSupplier.getText().contains(supplier), "Scalepoint supplier must be visible");
@@ -1436,6 +1450,6 @@ public class SettlementDialog extends BaseDialog {
             assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;
         }
-    }
+      }
 }
 
