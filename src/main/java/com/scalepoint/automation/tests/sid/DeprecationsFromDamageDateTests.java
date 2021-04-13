@@ -9,10 +9,10 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.Test;
 
@@ -59,7 +59,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     public void charlie_554_ip1_shouldSetDamageDateToCurrentDate(User user, Claim claim) {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate("");
-        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().doAssert(
+        IP1Api.doGetIntegration(user, claim, false).toCustomerDetails().doAssert(
                 asserts -> asserts.assertDamageDateIs(initialDamageDate)
         );
     }
@@ -70,7 +70,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         claim.setDamageDate(toDamageFormat(initialDamageDate));
 
         /* claim is created with damage date*/
-        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().doAssert(
+        IP1Api.doGetIntegration(user, claim, false).toCustomerDetails().doAssert(
                 asserts -> asserts.assertDamageDateIs(initialDamageDate)
         ).toSettlementPage().saveClaim(claim);
 
@@ -94,7 +94,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     public void charlie_554_ip1_shouldRejectNotValidDamageDates(User user, Claim claim) {
         /* damage date from future */
         claim.setDamageDate(toDamageFormat(LocalDate.now().plusDays(1L)));
-        IP1Api.assertGetIntegrationHasError(user, claim, true, "The entered Damage Date must not be later than today");
+        IP1Api.assertGetIntegrationHasError(user, claim, false, "The entered Damage Date must not be later than today");
 
         /* damage date with wrong format */
         //claim.setDamageDate("15-02-2018");
@@ -104,13 +104,16 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         });
     }
 
-
     @Test(dataProvider = "testDataProvider", description = "Check ip1 doesn't update damage date if claims lines present")
     public void charlie_554_ip1_shouldNotUpdateDamageDateIfClaimsLinesPresent(User user, Claim claim, ClaimItem claimItem) {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate(toDamageFormat(initialDamageDate));
 
-        IP1Api.doGetIntegration(user, claim, true).toCustomerDetails().toSettlementPage().openSid()
+        IP1Api
+                .doGetIntegration(user, claim, false)
+                .toCustomerDetails()
+                .toSettlementPage()
+                .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCategory(claimItem.getCategoryBabyItems())
                 .setNewPrice(Constants.PRICE_2400)
@@ -124,7 +127,6 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 asserts -> asserts.assertDamageDateIs(initialDamageDate)
         );
     }
-
 
     @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
     public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem) {
