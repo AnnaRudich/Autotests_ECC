@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -7,14 +8,17 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
+import org.apache.http.HttpStatus;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -29,6 +33,20 @@ public class SelfService2Tests extends BaseTest {
 
     private String description;
     private String newPasswordToSelfService;
+    MailserviceMock mailserviceMock;
+
+    @BeforeClass
+    public void startWireMock() {
+
+        WireMock.configureFor(wireMock);
+        wireMock.resetMappings();
+        mailserviceMock = new MailserviceMock(wireMock, databaseApi);
+        mailserviceMock.addStub();
+        wireMock.allStubMappings()
+                .getMappings()
+                .stream()
+                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+    }
 
     @BeforeMethod
     void init() {
@@ -99,7 +117,7 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(SelfService2Page.Asserts::assertLogOutIsDisplayed)
                 .logOut()
                 .doAssert(LoginSelfService2Page.Asserts::assertLogOutIsSuccessful);
-                new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
+        new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
@@ -170,5 +188,39 @@ public class SelfService2Tests extends BaseTest {
 
                 .backToSavePoint(SettlementPage.class)
                 .doAssert(asserts -> asserts.assertItemIsPresent(description));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Failed Mail service request - Internal Server Error")
+    public void sendSMSInternalServerErrorTest(User user, Claim claim) {
+
+        claim.setCellNumber(mailserviceMock.getTestMobileNumberForStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR));
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
+
+        databaseApi.waitForFailedMailServiceRequest(claim.getClaimId(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Failed Mail service request - No Found")
+    public void sendSMSNotFoundTest(User user, Claim claim) {
+
+        sendSMSandVerifyResponse(user, claim, HttpStatus.SC_NOT_FOUND);
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Failed Mail service request - Missing token")
+    public void sendSMSMissingTokenTest(User user, Claim claim) {
+
+        sendSMSandVerifyResponse(user, claim, HttpStatus.SC_OK);
+    }
+
+    private void sendSMSandVerifyResponse(User user, Claim claim, int httpStatus){
+
+        claim.setCellNumber(mailserviceMock.getTestMobileNumberForStatusCode(httpStatus));
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
+
+        databaseApi.waitForFailedMailServiceRequest(claim.getClaimId(), httpStatus);
     }
 }
