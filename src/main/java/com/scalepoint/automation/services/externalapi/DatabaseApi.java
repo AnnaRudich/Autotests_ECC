@@ -7,6 +7,7 @@ import com.scalepoint.ecc.thirdparty.integrations.model.enums.EventType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.cwa.TaskType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -132,10 +133,12 @@ public class DatabaseApi {
     }
 
     public String waitForFailedMailServiceRequest(String userId, int status){
+
         return
                 await()
                         .pollInterval(POLL_MS, TimeUnit.MILLISECONDS)
                         .timeout(FAILED_MAIL_SERVIECE_REQUEST_TIMEOUT, TimeUnit.SECONDS)
+                        .ignoreException(EmptyResultDataAccessException.class)
                         .until(() -> jdbcTemplate.queryForObject("SELECT [response] FROM [dbo].[FailedMailServiceRequests] WHERE [userId] = ?", String.class, userId), containsString(String.valueOf(status)));
     }
 
