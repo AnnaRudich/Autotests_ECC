@@ -11,6 +11,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class ToolBarMenu extends Module {
 
@@ -107,7 +108,7 @@ public class ToolBarMenu extends Module {
     }
 
     public UpdateCategoriesDialog toUpdateCategoriesDialog() {
-        waitForAjaxCompleted();
+        waitForAjaxCompletedAndJsRecalculation();
         return BaseDialog.at(UpdateCategoriesDialog.class);
     }
 }
