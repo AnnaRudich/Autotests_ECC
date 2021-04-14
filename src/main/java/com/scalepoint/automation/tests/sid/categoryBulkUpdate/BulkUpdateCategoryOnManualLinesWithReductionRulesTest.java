@@ -5,6 +5,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -14,6 +15,8 @@ import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.testng.annotations.Test;
 
 @RequiredSetting(type = FTSetting.ENABLE_BULK_UPDATE_CATEGORY)
+@RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
+@Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-6693")
 public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseTest {
 
     ClaimLinesHelper claimLinesHelper = new ClaimLinesHelper();
@@ -31,8 +34,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         2. using bulk update change category back to one with reduction rules mapped
         EXPECTED: in SID - there is reduction rule suggested
      */
-    @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
     public void bulkUpdateCategories_applyRulesAutomatically(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
@@ -100,7 +102,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         2. using bulk category update change category back to one with reduction rules mapped
         EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested
       */
-    @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
+    @Test(enabled = false, dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesManually(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
