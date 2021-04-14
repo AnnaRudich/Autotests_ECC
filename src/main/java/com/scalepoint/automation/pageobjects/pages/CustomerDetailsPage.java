@@ -46,6 +46,24 @@ public class CustomerDetailsPage extends BaseClaimPage {
     @FindBy(xpath = "//button[contains(@onclick, 'newPassword')]")
     private WebElement newPasswordButton;
 
+    @FindBy(id = "firstname")
+    private WebElement firstName;
+
+    @FindBy(id = "lastname")
+    private WebElement lastName;
+
+    @FindBy(id = "address1")
+    private WebElement address1;
+
+    @FindBy(id = "zipcode")
+    private WebElement zipCode;
+
+    @FindBy(id = "city")
+    private WebElement city;
+
+    @FindBy(id = "policy_type")
+    private WebElement policyType;
+
     private CustomerDetails customerDetails = new CustomerDetails();
 
     @Override
@@ -128,8 +146,38 @@ public class CustomerDetailsPage extends BaseClaimPage {
             return this;
         }
 
-        public Asserts assertCustomerFaceValueIs(Double expectedPrice) {
-            assertEqualsDouble(customerDetails.getVoucherValue(), expectedPrice, "Voucher face value %s should be assertEqualsDouble to not depreciated new price %s");
+        public Asserts assertClaimNumber(String expectedClaimNumber) {
+            assertThat($(claimNumber).getText()).isEqualTo(expectedClaimNumber);
+            return this;
+        }
+
+        public Asserts assertFirstName(String expectedFirstName) {
+            assertThat($(firstName).getText()).isEqualTo(expectedFirstName);
+            return this;
+        }
+
+        public Asserts assertLastName(String expectedLastName) {
+            assertThat($(lastName).getText()).isEqualTo(expectedLastName);
+            return this;
+        }
+
+        public Asserts assertAddress1(String expectedAddress) {
+            assertThat($(address1).getText()).isEqualTo(expectedAddress);
+            return this;
+        }
+
+        public Asserts assertZipCode(String expectedZipCode) {
+            assertThat($(zipCode).getText()).isEqualTo(expectedZipCode);
+            return this;
+        }
+
+        public Asserts assertCity(String expectedCity) {
+            assertThat($(city).getText()).isEqualTo(expectedCity);
+            return this;
+        }
+
+        public Asserts assertPolicyType(String expectedPolicyType) {
+            assertThat($(policyType).getText()).isEqualTo(expectedPolicyType);
             return this;
         }
 

@@ -50,7 +50,7 @@
             <key>REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM</key><value>DISABLE</value>
         </entry>
         <entry>
-            <key>SHOW_POLICY_TYPE</key><value>ENABLE</value>
+            <key>SHOW_POLICY_TYPE</key><value>DISABLE</value>
         </entry>
         <entry>
             <key>SHOW_MARKET_PRICE</key><value>ENABLE</value>

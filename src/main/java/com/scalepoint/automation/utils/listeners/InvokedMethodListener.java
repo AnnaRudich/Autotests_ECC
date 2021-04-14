@@ -25,7 +25,10 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.*;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
+import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -215,33 +218,35 @@ public class InvokedMethodListener implements IInvokedMethodListener {
     private void updateFunctionalTemplate(IInvokedMethod invokedMethod, User user) {
         List<RequiredSetting> allSettings = getAllSettings(invokedMethod.getTestMethod());
 
-        if (allSettings.isEmpty()) {
-            return;
-        }
-
         String companyCode = user.getCompanyCode();
-        List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
 
+        if(companyCode != null) {
 
-        for (RequiredSetting setting : allSettings) {
-            FTSetting settingType = setting.type();
-            defaultList = defaultList
-                    .stream()
-                    .filter(ftOperation ->
-                            !ftOperation.getSetting().equals(settingType))
-                    .collect(Collectors.toList());
-            switch (settingType.getOperationType()) {
-                case CHECKBOX:
-                    defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
-                    break;
-                case INPUT:
-                    defaultList.add(FTSettings.setValue(settingType, setting.value()));
-                    break;
-                case SELECT:
-                    defaultList.add(FTSettings.select(settingType, setting.value()));
+            List<FtOperation> defaultList = getDefaultFTSettings(companyCode);
+
+            if (!allSettings.isEmpty()) {
+                for (RequiredSetting setting : allSettings) {
+                    FTSetting settingType = setting.type();
+                    defaultList = defaultList
+                            .stream()
+                            .filter(ftOperation ->
+                                    !ftOperation.getSetting().equals(settingType))
+                            .collect(Collectors.toList());
+                    switch (settingType.getOperationType()) {
+                        case CHECKBOX:
+                            defaultList.add(setting.enabled() ? FTSettings.enable(settingType) : FTSettings.disable(settingType));
+                            break;
+                        case INPUT:
+                            defaultList.add(FTSettings.setValue(settingType, setting.value()));
+                            break;
+                        case SELECT:
+                            defaultList.add(FTSettings.select(settingType, setting.value()));
+                    }
+                }
             }
+
+            updateFtTemplateWithRequiredSettings(user, defaultList);
         }
-        updateFtTemplateWithRequiredSettings(user, defaultList);
     }
 
     private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations) {

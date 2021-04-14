@@ -11,4 +11,5 @@
     <policyTypeFF>FF-04</policyTypeFF>
     <agentName>testAgentName</agentName>
     <agentEmail>testAgentEmail</agentEmail>
+    <textArea>John Doe | CH-1234 Root, Oberwilstrasse 21; 05.07.1987 /G1238563 | T864310116 / 2021 7000801, ED, testPolicy, 21.12.2020, Erledigt, offen; Italienisch</textArea>
 </claim>

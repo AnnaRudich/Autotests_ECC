@@ -194,11 +194,7 @@ public class SelfService2Tests extends BaseTest {
             description = "Failed Mail service request - Internal Server Error")
     public void sendSMSInternalServerErrorTest(User user, Claim claim) {
 
-        claim.setCellNumber(mailserviceMock.getTestMobileNumberForStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR));
-        loginAndCreateClaim(user, claim)
-                .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
-
-        databaseApi.waitForFailedMailServiceRequest(claim.getClaimId(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        sendSMSandVerifyResponse(user, claim, HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     @Test(dataProvider = "testDataProvider",

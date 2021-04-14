@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * SystemUser: kke
@@ -45,6 +47,7 @@ public class Claim {
     private String policyTypeFF;
     private String agentName;
     private String agentEmail;
+    private String textArea;
     private transient String claimId;
 
     @Override
@@ -55,4 +58,13 @@ public class Claim {
                 '}';
     }
 
+    public String getTextAreaWithRandomClaimNumber(){
+
+        Matcher matcher = Pattern
+                .compile("/ .*?,")
+                .matcher(textArea);
+        matcher.find();
+
+        return matcher.replaceFirst(String.format("/ %s,", RandomUtils.randomInt()));
+    }
 }

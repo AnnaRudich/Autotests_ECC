@@ -104,6 +104,12 @@ public class SettlementPage extends BaseClaimPage {
         $(ok).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
+    public SettlementPage cancelPolicy(){
+
+        hoverAndClick($(cancelPolicy));
+        return this;
+    }
+
     public ClaimLine findClaimLine(String description) {
         By claimLineXpath = By.xpath(".//*[@id='settlementGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table | .//*[@id='settlementTreeGrid-body']//table//span[contains(text(), '" + description + "')]/ancestor::table");
         Table table = new Table($(claimLineXpath));
