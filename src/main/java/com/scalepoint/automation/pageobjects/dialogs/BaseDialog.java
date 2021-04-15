@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
+import static com.codeborne.selenide.Selenide.$$;
+
 public abstract class BaseDialog implements Actions {
 
     protected Logger logger = LogManager.getLogger(BaseDialog.class);
@@ -53,6 +55,16 @@ public abstract class BaseDialog implements Actions {
     public <T extends BaseDialog> T apply(Class<T> currentClass, Consumer<T> func) {
         func.accept((T) this);
         return at(currentClass);
+    }
+
+    protected void clickButton(DialogButton button){
+
+        $$(".x-window a[role=button][aria-hidden=false]").stream()
+                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new)
+                .hover()
+                .click();
     }
 
     protected enum DialogButton {

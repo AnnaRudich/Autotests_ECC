@@ -7,15 +7,12 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.NoSuchElementException;
-
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class DeductibleWarningDialog extends BaseDialog{
 
-    @FindBy(css = ".x-message-box")
+    @FindBy(css = ".x-window")
     private WebElement deductibleWarningDialog;
 
     @Override
@@ -35,15 +32,5 @@ public class DeductibleWarningDialog extends BaseDialog{
 
         clickButton(DialogButton.CANCEL);
         return Page.at(SettlementPage.class);
-    }
-
-    private void clickButton(DialogButton button){
-
-        $$(".x-message-box a[role=button][aria-hidden=false]").stream()
-                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new)
-                .hover()
-                .click();
     }
 }
