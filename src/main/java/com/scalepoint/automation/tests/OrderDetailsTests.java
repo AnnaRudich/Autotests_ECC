@@ -9,7 +9,6 @@ import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -18,7 +17,6 @@ import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -42,7 +40,6 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Verify Order page default")
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, Translations translations) {
@@ -219,7 +216,6 @@ public class OrderDetailsTests extends BaseTest {
                         )));
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
@@ -243,8 +239,6 @@ public class OrderDetailsTests extends BaseTest {
                         suborder.assertTotalPrice(zero));
     }
 
-
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
@@ -265,7 +259,6 @@ public class OrderDetailsTests extends BaseTest {
                         suborder.assertTotalPrice(zero));
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
