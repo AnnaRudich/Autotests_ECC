@@ -31,8 +31,8 @@ public class PastedData{
         String claimDataSection = sections.length > 2 ? sections[2]: "";
 
         String[] fullName = fullNameSection.trim().split(" ");
-        dataBuilder.firstName(fullName[0]);
-        dataBuilder.lastName(fullName[fullName.length - 1]);
+        dataBuilder.lastName(fullName[0]);
+        dataBuilder.firstName(fullName[fullName.length - 1]);
         dataBuilder.zipCode(extractZipCodeFromAddress(addressSection));
         dataBuilder.city(extractCity(addressSection));
         dataBuilder.address(extractAddress(addressSection));
