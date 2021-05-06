@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="claimLineBulkUpdateCategory" configfailurepolicy="continue" parallel="methods" thread-count="2">
+    <test verbose="1" name="claimLineBulkUpdateCategory" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.sid.categoryBulkUpdate.BulkUpdateCategoryOnManualLinesWithReductionRulesTest"/>
+        </classes>
+    </test>
+</suite>

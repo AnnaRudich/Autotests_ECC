@@ -34,7 +34,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         2. using bulk update change category back to one with reduction rules mapped
         EXPECTED: in SID - there is reduction rule suggested
      */
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
+    @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
     public void bulkUpdateCategories_applyRulesAutomatically(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
@@ -102,7 +102,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         2. using bulk category update change category back to one with reduction rules mapped
         EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested
       */
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
+    @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesManually(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
