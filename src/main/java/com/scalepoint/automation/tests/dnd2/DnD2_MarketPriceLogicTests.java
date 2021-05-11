@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.dnd2;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -18,7 +19,8 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
 public class DnD2_MarketPriceLogicTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Check if product and market price are visible")
+    @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",
+            description = "Check if product and market price are visible")
     public void charlie526_checkIsProductPriceVisibleForCatalogPriceLowerMarketPrice(User user, Claim claim) {
 
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
@@ -36,7 +38,8 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Check if product and market price are visible and when product price are equal or higher than market " +
+    @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",
+            description = "Check if product and market price are visible and when product price are equal or higher than market " +
             "then valuation should be them same in both")
     public void charlie526_checkIfProductPriceVisibleForCatalogPriceHigherMarketPrice(User user, Claim claim) {
 
@@ -56,7 +59,8 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice < Market price")
+    @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",
+            description = "Add product with ProductPrice < Market price")
     public void charlie526_addProductWhenProductPriceLowerThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
@@ -74,7 +78,8 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice = Market price")
+    @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",
+            description = "Add product with ProductPrice = Market price")
     public void charlie526_addProductWhenProductPriceEqualsMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
@@ -82,7 +87,8 @@ public class DnD2_MarketPriceLogicTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add product with ProductPrice > Market price")
+    @Test(groups = {TestGroups.DND2, TestGroups.MARKET_PRICE_LOGIC}, dataProvider = "testDataProvider",
+            description = "Add product with ProductPrice > Market price")
     public void charlie526_addProductWhenProductPriceHigherThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 

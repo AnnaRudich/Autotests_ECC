@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.api.unifiedpayments.v1;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -23,7 +24,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
     private String status = "settlementDetails.status";
     private String settlementType = "settlementDetails.settlementType";
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForClosedExternalClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
@@ -38,7 +43,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .body(matchesJsonSchemaInClasspath("schema/CaseDataSchema.json"));
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForClosedWithMailClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
@@ -53,7 +62,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .body(matchesJsonSchemaInClasspath("schema/CaseDataSchema.json"));
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForClosedWithoutMailClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
@@ -69,7 +82,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
     }
 
     //TODO: fix
-    @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForReplacement(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
@@ -84,7 +101,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .body(matchesJsonSchemaInClasspath("schema/CaseDataSchema.json"));
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionForInvalidRevisionShouldReturn400() {
 
         new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
@@ -93,7 +114,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionForInvalidTenantShouldReturn400(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()
@@ -105,7 +130,11 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.CASE_SETTLEMENT_DATA},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void getCaseRevisionByTokenForCanceledClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item) {
         loginAndOpenClaimWithItems(user, claimRequest, item)
                 .closeCase()

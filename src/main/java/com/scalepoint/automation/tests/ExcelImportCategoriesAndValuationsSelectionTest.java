@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -11,7 +12,7 @@ import org.testng.annotations.Test;
 
 public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.EXCEL_IMPORT_CATEGORIES_AND_VALUATIONS_SELECTION}, dataProvider = "testDataProvider",
             description = "Import Excel where categories are not specified, but line description is meaningful " +
                     "so categories will be auto suggested while importing")
     @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_EXCEL_IMPORT)
@@ -28,7 +29,7 @@ public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
                 .doAssert(claimLine -> claimLine.assertCategory(claimItem.getCategoryMobilePhones().getGroupName(), claimItem.getCategoryMobilePhones().getCategoryName()));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.EXCEL_IMPORT_CATEGORIES_AND_VALUATIONS_SELECTION}, dataProvider = "testDataProvider",
             description = "Import Excel where categories are not specified, and also line description has no sense" +
                     "so categories should be selected manually")
     @FeatureToggleSetting(type = FeatureIds.AUTOCAT_IN_EXCEL_IMPORT)

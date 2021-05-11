@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -36,7 +37,9 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price is higher than product price")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+
+            description = "Add claim with product from catalog where market price is higher than product price")
     public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
 
@@ -58,7 +61,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add claim with product from catalog where market price equals product price")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, enabled = false, dataProvider = "testDataProvider",
+            description = "Add claim with product from catalog where market price equals product price")
     public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
@@ -81,7 +85,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if new price, customer demand are discounted")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+            description = "Add claim item manually and check if new price, customer demand are discounted")
     public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
@@ -111,7 +116,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND)
-    @Test(dataProvider = "testDataProvider", description = "Add claim item manually and check if customer demand is not discounted. FT Do not depreciate CD is on")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+            description = "Add claim item manually and check if customer demand is not discounted. FT Do not depreciate CD is on")
     public void charlie586_addManually_DoNotDepreciateCustomerDemandIsOn(User user, Claim claim, ClaimItem claimItem) {
 
         Double initialCustomerDemand = claimItem.getCustomerDemand();
@@ -135,7 +141,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is lower than voucher discount correct item is selected")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+            description = "Add items manually and check if depreciation is lower than voucher discount correct item is selected")
     public void charlie586_addManuallyWithVoucherAndDepreciationLowerThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
@@ -158,7 +165,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    @Test(dataProvider = "testDataProvider", description = "Add items manually and check if depreciation is bigger than voucher discount correct item is selected")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+            description = "Add items manually and check if depreciation is bigger than voucher discount correct item is selected")
     public void charlie586_addManuallyWithVoucherAndDepreciationHigherThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
@@ -178,7 +186,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    @Test(dataProvider = "testDataProvider", description = "Add item manually with comparision of dd disabled, check if both are depreciated and lower price is selected")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+            description = "Add item manually with comparision of dd disabled, check if both are depreciated and lower price is selected")
     public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(
@@ -200,7 +209,8 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add item from self service with reduction rule and check if depreciation is applied")
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, enabled = false, dataProvider = "testDataProvider",
+            description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)

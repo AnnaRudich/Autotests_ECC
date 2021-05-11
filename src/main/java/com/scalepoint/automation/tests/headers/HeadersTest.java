@@ -5,6 +5,7 @@ import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.SelfServiceService;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.TestData;
@@ -45,7 +46,7 @@ public class HeadersTest extends BaseApiTest {
     static String PRAGMA = "no-cache";
 
 
-    @Test(dataProvider = "staticFilesECCDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesECCDataProvider")
     public void staticFilesECCTest(User user, String url){
 
         ValidatableResponse validatableResponse = login(user, url);
@@ -53,7 +54,7 @@ public class HeadersTest extends BaseApiTest {
         assertMaxAgeAndPolicyLong(validatableResponse);
     }
 
-    @Test(dataProvider = "staticNoCacheECCDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticNoCacheECCDataProvider")
     public void staticNoCacheECCTest(User user, ClaimRequest claimRequest, String url){
 
         ValidatableResponse validatableResponse = claim(user, claimRequest, url);
@@ -61,7 +62,7 @@ public class HeadersTest extends BaseApiTest {
         assertExpiresPragmaNoCasheAndPolicyLong(validatableResponse);
     }
 
-    @Test(dataProvider = "staticFilesAdminDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesAdminDataProvider")
     public void staticFilesAdminTest(User user, String url){
 
         ValidatableResponse validatableResponse = admin(user , url);
@@ -69,7 +70,7 @@ public class HeadersTest extends BaseApiTest {
         assertMaxAgeAndPolicyShort(validatableResponse);
     }
 
-    @Test(dataProvider = "noCacheAdminDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "noCacheAdminDataProvider")
     public void noCacheAdminTest(User user, String url){
 
         ValidatableResponse validatableResponse = admin(user , url);
@@ -77,7 +78,7 @@ public class HeadersTest extends BaseApiTest {
         assertExpiresPragmaNoCasheAndPolicyShort(validatableResponse);
     }
 
-    @Test(dataProvider = "staticFilesRnVDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesRnVDataProvider")
     public void staticFilesRnVTest(User user, ClaimRequest claimRequest, InsertSettlementItem insertSettlementItem,  String url){
 
         ValidatableResponse validatableResponse = rnv(user, claimRequest, insertSettlementItem, url);
@@ -85,7 +86,7 @@ public class HeadersTest extends BaseApiTest {
         assertMaxAgeAndPolicyShort(validatableResponse);
     }
 
-    @Test(dataProvider = "staticFilesSelfServiceDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesSelfServiceDataProvider")
     public void staticFilesSelfServiceTest(@UserCompany(CompanyCode.TOPDANMARK) User user, String url){
 
         ValidatableResponse validatableResponse = selfService(user, url);
@@ -93,7 +94,7 @@ public class HeadersTest extends BaseApiTest {
         assertMaxAgeAndPolicySelfService(validatableResponse);
     }
 
-    @Test(dataProvider = "noCacheSelfServiceDataProvider")
+    @Test(groups = {TestGroups.HEADERS}, dataProvider = "noCacheSelfServiceDataProvider")
     public void noCacheSelfServiceTest(@UserCompany(CompanyCode.TOPDANMARK) User user, String url){
 
         ValidatableResponse validatableResponse = selfService(user, url);

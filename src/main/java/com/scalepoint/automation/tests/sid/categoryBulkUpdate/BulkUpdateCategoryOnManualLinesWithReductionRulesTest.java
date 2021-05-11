@@ -3,6 +3,8 @@ package com.scalepoint.automation.tests.sid.categoryBulkUpdate;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -34,7 +36,12 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         2. using bulk update change category back to one with reduction rules mapped
         EXPECTED: in SID - there is reduction rule suggested
      */
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.CATEGORY_BULK_UPDATE,
+            TestGroups.MANULA_LINES_WITH_RR,
+            UserCompanyGroups.TRYGFORSIKRING},
+            enabled = false, dataProvider = "testDataProvider",
+            description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
     public void bulkUpdateCategories_applyRulesAutomatically(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
@@ -102,7 +109,12 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         2. using bulk category update change category back to one with reduction rules mapped
         EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested
       */
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.CATEGORY_BULK_UPDATE,
+            TestGroups.MANULA_LINES_WITH_RR,
+            UserCompanyGroups.TRYGFORSIKRING},
+            enabled = false, dataProvider = "testDataProvider",
+            description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesManually(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 

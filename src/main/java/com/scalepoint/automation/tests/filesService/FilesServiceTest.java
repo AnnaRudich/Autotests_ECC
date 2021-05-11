@@ -1,6 +1,8 @@
 package com.scalepoint.automation.tests.filesService;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -17,7 +19,8 @@ public class FilesServiceTest extends BaseTest {
 
     private static final String IPHONE = "iPhone";
 
-    @Test(dataProvider = "topdanmarkDataProvider", description = "FNOL", groups = {"ecc"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.ECC, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "FNOL")
     public void attachmentImportedFromFNOLTest(@UserCompany(TOPDANMARK) User user, Claim claim){
 
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();

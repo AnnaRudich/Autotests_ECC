@@ -13,6 +13,7 @@ import com.scalepoint.automation.services.ucommerce.GetBalanceService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.stubs.EVBMock;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
@@ -46,7 +47,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
     public void orderProduct_positiveBalance(User user, Claim claim, ClaimItem claimItem) {
 
@@ -81,7 +82,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
     public void orderProductVoucherOnly(User user, Claim claim, ClaimItem claimItem) {
 
@@ -116,7 +117,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with product and verify orderTotals")
     public void orderProductWithExtraPay(User user, Claim claim, ClaimItem claimItem) {
         Boolean isEvoucher = false;
@@ -152,7 +153,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with physical voucher and verify orderTotals")
     public void orderPhysicalVoucher(User user, Claim claim, ClaimItem claimItem) {
         Boolean isEvoucher = false;
@@ -186,7 +187,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "create order with Evoucher and verify orderTotals")
     public void orderEVoucher(User user, Claim claim, ClaimItem claimItem) {
         Boolean isEvoucher = true;
@@ -220,7 +221,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "verify data received from getBalance endpoint")
     public void verifyGetBalance(User user, Claim claim, ClaimItem claimItem) {
 
@@ -247,7 +248,7 @@ public class UCommerceShopTests extends BaseTest {
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "verify data received from getBalance endpoint for cancelled claim")
     public void verifyGetBalanceCancelledClaim(User user, Claim claim, ClaimItem claimItem) {
 
@@ -280,7 +281,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "verify data received from getBalance endpoint for cancelled order")
     public void verifyGetBalanceCancelledItem(User user, Claim claim, ClaimItem claimItem) {
 
@@ -327,7 +328,7 @@ public class UCommerceShopTests extends BaseTest {
     }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "verify data received from getBalance endpoint for reopened claim")
     public void verifyGetBalanceReopenClaim(User user, Claim claim, ClaimItem claimItem) {
 
@@ -384,7 +385,7 @@ public class UCommerceShopTests extends BaseTest {
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",
             description = "verify data received from getBalance endpoint for saved claim")
     public void verifyGetBalanceSavedClaim(User user, Claim claim, ClaimItem claimItem) {
 

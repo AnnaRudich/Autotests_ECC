@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -24,7 +25,9 @@ public class CatalogPricesTests extends BaseTest {
      * this section covers ProductsAsVouchers "B&O products"
      */
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductInvoicePrice < Market price")
+    @Test(groups = {TestGroups.CATALOG_PRICES},
+            dataProvider = "testDataProvider",
+            description = "Add BnO product with ProductInvoicePrice < Market price")
     public void charlie543_addOrderableProductsWithBnoWhenProductPriceLowerThanMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
@@ -48,7 +51,9 @@ public class CatalogPricesTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(dataProvider = "testDataProvider", description = "Add BnO product with ProductPrice = Market price")
+    @Test(groups = {TestGroups.CATALOG_PRICES},
+            dataProvider = "testDataProvider",
+            description = "Add BnO product with ProductPrice = Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceEqualsMarketPrice(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
@@ -70,7 +75,9 @@ public class CatalogPricesTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-2723")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
-    @Test(enabled = false, dataProvider = "testDataProvider", description = "Add BnO product with Product Invoice Price > Market price")
+    @Test(groups = {TestGroups.CATALOG_PRICES},
+            enabled = false, dataProvider = "testDataProvider",
+            description = "Add BnO product with Product Invoice Price > Market price")
     public void charlie543_addOrderableProductsWithBnoProductWhenProductInvoicePriceHigherThanMarketPrice(User user, Claim claim) {
 
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));

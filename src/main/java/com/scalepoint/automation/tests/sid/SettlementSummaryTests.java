@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -31,7 +32,9 @@ public class SettlementSummaryTests extends BaseTest {
      * THEN: Result Value is correct
      * THEN: Result Total New Price is correct
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value and Total New Price result value are correct for claim with depreciated claim line")
+    @Test(groups = {TestGroups.SID, TestGroups.SETTLEMENT_SUMMARY},
+            dataProvider = "testDataProvider",
+            description = "ECC-3034 Settlement Summary Result value and Total New Price result value are correct for claim with depreciated claim line")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3034_setSummaryCheck(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =
@@ -63,7 +66,9 @@ public class SettlementSummaryTests extends BaseTest {
      * WHEN: and navigates to Settlement Summary page
      * THEN: Result Value is correct
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3034 Settlement Summary Result value is correct for multi string claim")
+    @Test(groups = {TestGroups.SID, TestGroups.SETTLEMENT_SUMMARY},
+            dataProvider = "testDataProvider",
+            description = "ECC-3034 Settlement Summary Result value is correct for multi string claim")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3034_setSummaryCheckMultipleItems(User user, Claim claim, ClaimItem item, Voucher voucher) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation =

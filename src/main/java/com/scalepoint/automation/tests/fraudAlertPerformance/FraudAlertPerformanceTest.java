@@ -6,6 +6,7 @@ import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.stubs.FraudAlertMock;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -123,7 +124,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         writer.close();
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = true)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "usersDataProvider", enabled = true)
     public void testAdd(User user) throws IOException {
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
 
@@ -133,7 +134,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         topdanmark(claimSettlementItemsService, manual);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "usersDataProvider", enabled = false)
     public void testRemove(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
@@ -146,7 +147,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         topdanmark(claimSettlementItemsService, manual);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = true)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "usersDataProvider", enabled = true)
     public void testSelfService(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
@@ -164,7 +165,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         topdanmark(selfServiceService, selfService);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = true)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "usersDataProvider", enabled = true)
     public void testBulk(User user) throws IOException, ParseException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();

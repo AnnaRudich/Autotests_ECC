@@ -7,6 +7,7 @@ import com.scalepoint.automation.services.restService.TextSearchService;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.spring.PerformanceTestConfig;
 import com.scalepoint.automation.stubs.RnVMock;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -54,13 +55,13 @@ public class PerformanceTest extends BaseApiTest{
         PerformanceUsers.releaseUser((User) objects[0]);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_USER})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_LOGIN_USER}, dataProvider = "usersDataProvider")
     public void loginUserTest(User user) {
 
         BaseService.loginUser(user);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM}, dataProvider = "usersDataProvider")
     public void loginAndOpenClaimTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -70,7 +71,7 @@ public class PerformanceTest extends BaseApiTest{
         BaseService.loginAndOpenClaim(user, claimRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_SELFSERVICE})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_SELFSERVICE}, dataProvider = "usersDataProvider")
     public void requestAndSubmitSelfServiceTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -89,7 +90,7 @@ public class PerformanceTest extends BaseApiTest{
                 .submitted();
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS}, dataProvider = "usersDataProvider")
     public void loginAndOpenClaimWithItemsTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -101,7 +102,7 @@ public class PerformanceTest extends BaseApiTest{
         BaseService.loginAndOpenClaimWithItems(user, claimRequest,insertSettlementItem);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_CLOSE_WITH_EMAIL})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_CLOSE_WITH_EMAIL}, dataProvider = "usersDataProvider")
     public void closeClaimWithEmailTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -116,7 +117,7 @@ public class PerformanceTest extends BaseApiTest{
                 .close(claimRequest, SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_REOPEN_SAVED_CLAIM})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_REOPEN_SAVED_CLAIM}, dataProvider = "usersDataProvider")
     public void reopenSavedClaimTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -129,7 +130,7 @@ public class PerformanceTest extends BaseApiTest{
                 .reopenClaim();
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_CANCEL_CLAIM})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_CANCEL_CLAIM}, dataProvider = "usersDataProvider")
     public void cancelClaimTest(User user) {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -144,7 +145,7 @@ public class PerformanceTest extends BaseApiTest{
                 .cancel(claimRequest);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_TEXT_SEARCH})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_TEXT_SEARCH}, dataProvider = "usersDataProvider")
     public void textSearchTest(User user) throws JsonProcessingException {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();
@@ -165,7 +166,7 @@ public class PerformanceTest extends BaseApiTest{
                 .addLine(productResult);
     }
 
-    @Test(dataProvider = "usersDataProvider", groups = {PerformanceTestConfig.TEST_RNV})
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_RNV}, dataProvider = "usersDataProvider")
     public void sendLineToRnvTest(User user) throws MalformedURLException {
 
         ClaimRequest claimRequest = TestData.getClaimRequest();

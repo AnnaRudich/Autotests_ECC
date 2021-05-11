@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
@@ -23,7 +24,8 @@ public class TextSearchTests extends BaseTest {
 
     private static final String SAMSUNG_GALAXY_S_7 = "samsung galaxy s7";
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the search target")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if search results match to the search target")
     public void charlie510_checkIfSearchResultsMathTarget(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
@@ -37,7 +39,8 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if results are matching selected suggestion")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if results are matching selected suggestion")
     public void charlie510_useSuggestionsToFindProduct(User user, Claim claim) {
         TextSearchPage textSearchPage = loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -50,7 +53,8 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected brand and model")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if search results match to the selected brand and model")
     public void charlie510_selectBrandAndModel(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
 
@@ -67,7 +71,8 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if search results match to the selected attributes")
     public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         int index = 0;
         Attributes[] attributes = {TOUCH_SCREEN_NEJ, NFC_NEJ};
@@ -87,7 +92,8 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if search results match to the selected group")
     public void charlie510_selectCategory(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
@@ -99,7 +105,8 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected group")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if search results match to the selected group")
     public void charlie510_createClaimManuallyFromSearch(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -111,7 +118,8 @@ public class TextSearchTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check is sorting by popularity works")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check is sorting by popularity works")
     public void charlie516_checkSortingByPopularity(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         String product = SAMSUNG_GALAXY_S_7;
@@ -148,7 +156,8 @@ public class TextSearchTests extends BaseTest {
                         TextSearchPage.Asserts::assertNoPopularitySortChosen);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if search by sku works")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if search by sku works")
     public void charlie510_checkSearchBySku(User user, Claim claim) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_LOWER_THAN_MARKET_PRICE));
 
@@ -162,7 +171,8 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if Did you mean appears. Misspelling")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if Did you mean appears. Misspelling")
     public void charlie510_checkDidYouMean(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
@@ -179,7 +189,8 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if Did you mean appears. Special characters")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check if Did you mean appears. Special characters")
     public void charlie510_checkDidYouMeanWithSpecialCharacters(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
@@ -198,7 +209,8 @@ public class TextSearchTests extends BaseTest {
                         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check category selection")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check category selection")
     public void charlie520_checkIfCorrectCategoryWasSelected(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)
@@ -215,7 +227,8 @@ public class TextSearchTests extends BaseTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check manual category selection")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.TEXT_SEARCH}, dataProvider = "testDataProvider",
+            description = "Check manual category selection")
     public void charlie520_checkIfManuallySelectedCategoryIsNotDiscardedAfterQuery(User user, Claim claim, Translations translations) {
         TextSearch textSearch = translations.getTextSearch();
         loginAndCreateClaim(user, claim)

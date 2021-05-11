@@ -4,6 +4,8 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -23,7 +25,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when no depreciation and no voucher is added to claim line")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when no depreciation and no voucher is added to claim line")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceWhenNoVoucherIsUsedAndDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -40,7 +43,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher is added to claim line but no depreciation")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when voucher is added to claim line but no depreciation")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusVoucherValueWhenDeprecationAmountIs0(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -59,7 +63,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when voucher and depreciation is added to claim line")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
@@ -85,7 +90,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAdded(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -103,7 +109,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line and red rule is discretionary type")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when depreciation is added and voucher not added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationWhenNoVoucherIsUsedAndDeprecationAmountIsAddedAndRedRuleIsDiscretionaryType(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -122,7 +129,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLineAndRedRuleIsDiscretionaryType(
             @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
@@ -150,7 +158,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "convert for claim line without voucher and depreciation and no reduction rule")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "convert for claim line without voucher and depreciation and no reduction rule")
     public void charlie514_claimLineWithoutVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
@@ -172,7 +181,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "convert for claim line with voucher and no depreciation and reduction rule")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "convert for claim line with voucher and no depreciation and reduction rule")
     public void charlie514_claimLineWithVoucherAndNoDepreciationAmount(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
@@ -193,7 +203,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "convert for claim line with voucher and depreciation and no reduction rule")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "convert for claim line with voucher and depreciation and no reduction rule")
     public void charlie514_claimLineWithVoucherAndDepreciationAmount(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller
@@ -216,7 +227,8 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
+    @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS}, dataProvider = "testDataProvider",
+            description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLine(User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(claimItem.getCategoryBabyItems(), formFiller -> formFiller

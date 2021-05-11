@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.CwaTaskLog;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -38,7 +39,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-5660")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-    @Test(enabled = false, dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.ECC_CWA_INTEGRATION}, enabled = false, dataProvider = "testDataProvider")
     public void selfServiceImport(User user, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken)
                 .requestSelfService(Constants.DEFAULT_PASSWORD);
