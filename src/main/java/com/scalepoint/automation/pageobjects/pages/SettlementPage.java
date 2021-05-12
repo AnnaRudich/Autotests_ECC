@@ -40,8 +40,7 @@ import static com.scalepoint.automation.utils.Constants.*;
 import static com.scalepoint.automation.utils.OperationalUtils.assertEqualsDouble;
 import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 @ClaimSpecificPage
 @EccPage
@@ -424,7 +423,7 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public Asserts assertItemNotPresent(String claimLineDescription) {
-            Assert.assertFalse(isItemPresent(claimLineDescription),
+            assertFalse(isItemPresent(claimLineDescription),
                     errorMessage("The claim item [%s] must be absent: ", claimLineDescription));
             return this;
         }
@@ -432,7 +431,7 @@ public class SettlementPage extends BaseClaimPage {
 
         public Asserts assertGenericItemIsNotPresent(GenericItem genericItem) {
             boolean genericItemIsPresent = claimOperationsMenu.addGenericItem().isGenericItemPresent(genericItem.getName(), genericItem.getGroup(), genericItem.getCategory());
-            Assert.assertFalse(genericItemIsPresent);
+            assertFalse(genericItemIsPresent);
             return this;
         }
 
@@ -458,6 +457,11 @@ public class SettlementPage extends BaseClaimPage {
 
         public Asserts assertItemNoteIsPresent(String itemCustomerNote) {
             assertThat(claimLineDescription.stream().anyMatch(claim -> claim.findElement(By.tagName("img")).getAttribute("data-qtip").trim().contains(itemCustomerNote))).isTrue();
+            return this;
+        }
+
+        public Asserts assertEditPolicyTypeDialogIsNotPresent(){
+            assertFalse(BaseDialog.isOn(EditPolicyTypeDialog.class));
             return this;
         }
     }
