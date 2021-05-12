@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
