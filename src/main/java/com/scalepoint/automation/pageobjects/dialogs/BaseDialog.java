@@ -1,5 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
@@ -59,7 +61,8 @@ public abstract class BaseDialog implements Actions {
 
     protected void clickButton(DialogButton button){
 
-        $$(".x-window a[role=button][aria-hidden=false]").stream()
+        ElementsCollection selenideElement = $$(".x-window a[role=button][aria-hidden=false]");
+        selenideElement.stream()
                 .filter(element -> DialogButton.findByText(element.getText()).equals(button))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
@@ -74,7 +77,8 @@ public abstract class BaseDialog implements Actions {
         YES("Ja"),
         NO("Nej"),
         SAVE("Gem"),
-        ABORT("Annuller");
+        ABORT("Annuller"),
+        UNDEFINED("");
 
         private String text;
 
@@ -88,7 +92,7 @@ public abstract class BaseDialog implements Actions {
             return Arrays.stream(DialogButton.values())
                     .filter(button -> button.text.equals(text))
                     .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
+                    .orElse(DialogButton.UNDEFINED);
         }
     }
 }
