@@ -7,12 +7,10 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
@@ -89,7 +87,6 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price value displays on Product Details page
      * THEN: Market Price supplier displays on Product Details page
      */
-    @RunOn(DriverType.CHROME)
     @Test(groups = {TestGroups.SID, TestGroups.SHOW_MARKET_PRICES},
             dataProvider = "testDataProvider",
             description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")

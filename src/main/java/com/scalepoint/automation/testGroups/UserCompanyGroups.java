@@ -1,7 +1,5 @@
 package com.scalepoint.automation.testGroups;
 
-import org.apache.commons.beanutils.PropertyUtilsBean;
-
 public class UserCompanyGroups {
 
     public static final String TRYGFORSIKRING = "trygforsikring";
