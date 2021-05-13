@@ -32,6 +32,9 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
+    private final String POLICY_TYPE = "testPolicy";
+    private final String EMPTY = "";
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
@@ -485,5 +488,57 @@ public class ClaimTests extends BaseTest {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests canceling of the EditPolicyType dialog")
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
+    public void cancelEditPolicyTypeDialogTest(User user, Claim claim) {
+
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .selectPolicyType(POLICY_TYPE)
+                .cancel()
+                .toCustomerDetails()
+                .doAssert(customerDetailsPage ->
+                        customerDetailsPage.assertPolicyType(EMPTY));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests setting of policy type in the EditPolicyType dialog")
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
+    public void setPolicyTypeInEditPolicyTypeDialogTest(User user, Claim claim) {
+
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .selectPolicyType(POLICY_TYPE)
+                .confirm()
+                .toCustomerDetails()
+                .doAssert(customerDetailsPage ->
+                        customerDetailsPage.assertPolicyType(POLICY_TYPE));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Tests setting of policy type using createUser endpoint")
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
+    public void setPolicyTypeUsingCreateUserEndpointTest(User user, Claim claim) {
+
+        loginAndCreateClaim(user, claim, POLICY_TYPE)
+                .doAssert(settlmentPage ->
+                        settlmentPage.assertEditPolicyTypeDialogIsNotPresent())
+                .toCustomerDetails()
+                .doAssert(customerDetailsPage ->
+                        customerDetailsPage.assertPolicyType(POLICY_TYPE));
+    }
+
+    @Test(dataProvider = "testDataProvider",
+            description = "Verify that EditPolicyType dialog is not displayed when show policy type setting is disabled")
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
+    public void editPolicyTypeDialogWithDisabledShowPolicyTypeTest(User user, Claim claim) {
+
+        loginAndCreateClaim(user, claim)
+                .doAssert(settlmentPage ->
+                        settlmentPage.assertEditPolicyTypeDialogIsNotPresent())
+                .toCustomerDetails()
+                .doAssert(customerDetailsPage ->
+                        customerDetailsPage.assertPolicyType(EMPTY));
     }
 }

@@ -3,6 +3,8 @@ package com.scalepoint.automation.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.EditPolicyTypeDialog;
 import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -12,21 +14,21 @@ import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
+import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.response.Token;
 import com.scalepoint.automation.utils.driver.DriverHelper;
@@ -52,8 +54,10 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.SkipException;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -179,6 +183,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
         return loginAndCreateClaim(user, claim, null);
+    }
+
+    protected EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
+        loginAndCreateClaim(user, claim, null);
+        return BaseDialog.at(EditPolicyTypeDialog.class);
     }
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {

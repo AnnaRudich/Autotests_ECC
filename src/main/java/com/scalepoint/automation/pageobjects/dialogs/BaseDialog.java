@@ -1,5 +1,6 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +11,8 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+
+import static com.codeborne.selenide.Selenide.$$;
 
 public abstract class BaseDialog implements Actions {
 
@@ -55,6 +58,17 @@ public abstract class BaseDialog implements Actions {
         return at(currentClass);
     }
 
+    protected void clickButton(DialogButton button){
+
+        ElementsCollection selenideElement = $$(".x-window a[role=button][aria-hidden=false]");
+        selenideElement.stream()
+                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new)
+                .hover()
+                .click();
+    }
+
     protected enum DialogButton {
 
         OK("OK"),
@@ -62,7 +76,8 @@ public abstract class BaseDialog implements Actions {
         YES("Ja"),
         NO("Nej"),
         SAVE("Gem"),
-        ABORT("Annuller");
+        ABORT("Annuller"),
+        UNDEFINED("");
 
         private String text;
 
@@ -76,7 +91,7 @@ public abstract class BaseDialog implements Actions {
             return Arrays.stream(DialogButton.values())
                     .filter(button -> button.text.equals(text))
                     .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
+                    .orElse(DialogButton.UNDEFINED);
         }
     }
 }
