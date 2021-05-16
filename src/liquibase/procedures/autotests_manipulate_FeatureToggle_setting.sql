@@ -18,7 +18,7 @@ update [FF4J_FEATURES]
     set [ENABLE] = @ToggleState
     where FEAT_UID=@FeatureToggleUID
 
-	SET NOCOUNT OFF
+	SET NONCOUNT OFF
 
 
 --rollback DROP FUNCTION [dbo].[autotests_manipulate_FeatureToggle_setting]
