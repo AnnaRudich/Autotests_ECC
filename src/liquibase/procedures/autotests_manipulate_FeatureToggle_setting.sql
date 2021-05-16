@@ -11,14 +11,10 @@ CREATE PROCEDURE [dbo].[autotests_manipulate_FeatureToggle_setting]
 
 AS
 
-SET NONCOUNT ON
-
-
 update [FF4J_FEATURES]
     set [ENABLE] = @ToggleState
     where FEAT_UID=@FeatureToggleUID
 
-	SET NONCOUNT OFF
 
 
 --rollback DROP FUNCTION [dbo].[autotests_manipulate_FeatureToggle_setting]
