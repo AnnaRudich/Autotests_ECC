@@ -2,7 +2,7 @@
 <suite name="SelfService 2.0" configfailurepolicy="continue" parallel="methods" thread-count="9">
     <test verbose="1" name="SelfService 2.0" group-by-instances="false" enabled="true" preserve-order="true">
         <classes>
-            <class name="com.scalepoint.automation.tests.SelfService2Tests"/>
+            <class name="com.scalepoint.automation.tests.selfservice.SelfService2Tests"/>
             <class name="com.scalepoint.automation.tests.eccCwaIntegration.EccIntegrationsWithCwaClaimSSTests"/>
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
