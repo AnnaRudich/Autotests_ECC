@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitElementDisappeared;
 
 public class SelfServicePasswordDialog extends BaseDialog {
     @FindBy(css = "#new-password-dialog-ok-button")
@@ -28,7 +29,7 @@ public class SelfServicePasswordDialog extends BaseDialog {
 
     public CustomerDetailsPage closeSelfServicePasswordDialog() {
         ok.click();
-        Wait.waitElementDisappeared(By.cssSelector("#new-password-dialogs-ok-button-btnIconEl"));
+        waitElementDisappeared($(By.cssSelector("#new-password-dialogs-ok-button-btnIconEl")));
         return Page.at(CustomerDetailsPage.class);
     }
 }

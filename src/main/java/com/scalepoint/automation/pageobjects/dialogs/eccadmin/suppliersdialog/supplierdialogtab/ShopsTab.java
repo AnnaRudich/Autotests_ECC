@@ -15,8 +15,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -81,7 +80,7 @@ public class ShopsTab extends SupplierDialog {
         element
                 .scrollTo()
                 .doubleClick();
-        Wait.waitForVisibleAndEnabled(By.name("shopName"));
+        waitForVisibleAndEnabled($(By.name("shopName")));
         return at(AddShopDialog.class);
     }
 

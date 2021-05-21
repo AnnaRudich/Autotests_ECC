@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertTrue;
 
 public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgreementTabs {
@@ -80,7 +80,7 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
 
         public FormFiller withActive(boolean active) {
             waitForAjaxCompleted();
-            Wait.waitForVisible(dialog.agreementStatusCombo).select(active ? "Active" : "Inactive");
+            waitElementVisible($(dialog.agreementStatusCombo)).selectOption(active ? "Active" : "Inactive");
             return this;
         }
 
@@ -88,14 +88,14 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
             dialog.useCustomLogoRadio.click();
             WebElement elem = $(By.xpath("//input[contains(@id, 'voucherLogoFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
-            Wait.waitForDisplayed(dialog.logoImageXpath);
+            verifyElementVisible($(dialog.logoImageXpath));
             return this;
         }
 
         public FormFiller withImage(String logoPath) {
             WebElement elem = $(By.xpath("//input[contains(@id, 'voucherImageFileId') and contains(@type, 'file')]"));
             $(elem).uploadFile(new File(logoPath));
-            Wait.waitForDisplayed(dialog.imageXpath);
+            verifyElementVisible($(dialog.imageXpath));
             return this;
         }
     }

@@ -76,7 +76,7 @@ public class ReplacementDialog extends BaseDialog {
 
 
     public void closeReplacementDialog() {
-        waitForVisible(cancelButton);
+        verifyElementVisible($(cancelButton));
         cancelButton.click();
     }
 
@@ -132,7 +132,7 @@ public class ReplacementDialog extends BaseDialog {
         $(nextButtonPath).click();
         $(finishButtonByXpath).click();
         waitForSpinnerToDisappear();
-        waitForVisible(alertOk).click();
+        waitElementVisible($(alertOk)).click();
         return Page.at(CustomerDetailsPage.class);
     }
 
@@ -174,12 +174,12 @@ public class ReplacementDialog extends BaseDialog {
         }
 
         public Asserts assertItemsListIsEmpty() {
-            assertThat(Wait.isElementNotPresent(selectItemCheckboxByXpath)).as("there should not be items in the list").isTrue();
+            assertThat(verifyElementVisible($(selectItemCheckboxByXpath))).as("there should not be items in the list").isFalse();
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
-            assertThat(Wait.isElementNotPresent(goToShopButtonByXpath)).as("goToShopButton should not be present").isTrue();
+            assertThat(verifyElementVisible($(goToShopButtonByXpath))).as("goToShopButton should not be present").isFalse();
             return this;
         }
 

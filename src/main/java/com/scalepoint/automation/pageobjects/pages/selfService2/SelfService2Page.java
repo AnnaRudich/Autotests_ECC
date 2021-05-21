@@ -66,8 +66,7 @@ public class SelfService2Page extends Page {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForJavascriptRecalculation();
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(saveItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -83,13 +82,13 @@ public class SelfService2Page extends Page {
     }
 
     private void waitForValidationMark(WebElement element) {
-        waitForVisible(element.findElement(By.xpath("./ancestor::div[contains(@class,'row')][1]//span[contains(@class,'validation-mark')]")));
+        verifyElementVisible($(element.findElement(By.xpath("./ancestor::div[contains(@class,'row')][1]//span[contains(@class,'validation-mark')]"))));
     }
 
     public SelfService2Page addDescription(String text) {
         Wait.waitForStaleElement(By.id("description-text"));
         $("#description-text").setValue(text);
-        waitForVisible(suggestions);
+        verifyElementVisible($(suggestions));
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ENTER);
@@ -135,23 +134,24 @@ public class SelfService2Page extends Page {
     }
 
     private void selectItem(WebElement element, String text) {
-        WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
+        WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
         hoverAndClick($(selectElement));
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
-        waitForVisible(element.findElement(By.xpath(menuLocator)));
+        verifyElementVisible($(element.findElement(By.xpath(menuLocator))));
         String itemLocator = ".//span[contains(text(),'%s')]";
         WebElement selectItemElement = Wait.forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
-        waitForVisible(selectItemElement);
+        verifyElementVisible($(selectItemElement));
         $(selectItemElement).scrollTo();
-        waitForVisible(selectItemElement);
+        verifyElementVisible($(selectItemElement));
         hoverAndClick($(selectItemElement));
-        waitForVisible(selectElement);
-        Wait.forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
+        verifyElementVisible($(selectElement));
+
+        waitForElementContainsText($(selectElement), text);
     }
 
     private void trySelectItem(WebElement element, String text) {
-        WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
+        WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
         int count = 0;
         while (!selectElement.getText().equals(text) && count < 5) {
             selectItem(element, text);

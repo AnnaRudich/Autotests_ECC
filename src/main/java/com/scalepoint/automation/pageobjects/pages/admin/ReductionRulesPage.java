@@ -13,7 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -44,7 +44,7 @@ public class ReductionRulesPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), "webshop/jsp/Admin/ReductionRuleRefresh");
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -71,8 +71,8 @@ public class ReductionRulesPage extends AdminBasePage {
     }
 
     public ReductionRulesPage selectRefreshOption() {
-            hoverAndClick($(refreshButton));
-            return at(ReductionRulesPage.class);
+        hoverAndClick($(refreshButton));
+        return at(ReductionRulesPage.class);
     }
 
 

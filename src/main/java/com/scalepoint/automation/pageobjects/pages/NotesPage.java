@@ -16,8 +16,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.*;
 
 @EccPage
 @ClaimSpecificPage
@@ -46,18 +45,17 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
-        waitForJavascriptRecalculation();
+        waitForAjaxCompletedAndJsRecalculation();
     }
 
     public EditCustomerNoteDialog editCustomerNote() {
-        Wait.waitForVisible(editCustomerNote);
+        verifyElementVisible($(editCustomerNote));
         editCustomerNote.click();
         return BaseDialog.at(EditCustomerNoteDialog.class);
     }
 
     public NotesPage addInternalNote(String note) {
-        Wait.waitForVisible(addInternalNote);
+        verifyElementVisible($(addInternalNote));
         $(addInternalNote).click();
         return BaseDialog.at(AddInternalNoteDialog.class).addInternalNote(note, NotesPage.class);
     }
@@ -68,12 +66,12 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
     }
 
     public boolean isCustomerNotesPresent(String _customerNote) {
-        Wait.waitForVisible(customerNote);
+        verifyElementVisible($(customerNote));
         return customerNote.getText().contains(_customerNote);
     }
 
     public boolean isInternalNotesPresent(String _internalNote) {
-        Wait.waitForVisible(internalNote);
+        verifyElementVisible($(internalNote));
         return internalNote.getText().contains(_internalNote);
     }
 
@@ -82,12 +80,8 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
     }
 
     public boolean isAddInternalNoteButtonPresent() {
-        try {
-            Wait.waitForInvisible(addInternalNote);
-            return false;
-        } catch (NoSuchElementException e) {
-            return true;
-        }
+
+           return verifyElementVisible($(addInternalNote));
     }
 
     public boolean isInternalNotePresent() {

@@ -12,7 +12,7 @@ import org.testng.Assert;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 
 public class AddShopDialogViewMode extends BaseDialog {
 
@@ -39,7 +39,7 @@ public class AddShopDialogViewMode extends BaseDialog {
 
     public class Asserts {
         public Asserts assertIsShopDialogNotEditable() {
-            Assert.assertTrue(Wait.invisibleOfElement(By.id("editSupplierShopTabFormId")));
+            Assert.assertFalse(verifyElementVisible($(By.id("editSupplierShopTabFormId"))));
             return this;
         }
     }

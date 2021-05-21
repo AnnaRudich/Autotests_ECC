@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClaimLineNotesDialog extends BaseDialog {
@@ -34,7 +33,6 @@ public class ClaimLineNotesDialog extends BaseDialog {
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(closeNotesButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

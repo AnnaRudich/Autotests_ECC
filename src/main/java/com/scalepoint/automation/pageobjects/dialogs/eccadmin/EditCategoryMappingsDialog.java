@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 
 public class EditCategoryMappingsDialog extends BaseDialog {
 
@@ -52,8 +52,8 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         element.click();
         element.doubleClick();
         $(saveMappings).doubleClick();
-        Wait.waitElementDisappeared(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]"));
-        Wait.waitForAjaxCompleted();
+        waitElementDisappeared($(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]")));
+        waitForAjaxCompleted();
         return at(VoucherAgreementCategoriesTab.class);
     }
 

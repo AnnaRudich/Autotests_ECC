@@ -3,7 +3,7 @@ package com.scalepoint.automation.pageobjects.pages.selfService2;
 import com.scalepoint.automation.pageobjects.pages.Page;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class SaveConfirmationPage extends Page {
 
@@ -11,7 +11,7 @@ public class SaveConfirmationPage extends Page {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
     }
 
     @Override

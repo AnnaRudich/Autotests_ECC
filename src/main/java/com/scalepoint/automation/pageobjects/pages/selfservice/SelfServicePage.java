@@ -117,7 +117,7 @@ public class SelfServicePage extends Page {
      * The method waits for file upload is completed
      */
     public void waitForUploadCompleted() {
-        waitForDisplayed(By.xpath("//div[contains(text(),'100 %')]"));
+        verifyElementVisible($(By.xpath("//div[contains(text(),'100 %')]")));
     }
 
     public SelfServiceGrid getSelfServiceGrid(){

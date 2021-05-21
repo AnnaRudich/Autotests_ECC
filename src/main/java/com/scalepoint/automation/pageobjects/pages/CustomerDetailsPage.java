@@ -79,7 +79,6 @@ public class CustomerDetailsPage extends BaseClaimPage {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl(), getAlternativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         if (driver.getCurrentUrl().contains(getRelativeUrl())) {
             $(reopenClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
             $(cancelClaimButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
@@ -95,7 +94,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
     public CustomerDetailsPage cancelClaim() {
         cancelClaimButton.click();
         By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
-        Wait.waitForDisplayed(alertMessageBy);
+        verifyElementVisible($(alertMessageBy));
         $(alertMessageBy).click();
         return at(CustomerDetailsPage.class);
     }
@@ -114,17 +113,17 @@ public class CustomerDetailsPage extends BaseClaimPage {
     public CustomerDetailsPage selectDamageDate(LocalDate date) {
         $(By.xpath("//a[@href='javascript:EditDamageDate()']")).click();
         $(By.id("damageDate-inputEl")).click();
-        waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
-        waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
         hoverAndClick($(By.xpath("//div[@class='x-monthpicker-buttons']//span[contains(text(),'OK')]")));
-        waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//table//td[contains(@class, 'x-datepicker-active')]/div[text()='" + date.getDayOfMonth() + "']")).click();
-        waitForInvisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//div[contains(@id, 'toolbar')]//div[@class='x-box-inner']//a")).click();
-        waitForInvisible($(By.id("damageDate-inputEl")));
+        verifyElementVisible($(By.id("damageDate-inputEl")));
         return this;
     }
 
@@ -197,7 +196,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
         }
 
         public Asserts assertIsDamageDateEditAvailable() {
-            assertThat(visible(damageDateEdit)).isTrue();
+            assertThat(verifyElementVisible($(damageDateEdit))).isTrue();
             return this;
         }
 

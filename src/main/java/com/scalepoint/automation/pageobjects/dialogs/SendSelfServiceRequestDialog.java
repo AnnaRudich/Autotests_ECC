@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -12,8 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForInvisible;
+import static com.scalepoint.automation.utils.Wait.*;
 
 public class SendSelfServiceRequestDialog extends BaseDialog {
 
@@ -98,16 +98,18 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     public SettlementPage send() {
-        ok.click();
+        SelenideElement element = $(ok);
+        element.click();
         at(GdprConfirmationDialog.class)
                 .confirm();
-        waitForInvisible(ok);
+        waitElementInvisible(element);
         return Page.at(SettlementPage.class);
     }
 
     public SettlementPage sendWithoutGdpr() {
-        ok.click();
-        waitForInvisible(ok);
+        SelenideElement element = $(ok);
+        element.click();
+        waitElementInvisible(element);
         return Page.at(SettlementPage.class);
     }
 }

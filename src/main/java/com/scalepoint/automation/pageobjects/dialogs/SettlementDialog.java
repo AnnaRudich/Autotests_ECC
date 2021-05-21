@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.codeborne.selenide.impl.Events;
+import com.codeborne.selenide.impl.StaticDriver;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.extjs.*;
 import com.scalepoint.automation.pageobjects.pages.Page;
@@ -442,8 +443,8 @@ public class SettlementDialog extends BaseDialog {
 
     public SettlementDialog setDescriptionAndWaitForCategoriesToAutoSelect(String descriptionText) {
         SettlementDialog settlementDialog = setDescription(descriptionText);
-        Wait.waitForAjaxCompleted();
-        Wait.waitForDisplayed(By.id("pseudocategory-combobox-inputEl"));
+        waitForAjaxCompleted();
+        verifyElementVisible($(By.id("pseudocategory-combobox-inputEl")));
         return settlementDialog;
     }
 
@@ -539,8 +540,8 @@ public class SettlementDialog extends BaseDialog {
     }
 
     private Double fetchDepreciationAmount() {
-        Wait.waitForLoaded();
-        waitForVisible(deprecationAmount);
+        waitForLoaded();
+        verifyElementVisible($(deprecationAmount));
         return OperationalUtils.getDoubleValue(deprecationAmount.getText());
     }
 
@@ -577,7 +578,7 @@ public class SettlementDialog extends BaseDialog {
 
     public <T extends BaseDialog> T tryToCloseSidWithOkButExpectDialog(Class<T> dialogClass) {
         WebElement button = driver.findElement(OK_BUTTON);
-        waitForVisible(button);
+        verifyElementVisible($(button));
         button.click();
         return BaseDialog.at(dialogClass);
     }
@@ -632,13 +633,13 @@ public class SettlementDialog extends BaseDialog {
 
     private Double voucherFaceValueFieldText() {
         Wait.waitForLoaded();
-        waitForVisible(voucherFaceValue);
+        verifyElementVisible($(voucherFaceValue));
         return OperationalUtils.getDoubleValue(voucherFaceValue.getText());
     }
 
     private Double voucherCashValueFieldText() {
         Wait.waitForLoaded();
-        waitForVisible(voucherCashValue);
+        verifyElementVisible($(voucherCashValue));
         return OperationalUtils.getDoubleValue(voucherCashValue.getText());
     }
 
@@ -649,25 +650,25 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public Double getCashCompensationValue() {
-        waitForVisible(cashCompensationValue);
+        verifyElementVisible($(cashCompensationValue));
         return OperationalUtils.getDoubleValue(cashCompensationValue.getText());
     }
 
     public Double DeprecationValue() {
-        waitForVisible(deprecationAmount);
+        verifyElementVisible($(deprecationAmount));
         return OperationalUtils.getDoubleValue(deprecationAmount.getText());
     }
 
     private String getCategoryText() {
         Wait.waitForLoaded();
-        waitForVisible(getCategory());
+        verifyElementVisible($(getCategory()));
         return getCategory().getValue();
     }
 
     private String getSubCategoryText() {
         PseudoCategoryComboBox subCategory = getSubCategory();
         Wait.waitForLoaded();
-        waitForVisible(subCategory);
+        verifyElementVisible($(subCategory));
         return subCategory.getValue();
     }
 
@@ -806,11 +807,11 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public SettlementDialog selectRejectReason(String visibleText) {
-        waitForVisible(getRejectReason());
+        verifyElementVisible($(getRejectReason()));
         new Actions(driver).click(driver.findElement(By.id("reject-reason-combobox"))).build().perform();
         $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)).setValue(visibleText);
         new Actions(driver).click(driver.findElement(By.xpath("//span[text()='" + visibleText + "']"))).build().perform();
-        new Events().fireEvent($(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)), "focus", "keydown", "keypress", "input", "keyup", "change");
+        Events.events.fireEvent(new StaticDriver(), $(By.id(REJECT_REASON_COMBOBOX_INPUT_EL)),"focus", "keydown", "keypress", "input", "keyup", "change");
         waitForJavascriptRecalculation();
         return this;
     }
@@ -844,7 +845,7 @@ public class SettlementDialog extends BaseDialog {
     }
 
     public NotCheapestChoiceDialog editNotCheapestReason() {
-        waitForVisible(notCheapestReasonEdit);
+        verifyElementVisible($(notCheapestReasonEdit));
         notCheapestReasonEdit.click();
 
         return at(NotCheapestChoiceDialog.class);
@@ -913,7 +914,7 @@ public class SettlementDialog extends BaseDialog {
 
     public boolean isDiscountDistributionDisplayed() {
         try {
-            return waitForDisplayed(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName()))).isDisplayed();
+            return verifyElementVisible($(By.xpath(String.format(discountDistributionLocator, VOUCHER.getClassName()))));
         } catch (Exception e) {
             logger.error(e.getMessage());
             return false;
@@ -1187,7 +1188,7 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertSubCategoriesListEqualTo(List<String> expectedSubCategoriesList) {
             PseudoCategoryComboBox subCategory = getSubCategory();
-            waitForVisible(subCategory);
+            verifyElementVisible($(subCategory));
             List<String> stringList = new ArrayList<>();
             List<String> allCategories = subCategory.getComboBoxOptions();
             for (String allCategory : allCategories) {

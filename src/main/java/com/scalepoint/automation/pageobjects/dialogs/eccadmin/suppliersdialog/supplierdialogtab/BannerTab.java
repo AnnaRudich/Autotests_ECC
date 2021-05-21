@@ -9,8 +9,7 @@ import java.io.File;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForDisplayed;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertTrue;
 
 public class BannerTab extends SupplierDialog {
@@ -28,7 +27,7 @@ public class BannerTab extends SupplierDialog {
 
     public class Asserts {
         public BannerTab.Asserts assertBannerIsPresent() {
-            assertTrue(JavascriptHelper.isImagePresent(waitForDisplayed(By.className("bannerUploadImg"))));
+            assertTrue(JavascriptHelper.isImagePresent(waitElementVisible($(By.className("bannerUploadImg")))));
             return this;
         }
     }

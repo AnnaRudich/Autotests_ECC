@@ -19,8 +19,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -96,7 +95,6 @@ public class CompleteClaimPage extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(saveClaim).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -242,7 +240,7 @@ public class CompleteClaimPage extends Page {
 
     public class Asserts {
         public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
-            assertThat(Wait.isElementNotPresent(replacementButtonByXpath)).as("replacement button should should not be present").isTrue();
+            assertThat(verifyElementVisible($(replacementButtonByXpath))).as("replacement button should should not be present").isTrue();
             return this;
         }
 

@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+
 @SuppressWarnings("unchecked")
 public abstract class Page implements Actions {
 
@@ -124,7 +126,7 @@ public abstract class Page implements Actions {
 
         LogManager.getLogger(Page.class).info("Open page: " + initialUrl);
         Browser.open(initialUrl);
-        Wait.waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         T atPage = at(pageClass);
         innerLogger.info("To {} -> {} ms.", pageClass.getSimpleName(), (System.currentTimeMillis() - start));
         return atPage;

@@ -13,7 +13,8 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.testng.Assert.assertTrue;
 
 @EccPage
@@ -46,7 +47,7 @@ public class GenericItemsAdminPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(newButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -68,7 +69,7 @@ public class GenericItemsAdminPage extends AdminBasePage {
 
     private GenericItemsAdminPage selectGroup(String group) {
         categoryGroups.selectByVisibleText(group);
-        Wait.waitForVisible(categories);
+        verifyElementVisible($(categories));
         return this;
     }
 
@@ -98,7 +99,7 @@ public class GenericItemsAdminPage extends AdminBasePage {
     private GenericItemsAdminPage selectDeleteOptionAndAccept() {
         deleteButton.click();
         acceptAlert();
-        Wait.waitForDisplayed(By.id("btnEdit"));
+        verifyElementVisible($(By.id("btnEdit")));
         return this;
     }
 

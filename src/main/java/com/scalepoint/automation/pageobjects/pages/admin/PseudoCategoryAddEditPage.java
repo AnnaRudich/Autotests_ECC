@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class PseudoCategoryAddEditPage extends AdminBasePage {
@@ -28,7 +28,7 @@ public class PseudoCategoryAddEditPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(descriptionField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

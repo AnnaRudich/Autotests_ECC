@@ -10,7 +10,7 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class InsCompaniesPage extends AdminBasePage {
@@ -27,7 +27,7 @@ public class InsCompaniesPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
