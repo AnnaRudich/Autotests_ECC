@@ -137,7 +137,7 @@ public  class GeneralTab extends SupplierDialog {
         }
 
         public Asserts assertIsDialogNotEditable() {
-            Assert.assertTrue(verifyElementVisible($(By.id("editSupplierTabPanelId"))));
+            Assert.assertFalse(verifyElementVisible($(By.id("editSupplierTabPanelId"))));
             return this;
         }
     }

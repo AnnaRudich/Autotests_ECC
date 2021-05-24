@@ -6,11 +6,13 @@ import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.shared.ProductInfo;
 import com.scalepoint.automation.shared.SortOrder;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.translations.TextSearch;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.modules.textSearch.Attributes.NFC_NEJ;
@@ -66,7 +68,7 @@ public class TextSearchTests extends BaseTest {
                             asserts.assertSearchResultsContainsSearchBrand(textSearch.getBrandSamsung());
                         });
     }
-
+@RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "Check if search results match to the selected attributes")
     public void charlie510_selectAttributes(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         int index = 0;

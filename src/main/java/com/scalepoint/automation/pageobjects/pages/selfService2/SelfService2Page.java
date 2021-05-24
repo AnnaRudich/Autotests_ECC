@@ -223,7 +223,7 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page saveItem() {
         $(saveItem).click();
-        Wait.waitForSpinnerToDisappear();
+//        Wait.waitForSpinnerToDisappear();
         return at(SelfService2Page.class);
     }
 

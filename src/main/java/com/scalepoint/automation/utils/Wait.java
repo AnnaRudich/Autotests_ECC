@@ -2,12 +2,9 @@ package com.scalepoint.automation.utils;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.commands.Should;
-import com.codeborne.selenide.commands.ShouldBe;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.ex.ElementShould;
 import com.google.common.base.Function;
-import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
@@ -16,15 +13,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
 @SuppressWarnings({"Guava", "ConstantConditions"})
@@ -108,7 +102,7 @@ public class Wait {
         try {
 
             return waitElementVisible(element).isDisplayed();
-        }catch (ElementShould e){
+        }catch (ElementShould | ElementNotFound e){
 
             return false;
         }
@@ -119,7 +113,11 @@ public class Wait {
     }
 
     public static SelenideElement waitElementInvisible(SelenideElement element){
-        return verifyElementCondition(element, Condition.not(Condition.visible));
+        try {
+            return verifyElementCondition(element, Condition.not(Condition.visible));
+        }catch (ElementNotFound | ElementShould e){
+            return null;
+        }
     }
 
     public static WebElement waitForVisibleAndEnabled(SelenideElement element) {
@@ -131,7 +129,19 @@ public class Wait {
 //        long start = System.currentTimeMillis();
 //        try {
 
-           return element.shouldBe(condition, TIMEOUT);
+        return element.shouldBe(condition, TIMEOUT);
+//        }
+//        finally {
+//            logIfLong(start, "invisibleOfElement");
+//        }
+//        return element;
+    }
+
+    public static SelenideElement verifyElementNotCondition(SelenideElement element, Condition condition){
+//        long start = System.currentTimeMillis();
+//        try {
+
+        return element.shouldNot(condition, TIMEOUT);
 //        }
 //        finally {
 //            logIfLong(start, "invisibleOfElement");
@@ -261,7 +271,7 @@ public class Wait {
 
     public static <T> T forCondition(Function<WebDriver, T> condition, long timeoutSeconds) {
         return forCondition(condition, timeoutSeconds, 100);
-}
+    }
 
     private static <T> T wrap(ExpectedCondition<T> expectedCondition) {
         long start = System.currentTimeMillis();

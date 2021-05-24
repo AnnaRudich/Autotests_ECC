@@ -131,7 +131,7 @@ public class ReplacementDialog extends BaseDialog {
         $(selectAllItemsCheckbox).waitUntil(Condition.visible, 15L).click();
         $(nextButtonPath).click();
         $(finishButtonByXpath).click();
-        waitForSpinnerToDisappear();
+//        waitForSpinnerToDisappear();
         waitElementVisible($(alertOk)).click();
         return Page.at(CustomerDetailsPage.class);
     }

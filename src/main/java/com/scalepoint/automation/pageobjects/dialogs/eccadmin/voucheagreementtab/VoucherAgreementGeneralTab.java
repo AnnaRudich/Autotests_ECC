@@ -80,7 +80,8 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
 
         public FormFiller withActive(boolean active) {
             waitForAjaxCompleted();
-            waitElementVisible($(dialog.agreementStatusCombo)).selectOption(active ? "Active" : "Inactive");
+            waitElementVisible($(dialog.agreementStatusCombo));
+            dialog.agreementStatusCombo.select(active ? "Active" : "Inactive");
             return this;
         }
 
@@ -118,7 +119,8 @@ public class VoucherAgreementGeneralTab extends BaseDialog implements VoucherAgr
 
     @Override
     protected void ensureWeAreAt() {
-        $(voucherNameInput).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
+        waitForAjaxCompletedAndJsRecalculation();
+        waitElementVisible($(voucherNameInput));
     }
 
     public VoucherAgreementGeneralTab doAssert(Consumer<Asserts> assertFunc) {

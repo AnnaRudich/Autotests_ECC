@@ -6,12 +6,10 @@ import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.MARKET_PRICE;
@@ -27,7 +25,6 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price is unavailable on the Product's Best Fit page
      * THEN: Market Price supplier not displays on Product Details page
      */
-    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {

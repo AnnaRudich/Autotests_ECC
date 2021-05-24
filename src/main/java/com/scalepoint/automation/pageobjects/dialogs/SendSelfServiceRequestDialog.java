@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.Customer;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -16,6 +17,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.*;
 
 public class SendSelfServiceRequestDialog extends BaseDialog {
+
+    private static final String OK_BUTTON_PATH = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]";
 
     @FindBy(name = "email")
     private WebElement email;
@@ -32,7 +35,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     @FindBy(id = "closeAutomatically-bodyEl")
     private ExtCheckboxTypeDiv closeAutomatically;
 
-    @FindBy(xpath = "//span[contains(@class,'x-btn-inner-default-small')][contains(text(),'Ok')]")
+    @FindBy(xpath = OK_BUTTON_PATH)
     private Button ok;
 
     @FindBy(name = "password")
@@ -98,7 +101,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
     }
 
     public SettlementPage send() {
-        SelenideElement element = $(ok);
+        SelenideElement element = $(By.xpath(OK_BUTTON_PATH));
         element.click();
         at(GdprConfirmationDialog.class)
                 .confirm();

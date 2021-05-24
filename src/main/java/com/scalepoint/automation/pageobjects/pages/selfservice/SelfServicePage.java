@@ -205,7 +205,7 @@ public class SelfServicePage extends Page {
             SelfServiceGridRow(SelenideElement row) {
                 this.row = row;
                 category = row.find("[class*=categoryColumn] div div");
-                acquired = row.find("[class*=acquired] div div");
+                acquired = waitElementVisible(row.find("[class*=acquired] div div"));
                 purchaseDate = row.find("[class*=purchaseDate] div div");
                 purchasePrice = row.find("[class*=purchasePrice] div div");
                 newPrice = row.find("[class*=newPrice] div div");
@@ -231,7 +231,7 @@ public class SelfServicePage extends Page {
                 ElementsCollection listItems = chooseDisplayed(".x-layer.x-combo-list")
                         .findAll(".x-combo-list-item");
                 listItems.get(0).click();
-                return this;
+                return new SelfServiceGridRow(row);
             }
 
             public SelfServiceGridRow selectRandomCategory() {
