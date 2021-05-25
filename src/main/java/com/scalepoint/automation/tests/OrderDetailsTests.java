@@ -2,11 +2,13 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.CustomerOrderEditPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -14,10 +16,12 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
@@ -97,7 +101,9 @@ public class OrderDetailsTests extends BaseTest {
                 .openReplacementWizard(true)
                 .replaceAllItems()
                 .toOrdersDetailsPage()
-                .cancelItem();
+                .showOrder()
+                .cancelItemByDescription(claimItem.getSetDialogTextMatch())
+                .addInternalNote("Autotest", OrderDetailsPage.class);
 
         OrderDetails orderDetails = translations.getOrderDetails();
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
@@ -209,6 +215,112 @@ public class OrderDetailsTests extends BaseTest {
                                 CUSTOMER_WELCOME,
                                 ORDER_CONFIRMATION
                         )));
+    }
+
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "Verifies canceling of items one by one")
+    public void orderEditCancelOneByOneTest(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+
+
+        BigDecimal firstItemUnitPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(2841.02);
+        BigDecimal secondItemUnitPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(90.00);
+        BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+
+        createOrderWithTwoItems(user, claim, claimItem, voucher, firstItemUnitPrice, secondItemUnitPrice)
+                .cancelItemByDescription(claimItem.getSetDialogTextMatch())
+                .addInternalNote("Autotest1", CustomerOrderEditPage.class)
+                .cancelItemByDescription(voucher.getExistingVoucherForDistances())
+                .addInternalNote("Autotest2", OrderDetailsPage.class)
+                .doSuborderAssert(claimItem.getSetDialogTextMatch(), suborder ->
+                        suborder.assertTotalPrice(zero))
+                .doSuborderAssert(voucher.getExistingVoucherForDistances(), suborder ->
+                        suborder.assertTotalPrice(zero));
+    }
+
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "Verifies canceling of all items at once")
+    public void orderEditCancelAllItemsTest(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+
+        BigDecimal firstItemUnitPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(2841.02);
+        BigDecimal secondItemUnitPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(90.00);
+        BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+
+        createOrderWithTwoItems(user, claim, claimItem, voucher, firstItemUnitPrice, secondItemUnitPrice)
+                .cancelAllItems()
+                .addInternalNote("Autotest", OrderDetailsPage.class)
+                .doSuborderAssert(claimItem.getSetDialogTextMatch(), suborder ->
+                        suborder.assertTotalPrice(zero))
+                .doSuborderAssert(voucher.getExistingVoucherForDistances(), suborder ->
+                        suborder.assertTotalPrice(zero));
+    }
+
+    @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
+    @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "Verifies canceling of one item out of many")
+    public void orderEditCancelOneItemTest(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+
+        BigDecimal firstItemUnitPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(2841.02);
+        BigDecimal secondItemUnitPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(90.00);
+        BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+
+        createOrderWithTwoItems(user, claim, claimItem, voucher, firstItemUnitPrice, secondItemUnitPrice)
+                .cancelItemByDescription(claimItem.getSetDialogTextMatch())
+                .addInternalNote("Autotest1", CustomerOrderEditPage.class)
+                .toOrdersDetailsPage()
+                .doSuborderAssert(claimItem.getSetDialogTextMatch(), suborder ->
+                        suborder.assertTotalPrice(zero))
+                .doSuborderAssert(voucher.getExistingVoucherForDistances(), suborder ->
+                        suborder.assertTotalPrice(secondItemUnitPrice));
+    }
+
+    private CustomerOrderEditPage createOrderWithTwoItems(User user,
+                                                          Claim claim,
+                                                          ClaimItem claimItem,
+                                                          Voucher voucher,
+                                                          BigDecimal firstItemUnitPrice,
+                                                          BigDecimal secondItemUnitPrice){
+        String existingVoucher = voucher.getExistingVoucherForDistances();
+
+        return loginAndCreateClaim(user, claim)
+                .toTextSearchPage()
+                .searchByProductName(claimItem.getSetDialogTextMatch())
+                .chooseCategory(claimItem.getCategoryMobilePhones())
+                .sortOrderableFirst()
+                .openSidForFirstProduct()
+                .closeSidWithOk()
+                .openSidAndFill(sid ->
+                        sid
+                                .withCategory(claimItem.getCategoryBabyItems())
+                                .withCustomerDemandPrice(1000.00)
+                                .withNewPrice(100.00)
+                                .withVoucher(existingVoucher))
+                .closeSidWithOk()
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .openReplacementWizard(true)
+                .replaceAllItems()
+                .toOrdersDetailsPage()
+                .doSuborderAssert(claimItem.getSetDialogTextMatch(), orderDetails ->
+                        orderDetails
+                                .assertUnitPrice(firstItemUnitPrice)
+                                .assertQuantity(1)
+                                .assertPrice(firstItemUnitPrice)
+                )
+                .doSuborderAssert(existingVoucher, orderDetails ->
+                        orderDetails
+                                .assertUnitPrice(secondItemUnitPrice)
+                                .assertQuantity(1)
+                                .assertPrice(secondItemUnitPrice)
+                )
+                .showOrder();
     }
 }
 

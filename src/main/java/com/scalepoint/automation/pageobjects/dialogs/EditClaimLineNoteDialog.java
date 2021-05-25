@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -48,17 +47,6 @@ public class EditClaimLineNoteDialog extends BaseDialog {
     private String getNoteText(){
 
         return $(elementEditClaimLineNoteDialogElement).find(textAreaPath).getValue();
-    }
-
-    private void clickButton(DialogButton button){
-        $(elementEditClaimLineNoteDialogElement)
-                .findAll("a[role=button][aria-hidden=false]")
-                .stream()
-                .filter(element -> DialogButton.findByText(element.getText()).equals(button))
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new)
-                .hover()
-                .click();
     }
 
     public EditClaimLineNoteDialog doAssert(Consumer<Asserts> assertFunc) {

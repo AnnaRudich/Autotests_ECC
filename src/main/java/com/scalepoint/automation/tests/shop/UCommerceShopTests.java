@@ -320,7 +320,10 @@ public class UCommerceShopTests extends BaseTest {
                 .getBalance(claim.getClaimNumber())
                 .assertBalanceIs(0.0);
 
-        orderDetailsPage.cancelItem();
+        orderDetailsPage
+                .showOrder()
+                .cancelItemByIndex(0)
+                .addInternalNote("Autotest", OrderDetailsPage.class);
 
         new GetBalanceService()
                 .getBalance(claim.getClaimNumber())
