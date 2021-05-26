@@ -39,7 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-
+/*
+* https://jira.scalepoint.com/browse/CLAIMSHOP-5907
+ */
 public class CreateOrderService extends BaseService {
     
     private final String TEST_DESCRIPTION = "Test description";
