@@ -109,6 +109,12 @@ public class ClaimLineNotesDialog extends BaseDialog {
 
     public class Asserts {
 
+        Asserts(){
+
+            claimLineNotesGrid = new ClaimLineNotesGrid();
+            notesTreePanel = new NotesTreePanel();
+        }
+
         public Asserts assertNoteText(String originalNoteText) {
             String noteText = claimLineNotesGrid.getClaimLineNotesGridRowByName(originalNoteText).getNoteText();
             assertThat(originalNoteText).

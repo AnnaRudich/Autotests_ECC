@@ -3,6 +3,8 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
@@ -361,7 +363,8 @@ public class TextSearchPage extends Page {
     public TextSearchPage waitForResultsLoad() {
         try {
             waitElementVisible($(fieldSetDisabled));
-        } catch (Exception e) {
+        }catch (ElementNotFound | ElementShould e) {
+
             logger.info(e.getMessage());
         }
         waitElementVisible($(fieldSetNotDisabled));

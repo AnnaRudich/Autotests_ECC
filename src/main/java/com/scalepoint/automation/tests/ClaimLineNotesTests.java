@@ -69,7 +69,6 @@ public class ClaimLineNotesTests extends BaseTest {
                     notesPage.assertClaimLineNotesIconMissing(secondItemName);
                 });
     }
-
     @Test(dataProvider = "testDataProvider")
     public void addClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
