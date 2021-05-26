@@ -8,9 +8,9 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -95,7 +95,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
                 .automaticDepreciation(true)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
-                .makeActive(true)
+                .makeActive(false)
                 .doAssert(row -> row.assertDepreciationPercentageIs(0));
     }
 
