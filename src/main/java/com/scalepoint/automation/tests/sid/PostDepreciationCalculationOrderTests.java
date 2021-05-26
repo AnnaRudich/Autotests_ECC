@@ -42,7 +42,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
-                .makeActive(false)
+                .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
                 .toSettlementDialog()
                 .doAssert(sid -> {
@@ -154,7 +154,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .editFirstClaimLine()
                 .valuationGrid()
                 .parseValuationRow(VOUCHER)
-                .makeActive(false)
+                .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
                 .toSettlementDialog()
                 .setDepreciation(depreciationPercentage)
