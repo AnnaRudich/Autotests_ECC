@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests;
+package com.scalepoint.automation.tests.selfservice;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
@@ -9,6 +9,7 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.stubs.MailserviceMock;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
