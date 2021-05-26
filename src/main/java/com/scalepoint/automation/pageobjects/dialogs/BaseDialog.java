@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
@@ -44,11 +45,11 @@ public abstract class BaseDialog implements Actions {
     public static <T extends BaseDialog> T at(Class<T> baseDialogClass) {
         long start = System.currentTimeMillis();
         try {
-            T t = baseDialogClass.newInstance();
+            T t = baseDialogClass.getDeclaredConstructor().newInstance();
             t.ensureWeAreAt();
             innerLogger.info("At {} -> {} ms.", baseDialogClass.getSimpleName(), (System.currentTimeMillis() - start));
             return t;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
         }
     }
