@@ -54,7 +54,7 @@ public class Wait {
             log.warn("waitForAjaxCompleted Timeout");
         }catch (JavascriptException e){
 
-            log.warn("Javascript exception: ", e);
+            log.warn("Javascript exception: {}", e.getMessage());
         }
         waitForJavascriptRecalculation();
     }
@@ -70,8 +70,11 @@ public class Wait {
 //    }
 
     public static void waitForSpinnerToDisappear() {
-
-        verifyElementCondition($(By.xpath("//div[contains(@class, 'loader')]")), Condition.empty);
+        try {
+            verifyElementCondition($(By.xpath("//div[contains(@class, 'loader')]")), Condition.empty);
+        }catch (ElementNotFound e){
+            log.info("Spinner not found");
+        }
     }
 
     public static void waitMillis(int milliseconds) {

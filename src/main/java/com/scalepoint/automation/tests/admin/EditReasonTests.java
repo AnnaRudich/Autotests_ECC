@@ -7,12 +7,14 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
@@ -149,6 +151,7 @@ public class EditReasonTests extends BaseTest {
      * AND: verify if the reason input field enabled
      * THEN: reason input field is disabled
      */
+    @RunOn(DriverType.CHROME)
     @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
     public void charlie508_7_EditReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
                                              Claim claim,
@@ -235,7 +238,8 @@ public class EditReasonTests extends BaseTest {
     }
 
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
-        loginAndCreateClaim(trygUser, claim)
+        loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
+                .cancel()
                 .openSid()
                 .setDescription(TEST_REASON_LINE)
                 .setCategory(claimItem.getCategoryShoes())

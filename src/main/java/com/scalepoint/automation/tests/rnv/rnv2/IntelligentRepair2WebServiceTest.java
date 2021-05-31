@@ -15,12 +15,14 @@ import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -251,7 +253,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .assertTaskHasCompletedStatus(agreement)
                 .assertEvaluateTaskButtonIsDisabled();
     }
-
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)

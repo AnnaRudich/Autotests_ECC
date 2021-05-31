@@ -11,6 +11,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -18,6 +19,7 @@ import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.listeners.RollbackContext;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.ITestResult;
@@ -133,7 +135,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -170,7 +173,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -200,7 +204,8 @@ public class RejectReasonTests extends BaseTest {
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY)
     @Test(dataProvider = "testDataProvider", description = "Check if DISCREATIONARY reason is mandatory and filled claim will be created")
-    public void charlie_549_makeRejectReasonNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void
+    charlie_549_makeRejectReasonNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                     Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
@@ -249,7 +254,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -295,7 +301,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -324,7 +331,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -347,7 +355,7 @@ public class RejectReasonTests extends BaseTest {
                     asserts.assertRejectReasonEnabled();
                 });
     }
-
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @Test(dataProvider = "testDataProvider", description = "Check if any reason is mandatory and filled claim will be created")
@@ -361,7 +369,8 @@ public class RejectReasonTests extends BaseTest {
     @Test(dataProvider = "testDataProvider", description = "Check if discretionary reasons will be not filled claim will be created")
     public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithoutReasons(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                                 Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -389,7 +398,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -418,7 +428,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(claimItem.getCategoryBabyItems(), sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)
@@ -450,7 +461,8 @@ public class RejectReasonTests extends BaseTest {
                 .getPage()
                 .logout();
 
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCustomerDemandPrice(PRICE_100_000)
                         .withNewPrice(PRICE_2400)

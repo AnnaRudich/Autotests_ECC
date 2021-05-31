@@ -245,7 +245,7 @@ public class SelfService2Page extends Page {
     public SelfService2Page deleteItem() {
         SelenideElement deleteItem = $(By.xpath("//span[@title='Slet']"));
         deleteItem.shouldBe(Condition.visible).click();
-        Wait.waitForSpinnerToDisappear();
+//        Wait.waitForSpinnerToDisappear();
         return this;
     }
 

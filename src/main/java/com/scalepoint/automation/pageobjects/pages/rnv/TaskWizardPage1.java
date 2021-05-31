@@ -48,6 +48,7 @@ public class TaskWizardPage1 extends Page {
         getServiceLineByDescription(lineDescription).clickTaskType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(rnvType);
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -55,6 +56,7 @@ public class TaskWizardPage1 extends Page {
         getServiceLineByDescription(lineDescription).clickDamageType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(damageType);
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 

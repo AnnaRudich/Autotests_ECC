@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.VoucherTermsAndConditionsDialog;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.tests.BaseTest;
@@ -10,11 +11,14 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Settlement;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import org.testng.annotations.Test;
+
+import java.util.Set;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-557")
 public class SidShowVoucherDetails extends BaseTest {
@@ -81,7 +85,10 @@ public class SidShowVoucherDetails extends BaseTest {
      */
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify shared voucher")
     public void ecc5519_1_sharedVoucherAndTagsBrandInSID(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        checkBrandsAndTags(user, claim, claimItem, voucher);
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        checkBrandsAndTags(settlementPage, user, claimItem, voucher);
     }
 
     /**
@@ -95,13 +102,17 @@ public class SidShowVoucherDetails extends BaseTest {
 
     @Test(dataProvider = "testDataProvider", description = "ECC-5519 Verify exclusive voucher")
     public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserCompany(CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        checkBrandsAndTags(user, claim, claimItem, voucher);
+
+        SettlementPage settlementPage = loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel();
+
+        checkBrandsAndTags(settlementPage, user, claimItem, voucher);
     }
 
-    private void checkBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+    private void checkBrandsAndTags(SettlementPage settlementPage, User user, ClaimItem claimItem, Voucher voucher) {
         PseudoCategory assignedCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
-        loginAndCreateClaim(user, claim).openSid()
+        settlementPage.openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)

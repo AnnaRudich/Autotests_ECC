@@ -240,7 +240,7 @@ public class CompleteClaimPage extends Page {
 
     public class Asserts {
         public CompleteClaimPage.Asserts assertReplacementButtonIsNotVisible() {
-            assertThat(verifyElementVisible($(replacementButtonByXpath))).as("replacement button should should not be present").isTrue();
+            assertThat(verifyElementVisible($(replacementButtonByXpath))).as("replacement button should should not be present").isFalse();
             return this;
         }
 
