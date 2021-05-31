@@ -9,6 +9,8 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.stubs.MailserviceMock;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -59,7 +61,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
     public void Charlie735_addLineWithDocumentation(User user, Claim claim, Translations translations) {
 
@@ -100,8 +102,9 @@ public class SelfService2Tests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
-    @Test(dataProvider = "testDataProvider", description = "SelfService2 password reset, login and logout")
-    public void selfService2LogInWithNewPassword(User user, Claim claim) {
+    @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
+            description = "SelfService2 password reset, login and logout")
+        public void selfService2LogInWithNewPassword(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toCompleteClaimPage()
@@ -127,7 +130,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE2, UserCompanyGroups.TOPDANMARK}, dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
     public void Charlie735_addLine_ageAsSingleValue_notes(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -159,7 +162,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE, enabled = false)
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4975")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService", enabled = false)
     public void submitRepairLine(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -191,21 +194,21 @@ public class SelfService2Tests extends BaseTest {
                 .doAssert(asserts -> asserts.assertItemIsPresent(description));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "Failed Mail service request - Internal Server Error")
     public void sendSMSInternalServerErrorTest(User user, Claim claim) {
 
         sendSMSandVerifyResponse(user, claim, HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "Failed Mail service request - No Found")
     public void sendSMSNotFoundTest(User user, Claim claim) {
 
         sendSMSandVerifyResponse(user, claim, HttpStatus.SC_NOT_FOUND);
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "Failed Mail service request - Missing token")
     public void sendSMSMissingTokenTest(User user, Claim claim) {
 

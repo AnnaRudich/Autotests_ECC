@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
@@ -33,7 +34,9 @@ import static com.scalepoint.automation.utils.Constants.PRICE_2400;
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
 public class SidTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialogs")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 It's possible to assign existing category for new voucher and select categories in Add/Edit dialogs")
     public void ecc3025_selectVoucherExistingCatAddDialog(User user, Claim claim, Voucher voucher) {
         PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
         loginAndCreateClaim(user, claim)
@@ -50,7 +53,9 @@ public class SidTests extends BaseTest {
      * THAN: Cash compensation is P1 - V1 discount - D1
      * THAN: Depreciation is D1 amount of Cash Compensation
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
             " - depreciation percent if voucher selected in Add settlement dialogs")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, Voucher voucher) {
@@ -83,7 +88,9 @@ public class SidTests extends BaseTest {
      * THAN the distance is equal to predefined value
      */
 
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_calculateShopDistance(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucherForDistances();
@@ -126,7 +133,9 @@ public class SidTests extends BaseTest {
      * WHEN user searches for Shop with Voucher2 option and predefined Zip code
      * THAN it's possible to find shop with distance as predefined value
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher();
@@ -169,7 +178,9 @@ public class SidTests extends BaseTest {
      * THEN: Face Value = Cash Value / (1 - comDiscount / 100 (It is new because DtDn was changed)
      */
     @RequiredSetting(type = MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_voucherRepDialogDDDialogFVCV(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher();
@@ -206,7 +217,9 @@ public class SidTests extends BaseTest {
      * THEN: Face Value = Cash Value / (1 - comDiscount / 100 (It is new because DtDn was changed)
      */
     @RequiredSetting(type = MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG)
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 It's possible to calculate shop distance in Settlement dialog")
     public void ecc3025_voucherRepDialogCustomDtDnDialogFVCV2(User user, Claim claim, ClaimItem item, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher();
@@ -229,7 +242,9 @@ public class SidTests extends BaseTest {
      * THEN: Terms and Conditions data contains correct V1 discount
      * THEN: Terms and Conditions data contains correct S1 telephone number
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Voucher's Terms and Conditions contain correct info about voucher and supplier")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 Voucher's Terms and Conditions contain correct info about voucher and supplier")
     public void ecc3025_voucherTradesTermsConditionsCorrectInfo(User user, Claim claim, Supplier supplier, Voucher voucher, ClaimItem claimItem) {
         String conditionsText = "Autotest Sample Conditions";
         int discount = 10;
@@ -273,7 +288,9 @@ public class SidTests extends BaseTest {
      * THAN: Depreciation is 0.00
      */
     @SuppressWarnings("AccessStaticViaInstance")
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price if no vouchers selected in Add settlement dialogs")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 Cash compensation without depreciation are New price if no vouchers selected in Add settlement dialogs")
     public void ecc3025_cashCompensationWithoutDepNoVoucher(User user, Claim claim, Category category) {
         login(user, AdminPage.class)
                 .createPsModelWithCategoryAndEnable(category, "All Categories")
@@ -301,7 +318,9 @@ public class SidTests extends BaseTest {
      * THAN: Depreciation is 0.00
      */
     @SuppressWarnings("AccessStaticViaInstance")
-    @Test(dataProvider = "testDataProvider", description = "ECC-3025 Cash compensation without depreciation are New price minus voucher percent if voucher selected in Add settlement dialogs")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
+            dataProvider = "testDataProvider",
+            description = "ECC-3025 Cash compensation without depreciation are New price minus voucher percent if voucher selected in Add settlement dialogs")
     public void ecc3025_cashCompensationWithoutDepVoucher(User user, Claim claim, ClaimItem item) {
         SidCalculator.VoucherValuationWithDepreciation voucherValuation = SidCalculator.calculateVoucherValuation(
                 Constants.PRICE_2400,

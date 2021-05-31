@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog.Depreciati
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -28,7 +29,9 @@ import static org.testng.Assert.assertEquals;
 public class NotCheapestChoiceTests extends BaseTest {
 
     /*09*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Not Minimal Valuation Is Selected Then Minimal Valuation Is Suggested")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 When Not Minimal Valuation Is Selected Then Minimal Valuation Is Suggested")
     public void charlie530WhenNotMinimalValuationIsSelectedThenMinimalValuationIsSuggested(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(NEW_PRICE))
@@ -36,7 +39,9 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .doAssert(notCheapestDialog -> notCheapestDialog.assertMinimalValuationIsSuggested(1.00));
     }
     /*10*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Selected reason is stored")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 Selected reason is stored")
     public void charlie530SelectedReasonIsStored(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
         String selectedReason = selectFirstNotCheapestReason(claimItem, settlementPage);
@@ -47,7 +52,9 @@ public class NotCheapestChoiceTests extends BaseTest {
     }
 
     /*11*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 When Minimal Valuation Is Selected Then Sid Closes Without Popup")
     public void charlie530WhenMinimalValuationIsSelectedThenSidClosesWithoutPopup(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, sid).withValuation(CUSTOMER_DEMAND))
@@ -55,7 +62,9 @@ public class NotCheapestChoiceTests extends BaseTest {
     }
 
     /*12*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Discretionary Depreciated Price")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Discretionary Depreciated Price")
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
@@ -71,7 +80,9 @@ public class NotCheapestChoiceTests extends BaseTest {
     }
 
     /*13*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Policy Depreciated Price")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Policy Depreciated Price")
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
@@ -87,7 +98,9 @@ public class NotCheapestChoiceTests extends BaseTest {
     }
 
     /*14*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Not Possible To Not Select The Reason")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 Not Possible To Not Select The Reason")
     public void charlie530NotPossibleToNotSelectTheReason(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
@@ -99,7 +112,9 @@ public class NotCheapestChoiceTests extends BaseTest {
     }
 
     /*16*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Item From Catalog")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Item From Catalog")
     public void charlie530MinimalValuationIsSuggestedInCaseOfItemFromCatalog(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -112,7 +127,9 @@ public class NotCheapestChoiceTests extends BaseTest {
     }
 
     /*17*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Generic Item")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 Minimal Valuation Is Suggested In Case Of Generic Item")
     public void charlie530MinimalValuationIsSuggestedInCaseOfGenericItem(User user, Claim claim, GenericItem genericItem) {
         genericItem.setPrice("10");
         loginAndCreateClaim(user, claim)
@@ -129,7 +146,9 @@ public class NotCheapestChoiceTests extends BaseTest {
                 .tryToCloseSidWithOkButExpectDialog(NotCheapestChoiceDialog.class);
     }
     /*21*/
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-530 When reason is set then edit button appears and reason can be changed using popup")
+    @Test(groups = {TestGroups.SID, TestGroups.NOT_CHEAPEST_CHOICE},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-530 When reason is set then edit button appears and reason can be changed using popup")
     public void charlie530WhenReasonIsSetThenEditButtonAppearsAndReasonCanBeChangedUsingPopup(User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
 

@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
@@ -41,7 +42,9 @@ public class DeprecationDeductedTests extends BaseTest {
      * THAN: Face value = New Price, Cash Value = New Price - VD1%
      */
     @Bug(bug = "CHARLIE-404")
-    @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (off)")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATION_DEDUCTED},
+            dataProvider = "testDataProvider",
+            description = "ECC-3288 Display voucher value with depreciation deducted (off)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION, enabled = false)
     public void ecc3288_1_displayVoucherValueWithDeprecationDeductedOFF(User user, Claim claim, Voucher voucher) {
 
@@ -75,7 +78,9 @@ public class DeprecationDeductedTests extends BaseTest {
      * WHEN: CH review completed claim details
      * THAN: Face value = New Price - D1%, Cash Value = New Price - VD1% - D1%
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with depreciation deducted (on)")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATION_DEDUCTED},
+            dataProvider = "testDataProvider",
+            description = "ECC-3288 Display voucher value with depreciation deducted (on)")
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     public void ecc3288_2_displayVoucherValueWithDeprecationDeductedON(User user, Claim claim, ClaimItem claimItem) {
         VoucherValuationWithDepreciation expectedCalculation = SidCalculator.calculateVoucherValuation(Constants.PRICE_2400, Constants.VOUCHER_DISCOUNT_10, Constants.DEPRECIATION_10);

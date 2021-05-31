@@ -3,6 +3,8 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -29,7 +31,9 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
      * THEN: depreciation is applied automatically
      * AND: the depreciation value is displayed in the depreciation input =41%
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify automatic overwrite of the depreciation field")
+    @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-505 Verify automatic overwrite of the depreciation field")
     public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
@@ -51,7 +55,9 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
      * AND: Reopen SID
      * THEN: the depreciation value is displayed in the depreciation input =47%
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Update automatic overwrite of the depreciation field")
+    @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-505 Update automatic overwrite of the depreciation field")
     public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
@@ -84,7 +90,9 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
      * WHEN: change category to be Personlig Pleje-> Medicin (no rule is mapped to this category)
      * THEN: depreciation field is automatically reset to 0
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that changing category automatically reset of the depreciation field to 0")
+    @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-505 Verify that changing category automatically reset of the depreciation field to 0")
     public void charlie_505_4_changeCategoryResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
@@ -111,7 +119,9 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
      * THEN: depreciation field is automatically reset to 0
      * SUMMARY: change any other parameter so that no match to rule age
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-505 Verify that select other age than specified in the rules automatically reset of the depreciation field to 0")
+    @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-505 Verify that select other age than specified in the rules automatically reset of the depreciation field to 0")
     public void charlie_505_5_changeAgeResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()

@@ -2,6 +2,8 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,7 +18,7 @@ import java.util.List;
 public class BulkUpdateCategoryTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4524")
-    @Test(dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.BULK_UPDATE_CATEGORY, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider")
     public void testBulkUpdateCategories(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         final String itemDescriptions[] = {"item1", "item2"};
         PseudoCategory mobilePhonesCategory = claimItem.getCategoryMobilePhones();

@@ -5,6 +5,8 @@ import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.input.SystemUser;
@@ -16,7 +18,7 @@ import static com.scalepoint.automation.utils.Constants.ALL_ROLES;
 
 public class UserPasswordTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_PASSWORD}, dataProvider = "testDataProvider",
             description = "CHARLIE-534 generate password works for new user")
     public void charlie534_generatePasswordForNewUser(SystemUser user) {
         UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
@@ -29,7 +31,7 @@ public class UserPasswordTests extends BaseTest {
         });
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_PASSWORD}, dataProvider = "testDataProvider",
             description = "CHARLIE-534 generate password works for existing")
     public void charlie534_generatePasswordForExistingUser(SystemUser user) {
         UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
@@ -44,7 +46,7 @@ public class UserPasswordTests extends BaseTest {
         });
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_PASSWORD}, dataProvider = "testDataProvider",
             description = "CHARLIE-534 generate password from prefs")
     public void charlie534_generatePasswordFromPreferences(SystemUser user) {
         EditPreferencesPage editPreferencesPage = login(getSystemUser(), UsersPage.class)
@@ -59,7 +61,8 @@ public class UserPasswordTests extends BaseTest {
         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check basic password rule")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_PASSWORD, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
+            description = "Check basic password rule")
     public void charlie528_defaultPasswordRule(@UserCompany(CompanyCode.SCALEPOINT) User user, SystemUser systemUser) {
         UserAddEditPage userAddEditPage = login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage();

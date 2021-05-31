@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.api.unifiedpayments.v1;
 
 import com.scalepoint.automation.services.restService.*;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
@@ -31,7 +32,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         claimRequest.setCompany("lb");
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closedExternalClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_EXTERNAL);
@@ -39,7 +44,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         assertEvent();
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closedWithMailClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
@@ -48,7 +57,11 @@ public class SendingToEventApiTests extends BaseApiTest {
     }
 
     //TODO: fix
-    @Test(enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            enabled = false, dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void replacedClaimShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, REPLACEMENT);
@@ -56,7 +69,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         assertEvent();
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeClaimWithSettlementWithAmountEqual0ShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item);
 
@@ -67,7 +84,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeClaimWithNegativeSettlementAmountShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
@@ -87,7 +108,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertNumberOfCloseCaseEventsThatWasCreatedForClaim(claimRequest, 2);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void cancelNotSettledClaimShouldSendClaimUpdatedCaseClosedEvent(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .cancel(claimRequest);
@@ -95,7 +120,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void cancelSettledClaimShouldSendClaimUpdatedCaseClosedAndCaseSettledEvens(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);
@@ -106,7 +135,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCaseSettledEventWasCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void cancelClaimShouldBeNotSendToEventApi(User user, EccIntegration eccIntegration) {
         loginUser(user);
         EccIntegrationService eccIntegrationService = new EccIntegrationService();
@@ -117,7 +150,11 @@ public class SendingToEventApiTests extends BaseApiTest {
         eventDatabaseApi.assertThatCloseCaseEventWasNotCreated(claimRequest);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V1,
+            TestGroups.SENDING_TO_EVENT_API},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void cancelClaimPreviouslySettledShouldBeSendToEventApi(User user, InsertSettlementItem item) {
         createClaimWithItem(user, item)
                 .close(claimRequest, CLOSE_WITH_MAIL);

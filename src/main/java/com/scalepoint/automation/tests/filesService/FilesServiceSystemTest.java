@@ -1,6 +1,8 @@
 package com.scalepoint.automation.tests.filesService;
 
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -26,7 +28,8 @@ public class FilesServiceSystemTest extends BaseTest {
     private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");
     private static final String IPHONE = "iPhone";
 
-    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentAddedFromClaimLineLevelToClaimLineLevel", groups = {"uni"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "attachmentAddedFromClaimLineLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLineLevelToClaimLineLevelSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -53,7 +56,8 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LINE_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentAddedFromClaimLevelToClaimLineLevel", groups = {"uni"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "attachmentAddedFromClaimLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLevelToClaimLineLevelSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -78,7 +82,8 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentDeletedFromClaimLevel", groups = {"uni"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "attachmentDeletedFromClaimLevel")
     public void attachmentDeletedFromClaimLevelSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -103,7 +108,8 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_DELETED_FROM_CLAIM_LEVEL, 1);
     }
 
-    @Test(dataProvider = "topdanmarkDataProvider", description = "attachmentUnlinkedFromClaimLineLevel", groups = {"uni"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "attachmentUnlinkedFromClaimLineLevel")
     public void attachmentUnlinkedFromClaimLineLevelSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         String token = createCwaClaimAndGetClaimToken(claimRequest);
@@ -130,8 +136,8 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_UNLINKED_FROM_CLAIM_LINE_LEVEL, 1);
     }
 
-    @Test(dataProvider = "topdanmarkDataProvider",
-            description = "SelfService", groups = {"uni"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "SelfService")
     public void attachmentImportedFromSelfServiceSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
@@ -155,7 +161,8 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_IMPORTED_FROM_SELFSERVICE,1);
     }
 
-    @Test(dataProvider = "topdanmarkDataProvider", description = "FNOL", groups = {"uni"})
+    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+            description = "FNOL")
     public void attachmentImportedFromFNOLSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim){
 
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();

@@ -4,6 +4,7 @@ import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.pageobjects.pages.BestFitPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -25,7 +26,9 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price is unavailable on the Product's Best Fit page
      * THEN: Market Price supplier not displays on Product Details page
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
+    @Test(groups = {TestGroups.SID, TestGroups.SHOW_MARKET_PRICES},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-588 Show Market Price (off), search for Product in Catalog, verify Best Fit Page")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_1_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -52,7 +55,9 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price valuation exists in the SID
      * THEN: Market Price Supplier name not displays in the SID
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID")
+    @Test(groups = {TestGroups.SID, TestGroups.SHOW_MARKET_PRICES},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-588 Show Market Price (off), add Product in Catalog, verify SID")
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE, enabled = false)
     public void charlie_588_3_showMarketPriceDisabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -82,7 +87,9 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price value displays on Product Details page
      * THEN: Market Price supplier displays on Product Details page
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
+    @Test(groups = {TestGroups.SID, TestGroups.SHOW_MARKET_PRICES},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-588 Show Market Price (on), search for Product in catalog, verify Product Details Page")
     public void charlie_588_4_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -111,7 +118,9 @@ public class ShowMarketPricesTests extends BaseTest {
      * THEN: Market Price value displays on Product Info page
      * THEN: Market Price Supplier displays on Product Info page
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
+    @Test(groups = {TestGroups.SID, TestGroups.SHOW_MARKET_PRICES},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-588 Show Market Price (on), add Product from the catalog, verify SID")
     public void charlie_588_5_showMarketPriceEnabled(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()

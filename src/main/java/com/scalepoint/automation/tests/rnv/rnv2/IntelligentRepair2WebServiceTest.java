@@ -12,6 +12,7 @@ import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
@@ -58,7 +59,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      *
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackWithInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -117,7 +119,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      */
 
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackNoInvoice_approved_claim_auto_completed(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -167,7 +170,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      */
 
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Reject")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "Feedback evaluation status: Reject")
     public void feedback_Rejected(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -211,7 +215,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: task is Completed, evaluateTaskButton is disabled
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "Feedback evaluation status: Manual")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "Feedback evaluation status: Manual")
     public void feedback_Manual(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
         String lineDescription = RandomUtils.randomName("RnVLine");
 
@@ -255,7 +260,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @Test(dataProvider = "testDataProvider", description = "damageType is actualized in SID when it was changed in RnV wizard")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "damageType is actualized in SID when it was changed in RnV wizard")
     public void damageTypeEditedInRnv(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -291,7 +297,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: the error is displayed while sending
      * Assert: the task has 'fail' status on projects page in RnV Wizard
      */
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnvFailsOnServicePartnerSide(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -325,7 +332,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @Test(dataProvider = "testDataProvider", description = "One line is set as repair type in RnV")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "One line is set as repair type in RnV")
     public void onLineSentToRnVTaskLineTests(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
 
         String lineDescription1 = RandomUtils.randomName("RnVLine");
@@ -377,7 +385,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @Test(dataProvider = "testDataProvider", description = "Two lines are set as repair type in RnV")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = "testDataProvider",
+            description = "Two lines are set as repair type in RnV")
     public void multipleLinesSentToRnVTaskLineTests(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
 
         String lineDescription1 = RandomUtils.randomName("RnVLine");

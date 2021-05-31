@@ -11,6 +11,7 @@ import com.scalepoint.automation.pageobjects.pages.suppliers.DefaultSettingsPage
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.NumberFormatUtils;
@@ -49,7 +50,8 @@ public class RnVSmokeTest extends BaseTest {
      * Assert: there are lines in Invoice dialog opened from Invoice tab
      */
 
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         completeWithEmailAndSendRnV(user, claim, agreement, translations);
@@ -68,7 +70,8 @@ public class RnVSmokeTest extends BaseTest {
                 .assertTotalForTheLineWithIndex(1, Constants.PRICE_50);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void messagesTest(User user, Claim claim, ServiceAgreement agreement) {
 
         final String testMessage = "Test message";
@@ -97,7 +100,8 @@ public class RnVSmokeTest extends BaseTest {
                 .assertLatestMessageContains(testMessage);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Sends multiple credit notes to the single invoice")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "Sends multiple credit notes to the single invoice")
     public void singleInvoiceCreditNotesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
@@ -148,7 +152,8 @@ public class RnVSmokeTest extends BaseTest {
         verifyInvoiceTotalAndGridSize(projectsPage, invoiceTotal, 4);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Sends multiple creditNotes to the multiple invoices")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "Sends multiple creditNotes to the multiple invoices")
     public void multipleInvoicesCreditNotesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
@@ -200,7 +205,8 @@ public class RnVSmokeTest extends BaseTest {
         verifyInvoiceTotalAndGridSize(projectsPage, invoiceTotal, 3);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Sends credit note without correct invoice number")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "Sends credit note without correct invoice number")
     public void creditNoteWithoutInvoiceNumberTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
@@ -224,7 +230,8 @@ public class RnVSmokeTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskLowerThanTotalAmounOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
@@ -268,7 +275,8 @@ public class RnVSmokeTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskEqualToTotalAmountOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
@@ -311,7 +319,8 @@ public class RnVSmokeTest extends BaseTest {
     }
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback", enabled = false)
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback", enabled = false)
     public void selfRiskHigherThanTotalAmountOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(20.00);
@@ -328,7 +337,8 @@ public class RnVSmokeTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskLowerThanRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
@@ -372,7 +382,8 @@ public class RnVSmokeTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskEqualToRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
@@ -416,7 +427,8 @@ public class RnVSmokeTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(dataProvider = "testDataProvider", description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void selfRiskHigherThanRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
 
         final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);

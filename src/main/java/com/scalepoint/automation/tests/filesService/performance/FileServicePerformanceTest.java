@@ -5,6 +5,7 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.AttachmentsService;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.restService.FilesServiceService;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -46,7 +47,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
         csv.close();
     }
-    @Test(dataProvider = "usersDataProvider", enabled = false)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "usersDataProvider", enabled = false)
     public void addAttachmentToClaimLevel(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
@@ -66,7 +67,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
                         Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LEVEL,1);
     }
 
-    @Test(dataProvider = "usersDataProvider", enabled = false)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "usersDataProvider", enabled = false)
     public void addAttachmentToClaimLineLevel(User user) throws IOException {
 
         ClaimRequest claimRequest = TestData.getClaimRequestFraudAlert();
@@ -86,7 +87,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
                         Change.Property.ATTACHMENT_ADDED_TO_CLAIM_LINE_LEVEL,1);
     }
 
-    @Test(dataProvider = "performanceDataProvider", enabled = true)
+    @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "performanceDataProvider", enabled = true)
     public void performanceTest(String fileGUID) {
 
         Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.FILES_READ, "topdanmark_dk_integration", "YBaPu4TqRpE_aYg8r8n8g7qcbOps1gCFm3ATuBdWJCU").getToken();

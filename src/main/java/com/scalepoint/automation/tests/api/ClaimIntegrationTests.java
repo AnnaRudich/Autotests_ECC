@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.api;
 
 import com.scalepoint.automation.services.restService.EccIntegrationService;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
@@ -22,7 +23,10 @@ public class ClaimIntegrationTests extends BaseApiTest {
         eccIntegrationService = new EccIntegrationService();
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.CLAIM_INTEGRATION},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void createClaimUsingXmlIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -31,7 +35,10 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.CLAIM_INTEGRATION},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void createClaimUsingXmlIntegrationWhenThisClaimWasPreviouslyClosed(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -45,7 +52,10 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.CLAIM_INTEGRATION},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void updateClaimUsingXmlIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -57,7 +67,10 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.CLAIM_INTEGRATION},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void createClaimUsingGetIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -65,7 +78,10 @@ public class ClaimIntegrationTests extends BaseApiTest {
         openClaim().statusCode(HttpStatus.SC_MOVED_TEMPORARILY);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.CLAIM_INTEGRATION},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void createClaimUsingGetIntegrationWhenThisClaimWasPreviouslyClosed(User user, EccIntegration eccIntegration) {
 
         loginUser(user);
@@ -79,7 +95,10 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.CLAIM_INTEGRATION},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void updateClaimUsingGetIntegration(User user, EccIntegration eccIntegration) {
 
         loginUser(user);

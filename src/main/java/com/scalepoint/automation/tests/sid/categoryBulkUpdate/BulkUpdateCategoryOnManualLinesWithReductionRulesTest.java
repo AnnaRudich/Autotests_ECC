@@ -3,6 +3,8 @@ package com.scalepoint.automation.tests.sid.categoryBulkUpdate;
 import com.scalepoint.automation.grid.ValuationGrid;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -29,12 +31,17 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         Apply reduction rules automatically was checked
 
         1. using bulk category update change category to some without rules mapped
-        EXPECTED: in SID - no reduction rules suggested, no depreciation applied
+        EXPECTED: in SID - no reduction rules suggested, but manual depreciation value(from previous rule) is still displayed
 
         2. using bulk update change category back to one with reduction rules mapped
-        EXPECTED: in SID - there is reduction rule suggested, there is depreciation applied
+        EXPECTED: in SID - there is reduction rule suggested
      */
-    @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.CATEGORY_BULK_UPDATE,
+            TestGroups.MANULA_LINES_WITH_RR,
+            UserCompanyGroups.TRYGFORSIKRING},
+            enabled = false, dataProvider = "testDataProvider",
+            description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
     public void bulkUpdateCategories_applyRulesAutomatically(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
@@ -97,12 +104,17 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         Apply reduction rules automatically was NOT checked
 
         1. using bulk category update change category to some without rules mapped
-        EXPECTED: in SID - no rules suggested now, but depreciation IS still applied (just remained unchanged)
+        EXPECTED: in SID - depreciation IS applied, but no rules suggested
 
         2. using bulk category update change category back to one with reduction rules mapped
-        EXPECTED: in SID - there is depreciation applied(just remained unchanged from previous step), there is reduction rule suggested(because category was changed)
+        EXPECTED: in SID - there is depreciation applied, there is reduction rule suggested
       */
-    @Test(dataProvider = "testDataProvider", description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.CATEGORY_BULK_UPDATE,
+            TestGroups.MANULA_LINES_WITH_RR,
+            UserCompanyGroups.TRYGFORSIKRING},
+            enabled = false, dataProvider = "testDataProvider",
+            description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesManually(
             @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
@@ -154,7 +166,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
                         sid -> {
                             sid.assertDepreciationAmountIs(Double.valueOf(depreciationPercentageFromReductionRule));
                             sid.assertDepreciationPercentageIs(String.valueOf(depreciationPercentageFromReductionRule));
-                            sid.assertThereIsReductionRuleSuggested();
+                            sid.assertThereIsNoReductionRules();
                             sid.assertAgeIs(lineAgeYears, lineAgeMonths);
                             sid.assertCategoriesTextIs(categoryWithReductionRulesMapped);
                         })

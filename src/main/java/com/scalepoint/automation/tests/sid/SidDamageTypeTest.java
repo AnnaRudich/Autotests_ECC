@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -19,7 +20,8 @@ public class SidDamageTypeTest extends BaseTest {
     private static final String SONY_HDR_CX450 = "HDR-CX450";
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.SID_DAMAGE_TYPE},
+            dataProvider = "testDataProvider",
             description = "Verify is possible to add damage type in manual registration")
     public void damageTypeManualItemTest(User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory pseudoCategory = claimItem.getCategoryVideoCamera();
@@ -46,7 +48,8 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.SID_DAMAGE_TYPE},
+            dataProvider = "testDataProvider",
             description = "Verify is possible to add damage type in registration from catalog")
     public void damageTypeCatalogRegistrationTest(User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory pseudoCategory = claimItem.getCategoryVideoCamera();
@@ -70,7 +73,8 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.SID_DAMAGE_TYPE},
+            dataProvider = "testDataProvider",
             description = "Verify damage type is grayed out if no reason(s) under the category under admin")
     public void damageTypeIfNoReasonUnderCategoryTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -95,7 +99,8 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.SID_DAMAGE_TYPE},
+            dataProvider = "testDataProvider",
             description = "Verify damage type is required if the item is damaged and the category has reasons")
     public void damageTypeRequiredTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -113,7 +118,8 @@ public class SidDamageTypeTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4453")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.SID_DAMAGE_TYPE},
+            dataProvider = "testDataProvider",
             description = "Verify combo with damage types should contain only damage types relevant for current category")
     public void damageTypeRelevantForCategoryTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)

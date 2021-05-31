@@ -9,6 +9,8 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.su
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -32,7 +34,7 @@ public class SupplierTests extends BaseTest {
      * WHEN: and saves Supplier changes
      * THEN: New Supplier is displayed in suppliers list
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to create new supplier. Suppliers list contains new supplier")
     public void ecc3037_createNewSupplier(User user, Supplier supplier) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
@@ -47,7 +49,7 @@ public class SupplierTests extends BaseTest {
      * THEN: Updated General data stored correctly
      */
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to update all general data for new supplier")
     public void ecc3037_updateSupplierGeneralData(User user, Supplier supplier1, Supplier supplier2) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
@@ -85,7 +87,7 @@ public class SupplierTests extends BaseTest {
      * WHEN: and saves Supplier changes
      * THEN: General data stored correctly
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to create new supplier. Suppliers list contains new supplier")
     public void ecc3037_createNewSupplierCompleteGeneral(User user, Supplier supplier, AttachmentFiles attachmentFiles) {
         String webSite = "http://google.com";
@@ -105,7 +107,7 @@ public class SupplierTests extends BaseTest {
      * WHEN: User adds banner data for random supplier
      * THEN: Banner Data is stored correctly
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It is possible to add Banner data")
     public void ecc3037_bannerDataAdding(User user, Supplier supplier, AttachmentFiles attachmentFiles) {
         String attachmentImage = attachmentFiles.getJpgFile2Loc();
@@ -127,7 +129,7 @@ public class SupplierTests extends BaseTest {
      * WHEN: User saves S! and V1 changes
      * THEN: Orders Data is stored correctly
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 It's possible to fill orders tab with valid values")
     public void ecc3037_detailedOrder(User user, Supplier supplier, Voucher voucher) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
@@ -161,7 +163,8 @@ public class SupplierTests extends BaseTest {
      * WHEN: IC User creates supplier S1
      * THEN: S1 is not available for SP User
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER, UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for SP")
     public void ecc3037_icSupplierUnavailableForSP(@UserCompany(CompanyCode.SCALEPOINT) User spUser, User futureUser, Supplier supplier) {
         checkVisibility(futureUser, spUser, supplier, false);
@@ -172,7 +175,7 @@ public class SupplierTests extends BaseTest {
      * WHEN: IC User creates supplier S1
      * THEN: S1 is not available for SP User
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for another IC")
     public void ecc3037_icSupplierUnavailableForIC2(User futureUser1, User futureUser2, Supplier supplier) {
         checkVisibility(futureUser1, futureUser2, supplier, false);
@@ -183,7 +186,11 @@ public class SupplierTests extends BaseTest {
      * WHEN: IC1 parent user creates supplier S1
      * THEN: S1 is available for IC1 child user
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.TRYGHOLDING,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
             description = "ECC-3037 Parent IC supplier is available for child IC")
     public void ecc3037_parentICSupplierAvailableForChildIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
         checkVisibility(parentCompanyUser, childCompanyUser, supplier, true);
@@ -194,20 +201,31 @@ public class SupplierTests extends BaseTest {
      * WHEN: IC1 child user creates supplier S1
      * THEN: S1 is available for IC1 parent user
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.TRYGHOLDING,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
             description = "ECC-3037 Child IC supplier is available for parent IC")
     public void ecc3037_childICSupplierAvailableForParentIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
         checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Voucher tick should not be visible in supply management, suppliers list")
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
+            description = "Voucher tick should not be visible in supply management, suppliers list")
     public void ecc3039_voucherTickIsNotAvailableInSuppliersList(
             @UserCompany(CompanyCode.SCALEPOINT) User user, @SupplierCompany(areWithVouchers = false) SimpleSupplier simpleSupplier) {
         loginToEccAdmin(user)
                 .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierNotDisplayed(simpleSupplier.getName()));
     }
 
-    @Test(dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.BAUTA},
+            dataProvider = "testDataProvider")
     public void ecc3039_exclusiveTickIsAvailableForIC(@UserCompany(CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
@@ -219,7 +237,12 @@ public class SupplierTests extends BaseTest {
                 .toVouchersPage()
                 .doAssert(asserts -> asserts.assertsIsExclusiveTickForVoucherDisplayed(agreement));     // Exclusive tick should be visible in supply management, vouchers list
     }
-    @Test(dataProvider = "testDataProvider", description = "Check if invoiceSetting is set correctly")
+
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
+            description = "Check if invoiceSetting is set correctly")
     public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT) User user) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         suppliersPage.openFirstSupplier()
@@ -238,7 +261,10 @@ public class SupplierTests extends BaseTest {
                 .doAssert(a -> a.assertInvoiceSettingIs(1));
     }
 
-    @Test(dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider")
     public void ecc3039_sharedDataAreEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
         final String scalepointAgreement = simpleSupplier.getScalepointAgreement();
@@ -257,7 +283,11 @@ public class SupplierTests extends BaseTest {
                 .doAssert(asserts -> asserts.assertsIsNotActiveTickForVoucherDisplayed(inactiveAgreement))  // Active tick should be not visible in supply management, vouchers list
                 .doAssert(VouchersPage.Asserts::assertsIsExclusiveColumnNotDisplayed);                      // Exclusive should not be visible in supply management, voucher list
     }
-    @Test(dataProvider = "testDataProvider")
+
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.SUPPLIER,
+            UserCompanyGroups.BAUTA},
+            dataProvider = "testDataProvider")
     public void ecc3039_sharedDataAreInViewModeForIC(@UserCompany(CompanyCode.BAUTA) User user, SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
