@@ -62,7 +62,7 @@ public class HeadersTest extends BaseApiTest {
         assertExpiresPragmaNoCasheAndPolicyLong(validatableResponse);
     }
 
-    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesAdminDataProvider")
+    @Test(enabled = false, groups = {TestGroups.HEADERS}, dataProvider = "staticFilesAdminDataProvider")
     public void staticFilesAdminTest(User user, String url){
 
         ValidatableResponse validatableResponse = admin(user , url);
@@ -78,7 +78,7 @@ public class HeadersTest extends BaseApiTest {
         assertExpiresPragmaNoCasheAndPolicyShort(validatableResponse);
     }
 
-    @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesRnVDataProvider")
+    @Test(enabled = false, groups = {TestGroups.HEADERS}, dataProvider = "staticFilesRnVDataProvider")
     public void staticFilesRnVTest(User user, ClaimRequest claimRequest, InsertSettlementItem insertSettlementItem,  String url){
 
         ValidatableResponse validatableResponse = rnv(user, claimRequest, insertSettlementItem, url);
