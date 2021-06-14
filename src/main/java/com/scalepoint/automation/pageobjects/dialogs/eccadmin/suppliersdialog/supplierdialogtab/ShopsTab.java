@@ -6,7 +6,6 @@ import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.AddShopDialogViewMode;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.SupplierDialog;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.Shop;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

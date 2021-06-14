@@ -12,7 +12,8 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.waitElementVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class LossImportDialog extends BaseDialog {
 

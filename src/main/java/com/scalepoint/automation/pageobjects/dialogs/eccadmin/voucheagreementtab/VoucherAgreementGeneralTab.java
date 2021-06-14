@@ -1,11 +1,9 @@
 package com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxBoundList;
 import com.scalepoint.automation.utils.JavascriptHelper;
-import com.scalepoint.automation.utils.Wait;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;

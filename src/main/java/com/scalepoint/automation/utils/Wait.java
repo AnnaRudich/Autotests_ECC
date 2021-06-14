@@ -59,16 +59,6 @@ public class Wait {
         waitForJavascriptRecalculation();
     }
 
-//    public static void waitForSpinnerToDisappear() {
-//        forCondition1s(new Function<WebDriver, Object>() {
-//            @Nullable
-//            @Override
-//            public Object apply(@Nullable WebDriver webDriver) {
-//                return webDriver.findElements(By.xpath("//div[contains(@class, 'loader')]")).isEmpty();
-//            }
-//        });
-//    }
-
     public static void waitForSpinnerToDisappear() {
         try {
             verifyElementCondition($(By.xpath("//div[contains(@class, 'loader')]")), Condition.empty);
@@ -84,21 +74,6 @@ public class Wait {
             Thread.currentThread().interrupt();
         }
     }
-
-//    public static Boolean visible(SelenideElement element) {
-//
-//        return element.has(Condition.visible);
-//    }
-
-//    public static Boolean isElementNotPresent(By locator) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            return $$(locator).filter(Condition.visible).size() == 0;
-//        } finally {
-//            logIfLong(start, "isElementNotPresent");
-//        }
-//    }
-
 
     public static boolean verifyElementVisible(SelenideElement element) {
 
@@ -129,46 +104,14 @@ public class Wait {
     }
 
     public static SelenideElement verifyElementCondition(SelenideElement element, Condition condition){
-//        long start = System.currentTimeMillis();
-//        try {
 
         return element.shouldBe(condition, TIMEOUT);
-//        }
-//        finally {
-//            logIfLong(start, "invisibleOfElement");
-//        }
-//        return element;
     }
 
     public static SelenideElement verifyElementNotCondition(SelenideElement element, Condition condition){
-//        long start = System.currentTimeMillis();
-//        try {
 
         return element.shouldNot(condition, TIMEOUT);
-//        }
-//        finally {
-//            logIfLong(start, "invisibleOfElement");
-//        }
-//        return element;
     }
-
-//    public static WebElement waitForVisibleAndEnabled(WebElement element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            return wrapShort(ExpectedConditions.elementToBeClickable(element));
-//        } finally {
-//            logIfLong(start, "wait for element to be visible and enabled");
-//        }
-//    }
-
-//    public static WebElement waitForDisplayed(By locator) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
-//        } finally {
-//            logIfLong(start, "waitForDisplayed");
-//        }
-//    }
 
     public static void waitForStaleElement(final By locator) {
         long start = System.currentTimeMillis();
@@ -205,18 +148,6 @@ public class Wait {
             logIfLong(start, "waitForStaleElements");
         }
     }
-
-//    public static void waitForElementContainsText(WebElement element, String text) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            Boolean contains = wrapShort((WebDriver d) -> element.getText().contains(text));
-//            if (!contains) {
-//                throw new IllegalStateException("Elements doesn't contain: " + text);
-//            }
-//        } finally {
-//            logIfLong(start, "waitForStaleElements");
-//        }
-//    }
 
     public static SelenideElement waitForElementContainsText(SelenideElement element, String text) {
 
@@ -285,16 +216,6 @@ public class Wait {
         }
     }
 
-//    public static <E extends ExtElement> E waitForVisible(E element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            waitForVisible(element.getRootElement());
-//            return element;
-//        } finally {
-//            logIfLong(start, "waitForVisible ExtElement");
-//        }
-//    }
-
     public static List<WebElement> waitForAllElementsVisible(List<WebElement> elements) {
         long start = System.currentTimeMillis();
         try {
@@ -304,86 +225,6 @@ public class Wait {
             logIfLong(start, "waitForAllElementsVisible");
         }
     }
-
-//    public static <E extends TypifiedElement> E waitForVisible(E element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            waitForVisible(element.getWrappedElement());
-//            return element;
-//        } finally {
-//            logIfLong(start, "waitForVisible TypifiedElement");
-//        }
-//    }
-
-//    public static WebElement waitForVisible(By by) {
-//        return waitForVisible(Browser.driver().findElement(by));
-//    }
-
-//    public static boolean waitForVisible(WebElement element) {
-//
-//        return waitFor($(element), Condition.visible);
-//    }
-
-//    public static boolean checkIsDisplayed(WebElement element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            return forCondition1s(d -> element.isDisplayed());
-//        } catch (NoSuchElementException e) {
-//            log.info("Element [{}] is not displayed", element.toString());
-//            return false;
-//        } finally {
-//            logIfLong(start, "checkIsDisplayed");
-//        }
-//    }
-
-//    public static <E extends TypifiedElement> void waitForInvisible(E element) {
-//        waitForInvisible(element.getWrappedElement());
-//    }
-//
-//    public static void waitForInvisible(final WebElement element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            forCondition(d -> {
-//                try {
-//                    return !element.isDisplayed();
-//                } catch (NoSuchElementException | StaleElementReferenceException e) {
-//                    return true;
-//                }
-//            }, TIME_OUT_IN_SECONDS, 200);
-//        } finally {
-//            logIfLong(start, "waitForInvisible");
-//        }
-//    }
-
-//    public static void waitUntilVisible(WebElement element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            wrap(d -> {
-//                try {
-//                    return element.isDisplayed();
-//                } catch (NoSuchElementException | StaleElementReferenceException e) {
-//                    return true;
-//                }
-//            });
-//        } finally {
-//            logIfLong(start, "waitUntilVisible");
-//        }
-//    }
-
-//    public static <E extends TypifiedElement> E waitForEnabled(E element) {
-//        waitForEnabled(element.getWrappedElement());
-//        return element;
-//    }
-
-//    private static WebElement waitForEnabled(WebElement element) {
-//        long start = System.currentTimeMillis();
-//        try {
-//            wrap(d -> element.isEnabled());
-//            return element;
-//        } finally {
-//            logIfLong(start, "waitForEnabled");
-//        }
-//    }
 
     public static void waitForLoaded() {
         long start = System.currentTimeMillis();

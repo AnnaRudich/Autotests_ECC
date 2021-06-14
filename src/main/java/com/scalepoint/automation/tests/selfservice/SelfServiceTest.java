@@ -9,11 +9,9 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.testng.annotations.Test;
 
 /**
@@ -58,7 +56,7 @@ public class SelfServiceTest extends BaseTest {
                     SelfServiceGridRow.assertCustomerDemandIsNotEmpty();
                 });
     }
-@RunOn(DriverType.CHROME)
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)

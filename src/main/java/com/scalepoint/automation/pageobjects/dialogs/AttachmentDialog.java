@@ -67,10 +67,6 @@ public class AttachmentDialog extends BaseDialog implements Actions {
 
         dragAndDrop(attachment.getDragArea(), line.getDropArea());
 
-//        String id = line.getId();
-//
-//        attachment.waitForLink(id);
-
         return at(AttachmentDialog.class);
     }
 

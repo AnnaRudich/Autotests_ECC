@@ -14,13 +14,11 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
@@ -106,7 +104,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "SelfService2 password reset, login and logout")
-        public void selfService2LogInWithNewPassword(User user, Claim claim) {
+    public void selfService2LogInWithNewPassword(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toCompleteClaimPage()

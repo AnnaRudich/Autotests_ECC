@@ -198,10 +198,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementDialog openSid() {
-//        boolean displayedPolicy = verifyElementVisible($(cancelPolicy));
-//        if (displayedPolicy) {
-//            cancelPolicy.click();
-//        }
+
         return functionalMenu.addManually();
     }
 

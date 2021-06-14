@@ -23,10 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClaimLineNotesDialog extends BaseDialog {
 
-//    private NotesTreePanel notesTreePanel = new NotesTreePanel();
-//    private AddNotePanel addNotePanel = new AddNotePanel();
-//    private ClaimLineNotesGrid claimLineNotesGrid = new ClaimLineNotesGrid();
-
     @FindBy(id = "closeNotesButton")
     private WebElement closeNotesButton;
 

@@ -4,10 +4,8 @@ import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
 import com.scalepoint.automation.pageobjects.dialogs.AddInternalNoteDialog;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.EditCustomerNoteDialog;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.ClaimSpecificPage;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -16,7 +14,8 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 @ClaimSpecificPage
@@ -81,7 +80,7 @@ public class NotesPage extends BaseClaimPage implements RequiresJavascriptHelper
 
     public boolean isAddInternalNoteButtonPresent() {
 
-           return verifyElementVisible($(addInternalNote));
+        return verifyElementVisible($(addInternalNote));
     }
 
     public boolean isInternalNotePresent() {

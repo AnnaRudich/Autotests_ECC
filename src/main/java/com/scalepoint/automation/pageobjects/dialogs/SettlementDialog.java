@@ -1463,6 +1463,6 @@ public class SettlementDialog extends BaseDialog {
             assertEquals(valuationRow.getCashCompensation(), newPrice - (newPrice * getVoucherPercentage() / 100), 0.0);
             return this;
         }
-      }
+    }
 }
 
