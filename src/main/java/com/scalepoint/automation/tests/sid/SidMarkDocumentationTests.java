@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -17,7 +18,9 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 @SuppressWarnings("AccessStaticViaInstance")
 public class SidMarkDocumentationTests extends BaseTest {
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
-    @Test(dataProvider = "testDataProvider", description = "Is sufficient documentation checkbox checked")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MARK_DOCUMENTATION},
+            dataProvider = "testDataProvider",
+            description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeChecked(User user, Claim claim, GenericItem genericItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -44,7 +47,9 @@ public class SidMarkDocumentationTests extends BaseTest {
                 );
     }
     @RequiredSetting(type = SUFFICIENT_DOCUMENTATION_CHECKBOX)
-    @Test(dataProvider = "testDataProvider", description = "Is sufficient documentation checkbox checked")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MARK_DOCUMENTATION},
+            dataProvider = "testDataProvider",
+            description = "Is sufficient documentation checkbox checked")
     public void charlie_547_sufficientDocumentationCheckboxShouldBeUnchecked(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()

@@ -6,6 +6,7 @@ import com.scalepoint.automation.pageobjects.pages.CompleteClaimPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -21,7 +22,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.REP
 public class ReplacementDialogTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",
             description = "CONTENTS-3281 changing of VoucherPrice in ReplacementWizard")
     public void contents3281_changeVoucherPriceInReplacementWizard(User user, Claim claim, ClaimItem item) {
         Double newVoucherFaceValue = Constants.PRICE_500;
@@ -49,7 +50,7 @@ public class ReplacementDialogTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-592")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",
             description = "CONTENTS-592 manual line is not shown in replacement dialog")
     public void contents592_manualLineIsNotShownInReplacementDialog(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_500;
@@ -70,7 +71,7 @@ public class ReplacementDialogTests extends BaseTest {
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-601")
     @RequiredSetting(type = FTSetting.ENABLE_CLAIMHANDLERS_ALLOW_SHOP_ACCESS_FOR_REMAINING_AMOUNT_IN_REPLACEMENT)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",
             description = "CONTENTS-601 allow shop access to remaining amount")
     public void contents601_allowShopAccessToRemainingAmount(User user, Claim claim, ClaimItem claimItem) {
 
@@ -95,7 +96,7 @@ public class ReplacementDialogTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_FROM_ME, enabled = false)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",
             description = "CONTENTS-592 ReplacementButton can be invisible")
     public void contents592_turnOffReplacementOption(User user, Claim claim) {
 
@@ -108,7 +109,7 @@ public class ReplacementDialogTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3281")
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_FROM_ME)
     @RequiredSetting(type = FTSetting.USE_REPLACEMENT_THROUGH_THE_SHOP, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.REPLACEMENT_DIALOG}, dataProvider = "testDataProvider",
             description = "CONTENTS-592 Replacement through the shop is disabled")
     public void contents592_turnOffReplacementThroughTheShop(User user, Claim claim) {
 

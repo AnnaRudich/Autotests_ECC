@@ -6,6 +6,8 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -37,7 +39,9 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Dropdown is not shown
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
+    @Test(groups = {TestGroups.SID, TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
     public void charlie_508_1_verifyDiscretionaryAndRejectReasonFTOFF(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -55,7 +59,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.MAKE_DISCREATIONARY_REASON_MANDATORY, enabled = false)
     @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is OFF")
     public void charlie_508_2_verifyDiscretionaryAndRejectReasonFTOFF(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -71,7 +79,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * AND: Open SID
      * THEN: A drop-down for choosing reason for choosing discretionary valuation is shown
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is ON")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify Discretionary and Reject Reason when FT is ON")
     public void charlie_508_3_verifyDiscretionaryAndRejectReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -90,7 +102,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Drop-down for choosing reason is enabled
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled after adding discretionary valuation.FT=ON")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify drop down for choosing reason is enabled after adding discretionary valuation.FT=ON")
     public void charlie_508_4_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -110,7 +126,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Drop-down for choosing reason is enabled
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
             " after adding Input manually discretionary depreciation.FT=ON")
     public void charlie_508_5_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -130,7 +150,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is greyed out" +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify drop down for choosing reason is greyed out" +
             " when the voucher is selected and adding the manual discretionary depreciation (combine checkbox is unchecked).FT=ON")
     public void charlie_508_6_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         loginAndCreateClaim(user, claim)
@@ -154,7 +178,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify drop down for choosing reason is enabled" +
             " adding the manual discretionary depreciation (combine checkbox is checked).FT=ON")
     public void charlie_508_7_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
@@ -179,7 +207,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 verify the reason's representation for different valuations.FT=ON")
     public void charlie_508_8_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem,
                                                             Translations translations) {
         String reasonText = translations.getDiscretionaryReason().getMaxCoverage();
@@ -221,7 +253,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
             " with discretionary deducted by rule")
     public void charlie_508_9_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                             Claim claim,
@@ -244,7 +280,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      * THEN: Drop-down is greyed out
      */
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
             " with discretionary deducted by rule")
     public void charlie_508_10_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
@@ -267,7 +307,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify Discretionary Reason when FT is ON and adding new price valuation" +
             " with policy deducted by the rules")
     public void charlie_508_11_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
@@ -296,7 +340,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page.FT=ON")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page.FT=ON")
     public void charlie_508_12_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
                                                                  ClaimItem claimItem,
@@ -333,7 +381,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
             "Customer demand price is matched with discretionary rule.FT=ON")
     public void charlie_508_13_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim, ClaimItem claimItem,
@@ -370,7 +422,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
             "Discretionary valuation is added.FT=ON")
     public void charlie_508_14_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
@@ -404,7 +460,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page." +
             "claimline is matched with some voucher and discretionary rule (combine checkbox is checked)FT=ON")
     public void charlie_508_15_verifyDiscretionaryReasonIconFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim,
@@ -442,7 +502,11 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     @RequiredSetting(type = FTSetting.DISPLAY_VOUCHER_VALUE_WITH_DEPRECATION_DEDUCTION)
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
+    @Test(groups = {TestGroups.SID,
+            TestGroups.SHOW_AND_REJECT_REASON_FOR_DISCRETIONARY_REASON,
+            UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider",
+            description = "CHARLIE-508 Verify the reason's icon with the hover on settlement page " +
             "after disabling FT 'Show 'Valuation reason'block' .FT=ON")
     public void charlie_508_16_verifyDiscretionaryReasonIconFTONandOFF(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                        Claim claim,

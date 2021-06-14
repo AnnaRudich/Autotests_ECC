@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.search;
 
 import com.scalepoint.automation.pageobjects.pages.ClaimSearchPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,7 +17,8 @@ import static com.scalepoint.automation.shared.ClaimStatus.OPEN;
 
 public class ClaimSearchTest extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider", description = "Search for claim by multiple fields")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for claim by multiple fields")
     public void searchClaim_byMultipleConditions(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
@@ -33,7 +35,8 @@ public class ClaimSearchTest extends BaseTest {
                 });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for claim by claim handler")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for claim by claim handler")
     public void searchClaim_claimHandler(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
@@ -43,7 +46,8 @@ public class ClaimSearchTest extends BaseTest {
                 .doAssert(asserts -> asserts.areClaimsMatchingClaimHandler("FirstName LastName"));
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for claim by name and last name")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for claim by name and last name")
     public void searchClaim_byName(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
@@ -56,7 +60,8 @@ public class ClaimSearchTest extends BaseTest {
                 .doAssert(claim, ClaimSearchPage.Asserts::areClaimsMatchingName);
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for claim by company")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for claim by company")
     public void searchClaim_byCompany(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
@@ -68,7 +73,8 @@ public class ClaimSearchTest extends BaseTest {
                 });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for claim in use")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for claim in use")
     public void searchClaim_inUse(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
@@ -82,7 +88,8 @@ public class ClaimSearchTest extends BaseTest {
                 });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for open claim")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for open claim")
     public void searchClaim_open(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
@@ -97,7 +104,8 @@ public class ClaimSearchTest extends BaseTest {
                 });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Search for completed claim")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for completed claim")
     public void searchClaim_completed(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
@@ -116,7 +124,8 @@ public class ClaimSearchTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
-    @Test(dataProvider = "testDataProvider", description = "Search for claim closed externally")
+    @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",
+            description = "Search for claim closed externally")
     public void searchClaim_closedExternally(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .completeClaimWithoutMail(claim)

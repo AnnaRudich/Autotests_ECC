@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.sidQUnit;
 
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.RunOn;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class SidQunitTests extends BaseTest {
 
     @RunOn(DriverType.CHROME_REMOTE)
-    @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
+    @Test(groups = {TestGroups.SID_QUNIT}, dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterTests(String test) {
         List<WebElement> results = openPage(test);
         assertThat(results.stream().noneMatch(findFailed()))
@@ -30,7 +31,7 @@ public class SidQunitTests extends BaseTest {
     }
 
     @RunOn(DriverType.IE_REMOTE)
-    @Test(dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
+    @Test(groups = {TestGroups.SID_QUNIT}, dataProvider = "qunitTests", description = "Check results from qunit test in ecc")
     public void qunitMatchingEngineAdapterOnIETests(String test) {
         List<WebElement> results = openPage(test);
         assertThat(results.stream().noneMatch(findFailed()))

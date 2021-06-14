@@ -5,6 +5,8 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.services.externalapi.IP1Api;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -32,7 +34,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
-    @Test(dataProvider = "testDataProvider", description = "Check if damage date is displayed and can be setup on creating new claim and on customer details page")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Check if damage date is displayed and can be setup on creating new claim and on customer details page")
     public void charlie_554_verifyDamageDateIsDisplayedAndCanBeSetOnCreatingAndDetails(User user, Claim claim) {
         LocalDate threeDaysBefore = LocalDate.now().minusDays(3);
         LocalDate fiveDaysBefore = LocalDate.now().minusDays(5);
@@ -55,7 +59,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Damage date should be set to current date if it's not passed in IP1")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Damage date should be set to current date if it's not passed in IP1")
     public void charlie_554_ip1_shouldSetDamageDateToCurrentDate(User user, Claim claim) {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate("");
@@ -64,7 +70,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if damage date created/updated for empty claims")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE, UserCompanyGroups.ALKA},
+            dataProvider = "testDataProvider",
+            description = "Check if damage date created/updated for empty claims")
     public void charlie_554_ip1_shouldCreateAndUpdateClaimWithDamageDate(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate(toDamageFormat(initialDamageDate));
@@ -90,7 +98,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     }
 
 
-    @Test(dataProvider = "testDataProvider", description = "Check ip1 rejects wrong damage dates")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Check ip1 rejects wrong damage dates")
     public void charlie_554_ip1_shouldRejectNotValidDamageDates(User user, Claim claim) {
         /* damage date from future */
         claim.setDamageDate(toDamageFormat(LocalDate.now().plusDays(1L)));
@@ -104,7 +114,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         });
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check ip1 doesn't update damage date if claims lines present")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Check ip1 doesn't update damage date if claims lines present")
     public void charlie_554_ip1_shouldNotUpdateDamageDateIfClaimsLinesPresent(User user, Claim claim, ClaimItem claimItem) {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate(toDamageFormat(initialDamageDate));
@@ -128,7 +140,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
         );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Check if damage date is not editable after adding claim line")
     public void charlie_554_damageDateOnCustomerDetailsShouldBeNotEditable(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -142,7 +156,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Check if damage date is not editable after adding claim line")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Check if damage date is not editable after adding claim line")
     public void charlie_554_damageDateOnCustomerDetailsShouldBeEditable(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCustomerDetails()
@@ -151,14 +167,18 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "create claim with wrong damage date")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "create claim with wrong damage date")
     public void charlie_554_createClaimWithWrongDataFormat(User user, EccIntegration eccIntegration) {
         eccIntegration.getClaim().getDamage().setDamageDate("2017-19-01");
         String response = createClaimUsingEccIntegration(user, eccIntegration).getResponse().extract().response().getBody().asString();
         assertThat(response).contains("The entered Damage Date is not valid.");
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Create claim using unified integration")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Create claim using unified integration")
     public void charlie_554_createClaimUsingUnifiedIntegration(User user, ClaimRequest claimRequest) {
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
         loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
@@ -168,7 +188,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Creating claim without damageDate should set it to now")
     public void charlie_554_createClaimUsingUnifiedIntegrationWithNoDamageDate(User user, ClaimRequest claimRequest) {
         claimRequest.setAccidentDate(null);
         loginAndOpenUnifiedIntegrationClaimByToken(user, createCwaClaimAndGetClaimToken(claimRequest))
@@ -178,7 +200,9 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
                 );
     }
 
-    @Test(dataProvider = "testDataProvider", description = "Creating claim without damageDate should set it to now")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE},
+            dataProvider = "testDataProvider",
+            description = "Creating claim without damageDate should set it to now")
     public void charlie_554_createClaimUsingUnifiedIntegrationWithWrongDamageDate(ClaimRequest claimRequest) {
         claimRequest.setAccidentDate("2017-19-01");
         String response = createCwaClaim(claimRequest).getResponse().body().asString();

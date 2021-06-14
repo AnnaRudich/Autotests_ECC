@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -16,7 +17,7 @@ public class ClaimLineNotesTests extends BaseTest {
     String secondNoteText = "noteText2";
     String thirdNoteText = "noteText3";
 
-    @Test(dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void editClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
@@ -69,7 +70,8 @@ public class ClaimLineNotesTests extends BaseTest {
                     notesPage.assertClaimLineNotesIconMissing(secondItemName);
                 });
     }
-    @Test(dataProvider = "testDataProvider")
+
+    @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void addClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)
@@ -113,7 +115,7 @@ public class ClaimLineNotesTests extends BaseTest {
                 .doAssert(claimLine -> claimLine.assertClaimLineNotesIconPresent());
     }
 
-    @Test(dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.CLAIM_LINES_NOTES}, dataProvider = "testDataProvider")
     public void removeClaimLineNoteTest(User user, Claim claim, ClaimItem claimItem) {
 
         loginAndCreateClaim(user, claim)

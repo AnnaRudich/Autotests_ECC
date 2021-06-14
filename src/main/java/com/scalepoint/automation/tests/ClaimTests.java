@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.RunOn;
@@ -38,7 +39,7 @@ public class ClaimTests extends BaseTest {
     private final String EMPTY = "";
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void charlie544_reopenSavedClaim(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -54,7 +55,7 @@ public class ClaimTests extends BaseTest {
      * THEN: "Cancelled" is the status of C1
      */
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
         loginAndCreateClaim(user, claim)
@@ -66,7 +67,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void charlie544_2629_completeClaimWithMail(User user, Claim claim) {
@@ -81,7 +82,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Verifies integration with agent info, send email to agent enabled")
     public void includeAgentDataSendEmailEnabledTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -98,7 +99,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Verifies integration with agent info, send email to agent disabled")
     public void includeAgentDataSendEmailDisabledTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -115,7 +116,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim externally. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void charlie544_2629_completeClaimExternally(User user, Claim claim) {
@@ -127,7 +128,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to save claim without completing from Enter base info page. " +
                     "Saved claim is added to the latest claims list with Saved status")
     public void charlie544_saveClaimFromBaseInfo(User user, Claim claim) {
@@ -140,7 +141,7 @@ public class ClaimTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SETTLE_WITHOUT_MAIL)
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-3332")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CONTENTS-3332 Be able to settle a claim without sending an e-mail to customer. " +
                     "The new close method in history")
     public void charlie544_2629_completeClaimWithoutMail(User user, Claim claim) {
@@ -156,7 +157,7 @@ public class ClaimTests extends BaseTest {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
     }
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -176,7 +177,7 @@ public class ClaimTests extends BaseTest {
     IC Validation code should be = topdanmark always
     Product should not be Iphone to have APPROVED line
      */
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, enabled = false, dataProvider = "testDataProvider",
             description = "It's possible submit product match from Self Service 2.0 and Audit automatically approves claim")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -209,7 +210,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-541")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible add note on Settlement page")
     @RequiredSetting(type = FTSetting.USE_INTERNAL_NOTES)
     @RequiredSetting(type = FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON)
@@ -251,7 +252,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
     @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
@@ -284,7 +285,7 @@ public class ClaimTests extends BaseTest {
     }
     @RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -342,7 +343,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for Excel imported claim lines")
     @RequiredSetting(type = FTSetting.ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS)
     @RequiredSetting(type = FTSetting.USE_BRAND_LOYALTY_BY_DEFAULT)
@@ -377,7 +378,7 @@ public class ClaimTests extends BaseTest {
      */
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +
                     "Claim status is Completed in the claims list")
     public void charlie544_2632_completeClaimUsingReplacementWizard(User user, Claim claim, ClaimItem claimItem) {
@@ -393,7 +394,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertClaimCompleted);
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CONTENTS-173 - after setting description the category and " +
                     "pseudo-category in SID is auto selected")
     public void contents173_autoCategorization(User user, Claim claim, ClaimItem claimItem) {
@@ -408,7 +409,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CONTENTS-1840")
-    @Test(dataProvider = "testDataProvider")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider")
     public void contents1840_copyClaimLineNote(User user, Claim claim, ClaimItem claimItem) {
         String noteText = Long.toString(System.currentTimeMillis());
 
@@ -424,7 +425,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(notesPage -> notesPage.assertNoteIsCopied(noteText));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Tests that the deductible warning information doesn't appear if amount is not zero")
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void nonZeroAmountDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
@@ -440,7 +441,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Tests the warning information that deductible amount is zero - the confirm case.")
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void confirmInDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
@@ -456,7 +457,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()));
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Tests the warning information that deductible amount is zero - the cancel case.")
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void cancelInDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {
@@ -475,7 +476,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "Tests the warning information that deductible amount is zero - the text serach case.")
     @RequiredSetting(type = FTSetting.WARNING_DEDUCTIBLE)
     public void searchProductDeductibleWarningDialogTest(User user, Claim claim, ClaimItem claimItem) {

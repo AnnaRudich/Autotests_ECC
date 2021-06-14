@@ -16,6 +16,7 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.stubs.AuditMock;
 import com.scalepoint.automation.stubs.CommunicationDesignerMock;
 import com.scalepoint.automation.stubs.RnVMock;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
@@ -93,7 +94,8 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email")
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare SelfService Customer welcome email")
     public void selfServiceCustomerWelcomeTest(User user, Claim claim) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -104,7 +106,8 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare SelfService Customer welcome email with attachments")
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare SelfService Customer welcome email with attachments")
     public void selfServiceCustomerWelcomeWithAttachmentsTest(User user, Claim claim) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -115,7 +118,8 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider",
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
+            dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -131,7 +135,8 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider",
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
+            dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare Itemization Submit And Save Loss Items email with attachments")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
@@ -147,7 +152,7 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider",
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcomeRejectionMail")
     public void customerWelcomeRejectionMail(User user, Claim claim) {
 
@@ -176,7 +181,7 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider",
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcome")
     public void customerWelcomeTest(User user, Claim claim, ClaimItem claimItem) {
 
@@ -208,7 +213,7 @@ public class CommunicationDesignerTests extends BaseTest {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = true)
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = true)
     public void customerWelcomeWithOutstandingTest(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
 
         String lineDescription = RandomUtils.randomName("RnVLine");
@@ -270,7 +275,8 @@ public class CommunicationDesignerTests extends BaseTest {
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare split replacement mails")
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare split replacement mails")
     public void splitReplacementTest(User user, Claim claim, ClaimItem claimItem) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -284,7 +290,8 @@ public class CommunicationDesignerTests extends BaseTest {
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare split replacement mails with attachments")
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
+            description = "Use communication designer to prepare split replacement mails with attachments")
     public void splitReplacementWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -297,7 +304,7 @@ public class CommunicationDesignerTests extends BaseTest {
 
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
-    @Test(dataProvider = "stubDataProvider",
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare order confirmation mails")
     public void orderConfirmationTest(User user, Claim claim, ClaimItem claimItem) {
 
@@ -337,7 +344,7 @@ public class CommunicationDesignerTests extends BaseTest {
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
-    @Test(dataProvider = "stubDataProvider", description = "Use communication designer to prepare replacement mail")
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider", description = "Use communication designer to prepare replacement mail")
     public void replacementMailTest(User user, Claim claim, ClaimItem claimItem) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -365,7 +372,7 @@ public class CommunicationDesignerTests extends BaseTest {
     }
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @CommunicationDesignerCleanUp
-    @Test(dataProvider = "stubDataProvider",
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider",
             description = "Use communication designer to prepare CustomerWelcome")
     public void automaticCustomerWelcomeTest(User user, ClaimItem claimItem) {
 

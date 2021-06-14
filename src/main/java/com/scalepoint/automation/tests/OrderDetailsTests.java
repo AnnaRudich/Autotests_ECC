@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.VoucherInfo;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
@@ -40,7 +41,7 @@ public class OrderDetailsTests extends BaseTest {
      * Kunde har betalt til Scalepoint (Indbetalinger) :  0,00
      * Tilbageværende erstatning :  0,00
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Verify Order page default")
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, Translations translations) {
         String companyName = user.getCompanyName();
@@ -83,7 +84,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
@@ -121,7 +122,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.CPR_NUMBER_ON_REPLACEMENT_REQUIRED, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CLAIMS_HANDLER, enabled = false)
     @RequiredSetting(type = FTSetting.DISABLE_NEMKONTO_ON_REPLACEMENT_CUSTOMER, enabled = false)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
@@ -156,7 +157,7 @@ public class OrderDetailsTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")
     public void orderDetailsInvisibilityTest(@UserCompany(BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
 
@@ -185,7 +186,7 @@ public class OrderDetailsTests extends BaseTest {
     }
 
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should only be visible when having VIEW_CUSTOMER_ORDERS permission")
     public void orderDetailsVisibilityTest(User user, Claim claim, ClaimItem claimItem) {
 

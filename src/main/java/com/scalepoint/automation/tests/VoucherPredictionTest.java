@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -21,7 +22,7 @@ public class VoucherPredictionTest extends BaseTest {
 
     private static final String lineDescription = "claimLine1";
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.VOUCHER_PREDICTION}, dataProvider = "testDataProvider",
             description = "MIKE-41 - call Improved voucher match service is SID, manual line")
     public void mike41_improvedVoucherMatchForManualLines(User user, Claim claim, ClaimItem claimItem) {
 
@@ -39,7 +40,7 @@ public class VoucherPredictionTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.VOUCHER_PREDICTION}, dataProvider = "testDataProvider",
             description = "MIKE-42 - call Improved voucher match service in SelfService")
     public void mike41_improvedVoucherMatchForSelfService(User user, Claim claim, ClaimItem claimItem) {
 
@@ -68,7 +69,7 @@ public class VoucherPredictionTest extends BaseTest {
                 .doAssert(sid -> sid.assertVoucherIsSelected(mongoDbApi.getVoucherPredictedObjectsBy(claim.getClaimNumber(), lineDescription)
                         .get(0).getPredictedVoucher().getVoucherName()));
     }
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.VOUCHER_PREDICTION}, dataProvider = "testDataProvider",
             description = "MIKE-17 - call Improved voucher match service in excel")
     public void mike41_improvedVoucherMatchForExcelImport(User user, Claim claim, ClaimItem claimItem) {
 

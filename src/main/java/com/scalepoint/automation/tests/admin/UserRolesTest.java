@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.RolesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.UsersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
@@ -27,7 +28,8 @@ public class UserRolesTest extends BaseTest {
      * THEN: U2 can sign in to the application
      * THEN: Admin link is available for U2
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to sign in as new SP Admin user")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, dataProvider = "testDataProvider",
+            description = "CHARLIE-537 It's possible to sign in as new SP Admin user")
     public void charlie537_loginAsNewSPAdmin(SystemUser user) throws Exception {
         login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
@@ -45,7 +47,8 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 updates all U2 details
      * THEN: U2 details are stored correctly
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to update new SP admin user")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, dataProvider = "testDataProvider",
+            description = "CHARLIE-537 It's possible to update new SP admin user")
     public void charlie537_updateNewSPAdminUser(SystemUser user) {
         SystemUser newUser = TestData.getSystemUser();
         login(getSystemUser(), UsersPage.class)
@@ -63,7 +66,8 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 creates user U2 with Admin permissions
      * THEN: U2 is displayed in Users list
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to create SP admin user. Created user is displayed in Users list")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, dataProvider = "testDataProvider",
+            description = "CHARLIE-537 It's possible to create SP admin user. Created user is displayed in Users list")
     public void charlie537_createSPAdminUser(SystemUser user) {
         login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
@@ -76,7 +80,7 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 creates IC user U2 with Supply manager and claim handler permissions
      * THEN: U2 is displayed in Users list
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, dataProvider = "testDataProvider",
             description = "CHARLIE-537 It's possible to create IC Supply manager and claim handler user. Created user is displayed in Users list")
     public void charlie537_createICCHSMUser(SystemUser user) throws Exception {
         login(getSystemUser(), UsersPage.class)
@@ -92,7 +96,8 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U2 signs in to the application
      * THEN: U2 has an access to Supply Management part only
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 IC SM only can sign in to Supply Management only")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, dataProvider = "testDataProvider",
+            description = "CHARLIE-537 IC SM only can sign in to Supply Management only")
     public void charlie537_icSMOnlyLoginSupManOnly(SystemUser user) {
         login(getSystemUser(), UsersPage.class)
                 .toUserCreatePage()
@@ -112,7 +117,8 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 enables claim handler role for U2
      * THEN: U2 has an access to Supply Management and Matching Engine parts
      */
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-537 It's possible to update role for IC SM only. " +
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, dataProvider = "testDataProvider",
+            description = "CHARLIE-537 It's possible to update role for IC SM only. " +
             "CH role can be enabled. In this case user logins to ME")
     public void charlie537_updateICSMOnlyToCHType(SystemUser user) {
         login(getSystemUser(), UsersPage.class)
@@ -140,7 +146,7 @@ public class UserRolesTest extends BaseTest {
      * WHEN: U1 creates role Role1
      * THEN: Role1 is displayed in roles list
      */
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to create new role with all enabled options. The RR is displayed in Roles list")
     public void charlie551_createNewRoleAllOptionsEnabled(Translations translations) {
         String roleName = translations.getRoles().getRoleName();
@@ -158,7 +164,7 @@ public class UserRolesTest extends BaseTest {
      * THEN: It's possible to select Role1
      * THEN: User1 is created successfully
      */
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.USER_ROLES}, enabled = false, dataProvider = "testDataProvider",
             description = "CHARLIE-551 It's possible to select new role for user creation. The new role is displayed on Add user page")
     public void charlie551_newRoleIsAvailableUserCreation(SystemUser user, Translations translations) {
         String roleName = translations.getRoles().getRoleName();

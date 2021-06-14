@@ -956,7 +956,7 @@ public class SettlementDialog extends BaseDialog {
     public SettlementDialog setValuation(ValuationGrid.Valuation valuation) {
         return new ValuationGrid()
                 .parseValuationRow(valuation)
-                .makeActive(false)
+                .makeActive()
                 .backToGrid()
                 .toSettlementDialog();
     }
@@ -1071,6 +1071,11 @@ public class SettlementDialog extends BaseDialog {
         return SettlementDialog.this;
     }
 
+    public Boolean isAlertOnVoucherDiscountChangePresent(){
+        ElementsCollection e = $$("div[role='alertdialog']");
+        return !e.isEmpty();
+    }
+
     public class Asserts {
 
         public Asserts assertDiscretionaryReasonValuePresent(String expectedValue) {
@@ -1128,6 +1133,13 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertSubCategoryTextIs(String expectedSubCategory) {
             assertEquals(getSubCategoryText(), expectedSubCategory, "The Subcategory is not Saved");
+            return this;
+        }
+
+        public Asserts assertThereIsNoAlertOnVoucherDiscountChange(){
+            assertThat(isAlertOnVoucherDiscountChangePresent())
+                    .as("alert saying the voucher discount has changed should not be present")
+                    .isFalse();
             return this;
         }
 

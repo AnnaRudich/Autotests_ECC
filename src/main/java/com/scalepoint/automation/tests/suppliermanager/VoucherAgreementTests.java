@@ -10,6 +10,8 @@ import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.VouchersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.Constants;
@@ -33,7 +35,8 @@ public class VoucherAgreementTests extends BaseTest {
 
     private static final String AUTOTEST_SUPPLIER_VA_TESTS = "Autotest-Supplier-VA-Tests";
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "Create voucher with brands and tags and later use it in sid")
     public void charlie550_createVoucherWithBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         String brand = "brand_test";
@@ -82,7 +85,8 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: User creates new voucher V1 for random supplier
      * THEN: V1 is displayed in the list of Vouchers
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 Vouchers list on Vouchers page contains new voucher")
     public void ecc3038_newVoucherInVouchersList(User user, Voucher voucher) {
         loginToEccAdmin(user).editSupplier(Constants.getSupplierNameForVATests(user))
@@ -110,7 +114,8 @@ public class VoucherAgreementTests extends BaseTest {
      * ecc3038_activeStatusNo
      * ecc3038_activeStatusYes
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to update all General tab data for new default voucher")
     public void ecc3038_newVoucherGeneralUpdate(User user, Voucher voucher, AttachmentFiles attachmentFiles) {
         int discount = 27;
@@ -166,7 +171,9 @@ public class VoucherAgreementTests extends BaseTest {
      * now to apply this toggle deploy should be done, it's a bug which should be fixed
      */
 
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            enabled = false,
+            dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to add Advanced data for new voucher")
     public void ecc3038_advancedDataAdding(User user, Voucher voucher) {
         loginToEccAdmin(user)
@@ -207,7 +214,8 @@ public class VoucherAgreementTests extends BaseTest {
      * THEN: Legal Data is stored correctly
      */
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to add Conditions and Limitations for new voucher")
     public void ecc3038_initialLegalAdding(User user, Voucher voucher) {
         String conditions = RandomStringUtils.randomAlphabetic(100);
@@ -245,7 +253,8 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_settingDistribution
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 All discount sent to IC if discount was changed and DD was customized before")
     public void ecc3038_discountUpdateClearDistribution(User user, Voucher voucher) {
         int discount = 25;
@@ -283,7 +292,8 @@ public class VoucherAgreementTests extends BaseTest {
      * ecc3038_initialCategoryAdding
      */
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to remove assigned category for new voucher")
     public void ecc3038_removeAssignedCategory(User user, Voucher voucher, ClaimItem claimItem) {
         loginToEccAdmin(user)
@@ -313,7 +323,8 @@ public class VoucherAgreementTests extends BaseTest {
      * THEN: SP user can't view V1 details
      */
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "Scalepoint SupplyManager can't open IC voucher")
     public void ecc3038_spSMCantOpenICVoucher(User futureUser,
                                               @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
@@ -335,7 +346,11 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC2 child user creates voucher V1
      * THEN: V1 is available for IC1 parent user in Vouchers List
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT,
+            UserCompanyGroups.TRYGFORSIKRING,
+            UserCompanyGroups.TRYGHOLDING},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 Child IC voucher is  available for parent IC in Vouchers List")
     public void ecc3038_childICVoucherAvailableParentICVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User childUser,
                                                                     @UserCompany(CompanyCode.TRYGHOLDING) User parentUser,
@@ -356,7 +371,11 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC1 parent user creates voucher V1
      * THEN: V1 is available for IC1 child user in Vouchers List
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT,
+            UserCompanyGroups.TRYGFORSIKRING,
+            UserCompanyGroups.TRYGHOLDING},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 Parent IC voucher is  available for child IC in Vouchers List")
     public void ecc3038_parentICVoucherAvailableChildICVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User childUser,
                                                                     @UserCompany(CompanyCode.TRYGHOLDING) User parentUser,
@@ -379,7 +398,10 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_leaveSPVoucherInactiveStatus
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 It's possible to join left Shared Voucher for IC SM. Voucher gets status active")
     public void ecc3038_joinLeftSPVoucherActiveStatus(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
@@ -408,7 +430,10 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: SP User creates V1 without any assigned categories
      * THEN: V1 active status is No for IC User
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 SP voucher active status is Noe for IC SM if no categories are assigned to Voucher")
     public void ecc3038_inactiveSPVoucherNoCatAssigned(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
@@ -425,7 +450,10 @@ public class VoucherAgreementTests extends BaseTest {
      * THEN: V1 statues is "Yes"
      */
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
             description = "ECC-3038 Voucher left by IC1 is active for IC2")
     public void ecc3038_voucherLeftByIC1ActiveIC2(@UserCompany(CompanyCode.SCALEPOINT) User sharedAgreementOwner, User futureUser1, User futureUser2, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(sharedAgreementOwner, supplier)
@@ -456,7 +484,9 @@ public class VoucherAgreementTests extends BaseTest {
      * WHEN: IC1 User creates voucher V1 for S1
      * THEN: V1 details is unavailable for IC2 user in SP Supplier's dialog
      */
-    @Test(enabled = false, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT},
+            enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3038 IC1 voucher is not available for IC2 in SP Supplier's dialog")
     public void ecc3038_ic1VoucherNotAvailableIC2(User futureUser1, User futureUser2, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(futureUser1, AUTOTEST_SUPPLIER_VA_TESTS)
@@ -474,7 +504,11 @@ public class VoucherAgreementTests extends BaseTest {
      * <p>
      * ecc3038_inactiveSPVoucherNotAvailableICVouchersList
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
+            description = "ECC-3038 Inactive SP voucher is not available for IC SM in Suppliers dialog")
     public void ecc3038_inactiveSPVoucherNotAvailableIC(@UserCompany(CompanyCode.SCALEPOINT) User scalepointUser, User futureUser, ClaimItem claimItem, Supplier supplier, Voucher voucher) {
         VoucherAgreementData data = VoucherAgreementData.newBuilder(scalepointUser, supplier)
                 .withVoucherInactive(voucher.getVoucherNameSP(), 10)
@@ -491,7 +525,9 @@ public class VoucherAgreementTests extends BaseTest {
      * assert shop voucher is created from 'standard voucher' and shown in the list
      * assert there is no shop voucher available in SID
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER,
+            TestGroups.VOUCHER_AGREEMENT},
+            dataProvider = "testDataProvider",
             description = "CLAIMSHOP-5147 Differentiate between which discounts on vouchers we show/sell in shop and in ECC")
     public void createShopOnlyVoucher(User user, Voucher voucher, Claim claim, ClaimItem claimItem) {
         loginToEccAdmin(user)

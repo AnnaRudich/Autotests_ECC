@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
@@ -19,7 +20,7 @@ public class InsCompanyTest extends BaseTest {
      * THEN: IC1 is displayed in company's list
      */
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.INS_COMPANY}, dataProvider = "testDataProvider",
             description = "CHARLIE-509 It's possible to update new simple parent IC. IC is displayed in IC list")
     public void charlie509_updateNewSimpleParentIC(InsuranceCompany insuranceCompany) {
         InsuranceCompany anotherCompany = TestData.getInsuranceCompany();
@@ -37,7 +38,7 @@ public class InsCompanyTest extends BaseTest {
      * WHEN: U1 creates Insurance company IC1
      * THEN: IC1 is displayed in company's list
      */
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.ADMIN, TestGroups.INS_COMPANY}, dataProvider = "testDataProvider",
             description = "CHARLIE-509 It's possible to create new simple parent IC. IC is displayed in IC list")
     public void charlie509_createNewSimpleParentIC(InsuranceCompany insuranceCompany) {
         login(getSystemUser())

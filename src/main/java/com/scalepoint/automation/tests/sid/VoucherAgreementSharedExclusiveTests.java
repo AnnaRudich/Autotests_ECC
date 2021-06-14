@@ -3,6 +3,8 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.AgreementsTab;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -27,7 +29,13 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * WHEN: U4 navigates to Vouchers list in ME
      * THEN: V1 is not displayed in Voucher's list in ME
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3030 IC1 voucher is displayed in vouchers list for IC user and not displayed for SP user")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.VOUCHER_AGREEMENT_SHARED_EXCLUSIVE,
+            UserCompanyGroups.TRYGFORSIKRING,
+            UserCompanyGroups.TRYGHOLDING,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
+            description = "ECC-3030 IC1 voucher is displayed in vouchers list for IC user and not displayed for SP user")
     public void ecc3030_exclusiveVoucherInVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User trygChildUser,
                                                        @UserCompany(CompanyCode.TRYGHOLDING) User trygParentUser,
                                                        @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
@@ -59,7 +67,12 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
      * WHEN: U3 navigates to Vouchers list in ME
      * THEN: V1 is displayed in Voucher's list in ME
      */
-    @Test(dataProvider = "testDataProvider", description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
+    @Test(groups = {TestGroups.SID,
+            TestGroups.VOUCHER_AGREEMENT_SHARED_EXCLUSIVE,
+            UserCompanyGroups.TRYGHOLDING,
+            UserCompanyGroups.SCALEPOINT},
+            dataProvider = "testDataProvider",
+            description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
     public void ecc3030_sharedVoucherInVouchersListForIC(@UserCompany(CompanyCode.TRYGHOLDING) User trygUser,
                                                          @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
                                                          User futureCompanyUser,

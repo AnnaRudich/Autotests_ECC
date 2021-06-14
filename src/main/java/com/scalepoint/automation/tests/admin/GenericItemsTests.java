@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.admin;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
@@ -17,7 +18,8 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
 public class GenericItemsTests extends BaseTest {
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
+            dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
     public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 
@@ -49,7 +51,8 @@ public class GenericItemsTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Publish/Unpublish generic item")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
+            dataProvider = "testDataProvider", description = "CHARLIE-535 Publish/Unpublish generic item")
     public void charlie535_testWeCanPublishGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 
@@ -73,7 +76,8 @@ public class GenericItemsTests extends BaseTest {
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
 
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-535 Delete generic item")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
+            dataProvider = "testDataProvider", description = "CHARLIE-535 Delete generic item")
     public void charlie535_testWeCanDeleteGenericItem(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 

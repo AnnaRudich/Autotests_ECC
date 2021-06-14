@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.createCase;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.PastedData;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -14,7 +15,7 @@ public class ManualCreateClaimTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_COPY_PASTE_TEXTAREA)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
-    @Test(dataProvider = "testDataProvider", description = "Check textArea on 'NewClaim' page that allows to copy-paste claim in specific format")
+    @Test(groups = {TestGroups.CREATE_CASE, TestGroups.MANUAL_CREATE_CLAIM}, dataProvider = "testDataProvider", description = "Check textArea on 'NewClaim' page that allows to copy-paste claim in specific format")
     public void createClaimUsingCopyPasteOnCreateClaimPageTest(User user, Claim claim) {
 
         String text = claim.getTextAreaWithRandomClaimNumber();
@@ -42,7 +43,7 @@ public class ManualCreateClaimTest extends BaseTest {
 
     @RequiredSetting(type = FTSetting.SHOW_COPY_PASTE_TEXTAREA)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
-    @Test(dataProvider = "testDataProvider", description = "Check textArea on 'NewClaim' page that allows to copy-paste claim in specific format")
+    @Test(groups = {TestGroups.CREATE_CASE, TestGroups.MANUAL_CREATE_CLAIM}, dataProvider = "testDataProvider", description = "Check textArea on 'NewClaim' page that allows to copy-paste claim in specific format")
     public void createClaimUsingCopyPasteOnCreateClaimPageEmptyTextAreaTest(User user, Claim claim) {
 
         LocalDate threeDaysBefore = LocalDate.now().minusDays(3);

@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -30,7 +31,7 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
 @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
 public class PostDepreciationCalculationOrderTests extends BaseTest {
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.POST_DEPRECATION_CALCULATION_ORDER}, dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualItem(User user, Claim claim, ClaimItem claimItem) {
         double purchasePrice = 1000.00;
@@ -42,7 +43,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .openSidAndFill(sid -> prepareBaseFiller(claimItem, purchasePrice, sid).withDepreciation(depreciationPercentage))
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
-                .makeActive(false)
+                .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(purchasePrice))
                 .toSettlementDialog()
                 .doAssert(sid -> {
@@ -57,7 +58,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 });
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.POST_DEPRECATION_CALCULATION_ORDER}, dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherDefaultDD(User user, Claim claim, ClaimItem claimItem) {
 
@@ -97,7 +98,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
     }
 
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.POST_DEPRECATION_CALCULATION_ORDER}, dataProvider = "testDataProvider",
             description = "ECC-3636 Calculations order of 'Post_depreciation_logic' claims")
     public void ecc3636_manualLineWithVoucherCustomDD(User user, Claim claim, ClaimItem claimItem) {
 
@@ -128,7 +129,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 });
     }
 
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SID, TestGroups.POST_DEPRECATION_CALCULATION_ORDER}, dataProvider = "testDataProvider",
             description = "ECC-3638 Calculations order of PRE-depreciation_logic claims")
     public void ecc3636_productWithVoucherDefaultDD(User user, Claim claim) {
 
@@ -154,7 +155,7 @@ public class PostDepreciationCalculationOrderTests extends BaseTest {
                 .editFirstClaimLine()
                 .valuationGrid()
                 .parseValuationRow(VOUCHER)
-                .makeActive(false)
+                .makeActive()
                 .doAssert(row -> row.assertTotalAmountIs(voucherCashValue))
                 .toSettlementDialog()
                 .setDepreciation(depreciationPercentage)

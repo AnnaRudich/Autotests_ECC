@@ -93,10 +93,7 @@ public class ValuationGrid implements Actions {
                     .getAttribute(CLASS).contains("x-grid-checkcolumn-checked");
         }
 
-        public ValuationRow makeActive(Boolean isAlertPresent) {
-            if(isAlertPresent){
-                confirmAlert();
-            }
+        public ValuationRow makeActive() {
             while(!isValuationChecked()){
                 $(By.xpath("//tr[contains(@class, '" + valuation.className + "')]//div[@role='button']")).click();
             }

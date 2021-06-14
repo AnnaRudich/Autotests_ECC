@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.VoucherValuationWithDepreciation;
 import com.scalepoint.automation.utils.Constants;
@@ -47,14 +48,19 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
             Constants.DEPRECIATION_10
     );
 
-    @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATION_DEDUCTED_COMBINED},
+            dataProvider = "testDataProvider",
+            description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' UNCHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3288_1_verifyDndD2AndFTRelationCombineDnDOFF(User user, Claim claim, ClaimItem claimItem) {
         Double expectedCashValue = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationOfVoucher();
         Double expectedNewPrice = Constants.PRICE_2400;
         verify(user, claim, claimItem, expectedNewPrice, expectedCashValue, false);
     }
-    @Test(dataProvider = "testDataProvider", description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
+
+    @Test(groups = {TestGroups.SID, TestGroups.DEPRECATION_DEDUCTED_COMBINED},
+            dataProvider = "testDataProvider",
+            description = "ECC-3288 Display voucher value with 'Combine discount and depreciation' CHECKED")
     @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION)
     public void ecc3288_3281_2_verifyDndD2AndFTRelationCombineDDON(User user, Claim claim, ClaimItem claimItem) {
         Double expectedNewPrice = VOUCHER_VALUATION_WITH_DEPRECIATION.getCashCompensationOfVoucher();

@@ -15,22 +15,40 @@
               "type": "string"
             },
             "policyType": {
-              "type": ["string","null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "policyNumber": {
-              "type": ["string","null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "tradeUp": {
-              "type": ["string","null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "status": {
-              "type": ["string","null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "reimbursementDate": {
-              "type": ["string","null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "reimbursementExpiration": {
-              "type": ["string","null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "showReimbursementPayoutInfo": {
               "type": "boolean"
@@ -51,7 +69,10 @@
               "type": "boolean"
             },
             "insuranceCompany": {
-              "type": ["object", "null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "properties": {
                 "companyName": {
                   "type": "string"
@@ -142,7 +163,10 @@
               ]
             },
             "claimHandler": {
-              "type": ["object", "null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "properties": {
                 "id": {
                   "type": "string"
@@ -184,7 +208,42 @@
                   "type": "null"
                 },
                 "departmentInformation": {
-                  "type": "null"
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "address1": {
+                      "type": "null"
+                    },
+                    "address2": {
+                      "type": "null"
+                    },
+                    "city": {
+                      "type": "null"
+                    },
+                    "zipcode": {
+                      "type": "null"
+                    },
+                    "alias": {
+                      "type": "null"
+                    },
+                    "includeDepartmentInfoInMail": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "address1",
+                    "address2",
+                    "city",
+                    "zipcode",
+                    "alias",
+                    "includeDepartmentInfoInMail",
+                    "email"
+                  ]
                 }
               },
               "required": [
@@ -205,10 +264,16 @@
               ]
             },
             "claimant": {
-              "type": ["object", "null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "properties": {
                 "accountInfo": {
-                  "type": ["object","null"]
+                  "type": [
+                    "object",
+                    "null"
+                  ]
                 },
                 "salutation": {
                   "type": "string"
@@ -220,22 +285,37 @@
                   "type": "string"
                 },
                 "fullName": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "company": {
                   "type": "null"
                 },
                 "address1": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "address2": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "zipCode": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "city": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "stateCode": {
                   "type": "null"
@@ -244,7 +324,10 @@
                   "type": "null"
                 },
                 "phone": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "cellPhoneNumber": {
                   "type": "string"
@@ -292,7 +375,10 @@
               ]
             },
             "notes": {
-              "type": ["object", "null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "properties": {
                 "customerNote": {
                   "type": "null"
@@ -306,14 +392,20 @@
               "type": "null"
             },
             "settlement": {
-              "type": ["object","null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "properties": {
                 "items": {
                   "type": "array",
                   "items": {}
                 },
                 "summary": {
-                  "type": ["object","null"]
+                  "type": [
+                    "object",
+                    "null"
+                  ]
                 },
                 "discretionaryAndRejectReasonsFootNotes": {
                   "type": "array",
@@ -323,49 +415,91 @@
                   "type": "boolean"
                 },
                 "collectedBySP": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "collectedByIC": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "ownRisk": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "indemnity": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "indemnityWithoutRepair": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "createdDate": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "dateToday": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "subTotal": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "cashSubTotal": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "replacementSubTotal": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "replacementIndemnity": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "totalRepairPrice": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "cashCompensation": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "manualReductionText": {
                   "type": "null"
                 },
                 "manualReductionAmount": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "showDiscretionaryFirst": {
                   "type": "boolean"
@@ -374,7 +508,10 @@
                   "type": "boolean"
                 },
                 "cashCompensationOrFaceValueIndemnity": {
-                  "type": ["string","null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "rejected": {
                   "type": "boolean"
@@ -520,10 +657,16 @@
           ]
         },
         "selfServiceLoginURL": {
-          "type": ["string","null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "shopLoginURL": {
-          "type": ["string","null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "firstWelcomeMail": {
           "type": "boolean"

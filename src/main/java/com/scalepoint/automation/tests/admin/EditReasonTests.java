@@ -4,17 +4,17 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.commons.lang.RandomStringUtils;
 import org.testng.annotations.Test;
@@ -36,7 +36,8 @@ public class EditReasonTests extends BaseTest {
      * THEN: The value should be trimmed to 500 char
      */
     @Bug(bug = "CHARLIE-1378 - not a bug")
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Reason text length is restricted to 500 characters")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
+            dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Reason text length is restricted to 500 characters")
     public void charlie508_2_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany) {
         String reasonWithExceededLength = RandomStringUtils.randomAlphabetic(501);
         String reasonWithAllowedLength = reasonWithExceededLength.substring(0, 500);
@@ -60,7 +61,8 @@ public class EditReasonTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
     public void charlie508_3_EditReasonPageFromAdmin(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                      Claim claim,
                                                      InsuranceCompany insuranceCompany,
@@ -98,7 +100,8 @@ public class EditReasonTests extends BaseTest {
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
     public void charlie508_5_DeleteReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                Claim claim,
                                                InsuranceCompany insuranceCompany,
@@ -127,7 +130,7 @@ public class EditReasonTests extends BaseTest {
      * THEN: reason is deleted
      */
     @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
     public void charlie508_6_DeleteReasonNotInUse(InsuranceCompany insuranceCompany) {
         String reason = "New reason " + System.currentTimeMillis();
         openEditReasonPage(insuranceCompany)
@@ -151,8 +154,7 @@ public class EditReasonTests extends BaseTest {
      * AND: verify if the reason input field enabled
      * THEN: reason input field is disabled
      */
-    @RunOn(DriverType.CHROME)
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
     public void charlie508_7_EditReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
                                              Claim claim,
                                              InsuranceCompany insuranceCompany,
@@ -184,7 +186,7 @@ public class EditReasonTests extends BaseTest {
      * THEN: the field is enabled and user can edit the reason
      */
     @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
     public void charlie508_8_EditReasonNotInUse(InsuranceCompany insuranceCompany) {
         String reason = "New reason " + System.currentTimeMillis();
         openEditReasonPage(insuranceCompany)
@@ -212,7 +214,7 @@ public class EditReasonTests extends BaseTest {
      */
 
     //TODO https://jira.scalepoint.com/browse/CHARLIE-1514
-//    @Test(dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
+//    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
     public void charlie508_9_DisableReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
                                                 Claim claim,
                                                 InsuranceCompany insuranceCompany,

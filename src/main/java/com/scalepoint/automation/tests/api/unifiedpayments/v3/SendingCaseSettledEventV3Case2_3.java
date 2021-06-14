@@ -1,6 +1,7 @@
 package com.scalepoint.automation.tests.api.unifiedpayments.v3;
 
 import com.scalepoint.automation.services.restService.SettlementClaimService;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
@@ -17,17 +18,29 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaym
 public class SendingCaseSettledEventV3Case2_3 extends SendingCaseSettledEventV3Case2Base {
 
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V3,
+            TestGroups.CASE2_3},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeWithMailSendingCaseSettledEventV3Case2_3(User user, InsertSettlementItem item1, InsertSettlementItem item2) {
         close(user, item1, item2, CLOSE_WITH_MAIL);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V3,
+            TestGroups.CASE2_3},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeWithoutMailSendingCaseSettledEventV3Case2_3(User user, InsertSettlementItem item1, InsertSettlementItem item2) {
         close(user, item1, item2, CLOSE_WITHOUT_MAIL);
     }
 
-    @Test(dataProvider = "testDataProvider", dataProviderClass = BaseTest.class, groups = {"backend"})
+    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+            TestGroups.BACKEND,
+            TestGroups.V3,
+            TestGroups.CASE2_3},
+            dataProvider = "testDataProvider", dataProviderClass = BaseTest.class)
     public void closeExternallySendingCaseSettledEventV3Case2_3(User user, InsertSettlementItem item1, InsertSettlementItem item2) {
         //GIVEN
         /*

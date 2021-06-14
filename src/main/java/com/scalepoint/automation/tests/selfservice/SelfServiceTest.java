@@ -5,6 +5,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfservice.SelfServicePage;
 import com.scalepoint.automation.pageobjects.pages.selfservice.SelfServicePage.SelfServiceGrid.SelfServiceGridRow;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -29,7 +30,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line. Required fields only. Category auto match")
     public void charlie504_addSSLineWithoutDocsAndNotes(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -64,7 +65,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Reloaded data saved")
     public void charlie504_reloadedDataSaved(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
@@ -100,7 +101,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Delete line")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -129,7 +130,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Submit SS. " +
                     "Auto import")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -169,7 +170,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Save SelfService")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -210,7 +211,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Required fields validation")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -244,7 +245,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with Documentation attached")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -278,7 +279,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with customer comment")
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -315,7 +316,7 @@ public class SelfServiceTest extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-504")
-    @Test(dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line with customer note")
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @RequiredSetting(type = FTSetting.INCLUDE_PURCHASE_PRICE_COLUMN_IN_SELF_SERVICE)
