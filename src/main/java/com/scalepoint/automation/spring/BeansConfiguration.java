@@ -70,6 +70,11 @@ public class BeansConfiguration {
     private String hubRemoteZaleniumUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_HUB_LOCAL_ZALENIUM + "}")
     private String hubLocalZaleniumUrl;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_TEST_WIDGET_PROTOCOL + "}")
+    private String testWidgetProtocol;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_URL_TEST_WIDGET + "}")
+    private String urlTestWidget;
+
 
 
     @SuppressWarnings("Convert2Lambda")
@@ -91,7 +96,9 @@ public class BeansConfiguration {
                         .setSolrBaseUrl(solrBaseUrl)
                         .setHubRemote(hubRemoteUrl)
                         .setHubLocalZalenium(hubLocalZaleniumUrl)
-                        .setHubRemoteZalenium(hubRemoteZaleniumUrl);
+                        .setHubRemoteZalenium(hubRemoteZaleniumUrl)
+                        .setUrlTestWidget(urlTestWidget)
+                        .setTestWidgetProtocol(testWidgetProtocol);
                 UsersManager.initManager(TestData.getSystemUsers());
             }
         };

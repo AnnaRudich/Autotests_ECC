@@ -51,6 +51,8 @@ public enum FTSetting {
     INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='512']", CHECKBOX),
     VALIDATE_AGE("input[name=ftSelfServiceFlag][value='2']", CHECKBOX),
     SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH("input[name=ftSelfServiceFlag][value='131072']", CHECKBOX),
+    ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_WIDGET_ONLY("input[name=ftSelfServiceFlag][value='134217728']", CHECKBOX),
+    ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_SELF_SERVICE2("input[name=ftSelfServiceFlag][value='32768']", CHECKBOX),
 
     //Integration settings
 

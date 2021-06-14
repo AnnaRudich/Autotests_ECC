@@ -14,6 +14,8 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService.ActionsOnToggle;
+import com.scalepoint.automation.services.restService.SelfServiceService;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
@@ -93,8 +95,10 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
         logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
         if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             Page.to(LoginPage.class);
-            updateFunctionalTemplate(invokedMethod, optionalUser.get());
+            updateFunctionalTemplate(invokedMethod, user);
+            BaseService.loginUser(user).reloadFunctionTemplate();
             Browser.driver().manage().deleteAllCookies();
         }
     }
