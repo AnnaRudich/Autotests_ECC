@@ -26,12 +26,11 @@ public class Wait {
     private static final int TIME_OUT_IN_SECONDS = 12;
     private static final Duration TIMEOUT = Duration.ofSeconds(12);
     private static final int POLL_IN_MS = 1000;
-    private static final int DEFAULT_TIMEOUT = 12;
 
     private static Logger log = LogManager.getLogger(Wait.class);
 
     private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling() {
-        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS)
                 .pollingEvery(500, TimeUnit.MILLISECONDS)
                 .ignoring(StaleElementReferenceException.class);
     }
@@ -244,7 +243,7 @@ public class Wait {
     }
 
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT, 1000).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, 1000).until(expectedCondition);
     }
 
     public static void waitForElementWithPageReload(By locator) {
