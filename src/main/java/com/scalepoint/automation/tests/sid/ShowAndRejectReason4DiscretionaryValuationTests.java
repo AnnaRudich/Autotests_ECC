@@ -537,7 +537,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .getMainMenu()
                 .toAdminPage();
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
-        functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class, disable(FTSetting.SHOW_DISCREATIONARY_REASON))
+        functionalTemplatesApi.updateTemplate(user, MyPage.class, disable(FTSetting.SHOW_DISCREATIONARY_REASON))
                 .getClaimMenu()
                 .logout();
 

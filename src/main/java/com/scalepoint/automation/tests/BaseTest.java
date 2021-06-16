@@ -168,7 +168,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-        return functionalTemplatesApi.updateTemplate(user.getFtId(), returnPageClass, operations);
+        return functionalTemplatesApi.updateTemplate(user, returnPageClass, operations);
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {

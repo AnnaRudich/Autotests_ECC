@@ -14,8 +14,6 @@ import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOp
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService;
 import com.scalepoint.automation.services.restService.FeaturesToggleAdministrationService.ActionsOnToggle;
-import com.scalepoint.automation.services.restService.SelfServiceService;
-import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.SystemUtils;
@@ -98,7 +96,6 @@ public class InvokedMethodListener implements IInvokedMethodListener {
             User user = optionalUser.get();
             Page.to(LoginPage.class);
             updateFunctionalTemplate(invokedMethod, user);
-            BaseService.loginUser(user).reloadFunctionTemplate();
             Browser.driver().manage().deleteAllCookies();
         }
     }
@@ -255,7 +252,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-        functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
+        functionalTemplatesApi.updateTemplate(user, LoginPage.class, ftOperations.toArray(new FtOperation[0]));
     }
 
     private void printErrorStackTraceIfAny(ITestResult iTestResult) {

@@ -505,7 +505,7 @@ public class RejectReasonTests extends BaseTest {
         List<FtOperation> ftOperations = new ArrayList<>();
         ftOperations.add(FTSettings.enable(FTSetting.MAKE_REJECT_REASON_MANDATORY));
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-        functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
+        functionalTemplatesApi.updateTemplate(user, LoginPage.class, ftOperations.toArray(new FtOperation[0]));
         iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, functionalTemplatesApi.getOperationsToRollback()));
     }
 
