@@ -90,7 +90,7 @@ AS
 
 	/*---------------------------------------------------------*/
 	/* SHOP DATA */
-	declare @ShopName varchar(100) = CONCAT('Test shop ', @ScalepointCompanyId)
+	declare @ShopName varchar(100) = CONCAT('Test shop ÆæØøÅåß ', @ScalepointCompanyId)
 	declare @ShopName2 varchar(100) = @ShopName+' 2'
 	declare @IsRetailShop bit = 1
 	declare @IsRepairValuationLocation bit = 1

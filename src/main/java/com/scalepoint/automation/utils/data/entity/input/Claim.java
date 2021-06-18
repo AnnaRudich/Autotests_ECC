@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 public class Claim {
 
     private String title = RandomUtils.randomName("mr");
-    private String lastName = RandomUtils.randomName("lname");
-    private String firstName = RandomUtils.randomName("fname");
+    private String lastName = RandomUtils.randomName("lname ÆæØøÅåß");
+    private String firstName = RandomUtils.randomName("fname  ÆæØøÅåß");
     private String fullName = firstName + " " + lastName;
     private String fullNameWithTitle = title + " " + firstName + " " + lastName;
     private String policyNumber = Integer.toString(RandomUtils.randomInt());
@@ -32,9 +32,9 @@ public class Claim {
     private String phoneNumber = Integer.toString(RandomUtils.randomInt());
     private String damageDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     private String cellNumber;
-    private String address = RandomUtils.randomName("addr");
-    private String address2 = RandomUtils.randomName("addr2");
-    private String city = RandomUtils.randomName("city");
+    private String address = RandomUtils.randomName("addr ÆæØøÅåß");
+    private String address2 = RandomUtils.randomName("addr2 ÆæØøÅåß");
+    private String city = RandomUtils.randomName("city ÆæØøÅåß");
     private String zipCode;
     private String email;
     //private String fullNameWithTitle = getTitle()+" " +getFirstName() + " " +getLastName();

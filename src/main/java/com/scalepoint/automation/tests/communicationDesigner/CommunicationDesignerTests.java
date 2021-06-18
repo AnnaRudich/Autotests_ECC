@@ -216,7 +216,7 @@ public class CommunicationDesignerTests extends BaseTest {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = "stubDataProvider", description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail", enabled = true)
     public void customerWelcomeWithOutstandingTest(User user, Claim claim, ServiceAgreement agreement, Translations translations, ClaimItem claimItem) {
 
-        String lineDescription = RandomUtils.randomName("RnVLine");
+        String lineDescription = RandomUtils.randomName("RnVLine ÆæØøÅåß");
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
                 .setUseOutputManagement(true)

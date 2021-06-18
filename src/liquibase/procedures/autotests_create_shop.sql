@@ -16,10 +16,10 @@ AS
 
 SET NOCOUNT ON
 
-  declare @Address1 varchar(100) = 'Test address 1'
-  declare @Address2 varchar(100) = 'Test address 2'
+  declare @Address1 varchar(100) = 'Test address ÆæØøÅåß 1'
+  declare @Address2 varchar(100) = 'Test address ÆæØøÅåß 2'
   declare @Phone varchar(100) = '0800 0833113'
-  declare @City varchar(100) = 'Test city'
+  declare @City varchar(100) = 'Test city ÆæØøÅåß'
 
   insert into Shop (SupplierId,name,zipCode,address1,address2,city,phone,searchZipCode,typeRetail,typeRepairValuation,typeOnline, updatedDate)
   select @SupplierID, @ShopName, @PostalCode, @Address1, @Address2, @City, @Phone, @PostalCode, @IsRetailShop, @IsRepairValuationLocation, 0, GETDATE()

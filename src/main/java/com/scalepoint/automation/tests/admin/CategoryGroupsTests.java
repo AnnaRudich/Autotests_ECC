@@ -6,8 +6,8 @@ import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.data.entity.input.Category;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.Category;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("AccessStaticViaInstance")

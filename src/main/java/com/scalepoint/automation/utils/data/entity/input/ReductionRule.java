@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ReductionRule implements Cloneable {
 
-    private String rrName = RandomUtils.randomName("RR");
-    private String policyName1 = "Pola" + RandomUtils.randomInt();
-    private String policyName2 = "Polb" + RandomUtils.randomInt();
-    private String description1 = "Desc1" + RandomUtils.randomInt();
+    private String rrName = RandomUtils.randomName("RR ÆæØøÅåß");
+    private String policyName1 = "Pola ÆæØøÅåß" + RandomUtils.randomInt();
+    private String policyName2 = "Polb ÆæØøÅåß" + RandomUtils.randomInt();
+    private String description1 = "Desc1 ÆæØøÅåß" + RandomUtils.randomInt();
     @XmlElement
     private String ageFrom1;
     @XmlElement

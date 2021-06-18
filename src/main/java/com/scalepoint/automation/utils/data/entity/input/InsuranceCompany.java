@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class InsuranceCompany {
 
     private String icID = Integer.toString(RandomUtils.randomInt());
-    private String icName = RandomUtils.randomName("Autotest-IC");
+    private String icName = RandomUtils.randomName("Autotest-IC ÆæØøÅåß");
     private String icCode = icName.toUpperCase();
-    private String address = RandomUtils.randomName("addr");
+    private String address = RandomUtils.randomName("addr ÆæØøÅåß");
     @XmlElement
     private String zipCode;
-    private String icCity = RandomUtils.randomName("City");
+    private String icCity = RandomUtils.randomName("City ÆæØøÅåß");
     @XmlElement
     private String companyCommonMail;
     @XmlElement

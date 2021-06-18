@@ -3,8 +3,8 @@
     <!-->Test data <-->
     <testRnVShop>Barbara Maria - Kongevejen 11</testRnVShop>
     <testSePa>Barbara Maria</testSePa>
-    <testAgrName>serviceAgreement_autotests</testAgrName>
-    <testAgrNameForRnV>serviceAgreement_autotests</testAgrNameForRnV>
+    <testAgrName>serviceAgreement_autotests ÆæØøÅåß</testAgrName>
+    <testAgrNameForRnV>serviceAgreement_autotests ÆæØøÅåß</testAgrNameForRnV>
     <templateName>Jacobsen Plus</templateName>
 
     <!--rnv Dedicated Supplier(Service Partner) Data -->

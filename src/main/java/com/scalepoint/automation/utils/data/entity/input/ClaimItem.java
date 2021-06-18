@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ClaimItem {
 
-    private String textFieldSP = RandomUtils.randomName("ClaimItem");
+    private String textFieldSP = RandomUtils.randomName("ClaimItem ÆæØøÅåß");
     @XmlElement
     private Double newPriceSP;
     @XmlElement
