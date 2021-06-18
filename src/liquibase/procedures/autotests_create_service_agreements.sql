@@ -19,13 +19,13 @@ AS
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
 
 	/* SUPPLIER DATA */
-	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
-	declare @Address1 varchar(100) = 'Test address 1'
-	declare @Address2 varchar(100) = 'Test address 2'
+	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests ÆæØøÅåß'
+	declare @Address1 varchar(100) = 'Test address ÆæØøÅåß 1'
+	declare @Address2 varchar(100) = 'Test address ÆæØøÅåß 2'
 	declare @Phone varchar(100) = '0800 0833113'
     declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
 	declare @PostalCode varchar(100) = '4321'
-	declare @City varchar(100) = 'Test city'
+	declare @City varchar(100) = 'Test city ÆæØøÅåß'
 	declare @SecurityToken varchar(100) = '7D1B2289-9365-4294-BD11-A7EB865B94E3'
 	declare @RV_TaskWebServiceUrl varchar(100) = 'https://' + @MockUrl + '/mock/rnv/rvTaskWebServiceUrl'
     declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
