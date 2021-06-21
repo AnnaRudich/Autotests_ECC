@@ -32,7 +32,7 @@
                  relativeToChangelogFile="true" />
     </changeSet>
     <changeSet author="bna" id="6" runOnChange="true" runInTransaction="true">
-        <sqlFile path="src/liquibase/procedures/autotests_create_ic.sql"
+        <sqlFile path="procedures/autotests_create_ic.sql"
                  encoding="UTF-8"
                  relativeToChangelogFile="true" />
     </changeSet>
