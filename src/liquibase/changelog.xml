@@ -11,7 +11,7 @@
                  encoding="UTF-8"
                  relativeToChangelogFile="true" />
     </changeSet>
-    <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
+    <changeSet author="bna" id="2" runOnChange="true" runInTransaction="true">
         <sqlFile path="procedures/autotests_create_supplier.sql"
                  encoding="UTF-8"
                  relativeToChangelogFile="true" />
