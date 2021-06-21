@@ -8,7 +8,7 @@
 <!--    <includeAll path="src/liquibase/procedures" />-->
     <includeAll path="src/liquibase/data/dk" />
     <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
-        <sqlFile path="src/liquibase/procedures/autotests_add_damageTypes.sql"
+        <sqlFile path="src/liquibase/procedures/autotests_create_service_agreements.sql"
                  encoding="UTF-8"
                  relativeToChangelogFile="true"
                  endDelimiter=";"
