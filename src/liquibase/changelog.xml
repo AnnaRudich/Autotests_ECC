@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-<!--    <includeAll path="src/liquibase/procedures" />-->
+    <!--    <includeAll path="src/liquibase/procedures" />-->
     <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
         <sqlFile path="procedures/autotests_create_service_agreements.sql"
                  encoding="UTF-8"
@@ -13,6 +13,11 @@
     </changeSet>
     <changeSet author="bna" id="2" runOnChange="true" runInTransaction="true">
         <sqlFile path="procedures/autotests_create_supplier.sql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="3" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_add_test_mobile_number.sql"
                  encoding="UTF-8"
                  relativeToChangelogFile="true" />
     </changeSet>
