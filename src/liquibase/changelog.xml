@@ -11,5 +11,10 @@
                  encoding="UTF-8"
                  relativeToChangelogFile="true" />
     </changeSet>
+    <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_supplier.sql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true" />
+    </changeSet>
     <includeAll path="src/liquibase/data/dk" />
 </databaseChangeLog>
