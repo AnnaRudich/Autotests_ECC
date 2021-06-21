@@ -6,7 +6,6 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
 <!--    <includeAll path="src/liquibase/procedures" />-->
-    <includeAll path="src/liquibase/data/dk" />
     <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
         <sqlFile path="procedures/autotests_create_service_agreements.sql"
                  encoding="UTF-8"
@@ -14,5 +13,5 @@
                  endDelimiter=";"
                  splitStatements="true"/>
     </changeSet>
-
+    <includeAll path="src/liquibase/data/dk" />
 </databaseChangeLog>
