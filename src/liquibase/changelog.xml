@@ -5,8 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <includeAll path="src/liquibase/procedures" />
+<!--    <includeAll path="src/liquibase/procedures" />-->
     <includeAll path="src/liquibase/data/dk" />
+    <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
+        <sqlFile path="src/liquibase/data/dk/autotests_add_damageTypes.sql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 endDelimiter=";"
+                 splitStatements="true"/>
+    </changeSet>
 
 
 </databaseChangeLog>
