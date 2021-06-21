@@ -11,11 +11,11 @@
                  encoding="UTF-8"
                  relativeToChangelogFile="true" />
     </changeSet>
-    <changeSet author="bna" id="2" runOnChange="true" runInTransaction="true">
-        <sqlFile path="procedures/autotests_add_ip2_test_entries.sql"
-                 encoding="UTF-8"
-                 relativeToChangelogFile="true" />
-    </changeSet>
+<!--    <changeSet author="bna" id="2" runOnChange="true" runInTransaction="true">-->
+<!--        <sqlFile path="procedures/autotests_add_ip2_test_entries.sql"-->
+<!--                 encoding="UTF-8"-->
+<!--                 relativeToChangelogFile="true" />-->
+<!--    </changeSet>-->
     <changeSet author="bna" id="3" runOnChange="true" runInTransaction="true">
         <sqlFile path="procedures/autotests_add_popularity.sql"
                  encoding="UTF-8"

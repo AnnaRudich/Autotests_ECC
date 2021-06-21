@@ -6,11 +6,11 @@ IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = object_id(N'[dbo].[autotests_
 GO
 
 CREATE PROCEDURE [dbo].[autotests_add_ip2_test_entries]
-@companyId int,
+@companyId int = NULL,
 @eventId int,
 @baseDocumentId int,
 @mockEndpoint nvarchar(256),
-@supplierId int
+@supplierId int = NULL
 
 AS
 
