@@ -9,9 +9,7 @@
     <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
         <sqlFile path="procedures/autotests_create_service_agreements.sql"
                  encoding="UTF-8"
-                 relativeToChangelogFile="true"
-                 endDelimiter=";"
-                 splitStatements="true"/>
+                 relativeToChangelogFile="true" />
     </changeSet>
     <includeAll path="src/liquibase/data/dk" />
 </databaseChangeLog>
