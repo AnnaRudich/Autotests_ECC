@@ -23,7 +23,7 @@ public class Claim {
 
     private String title = RandomUtils.randomName("mr");
     private String lastName = RandomUtils.randomName("lname ÆæØøÅåß");
-    private String firstName = RandomUtils.randomName("fname  ÆæØøÅåß");
+    private String firstName = RandomUtils.randomName("fname ÆæØøÅåß");
     private String fullName = firstName + " " + lastName;
     private String fullNameWithTitle = title + " " + firstName + " " + lastName;
     private String policyNumber = Integer.toString(RandomUtils.randomInt());

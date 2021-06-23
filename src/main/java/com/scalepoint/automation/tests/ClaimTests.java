@@ -33,7 +33,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
-    private final String POLICY_TYPE = "testPolicy";
+    private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")

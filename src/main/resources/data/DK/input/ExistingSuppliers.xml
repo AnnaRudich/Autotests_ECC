@@ -6,7 +6,7 @@
             inactiveAgreement="Autotest-Scalepoint-Inactive-Voucher-10"
             scalepointAgreement="Autotest-Scalepoint-Voucher-10"
             insuranceCompany="SCALEPOINT"
-            shopName="Test shop Autotest-Bauta-Voucher"
+            shopName="Test shop ÆæØøÅåß Autotest-Bauta"
             withVouchers="true"/>
     <simpleSupplier
             name="Autotest_Supplier_Bauta"

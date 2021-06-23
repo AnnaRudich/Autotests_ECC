@@ -48,8 +48,8 @@
         <groupName>Personlig Pleje</groupName>
         <categoryName>Medicin</categoryName>
         <damageTypes>
-            <damageType>damageType1</damageType>
-            <damageType>damageType2</damageType>
+            <damageType>damageType1 ÆæØøÅåß</damageType>
+            <damageType>damageType2 ÆæØøÅåß</damageType>
         </damageTypes>
     </categoryPersonalMedicine>
 

@@ -15,20 +15,13 @@ import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.input.Category;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.data.entity.input.Supplier;
-import com.scalepoint.automation.utils.data.entity.input.Voucher;
+import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.VOUCHER;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.MOVE_DISCOUNT_DISTRIBUTION_TO_DIALOG;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
-import static com.scalepoint.automation.utils.Constants.DEPRECIATION_10;
-import static com.scalepoint.automation.utils.Constants.PRICE_100_000;
-import static com.scalepoint.automation.utils.Constants.PRICE_2400;
+import static com.scalepoint.automation.utils.Constants.*;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-512")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
@@ -56,7 +49,7 @@ public class SidTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_MISCELLANEOUS},
             dataProvider = "testDataProvider",
             description = "ECC-3025 Cash compensation with depreciation field value is (New price minus voucher percent)" +
-            " - depreciation percent if voucher selected in Add settlement dialogs")
+                    " - depreciation percent if voucher selected in Add settlement dialogs")
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION, enabled = false)
     public void ecc3025_cashCompensationWithAddedDepVoucher(User user, Claim claim, Voucher voucher) {
         PseudoCategory categoryInfo = new VoucherAgreementApi(user).createVoucher(voucher);
@@ -139,7 +132,7 @@ public class SidTests extends BaseTest {
     public void ecc3025_findShopInDialog(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         // default postal code is 5000
         String existingVoucher = voucher.getExistingVoucher();
-        String existingVoucherShopName = "Test shop " + existingVoucher;
+        String existingVoucherShopName = "Test shop ÆæØøÅåß " + existingVoucher;
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> {
                     sid
