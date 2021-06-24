@@ -27,6 +27,9 @@ import static org.testng.Assert.assertTrue;
 
 public class SelfService2Page extends Page {
 
+    protected final String SEND_BUTTON_PATH = "#send-button";
+    protected final String ACCEPTANCE_CHECKBOX_PATH = "[class*='acceptance'] input";
+
     @FindBy(xpath = "//input[@type='submit']")
     private WebElement logout;
 
@@ -52,7 +55,7 @@ public class SelfService2Page extends Page {
     private WebElement save;
 
     @FindBy(css = "#save-item-button")
-    private WebElement saveItem;
+    protected WebElement saveItem;
 
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
@@ -256,8 +259,13 @@ public class SelfService2Page extends Page {
         return this;
     }
 
+    public SelfService2Page acceptStatement(){
+        $(ACCEPTANCE_CHECKBOX_PATH).setSelected(true);
+        return this;
+    }
+
     public SelfService2Page sendResponseToEcc() {
-        $("#send-button").shouldBe(Condition.enabled).click();
+        $(SEND_BUTTON_PATH).shouldBe(Condition.enabled).click();
         waitForUrl("self-service/dk/send-confirmation");
         return this;
     }
@@ -320,6 +328,21 @@ public class SelfService2Page extends Page {
             assertTrue(driver.findElements(By.xpath("//input[@type='submit']")).isEmpty(), "logout button should not be displayed");
             return this;
         }
+
+        public Asserts assertSendButtonDisabled(){
+            assertThat($(SEND_BUTTON_PATH).is(Condition.disabled))
+                    .as("Send button should be disabled")
+                    .isTrue();
+            return this;
+        }
+
+        public Asserts assertSendButtonEnabled(){
+            assertThat(Wait.waitForVisibleAndEnabled($(SEND_BUTTON_PATH)).isEnabled())
+                    .as("Send button should be enabled")
+                    .isTrue();
+            return this;
+        }
+
     }
 
 

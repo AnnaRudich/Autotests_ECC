@@ -31,6 +31,7 @@ public class TestGroups {
     public static final String CATEGORY_BULK_UPDATE = "categoryBulkUpdate";
     public static final String SUPPLIER_MANAGER = "supplierManager";
     public static final String FNOL = "FNOL";
+    public static final String WIDGET = "widget";
 
     public static final String CATEGORY_GROUPS = "categoryGroup";
     public static final String EDIT_REASON = "editReason";

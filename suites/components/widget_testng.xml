@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Widget" configfailurepolicy="continue" parallel="methods" thread-count="6">
+    <test verbose="1" name="Widget" group-by-instances="false" enabled="true" preserve-order="true">
+        <packages>
+            <package name="com.scalepoint.automation.tests.widget" />
+        </packages>
+    </test>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+</suite>

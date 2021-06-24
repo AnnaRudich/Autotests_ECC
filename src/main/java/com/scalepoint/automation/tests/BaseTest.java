@@ -12,12 +12,10 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
+import com.scalepoint.automation.pageobjects.pages.testWidget.GenerateWidgetPage;
 import com.scalepoint.automation.services.externalapi.*;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
-import com.scalepoint.automation.services.restService.CreateClaimService;
-import com.scalepoint.automation.services.restService.EccIntegrationService;
-import com.scalepoint.automation.services.restService.LoginProcessService;
-import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
+import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
@@ -149,6 +147,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         } catch (Exception ex) {
             LogManager.getLogger(BaseTest.class).error(ex);
         }
+
         return params;
     }
 
@@ -169,7 +168,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
-        return functionalTemplatesApi.updateTemplate(user.getFtId(), returnPageClass, operations);
+        return functionalTemplatesApi.updateTemplate(user, returnPageClass, operations);
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
@@ -234,6 +233,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return login(user)
                 .getMainMenu()
                 .toEccAdminPage();
+    }
+
+    protected GenerateWidgetPage openGenerateWidgetPage(){
+        Browser.open(com.scalepoint.automation.utils.Configuration.getWidgetUrl());
+        return Page.at(GenerateWidgetPage.class);
     }
 
     protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {

@@ -93,8 +93,9 @@ public class InvokedMethodListener implements IInvokedMethodListener {
         Optional<User> optionalUser = findMethodParameter(iTestResult, User.class);
         logger.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
         if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             Page.to(LoginPage.class);
-            updateFunctionalTemplate(invokedMethod, optionalUser.get());
+            updateFunctionalTemplate(invokedMethod, user);
             Browser.driver().manage().deleteAllCookies();
         }
     }
@@ -251,7 +252,7 @@ public class InvokedMethodListener implements IInvokedMethodListener {
 
     private void updateFtTemplateWithRequiredSettings(User user, List<FtOperation> ftOperations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-        functionalTemplatesApi.updateTemplate(user.getFtId(), LoginPage.class, ftOperations.toArray(new FtOperation[0]));
+        functionalTemplatesApi.updateTemplate(user, LoginPage.class, ftOperations.toArray(new FtOperation[0]));
     }
 
     private void printErrorStackTraceIfAny(ITestResult iTestResult) {
