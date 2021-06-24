@@ -30,6 +30,7 @@ public class TestGroups {
     public static final String SID = "sid";
     public static final String CATEGORY_BULK_UPDATE = "categoryBulkUpdate";
     public static final String SUPPLIER_MANAGER = "supplierManager";
+    public static final String FNOL = "FNOL";
 
     public static final String CATEGORY_GROUPS = "categoryGroup";
     public static final String EDIT_REASON = "editReason";
@@ -95,4 +96,5 @@ public class TestGroups {
     public static final String REPLACEMENT_DIALOG = "replacementDialog";
     public static final String SELF_SERVICE2 = "selfService2";
     public static final String VOUCHER_PREDICTION = "voucherPrediction";
+    public static final String FNOL_REASSIGNE = "fnolReassign";
 }
