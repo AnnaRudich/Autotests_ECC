@@ -1,18 +1,38 @@
 package com.scalepoint.automation.tests.admin;
 
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoriesPage;
 import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.data.entity.input.Category;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.driver.DriverType;
+import org.testng.ITestContext;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-545")
 public class CategoryGroupsTests extends BaseTest {
+
+    @BeforeMethod
+    public void adminPage(Method method, ITestContext context, Object[] objects) {
+
+        User user = (User) Arrays.asList(objects)
+                .stream()
+                .filter(object -> object.getClass().equals(User.class))
+                .findFirst()
+                .orElseThrow();
+        login(user, AdminPage.class);
+    }
+
     /**
      * GIVEN: SP user U1 with Admin permissions
      * WHEN: U1 creates Pseudo Category Group G1
@@ -86,7 +106,7 @@ public class CategoryGroupsTests extends BaseTest {
     @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = "testDataProvider",
             description = "CHARLIE-545 It's possible to move category from one group to another")
     public void charlie545_moveCatToAnotherGroup(User user, Category categoryToMove, Category category2) {
-        PseudoCategoryGroupPage groupPage = login(user, AdminPage.class).
+        PseudoCategoryGroupPage groupPage = Page.at(AdminPage.class).
                 toPseudoCategoryGroupPage();
 
         String sourceGroup = categoryToMove.getGroupName();
@@ -116,7 +136,7 @@ public class CategoryGroupsTests extends BaseTest {
             description = "CHARLIE-545 It's possible to create new Pseudo Category Model. New Model is displayed in Models list")
     public void charlie545_createNewPsCatModel(User user, Category category) {
         String modelName = category.getModelName();
-        login(user, AdminPage.class)
+        Page.at(AdminPage.class)
                 .toPseudoCategoryModelPage()
                 .toAddModelPage()
                 .updateNameAndSave(modelName)
@@ -134,7 +154,7 @@ public class CategoryGroupsTests extends BaseTest {
     public void charlie545_updateNewPsCatModel(User user, Category category) {
         String initialModelName = category.getModelName();
         String newModelName = "Updated-" + System.currentTimeMillis();
-        login(user, AdminPage.class)
+        Page.at(AdminPage.class)
                 .toPseudoCategoryModelPage()
                 .toAddModelPage()
                 .updateNameAndSave(initialModelName)
@@ -153,7 +173,7 @@ public class CategoryGroupsTests extends BaseTest {
             description = "CHARLIE-545 It's possible to remove new Pseudo Category Model. Removed Model is not displayed in Models list")
     public void charlie545_removeNewPsCatModel(User user, Category category) {
         String modelName = category.getModelName();
-        login(user, AdminPage.class)
+        Page.at(AdminPage.class)
                 .toPseudoCategoryModelPage()
                 .toAddModelPage()
                 .updateNameAndSave(modelName)
@@ -162,7 +182,7 @@ public class CategoryGroupsTests extends BaseTest {
     }
 
     private PseudoCategoryGroupPage createPseudoCategoryGroup(User user, Category category) {
-        return login(user, AdminPage.class)
+        return Page.at(AdminPage.class)
                 .toPseudoCategoryGroupPage()
                 .toAddGroupPage()
                 .addGroup(category.getGroupName());
