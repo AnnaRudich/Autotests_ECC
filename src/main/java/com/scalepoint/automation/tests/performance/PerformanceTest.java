@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.performance;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.restService.SettlementClaimService;
 import com.scalepoint.automation.services.restService.TextSearchService;
 import com.scalepoint.automation.services.restService.common.BaseService;
@@ -27,19 +26,6 @@ public class PerformanceTest extends BaseApiTest{
     static int users;
 
     RnVMock.RnvStub rnvStub;
-
-    @BeforeClass
-    public void startWireMock() {
-
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        rnvStub = new RnVMock(wireMock)
-                .addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
 
     @Parameters({"tests.performance.users"})
     @BeforeTest

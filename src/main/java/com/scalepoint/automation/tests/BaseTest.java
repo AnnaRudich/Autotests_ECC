@@ -27,6 +27,7 @@ import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
+import com.scalepoint.automation.stubs.*;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.SystemUtils;
@@ -95,6 +96,8 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
 @Listeners({SuiteListener.class, OrderRandomizer.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
+    public static final String TEST_DATA_PROVIDER = "testDataProvider";
+
     protected Logger log = LogManager.getLogger(BaseTest.class);
 
     private String gridNode;
@@ -124,6 +127,21 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     private DriverType driverType = null;
 
+    @Autowired
+    protected RnVMock.RnvStub rnvStub;
+
+    @Autowired
+    protected AuditMock.AuditStub auditStub;
+
+    @Autowired
+    protected CommunicationDesignerMock communicationDesignerMock;
+
+    @Autowired
+    protected EVBMock.EVBStubs evbMock;
+
+    @Autowired
+    protected FraudAlertMock fraudAlertMock;
+
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) throws Exception {
 
@@ -151,13 +169,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             log.info("Start from: " + SystemUtils.getHostname());
             gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
             log.info("Running on grid node: " + gridNode);
-            retryUpdateFtTemplate(method);
+
+            Optional<User> optionalUser = getObjectByClass(Arrays.asList(objects), User.class).stream().findFirst();
+
+            retryUpdateFtTemplate(method, optionalUser);
             updateFeatureToggle(method);
         }
     }
 
     @AfterMethod
-    public void cleanup(Method method, ITestResult iTestResult) {
+    public void cleanup(Method method, ITestResult iTestResult, Object[] objects) {
         log.info("Clean up after: {}", method.toString());
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
@@ -165,13 +186,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         } catch (Exception e) {
             log.info(e.getMessage());
         }
-        Browser.quit();
-        Window.cleanUp();
-        CurrentUser.cleanUp();
-        Page.PagesCache.cleanUp();
-        ThreadContext.clearMap();
-        log.info("Clean up completed after: {} ", method.getName());
-
         if (Browser.hasDriver()) {
             try {
 
@@ -186,7 +200,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
                 log.info("Left tests: {}", left);
 
-                cleanUpCDTemplates(method);
+
+                cleanUpCDTemplates(method, objects);
 
                 if (featureTogglesDefaultState.isEmpty()) {
                     log.info("No feature toggle to rollback");
@@ -201,26 +216,18 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 log.error(e.getMessage(), e);
             }
         }
+        Browser.quit();
+        Window.cleanUp();
+        CurrentUser.cleanUp();
+        Page.PagesCache.cleanUp();
+        ThreadContext.clearMap();
+        log.info("Clean up completed after: {} ", method.getName());
     }
 
-    @DataProvider(name = "testDataProvider")
+    @DataProvider(name = TEST_DATA_PROVIDER)
     public static Object[][] provide(Method method) {
         Thread.currentThread().setName("Thread " + method.getName());
         Object[][] params = new Object[1][];
-        try {
-            params[0] = TestDataActions.getTestDataParameters(method).toArray();
-        } catch (Exception ex) {
-            LogManager.getLogger(BaseTest.class).error(ex);
-        }
-
-        return params;
-    }
-
-    @DataProvider(name = "testThisDataProvider")
-    public static Object[][] test(Method method) {
-        Thread.currentThread().setName("Thread " + method.getName());
-        Object[][] params = new Object[1][];
-
         try {
             params[0] = TestDataActions.getTestDataParameters(method).toArray();
         } catch (Exception ex) {
@@ -243,6 +250,18 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
 
         return testDataProvider;
+    }
+
+    public static Object[][] addNewParameters(List parameters, Object ...array){
+
+        Object[][] params = new Object[1][];
+        try {
+            parameters.addAll(Arrays.asList(array));
+            params[0] = parameters.toArray();
+        } catch (Exception ex) {
+            LogManager.getLogger(BaseTest.class).error(ex);
+        }
+        return params;
     }
 
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
@@ -357,12 +376,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return databaseApi.getVoucherInfo(isEvoucher);
     }
 
-    private void retryUpdateFtTemplate(Method method) {
+    private void retryUpdateFtTemplate(Method method, Optional<User> optionalUser) {
+
         int attempt = 0;
         /*sometimes we get java.net.SocketTimeoutException: Read timed out, so lets try again*/
         while (attempt <= 1) {
             try {
-                updateTemplate(method);
+
+                List<RequiredSetting> allSettings = getAllSettings(method);
+
+                updateTemplate(allSettings, optionalUser);
                 break;
             } catch (InvalidFtOperationException e) {
                 throw e;
@@ -377,22 +400,22 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    private void updateTemplate(Method method) {
-        Optional<User> optionalUser = findMethodParameter(method, User.class);
+    private void updateTemplate(List<RequiredSetting> allSettings, Optional<User> optionalUser) {
+
         log.info("-------- InvokedMethodListener before. Thread: {} ----------", Thread.currentThread().getId());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Page.to(LoginPage.class);
-            updateFunctionalTemplate(method, user);
+            updateFunctionalTemplate(allSettings, user);
             Browser.driver().manage().deleteAllCookies();
         }
     }
 
-    public void cleanUpCDTemplates(Method method){
+    public void cleanUpCDTemplates(Method method, Object[] objects){
         boolean cleanUp = method
                 .getDeclaredAnnotation(CommunicationDesignerCleanUp.class) != null;
         if(cleanUp) {
-            User user = findMethodParameter(method, User.class).get();
+            User user = getObjectByClass(Arrays.asList(objects), User.class).get(0);
             Page.to(InsCompAddEditPage.class, user.getCompanyId())
                     .setCommunicationDesignerSection(InsCompAddEditPage.CommunicationDesigner.reset())
                     .selectSaveOption(false);
@@ -465,8 +488,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
 
-    private void updateFunctionalTemplate(Method method, User user) {
-        List<RequiredSetting> allSettings = getAllSettings(method);
+    private void updateFunctionalTemplate(List<RequiredSetting> allSettings, User user) {
+
+
 
         String companyCode = user.getCompanyCode();
 
@@ -512,12 +536,14 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     private List<RequiredSetting> getAllSettings(Method method) {
+
+        Class realClass = method.getDeclaringClass();
+        RequiredSetting[] classAnnotations = (RequiredSetting[]) realClass.getDeclaredAnnotationsByType(RequiredSetting.class);
+        RequiredSetting[] methodAnnotations = method.getDeclaredAnnotationsByType(RequiredSetting.class);
+
         List<RequiredSetting> requiredSettings = new ArrayList<>();
         Set<FTSetting> methodSettings = new HashSet<>();
 
-        Class realClass = method.getDeclaringClass();
-
-        RequiredSetting[] methodAnnotations = method.getDeclaredAnnotationsByType(RequiredSetting.class);
         if (methodAnnotations != null) {
             Arrays.stream(methodAnnotations).
                     forEach(annotation -> {
@@ -526,7 +552,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                     });
         }
 
-        RequiredSetting[] classAnnotations = (RequiredSetting[]) realClass.getDeclaredAnnotationsByType(RequiredSetting.class);
         if (classAnnotations != null) {
             Arrays.stream(classAnnotations).
                     filter(classAnnotation -> !methodSettings.contains(classAnnotation.type())).
@@ -536,13 +561,21 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return requiredSettings;
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> Optional<T> findMethodParameter(Method method, Class<T> tClass) {
-        return Arrays.stream(method.getParameters()).
-                filter(sc -> sc.getClass().equals(tClass)).
-                map(sc -> (T) sc).findFirst();
+    protected static  <T> List<T> getObjectByClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(o -> o.getClass().equals(clazz))
+                .map(o -> (T)o)
+                .collect(Collectors.toList());
     }
 
+    protected static <T> List<T> removeObjectByClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
+    }
 }
 
 

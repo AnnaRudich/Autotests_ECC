@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.fraudAlertPerformance;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.restService.*;
@@ -25,7 +24,10 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class FraudAlertPerformanceTest extends BaseApiTest {
 
@@ -44,13 +46,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
 
         this.users = Integer.valueOf(users);
 
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        fraudAlertStubs = new FraudAlertMock(wireMock).addStub(TENANT);
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+        fraudAlertStubs = fraudAlertMock.addStub(TENANT);
 
         new EventApiService().scheduleSubscription(claimLineChangedSubscriptionId);
         new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);

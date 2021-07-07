@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.shop;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.OrderDetailsPage;
@@ -12,7 +11,6 @@ import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.services.ucommerce.GetBalanceService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
-import com.scalepoint.automation.stubs.EVBMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
@@ -21,10 +19,7 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.io.IOException;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 
@@ -34,17 +29,6 @@ public class UCommerceShopTests extends BaseTest {
     private final Double orderedProductPrice = Constants.PRICE_100;
     private final Double orderedVoucherPrice = Constants.PRICE_100;
     private final Double extraPayAmount = Constants.PRICE_50;
-
-    @BeforeClass
-    public void startWireMock() throws IOException {
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        new EVBMock(wireMock).addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
 
     @FeatureToggleSetting(type = FeatureIds.JAXBUTILS_USE_SCHEMAS, enabled = false)
     @Test(groups = {TestGroups.SHOP, TestGroups.UCOMMERCE_SHOP}, dataProvider = "testDataProvider",

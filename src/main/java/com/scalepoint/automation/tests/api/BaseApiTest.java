@@ -7,6 +7,8 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.spring.Application;
+import com.scalepoint.automation.stubs.FraudAlertMock;
+import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.logging.log4j.LogManager;
@@ -19,10 +21,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 
 import java.lang.reflect.Method;
 
@@ -44,6 +44,12 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected WireMock wireMock;
+
+    @Autowired
+    protected FraudAlertMock fraudAlertMock;
+
+    @Autowired
+    protected RnVMock.RnvStub rnvStub;
 
     @Value("${driver.type}")
     protected String browserMode;

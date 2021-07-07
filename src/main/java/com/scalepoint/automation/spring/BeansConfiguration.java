@@ -1,14 +1,10 @@
 package com.scalepoint.automation.spring;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.client.WireMockBuilder;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.opencsv.CSVWriter;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
-import com.scalepoint.automation.shared.WiremockServer;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +22,6 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 @Configuration
 @EnableAutoConfiguration
@@ -142,18 +135,5 @@ public class BeansConfiguration {
         return new MongoDbApi(mongoTemplate());
     }
 
-    @Bean
-    public WireMock wireMock(@Value("${wiremock.host}") String host,
-                             @Value("${wiremock.urlPathPrefix}") String urlPathPrefix,
-                             @Value("${wiremock.port}") String port){
 
-        log.info("Wiremock host: {}", host);
-
-        return new WireMockBuilder()
-                .https()
-                .host(WiremockServer.findByDomain(host).getIpAddress())
-                .urlPathPrefix(urlPathPrefix)
-                .port(new Integer(port))
-                .build();
-    }
 }
