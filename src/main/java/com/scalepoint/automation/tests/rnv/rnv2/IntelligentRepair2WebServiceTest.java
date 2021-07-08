@@ -31,8 +31,6 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 
 public class IntelligentRepair2WebServiceTest extends BaseTest {
 
-    RnVMock.RnvStub rnvStub;
-
     /*
      * send line to RnV
      * send feedback via RnV Rest service (with Invoice)
@@ -178,7 +176,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
-
 
         new RnvService()
                 .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_10), claim, rnvStub);

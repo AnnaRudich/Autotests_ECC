@@ -27,8 +27,6 @@ import java.math.BigDecimal;
 
 public class RnVSmokeTest extends BaseTest {
 
-    RnVMock.RnvStub rnvStub;
-
     /*
      * send line to RnV
      * send feedback with Invoice
