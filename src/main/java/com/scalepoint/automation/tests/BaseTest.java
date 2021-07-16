@@ -96,6 +96,9 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
 @Listeners({SuiteListener.class, OrderRandomizer.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
+    public static final String RV_LINE_DESCRIPTION = "RnVLine";
+    public static final String DEFAULT_PASSWORD = "12341234";
+
     public static final String TEST_DATA_PROVIDER = "testDataProvider";
 
     protected Logger log = LogManager.getLogger(BaseTest.class);

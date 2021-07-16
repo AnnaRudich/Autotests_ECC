@@ -92,6 +92,10 @@ public class TestData {
         return (AttachmentFiles) getData(Data.ATTFILES);
     }
 
+    public static BankAccount getBankAccount() {
+        return (BankAccount) getData(Data.BANK_ACCOUNT);
+    }
+
     public static Payments getPayments() {
         return (Payments) getData(Data.PAYMENTS);
     }
@@ -286,6 +290,7 @@ public class TestData {
         CLGROUP("input/ClaimLineGroup.xml", ClaimLineGroup.class),
         PAYMENTS("input/Payments.xml", Payments.class),
         ATTFILES("input/AttachmentFiles.xml", AttachmentFiles.class),
+        BANK_ACCOUNT("input/BankAccount.xml", BankAccount.class),
         CWA_CLAIM("request/Claim/ClaimRequest.json", ClaimRequest.class),
         FRAUD_ALERT_CLAIM("request/Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),
         TOPDANMARK_FNOL_ITEMIZATION_CASE("request/Claim/fraudAlert/ClaimRequestTopadanmarkFNOL.json", ClaimRequest.class),

@@ -14,15 +14,13 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
-import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -151,9 +149,8 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_WITH_OUTSTATNDING_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
     public void customerWelcomeWithOutstandingTest(User user, Claim claim, ServiceAgreement agreement,
-                                                   Translations translations, ClaimItem claimItem, String lineDescription,
-                                                   Double newPrice, BigDecimal repairPrice, String regNumber,
-                                                   String accountNumber, String selfRisk,
+                                                   Translations translations, ClaimItem claimItem, BankAccount bankAccount, String lineDescription,
+                                                   Double newPrice, BigDecimal repairPrice, String selfRisk,
                                                    CommunicationDesigner communicationDesigner) {
 
         Page.at(SettlementPage.class)
@@ -184,7 +181,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .openReplacementWizard(true)
-                .completeClaimUsingCashPayoutToBankAccount(regNumber, accountNumber)
+                .completeClaimUsingCashPayoutToBankAccount(bankAccount.getRegNumber(), bankAccount.getAccountNumber())
                 .reopenClaim();
         new SettlementSummary()
                 .editSelfRisk(selfRisk)
@@ -205,10 +202,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails")
-    public void splitReplacementTest(User user, Claim claim, ClaimItem claimItem, String regNumber, String accountNumber,
+    public void splitReplacementTest(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount,
                                      CommunicationDesigner communicationDesigner) {
 
-        sendSplitReplacementEmails(user, claim, claimItem, regNumber, accountNumber);
+        sendSplitReplacementEmails(user, claim, claimItem, bankAccount);
     }
 
     @CommunicationDesignerCleanUp
@@ -216,11 +213,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails with attachments")
-    public void splitReplacementWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem, String regNumber,
-                                                    String accountNumber,
-                                                    CommunicationDesigner communicationDesigner) {
+    public void splitReplacementWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem,
+                                                    BankAccount bankAccount, CommunicationDesigner communicationDesigner) {
 
-        sendSplitReplacementEmails(user, claim, claimItem, regNumber, accountNumber);
+        sendSplitReplacementEmails(user, claim, claimItem, bankAccount);
     }
 
     @CommunicationDesignerCleanUp
@@ -258,10 +254,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = REPLACEMENT_MAIL_DATA_PROVIDER,
             description = "Use communication designer to prepare replacement mail")
-    public void replacementMailTest(User user, Claim claim, ClaimItem claimItem, String regNumber, String accountNumber,
+    public void replacementMailTest(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount,
                                     CommunicationDesigner communicationDesigner) {
 
-        replacement(claim, claimItem, regNumber, accountNumber)
+        replacement(claim, claimItem, bankAccount.getRegNumber(), bankAccount.getAccountNumber())
                 .doAssert(mailViewDialog ->
                         mailViewDialog.noOtherMailsOnThePage(
                                 Arrays.asList(
@@ -282,7 +278,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setSelfServiceCustomerWelcome(false, null);
 
-        String password = Constants.DEFAULT_PASSWORD;
+        String password = DEFAULT_PASSWORD;
 
         return addNewParameters(TestDataActions.getTestDataParameters(method), password, communicationDesigner);
     }
@@ -294,7 +290,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setSelfServiceCustomerWelcome(true, TWO_ATTACHMENTS);
 
-        String password = Constants.DEFAULT_PASSWORD;
+        String password = DEFAULT_PASSWORD;
 
         return addNewParameters(TestDataActions.getTestDataParameters(method), password, communicationDesigner);
     }
@@ -307,9 +303,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setItemizationSaveLossItems(false, null)
                 .setItemizationSubmitLossItems(false, null);
 
-        String password = Constants.DEFAULT_PASSWORD;
-        String month = Constants.JANUARY;
-        Double newPrice = Double.valueOf(3000);
+        String password = DEFAULT_PASSWORD;
+        String month = DEFAULT_MONTH;
+        Double newPrice = 3000.00;
 
         return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice, communicationDesigner);
     }
@@ -322,9 +318,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setItemizationSaveLossItems(true, TWO_ATTACHMENTS)
                 .setItemizationSubmitLossItems(true, ONE_ATTACHMENT);
 
-        String password = Constants.DEFAULT_PASSWORD;
-        String month = Constants.JANUARY;
-        Double newPrice = Double.valueOf(3000);
+        String password = DEFAULT_PASSWORD;
+        String month = DEFAULT_MONTH;
+        Double newPrice = 3000.00;
 
         return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice, communicationDesigner);
     }
@@ -356,15 +352,13 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setCustomerWelcomeWithOutstanding(false, null);
 
-        String lineDescription = RandomUtils.randomName("RnVLine");
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
         Double newPrice = RnVMock.OK_PRICE;
-        BigDecimal repairPrice = BigDecimal.valueOf(Constants.PRICE_100);
-        String regNumber = "1";
-        String accountNumber = "12345678890";
+        BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(1000.00);
         String selfRisk = "2000";
 
         return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, newPrice, repairPrice,
-                regNumber, accountNumber, selfRisk, communicationDesigner);
+                selfRisk, communicationDesigner);
     }
 
     @DataProvider(name = SPLIT_REPLACEMENT_DATA_PROVIDER)
@@ -375,10 +369,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setCustomerWelcome(false, null)
                 .setOrderConfirmation(false, null);
 
-        String regNumber = "1";
-        String accountNumber = "12345678890";
-
-        return addNewParameters(TestDataActions.getTestDataParameters(method), regNumber, accountNumber, communicationDesigner);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
     }
 
     @DataProvider(name = SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER)
@@ -389,10 +380,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setCustomerWelcome(true, TWO_ATTACHMENTS)
                 .setOrderConfirmation(true, ONE_ATTACHMENT);
 
-        String regNumber = "1";
-        String accountNumber = "12345678890";
-
-        return addNewParameters(TestDataActions.getTestDataParameters(method), regNumber, accountNumber, communicationDesigner);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
     }
 
     @DataProvider(name = ORDER_CONFIRMATION_DATA_PROVIDER)
@@ -412,9 +400,6 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setReplacementMail(false, null);
 
-        String regNumber = "1";
-        String accountNumber = "12345678890";
-
-        return addNewParameters(TestDataActions.getTestDataParameters(method), regNumber, accountNumber, communicationDesigner);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
     }
 }

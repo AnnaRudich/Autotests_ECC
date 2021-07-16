@@ -29,7 +29,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTests {
 
-    private static final String AUTOMATIC_CUSTOME_WELCOME_DATA_PROVIDER = "automaticCustomerWelcomeDataProvider";
+    private static final String AUTOMATIC_CUSTOMER_WELCOME_DATA_PROVIDER = "automaticCustomerWelcomeDataProvider";
 
     @BeforeMethod
     public void toSettlementPage(Object[] objects) {
@@ -46,25 +46,25 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
 
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
     @CommunicationDesignerCleanUp
-    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = AUTOMATIC_CUSTOME_WELCOME_DATA_PROVIDER,
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = AUTOMATIC_CUSTOMER_WELCOME_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcome")
     public void automaticCustomerWelcomeTest(User user, ClaimItem claimItem, ClaimRequest createClaimRequest,
-                                             ClaimRequest itemizationClaimRequest,
-                                             CommunicationDesigner communicationDesigner) {
+                                             ClaimRequest itemizationClaimRequest, String password, String month,
+                                             Double newPrice, CommunicationDesigner communicationDesigner) {
 
         String claimLineDescription = claimItem.getSetDialogTextMatch();
 
         Page.at(SettlementPage.class)
                 .cancelPolicy()
-                .requestSelfServiceWithEnabledNewPassword(createClaimRequest, Constants.DEFAULT_PASSWORD)
+                .requestSelfServiceWithEnabledNewPassword(createClaimRequest, password)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
-                .login(Constants.DEFAULT_PASSWORD)
+                .login(password)
                 .addDescriptionWithOutSuggestions(claimLineDescription)
                 .selectPurchaseYear(String.valueOf(Year.now().getValue()))
-                .selectPurchaseMonth(JANUARY)
-                .addNewPrice(3000.00)
+                .selectPurchaseMonth(month)
+                .addNewPrice(newPrice)
                 .selectCategory(claimItem.getCategoryMobilePhones())
                 .saveItem()
                 .sendResponseToEcc();
@@ -84,7 +84,7 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
                 );
     }
 
-    @DataProvider(name = AUTOMATIC_CUSTOME_WELCOME_DATA_PROVIDER)
+    @DataProvider(name = AUTOMATIC_CUSTOMER_WELCOME_DATA_PROVIDER)
     public static Object[][] automaticCustomerWelcomeDataProvider(Method method) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -96,11 +96,13 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
         ClaimRequest itemizationClaimRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
         User user = getObjectByClass(parameters, User.class).get(0);
-
+        String password = DEFAULT_PASSWORD;
+        String month = DEFAULT_MONTH;
+        Double newPrice = 3000.00;
         String companyName = user.getCompanyName();
 
         return addNewParameters(parameters, setAllowAutoClose(createClaimRequest, companyName),
-                setAllowAutoClose(itemizationClaimRequest, companyName), communicationDesigner);
+                setAllowAutoClose(itemizationClaimRequest, companyName), password, month, newPrice, communicationDesigner);
     }
 
     private static ClaimRequest setAllowAutoClose(ClaimRequest claimRequest, String companyName){

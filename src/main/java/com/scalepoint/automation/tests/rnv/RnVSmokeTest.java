@@ -1,65 +1,48 @@
 package com.scalepoint.automation.tests.rnv;
 
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
-import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage;
-import com.scalepoint.automation.pageobjects.pages.rnv.tabs.InvoiceTab;
-import com.scalepoint.automation.pageobjects.pages.rnv.tabs.OverviewTab;
-import com.scalepoint.automation.pageobjects.pages.suppliers.DefaultSettingsPage;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.RnvService;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
-public class RnVSmokeTest extends BaseTest {
+public class RnVSmokeTest extends RnVBase {
 
-    /*
-     * send line to RnV
-     * send feedback with Invoice
-     * Assert: task has feedback received status
-     * Assert: there are lines in Invoice dialog opened from Invoice tab
-     */
+    private static final String SEND_LINE_TO_RNV_SEND_FEEDBACK_IS_SUCCESS_DATA_PROVIDER = "sendLineToRnvSSendFeedbackIsSuccessDataProvider";
+    private static final String MESSAGES_DATA_PROVIDER = "messagesDataProvider";
+    private static final String SINGLE_INVOICE_CREDIT_NOTES_DATA_PROVIDER = "singleInvoiceCreditNotesDataProvider";
+    private static final String MULTIPLE_INVOICED_CREDIT_NOTES_DATA_PROVIDER = "multipleInvoicesCreditNotesDataProvider";
+    private static final String CREDIT_NOTE_WITHOUT_INVOICE_NUMBER_DATA_PROVIDER = "creditNoteWithoutInvoiceNumberDataProvider";
+    private static final String SELF_RISK_LOWER_THAN_TOTAL_AMOUNT_OF_COMPENSATION_DATA_PROVIDER = "selfRiskLowerThanTotalAmountOfCompensationDataProvider";
 
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void sendLineToRnv_SendFeedbackIsSuccess(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    private static final String TEST_MESSAGE = "Test message";
 
-        completeWithEmailAndSendRnV(user, claim, agreement, translations);
+    @BeforeMethod
+    public void toSettlementPage(Object[] objects) {
 
-        new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_30),claim, rnvStub);
+        List parameters = Arrays.asList(objects);
 
-        new ClaimNavigationMenu().toRepairValuationProjectsPage()
-                .expandTopTaskDetails()
-                .getAssertion()
-                .assertTaskHasFeedbackReceivedStatus(agreement);
-
-        new ProjectsPage().toInvoiceTab()
-                .openInvoiceDialogForLineWithIndex(0)
-                .findInvoiceLineByIndex(1)
-                .assertTotalForTheLineWithIndex(1, Constants.PRICE_50);
-    }
-
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void messagesTest(User user, Claim claim, ServiceAgreement agreement) {
-
-        final String testMessage = "Test message";
-        final String lineDescription = RandomUtils.randomName("RnVLine");
+        User user = getObjectByClass(parameters, User.class).get(0);
+        Claim claim = getObjectByClass(parameters, Claim.class).get(0);
+        ServiceAgreement agreement = getObjectByClass(parameters, ServiceAgreement.class).get(0);
+        Translations translations = getObjectByClass(parameters, Translations.class).get(0);
+        String lineDescription = getObjectByClass(parameters, String.class).get(0);
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
@@ -73,9 +56,43 @@ public class RnVSmokeTest extends BaseTest {
                 .findClaimLine(lineDescription)
                 .selectLine()
                 .sendToRnV()
+                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
                 .nextRnVstep()
                 .sendRnvIsSuccess(agreement);
+    }
+    /*
+     * send line to RnV
+     * send feedback with Invoice
+     * Assert: task has feedback received status
+     * Assert: there are lines in Invoice dialog opened from Invoice tab
+     */
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE},
+            dataProvider = SEND_LINE_TO_RNV_SEND_FEEDBACK_IS_SUCCESS_DATA_PROVIDER,
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void sendLineToRnvSSendFeedbackIsSuccessTest(User user, Claim claim, ServiceAgreement agreement,
+                                                        Translations translations, String lineDescription,
+                                                        BigDecimal repairPrice, Double lineTotal) {
 
+        completeWithEmailAndSendRnV(lineDescription);
+
+        new RnvService()
+                .sendFeedbackWithInvoiceWithRepairPrice(repairPrice,claim, rnvStub);
+
+        new ClaimNavigationMenu().toRepairValuationProjectsPage()
+                .expandTopTaskDetails()
+                .getAssertion()
+                .assertTaskHasFeedbackReceivedStatus(agreement);
+
+        new ProjectsPage().toInvoiceTab()
+                .openInvoiceDialogForLineWithIndex(0)
+                .findInvoiceLineByIndex(1)
+                .assertTotalForTheLineWithIndex(1, lineTotal);
+    }
+
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = MESSAGES_DATA_PROVIDER,
+            description = "RnV1. SendLine to RnV, send Service Partner feedback")
+    public void messagesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
+                             String lineDescription, String testMessage) {
 
         new ClaimNavigationMenu()
                 .toRepairValuationProjectsPage()
@@ -84,19 +101,17 @@ public class RnVSmokeTest extends BaseTest {
                 .assertLatestMessageContains(testMessage);
     }
 
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = SINGLE_INVOICE_CREDIT_NOTES_DATA_PROVIDER,
             description = "Sends multiple credit notes to the single invoice")
-    public void singleInvoiceCreditNotesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    public void singleInvoiceCreditNotesTest(User user, Claim claim, ServiceAgreement agreement,
+                                             Translations translations, String lineDescription, BigDecimal repairPrice,
+                                             BigDecimal invoicePrice, BigDecimal creditNote1, BigDecimal creditNote2,
+                                             BigDecimal creditNote3) {
 
-        final BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
-        final BigDecimal creditNote1 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(25.00);
-        final BigDecimal creditNote2 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
-        final BigDecimal creditNote3 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-
-        completeWithEmailAndSendRnV(user, claim, agreement, translations);
+        completeWithEmailAndSendRnV(lineDescription);
 
         ServiceTaskImport serviceTaskImport = new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00), claim, rnvStub);
+                .sendFeedbackWithInvoiceWithRepairPrice(repairPrice, claim, rnvStub);
 
         ProjectsPage projectsPage = new ClaimNavigationMenu().toRepairValuationProjectsPage();
         verifyInvoicesDetails(projectsPage, 1, 0, invoicePrice, invoicePrice);
@@ -136,23 +151,22 @@ public class RnVSmokeTest extends BaseTest {
         verifyInvoiceTotalAndGridSize(projectsPage, invoiceTotal, 4);
     }
 
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = MULTIPLE_INVOICED_CREDIT_NOTES_DATA_PROVIDER,
             description = "Sends multiple creditNotes to the multiple invoices")
-    public void multipleInvoicesCreditNotesTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    public void multipleInvoicesCreditNotesTest(User user, Claim claim, ServiceAgreement agreement,
+                                                Translations translations, String lineDescription,
+                                                BigDecimal invoicePrice, BigDecimal creditNote, BigDecimal repairPrice) {
 
-        final BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
-        final BigDecimal creditNote = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(75.00);
-
-        completeWithEmailAndSendRnV(user, claim, agreement, translations);
+        completeWithEmailAndSendRnV(lineDescription);
 
         ServiceTaskImport serviceTaskImport1 = new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00), claim, rnvStub);
+                .sendFeedbackWithInvoiceWithRepairPrice(repairPrice, claim, rnvStub);
 
         ProjectsPage projectsPage = new ClaimNavigationMenu().toRepairValuationProjectsPage();
         verifyInvoicesDetails(projectsPage, 1, 0, invoicePrice, invoicePrice);
 
         ServiceTaskImport serviceTaskImport2 = new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00), claim, rnvStub);
+                .sendFeedbackWithInvoiceWithRepairPrice(repairPrice, claim, rnvStub);
 
         BigDecimal invoiceTotal = invoicePrice.add(invoicePrice);
 
@@ -165,7 +179,6 @@ public class RnVSmokeTest extends BaseTest {
                     rnvService.assertCreated();
                     rnvService.assertCreditNoteHigherThanInvoice();
                 });
-
 
         projectsPage.refresh();
         verifyInvoiceTotalAndGridSize(projectsPage, invoiceTotal, 2);
@@ -189,16 +202,16 @@ public class RnVSmokeTest extends BaseTest {
         verifyInvoiceTotalAndGridSize(projectsPage, invoiceTotal, 3);
     }
 
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = CREDIT_NOTE_WITHOUT_INVOICE_NUMBER_DATA_PROVIDER,
             description = "Sends credit note without correct invoice number")
-    public void creditNoteWithoutInvoiceNumberTest(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    public void creditNoteWithoutInvoiceNumberTest(User user, Claim claim, ServiceAgreement agreement,
+                                                   Translations translations, String lineDescription,
+                                                   BigDecimal invoicePrice, BigDecimal repairPrice) {
 
-        final BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
-
-        completeWithEmailAndSendRnV(user, claim, agreement, translations);
+        completeWithEmailAndSendRnV(lineDescription);
 
         ServiceTaskImport serviceTaskImport = new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPrice(NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00), claim, rnvStub);
+                .sendFeedbackWithInvoiceWithRepairPrice(repairPrice, claim, rnvStub);
         serviceTaskImport.getInvoice().setInvoiceNumber("");
 
         new RnvService()
@@ -212,386 +225,70 @@ public class RnVSmokeTest extends BaseTest {
         verifyInvoicesDetails(projectsPage, 1, 0, invoicePrice, invoicePrice);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
-    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void selfRiskLowerThanTotalAmounOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    @DataProvider(name = SEND_LINE_TO_RNV_SEND_FEEDBACK_IS_SUCCESS_DATA_PROVIDER)
+    public static Object[][] sendLineToRnvSSendFeedbackIsSuccessDataProvider(Method method) {
 
-        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
-        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
-        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
-        final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfriskByServicePartner).subtract(selfRisk);
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
+        BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
+        Double lineTotal = 50.00;
 
-        setSelfRiskCollectedByServicePartner(user);
-
-        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
-
-        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), selfriskByServicePartner)
-                .clickEvaluateAssignment()
-                .acceptFeedback()
-                .toSettlementPage();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                selfriskByServicePartner,
-                selfRisk,
-                zero,
-                zero,
-                selfRiskTakenByInsureanceCompany);
-
-        settlementPage = settlementPage
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .reopenClaim();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                selfriskByServicePartner,
-                selfRisk,
-                zero,
-                selfRiskTakenByInsureanceCompany,
-                zero);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice, lineTotal);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
-    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void selfRiskEqualToTotalAmountOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    @DataProvider(name = MESSAGES_DATA_PROVIDER)
+    public static Object[][] messagesDataProvider(Method method) {
 
-        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
-        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
-        final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfriskByServicePartner).subtract(selfRisk);
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
 
-        setSelfRiskCollectedByServicePartner(user);
-
-        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
-
-        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), selfriskByServicePartner)
-                .clickEvaluateAssignment()
-                .acceptFeedback()
-                .toSettlementPage();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                selfriskByServicePartner,
-                selfRisk,
-                zero,
-                zero,
-                selfRiskTakenByInsureanceCompany);
-
-        settlementPage = settlementPage
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .reopenClaim();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                selfriskByServicePartner,
-                selfRisk,
-                zero,
-                selfRiskTakenByInsureanceCompany,
-                zero);
-    }
-    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
-    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback", enabled = false)
-    public void selfRiskHigherThanTotalAmountOfCompensation(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
-
-        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(20.00);
-        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
-        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
-
-        setSelfRiskCollectedByServicePartner(user);
-
-        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner)
-                .doAssert(rnvService -> rnvService.assertTakenSelfRiskNotWithinAllowedRange());
-
-        verifyPanelView(agreement.getWaitingStatus(), zero);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, TEST_MESSAGE);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
-    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void selfRiskLowerThanRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    @DataProvider(name = SINGLE_INVOICE_CREDIT_NOTES_DATA_PROVIDER)
+    public static Object[][] singleInvoiceCreditNotesDataProvider(Method method) {
 
-        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
-        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
-        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
-        final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfRisk);
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
+        BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
+        BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
+        BigDecimal creditNote1 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(25.00);
+        BigDecimal creditNote2 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
+        BigDecimal creditNote3 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
 
-        setSelfRiskCollectedByInsuranceCompany(user);
-
-        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
-
-        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), zero)
-                .clickEvaluateAssignment()
-                .acceptFeedback()
-                .toSettlementPage();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                zero,
-                selfRisk,
-                zero,
-                zero,
-                selfRiskTakenByInsureanceCompany);
-
-        settlementPage = settlementPage
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .reopenClaim();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                zero,
-                selfRisk,
-                zero,
-                selfRiskTakenByInsureanceCompany,
-                zero);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice,
+                invoicePrice, creditNote1, creditNote2, creditNote3);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
-    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void selfRiskEqualToRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    @DataProvider(name = MULTIPLE_INVOICED_CREDIT_NOTES_DATA_PROVIDER)
+    public static Object[][] multipleInvoicesCreditNotesDataProvider(Method method) {
 
-        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
-        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
-        final BigDecimal selfRiskTakenByInsureanceCompany = repairPrice.subtract(selfRisk);
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
+        BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
+        BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
+        BigDecimal creditNote = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(75.00);
 
-        setSelfRiskCollectedByInsuranceCompany(user);
-
-        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
-
-        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), zero)
-                .clickEvaluateAssignment()
-                .acceptFeedback()
-                .toSettlementPage();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                zero,
-                selfRiskTakenByInsureanceCompany,
-                zero,
-                zero,
-                repairPrice);
-
-        settlementPage = settlementPage
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .reopenClaim();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                zero,
-                zero,
-                zero,
-                selfRisk,
-                zero);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription,
+                invoicePrice, creditNote, repairPrice);
     }
 
-    @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
-    @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = "testDataProvider",
-            description = "RnV1. SendLine to RnV, send Service Partner feedback")
-    public void selfRiskHigherThanRepairPrice(User user, Claim claim, ServiceAgreement agreement, Translations translations) {
+    @DataProvider(name = CREDIT_NOTE_WITHOUT_INVOICE_NUMBER_DATA_PROVIDER)
+    public static Object[][] creditNoteWithoutInvoiceNumberDataProvider(Method method) {
 
-        final BigDecimal selfriskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
-        final BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
-        final BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(20.00);
-        final BigDecimal zero = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(0.00);
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
+        BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
+        BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
 
-        setSelfRiskCollectedByInsuranceCompany(user);
-
-        sendRnVAndFeedbackWithTakenSelfRisk(user, claim, agreement, translations, repairPrice, selfriskByServicePartner);
-
-        SettlementPage settlementPage = verifyPanelView(agreement.getFeedbackReceivedStatus(), zero)
-                .clickEvaluateAssignment()
-                .acceptFeedback()
-                .toSettlementPage();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                zero,
-                zero,
-                zero,
-                zero,
-                repairPrice);
-
-        settlementPage = settlementPage
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .reopenClaim();
-
-        verifyRepairPanel(settlementPage,
-                repairPrice,
-                zero,
-                zero,
-                zero,
-                repairPrice,
-                zero);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, invoicePrice, repairPrice);
     }
 
-    private void completeWithEmailAndSendRnV(User user, Claim claim, ServiceAgreement agreement, Translations translations){
+    @DataProvider(name = SELF_RISK_LOWER_THAN_TOTAL_AMOUNT_OF_COMPENSATION_DATA_PROVIDER)
+    public static Object[][] selfRiskLowerThanTotalAmountOfCompensationDataProvider(Method method) {
 
-        String lineDescription = RandomUtils.randomName("RnVLine");
+        String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
+        BigDecimal selfRiskByServicePartner = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
+        BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
+        BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
 
-        loginAndCreateClaim(user, claim)
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .openRecentClaim()
-                .reopenClaim()
-                .openSid()
-                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
-                .closeSidWithOk()
-                .findClaimLine(lineDescription)
-                .selectLine()
-                .sendToRnV()
-                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
-                .nextRnVstep()
-                .sendRnvIsSuccess(agreement)
-                .findClaimLine(lineDescription)
-                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
-    }
-
-    private void setSelfRiskCollectedByServicePartner(User user){
-
-        DefaultSettingsPage defaultSettingsPage = login(user)
-                .getMainMenu()
-                .toEccAdminPage()
-                .toDefaultSettings();
-        defaultSettingsPage
-                .toDefaultSettingsGrid()
-                .getDefaultSettingsRow(0)
-                .setSelfRiskCollectedByServicePartner();
-        defaultSettingsPage.logout();
-    }
-
-    private void setSelfRiskCollectedByInsuranceCompany(User user){
-
-        DefaultSettingsPage defaultSettingsPage = login(user)
-                .getMainMenu()
-                .toEccAdminPage()
-                .toDefaultSettings();
-        defaultSettingsPage
-                .toDefaultSettingsGrid()
-                .getDefaultSettingsRow(0)
-                .setSelfRiskCollectedByInsuranceCompany();
-        defaultSettingsPage.logout();
-    }
-
-    private RnvService sendRnVAndFeedbackWithTakenSelfRisk(User user, Claim claim, ServiceAgreement agreement, Translations translations, BigDecimal repairPrice, BigDecimal selfriskByServicePartner){
-
-        final String lineDescription = RandomUtils.randomName("RnVLine");
-
-        loginAndCreateClaim(user, claim)
-                .getSettlementSummary()
-                .editSelfRisk("15")
-                .openSid()
-                .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
-                .closeSidWithOk()
-                .findClaimLine(lineDescription)
-                .selectLine()
-                .sendToRnV()
-                .selectRnvType(lineDescription, translations.getRnvTaskType().getRepair())
-                .nextRnVstep()
-                .sendRnvIsSuccess(agreement)
-                .findClaimLine(lineDescription)
-                .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
-
-        return new RnvService()
-                .sendFeedbackWithInvoiceWithRepairPriceAndTakenSelfRisk(repairPrice, selfriskByServicePartner, claim, rnvStub);
-    }
-
-    private void verifyInvoicesDetails(ProjectsPage projectsPage,
-                                       int gridSize,
-                                       int gridIndex,
-                                       BigDecimal invoicePrice,
-                                       BigDecimal invoiceTotal){
-
-        InvoiceTab invoiceTab = verifyInvoiceTotalAndGridSize(projectsPage, invoiceTotal, gridSize);
-        invoiceTab
-                .toInvoiceGrid()
-                .getGridLine(gridIndex)
-                .doAssert(iGrid -> iGrid.assertTotal(invoicePrice));
-        invoiceTab
-                .openInvoiceDialogForLineWithIndex(gridIndex)
-                .doAssert(iDialog -> iDialog.assertTotalIs(invoicePrice));
-    }
-
-    private InvoiceTab verifyInvoiceTotalAndGridSize(ProjectsPage projectsPage, BigDecimal invoiceTotal, int gridSize){
-
-        projectsPage
-                .toOverviewTab()
-                .toPanelViewGrid()
-                .getPanelViewGridLine(0)
-                .doAssert(panelViewGridLine ->
-                        panelViewGridLine.assertInvoicePrice(invoiceTotal)
-                );
-
-        InvoiceTab invoiceTab = projectsPage
-                .toInvoiceTab();
-        return invoiceTab
-                .doAssert(iTab ->
-                        iTab.assertInvoiceGridSize(gridSize));
-    }
-
-    private OverviewTab.PanelViewGrid.PanelViewGridLine verifyPanelView(String status, BigDecimal selfriskByServicePartner){
-
-        return new ClaimNavigationMenu()
-                .toRepairValuationProjectsPage()
-                .toOverviewTab()
-                .toPanelViewGrid()
-                .getPanelViewGridLine(0)
-                .doAssert(panelViewGridLine ->
-                        panelViewGridLine
-                                .assertTaskStatus(status)
-                                .assertSelfriskByServicePartner(selfriskByServicePartner)
-                );
-    }
-
-    private SettlementSummary.RepairPanel verifyRepairPanel(SettlementPage settlementPage,
-                                                            BigDecimal repairPrice,
-                                                            BigDecimal selfriskByServicePartner,
-                                                            BigDecimal substractedFromStatement,
-                                                            BigDecimal payBackOverCollectedDeductible,
-                                                            BigDecimal selfRiskTakenByInsureanceCompany,
-                                                            BigDecimal outstandingSelfRiskTakenByInsureanceCompany){
-
-        return settlementPage
-                .getSettlementSummary()
-                .getRepairPanel()
-                .doAssert(repairPanel ->
-                        repairPanel
-                                .assertRepairPrice(repairPrice)
-                                .assertSelfRiskTakenByServicePartner(selfriskByServicePartner)
-                                .assertSubtractedFromStatement(substractedFromStatement)
-                                .assertPayBackOverCollectedDeductible(payBackOverCollectedDeductible)
-                                .asserSelfRiskTakenByInsureanceCompany(selfRiskTakenByInsureanceCompany)
-                                .assertOutstandingSelfRiskTakenByInsureanceCompany(outstandingSelfRiskTakenByInsureanceCompany)
-                );
+        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription,
+                selfRiskByServicePartner, repairPrice, selfRisk);
     }
 }
 
