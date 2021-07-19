@@ -97,6 +97,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     public static final String RV_LINE_DESCRIPTION = "RnVLine";
+    public static final String UPDATED_LINE_DESCRIPTION = "Updated";
     public static final String DEFAULT_PASSWORD = "12341234";
 
     public static final String TEST_DATA_PROVIDER = "testDataProvider";
@@ -313,6 +314,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         login(user, null);
         Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
         return new SettlementPage();
+    }
+
+    protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
+        login(user, null);
+        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
+        return Page.at(returnPageClass);
     }
 
     protected MyPage login(User user) {

@@ -565,7 +565,7 @@ public class SettlementDialog extends BaseDialog {
         $(ok).click();
         try {
             $(ok).click();
-        } catch (Exception e) {
+        } catch (Throwable  e) {
             logger.info(e.getMessage());
         }
         return this;
