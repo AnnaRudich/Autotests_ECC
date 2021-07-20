@@ -166,7 +166,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         new ProjectsPage().toInvoiceTab()
                 .doAssert(InvoiceTab.Asserts::assertThereIsNoInvoiceGrid);
 
-}
+    }
     /*
      * send line to RnV
      * send feedback via RnV Rest service (withOUT Invoice)

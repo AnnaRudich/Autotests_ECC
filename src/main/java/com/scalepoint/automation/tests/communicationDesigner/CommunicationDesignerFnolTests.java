@@ -7,7 +7,6 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
@@ -25,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
-import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTests {
 

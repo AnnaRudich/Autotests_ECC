@@ -55,7 +55,6 @@ public class RejectReasonTests extends BaseTest {
     public void charlie_549_checkIfCanAddNewRejectReasonToClaimCreatedBefore(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                              InsuranceCompany insuranceCompany, EccIntegration eccIntegration) {
         String location = createClaimAndLineUsingEccIntegration(user, eccIntegration).getResponse().extract().header("Location");
-        makeRejectReasonMandatory(iTestResult, user);
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
@@ -491,13 +490,4 @@ public class RejectReasonTests extends BaseTest {
                 .closeSidWithOk()
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
-
-    private void makeRejectReasonMandatory(ITestResult iTestResult, @UserCompany(CompanyCode.TRYGFORSIKRING) User user) {
-//        List<FtOperation> ftOperations = new ArrayList<>();
-//        ftOperations.add(FTSettings.enable(FTSetting.MAKE_REJECT_REASON_MANDATORY));
-//        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-//        functionalTemplatesApi.updateTemplate(user, LoginPage.class, ftOperations.toArray(new FtOperation[0]));
-//        iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, functionalTemplatesApi.getOperationsToRollback()));
-    }
-
 }

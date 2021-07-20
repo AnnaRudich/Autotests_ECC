@@ -13,7 +13,6 @@ import com.scalepoint.automation.services.ucommerce.CreateOrderService;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.testGroups.TestGroups;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
