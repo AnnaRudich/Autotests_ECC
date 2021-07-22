@@ -152,14 +152,14 @@ public class TextSearchPage extends Page {
         return sort(sortByOrderable, descendingOrderable);
     }
 
-    private TextSearchPage sort(SelenideElement sortLink, SelenideElement sortIconToWait) {
+    private TextSearchPage sort(WebElement sortLink, WebElement sortIconToWait) {
         int totalAttempts = 10;
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
 
             try {
-                sortLink.click();
-                sortIconToWait.waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+                $(sortLink).click();
+                $(sortIconToWait).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
             } catch (Throwable e) {
                 logger.info(e.getMessage());
             }
