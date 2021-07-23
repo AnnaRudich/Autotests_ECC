@@ -63,7 +63,6 @@ public class SuppliersPage extends BaseSupplierAdminNavigation {
     @Override
     protected void ensureWeAreOnPage() {
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         try {
             $(createSupplierButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } catch (Exception e) {

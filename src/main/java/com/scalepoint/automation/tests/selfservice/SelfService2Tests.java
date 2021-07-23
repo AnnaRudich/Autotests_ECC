@@ -104,7 +104,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "SelfService2 password reset, login and logout")
-        public void selfService2LogInWithNewPassword(User user, Claim claim) {
+    public void selfService2LogInWithNewPassword(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toCompleteClaimPage()

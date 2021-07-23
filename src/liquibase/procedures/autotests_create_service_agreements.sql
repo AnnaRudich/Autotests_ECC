@@ -19,13 +19,13 @@ AS
 	declare @ServiceAgreementTemplateID int = (Select top 1 id from ServiceAgreementTemplate order by id desc)
 
 	/* SUPPLIER DATA */
-	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests'
-	declare @Address1 varchar(100) = 'Test address 1'
-	declare @Address2 varchar(100) = 'Test address 2'
+	declare @SupplierName varchar(100) = 'Autotest-Supplier-RnV-Tests ÆæØøÅåß'
+	declare @Address1 varchar(100) = 'Test address ÆæØøÅåß 1'
+	declare @Address2 varchar(100) = 'Test address ÆæØøÅåß 2'
 	declare @Phone varchar(100) = '0800 0833113'
     declare @Email varchar(100) = 'ecc_auto@scalepoint.com'
 	declare @PostalCode varchar(100) = '4321'
-	declare @City varchar(100) = 'Test city'
+	declare @City varchar(100) = 'Test city ÆæØøÅåß'
 	declare @SecurityToken varchar(100) = '7D1B2289-9365-4294-BD11-A7EB865B94E3'
 	declare @RV_TaskWebServiceUrl varchar(100) = 'https://' + @MockUrl + '/mock/rnv/rvTaskWebServiceUrl'
     declare @SecurityTokenIssued varchar(100) = '2018-06-05 00:00:00.000'
@@ -44,7 +44,7 @@ AS
      --add supplier if there is no
 	ELSE
 	BEGIN
-		EXEC autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, 3, @SupplierId OUTPUT, @MockUrl = @MockUrl;
+		EXEC autotests_create_supplier @SupplierName, @insCompanyId, @PostalCode, @SecurityToken, @RV_TaskWebServiceUrl, @SecurityTokenIssued, 3, @SupplierId OUTPUT, @MockUrl = @MockUrl
 	END
 
     --add RnV_testUrl
@@ -90,7 +90,7 @@ AS
 
 	/*---------------------------------------------------------*/
 	/* SHOP DATA */
-	declare @ShopName varchar(100) = CONCAT('Test shop ', @ScalepointCompanyId)
+	declare @ShopName varchar(100) = CONCAT('Test shop ÆæØøÅåß ', @ScalepointCompanyId)
 	declare @ShopName2 varchar(100) = @ShopName+' 2'
 	declare @IsRetailShop bit = 1
 	declare @IsRepairValuationLocation bit = 1

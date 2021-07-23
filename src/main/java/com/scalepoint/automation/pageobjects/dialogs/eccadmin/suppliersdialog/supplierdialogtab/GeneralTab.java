@@ -14,8 +14,7 @@ import java.io.File;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertTrue;
 
 public  class GeneralTab extends SupplierDialog {
@@ -93,7 +92,7 @@ public  class GeneralTab extends SupplierDialog {
     public GeneralTab uploadLogo(String logoPath) {
         WebElement elem = $(By.xpath("//input[contains(@id, 'supplierLogoFileId') and contains(@type, 'file')]"));
         $(elem).uploadFile(new File(logoPath));
-        Wait.waitForDisplayed(By.cssSelector(("img.imageUploadImg")));
+        verifyElementVisible($(By.cssSelector(("img.imageUploadImg"))));
         return this;
     }
 
@@ -123,7 +122,7 @@ public  class GeneralTab extends SupplierDialog {
         }
 
         public Asserts assertCity(String cityValue) {
-            Assert.assertEquals(waitForVisible(city).getAttribute(VALUE), cityValue);
+            Assert.assertEquals(waitElementVisible($(city)).getAttribute(VALUE), cityValue);
             return this;
         }
 
@@ -138,7 +137,7 @@ public  class GeneralTab extends SupplierDialog {
         }
 
         public Asserts assertIsDialogNotEditable() {
-            Assert.assertTrue(Wait.invisibleOfElement(By.id("editSupplierTabPanelId")));
+            Assert.assertFalse(verifyElementVisible($(By.id("editSupplierTabPanelId"))));
             return this;
         }
     }

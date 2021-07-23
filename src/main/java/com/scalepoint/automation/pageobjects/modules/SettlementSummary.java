@@ -22,8 +22,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {
@@ -152,7 +152,7 @@ public class SettlementSummary extends Module {
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
         expand();
-        waitForVisible(auditInfoPanel);
+        verifyElementVisible($(auditInfoPanel));
         return this;
     }
 

@@ -12,7 +12,7 @@ AS
 	SET NOCOUNT ON
 
 	UPDATE [PsuedoCategory]
-	SET damageTypes = 'damageType1,damageType2'
+	SET damageTypes = 'damageType1 ÆæØøÅåß,damageType2 ÆæØøÅåß'
     WHERE PseudoCategoryID = 209083 --Category Personal Medicine
 
 	SET NOCOUNT OFF

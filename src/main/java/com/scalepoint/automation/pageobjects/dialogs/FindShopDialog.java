@@ -75,7 +75,7 @@ public class FindShopDialog extends BaseDialog {
         public Asserts assertDistanceToShopIs(String voucherName, String shopName, String postalCode, Integer expectedDistance) {
             Optional<ShopRow> shopRow = findShops(voucherName, postalCode)
                     .parseShopResults()
-                    .stream().filter(row -> row.name.equals(shopName)).findFirst();
+                    .stream().filter(row -> shopName.contains(row.name)).findFirst();
             if (shopRow.isPresent()) {
                 Assert.assertEquals(shopRow.get().distance, expectedDistance);
             } else {

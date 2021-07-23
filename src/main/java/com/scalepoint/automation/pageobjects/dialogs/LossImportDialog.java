@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class LossImportDialog extends BaseDialog {
@@ -48,7 +49,7 @@ public class LossImportDialog extends BaseDialog {
 
     private void startUploadExcel(String path){
         $(By.name("upfile")).uploadFile(new File(path));
-        Wait.waitForVisible(excelImportButton);
+        waitElementVisible($(excelImportButton));
         excelImportButton.click();
         Wait.waitForLoaded();
     }

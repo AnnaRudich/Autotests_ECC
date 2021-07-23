@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccPage
 public class MyPage extends Page {
@@ -52,7 +51,6 @@ public class MyPage extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(editPreferences).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(lastClaims).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }

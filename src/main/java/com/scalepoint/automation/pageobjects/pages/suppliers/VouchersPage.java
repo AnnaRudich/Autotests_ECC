@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
@@ -46,7 +45,6 @@ public class VouchersPage extends BaseSupplierAdminNavigation {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         try {
             $(firstVoucherItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         } catch (Exception e) {

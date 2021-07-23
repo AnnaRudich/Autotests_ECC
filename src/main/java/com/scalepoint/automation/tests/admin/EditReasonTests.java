@@ -14,6 +14,7 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
@@ -359,7 +360,8 @@ public class EditReasonTests extends BaseTest {
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason,
                                            String description, Double customerDemandPrice, String month, int depreciation,
                                            Double discretionaryReasonPrice, Double newPrice) {
-        loginAndCreateClaim(trygUser, claim)
+        loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
+                .cancel()
                 .openSid()
                 .setDescription(description)
                 .setCategory(claimItem.getCategoryShoes())

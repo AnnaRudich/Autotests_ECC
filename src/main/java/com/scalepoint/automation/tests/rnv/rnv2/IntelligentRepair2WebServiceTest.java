@@ -247,7 +247,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .assertTaskHasCompletedStatus(agreement)
                 .assertEvaluateTaskButtonIsDisabled();
     }
-
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)

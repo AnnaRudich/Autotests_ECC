@@ -12,12 +12,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class InvoiceTab extends BaseClaimPage {
@@ -25,7 +22,6 @@ public class InvoiceTab extends BaseClaimPage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
         waitForAjaxCompletedAndJsRecalculation();
         $("#grid-invoice-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
     }

@@ -11,7 +11,7 @@
 
         <sql>
 
-            declare @agreementName varchar(50) = 'serviceAgreement_autotests'
+            declare @agreementName varchar(50) = 'serviceAgreement_autotests ÆæØøÅåß'
 
             --create shared service agreement under Scalepoint
             declare @insCompanyId int = (select ICRFNBR from InsComp where CompanyCode = 'SCALEPOINT')

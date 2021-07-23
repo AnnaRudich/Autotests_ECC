@@ -3,6 +3,8 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.textSearch.Attributes;
@@ -28,6 +30,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -77,7 +80,7 @@ public class TextSearchPage extends Page {
     private Button search;
 
     @FindBy(xpath = "//img[@id='sortMarketPriceImg' and contains(@src,'text_search\\icon_order_az.gif')]")
-    private Image ascendantMarketPrice;
+    private WebElement ascendantMarketPrice;
 
     @FindBy(xpath = "//img[@id='sortMarketPriceImg' and contains(@src,'text_search\\icon_order_za.gif')]")
     private Image descendantMarketPrice;
@@ -139,7 +142,6 @@ public class TextSearchPage extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(By.id("categoryLegend")).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -155,19 +157,16 @@ public class TextSearchPage extends Page {
         int totalAttempts = 10;
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
-            $(sortLink).click();
-            boolean isDisplayed = false;
+
             try {
-                isDisplayed = sortIconToWait.isDisplayed();
-            } catch (Exception e) {
+                $(sortLink).click();
+                $(sortIconToWait).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+            } catch (Throwable e) {
                 logger.info(e.getMessage());
             }
-            if (isDisplayed) {
-                break;
-            }
-            currentAttempt++;
+            break;
         }
-        Wait.waitForAjaxCompleted();
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -201,14 +200,14 @@ public class TextSearchPage extends Page {
     }
 
     public BestFitPage toBestFitPage() {
-        Wait.waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         bestFit.click();
         return at(BestFitPage.class);
     }
 
     public ProductDetailsDialog openProductDetailsOfFirstProduct() {
-        Wait.waitForVisible(match);
-        Wait.waitForAjaxCompleted();
+        verifyElementVisible($(match));
+        waitForAjaxCompleted();
         $(firstProductDetails).click();
         return BaseDialog.at(ProductDetailsDialog.class);
     }
@@ -224,8 +223,8 @@ public class TextSearchPage extends Page {
     }
 
     public SettlementDialog openSidForProductWithVoucher() {
-        Wait.waitForAjaxCompleted();
-        Wait.waitForVisible(match);
+        waitForAjaxCompleted();
+        verifyElementVisible($(match));
         hoverAndClick($(match));
         SettlementDialog settlementDialog = BaseDialog.at(SettlementDialog.class);
         if (!settlementDialog.isDiscountDistributionDisplayed()) {
@@ -272,7 +271,7 @@ public class TextSearchPage extends Page {
     }
 
     public TextSearchPage chooseCategory(String _category) {
-        waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
+        verifyElementVisible($(By.cssSelector("#categoryFieldSet table:first-child")));
         List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
         forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(_category)).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + _category)))).click();
         waitForResultsLoad();
@@ -280,7 +279,7 @@ public class TextSearchPage extends Page {
     }
 
     public TextSearchPage chooseCategory(PseudoCategory pseudoCategory) {
-        waitForDisplayed(By.cssSelector("#categoryFieldSet table:first-child"));
+        verifyElementVisible($(By.cssSelector("#categoryFieldSet table:first-child")));
         List<WebElement> categories = driver.findElements(By.cssSelector(".ygtvitem span span"));
         forCondition(ExpectedConditions.elementToBeClickable(categories.stream().filter(category -> category.getText().contains(pseudoCategory.getGroupName())).findFirst().orElseThrow(() -> new NoSuchElementException("Can't find category: " + pseudoCategory.getGroupName())))).click();
         waitForResultsLoad();
@@ -322,7 +321,7 @@ public class TextSearchPage extends Page {
     }
 
     private void waitForSuggestions() {
-        waitForDisplayed(By.xpath("//div[@id='suggest_div']/table"));
+        verifyElementVisible($(By.xpath("//div[@id='suggest_div']/table")));
     }
 
     public TextSearchPage searchProductAndSelectFirstSuggestion(String productName) {
@@ -340,32 +339,33 @@ public class TextSearchPage extends Page {
     }
 
     public String getFirstProductId() {
-        Wait.waitForAjaxCompleted();
-        Wait.waitForDisplayed(By.xpath("(.//*[@id='productsTable']/table//td[@productid])[1]"));
+        waitForAjaxCompleted();
+        verifyElementVisible($(By.xpath("(.//*[@id='productsTable']/table//td[@productid])[1]")));
         return $(By.xpath("(.//*[@id='productsTable']//tr[..//button[@class='matchbutton']]//td[@productid])")).attr("productid");
     }
 
     public TextSearchPage selectBrand(String text) {
         forCondition(ExpectedConditions.elementToBeClickable(brandButton)).click();
-        waitForVisible(brandSelect).selectByVisibleText(text);
+        waitElementVisible($(brandSelect)).selectOption(text);
         waitForResultsLoad();
         return this;
     }
 
     public TextSearchPage selectModel(String text) {
         forCondition(ExpectedConditions.elementToBeClickable(modelButton)).click();
-        waitForVisible(modelSelect).selectByVisibleText(text);
+        waitElementVisible($(modelSelect)).selectOption(text);
         waitForResultsLoad();
         return this;
     }
 
     public TextSearchPage waitForResultsLoad() {
         try {
-            waitForDisplayed(fieldSetDisabled);
-        } catch (Exception e) {
+            waitElementVisible($(fieldSetDisabled));
+        }catch (ElementNotFound | ElementShould e) {
+
             logger.info(e.getMessage());
         }
-        waitForDisplayed(fieldSetNotDisabled);
+        waitElementVisible($(fieldSetNotDisabled));
         Wait.waitForAjaxCompleted();
         return this;
     }
@@ -378,7 +378,7 @@ public class TextSearchPage extends Page {
     public TextSearchPage openSpecificationForItem(int index) {
         waitForResultsLoad();
         forCondition(ExpectedConditions.elementToBeClickable(productsSpecifications.get(index))).click();
-        waitForElementContainsText(productsSpecifications.get(index), "-");
+        waitForElementContainsText($(productsSpecifications.get(index)), "-");
         return this;
     }
 
@@ -421,7 +421,7 @@ public class TextSearchPage extends Page {
         }
 
         public Asserts assertMarketPriceSortingInvisible() {
-            Assert.assertFalse(Wait.checkIsDisplayed(ascendantMarketPrice), "Market price sorting still visible");
+            Assert.assertFalse(verifyElementVisible($(ascendantMarketPrice)), "Market price sorting still visible");
             return this;
         }
 

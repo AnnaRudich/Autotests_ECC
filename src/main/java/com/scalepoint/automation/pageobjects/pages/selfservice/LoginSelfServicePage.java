@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 
 @EccPage
 public class LoginSelfServicePage extends Page {
@@ -31,8 +31,8 @@ public class LoginSelfServicePage extends Page {
     @Override
     public void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForVisible(passwordField);
-        waitForVisible(login);
+        verifyElementVisible($(passwordField));
+        verifyElementVisible($(login));
     }
 
     public LoginSelfServicePage enterPassword(String password) {

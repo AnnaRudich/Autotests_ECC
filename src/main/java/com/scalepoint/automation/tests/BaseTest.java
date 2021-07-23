@@ -63,6 +63,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -94,7 +96,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-public class BaseTest extends AbstractTestNGSpringContextTests {
+public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
     protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
@@ -154,35 +156,45 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) throws Exception {
 
-        Thread.currentThread().setName("Thread " + method.getName());
-        ThreadContext.put("sessionid", method.getName());
-        log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
+        try {
+            Thread.currentThread().setName("Thread " + method.getName());
+            ThreadContext.put("sessionid", method.getName());
+            log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
 
-        driverType = new DriverHelper().getDriverType(method, browserMode);
+            driverType = new DriverHelper().getDriverType(method, browserMode);
 
-        WebDriver driver = DriversFactory.getDriver(driverType, method);
+            WebDriver driver = DriversFactory.getDriver(driverType, method);
 
-        Browser.init(driver, driverType);
-        Window.init(driver);
-        WebDriverRunner.setWebDriver(driver);
-        ServiceData.init(databaseApi);
+            Browser.init(driver, driverType);
+            Window.init(driver);
+            WebDriverRunner.setWebDriver(driver);
+            ServiceData.init(databaseApi);
 
-        JavascriptHelper.initializeCommonFunctions();
+            JavascriptHelper.initializeCommonFunctions();
 
-        Configuration.savePageSource = false;
+            Configuration.savePageSource = false;
 
-        log.info("Initialization completed for : {}", method.getName());
+            log.info("Initialization completed for : {}", method.getName());
 
-        if (Browser.hasDriver()) {
-            log.info("Using driver type: " + Browser.getDriverType());
-            log.info("Start from: " + SystemUtils.getHostname());
-            gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
-            log.info("Running on grid node: " + gridNode);
+            if (Browser.hasDriver()) {
+                log.info("Using driver type: " + Browser.getDriverType());
+                log.info("Start from: " + SystemUtils.getHostname());
+                gridNode = GridInfoUtils.getGridNodeName(((RemoteWebDriver) Browser.driver()).getSessionId());
+                log.info("Running on grid node: " + gridNode);
 
-            Optional<User> optionalUser = getObjectByClass(Arrays.asList(objects), User.class).stream().findFirst();
+                Optional<User> optionalUser = getObjectByClass(Arrays.asList(objects), User.class).stream().findFirst();
 
-            retryUpdateFtTemplate(method, optionalUser);
-            updateFeatureToggle(method);
+                retryUpdateFtTemplate(method, optionalUser);
+                updateFeatureToggle(method);
+            }
+
+        }catch (Exception e){
+            Browser.quit();
+            Window.cleanUp();
+            CurrentUser.cleanUp();
+            Page.PagesCache.cleanUp();
+            ThreadContext.clearMap();
+            throw new RuntimeException(e);
         }
     }
 
@@ -590,6 +602,19 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return (List<T>) objects
                 .stream()
                 .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
+        iConfigureCallBack.runConfigurationMethod(iTestResult);
+        if (iTestResult.getThrowable() != null) {
+            for (int i = 0; i <= 3; i++) {
+                iConfigureCallBack.runConfigurationMethod(iTestResult);
+                if (iTestResult.getThrowable() == null) {
+                    break;
+                }
+            }
+        }
     }
 }
 

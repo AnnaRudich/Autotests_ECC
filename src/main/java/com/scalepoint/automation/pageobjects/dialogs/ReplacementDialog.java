@@ -6,11 +6,9 @@ import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.OperationalUtils;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.Radio;
 
@@ -76,7 +74,7 @@ public class ReplacementDialog extends BaseDialog {
 
 
     public void closeReplacementDialog() {
-        waitForVisible(cancelButton);
+        verifyElementVisible($(cancelButton));
         cancelButton.click();
     }
 
@@ -131,8 +129,7 @@ public class ReplacementDialog extends BaseDialog {
         $(selectAllItemsCheckbox).waitUntil(Condition.visible, 15L).click();
         $(nextButtonPath).click();
         $(finishButtonByXpath).click();
-        waitForSpinnerToDisappear();
-        waitForVisible(alertOk).click();
+        waitElementVisible($(alertOk)).click();
         return Page.at(CustomerDetailsPage.class);
     }
 
@@ -174,12 +171,12 @@ public class ReplacementDialog extends BaseDialog {
         }
 
         public Asserts assertItemsListIsEmpty() {
-            assertThat(Wait.isElementNotPresent(selectItemCheckboxByXpath)).as("there should not be items in the list").isTrue();
+            assertThat(verifyElementVisible($(selectItemCheckboxByXpath))).as("there should not be items in the list").isFalse();
             return this;
         }
 
         public Asserts assertGoToShopIsNotDisplayed() {
-            assertThat(Wait.isElementNotPresent(goToShopButtonByXpath)).as("goToShopButton should not be present").isTrue();
+            assertThat(verifyElementVisible($(goToShopButtonByXpath))).as("goToShopButton should not be present").isFalse();
             return this;
         }
 

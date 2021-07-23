@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Category implements Cloneable {
 
-    private String groupName = RandomUtils.randomName("Group");
-    private String categoryName = RandomUtils.randomName("Category");
-    private String modelName = RandomUtils.randomName("Model");
+    private String groupName = RandomUtils.randomName("Group_ÆæØøÅåß_");
+    private String categoryName = RandomUtils.randomName("Category_ÆæØøÅåß_");
+    private String modelName = RandomUtils.randomName("Model_ÆæØøÅåß_");
 
     public Category clone() throws CloneNotSupportedException {
         return (Category) super.clone();

@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EditClaimLineNoteDialog extends BaseDialog {
@@ -22,7 +21,6 @@ public class EditClaimLineNoteDialog extends BaseDialog {
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(elementEditClaimLineNoteDialogElement).waitUntil(Condition.visible, 5000);
     }
 

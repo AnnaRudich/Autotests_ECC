@@ -5,14 +5,11 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import org.testng.annotations.Test;
 
-import static com.scalepoint.automation.shared.ClaimStatus.CLOSED_EXTERNALLY;
-import static com.scalepoint.automation.shared.ClaimStatus.COMPLETED;
-import static com.scalepoint.automation.shared.ClaimStatus.IN_USE;
-import static com.scalepoint.automation.shared.ClaimStatus.OPEN;
+import static com.scalepoint.automation.shared.ClaimStatus.*;
 
 
 public class ClaimSearchTest extends BaseTest {
@@ -41,9 +38,9 @@ public class ClaimSearchTest extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .getMainMenu()
                 .openClaimSearch()
-                .fillClaimHandler("FirstName LastName")
+                .fillClaimHandler("FirstName ÆæØøÅåß LastName ÆæØøÅåß")
                 .search()
-                .doAssert(asserts -> asserts.areClaimsMatchingClaimHandler("FirstName LastName"));
+                .doAssert(asserts -> asserts.areClaimsMatchingClaimHandler("FirstName ÆæØøÅåß LastName ÆæØøÅåß"));
     }
 
     @Test(groups = {TestGroups.SEARCH, TestGroups.CLAIM_SEARCH}, dataProvider = "testDataProvider",

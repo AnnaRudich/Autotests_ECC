@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class CustomerOrderEditPage extends BaseClaimPage {
@@ -27,7 +27,7 @@ public class CustomerOrderEditPage extends BaseClaimPage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(cancelButton).shouldHave(Condition.attribute("disabled", "true"));
     }
 

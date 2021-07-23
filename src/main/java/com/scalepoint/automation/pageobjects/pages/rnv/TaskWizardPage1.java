@@ -17,7 +17,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @RVPage
 public class TaskWizardPage1 extends Page {
@@ -32,7 +31,6 @@ public class TaskWizardPage1 extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(nameField).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -50,6 +48,7 @@ public class TaskWizardPage1 extends Page {
         getServiceLineByDescription(lineDescription).clickTaskType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(rnvType);
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -57,6 +56,7 @@ public class TaskWizardPage1 extends Page {
         getServiceLineByDescription(lineDescription).clickDamageType();
         waitForAjaxCompletedAndJsRecalculation();
         selectValue(damageType);
+        waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 

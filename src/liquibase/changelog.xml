@@ -5,8 +5,126 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
-    <includeAll path="src/liquibase/procedures" />
+    <!--    <includeAll path="src/liquibase/procedures" />-->
+    <changeSet author="bna" id="1" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_add_damageTypes.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="2" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_add_ip2_test_entries.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="3" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_add_popularity.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="4" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_add_test_mobile_number.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="5" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_choice_reasons.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="6" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_ic.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="7" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_performance_test_users.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="8" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_pseudo_category.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="9" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_redrule.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="10" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_service_agreements.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="11" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_shop.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="12" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_supplier.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="13" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_user.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="14" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_create_voucher_agreement.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="15" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_enable_fraud_alert.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="16" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_enable_pseudoCategoryRepairMap.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="17" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_manipulate_FeatureToggle_setting.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="18" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_map_service_agreement.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="19" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_prepare_future_company.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="bna" id="20" runOnChange="true" runInTransaction="true">
+        <sqlFile path="procedures/autotests_splitstr_on_ints.sql"
+                 encoding="UTF-8"
+                 endDelimiter="GO"
+                 relativeToChangelogFile="true" />
+    </changeSet>
     <includeAll path="src/liquibase/data/dk" />
-
-
 </databaseChangeLog>
