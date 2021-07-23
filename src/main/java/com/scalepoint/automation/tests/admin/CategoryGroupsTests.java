@@ -45,7 +45,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 creates Pseudo Category Group G1
      * THEN: G1 is displayed in group's list
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = CREATE_NEW_PS_CAT_GROUP_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = CREATE_NEW_PS_CAT_GROUP_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to create new Pseudo Category Group. New Group is displayed in Group list")
     public void createNewPsCatGroupTest(User user, Category category) {
 
@@ -59,7 +60,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 creates Pseudo Category C1
      * THEN: C1 is displayed in category's list
      */
-    @Test(groups ={TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = CREATE_NEW_PS_CAT_WITH_NEW_GROUP_DATA_PROVIDER,
+    @Test(groups ={TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = CREATE_NEW_PS_CAT_WITH_NEW_GROUP_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to create new Pseudo Category with new pseudo category group. New Category is displayed in Category list")
     public void createNewPsCatWithNewGroupTest(User user, Category category) {
 
@@ -75,7 +77,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 updates C1 data
      * THEN: New C1 data is stored correctly
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = UPDATE_NEW_PS_CAT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = UPDATE_NEW_PS_CAT_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to update new Pseudo Category")
     public void updateNewPsCatTest(User user, Category category, String updatedName) {
 
@@ -93,7 +96,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 updates G1 data
      * THEN: New G1 data is stored correctly
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = UPDATE_NEW_PS_CAT_GROUP_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = UPDATE_NEW_PS_CAT_GROUP_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to update new Pseudo Category Group")
     public void updateNewPsCatGroupTest(User user, Category category, String updatedName) {
 
@@ -109,7 +113,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 moves C1 to G2
      * THEN: C1 mapped with G2
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = MOVE_CAT_TO_ANOTHER_GROUP_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = MOVE_CAT_TO_ANOTHER_GROUP_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to move category from one group to another")
     public void moveCatToAnotherGroupTest(User user, Category categoryToMove, Category category2) {
 
@@ -137,7 +142,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 creates Pseudo Category Model M1
      * THEN: M1 is displayed in model's list
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = CREATE_NEW_PS_CAT_MODE_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = CREATE_NEW_PS_CAT_MODE_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to create new Pseudo Category Model. New Model is displayed in Models list")
     public void createNewPsCatModelTest(User user, Category category) {
 
@@ -155,7 +161,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 updates M1
      * THEN: M1 data is stored correctly
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = UPDATE_NEW_PS_CAT_MODE_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = UPDATE_NEW_PS_CAT_MODE_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to update new Pseudo Category Model. Updated Model is displayed in Models list")
     public void updateNewPsCatModelTest(User user, Category category, String updatedName) {
 
@@ -175,7 +182,8 @@ public class CategoryGroupsTests extends BaseTest {
      * WHEN: U1 removes M1
      * THEN: M1 is not displayed in model's list
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS}, dataProvider = REMOVE_NEW_PS_CAT_MODEL_DATA_PROVIDER,
+    @Test(groups = {TestGroups.ADMIN, TestGroups.CATEGORY_GROUPS},
+            dataProvider = REMOVE_NEW_PS_CAT_MODEL_DATA_PROVIDER,
             description = "CHARLIE-545 It's possible to remove new Pseudo Category Model. Removed Model is not displayed in Models list")
     public void removeNewPsCatModelTest(User user, Category category) {
 

@@ -14,7 +14,6 @@ import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
@@ -83,7 +82,6 @@ public class EditReasonTests extends BaseTest {
      * THEN: Saved discretionary reason is visible in drop-down
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = EDIT_REASON_PAGE_FROM_ADMIN_DATA_PROVIDER,
             description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
@@ -121,7 +119,6 @@ public class EditReasonTests extends BaseTest {
      * THEN: delete button is disabled
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider =DELETE_REASON_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
