@@ -11,7 +11,7 @@ import ru.yandex.qatools.htmlelements.element.Select;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -43,7 +43,7 @@ public class ReductionRuleAssignmentsPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

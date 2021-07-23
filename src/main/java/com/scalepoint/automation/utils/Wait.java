@@ -1,46 +1,36 @@
 package com.scalepoint.automation.utils;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.ex.ElementNotFound;
+import com.codeborne.selenide.ex.ElementShould;
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-import com.scalepoint.automation.pageobjects.extjs.ExtElement;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.codeborne.selenide.Selenide.$$;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+import static com.codeborne.selenide.Selenide.$;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
 
 @SuppressWarnings({"Guava", "ConstantConditions"})
 public class Wait {
     private static final int TIME_OUT_IN_SECONDS = 12;
+    private static final Duration TIMEOUT = Duration.ofSeconds(12);
     private static final int POLL_IN_MS = 1000;
-    private static final int DEFAULT_TIMEOUT = 12;
 
     private static Logger log = LogManager.getLogger(Wait.class);
 
     private static FluentWait<WebDriver> getWebDriverWaitWithDefaultTimeoutAndPooling() {
-        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT)
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS)
                 .pollingEvery(500, TimeUnit.MILLISECONDS)
                 .ignoring(StaleElementReferenceException.class);
     }
@@ -63,25 +53,17 @@ public class Wait {
             log.warn("waitForAjaxCompleted Timeout");
         }catch (JavascriptException e){
 
-            log.warn("Javascript exception: ", e);
+            log.warn("Javascript exception: {}", e.getMessage());
         }
         waitForJavascriptRecalculation();
     }
 
     public static void waitForSpinnerToDisappear() {
-        forCondition1s(new Function<WebDriver, Object>() {
-            @Nullable
-            @Override
-            public Object apply(@Nullable WebDriver webDriver) {
-                return webDriver.findElements(By.xpath("//div[contains(@class, 'loader')]")).isEmpty();
-            }
-        });
-    }
-
-
-    public static void waitForPageLoaded() {
-        getWebDriverWaitWithDefaultTimeoutAndPooling().until((ExpectedCondition<Boolean>) wrapWait ->
-                ((JavascriptExecutor) wrapWait).executeScript("return document.readyState").equals("complete"));
+        try {
+            verifyElementCondition($(By.xpath("//div[contains(@class, 'loader')]")), Condition.empty);
+        }catch (ElementNotFound e){
+            log.info("Spinner not found");
+        }
     }
 
     public static void waitMillis(int milliseconds) {
@@ -92,77 +74,42 @@ public class Wait {
         }
     }
 
-    public static Boolean visible(WebElement element) {
-        long start = System.currentTimeMillis();
+    public static boolean verifyElementVisible(SelenideElement element) {
+
         try {
-            List<WebElement> webElements = wrapShort(visibilityOfAllElements(Lists.newArrayList(element)));
-            return webElements.size() == 1;
-        } finally {
-            logIfLong(start, "visible");
+
+            return waitElementVisible(element).isDisplayed();
+        }catch (ElementShould | ElementNotFound e){
+
+            return false;
         }
     }
 
-    private static void logIfLong(long start, String method) {
-        long diff = System.currentTimeMillis() - start;
-        if (diff > 5000) {
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            StringBuilder from = new StringBuilder();
-            for (int i = stackTrace.length - 1; i >= 0; i--) {
-                StackTraceElement stackTraceElement = stackTrace[i];
-                if (stackTraceElement.getClassName().contains("com.scalepoint.")) {
-                    from.append(stackTraceElement.getMethodName()+":"+stackTraceElement.getLineNumber());
-                    if (i > 1) {
-                        from.append(" -> ");
-                    }
-                }
-            }
-            log.warn("Long timeout {}: [{}] From: {}", method, diff, from.toString());
+    public static SelenideElement waitElementVisible(SelenideElement element){
+        return verifyElementCondition(element, Condition.visible);
+    }
+
+    public static SelenideElement waitElementInvisible(SelenideElement element){
+        try {
+            return verifyElementCondition(element, Condition.not(Condition.visible));
+        }catch (ElementNotFound | ElementShould e){
+            return null;
         }
     }
 
-    public static Boolean isElementNotPresent(By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            return $$(locator).filter(Condition.visible).size() == 0;
-        } finally {
-            logIfLong(start, "isElementNotPresent");
-        }
+    public static WebElement waitForVisibleAndEnabled(SelenideElement element) {
+
+        return verifyElementCondition(element, Condition.and("wait for element to be visible and enabled", Condition.visible, Condition.enabled));
     }
 
-    public static Boolean invisibleOfElement(By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            return wrapShort(ExpectedConditions.invisibilityOfElementLocated(locator));
-        } finally {
-            logIfLong(start, "invisibleOfElement");
-        }
+    public static SelenideElement verifyElementCondition(SelenideElement element, Condition condition){
+
+        return element.shouldBe(condition, TIMEOUT);
     }
 
-    public static WebElement waitForVisibleAndEnabled(By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            return wrapShort(ExpectedConditions.elementToBeClickable(locator));
-        } finally {
-            logIfLong(start, "wait for element to be visible and enabled");
-        }
-    }
+    public static SelenideElement verifyElementNotCondition(SelenideElement element, Condition condition){
 
-    public static WebElement waitForVisibleAndEnabled(WebElement element) {
-        long start = System.currentTimeMillis();
-        try {
-            return wrapShort(ExpectedConditions.elementToBeClickable(element));
-        } finally {
-            logIfLong(start, "wait for element to be visible and enabled");
-        }
-    }
-
-    public static WebElement waitForDisplayed(By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            return wrapShort(ExpectedConditions.visibilityOfElementLocated(locator));
-        } finally {
-            logIfLong(start, "waitForDisplayed");
-        }
+        return element.shouldNot(condition, TIMEOUT);
     }
 
     public static void waitForStaleElement(final By locator) {
@@ -201,25 +148,14 @@ public class Wait {
         }
     }
 
-    public static void waitForElementContainsText(WebElement element, String text) {
-        long start = System.currentTimeMillis();
-        try {
-            Boolean contains = wrapShort((WebDriver d) -> element.getText().contains(text));
-            if (!contains) {
-                throw new IllegalStateException("Elements doesn't contain: " + text);
-            }
-        } finally {
-            logIfLong(start, "waitForStaleElements");
-        }
+    public static SelenideElement waitForElementContainsText(SelenideElement element, String text) {
+
+        return verifyElementCondition(element, Condition.text(text));
     }
 
-    public static void waitElementDisappeared(By locator) {
-        long start = System.currentTimeMillis();
-        try {
-            forCondition(ExpectedConditions.invisibilityOfElementLocated(locator), 5);
-        } finally {
-            logIfLong(start, "waitElementDisappeared");
-        }
+    public static SelenideElement waitElementDisappeared(SelenideElement element) {
+
+        return verifyElementCondition(element, Condition.disappear);
     }
 
     public static <T> T forCondition(Function<WebDriver, T> condition) {
@@ -279,16 +215,6 @@ public class Wait {
         }
     }
 
-    public static <E extends ExtElement> E waitForVisible(E element) {
-        long start = System.currentTimeMillis();
-        try {
-            waitForVisible(element.getRootElement());
-            return element;
-        } finally {
-            logIfLong(start, "waitForVisible ExtElement");
-        }
-    }
-
     public static List<WebElement> waitForAllElementsVisible(List<WebElement> elements) {
         long start = System.currentTimeMillis();
         try {
@@ -296,91 +222,6 @@ public class Wait {
             return elements;
         } finally {
             logIfLong(start, "waitForAllElementsVisible");
-        }
-    }
-
-    public static <E extends TypifiedElement> E waitForVisible(E element) {
-        long start = System.currentTimeMillis();
-        try {
-            waitForVisible(element.getWrappedElement());
-            return element;
-        } finally {
-            logIfLong(start, "waitForVisible TypifiedElement");
-        }
-    }
-
-    public static WebElement waitForVisible(By by) {
-        return waitForVisible(Browser.driver().findElement(by));
-    }
-
-    public static WebElement waitForVisible(WebElement element) {
-        long start = System.currentTimeMillis();
-        try {
-            wrap(visibilityOf(element));
-            return element;
-        } finally {
-            logIfLong(start, "waitForVisible");
-        }
-    }
-
-    public static boolean checkIsDisplayed(WebElement element) {
-        long start = System.currentTimeMillis();
-        try {
-            return forCondition1s(d -> element.isDisplayed());
-        } catch (NoSuchElementException e) {
-            log.info("Element [{}] is not displayed", element.toString());
-            return false;
-        } finally {
-            logIfLong(start, "checkIsDisplayed");
-        }
-    }
-
-    public static <E extends TypifiedElement> void waitForInvisible(E element) {
-        waitForInvisible(element.getWrappedElement());
-    }
-
-    public static void waitForInvisible(final WebElement element) {
-        long start = System.currentTimeMillis();
-        try {
-            forCondition(d -> {
-                try {
-                    return !element.isDisplayed();
-                } catch (NoSuchElementException | StaleElementReferenceException e) {
-                    return true;
-                }
-            }, TIME_OUT_IN_SECONDS, 200);
-        } finally {
-            logIfLong(start, "waitForInvisible");
-        }
-    }
-
-    public static void waitUntilVisible(WebElement element) {
-        long start = System.currentTimeMillis();
-        try {
-            wrap(d -> {
-                try {
-                    return element.isDisplayed();
-                } catch (NoSuchElementException | StaleElementReferenceException e) {
-                    return true;
-                }
-            });
-        } finally {
-            logIfLong(start, "waitUntilVisible");
-        }
-    }
-
-    public static <E extends TypifiedElement> E waitForEnabled(E element) {
-        waitForEnabled(element.getWrappedElement());
-        return element;
-    }
-
-    private static WebElement waitForEnabled(WebElement element) {
-        long start = System.currentTimeMillis();
-        try {
-            wrap(d -> element.isEnabled());
-            return element;
-        } finally {
-            logIfLong(start, "waitForEnabled");
         }
     }
 
@@ -402,7 +243,7 @@ public class Wait {
     }
 
     private static <V> V wrapShort(ExpectedCondition<V> expectedCondition) {
-        return new WebDriverWait(Browser.driver(), DEFAULT_TIMEOUT, 1000).until(expectedCondition);
+        return new WebDriverWait(Browser.driver(), TIME_OUT_IN_SECONDS, 1000).until(expectedCondition);
     }
 
     public static void waitForElementWithPageReload(By locator) {
@@ -413,5 +254,23 @@ public class Wait {
             driver.navigate().refresh();
             return driver.findElement(locator);
         });
+    }
+
+    private static void logIfLong(long start, String method) {
+        long diff = System.currentTimeMillis() - start;
+        if (diff > 5000) {
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            StringBuilder from = new StringBuilder();
+            for (int i = stackTrace.length - 1; i >= 0; i--) {
+                StackTraceElement stackTraceElement = stackTrace[i];
+                if (stackTraceElement.getClassName().contains("com.scalepoint.")) {
+                    from.append(stackTraceElement.getMethodName()+":"+stackTraceElement.getLineNumber());
+                    if (i > 1) {
+                        from.append(" -> ");
+                    }
+                }
+            }
+            log.warn("Long timeout {}: [{}] From: {}", method, diff, from.toString());
+        }
     }
 }

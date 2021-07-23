@@ -12,7 +12,6 @@ import org.openqa.selenium.support.FindBy;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @RVPage
 public class TaskWizardPage2 extends Page {
@@ -25,7 +24,6 @@ public class TaskWizardPage2 extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(sendBtn).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
     }
 

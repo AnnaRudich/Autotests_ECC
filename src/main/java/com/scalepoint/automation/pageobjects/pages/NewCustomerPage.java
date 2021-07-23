@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.utils.PastedData;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -19,7 +18,8 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.*;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -73,7 +73,6 @@ public class NewCustomerPage extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(claimsNumber).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
         $(surname).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
@@ -118,14 +117,14 @@ public class NewCustomerPage extends Page {
     }
 
     public NewCustomerPage selectPolicyType(int index) {
-        waitForVisible(policyType);
+        verifyElementVisible($(policyType));
         policyType.selectByIndex(index);
         return this;
     }
 
     public SettlementPage create() {
         continueButton.click();
-        Wait.waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         return Page.at(SettlementPage.class);
     }
 
@@ -136,13 +135,13 @@ public class NewCustomerPage extends Page {
 
     public NewCustomerPage selectDamageDate(LocalDate date) {
         damageDate.click();
-        waitForVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@id, 'datepicker') and contains(@class, 'x-datepicker-default')]")));
         $(By.xpath("//a[contains(@id, 'splitbutton')]")).click();
-        waitForVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-month']/a[text()='" + date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("da-DK")).substring(0, 3).toLowerCase() + "']")).click();
         $(By.xpath("//div[@class='x-monthpicker-item x-monthpicker-year']/a[text()='" + date.getYear() + "']")).click();
         hoverAndClick($(By.xpath("//div[@class='x-monthpicker-buttons']//span[text()='OK']/parent::span")));
-        waitForInvisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
+        verifyElementVisible($(By.xpath("//div[contains(@class, 'x-monthpicker-body')]")));
         $(By.xpath("//table[@class='x-datepicker-inner']//td[@class='x-datepicker-active x-datepicker-cell']/a[text()='" + date.getDayOfMonth() + "']")).click();
         return this;
     }

@@ -3,6 +3,7 @@ package com.scalepoint.automation.tests.sid;
 import com.scalepoint.automation.pageobjects.dialogs.EditVoucherValuationDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.dialogs.VoucherTermsAndConditionsDialog;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
@@ -85,7 +86,10 @@ public class SidShowVoucherDetails extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify shared voucher")
     public void ecc5519_1_sharedVoucherAndTagsBrandInSID(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        checkBrandsAndTags(user, claim, claimItem, voucher);
+
+        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
+
+        checkBrandsAndTags(settlementPage, user, claimItem, voucher);
     }
 
     /**
@@ -101,13 +105,17 @@ public class SidShowVoucherDetails extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify exclusive voucher")
     public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserCompany(CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
-        checkBrandsAndTags(user, claim, claimItem, voucher);
+
+        SettlementPage settlementPage = loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel();
+
+        checkBrandsAndTags(settlementPage, user, claimItem, voucher);
     }
 
-    private void checkBrandsAndTags(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+    private void checkBrandsAndTags(SettlementPage settlementPage, User user, ClaimItem claimItem, Voucher voucher) {
         PseudoCategory assignedCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
-        loginAndCreateClaim(user, claim).openSid()
+        settlementPage.openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCustomerDemand(Constants.PRICE_100_000)
                 .setNewPrice(Constants.PRICE_2400)

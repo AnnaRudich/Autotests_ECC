@@ -1,7 +1,6 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -12,7 +11,8 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class PseudoCategoryModelPage extends AdminBasePage {
@@ -32,7 +32,7 @@ public class PseudoCategoryModelPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(addButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -43,7 +43,7 @@ public class PseudoCategoryModelPage extends AdminBasePage {
 
     public PseudoCategoryModelAddEditPage toAddModelPage() {
         ((JavascriptExecutor) driver).executeScript("addPseudoCategoryModel();");
-        Wait.waitForDisplayed(By.xpath("//input[contains(@id, 'modelname')]"));
+        verifyElementVisible($(By.xpath("//input[contains(@id, 'modelname')]")));
         return at(PseudoCategoryModelAddEditPage.class);
     }
 

@@ -3,7 +3,6 @@ package com.scalepoint.automation.pageobjects.dialogs.eccadmin;
 import com.codeborne.selenide.Condition;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.suppliersdialog.supplierdialogtab.ShopsTab;
-import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,6 +11,7 @@ import org.testng.Assert;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 public class AddShopDialogViewMode extends BaseDialog {
@@ -39,7 +39,7 @@ public class AddShopDialogViewMode extends BaseDialog {
 
     public class Asserts {
         public Asserts assertIsShopDialogNotEditable() {
-            Assert.assertTrue(Wait.invisibleOfElement(By.id("editSupplierShopTabFormId")));
+            Assert.assertFalse(verifyElementVisible($(By.id("editSupplierShopTabFormId"))));
             return this;
         }
     }

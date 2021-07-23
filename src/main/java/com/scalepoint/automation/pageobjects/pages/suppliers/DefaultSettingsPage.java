@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 
 @EccAdminPage
 public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
@@ -22,7 +21,6 @@ public class DefaultSettingsPage extends BaseSupplierAdminNavigation {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(".defaultSettings").waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
