@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class RoleAddEditPage extends AdminBasePage {
@@ -155,7 +155,7 @@ public class RoleAddEditPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(saveButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

@@ -11,7 +11,7 @@ import ru.yandex.qatools.htmlelements.element.Link;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class AdminPage extends AdminBasePage {
@@ -46,7 +46,7 @@ public class AdminPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(matchingEngine).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

@@ -108,4 +108,20 @@ public class SelfServiceService extends BaseService {
         return this;
     }
 
+    public SelfServiceService reloadFunctionTemplate(){
+
+        this.response = given()
+                .baseUri(getEccUrl())
+                .sessionId(data.getEccSessionId())
+                .contentType("application/json")
+                .post(SELF_SERVICE_RELOAD_FT)
+                .then()
+                .log()
+                .all()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
+
+        return this;
+    }
+
 }

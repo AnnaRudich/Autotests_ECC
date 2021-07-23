@@ -172,6 +172,12 @@
         <entry>
             <key>WARNING_DEDUCTIBLE</key><value>DISABLE</value>
         </entry>
+        <entry>
+            <key>ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_WIDGET_ONLY</key><value>DISABLE</value>
+        </entry>
+        <entry>
+            <key>ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_WIDGET_ONLY</key><value>DISABLE</value>
+        </entry>
     </defaultSettings>
 </defaultFTSettings>
 

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 @RequiredParameters("ftrfnbr=%s&showHidden=true")
@@ -38,7 +38,7 @@ public class EditFunctionTemplatePage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(saveValues).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

@@ -15,8 +15,8 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
-import static com.scalepoint.automation.utils.Wait.waitForVisible;
+import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -33,7 +33,7 @@ public class MailViewDialog extends BaseDialog {
 
     @Override
     public void ensureWeAreAt() {
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
     }
 
     public MailsPage cancel(){
@@ -42,21 +42,21 @@ public class MailViewDialog extends BaseDialog {
     }
 
     public LoginSelfServicePage findSelfServiceLinkAndOpenIt() {
-        waitForVisible(selfServiceLink);
+        verifyElementVisible($(selfServiceLink));
         String link = selfServiceLink.getWrappedElement().getAttribute("href");
         Browser.open(link);
         return Page.at(LoginSelfServicePage.class);
     }
 
     public LoginSelfService2Page findSelfServiceNewLinkAndOpenIt() {
-        waitForVisible(selfServiceLink);
+        verifyElementVisible($(selfServiceLink));
         String link = selfServiceLink.getWrappedElement().getAttribute("href");
         Browser.open(link);
         return Page.at(LoginSelfService2Page.class);
     }
 
     public String findLoginToShopLink() {
-        waitForVisible(loginToShopLink);
+        verifyElementVisible($(loginToShopLink));
         return loginToShopLink.getWrappedElement().getAttribute("href");
     }
 

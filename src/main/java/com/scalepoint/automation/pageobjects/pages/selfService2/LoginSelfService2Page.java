@@ -9,8 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForJavascriptRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginSelfService2Page extends Page {
@@ -29,8 +28,7 @@ public class LoginSelfService2Page extends Page {
     @Override
     public void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForJavascriptRecalculation();
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(login).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

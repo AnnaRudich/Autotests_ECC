@@ -51,6 +51,8 @@ public enum FTSetting {
     INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE("input[name=ftSelfServiceFlag][value='512']", CHECKBOX),
     VALIDATE_AGE("input[name=ftSelfServiceFlag][value='2']", CHECKBOX),
     SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH("input[name=ftSelfServiceFlag][value='131072']", CHECKBOX),
+    ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_WIDGET_ONLY("input[name=ftSelfServiceFlag][value='134217728']", CHECKBOX),
+    ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_SELF_SERVICE2("input[name=ftSelfServiceFlag][value='32768']", CHECKBOX),
 
     //Integration settings
 
@@ -87,7 +89,9 @@ public enum FTSetting {
 
     SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX),
     SPLIT_REPLACEMENT_EMAIL("input[name='ftfunctionflag'][value='16384']", CHECKBOX),
-    WARNING_DEDUCTIBLE("input[name='ftfunctionflag'][value='65536']", CHECKBOX);
+    WARNING_DEDUCTIBLE("input[name='ftfunctionflag'][value='65536']", CHECKBOX),
+    //TODO correct path
+    CAN_FNOL_CASE_BE_REASSIGNED("path", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;

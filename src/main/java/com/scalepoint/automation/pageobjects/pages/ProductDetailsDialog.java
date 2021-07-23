@@ -3,20 +3,12 @@ package com.scalepoint.automation.pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-import com.scalepoint.automation.utils.Wait;
-import com.scalepoint.automation.utils.annotations.page.EccPage;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 public class ProductDetailsDialog extends BaseDialog {
 

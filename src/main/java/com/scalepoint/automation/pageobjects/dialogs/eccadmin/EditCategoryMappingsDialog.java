@@ -5,7 +5,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.eccadmin.voucheagreementtab.VoucherAgreementCategoriesTab;
-import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -15,7 +14,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 
 public class EditCategoryMappingsDialog extends BaseDialog {
 
@@ -52,8 +51,8 @@ public class EditCategoryMappingsDialog extends BaseDialog {
         element.click();
         element.doubleClick();
         $(saveMappings).doubleClick();
-        Wait.waitElementDisappeared(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]"));
-        Wait.waitForAjaxCompleted();
+        waitElementDisappeared($(By.xpath("//a[contains(@class,'supplier-voucher-save-mappings')]")));
+        waitForAjaxCompleted();
         return at(VoucherAgreementCategoriesTab.class);
     }
 

@@ -240,7 +240,8 @@ public class EditReasonTests extends BaseTest {
     }
 
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
-        loginAndCreateClaim(trygUser, claim)
+        loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
+                .cancel()
                 .openSid()
                 .setDescription(TEST_REASON_LINE)
                 .setCategory(claimItem.getCategoryShoes())

@@ -1,28 +1,16 @@
 package com.scalepoint.automation.tests.fraudAlert;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.scalepoint.automation.pageobjects.pages.MailsPage;
-import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.EventApiService;
-import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.UserCompany;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 
-import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOPDANMARK;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 
@@ -37,13 +25,9 @@ public class FraudAlertBase extends BaseTest {
 
     @BeforeClass
     public void startWireMock() throws IOException {
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        fraudAlertStubs = new FraudAlertMock(wireMock).addStub(TENANT);
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+
+        fraudAlertStubs = fraudAlertMock.addStub(TENANT);
+
         new EventApiService().scheduleSubscription(claimLineChangedSubscriptionId);
         new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
     }

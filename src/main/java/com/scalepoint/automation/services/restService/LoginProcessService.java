@@ -75,6 +75,8 @@ public class LoginProcessService extends BaseService {
         return new CreateClaimService(token);
     }
 
+    public SelfServiceService reloadFunctionTemplate(){return new SelfServiceService().reloadFunctionTemplate();}
+
     private String getLocationHeader(Response response) {
         return response.getHeader("Location");
     }

@@ -1,0 +1,71 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<div class="ShortcutsBar">
+</div>
+<div id=generateWidget>
+	<input type=button id=testWidget value=testWidget onclick=getWidget() />
+	<input type=text id=country>country</input>
+	<input type=text id=server>server</input>
+	<input type=text id=caseToken>caseToken</input>
+</div>
+<script>
+
+// Here You can type your custom JavaScript...
+function widget(country, server, caseToken) {
+  // 1
+  var widgetDivId = "navbar-segments";
+  var widgetDivClassName = "ShortcutsBar";
+  var isElementById = false;
+  var ssoToken = "";
+  function getTargetElement(){
+      if (isElementById)
+        return document.getElementById(widgetDivId);
+      else
+        return document.getElementsByClassName(widgetDivClassName)[0];
+  }
+    
+  // 2
+  //add widget container element
+  var newDiv = document.createElement("div");
+  newDiv.id = 'scalepoint_widget_id';
+  getTargetElement().appendChild(newDiv);
+ 
+  // 3
+  //add embedding script
+  var script = document.createElement("script");
+  script.src = "https://" + server + ".scalepoint.com/self-service/" + country + "/api/case/" + caseToken + "?sso_token=" + ssoToken + "&widget=true&target=scalepoint_widget_id";  document.getElementsByTagName("head")[0].appendChild(script);
+  
+  // 4
+  //if needed
+  getTargetElement().style.display = 'block'
+
+  // 5
+  // external submit button
+  var insCompanySendButton = document.createElement("button");
+  insCompanySendButton.type="button";
+  insCompanySendButton.innerHTML="Send Button";
+  insCompanySendButton.onclick = function() {
+    ScalepointSelfService.widget.submit(
+        function(data) {console.log(JSON.stringify(data));},
+        function(){alert('error');}
+        )
+  };
+  document.getElementById("generateWidget").remove();
+  getTargetElement().appendChild(insCompanySendButton);
+
+}
+
+function getWidget(){
+	var country = document.getElementById("country").value;
+	var server = document.getElementById("server").value;
+	var caseToken = document.getElementById("caseToken").value;
+	widget(country, server, caseToken);
+}
+</script>
+</body>
+</html>

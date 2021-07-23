@@ -10,7 +10,6 @@ import java.util.function.Consumer;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -28,7 +27,6 @@ public class EditPreferencesPage extends Page {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(buttonGenerate).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

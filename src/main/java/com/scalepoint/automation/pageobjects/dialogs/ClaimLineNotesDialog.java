@@ -19,14 +19,9 @@ import java.util.stream.Collectors;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClaimLineNotesDialog extends BaseDialog {
-
-    private NotesTreePanel notesTreePanel = new NotesTreePanel();
-    private AddNotePanel addNotePanel = new AddNotePanel();
-    private ClaimLineNotesGrid claimLineNotesGrid = new ClaimLineNotesGrid();
 
     @FindBy(id = "closeNotesButton")
     private WebElement closeNotesButton;
@@ -34,7 +29,6 @@ public class ClaimLineNotesDialog extends BaseDialog {
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $(closeNotesButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -44,27 +38,27 @@ public class ClaimLineNotesDialog extends BaseDialog {
     }
 
     public ClaimLineNotesDialog clickAddNoteButton() {
-        addNotePanel
+        new AddNotePanel()
                 .clickAddNoteButton();
         return this;
     }
 
     public ClaimLineNotesDialog clickClaimLine(String name) {
-        notesTreePanel
+        new NotesTreePanel()
                 .getNotesTreeLeafByName(name)
                 .click();
         return this;
     }
 
     public ClaimLineNotesDialog clickCopyNoteTextButton(String noteText) {
-        claimLineNotesGrid
+        new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickCopyNoteTextButton();
         return this;
     }
 
     public ClaimLineNotesDialog pasteClipboardInNoteWindow() {
-        addNotePanel
+        new AddNotePanel()
                 .clickNoteText()
                 .pasteText();
         return this;
@@ -73,33 +67,33 @@ public class ClaimLineNotesDialog extends BaseDialog {
     public ClaimLineNotesDialog enterClaimLineNote(String note) {
         enterNote(note).
                 clickAddNoteButton();
-        return this;
+        return at(ClaimLineNotesDialog.class);
     }
 
     public ClaimLineNotesDialog enterVisibleClaimLineNote(String note){
         enterNote(note);
-        addNotePanel
+        new AddNotePanel()
                 .clickVisibleNoteButton();
         clickAddNoteButton();
         return this;
     }
 
     public EditClaimLineNoteDialog editClaimLineNote(String noteText){
-        claimLineNotesGrid
+        new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .clickEditNoteButtonElement();
         return at(EditClaimLineNoteDialog.class);
     }
 
     public ClaimLineNotesDialog enterNote(String note) {
-        addNotePanel
+        new AddNotePanel()
                 .clickNoteText()
                 .setText(note);
         return this;
     }
 
     public RemoveClaimLineNoteWarningDialog removeNote(String noteText){
-        return claimLineNotesGrid
+        return new ClaimLineNotesGrid()
                 .getClaimLineNotesGridRowByName(noteText)
                 .removeNote();
     }
@@ -110,6 +104,10 @@ public class ClaimLineNotesDialog extends BaseDialog {
     }
 
     public class Asserts {
+
+        ClaimLineNotesGrid claimLineNotesGrid = new ClaimLineNotesGrid();
+        NotesTreePanel notesTreePanel = new NotesTreePanel();
+        AddNotePanel addNotePanel = new AddNotePanel();
 
         public Asserts assertNoteText(String originalNoteText) {
             String noteText = claimLineNotesGrid.getClaimLineNotesGridRowByName(originalNoteText).getNoteText();

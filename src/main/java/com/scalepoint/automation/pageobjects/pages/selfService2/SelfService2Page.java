@@ -27,6 +27,9 @@ import static org.testng.Assert.assertTrue;
 
 public class SelfService2Page extends Page {
 
+    protected final String SEND_BUTTON_PATH = "#send-button";
+    protected final String ACCEPTANCE_CHECKBOX_PATH = "[class*='acceptance'] input";
+
     @FindBy(xpath = "//input[@type='submit']")
     private WebElement logout;
 
@@ -52,7 +55,7 @@ public class SelfService2Page extends Page {
     private WebElement save;
 
     @FindBy(css = "#save-item-button")
-    private WebElement saveItem;
+    protected WebElement saveItem;
 
     @FindBy(id = "react-autowhatever-1")
     private WebElement suggestions;
@@ -66,8 +69,7 @@ public class SelfService2Page extends Page {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForJavascriptRecalculation();
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(saveItem).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 
@@ -83,13 +85,13 @@ public class SelfService2Page extends Page {
     }
 
     private void waitForValidationMark(WebElement element) {
-        waitForVisible(element.findElement(By.xpath("./ancestor::div[contains(@class,'row')][1]//span[contains(@class,'validation-mark')]")));
+        verifyElementVisible($(element.findElement(By.xpath("./ancestor::div[contains(@class,'row')][1]//span[contains(@class,'validation-mark')]"))));
     }
 
     public SelfService2Page addDescription(String text) {
         Wait.waitForStaleElement(By.id("description-text"));
         $("#description-text").setValue(text);
-        waitForVisible(suggestions);
+        verifyElementVisible($(suggestions));
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ARROW_DOWN);
         descriptionField.sendKeys(Keys.ENTER);
@@ -135,23 +137,24 @@ public class SelfService2Page extends Page {
     }
 
     private void selectItem(WebElement element, String text) {
-        WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
+        WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
         hoverAndClick($(selectElement));
         String menuLocator = ".//div[contains(@class, 'Select-menu')]";
-        waitForVisible(element.findElement(By.xpath(menuLocator)));
+        verifyElementVisible($(element.findElement(By.xpath(menuLocator))));
         String itemLocator = ".//span[contains(text(),'%s')]";
         WebElement selectItemElement = Wait.forCondition(ExpectedConditions
                 .elementToBeClickable(element.findElement(By.xpath(menuLocator)).findElement(By.xpath(String.format(itemLocator, text)))));
-        waitForVisible(selectItemElement);
+        verifyElementVisible($(selectItemElement));
         $(selectItemElement).scrollTo();
-        waitForVisible(selectItemElement);
+        verifyElementVisible($(selectItemElement));
         hoverAndClick($(selectItemElement));
-        waitForVisible(selectElement);
-        Wait.forCondition(ExpectedConditions.textToBePresentInElement(selectElement, text));
+        verifyElementVisible($(selectElement));
+
+        waitForElementContainsText($(selectElement), text);
     }
 
     private void trySelectItem(WebElement element, String text) {
-        WebElement selectElement = waitForVisible(element.findElement(By.xpath(".//span//span")));
+        WebElement selectElement = waitElementVisible($(element.findElement(By.xpath(".//span//span"))));
         int count = 0;
         while (!selectElement.getText().equals(text) && count < 5) {
             selectItem(element, text);
@@ -223,7 +226,7 @@ public class SelfService2Page extends Page {
 
     public SelfService2Page saveItem() {
         $(saveItem).click();
-        Wait.waitForSpinnerToDisappear();
+//        Wait.waitForSpinnerToDisappear();
         return at(SelfService2Page.class);
     }
 
@@ -245,7 +248,7 @@ public class SelfService2Page extends Page {
     public SelfService2Page deleteItem() {
         SelenideElement deleteItem = $(By.xpath("//span[@title='Slet']"));
         deleteItem.shouldBe(Condition.visible).click();
-        Wait.waitForSpinnerToDisappear();
+//        Wait.waitForSpinnerToDisappear();
         return this;
     }
 
@@ -256,8 +259,13 @@ public class SelfService2Page extends Page {
         return this;
     }
 
+    public SelfService2Page acceptStatement(){
+        $(ACCEPTANCE_CHECKBOX_PATH).setSelected(true);
+        return this;
+    }
+
     public SelfService2Page sendResponseToEcc() {
-        $("#send-button").shouldBe(Condition.enabled).click();
+        $(SEND_BUTTON_PATH).shouldBe(Condition.enabled).click();
         waitForUrl("self-service/dk/send-confirmation");
         return this;
     }
@@ -320,6 +328,21 @@ public class SelfService2Page extends Page {
             assertTrue(driver.findElements(By.xpath("//input[@type='submit']")).isEmpty(), "logout button should not be displayed");
             return this;
         }
+
+        public Asserts assertSendButtonDisabled(){
+            assertThat($(SEND_BUTTON_PATH).is(Condition.disabled))
+                    .as("Send button should be disabled")
+                    .isTrue();
+            return this;
+        }
+
+        public Asserts assertSendButtonEnabled(){
+            assertThat(Wait.waitForVisibleAndEnabled($(SEND_BUTTON_PATH)).isEnabled())
+                    .as("Send button should be enabled")
+                    .isTrue();
+            return this;
+        }
+
     }
 
 

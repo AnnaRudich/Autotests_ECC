@@ -26,6 +26,7 @@ public interface BasePath {
     String SETTLEMENT_TOTALS = "/{userId}/rest/settlement/settlementSummaryTotals.json";
     String SELF_SERVICE_REQUEST = "/{userId}/rest/settlement/selfServiceRequest.json";
     String SELF_SERVICE_LOGIN = "/self-service/dk/login";
+    String SELF_SERVICE_RELOAD_FT= "/rest/selfservicereload/functiontemplate";
     String EXCEL = "/{userId}/rest/lossImport/excel";
     String MATCH = "/{userId}/rest/lossImport/match";
     String SELF_SERVICE_LOSS_ITEMS = "/self-service/dk/lossItems/";

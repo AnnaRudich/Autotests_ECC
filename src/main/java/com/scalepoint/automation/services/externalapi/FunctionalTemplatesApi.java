@@ -4,10 +4,10 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.EditFunctionTemplatePage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
 import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.http.client.fluent.Content;
-import org.apache.http.client.fluent.Executor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -41,7 +41,9 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
         }
     }
 
-    public <T extends Page> T updateTemplate(Integer functionalTemplateId, Class<T> returnPageClass, FtOperation... operations) {
+    public <T extends Page> T updateTemplate(User user, Class<T> returnPageClass, FtOperation... operations) {
+
+        Integer functionalTemplateId = user.getFtId();
         try {
             if (lock.tryLock(240, TimeUnit.SECONDS)) {
                 try {
@@ -72,7 +74,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
                     }
 
                     templatePage.saveTemplate();
-
+                    BaseService.loginUser(user).reloadFunctionTemplate();
                     return detectPage(currentUrl, returnPageClass);
 
                 } finally {

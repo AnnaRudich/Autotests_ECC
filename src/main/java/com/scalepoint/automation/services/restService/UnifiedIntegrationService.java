@@ -11,6 +11,7 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lombok.Getter;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +19,11 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class UnifiedIntegrationService{
 
@@ -27,7 +31,10 @@ public class UnifiedIntegrationService{
 
     private static final String BASE_PATH = "/api/integration/";
     Token token;
+    @Getter
     Duration duration;
+    @Getter
+    Response response;
 
     public UnifiedIntegrationService() {
         this.token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.PLATFORM_CASE_READ).getToken();
@@ -97,9 +104,11 @@ public class UnifiedIntegrationService{
 
     public String createClaimFNOL(ClaimRequest claimRequest){
 
-        return new CreateClaimService(token)
+        response = new CreateClaimService(token)
                 .addClaim(claimRequest)
-                .getResponse()
+                .getResponse();
+
+        return response
                 .jsonPath()
                 .get("token");
     }
@@ -115,7 +124,24 @@ public class UnifiedIntegrationService{
                 .extract().response();
     }
 
-    public Duration getDuration(){
-        return duration;
+    public UnifiedIntegrationService doAssert(Consumer<UnifiedIntegrationService.Asserts> assertFunc) {
+        assertFunc.accept(new UnifiedIntegrationService.Asserts());
+        return this;
+    }
+
+
+    public class Asserts {
+
+        final static String OPEN_TO_ANOTHER_CLAIMS_HANDLER_MESSAGE = "This claim with claim number \\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12} is currently open to another claims handler. Claim was not updated.";
+        final static String OPEN_TO_ANOTHER_CLAIMS_HANDLER_PATH = "warnings[1].message";
+
+        public UnifiedIntegrationService.Asserts assertWarningOpenToAnotherClaimHandler() {
+            response.then().assertThat().body(OPEN_TO_ANOTHER_CLAIMS_HANDLER_PATH, matchesPattern(OPEN_TO_ANOTHER_CLAIMS_HANDLER_MESSAGE));
+            return this;
+        }
+        public UnifiedIntegrationService.Asserts assertMissingWarningOpenToAnotherClaimHandler() {
+            response.then().assertThat().body(OPEN_TO_ANOTHER_CLAIMS_HANDLER_PATH, isEmptyOrNullString());
+            return this;
+        }
     }
 }

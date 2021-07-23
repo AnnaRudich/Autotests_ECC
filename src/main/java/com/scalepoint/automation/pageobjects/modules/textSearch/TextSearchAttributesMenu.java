@@ -4,12 +4,12 @@ import com.scalepoint.automation.pageobjects.modules.Module;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.TextSearchPage;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 import java.util.Arrays;
 
-import static com.scalepoint.automation.utils.Wait.forCondition;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForVisibleAndEnabled;
 
 public class TextSearchAttributesMenu extends Module {
 
@@ -22,7 +22,7 @@ public class TextSearchAttributesMenu extends Module {
     }
 
     public TextSearchPage searchAttributes() {
-        forCondition(ExpectedConditions.elementToBeClickable(attributeSearchButton)).click();
+        waitForVisibleAndEnabled($(attributeSearchButton)).click();
         return Page.at(TextSearchPage.class);
     }
 

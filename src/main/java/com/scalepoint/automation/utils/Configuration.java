@@ -2,8 +2,10 @@ package com.scalepoint.automation.utils;
 
 import com.opencsv.CSVWriter;
 import com.scalepoint.automation.shared.Locale;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.util.Assert;
-
 public class Configuration {
 
     public static final String KEY_PROTOCOL = "app.protocol";
@@ -24,6 +26,9 @@ public class Configuration {
     public static final String KEY_HUB_REMOTE = "hub.remote";
     public static final String KEY_HUB_REMOTE_ZALENIUM = "hub.remote.zalenium";
     public static final String KEY_HUB_LOCAL_ZALENIUM = "hub.local.zalenium";
+
+    public static final String KEY_TEST_WIDGET_PROTOCOL = "test.widget.protocol";
+    public static final String KEY_URL_TEST_WIDGET = "url.test.widget";
 
     private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
     private static final String ff4jToggleAdminUrl = "ff4j-console/features";
@@ -49,6 +54,11 @@ public class Configuration {
     private static String hubRemote;
     private static String hubRemoteZalenium;
     private static String hubLocalZalenium;
+
+    @Getter
+    private static String testWidgetProtocol;
+    @Getter
+    private static String urlTestWidget;
 
     private static Configuration instance;
 
@@ -160,6 +170,10 @@ public class Configuration {
         return solrBaseUrl;
     }
 
+    public static String getWidgetUrl(){
+        return getTestWidgetProtocol() + SLASH + getUrlTestWidget();
+    }
+
     public Configuration setProtocol(String protocol) {
         Assert.notNull(protocol, errorMessage(KEY_PROTOCOL));
         Configuration.protocol = protocol;
@@ -224,6 +238,16 @@ public class Configuration {
 
     public Configuration setHubRemote(String hubRemote) {
         Configuration.hubRemote = hubRemote;
+        return this;
+    }
+
+    public Configuration setTestWidgetProtocol(String testWidgetProtocol) {
+        Configuration.testWidgetProtocol = testWidgetProtocol;
+        return this;
+    }
+
+    public Configuration setUrlTestWidget(String urlTestWidget) {
+        Configuration.urlTestWidget = urlTestWidget;
         return this;
     }
 

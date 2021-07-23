@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static com.scalepoint.automation.utils.Wait.*;
 import static org.testng.Assert.assertEquals;
 
 public class AgreementsTab extends SupplierDialog {
@@ -74,14 +74,14 @@ public class AgreementsTab extends SupplierDialog {
         $(voucherRow).click();
 
         By actionButtonBy = By.className("supplier-join-leave-voucher-agreement-btn");
-        Wait.waitForVisibleAndEnabled(actionButtonBy);
+        waitForVisibleAndEnabled($(actionButtonBy));
 
         WebElement actionButton = $(actionButtonBy);
         Assert.assertEquals(actionButton.getText(), actionType == ActionType.JOIN ? "Join" : "Leave");
         actionButton.click();
 
         By alertMessageBy = By.xpath(".//div[contains(@id, 'messagebox')]//span[text()='Yes']//ancestor::a");
-        Wait.waitForDisplayed(alertMessageBy);
+        verifyElementVisible($(alertMessageBy));
         $(alertMessageBy).click();
 
         Wait.waitForAjaxCompleted();

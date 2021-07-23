@@ -47,7 +47,8 @@ public class SidReductionRulesTests extends BaseTest {
             description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button")
     public void ecc3031_1_reductionRulePolicyType(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
                 .setCategory(claimItem.getCategoryMobilePhones())

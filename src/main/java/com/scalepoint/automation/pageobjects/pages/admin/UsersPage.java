@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompleted;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
 public class UsersPage extends AdminBasePage {
@@ -40,7 +40,7 @@ public class UsersPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(createUserButton).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

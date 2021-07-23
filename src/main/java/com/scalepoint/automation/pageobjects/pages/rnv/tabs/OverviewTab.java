@@ -18,7 +18,6 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class OverviewTab extends BaseClaimPage {
@@ -27,7 +26,6 @@ public class OverviewTab extends BaseClaimPage {
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
         waitForAjaxCompletedAndJsRecalculation();
-        waitForPageLoaded();
         $("#panel-overview-list-body").waitUntil(visible, TIME_OUT_IN_MILISECONDS);
     }
 

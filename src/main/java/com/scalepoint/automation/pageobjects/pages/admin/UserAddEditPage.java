@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.utils.Wait.waitForPageLoaded;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
@@ -91,7 +91,7 @@ public class UserAddEditPage extends AdminBasePage {
     @Override
     protected void ensureWeAreOnPage() {
         waitForUrl(getRelativeUrl());
-        waitForPageLoaded();
+        waitForAjaxCompletedAndJsRecalculation();
         $(loginField).waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS);
     }
 

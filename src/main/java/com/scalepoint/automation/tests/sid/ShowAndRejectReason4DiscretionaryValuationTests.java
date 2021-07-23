@@ -262,7 +262,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_9_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                             Claim claim,
                                                             ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCategory(claimItem.getCategoryMusic())
                         .withNewPrice(PRICE_500)
@@ -315,7 +316,8 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
     public void charlie_508_11_verifyDiscretionaryReasonFTON(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginAndCreateClaimToEditPolicyDialog(user, claim)
+                .cancel()
                 .openSidAndFill(sid -> sid
                         .withCategory(claimItem.getCategoryMusic())
                         .withNewPrice(10.00)
@@ -537,7 +539,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
                 .getMainMenu()
                 .toAdminPage();
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(getSystemUser());
-        functionalTemplatesApi.updateTemplate(user.getFtId(), MyPage.class, disable(FTSetting.SHOW_DISCREATIONARY_REASON))
+        functionalTemplatesApi.updateTemplate(user, MyPage.class, disable(FTSetting.SHOW_DISCREATIONARY_REASON))
                 .getClaimMenu()
                 .logout();
 

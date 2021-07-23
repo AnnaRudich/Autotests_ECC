@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.rnv;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -22,27 +21,12 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.rnv.serviceTask.ServiceTaskImport;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 public class RnVSmokeTest extends BaseTest {
 
-    RnVMock.RnvStub rnvStub;
-
-    @BeforeClass
-    public void startWireMock() throws IOException {
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        rnvStub = new RnVMock(wireMock)
-                .addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
     /*
      * send line to RnV
      * send feedback with Invoice
