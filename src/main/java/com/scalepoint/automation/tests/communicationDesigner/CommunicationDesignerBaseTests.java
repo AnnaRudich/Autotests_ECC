@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.Comm
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.BankAccount;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.BeforeMethod;
@@ -32,6 +33,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
     protected static final String SELFSERVICE_CUSTOMER_WELCOME = "[SelfServiceCustomerWelcome]";
     protected static final String ONE_ATTACHMENT = "testpdf.pdf";
     protected static final String TWO_ATTACHMENTS = "testpdf.pdf,testpdf.pdf";
+    public static final String DEFAULT_MONTH = "Jan";
 
 
     @BeforeMethod
@@ -122,9 +124,9 @@ public class CommunicationDesignerBaseTests extends BaseTest {
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
-    protected void sendSplitReplacementEmails(User user, Claim claim, ClaimItem claimItem, String regNumber, String accountNumber){
+    protected void sendSplitReplacementEmails(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount){
 
-        replacement(claim, claimItem, regNumber, accountNumber)
+        replacement(claim, claimItem, bankAccount.getRegNumber(), bankAccount.getRegNumber())
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(CUSTOMER_WELCOME)

@@ -1,6 +1,8 @@
 package com.scalepoint.automation.tests.fraudAlert;
 
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
@@ -102,7 +104,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
             description = "SelfService")
     public void selfServiceAddFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
-        selfService(claimRequest, user, claim, EventApiService.FraudStatus.FRAUDULENT)
+        selfService(claimRequest, user, claim, EventApiService.FraudStatus.FRAUDULENT, SettlementPage.class)
                 .getSettlementSummary()
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
@@ -111,16 +113,17 @@ public class FraudAlertSystemTest extends FraudAlertBase {
             description = "SelfService")
     public void selfServiceAddNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
-        selfService(claimRequest, user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT)
+        selfService(claimRequest, user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT, CustomerDetailsPage.class)
+                .reopenClaim()
                 .getSettlementSummary()
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+                    " drop-down for choosing reason is enabled")
     public void importExcelNoFraudSystemTest(@UserCompany(TOPDANMARK) User user,
-                                   ClaimRequest claimRequest) throws IOException {
+                                             ClaimRequest claimRequest) throws IOException {
 
         importExcel(claimRequest, user, EventApiService.FraudStatus.NOT_FRAUDULENT)
                 .getSettlementSummary()
@@ -129,9 +132,9 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+                    " drop-down for choosing reason is enabled")
     public void importExcelFraudSystemTest(@UserCompany(TOPDANMARK) User user,
-                                 ClaimRequest claimRequest) throws IOException {
+                                           ClaimRequest claimRequest) throws IOException {
 
         importExcel(claimRequest, user, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()
@@ -285,7 +288,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
         return settlementPage;
     }
 
-    private SettlementPage selfService(ClaimRequest claimRequest, User user, Claim claim, EventApiService.FraudStatus fraudStatus) throws IOException {
+    private  <T extends Page> T selfService(ClaimRequest claimRequest, User user, Claim claim, EventApiService.FraudStatus fraudStatus, Class<T> returnPageClass) throws IOException {
 
         String token = getToken(claimRequest);
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
@@ -319,7 +322,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
         fraudStatus(events.get(0), claimRequest.getCaseNumber(),fraudStatus);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token);
+        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, returnPageClass);
     }
 
     private SettlementPage importExcel(ClaimRequest claimRequest, User user, EventApiService.FraudStatus fraudStatus) throws IOException {

@@ -1,15 +1,10 @@
 package com.scalepoint.automation.tests.sid;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
-import com.scalepoint.automation.services.externalapi.FunctionalTemplatesApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
-import com.scalepoint.automation.services.externalapi.ftemplates.FTSettings;
-import com.scalepoint.automation.services.externalapi.ftemplates.operations.FtOperation;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
@@ -20,14 +15,10 @@ import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
-import com.scalepoint.automation.utils.listeners.RollbackContext;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.testng.ITestResult;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.scalepoint.automation.utils.Constants.*;
 
@@ -56,6 +47,7 @@ public class RejectReasonTests extends BaseTest {
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
 
+    @RequiredSetting(type = FTSetting.MAKE_REJECT_REASON_MANDATORY)
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
@@ -63,7 +55,6 @@ public class RejectReasonTests extends BaseTest {
     public void charlie_549_checkIfCanAddNewRejectReasonToClaimCreatedBefore(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
                                                                              InsuranceCompany insuranceCompany, EccIntegration eccIntegration) {
         String location = createClaimAndLineUsingEccIntegration(user, eccIntegration).getResponse().extract().header("Location");
-        makeRejectReasonMandatory(iTestResult, user);
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
         openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
@@ -508,13 +499,4 @@ public class RejectReasonTests extends BaseTest {
                 .closeSidWithOk()
                 .doAssert(SettlementPage.Asserts::assertFirstLineIsRejected);
     }
-
-    private void makeRejectReasonMandatory(ITestResult iTestResult, @UserCompany(CompanyCode.TRYGFORSIKRING) User user) {
-//        List<FtOperation> ftOperations = new ArrayList<>();
-//        ftOperations.add(FTSettings.enable(FTSetting.MAKE_REJECT_REASON_MANDATORY));
-//        FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(UsersManager.getSystemUser());
-//        functionalTemplatesApi.updateTemplate(user, LoginPage.class, ftOperations.toArray(new FtOperation[0]));
-//        iTestResult.setAttribute(ROLLBACK_CONTEXT, new RollbackContext(user, functionalTemplatesApi.getOperationsToRollback()));
-    }
-
 }

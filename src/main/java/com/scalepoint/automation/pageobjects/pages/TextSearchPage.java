@@ -30,6 +30,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.*;
@@ -156,19 +157,16 @@ public class TextSearchPage extends Page {
         int totalAttempts = 10;
         int currentAttempt = 0;
         while (currentAttempt < totalAttempts) {
-            $(sortLink).click();
-            boolean isDisplayed = false;
+
             try {
-                isDisplayed = sortIconToWait.isDisplayed();
-            } catch (Exception e) {
+                $(sortLink).click();
+                $(sortIconToWait).waitUntil(visible, TIME_OUT_IN_MILISECONDS);
+            } catch (Throwable e) {
                 logger.info(e.getMessage());
             }
-            if (isDisplayed) {
-                break;
-            }
-            currentAttempt++;
+            break;
         }
-        Wait.waitForAjaxCompleted();
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
