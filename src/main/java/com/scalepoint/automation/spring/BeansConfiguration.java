@@ -134,6 +134,4 @@ public class BeansConfiguration {
     public MongoDbApi mongoDbApi(){
         return new MongoDbApi(mongoTemplate());
     }
-
-
 }

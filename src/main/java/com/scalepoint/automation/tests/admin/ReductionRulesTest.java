@@ -34,6 +34,7 @@ public class ReductionRulesTest extends BaseTest {
     @Test(groups = {TestGroups.ADMIN, TestGroups.REDUCTION_RULES}, dataProvider = "testDataProvider",
             description = "ECCD-629, 635  Extend reduction rules lines with PriceRange fields + Documentation and ClaimantRating")
     public void ecc4007_verifyRRLineFields(Translations translations) {
+
         AddEditReductionRulePage editPage = toNewReductionRulePage();
 
         RRLinesFields ruleFields = translations.getRrLinesFields();

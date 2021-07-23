@@ -1,46 +1,53 @@
 package com.scalepoint.automation.tests.admin;
 
-import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.GenericItemsAdminPage;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.GenericItem;
-import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
 public class GenericItemsTests extends BaseTest {
+
+    @BeforeMethod
+    public void toGenericItemsAdminPage(Object[] objects) {
+
+        List parameters = Arrays.asList(objects);
+
+        User user = getObjectByClass(parameters, User.class).get(0);
+        Claim claim = getObjectByClass(parameters, Claim.class).get(0);
+
+        loginAndCreateClaim(user, claim)
+                .to(GenericItemsAdminPage.class);
+    }
+
     @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
-            dataProvider = "testDataProvider", description = "CHARLIE-535 Insert/Update generic item")
-    public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem) {
+            dataProvider = TEST_DATA_PROVIDER, description = "CHARLIE-535 Insert/Update generic item")
+    public void charlie535_testWeCanManageGenericItems(User user, Claim claim, GenericItem genericItem, String newDescription) {
         String companyName = user.getCompanyName();
 
-        GenericItemsAdminPage genericItemsAdminPage = loginAndCreateClaim(user, claim)
-                .to(GenericItemsAdminPage.class)
+        at(GenericItemsAdminPage.class)
                 .refreshList()
-                .doAssert(GenericItemsAdminPage.Asserts::assertItemsListIsNotEmpty);
-
-        //Create new item and check we are able to add it to settlement
-        SettlementPage settlementPage = genericItemsAdminPage
+                .doAssert(GenericItemsAdminPage.Asserts::assertItemsListIsNotEmpty)
                 .clickCreateNewItem()
                 .addNewGenericItem(genericItem, companyName, true)
                 .to(SettlementPage.class)
                 .addGenericItemToClaim(genericItem)
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
 
-        //Update generic item name and make sure the update is visible in settlement
-        String newDescription = genericItem.getName() + "-UPDATED";
-
-        settlementPage
-                .to(GenericItemsAdminPage.class)
+        to(GenericItemsAdminPage.class)
                 .editItem(genericItem, companyName)
                 .setDescription(newDescription)
                 .save();
@@ -51,16 +58,13 @@ public class GenericItemsTests extends BaseTest {
                 .addGenericItemToClaim(genericItem)
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
+
     @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
-            dataProvider = "testDataProvider", description = "CHARLIE-535 Publish/Unpublish generic item")
+            dataProvider = TEST_DATA_PROVIDER, description = "CHARLIE-535 Publish/Unpublish generic item")
     public void charlie535_testWeCanPublishGenericItems(User user, Claim claim, GenericItem genericItem) {
         String companyName = user.getCompanyName();
 
-        SettlementPage settlementPage = loginAndCreateClaim(user, claim);
-        String currentUrl = Browser.driver().getCurrentUrl();
-
-        settlementPage
-                .to(GenericItemsAdminPage.class)
+        at(GenericItemsAdminPage.class)
                 .clickCreateNewItem()
                 .addNewGenericItem(genericItem, companyName, false)
                 .to(SettlementPage.class)
@@ -70,21 +74,18 @@ public class GenericItemsTests extends BaseTest {
                 .publish(true)
                 .save();
 
-        Browser.driver().get(currentUrl);
-        Page.at(SettlementPage.class)
+        to(SettlementPage.class)
                 .addGenericItemToClaim(genericItem)
                 .doAssert(spage -> spage.assertItemIsPresent(genericItem.getName()));
     }
 
     @Test(groups = {TestGroups.ADMIN, TestGroups.GENERIC_ITEMS},
-            dataProvider = "testDataProvider", description = "CHARLIE-535 Delete generic item")
-    public void charlie535_testWeCanDeleteGenericItem(User user, Claim claim, GenericItem genericItem) {
+            dataProvider = TEST_DATA_PROVIDER, description = "CHARLIE-535 Delete generic item")
+    public void charlie535_testWeCanDeleteGenericItem(User user, Claim claim,
+                                                      GenericItem genericItem, GenericItem genericItemToDelete) {
         String companyName = user.getCompanyName();
 
-        GenericItem genericItemToDelete = TestData.getGenericItem();
-
-        loginAndCreateClaim(user, claim)
-                .to(GenericItemsAdminPage.class)
+        at(GenericItemsAdminPage.class)
                 .clickCreateNewItem()
                 .addNewGenericItem(genericItem, companyName, true)
                 .to(SettlementPage.class)
