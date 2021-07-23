@@ -1,7 +1,6 @@
 package com.scalepoint.automation.tests.rnv.rnv2;
 
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
@@ -22,7 +21,6 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -32,20 +30,6 @@ import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.Audit
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
 
 public class IntelligentRepair2WebServiceTest extends BaseTest {
-
-    RnVMock.RnvStub rnvStub;
-
-    @BeforeClass
-    public void startWireMock() {
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        rnvStub = new RnVMock(wireMock)
-                .addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
 
     /*
      * send line to RnV
@@ -192,7 +176,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .sendRnvIsSuccess(agreement)
                 .findClaimLine(lineDescription)
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertLineIsSentToRepair);
-
 
         new RnvService()
                 .sendFeedbackWithInvoiceWithRepairPrice(BigDecimal.valueOf(Constants.PRICE_10), claim, rnvStub);

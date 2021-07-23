@@ -1,0 +1,114 @@
+package com.scalepoint.automation.tests.communicationDesigner;
+
+import com.scalepoint.automation.pageobjects.pages.MailsPage;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
+import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
+import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
+import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestData;
+import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.time.Year;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.scalepoint.automation.pageobjects.pages.Page.to;
+import static com.scalepoint.automation.utils.Constants.JANUARY;
+
+public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTests {
+
+    private static final String AUTOMATIC_CUSTOME_WELCOME_DATA_PROVIDER = "automaticCustomerWelcomeDataProvider";
+
+    @BeforeMethod
+    public void toSettlementPage(Object[] objects) {
+
+        List parameters = Arrays.asList(objects);
+
+        User user = getObjectByClass(parameters, User.class).get(0);
+        ClaimRequest createClaimRequest = getObjectByClass(parameters, ClaimRequest.class).get(0);
+        ClaimRequest itemizationClaimRequest = getObjectByClass(parameters, ClaimRequest.class).get(0);
+
+        String token = createFNOLClaimAndGetClaimToken(itemizationClaimRequest, createClaimRequest);
+        loginAndOpenUnifiedIntegrationClaimByToken(user, token);
+    }
+
+    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE)
+    @CommunicationDesignerCleanUp
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = AUTOMATIC_CUSTOME_WELCOME_DATA_PROVIDER,
+            description = "Use communication designer to prepare CustomerWelcome")
+    public void automaticCustomerWelcomeTest(User user, ClaimItem claimItem, ClaimRequest createClaimRequest,
+                                             ClaimRequest itemizationClaimRequest,
+                                             CommunicationDesigner communicationDesigner) {
+
+        String claimLineDescription = claimItem.getSetDialogTextMatch();
+
+        Page.at(SettlementPage.class)
+                .cancelPolicy()
+                .requestSelfServiceWithEnabledNewPassword(createClaimRequest, Constants.DEFAULT_PASSWORD)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescriptionWithOutSuggestions(claimLineDescription)
+                .selectPurchaseYear(String.valueOf(Year.now().getValue()))
+                .selectPurchaseMonth(JANUARY)
+                .addNewPrice(3000.00)
+                .selectCategory(claimItem.getCategoryMobilePhones())
+                .saveItem()
+                .sendResponseToEcc();
+
+        to(MyPage.class).openRecentClaim()
+                .toMailsPage()
+                .doAssert(mail ->
+                        mail.noOtherMailsOnThePage(
+                                Arrays.asList(
+                                        MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL,
+                                        MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME,
+                                        MailsPage.MailType.CUSTOMER_WELCOME))
+                )
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, AUTOMATIC_CUSTOMER_WELCOME)
+                .doAssert(mailViewDialog ->
+                        mailViewDialog.isTextVisible(AUTOMATIC_CUSTOMER_WELCOME)
+                );
+    }
+
+    @DataProvider(name = AUTOMATIC_CUSTOME_WELCOME_DATA_PROVIDER)
+    public static Object[][] automaticCustomerWelcomeDataProvider(Method method) {
+
+        CommunicationDesigner communicationDesigner = new CommunicationDesigner()
+                .setUseOutputManagement(true)
+                .setAutomaticCustomerWelcome(false, null);
+
+        List parameters = removeObjectByClass(TestDataActions.getTestDataParameters(method), ClaimRequest.class);
+
+        ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
+        ClaimRequest itemizationClaimRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
+        User user = getObjectByClass(parameters, User.class).get(0);
+
+        String companyName = user.getCompanyName();
+
+        return addNewParameters(parameters, setAllowAutoClose(createClaimRequest, companyName),
+                setAllowAutoClose(itemizationClaimRequest, companyName), communicationDesigner);
+    }
+
+    private static ClaimRequest setAllowAutoClose(ClaimRequest claimRequest, String companyName){
+
+        claimRequest.setCompany(companyName);
+        claimRequest.setTenant(companyName);
+        claimRequest.setAllowAutoClose(true);
+
+        return claimRequest;
+    }
+}
