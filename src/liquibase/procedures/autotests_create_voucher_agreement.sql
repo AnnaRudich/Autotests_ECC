@@ -141,7 +141,7 @@ DECLARE @PseudocatModelId INT = (
 
 	PRINT 'Voucher Agreement was successfully created with id = ' + CAST(@VoucherAgreementId AS VARCHAR(32))
 
-	declare @ShopName varchar(32) = CONCAT('Test shop ', @VoucherAgreementName)
+	declare @ShopName varchar(32) = CONCAT('Test shop ÆæØøÅåß ', @VoucherAgreementName)
 	declare @IsRetailShop bit = 1
 	declare @IsRepairValuationLocation bit = 0
 	declare @PostalCode varchar(100) = '5000'

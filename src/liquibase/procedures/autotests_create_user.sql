@@ -20,8 +20,8 @@ DECLARE @USERTYPE_ADMIN BIGINT = 4
 DECLARE @USERROLE_ITMANAGER BIGINT = 1
 DECLARE @USER_AND_ROLES_ACCESS BIGINT = 12
 DECLARE @VIEW_CUSTOMER_ORDERS_PERMISSION BIGINT = (SELECT TOP 1 Id FROM dbo.Permissions WHERE Code = 'VIEW_CUSTOMER_ORDERS')
-DECLARE @firstname NVARCHAR(256) = 'FirstName'
-DECLARE @lastname NVARCHAR(256) = 'LastName'
+DECLARE @firstname NVARCHAR(256) = 'FirstName ÆæØøÅåß'
+DECLARE @lastname NVARCHAR(256) = 'LastName ÆæØøÅåß'
 DECLARE @enableDND bit = 0
 DECLARE @departmentToken NVARCHAR(50) = (SELECT TOP 1 d.DepartmentToken FROM dbo.INSCOMP ic
 	LEFT JOIN dbo.Department pd ON pd.DepartmentToken = ic.icDepartment

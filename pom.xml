@@ -245,7 +245,7 @@
                 <configuration>
                     <changeLogFile>${basedir}/src/liquibase/changelog.xml</changeLogFile>
                     <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
-                    <url>jdbc:sqlserver://localhost;SelectMethod=cursor;integratedSecurity=true;databaseName=DEV_ECC_DK;</url>
+                    <url>jdbc:sqlserver://localhost?useUnicode=true&amp;characterEncoding=UTF-8;SelectMethod=cursor;integratedSecurity=true;databaseName=DEV_ECC_DK;</url>
                     <propertyFile>${basedir}/src/main/resources-filtered/application-${activatedProperties}.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <propertyFileWillOverride>true</propertyFileWillOverride>

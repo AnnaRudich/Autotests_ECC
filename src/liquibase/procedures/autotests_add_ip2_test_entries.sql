@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[autotests_add_ip2_test_entries]
 @eventId int,
 @baseDocumentId int,
 @mockEndpoint nvarchar(256),
-@supplierId int =NULL
+@supplierId int = NULL
 
 AS
 
