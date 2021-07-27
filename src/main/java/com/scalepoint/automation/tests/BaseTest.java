@@ -14,6 +14,7 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.AdminPage;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage;
+import com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage;
 import com.scalepoint.automation.pageobjects.pages.suppliers.SuppliersPage;
 import com.scalepoint.automation.pageobjects.pages.testWidget.GenerateWidgetPage;
 import com.scalepoint.automation.services.externalapi.*;
@@ -85,6 +86,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
@@ -98,9 +100,17 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
 @Listeners({SuiteListener.class, OrderRandomizer.class})
 public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable {
 
-    public static final String RV_LINE_DESCRIPTION = "RnVLine";
-    public static final String UPDATED_LINE_DESCRIPTION = "Updated";
-    public static final String DEFAULT_PASSWORD = "12341234";
+    protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
+    protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
+    protected static final String UPDATED_LINE_DESCRIPTION = "Updated åæéø ";
+    protected static final String DEFAULT_PASSWORD = "12341234";
+    protected static final String SAMPLE_REASON_TEXT = "Sample reason åæéø ";
+    protected static final String FT_TEMPLATE_NAME = "FT Name åæéø";
+    protected static final String UPDATED_FT_TEMPLATE_NAME = String.format("U %s", FT_TEMPLATE_NAME);
+    protected static final String DEFAULT_COPY_TEMPLATE = "Default";
+    protected static final String DEFAULT_USER_PASSWORD = "duapDuap(312";
+    protected static final UserAddEditPage.UserType[] USER_ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
+
 
     public static final String TEST_DATA_PROVIDER = "testDataProvider";
 

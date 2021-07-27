@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests.admin;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.admin.EditReasonsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
@@ -11,13 +12,20 @@ import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.commons.lang.RandomStringUtils;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRYGFORSIKRING;
@@ -26,8 +34,23 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TRY
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-508")
 public class EditReasonTests extends BaseTest {
 
-    private static final String TEST_REASON_LINE = "Test reason line";
+    private static final String EDIT_REASON_PAGE_FROM_ADMIN_EXCEEDED_LENGTH_DATA_PROVIDER = "editReasonPageFromAdminExceededLengthDataProvider";
+    private static final String EDIT_REASON_PAGE_FROM_ADMIN_DATA_PROVIDER = "editReasonPageFromAdminDataProvider";
+    private static final String DELETE_REASON_IN_USE_DATA_PROVIDER = "deleteReasonInUseDataProvider";
+    private static final String DELETE_REASON_NOT_IN_USE_DATA_PROVIDER = "deleteReasonNotInUseDataProvider";
+    private static final String EDIT_REASON_IN_USE_DATA_PROVIDER = "editReasonInUseDataProvider";
+    private static final String EDIT_REASON_NOT_IN_USE_DATA_PROVIDER = "editReasonNotInUseDataProvider";
+    private static final String DISABLE_REASON_IN_USE_DATA_PROVIDER = "disableReasonInUseDataProvider";
 
+    @BeforeMethod
+    public void toEditReasonPage(Object[] objects) {
+
+        List parameters = Arrays.asList(objects);
+
+        InsuranceCompany insuranceCompany = getObjectByClass(parameters, InsuranceCompany.class).get(0);
+
+        openEditReasonPage(insuranceCompany);
+    }
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -35,19 +58,18 @@ public class EditReasonTests extends BaseTest {
      * WHEN: Try to input Reason text 501 char
      * THEN: The value should be trimmed to 500 char
      */
-    @Bug(bug = "CHARLIE-1378 - not a bug")
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
-            dataProvider = "testDataProvider", description = "CHARLIE-508 Verify Reason text length is restricted to 500 characters")
-    public void charlie508_2_EditReasonPageFromAdmin(InsuranceCompany insuranceCompany) {
-        String reasonWithExceededLength = RandomStringUtils.randomAlphabetic(501);
-        String reasonWithAllowedLength = reasonWithExceededLength.substring(0, 500);
+            dataProvider = EDIT_REASON_PAGE_FROM_ADMIN_EXCEEDED_LENGTH_DATA_PROVIDER,
+            description = "Verify Reason text length is restricted to 500 characters")
+    public void editReasonPageFromAdminExceededLengthTest(InsuranceCompany insuranceCompany,
+                                                          String reasonWithExceededLength,
+                                                          String reasonWithAllowedLength) {
 
-        openEditReasonPage(insuranceCompany)
+        Page.at(EditReasonsPage.class)
                 .addReason(reasonWithExceededLength)
                 .findReason(reasonWithAllowedLength)
                 .delete();
     }
-
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -60,30 +82,28 @@ public class EditReasonTests extends BaseTest {
      * THEN: Saved discretionary reason is visible in drop-down
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
-            dataProvider = "testDataProvider", description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
-    public void charlie508_3_EditReasonPageFromAdmin(@UserCompany(TRYGFORSIKRING) User trygUser,
-                                                     Claim claim,
-                                                     InsuranceCompany insuranceCompany,
-                                                     ClaimItem claimItem) {
+            dataProvider = EDIT_REASON_PAGE_FROM_ADMIN_DATA_PROVIDER,
+            description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
+    public void editReasonPageFromAdminTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+                                            InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
+                                            String description, Double customerDemandPrice, String month,
+                                            int depreciation, Double discretionaryReasonPrice, Double newPrice) {
 
-        String reason = "Sample reason åæéø " + System.currentTimeMillis();
-
-        openEditReasonPage(insuranceCompany)
+        Page.at(EditReasonsPage.class)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason, description, customerDemandPrice, month,
+                depreciation, discretionaryReasonPrice, newPrice);
 
         openEditReasonPage(insuranceCompany)
                 .findReason(reason)
                 .disable()
                 .assertReasonDisabled(reason);
     }
-
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -99,26 +119,26 @@ public class EditReasonTests extends BaseTest {
      * THEN: delete button is disabled
      */
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
-    @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
-            dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
-    public void charlie508_5_DeleteReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
-                                               Claim claim,
-                                               InsuranceCompany insuranceCompany,
-                                               ClaimItem claimItem) {
-        String reason = "New reason " + System.currentTimeMillis();
-        openEditReasonPage(insuranceCompany)
+            dataProvider =DELETE_REASON_IN_USE_DATA_PROVIDER,
+            description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
+    public void deleteReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+                                      InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
+                                      String description, Double customerDemandPrice, String month,
+                                      int depreciation, Double discretionaryReasonPrice, Double newPrice) {
+
+        Page.at(EditReasonsPage.class)
                 .addReason(reason)
                 .logout();
 
-        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason, description, customerDemandPrice, month,
+                depreciation, discretionaryReasonPrice, newPrice);
 
         openEditReasonPage(insuranceCompany)
                 .findReason(reason)
                 .doAssert(EditReasonsPage.ReasonRow.Asserts::assertDeleteIsDisabled)
                 .disable();
     }
-
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -130,16 +150,17 @@ public class EditReasonTests extends BaseTest {
      * THEN: reason is deleted
      */
     @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
-    public void charlie508_6_DeleteReasonNotInUse(InsuranceCompany insuranceCompany) {
-        String reason = "New reason " + System.currentTimeMillis();
-        openEditReasonPage(insuranceCompany)
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
+            dataProvider = DELETE_REASON_NOT_IN_USE_DATA_PROVIDER,
+            description = "CHARLIE-508 Verify that it is possible to delete reasons which are in not use")
+    public void deleteReasonNotInUseTest(InsuranceCompany insuranceCompany, String reason) {
+
+        Page.at(EditReasonsPage.class)
                 .addReason(reason)
                 .findReason(reason)
                 .delete()
                 .assertReasonNotFound(reason);
     }
-
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -154,27 +175,28 @@ public class EditReasonTests extends BaseTest {
      * AND: verify if the reason input field enabled
      * THEN: reason input field is disabled
      */
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
-    public void charlie508_7_EditReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
-                                             Claim claim,
-                                             InsuranceCompany insuranceCompany,
-                                             ClaimItem claimItem) {
-        String reason = "New reason " + System.currentTimeMillis();
-        openEditReasonPage(insuranceCompany)
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = EDIT_REASON_IN_USE_DATA_PROVIDER,
+            description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
+    public void editReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+                                    InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
+                                    String description, Double customerDemandPrice, String month,
+                                    int depreciation, Double discretionaryReasonPrice, Double newPrice) {
+
+        Page.at(EditReasonsPage.class)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
                 .logout();
 
-        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason, description, customerDemandPrice, month,
+                depreciation, discretionaryReasonPrice, newPrice);
 
         openEditReasonPage(insuranceCompany)
                 .findReason(reason)
                 .doAssert(EditReasonsPage.ReasonRow.Asserts::assertReasonIsNotEditable)
                 .disable();
     }
-
-
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -186,17 +208,18 @@ public class EditReasonTests extends BaseTest {
      * THEN: the field is enabled and user can edit the reason
      */
     @Bug(bug = "CHARLIE-1379 - fixed")
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
-    public void charlie508_8_EditReasonNotInUse(InsuranceCompany insuranceCompany) {
-        String reason = "New reason " + System.currentTimeMillis();
-        openEditReasonPage(insuranceCompany)
+    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON},
+            dataProvider = EDIT_REASON_NOT_IN_USE_DATA_PROVIDER,
+            description = "CHARLIE-508 Verify that it is possible to edit reasons which are in not use")
+    public void editReasonNotInUseTest(InsuranceCompany insuranceCompany, String reason) {
+
+        Page.at(EditReasonsPage.class)
                 .addReason(reason)
                 .findReason(reason)
                 .doAssert(EditReasonsPage.ReasonRow.Asserts::assertReasonIsEditable)
                 .delete()
                 .assertReasonNotFound(reason);
     }
-
     /**
      * WHEN: Go to the Edit reasons page from admin.
      * AND: Select the Tryg Holding
@@ -212,17 +235,19 @@ public class EditReasonTests extends BaseTest {
      * AND: go to settlement page, open claimline
      * THEN: "reason 1 deaktiveret" is displayed in the SID and as a hover
      */
-
     //TODO https://jira.scalepoint.com/browse/CHARLIE-1514
-//    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING}, dataProvider = "testDataProvider", description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
-    public void charlie508_9_DisableReasonInUse(@UserCompany(TRYGFORSIKRING) User trygUser,
-                                                Claim claim,
-                                                InsuranceCompany insuranceCompany,
-                                                ClaimItem claimItem) {
-        String reason = "New reason " + System.currentTimeMillis();
+    @Test(enabled = false, groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
+            dataProvider = DISABLE_REASON_IN_USE_DATA_PROVIDER,
+            description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
+    public void disableReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+                                       InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
+                                       String description, Double customerDemandPrice, String month,
+                                       int depreciation, Double discretionaryReasonPrice, Double newPrice) {
 
         openEditReasonPage(insuranceCompany).addReason(reason);
-        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason);
+
+        addReasonToClaimAndLogout(trygUser, claim, claimItem, reason, description, customerDemandPrice, month,
+                depreciation, discretionaryReasonPrice, newPrice);
 
         openEditReasonPage(insuranceCompany, true)
                 .findReason(reason)
@@ -233,25 +258,117 @@ public class EditReasonTests extends BaseTest {
 
         login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
                 .reopenClaim()
-                .findClaimLine(TEST_REASON_LINE)
+                .findClaimLine(reason)
                 .doAssert(claimLine -> claimLine.assertTooltipPresent(reason))
                 .editLine()
                 .doAssert(sid -> sid.assertDiscretionaryReasonValuePresent(reason));
     }
 
-    private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason) {
+    @DataProvider(name = EDIT_REASON_PAGE_FROM_ADMIN_EXCEEDED_LENGTH_DATA_PROVIDER)
+    public static Object[][] editReasonPageFromAdminExceededLengthDataProvider(Method method) {
+
+        String reasonWithExceededLength = RandomStringUtils.randomAlphabetic(501);
+        String reasonWithAllowedLength = reasonWithExceededLength.substring(0, 500);
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reasonWithExceededLength,
+                reasonWithAllowedLength);
+    }
+
+    @DataProvider(name = EDIT_REASON_PAGE_FROM_ADMIN_DATA_PROVIDER)
+    public static Object[][] editReasonPageFromAdminDataProvider(Method method) {
+
+        String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
+
+        String description = TEST_LINE_DESCRIPTION;
+        Double customerDemandPrice = 1000.00;
+        String month = "6";
+        int depreciation = 5;
+        Double discretionaryReasonPrice = 400.00;
+        Double newPrice = 3000.00;
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
+                month, depreciation, discretionaryReasonPrice, newPrice);
+    }
+
+    @DataProvider(name = DELETE_REASON_IN_USE_DATA_PROVIDER)
+    public static Object[][] deleteReasonInUseDataProvider(Method method) {
+
+        String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
+
+        String description = TEST_LINE_DESCRIPTION;
+        Double customerDemandPrice = 1000.00;
+        String month = "6";
+        int depreciation = 5;
+        Double discretionaryReasonPrice = 400.00;
+        Double newPrice = 3000.00;
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
+                month, depreciation, discretionaryReasonPrice, newPrice);
+    }
+
+    @DataProvider(name = DELETE_REASON_NOT_IN_USE_DATA_PROVIDER)
+    public static Object[][] deleteReasonNotInUseDataProvider(Method method) {
+
+        String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reason);
+    }
+
+    @DataProvider(name = EDIT_REASON_IN_USE_DATA_PROVIDER)
+    public static Object[][] editReasonInUseDataProvider(Method method) {
+
+        String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
+
+        String description = TEST_LINE_DESCRIPTION;
+        Double customerDemandPrice = 1000.00;
+        String month = "6";
+        int depreciation = 5;
+        Double discretionaryReasonPrice = 400.00;
+        Double newPrice = 3000.00;
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
+                month, depreciation, discretionaryReasonPrice, newPrice);
+    }
+
+    @DataProvider(name = EDIT_REASON_NOT_IN_USE_DATA_PROVIDER)
+    public static Object[][] editReasonNotInUseDataProvider(Method method) {
+
+        String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reason);
+    }
+
+    @DataProvider(name = DISABLE_REASON_IN_USE_DATA_PROVIDER)
+    public static Object[][] disableReasonInUseDataProvider(Method method) {
+
+        String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
+
+        String description = TEST_LINE_DESCRIPTION;
+        Double customerDemandPrice = 1000.00;
+        String month = "6";
+        int depreciation = 5;
+        Double discretionaryReasonPrice = 400.00;
+        Double newPrice = 3000.00;
+
+        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
+                month, depreciation, discretionaryReasonPrice, newPrice);
+    }
+
+    private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason,
+                                           String description, Double customerDemandPrice, String month, int depreciation,
+                                           Double discretionaryReasonPrice, Double newPrice) {
         loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
                 .cancel()
                 .openSid()
-                .setDescription(TEST_REASON_LINE)
+                .setDescription(description)
                 .setCategory(claimItem.getCategoryShoes())
-                .setCustomerDemand(1000.00)
+                .setCustomerDemand(customerDemandPrice)
                 .enableAge()
-                .selectMonth("6")
+                .selectMonth(month)
                 .setDepreciationType(SettlementDialog.DepreciationType.DISCRETIONARY)
-                .setDepreciation(5)
-                .setDiscretionaryPrice(400.00)
-                .setNewPrice(3000.00)
+                .setDepreciation(depreciation)
+                .setDiscretionaryPrice(discretionaryReasonPrice)
+                .setNewPrice(newPrice)
                 .setValuation(DISCRETIONARY)
                 .selectDiscretionaryReason(reason)
                 .doAssert(sid -> sid.assertDiscretionaryReasonEqualTo(reason))

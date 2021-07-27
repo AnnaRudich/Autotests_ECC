@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GenericItem {
 
-    private String name = RandomUtils.randomName("GenericItem ÆæØøÅåß");
+    private String name = RandomUtils.randomName("GenericItem åæéø");
     @XmlElement
     private String group;
     @XmlElement

@@ -161,7 +161,8 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_IMPORTED_FROM_SELFSERVICE,1);
     }
 
-    @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(enabled = false, groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK},
+            dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
     public void attachmentImportedFromFNOLSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim){
 

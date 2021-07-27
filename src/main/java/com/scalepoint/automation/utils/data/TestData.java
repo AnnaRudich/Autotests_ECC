@@ -76,6 +76,10 @@ public class TestData {
         return (ClaimItem) getData(Data.CLAIMITEM);
     }
 
+    public static UserPasswordRules getUserPasswordRules() {
+        return (UserPasswordRules) getData(Data.USER_PASSWORD_RULES);
+    }
+
     public static GenericItem getGenericItem() {
         return (GenericItem) getData(Data.GENERICITEM);
     }
@@ -311,7 +315,8 @@ public class TestData {
         BAUTA_DEFAULT_FT_SETTINGS("DefaultFTSettings/Bauta.xml", DefaultFTOperations.DefaultFTSettings.class),
         TRYGHOLDING_DEFAULT_FT_SETTINGS("DefaultFTSettings/Trygholding.xml", DefaultFTOperations.DefaultFTSettings.class),
         PERFORMANCE_INSERT_SETTLEMENT_ITEM("request/Claim/PerformanceInsertSettlementItem.xml", InsertSettlementItem.class),
-        RNV_INSERT_SETTLEMENT_ITEM("request/Claim/RnvInsertSettlementItem.xml", InsertSettlementItem.class);
+        RNV_INSERT_SETTLEMENT_ITEM("request/Claim/RnvInsertSettlementItem.xml", InsertSettlementItem.class),
+        USER_PASSWORD_RULES("input/UserPasswordRules.xml", UserPasswordRules.class);
 
         private String fileName;
         private JAXBContext context;
