@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SystemUser {
 
-    private String login = RandomUtils.randomName("Autotest");
+    private String login = RandomUtils.randomName("Autotesåæéøt");
     private String password = "!Q@W#E$R5t6t!" + RandomUtils.randomInt(99);
-    private String firstName = RandomUtils.randomName("AutotestFirst");
-    private String lastName = RandomUtils.randomName("AutotestSecond");
+    private String firstName = RandomUtils.randomName("AutotestFirståæéøt");
+    private String lastName = RandomUtils.randomName("AutotestSecondåæéøt");
     private String email = RandomUtils.randomName("autotest") + "@scalepoint.com";
     @XmlElement
     private String company;

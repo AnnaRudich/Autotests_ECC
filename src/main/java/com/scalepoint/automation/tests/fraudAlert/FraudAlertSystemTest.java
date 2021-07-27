@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.List;
 
+import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOPDANMARK;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -154,7 +155,9 @@ public class FraudAlertSystemTest extends FraudAlertBase {
             description = "FNOL")
     public void fnolNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim) throws IOException {
 
-        fnol(user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT)
+        fnol(user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT);
+        at(CustomerDetailsPage.class)
+                .reopenClaim()
                 .getSettlementSummary()
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }

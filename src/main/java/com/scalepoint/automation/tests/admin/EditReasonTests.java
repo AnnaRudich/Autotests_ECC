@@ -236,7 +236,7 @@ public class EditReasonTests extends BaseTest {
      * THEN: "reason 1 deaktiveret" is displayed in the SID and as a hover
      */
     //TODO https://jira.scalepoint.com/browse/CHARLIE-1514
-    @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
+    @Test(enabled = false, groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = DISABLE_REASON_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
     public void disableReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
