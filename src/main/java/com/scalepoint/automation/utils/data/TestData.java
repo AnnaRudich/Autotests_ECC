@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.CommunicationDesignerEmailTemplates;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
 import com.scalepoint.automation.utils.data.entity.input.Claim;

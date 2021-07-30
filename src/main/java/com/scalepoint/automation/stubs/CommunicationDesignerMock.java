@@ -7,7 +7,7 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.utils.JsonUtils;
 import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.input.EmailTemplate;
+import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.EmailTemplate;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 
