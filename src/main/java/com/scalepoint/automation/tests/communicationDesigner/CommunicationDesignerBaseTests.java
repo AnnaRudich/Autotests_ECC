@@ -8,9 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.Comm
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.input.BankAccount;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
@@ -22,18 +20,8 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 
 public class CommunicationDesignerBaseTests extends BaseTest {
 
-    protected static final String CUSTOMER_WELCOME_REJECTION = "[CustomerWelcomeRejectionMail]";
-    protected static final String CUSTOMER_WELCOME = "[CustomerWelcome]";
-    protected static final String CUSTOMER_WELCOME_WITH_OUTSTANDING = "[CustomerWelcomeWithOutstanding]";
-    protected static final String ORDER_CONFIRMATION = "[OrderConfirmation]";
-    protected static final String REPLACEMENT_MAIL = "[ReplacementMail]";
-    protected static final String AUTOMATIC_CUSTOMER_WELCOME = "[AutomaticCustomerWelcome]";
-    protected static final String ITEMIZATION_SUBMIT_LOSS_ITEMS = "[ItemizationSubmitLossItems]";
-    protected static final String ITEMIZATION_SAVE_LOSS_ITEMS = "[ItemizationSaveLossItems]";
-    protected static final String SELFSERVICE_CUSTOMER_WELCOME = "[SelfServiceCustomerWelcome]";
-    protected static final String ONE_ATTACHMENT = "testpdf.pdf";
-    protected static final String TWO_ATTACHMENTS = "testpdf.pdf,testpdf.pdf";
-    public static final String DEFAULT_MONTH = "Jan";
+    protected static String oneAttachment;
+    protected static String twoAttachments;
 
 
     @BeforeMethod
@@ -43,6 +31,12 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         User user = getObjectByClass(parameters, User.class).get(0);
         CommunicationDesigner communicationDesigner = getObjectByClass(parameters, CommunicationDesigner.class).get(0);
+        CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates = getObjectByClass(parameters, CommunicationDesignerEmailTemplates.class).get(0);
+
+        String title = communicationDesignerEmailTemplates.getEmailTemplateByClass(AttachmentEmailTemplate.class).getTemplateName();
+
+        oneAttachment = title;
+        twoAttachments = String.format("%s,%s", title, title);
 
         communicationDesignerMock.addStub(user.getCompanyName().toLowerCase());
 
@@ -69,24 +63,36 @@ public class CommunicationDesignerBaseTests extends BaseTest {
                 .toMailsPage();
     }
 
-    protected void sendSelfServiceCustomerWelcomeEmail(Claim claim, String companyCode, String password){
+    protected void sendSelfServiceCustomerWelcomeEmail(Claim claim, String companyCode, String password,
+                                                       SelfServiceEmailTemplate selfServiceEmailTemplate){
+
+        String title = selfServiceEmailTemplate
+                .getTitle();
 
         MailsPage mailsPage = Page.at(SettlementPage.class)
                 .requestSelfService(claim, password)
                 .toMailsPage();
 
         mailsPage
-                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
-                .doAssert(mailViewDialog -> {
-                    mailViewDialog.isTextVisible(SELFSERVICE_CUSTOMER_WELCOME);
-                });
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME, title)
+                .doAssert(mailViewDialog -> mailViewDialog
+                        .isTextVisible(title
+                        ));
 
         schemaValidation(companyCode.toLowerCase(), claim.getClaimNumber());
     }
 
-    protected void sendItemizationSubmitAndSaveLossItemsEmails(User user, Claim claim, ClaimItem claimItem, String password, String month, Double newPrice){
+    protected void sendItemizationSubmitAndSaveLossItemsEmails(User user, Claim claim, ClaimItem claimItem,
+                                                               CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
+                                                               String password, String month, Double newPrice){
 
         String claimLineDescription = claimItem.getSetDialogTextMatch();
+        String itemizationSubmitLossItemsTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(ItemizationSubmitLossItemsEmailTemplate.class)
+                .getTitle();
+        String itemizationSaveLossItemsTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(ItemizationSaveLossItemsEmailTemplate.class)
+                .getTitle();
 
         Page.at(SettlementPage.class)
                 .requestSelfServiceWithEnabledAutoClose(claim, password)
@@ -111,30 +117,39 @@ public class CommunicationDesignerBaseTests extends BaseTest {
                     mail.isMailExist(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL);
                     mail.isMailExist(MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL);
                 })
-                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SUBMIT_LOSS_ITEMS)
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, itemizationSubmitLossItemsTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ITEMIZATION_SUBMIT_LOSS_ITEMS)
+                        mailViewDialog.isTextVisible(itemizationSubmitLossItemsTitle)
                 )
                 .cancel()
-                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, ITEMIZATION_SAVE_LOSS_ITEMS)
+                .viewMail(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL, itemizationSaveLossItemsTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ITEMIZATION_SAVE_LOSS_ITEMS)
+                        mailViewDialog.isTextVisible(itemizationSaveLossItemsTitle)
                 );
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
-    protected void sendSplitReplacementEmails(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount){
+    protected void sendSplitReplacementEmails(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount,
+                                              CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates){
+
+        String customerWelcomeTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(CustomerWelcomeEmailTemplate.class)
+                .getTitle();
+
+        String orderConfirmationTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(OrderConfirmationEmailTemplate.class)
+                .getTitle();
 
         replacement(claim, claimItem, bankAccount.getRegNumber(), bankAccount.getRegNumber())
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, customerWelcomeTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
+                        mailViewDialog.isTextVisible(customerWelcomeTitle)
                 )
                 .cancel()
-                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, ORDER_CONFIRMATION)
+                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, orderConfirmationTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+                        mailViewDialog.isTextVisible(orderConfirmationTitle));
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }

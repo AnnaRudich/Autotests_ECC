@@ -12,7 +12,9 @@ import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.AutomaticCustomerWelcomeEmailTemplate;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import com.scalepoint.automation.utils.data.entity.input.CommunicationDesignerEmailTemplates;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -46,11 +48,16 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
     @CommunicationDesignerCleanUp
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = AUTOMATIC_CUSTOMER_WELCOME_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcome")
-    public void automaticCustomerWelcomeTest(User user, ClaimItem claimItem, ClaimRequest createClaimRequest,
-                                             ClaimRequest itemizationClaimRequest, String password, String month,
+    public void automaticCustomerWelcomeTest(User user, ClaimItem claimItem,
+                                             CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
+                                             ClaimRequest createClaimRequest, ClaimRequest itemizationClaimRequest,
+                                             String password, String month,
                                              Double newPrice, CommunicationDesigner communicationDesigner) {
 
         String claimLineDescription = claimItem.getSetDialogTextMatch();
+        String automaticCustomerWelcomeTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(AutomaticCustomerWelcomeEmailTemplate.class)
+                .getTitle();
 
         Page.at(SettlementPage.class)
                 .cancelPolicy()
@@ -76,9 +83,9 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
                                         MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME,
                                         MailsPage.MailType.CUSTOMER_WELCOME))
                 )
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, AUTOMATIC_CUSTOMER_WELCOME)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, automaticCustomerWelcomeTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(AUTOMATIC_CUSTOMER_WELCOME)
+                        mailViewDialog.isTextVisible(automaticCustomerWelcomeTitle)
                 );
     }
 

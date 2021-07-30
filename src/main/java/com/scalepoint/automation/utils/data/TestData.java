@@ -80,6 +80,10 @@ public class TestData {
         return (UserPasswordRules) getData(Data.USER_PASSWORD_RULES);
     }
 
+    public static CommunicationDesignerEmailTemplates getCommunicationDesignerEmialTemplates() {
+        return (CommunicationDesignerEmailTemplates) getData(Data.COMMUNICATION_DESIGNER_EMAIL_TEMPLATES);
+    }
+
     public static GenericItem getGenericItem() {
         return (GenericItem) getData(Data.GENERICITEM);
     }
@@ -282,6 +286,7 @@ public class TestData {
         SUPPLIER("input/Supplier.xml", Supplier.class),
         SHOP("input/Shop.xml", Shop.class),
         VOUCHER("input/Voucher.xml", Voucher.class),
+        COMMUNICATION_DESIGNER_EMAIL_TEMPLATES("input/CommunicationDesignerEmailTemplates.xml", CommunicationDesignerEmailTemplates.class),
         SYSTEMCREDENTIALS("input/ExistingUsers.xml", ExistingUsers.class),
         NEWSYSTEMUSER("input/SystemUser.xml", SystemUser.class),
         CATEGORIES("input/Category.xml", Category.class),
