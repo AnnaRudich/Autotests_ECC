@@ -116,7 +116,7 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
         IncludeGroups(String included){
 
-            matcher = Pattern.compile("(Retest groups:)((\\w+;)+)").matcher(included);
+            matcher = Pattern.compile("(RetestGroups:)((\\w+;)+)").matcher(included);
         }
 
         protected Stream<IMethodInstance> filter(List<IMethodInstance> filteredList, String filter) {
@@ -131,7 +131,7 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
         IncludeMethods(String included){
 
-            matcher = Pattern.compile("(Retest methods:)((\\w+;)+)").matcher(included);
+            matcher = Pattern.compile("(RetestMethods:)((\\w+;)+)").matcher(included);
         }
 
         protected Stream<IMethodInstance> filter(List<IMethodInstance> filteredList, String filter){
