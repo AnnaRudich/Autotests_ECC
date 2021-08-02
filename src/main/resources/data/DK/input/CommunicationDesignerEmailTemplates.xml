@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<communicationDesignerEmailTemplates>
+    <selfServiceEmailTemplate>
+        <templateId>4820</templateId>
+        <templateName>SelfServiceCustomerWelcome</templateName>
+        <title>SelfServiceCustomerWelcome ÆæØøÅåß</title>
+    </selfServiceEmailTemplate>
+    <customerWelcomeEmailTemplate>
+        <templateId>4822</templateId>
+        <templateName>CustomerWelcome</templateName>
+        <title>CustomerWelcome ÆæØøÅåß</title>
+    </customerWelcomeEmailTemplate>
+    <emailTemplate>
+        <templateId>4823</templateId>
+        <templateName>CustomerWelcome_uCommerceEmployee</templateName>
+        <title>CustomerWelcome_uCommerceEmployee ÆæØøÅåß</title>
+    </emailTemplate>
+    <customerWelcomeWithOutstandingEmailTemplate>
+        <templateId>4824</templateId>
+        <templateName>CustomerWelcomeWithOutstanding</templateName>
+        <title>CustomerWelcomeWithOutstanding ÆæØøÅåß</title>
+    </customerWelcomeWithOutstandingEmailTemplate>
+    <customerWelcomeRejectionMail>
+        <templateId>4825</templateId>
+        <templateName>CustomerWelcomeRejectionMail</templateName>
+        <title>CustomerWelcomeRejectionMail ÆæØøÅåß</title>
+    </customerWelcomeRejectionMail>
+    <emailTemplate>
+        <templateId>4826</templateId>
+        <templateName>NotificationToClaimant</templateName>
+        <title>NotificationToClaimant ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4827</templateId>
+        <templateName>ReminderMail</templateName>
+        <title>ReminderMail ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4828</templateId>
+        <templateName>BlockedAccount</templateName>
+        <title>BlockedAccount ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4829</templateId>
+        <templateName>ItemizationReminderLossItems</templateName>
+        <title>ItemizationReminderLossItems ÆæØøÅåß</title>
+    </emailTemplate>
+    <itemizationSubmitLossItemsEmailTemplate>
+        <templateId>4830</templateId>
+        <templateName>ItemizationSubmitLossItems</templateName>
+        <title>ItemizationSubmitLossItems ÆæØøÅåß</title>
+    </itemizationSubmitLossItemsEmailTemplate>
+    <itemizationSaveLossItemsEmailTemplate>
+        <templateId>4831</templateId>
+        <templateName>ItemizationSaveLossItems</templateName>
+        <title>ItemizationSaveLossItems ÆæØøÅåß</title>
+    </itemizationSaveLossItemsEmailTemplate>
+    <emailTemplate>
+        <templateId>4832</templateId>
+        <templateName>SettlementNotification</templateName>
+        <title>SettlementNotification ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4833</templateId>
+        <templateName>SettlementNotificationClosedExternal</templateName>
+        <title>SettlementNotificationClosedExternal ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4834</templateId>
+        <templateName>SettlementPreview</templateName>
+        <title>SettlementPreview ÆæØøÅåß</title>
+    </emailTemplate>
+    <orderConfirmationEmailTemplate>
+        <templateId>4835</templateId>
+        <templateName>OrderConfirmation</templateName>
+        <title>OrderConfirmation ÆæØøÅåß</title>
+    </orderConfirmationEmailTemplate>
+    <emailTemplate>
+        <templateId>4836</templateId>
+        <templateName>OrderConfirmationEmployee</templateName>
+        <title>OrderConfirmationEmployee ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4837</templateId>
+        <templateName>OrderConfirmation_uCommerceEmployee</templateName>
+        <title>OrderConfirmation_uCommerceEmployee ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4838</templateId>
+        <templateName>InvoiceToIC</templateName>
+        <title>InvoiceToIC ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4839</templateId>
+        <templateName>PayoutNotification</templateName>
+        <title>PayoutNotification ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4840</templateId>
+        <templateName>ProcuraApprovalRequest</templateName>
+        <title>ProcuraApprovalRequest ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4841</templateId>
+        <templateName>ProcuraDecisionNotification</templateName>
+        <title>ProcuraDecisionNotification ÆæØøÅåß</title>
+    </emailTemplate>
+    <emailTemplate>
+        <templateId>4842</templateId>
+        <templateName>ItemizationCustomerMail</templateName>
+        <title>ItemizationCustomerMail ÆæØøÅåß</title>
+    </emailTemplate>
+    <replacementMailEmailTemplate>
+        <templateId>4843</templateId>
+        <templateName>ReplacementMail</templateName>
+        <title>ReplacementMail ÆæØøÅåß</title>
+    </replacementMailEmailTemplate>
+    <automaticCustomerWelcomeEmailTemplate>
+        <templateId>4844</templateId>
+        <templateName>AutomaticCustomerWelcome</templateName>
+        <title>AutomaticCustomerWelcome ÆæØøÅåß</title>
+    </automaticCustomerWelcomeEmailTemplate>
+    <attachmentEmailTemplate>
+        <templateId>4845</templateId>
+        <templateName>testpdf.pdf</templateName>
+        <title>testpdf.pdf ÆæØøÅåß</title>
+    </attachmentEmailTemplate>
+</communicationDesignerEmailTemplates>

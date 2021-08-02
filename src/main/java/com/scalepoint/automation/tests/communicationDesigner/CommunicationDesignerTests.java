@@ -18,6 +18,7 @@ import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
 import org.testng.annotations.BeforeMethod;
@@ -37,7 +38,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     private static final String ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEMS_WITH_ATTACHMENTS_DATA_PROVIDER = "itemizationSubmitAndSaveLossItemsWithAttachmentsDataProvider";
     private static final String CUSTOMER_WELCOME_REJECTION_MAIL_DATA_PROVIDER = "customerWelcomeRejectionMailDataProvider";
     private static final String CUSTOMER_WELCOME_DATA_PROVIDER = "customerWelcomeDataProvider";
-    private static final String CUSTOMER_WELCOME_WITH_OUTSTATNDING_DATA_PROVIDER = "customerWelcomeWithOutstandingDataProvider";
+    private static final String CUSTOMER_WELCOME_WITH_OUTSTANDING_DATA_PROVIDER = "customerWelcomeWithOutstandingDataProvider";
     private static final String SPLIT_REPLACEMENT_DATA_PROVIDER = "splitReplacementDataProvider";
     private static final String SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER = "splitReplacementWithAttachmentsDataProvider";
     private static final String ORDER_CONFIRMATION_DATA_PROVIDER = "orderConfirmationDataProvider";
@@ -55,21 +56,28 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     }
 
     @CommunicationDesignerCleanUp
-    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SELF_SERVICE_CUSTOMER_WELCOME_DATA_PROVIDER,
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
+            dataProvider = SELF_SERVICE_CUSTOMER_WELCOME_DATA_PROVIDER,
             description = "Use communication designer to prepare SelfService Customer welcome email")
-    public void selfServiceCustomerWelcomeTest(User user, Claim claim, String password,
-                                               CommunicationDesigner communicationDesigner) {
+    public void selfServiceCustomerWelcomeTest(User user, Claim claim,
+                                               CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
+                                               String password, CommunicationDesigner communicationDesigner) {
 
-        sendSelfServiceCustomerWelcomeEmail(claim, user.getCompanyCode(), password);
+        sendSelfServiceCustomerWelcomeEmail(claim, user.getCompanyCode(), password,
+                communicationDesignerEmailTemplates.getEmailTemplateByClass(SelfServiceEmailTemplate.class));
     }
 
     @CommunicationDesignerCleanUp
-    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SELF_SERVICE_CUSTOMER_WELCOME_WITH_ATTACHMENT_DATA_PROVIDER,
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER},
+            dataProvider = SELF_SERVICE_CUSTOMER_WELCOME_WITH_ATTACHMENT_DATA_PROVIDER,
             description = "Use communication designer to prepare SelfService Customer welcome email with attachments")
-    public void selfServiceCustomerWelcomeWithAttachmentsTest(User user, Claim claim, String password,
-                                                              CommunicationDesigner communicationDesigner) {
+    public void selfServiceCustomerWelcomeWithAttachmentsTest(User user, Claim claim,
+                                                              CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
+                                                              String password, CommunicationDesigner communicationDesigner) {
 
-        sendSelfServiceCustomerWelcomeEmail(claim, user.getCompanyCode(), password);
+
+        sendSelfServiceCustomerWelcomeEmail(claim, user.getCompanyCode(), password,
+                communicationDesignerEmailTemplates.getEmailTemplateByClass(SelfServiceEmailTemplate.class));
     }
 
 
@@ -80,11 +88,13 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    public void itemizationSubmitAndSaveLossItemsTest(User user, Claim claim, ClaimItem claimItem, String password,
-                                                      String month, Double newPrice,
+    public void itemizationSubmitAndSaveLossItemsTest(User user, Claim claim, ClaimItem claimItem,
+                                                      CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
+                                                      String password, String month, Double newPrice,
                                                       CommunicationDesigner communicationDesigner) {
 
-        sendItemizationSubmitAndSaveLossItemsEmails(user, claim, claimItem, password, month, newPrice);
+        sendItemizationSubmitAndSaveLossItemsEmails(user, claim, claimItem, communicationDesignerEmailTemplates,
+                password, month, newPrice);
     }
 
     @CommunicationDesignerCleanUp
@@ -95,17 +105,24 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void itemizationSubmitAndSaveLossItemsWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem,
+                                                                     CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                                                      String password, String month, Double newPrice,
                                                                      CommunicationDesigner communicationDesigner) {
 
-        sendItemizationSubmitAndSaveLossItemsEmails(user, claim, claimItem, password, month, newPrice);
+        sendItemizationSubmitAndSaveLossItemsEmails(user, claim, claimItem, communicationDesignerEmailTemplates,
+                password, month, newPrice);
     }
 
     @CommunicationDesignerCleanUp
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_REJECTION_MAIL_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcomeRejectionMail")
     public void customerWelcomeRejectionMailTest(User user, Claim claim,
+                                                 CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                                  CommunicationDesigner communicationDesigner) {
+
+        String title = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(CustomerWelcomeRejectionMailEmailTemplate.class)
+                .getTitle();
 
         Page.at(SettlementPage.class)
                 .toCompleteClaimPage()
@@ -113,9 +130,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_REJECTION)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME_REJECTION)
+                        mailViewDialog.isTextVisible(title)
                 );
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
@@ -124,8 +141,13 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @CommunicationDesignerCleanUp
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcome")
-    public void customerWelcomeTest(User user, Claim claim, ClaimItem claimItem,
+    public void customerWelcomeTest(User user, Claim claim, ClaimItem claimItem ,
+                                    CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                     CommunicationDesigner communicationDesigner) {
+
+        String title = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(CustomerWelcomeEmailTemplate.class)
+                .getTitle();
 
         Page.at(SettlementPage.class)
                 .openSid()
@@ -136,21 +158,27 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME)
+                        mailViewDialog.isTextVisible(title)
                 );
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
 
     @CommunicationDesignerCleanUp
-    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_WITH_OUTSTATNDING_DATA_PROVIDER,
+    @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_WITH_OUTSTANDING_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcomeWithOutstanding mail")
     public void customerWelcomeWithOutstandingTest(User user, Claim claim, ServiceAgreement agreement,
-                                                   Translations translations, ClaimItem claimItem, BankAccount bankAccount, String lineDescription,
+                                                   Translations translations, ClaimItem claimItem,
+                                                   CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
+                                                   BankAccount bankAccount, String lineDescription,
                                                    Double newPrice, BigDecimal repairPrice, String selfRisk,
                                                    CommunicationDesigner communicationDesigner) {
+
+        String title = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(CustomerWelcomeWithOutstandingEmailTemplate.class)
+                .getTitle();
 
         Page.at(SettlementPage.class)
                 .openSid()
@@ -182,15 +210,16 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .openReplacementWizard(true)
                 .completeClaimUsingCashPayoutToBankAccount(bankAccount.getRegNumber(), bankAccount.getAccountNumber())
                 .reopenClaim();
+
         new SettlementSummary()
                 .editSelfRisk(selfRisk)
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
                 .openRecentClaim()
                 .toMailsPage()
-                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, CUSTOMER_WELCOME_WITH_OUTSTANDING)
+                .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(CUSTOMER_WELCOME_WITH_OUTSTANDING)
+                        mailViewDialog.isTextVisible(title)
                 );
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
@@ -202,9 +231,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails")
     public void splitReplacementTest(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount,
+                                     CommunicationDesignerEmailTemplates communicationDesignerEmailTemplate,
                                      CommunicationDesigner communicationDesigner) {
 
-        sendSplitReplacementEmails(user, claim, claimItem, bankAccount);
+        sendSplitReplacementEmails(user, claim, claimItem, bankAccount, communicationDesignerEmailTemplate);
     }
 
     @CommunicationDesignerCleanUp
@@ -213,9 +243,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER,
             description = "Use communication designer to prepare split replacement mails with attachments")
     public void splitReplacementWithAttachmentsTest(User user, Claim claim, ClaimItem claimItem,
+                                                    CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                                     BankAccount bankAccount, CommunicationDesigner communicationDesigner) {
 
-        sendSplitReplacementEmails(user, claim, claimItem, bankAccount);
+        sendSplitReplacementEmails(user, claim, claimItem, bankAccount, communicationDesignerEmailTemplates);
     }
 
     @CommunicationDesignerCleanUp
@@ -223,10 +254,15 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = ORDER_CONFIRMATION_DATA_PROVIDER,
             description = "Use communication designer to prepare order confirmation mails")
     public void orderConfirmationTest(User user, Claim claim, ClaimItem claimItem,
+                                      CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                       CommunicationDesigner communicationDesigner) {
 
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
+        String orderConfirmationTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(OrderConfirmationEmailTemplate.class)
+                .getTitle();
+
 
         Page.at(SettlementPage.class)
                 .openSid()
@@ -241,9 +277,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
         new CustomerDetailsPage().toMailsPage()
-                .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, ORDER_CONFIRMATION)
+                .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, orderConfirmationTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(ORDER_CONFIRMATION));
+                        mailViewDialog.isTextVisible(orderConfirmationTitle));
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
@@ -254,7 +290,12 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = REPLACEMENT_MAIL_DATA_PROVIDER,
             description = "Use communication designer to prepare replacement mail")
     public void replacementMailTest(User user, Claim claim, ClaimItem claimItem, BankAccount bankAccount,
+                                    CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates,
                                     CommunicationDesigner communicationDesigner) {
+
+        String replacementMailTitle = communicationDesignerEmailTemplates
+                .getEmailTemplateByClass(ReplacementMailEmailTemplate.class)
+                .getTitle();
 
         replacement(claim, claimItem, bankAccount.getRegNumber(), bankAccount.getAccountNumber())
                 .doAssert(mailViewDialog ->
@@ -262,9 +303,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                                 Arrays.asList(
                                         MailsPage.MailType.REPLACEMENT_WITH_MAIL,
                                         MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC)))
-                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL)
+                .viewMail(MailsPage.MailType.REPLACEMENT_WITH_MAIL, replacementMailTitle)
                 .doAssert(mailViewDialog ->
-                        mailViewDialog.isTextVisible(REPLACEMENT_MAIL)
+                        mailViewDialog.isTextVisible(replacementMailTitle)
                 );
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
@@ -287,7 +328,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
                 .setUseOutputManagement(true)
-                .setSelfServiceCustomerWelcome(true, TWO_ATTACHMENTS);
+                .setSelfServiceCustomerWelcome(true, twoAttachments);
 
         String password = DEFAULT_PASSWORD;
 
@@ -306,22 +347,25 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         String month = DEFAULT_MONTH;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice, communicationDesigner);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice,
+                communicationDesigner);
     }
 
     @DataProvider(name = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEMS_WITH_ATTACHMENTS_DATA_PROVIDER)
     public static Object[][] itemizationSubmitAndSaveLossItemsWithAttachmentsDataProvider(Method method) {
 
+
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
                 .setUseOutputManagement(true)
-                .setItemizationSaveLossItems(true, TWO_ATTACHMENTS)
-                .setItemizationSubmitLossItems(true, ONE_ATTACHMENT);
+                .setItemizationSaveLossItems(true, twoAttachments)
+                .setItemizationSubmitLossItems(true, oneAttachment);
 
         String password = DEFAULT_PASSWORD;
         String month = DEFAULT_MONTH;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice, communicationDesigner);
+        return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice,
+                communicationDesigner);
     }
 
     @DataProvider(name = CUSTOMER_WELCOME_REJECTION_MAIL_DATA_PROVIDER)
@@ -344,7 +388,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
     }
 
-    @DataProvider(name = CUSTOMER_WELCOME_WITH_OUTSTATNDING_DATA_PROVIDER)
+    @DataProvider(name = CUSTOMER_WELCOME_WITH_OUTSTANDING_DATA_PROVIDER)
     public static Object[][] customerWelcomeWithOutstandingDataProvider(Method method) {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
@@ -376,8 +420,8 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
 
         CommunicationDesigner communicationDesigner = new CommunicationDesigner()
                 .setUseOutputManagement(true)
-                .setCustomerWelcome(true, TWO_ATTACHMENTS)
-                .setOrderConfirmation(true, ONE_ATTACHMENT);
+                .setCustomerWelcome(true, twoAttachments)
+                .setOrderConfirmation(true, oneAttachment);
 
         return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
     }

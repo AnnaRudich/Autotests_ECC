@@ -109,8 +109,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
     protected static final String UPDATED_FT_TEMPLATE_NAME = String.format("U %s", FT_TEMPLATE_NAME);
     protected static final String DEFAULT_COPY_TEMPLATE = "Default";
     protected static final String DEFAULT_USER_PASSWORD = "duapDuap(312";
+    public static final String DEFAULT_MONTH = "Jan";
     protected static final UserAddEditPage.UserType[] USER_ALL_ROLES = {ADMIN, CLAIMSHANDLER, SUPPLYMANAGER};
-
 
     public static final String TEST_DATA_PROVIDER = "testDataProvider";
 
