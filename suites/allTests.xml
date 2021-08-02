@@ -1,5 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="All" configfailurepolicy="continue">
+    <parameter name="included" value="${included}" />
     <suite-files>
         <suite-file path="critical_testng.xml" />
         <suite-file path="regression_testng.xml" />
