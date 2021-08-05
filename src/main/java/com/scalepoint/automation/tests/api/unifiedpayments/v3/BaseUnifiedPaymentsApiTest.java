@@ -2,12 +2,13 @@ package com.scalepoint.automation.tests.api.unifiedpayments.v3;
 
 import com.scalepoint.automation.services.restService.*;
 import com.scalepoint.automation.tests.api.BaseApiTest;
-import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.EventClaimSettled;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
 import com.scalepoint.automation.utils.data.request.Valuation;
+import lombok.Builder;
+import lombok.Data;
 
 import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
 import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
@@ -17,7 +18,7 @@ import static org.testng.Assert.assertTrue;
 
 public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
 
-    ClaimRequest claimRequest;
+    //    ClaimRequest claimRequest;
     SettlementClaimService settlementClaimService;
     EccSettlement eccSettlementSummaryService;
     ClaimSettlementItemsService claimSettlementItemsService;
@@ -88,16 +89,15 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     }
 
 
-    void initClaimRequest() {
-        claimRequest = TestData.getClaimRequest();
+    static void initClaimRequest(ClaimRequest claimRequest) {
         claimRequest.setTenant("topdanmark");
         claimRequest.setCompany("topdanmark");
         claimRequest.setCheckForFraud(false);
     }
 
 
-    void createClaim(User user, int selfRisk, int manualReduction, InsertSettlementItem... items) {
-        createClaimWithItems(user, items);
+    void createClaim(User user, ClaimRequest claimRequest,  int selfRisk, int manualReduction, InsertSettlementItem... items) {
+        createClaimWithItems(user, claimRequest, items);
 
         if (selfRisk > 0)
             setSelfRisk(selfRisk);
@@ -113,7 +113,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         new ManualReductionService().setManualReductionForClaim(manualReduction + "");
     }
 
-    SettlementClaimService closeExternally() {
+    SettlementClaimService closeExternally(ClaimRequest claimRequest) {
         return settlementClaimService.close(claimRequest, CLOSE_EXTERNAL);
     }
 
@@ -125,43 +125,43 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         new ReopenClaimService().reopenClaim();
     }
 
-    EventClaimSettled getEventClaimSettled() {
+    EventClaimSettled getEventClaimSettled(ClaimRequest claimRequest) {
         return eventDatabaseApi.getEventClaimSettled(claimRequest);
     }
 
-    EventClaimSettled getSecondEventClaimSettled() {
+    EventClaimSettled getSecondEventClaimSettled(ClaimRequest claimRequest) {
         return eventDatabaseApi.getEventClaimSettled(claimRequest, 1);
     }
 
-    EventClaimSettled getThirdEventClaimSettled() {
+    EventClaimSettled getThirdEventClaimSettled(ClaimRequest claimRequest) {
         return eventDatabaseApi.getEventClaimSettled(claimRequest, 2);
     }
 
-    EventClaimSettled getFourthEventClaimSettled() {
+    EventClaimSettled getFourthEventClaimSettled(ClaimRequest claimRequest) {
         return eventDatabaseApi.getEventClaimSettled(claimRequest, 3);
     }
 
-    SettlementClaimService close(SettlementClaimService.CloseCaseReason closeCaseReason) {
+    SettlementClaimService close(ClaimRequest claimRequest, SettlementClaimService.CloseCaseReason closeCaseReason) {
         return settlementClaimService.close(claimRequest, closeCaseReason);
     }
 
-    void assertThatCloseCaseEventWasCreated() {
+    void assertThatCloseCaseEventWasCreated(ClaimRequest claimRequest) {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest);
     }
 
-    void assertThatSecondCloseCaseEventWasCreated() {
+    void assertThatSecondCloseCaseEventWasCreated(ClaimRequest claimRequest) {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 1);
     }
 
-    void assertThatThirdCloseCaseEventWasCreated() {
+    void assertThatThirdCloseCaseEventWasCreated(ClaimRequest claimRequest) {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 2);
     }
 
-    void assertThatFourthCloseCaseEventWasCreated() {
+    void assertThatFourthCloseCaseEventWasCreated(ClaimRequest claimRequest) {
         eventDatabaseApi.assertThatCloseCaseEventWasCreated(claimRequest, 3);
     }
 
-    SettlementClaimService createClaimWithItems(User user, InsertSettlementItem... items) {
+    SettlementClaimService createClaimWithItems(User user,ClaimRequest claimRequest,  InsertSettlementItem... items) {
         settlementClaimService =
                 loginAndOpenClaimWithItems(user, claimRequest, items).closeCase();
         eccSettlementSummaryService = new EccSettlement()
@@ -171,7 +171,7 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
     }
 
 
-    void setPrice(InsertSettlementItem item, int price, int depreciation) {
+    static void setPrice(InsertSettlementItem item, int price, int depreciation) {
         item.getSettlementItem().setPostDepreciation(depreciation + "");
         for (Valuation valuation : item.getSettlementItem().getValuations().getValuation()) {
             if ("NEW_PRICE".equals(valuation.getValuationType())) {
@@ -183,5 +183,11 @@ public class BaseUnifiedPaymentsApiTest extends BaseApiTest {
         }
     }
 
+    @Data
+    @Builder
+    static class CreateClaimInput{
 
+        private int selfRisk;
+        private int manualReduction;
+    }
 }

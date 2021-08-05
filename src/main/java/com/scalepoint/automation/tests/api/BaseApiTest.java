@@ -106,8 +106,8 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
 
         return (List<T>) objects
                 .stream()
-                .filter(o -> o.getClass().equals(clazz))
-                .map(o -> (T)o)
+                .filter(object -> object.getClass().equals(clazz))
+                .map(object -> (T)object)
                 .collect(Collectors.toList());
     }
 }
