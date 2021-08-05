@@ -66,4 +66,9 @@ public class WireMockConfig {
     public FraudAlertMock fraudAlertMcok(){
         return new FraudAlertMock(wireMock());
     }
+
+    @Bean
+    public PostalCodeMock.PostalCodeStubs postalCodeMock() throws IOException {
+        return new PostalCodeMock(wireMock()).addStub();
+    }
 }
