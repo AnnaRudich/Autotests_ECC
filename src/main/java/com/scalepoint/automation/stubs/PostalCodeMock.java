@@ -25,13 +25,16 @@ public class PostalCodeMock extends EccMock{
                 .healthCheckStub();
     }
 
-    public class PostalCodeStubs {
+    public static class PostalCodeStubs {
 
-        public static final String HEALTH_CHECK = "/actuator/health";
+        public static final String HEALTH_CHECK = "/postalcode/actuator/health";
+        public static final String CONTENT_TYPE = "application/vnd.spring-boot.actuator.v3+json";
 
         public PostalCodeStubs healthCheckStub() throws IOException {
+
             stubFor(get(urlMatching(HEALTH_CHECK))
                     .willReturn(aResponse()
+                            .withHeader("Content-Type", CONTENT_TYPE)
                             .withBody(new ObjectMapper().writeValueAsString(buildHealthCheckResponse()))
                             .withStatus(200)));
 
@@ -48,7 +51,7 @@ public class PostalCodeMock extends EccMock{
 
         @Data
         @Builder
-        public class HealthCheckResponse {
+        static public class HealthCheckResponse {
 
             @JsonProperty("status")
             private String status;
