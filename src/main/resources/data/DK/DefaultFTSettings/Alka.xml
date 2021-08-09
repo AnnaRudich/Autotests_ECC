@@ -116,7 +116,7 @@
             <key>VALIDATE_AGE</key><value>ENABLE</value>
         </entry>
         <entry>
-        <key>SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH</key><value>DISABLE</value>
+            <key>SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH</key><value>DISABLE</value>
         </entry>
         <entry>
             <key>ALLOW_BEST_FIT_FOR_NONORDERABLE_PRODUCTS</key><value>ENABLE</value>
@@ -167,7 +167,10 @@
             <key>SHOW_DAMAGE_TYPE_CONTROLS_IN_SID</key><value>DISABLE</value>
         </entry>
         <entry>
-        <key>SPLIT_REPLACEMENT_EMAIL</key><value>DISABLE</value>
+            <key>SPLIT_REPLACEMENT_EMAIL</key><value>DISABLE</value>
+        </entry>
+        <entry>
+            <key>CAN_FNOL_CASE_BE_REASSIGNED</key><value>DISABLE</value>
         </entry>
     </defaultSettings>
 </defaultFTSettings>

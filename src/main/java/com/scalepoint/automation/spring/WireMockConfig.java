@@ -1,15 +1,15 @@
 package com.scalepoint.automation.spring;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.client.WireMockBuilder;
-import com.scalepoint.automation.shared.WiremockServer;
-import com.scalepoint.automation.stubs.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+        import com.github.tomakehurst.wiremock.client.WireMock;
+        import com.github.tomakehurst.wiremock.client.WireMockBuilder;
+        import com.scalepoint.automation.shared.WiremockServer;
+        import com.scalepoint.automation.stubs.*;
+        import org.springframework.beans.factory.annotation.Value;
+        import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
+        import java.io.IOException;
 
 @Configuration
 @EnableAutoConfiguration
@@ -63,7 +63,12 @@ public class WireMockConfig {
     }
 
     @Bean
-    public FraudAlertMock fraudAlertMcok(){
+    public FraudAlertMock fraudAlertMock(){
         return new FraudAlertMock(wireMock());
+    }
+
+    @Bean
+    public PostalCodeMock.PostalCodeStubs postalCodeMock() throws IOException {
+        return new PostalCodeMock(wireMock()).addStub();
     }
 }

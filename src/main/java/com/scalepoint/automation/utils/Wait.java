@@ -85,6 +85,17 @@ public class Wait {
         }
     }
 
+    public static boolean verifyElementInvisible(SelenideElement element) {
+
+        try {
+
+            return waitElementInvisible(element).isDisplayed();
+        }catch (ElementShould | ElementNotFound e){
+
+            return true;
+        }
+    }
+
     public static SelenideElement waitElementVisible(SelenideElement element){
         return verifyElementCondition(element, Condition.visible);
     }

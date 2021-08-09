@@ -90,8 +90,7 @@ public enum FTSetting {
     SHOW_DAMAGE_TYPE_CONTROLS_IN_SID("input[name='showDamageTypeControlsInSid'][value='1']", CHECKBOX),
     SPLIT_REPLACEMENT_EMAIL("input[name='ftfunctionflag'][value='16384']", CHECKBOX),
     WARNING_DEDUCTIBLE("input[name='ftfunctionflag'][value='65536']", CHECKBOX),
-    //TODO correct path
-    CAN_FNOL_CASE_BE_REASSIGNED("path", CHECKBOX);
+    CAN_FNOL_CASE_BE_REASSIGNED("input[name='ftfunctionflag6'][value='16']", CHECKBOX);
 
     private String locator;
     private FtOperation.OperationType operationType;

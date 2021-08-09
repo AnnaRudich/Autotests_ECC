@@ -9,6 +9,7 @@ import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.RnVMock;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +26,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
 
@@ -84,5 +88,26 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     protected CaseSettlementDataService getSettlementDataForSettledClaims(ClaimRequest claimRequest) {
         return new CaseSettlementDataService(new OauthTestAccountsApi().sendRequest(PLATFORM_CASE_READ).getToken())
                 .getSettlementData(databaseApi.getSettlementRevisionTokenByClaimNumberAndClaimStatusSettled(claimRequest.getCaseNumber()), claimRequest.getTenant());
+    }
+
+    public static Object[][] addNewParameters(List parameters, Object ...array){
+
+        Object[][] params = new Object[1][];
+        try {
+            parameters.addAll(Arrays.asList(array));
+            params[0] = parameters.toArray();
+        } catch (Exception ex) {
+            LogManager.getLogger(BaseTest.class).error(ex);
+        }
+        return params;
+    }
+
+    protected static  <T> List<T> getObjectByClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(object -> object.getClass().equals(clazz))
+                .map(object -> (T)object)
+                .collect(Collectors.toList());
     }
 }

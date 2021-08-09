@@ -50,6 +50,13 @@ public class TestDataActions {
         return instances;
     }
 
+    public static List<Object> getTestDataWithExternalParameters(Method method, Object...objects){
+
+        List<Object> list =  getTestDataParameters(method);
+        list.addAll(Arrays.asList(objects));
+        return list;
+    }
+
     private static Object getTestDataForExistingSuppliers(Annotation[] annotations) {
         ExistingSuppliers existingSuppliers = (ExistingSuppliers) TestData.Data.getInstance(ExistingSuppliers.class);
         if (annotations.length > 0) {

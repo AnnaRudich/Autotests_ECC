@@ -438,7 +438,8 @@ public class SettlementPage extends BaseClaimPage {
         }
 
         public Asserts assertSettlementPageIsInFlatView() {
-            assertThat(verifyElementVisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isFalse();
+
+            assertThat(verifyElementInvisible($(By.xpath("//div[contains(@class, 'x-tree-view')]")))).isFalse();
             return this;
         }
 

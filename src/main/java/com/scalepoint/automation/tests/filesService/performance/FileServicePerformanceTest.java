@@ -27,7 +27,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
 
     private static int users;
     private CSVWriter csv;
-
+    
     @Parameters({"users"})
     @BeforeClass
     public void startWireMock(String users){
@@ -90,7 +90,7 @@ public class FileServicePerformanceTest extends BaseApiTest {
     @Test(groups = {TestGroups.PERFORMANCE}, dataProvider = "performanceDataProvider", enabled = true)
     public void performanceTest(String fileGUID) {
 
-        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.FILES_READ, "topdanmark_dk_integration", "YBaPu4TqRpE_aYg8r8n8g7qcbOps1gCFm3ATuBdWJCU").getToken();
+        Token token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.FILES_READ, "topdanmark_dk_integration", "ZVLbcYBMfEEOcG9LJ_zoY7L8UkgRboZMimHLhpeBkak").getToken();
         LocalDateTime start = LocalDateTime.now();
         new FilesServiceService(token)
                 .getFile(fileGUID);
