@@ -107,6 +107,26 @@ public class WidgetTest extends BaseTest {
         createAndVerifyClaimSelfService(user);
     }
 
+    @Test(groups = {TestGroups.WIDGET, TestGroups.SELF_SERVICE2}, dataProvider = TEST_DATA_PROVIDER,
+            description = "Verify flow when request is sent from an unauthenticated domain")
+    public void corsNonAuthDomainTest(User user) {
+
+        String tenant = user.getCompanyName().toLowerCase();
+
+        ClaimRequest itemizationRequest = setTenantAndCompanyCode(TestData.getClaimRequestItemizationCaseTopdanmarkFNOL(), tenant);
+
+        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
+        String token = unifiedIntegrationService
+                .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), itemizationRequest);
+
+        openGenerateWidgetPageNonAuth()
+                .setCountry(itemizationRequest.getCountry())
+                .setServer(server)
+                .setCaseToken(token)
+                .generateWidget()
+                .doAssert(ss2Page -> ss2Page.assertAlertIsDisplayed());
+    }
+
     private TestWidgetPage createItemWidget(ClaimRequest itemizationRequest, ClaimItem claimItem, String token){
 
         return openGenerateWidgetPage()

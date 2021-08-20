@@ -24,7 +24,7 @@ public class InsCompanyTest extends BaseTest {
 
         List parameters = Arrays.asList(objects);
 
-        InsuranceCompany insuranceCompany = getObjectByClass(parameters, InsuranceCompany.class).get(0);
+        InsuranceCompany insuranceCompany = getLisOfObjectByClass(parameters, InsuranceCompany.class).get(0);
 
         login(getSystemUser())
                 .to(InsCompaniesPage.class)

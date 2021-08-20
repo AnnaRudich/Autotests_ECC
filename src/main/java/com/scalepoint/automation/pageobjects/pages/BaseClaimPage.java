@@ -38,6 +38,12 @@ public abstract class BaseClaimPage extends Page {
         return at(AdminPage.class);
     }
 
+    public ClaimSearchPage toClaimSearchPage() {
+        mainMenu.openClaimSearch();
+        return at(ClaimSearchPage.class);
+    }
+
+
     public ProjectsPage toRepairValuationProjectsPage() {
         return claimNavigationMenu.toRepairValuationProjectsPage();
     }

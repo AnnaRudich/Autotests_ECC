@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.restService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
+import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
@@ -19,13 +20,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.function.Consumer;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-public class UnifiedIntegrationService{
+public class UnifiedIntegrationService extends BaseService {
 
     protected Logger log = LogManager.getLogger(UnifiedIntegrationService.class);
 
@@ -43,7 +41,10 @@ public class UnifiedIntegrationService{
     public Case getCaseEndpointByToken(String country, String tenant, String caseToken, String eventId) throws IOException {
 
         log.info(Configuration.getEnvironmentUrl());
-        RequestSpecification requestSpecification = given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
+
+        RequestSpecification requestSpecification = given()
+                .baseUri(Configuration.getEnvironmentUrl())
+                .basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
                 .header(new Header("X-REQUEST-ID", eventId))
                 .contentType(ContentType.JSON)
@@ -62,7 +63,8 @@ public class UnifiedIntegrationService{
         String body = response
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().getBody().print();
+                .extract().response()
+                .getBody().print();
 
         return new ObjectMapper().readValue(body, Case.class);
     }
@@ -85,21 +87,21 @@ public class UnifiedIntegrationService{
                 .extract().response();
     }
 
-    public String createItemizationCaseFNOL(String locale, String tenant, ClaimRequest claimRequest){
+    public String getSSOToken(String tenant){
 
-        token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.CASE_INTEGRATION).getToken();
-
-        return given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
+        return given()
+                .baseUri(Configuration.getEnvironmentUrl())
+                .basePath(BASE_PATH)
                 .header(token.getAuthorizationHeader())
                 .contentType(ContentType.JSON)
-                .pathParam("locale", locale)
-                .pathParam("tenant", tenant)
-                .body(claimRequest)
+                .param("token", token.getAccessToken())
+                .param("tenant", tenant)
                 .when()
-                .post("/{locale}/{tenant}/v1/case")
-                .then().log().all()
+                .get("/token-client/ssoToken")
+                .then()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().getBody().jsonPath().get("token");
+                .extract().response()
+                .getBody().print();
     }
 
     public String createClaimFNOL(ClaimRequest claimRequest){
@@ -113,35 +115,32 @@ public class UnifiedIntegrationService{
                 .get("token");
     }
 
+    public String createItemizationCaseFNOL(String locale, String tenant, ClaimRequest claimRequest){
+
+        token = new OauthTestAccountsApi().sendRequest(OauthTestAccountsApi.Scope.CASE_INTEGRATION).getToken();
+
+        return given()
+                .baseUri(Configuration.getEnvironmentUrl())
+                .basePath(BASE_PATH)
+                .header(token.getAuthorizationHeader())
+                .contentType(ContentType.JSON)
+                .pathParam("locale", locale)
+                .pathParam("tenant", tenant)
+                .body(claimRequest)
+                .when()
+                .post("/{locale}/{tenant}/v1/case")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response()
+                .getBody().jsonPath().get("token");
+    }
+
     public Response healthCheck(){
 
         return given().baseUri(Configuration.getEnvironmentUrl()).basePath(BASE_PATH)
-                .log().all()
                 .when()
                 .get("/healthCheck")
                 .then()
-                .log().all()
                 .extract().response();
-    }
-
-    public UnifiedIntegrationService doAssert(Consumer<UnifiedIntegrationService.Asserts> assertFunc) {
-        assertFunc.accept(new UnifiedIntegrationService.Asserts());
-        return this;
-    }
-
-
-    public class Asserts {
-
-        final static String OPEN_TO_ANOTHER_CLAIMS_HANDLER_MESSAGE = "This claim with claim number \\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12} is currently open to another claims handler. Claim was not updated.";
-        final static String OPEN_TO_ANOTHER_CLAIMS_HANDLER_PATH = "warnings[1].message";
-
-        public UnifiedIntegrationService.Asserts assertWarningOpenToAnotherClaimHandler() {
-            response.then().assertThat().body(OPEN_TO_ANOTHER_CLAIMS_HANDLER_PATH, matchesPattern(OPEN_TO_ANOTHER_CLAIMS_HANDLER_MESSAGE));
-            return this;
-        }
-        public UnifiedIntegrationService.Asserts assertMissingWarningOpenToAnotherClaimHandler() {
-            response.then().assertThat().body(OPEN_TO_ANOTHER_CLAIMS_HANDLER_PATH, isEmptyOrNullString());
-            return this;
-        }
     }
 }

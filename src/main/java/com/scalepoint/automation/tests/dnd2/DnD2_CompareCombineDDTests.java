@@ -4,6 +4,7 @@ import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.SolrApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.shared.ProductInfo;
@@ -12,12 +13,15 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.threadlocal.Browser;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.time.Year;
 import java.util.Objects;
 
@@ -33,15 +37,27 @@ import static com.scalepoint.automation.services.externalapi.DatabaseApi.PriceCo
 @RequiredSetting(type = FTSetting.COMBINE_DISCOUNT_DEPRECATION, enabled = false)
 public class DnD2_CompareCombineDDTests extends BaseTest {
 
-    private int deprecationValue = 10;
+    private static final String ADD_FROM_CATALOG_WHERE_PRODUCT_PRICE_IS_HIGHER_THAN_MARKET_PRIDE_DATA_PROVIDER = "addFromCatalogWhereProductPriceIsHigherThanMarketPriceTest";
+    private static final String DEPRECATION_DATA_PROVIDER = "deprecationDataProvider";
+
+    @DataProvider(name = ADD_FROM_CATALOG_WHERE_PRODUCT_PRICE_IS_HIGHER_THAN_MARKET_PRIDE_DATA_PROVIDER)
+    public static Object[][] addFromCatalogWhereProductPriceIsHigherThanMarketPriceTest(Method method) {
+
+        DatabaseApi.PriceConditions[] priceConditions = {ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE};
+
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, priceConditions,10).toArray()
+        };
+    }
 
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
-
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = ADD_FROM_CATALOG_WHERE_PRODUCT_PRICE_IS_HIGHER_THAN_MARKET_PRIDE_DATA_PROVIDER,
             description = "Add claim with product from catalog where market price is higher than product price")
-    public void charlie586_addFromCatalogWhereProductPriceIsHigherThanMarketPrice(User user, Claim claim) {
-        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY_FALSE, INVOICE_PRICE_HIGHER_THAN_MARKET_PRICE));
+    public void addFromCatalogWhereProductPriceIsHigherThanMarketPriceTest(User user, Claim claim, DatabaseApi.PriceConditions[] priceConditions, int deprecationValue) {
+
+        ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(priceConditions));
 
         loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
@@ -59,11 +75,20 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 });
     }
 
+    @DataProvider(name = DEPRECATION_DATA_PROVIDER)
+    public static Object[][] deprecationDataProvider(Method method) {
+
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, 10).toArray()
+        };
+    }
+
     @RequiredSetting(type = FTSetting.SHOW_MARKET_PRICE)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, enabled = false, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, enabled = false, dataProvider = DEPRECATION_DATA_PROVIDER,
             description = "Add claim with product from catalog where market price equals product price")
-    public void charlie586_addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacement(User user, Claim claim) {
+    public void addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacementTest(User user, Claim claim, int deprecationValue) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
         loginAndCreateClaim(user, claim)
@@ -85,9 +110,9 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND, enabled = false, isDefault = true)
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
-    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = DEPRECATION_DATA_PROVIDER,
             description = "Add claim item manually and check if new price, customer demand are discounted")
-    public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem) {
+    public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem, int deprecationValue) {
 
         loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems())
@@ -116,9 +141,9 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
     @RequiredSetting(type = FTSetting.COMPARISON_OF_DISCOUNT_DEPRECATION)
     @RequiredSetting(type = FTSetting.DO_NOT_DEPRECIATE_CUSTOMER_DEMAND)
-    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = DEPRECATION_DATA_PROVIDER,
             description = "Add claim item manually and check if customer demand is not discounted. FT Do not depreciate CD is on")
-    public void charlie586_addManually_DoNotDepreciateCustomerDemandIsOn(User user, Claim claim, ClaimItem claimItem) {
+    public void charlie586_addManually_DoNotDepreciateCustomerDemandIsOn(User user, Claim claim, ClaimItem claimItem, int deprecationValue) {
 
         Double initialCustomerDemand = claimItem.getCustomerDemand();
 

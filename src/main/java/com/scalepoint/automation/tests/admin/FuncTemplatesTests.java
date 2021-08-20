@@ -31,7 +31,7 @@ public class FuncTemplatesTests extends BaseTest {
 
         List parameters = Arrays.asList(objects);
 
-        String ftName = getObjectByClass(parameters, String.class).get(0);
+        String ftName = getLisOfObjectByClass(parameters, String.class).get(0);
 
         createNewTemplate(ftName);
     }

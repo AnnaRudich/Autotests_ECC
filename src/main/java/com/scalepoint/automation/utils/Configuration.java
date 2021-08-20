@@ -1,10 +1,7 @@
 package com.scalepoint.automation.utils;
 
-import com.opencsv.CSVWriter;
 import com.scalepoint.automation.shared.Locale;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.springframework.util.Assert;
 public class Configuration {
 
@@ -28,7 +25,8 @@ public class Configuration {
     public static final String KEY_HUB_LOCAL_ZALENIUM = "hub.local.zalenium";
 
     public static final String KEY_TEST_WIDGET_PROTOCOL = "test.widget.protocol";
-    public static final String KEY_URL_TEST_WIDGET = "url.test.widget";
+    public static final String KEY_URL_TEST_WIDGET_URI = "test.widget.uri";
+    public static final String KEY_URL_TEST_WIDGET_DOMAIN = "test.widget.domain";
 
     private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
     private static final String ff4jToggleAdminUrl = "ff4j-console/features";
@@ -59,6 +57,8 @@ public class Configuration {
     private static String testWidgetProtocol;
     @Getter
     private static String urlTestWidget;
+    @Getter
+    private static String domainTestWidget;
 
     private static Configuration instance;
 
@@ -171,7 +171,7 @@ public class Configuration {
     }
 
     public static String getWidgetUrl(){
-        return getTestWidgetProtocol() + SLASH + getUrlTestWidget();
+        return getTestWidgetProtocol() + SLASH + getDomainTestWidget() + getUrlTestWidget();
     }
 
     public Configuration setProtocol(String protocol) {
@@ -243,6 +243,11 @@ public class Configuration {
 
     public Configuration setTestWidgetProtocol(String testWidgetProtocol) {
         Configuration.testWidgetProtocol = testWidgetProtocol;
+        return this;
+    }
+
+    public Configuration setDomainTestWidget(String domainTestWidget) {
+        Configuration.domainTestWidget = domainTestWidget;
         return this;
     }
 
