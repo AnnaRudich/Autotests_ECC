@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.widget;
 
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
@@ -165,8 +164,7 @@ public class WidgetTest extends BaseTest {
 
         token = unifiedIntegrationService.createClaimFNOL(claimRequest);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, CustomerDetailsPage.class)
-                .reopenClaim()
+        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
                 .doAssert(settlementPage -> settlementPage.assertItemIsPresent(descriptionWidget));
     }
 
