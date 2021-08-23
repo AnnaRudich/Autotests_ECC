@@ -7,14 +7,12 @@ import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import com.scalepoint.automation.utils.driver.DriverType;
 import lombok.Builder;
 import lombok.Data;
 import org.testng.annotations.BeforeClass;
@@ -167,7 +165,6 @@ public class FnolReassignTest extends BaseTest {
                 .doAssert(lossItem -> lossItem.assertProduct(fnolReassignTestData.getDescription()));
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
@@ -198,7 +195,6 @@ public class FnolReassignTest extends BaseTest {
                         .assertThatDraftIsEmpty());
     }
 
-    @RunOn(DriverType.CHROME)
     @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
