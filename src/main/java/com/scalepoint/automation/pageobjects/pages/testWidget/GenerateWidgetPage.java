@@ -20,7 +20,7 @@ public class GenerateWidgetPage extends Page {
 
     @Override
     protected String getRelativeUrl() {
-        return "testWidget";
+        return "widget";
     }
 
     public GenerateWidgetPage setServer(String server){

@@ -47,7 +47,7 @@ public class EditReasonTests extends BaseTest {
 
         List parameters = Arrays.asList(objects);
 
-        InsuranceCompany insuranceCompany = getObjectByClass(parameters, InsuranceCompany.class).get(0);
+        InsuranceCompany insuranceCompany = getLisOfObjectByClass(parameters, InsuranceCompany.class).get(0);
 
         openEditReasonPage(insuranceCompany);
     }

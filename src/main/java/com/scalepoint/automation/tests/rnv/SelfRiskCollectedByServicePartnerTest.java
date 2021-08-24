@@ -31,7 +31,7 @@ public class SelfRiskCollectedByServicePartnerTest extends RnVBase {
 
         List parameters = Arrays.asList(objects);
 
-        User user = getObjectByClass(parameters, User.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
 
         setSelfRiskCollectedByServicePartner(user);
     }

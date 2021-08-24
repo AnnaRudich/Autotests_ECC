@@ -98,4 +98,6 @@ public class TestGroups {
     public static final String SELF_SERVICE2 = "selfService2";
     public static final String VOUCHER_PREDICTION = "voucherPrediction";
     public static final String FNOL_REASSIGNE = "fnolReassign";
+    public static final String FNOL_CORS_GET = "fnolCorsGet";
+    public static final String FNOL_CORS_WIDGET = "fnolCorsWidget";
 }

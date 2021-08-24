@@ -9,7 +9,9 @@ import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.data.entity.input.*;
+import com.scalepoint.automation.utils.data.entity.input.BankAccount;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
@@ -30,9 +32,9 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         List parameters = Arrays.asList(objects);
 
-        User user = getObjectByClass(parameters, User.class).get(0);
-        CommunicationDesigner communicationDesigner = getObjectByClass(parameters, CommunicationDesigner.class).get(0);
-        CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates = getObjectByClass(parameters, CommunicationDesignerEmailTemplates.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
+        CommunicationDesigner communicationDesigner = getLisOfObjectByClass(parameters, CommunicationDesigner.class).get(0);
+        CommunicationDesignerEmailTemplates communicationDesignerEmailTemplates = getLisOfObjectByClass(parameters, CommunicationDesignerEmailTemplates.class).get(0);
 
         String title = communicationDesignerEmailTemplates.getEmailTemplateByClass(AttachmentEmailTemplate.class).getTemplateName();
 

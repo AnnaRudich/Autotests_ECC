@@ -65,8 +65,10 @@ public class BeansConfiguration {
     private String hubLocalZaleniumUrl;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_TEST_WIDGET_PROTOCOL + "}")
     private String testWidgetProtocol;
-    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_URL_TEST_WIDGET + "}")
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_URL_TEST_WIDGET_URI + "}")
     private String urlTestWidget;
+    @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_URL_TEST_WIDGET_DOMAIN + "}")
+    private String domainTestWidget;
 
 
 
@@ -91,7 +93,8 @@ public class BeansConfiguration {
                         .setHubLocalZalenium(hubLocalZaleniumUrl)
                         .setHubRemoteZalenium(hubRemoteZaleniumUrl)
                         .setUrlTestWidget(urlTestWidget)
-                        .setTestWidgetProtocol(testWidgetProtocol);
+                        .setTestWidgetProtocol(testWidgetProtocol)
+                        .setDomainTestWidget(domainTestWidget);
                 UsersManager.initManager(TestData.getSystemUsers());
             }
         };

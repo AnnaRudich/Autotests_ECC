@@ -110,4 +110,12 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
                 .map(object -> (T)object)
                 .collect(Collectors.toList());
     }
+
+    protected static  <T> List<T> getObjectBySuperClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(object -> object.getClass().getSuperclass().equals(clazz))
+                .collect(Collectors.toList());
+    }
 }
