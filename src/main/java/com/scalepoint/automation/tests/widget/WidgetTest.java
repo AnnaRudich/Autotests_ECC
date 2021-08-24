@@ -146,6 +146,7 @@ public class WidgetTest extends BaseTest {
         token = unifiedIntegrationService.createClaimFNOL(claimRequest);
 
         return loginAndOpenUnifiedIntegrationClaimByToken(user, token, CustomerDetailsPage.class)
+                .openReopenClaimDialog()
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertItemIsPresent(descriptionWidget));
     }

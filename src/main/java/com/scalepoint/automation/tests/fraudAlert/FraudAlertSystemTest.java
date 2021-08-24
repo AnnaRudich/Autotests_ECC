@@ -115,6 +115,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     public void selfServiceAddNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         selfService(claimRequest, user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT, CustomerDetailsPage.class)
+                .openReopenClaimDialog()
                 .reopenClaim()
                 .getSettlementSummary()
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
@@ -157,6 +158,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
         fnol(user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT);
         at(CustomerDetailsPage.class)
+                .openReopenClaimDialog()
                 .reopenClaim()
                 .getSettlementSummary()
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());

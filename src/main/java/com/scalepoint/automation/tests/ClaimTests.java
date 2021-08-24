@@ -43,6 +43,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
+                .openReopenClaimDialog()
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
@@ -189,8 +190,8 @@ public class ClaimTests extends BaseTest {
                 .enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode())
                 .saveClaim(true)
                 .openRecentClaim()
+                .openReopenClaimDialog()
                 .reopenClaim()
-
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -542,5 +543,21 @@ public class ClaimTests extends BaseTest {
                 .toCustomerDetails()
                 .doAssert(customerDetailsPage ->
                         customerDetailsPage.assertPolicyType(EMPTY));
+    }
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
+    @Test(dataProvider = "testDataProvider",
+    description = "verify the option to show Settlement Page without having to reopen the claim")
+    public void viewClaim(User user, Claim claim){
+        loginAndCreateClaim(user, claim);
+
+    }
+
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
+    public void viewClaimIsOff(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .completeClaimWithoutMail(claim)
+                .openRecentClaim();
     }
 }

@@ -59,6 +59,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
+                .openReopenClaimDialog()
                 .reopenClaim()
                 .openSid();
     }

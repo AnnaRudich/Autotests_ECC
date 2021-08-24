@@ -116,6 +116,7 @@ public class DeprecationDeductedTests extends BaseTest {
                     customerDetailsPage.assertCustomerCashValueIs(customerCashValue);
                     customerDetailsPage.assertCustomerFaceValueTooltipIs(expectedVoucherFaceValue);
                 })
+                .openReopenClaimDialog()
                 .reopenClaim()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)

@@ -99,10 +99,9 @@ public class CustomerDetailsPage extends BaseClaimPage {
         return at(CustomerDetailsPage.class);
     }
 
-    public SettlementPage reopenClaim() {
+    public ReopenClaimDialog openReopenClaimDialog() {
         $(By.id("genoptag")).click();
-        $(By.id("reopen-claim-button")).click();
-        return at(SettlementPage.class);
+        return BaseDialog.at(ReopenClaimDialog.class);
     }
 
     public SelfServicePasswordDialog newSelfServicePassword() {
