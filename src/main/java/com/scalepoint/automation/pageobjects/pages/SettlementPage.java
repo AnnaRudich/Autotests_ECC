@@ -188,6 +188,10 @@ public class SettlementPage extends BaseClaimPage {
         return settlementSummary;
     }
 
+    public FunctionalMenu getFunctionalMenu(){
+        return functionalMenu;
+    }
+
     public TextSearchPage toTextSearchPage() {
         functionalMenu.findInCatalogue();
         return Page.at(TextSearchPage.class);

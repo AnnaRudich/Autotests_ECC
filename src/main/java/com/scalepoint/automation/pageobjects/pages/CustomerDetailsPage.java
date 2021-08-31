@@ -99,9 +99,15 @@ public class CustomerDetailsPage extends BaseClaimPage {
         return at(CustomerDetailsPage.class);
     }
 
-    public ReopenClaimDialog openReopenClaimDialog() {
+    public ReopenClaimDialog startReopenClaimWhenViewModeIsEnabled() {
         $(By.id("genoptag")).click();
         return BaseDialog.at(ReopenClaimDialog.class);
+    }
+
+    public SettlementPage reopenClaimWhenViewModeIsDisabled(){
+        $(By.id("genoptag")).click();
+        getAlertTextAndAccept();
+        return at(SettlementPage.class);
     }
 
     public SelfServicePasswordDialog newSelfServicePassword() {
@@ -210,6 +216,7 @@ public class CustomerDetailsPage extends BaseClaimPage {
             assertThat(isDisplayed).isFalse();
             return this;
         }
+
     }
 
 }

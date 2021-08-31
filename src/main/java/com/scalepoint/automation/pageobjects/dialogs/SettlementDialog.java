@@ -39,6 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -1145,6 +1146,11 @@ public class SettlementDialog extends BaseDialog {
 
         public Asserts assertReviewedNotPresent() {
             assertFalse(getReviewed().isChecked(), "Reviewed checkbox must be disabled");
+            return this;
+        }
+
+        public Asserts assertOkButtonIsDisabled(){
+            $(ok).shouldHave(attribute("aria-disabled", "true"));
             return this;
         }
 

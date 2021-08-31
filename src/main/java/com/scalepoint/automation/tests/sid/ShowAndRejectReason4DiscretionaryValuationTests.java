@@ -545,7 +545,7 @@ public class ShowAndRejectReason4DiscretionaryValuationTests extends BaseTest {
 
         login(user, MyPage.class)
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .findClaimLine(TEXT_LINE)
                 .doAssert(claimLine -> {

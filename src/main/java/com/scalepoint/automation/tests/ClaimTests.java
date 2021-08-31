@@ -11,19 +11,24 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.Year;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
@@ -43,7 +48,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
@@ -190,7 +195,7 @@ public class ClaimTests extends BaseTest {
                 .enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode())
                 .saveClaim(true)
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
@@ -544,20 +549,69 @@ public class ClaimTests extends BaseTest {
                 .doAssert(customerDetailsPage ->
                         customerDetailsPage.assertPolicyType(EMPTY));
     }
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(dataProvider = "testDataProvider",
     description = "verify the option to show Settlement Page without having to reopen the claim")
     public void viewClaim(User user, Claim claim){
-        loginAndCreateClaim(user, claim);
-
+        loginAndCreateClaim(user, claim).
+                toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
+                .cancelViewClaim()
+                .doAssert(customerDetailsPage ->
+                        customerDetailsPage.assertClaimNumber(claim.getClaimNumber()));
     }
-
+@RunOn(DriverType.CHROME)
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
     public void viewClaimIsOff(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
-                .completeClaimWithoutMail(claim)
-                .openRecentClaim();
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaimWhenViewModeIsDisabled()
+                .doAssert(settlementPage ->
+                        settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
+    }
+
+    @RunOn(DriverType.CHROME)
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
+    public void viewClaimOn(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem, "lineDescription")
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
+                .viewClaim()
+                .getFunctionalMenu()
+                .doAssert(functionalMenu -> {
+                        functionalMenu.assertAddManuallyButtonIsDisabled();
+                        functionalMenu.assertImportExcelButtonIsDisabled();
+                        functionalMenu.assertRequestSelfServiceButtonIsDisabled();
+                });
+
+        new SettlementPage().findClaimLine("lineDescription").editLine()
+                .doAssert(SettlementDialog.Asserts::assertOkButtonIsDisabled);
+        new SettlementDialog()
+                .cancel()
+                .getSettlementSummary()
+                .reopenClaimFromViewMode()
+                .getFunctionalMenu()
+                .doAssert(functionalMenu -> {
+            functionalMenu.assertAddManuallyButtonIsEnabled();
+            functionalMenu.assertImportExcelButtonIsEnabled();
+            functionalMenu.assertRequestSelfServiceButtonIsEnabled();
+        });
+
+             //close claim -> details page
     }
 }

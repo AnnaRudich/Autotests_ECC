@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.modules;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
@@ -69,6 +70,9 @@ public class SettlementSummary extends Module {
     @FindBy(id = "settlementSummaryTotalsPanel")
     private WebElement settlementSummaryTotalsPanel;
 
+    @FindBy(id="reopenClaimBtn")
+    private WebElement reopenClaimViewMode;
+
     public void cancel() {
         hoverAndClick($(cancel));
     }
@@ -79,6 +83,12 @@ public class SettlementSummary extends Module {
             expand();
         }
         element.click();
+    }
+
+    public SettlementPage reopenClaimFromViewMode(){
+        $(reopenClaimViewMode).click();
+        getAlertTextAndAccept();
+        return Page.at(SettlementPage.class);
     }
 
     public void completeClaim() {

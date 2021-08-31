@@ -209,7 +209,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .fillClaimForm(claim)
                 .openReplacementWizard(true)
                 .completeClaimUsingCashPayoutToBankAccount(bankAccount.getRegNumber(), bankAccount.getAccountNumber())
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         new SettlementSummary()

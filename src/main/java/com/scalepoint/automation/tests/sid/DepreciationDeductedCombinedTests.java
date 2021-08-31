@@ -101,7 +101,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                     customerDetailsPage.assertCustomerCashValueIs(expectedCashValue);
                     customerDetailsPage.assertCustomerFaceValueTooltipIs(expectedNewPrice);
                 })
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)

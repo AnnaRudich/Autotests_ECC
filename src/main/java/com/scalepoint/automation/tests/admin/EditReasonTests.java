@@ -257,7 +257,7 @@ public class EditReasonTests extends BaseTest {
                 .logout();
 
         login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .findClaimLine(reason)
                 .doAssert(claimLine -> claimLine.assertTooltipPresent(reason))

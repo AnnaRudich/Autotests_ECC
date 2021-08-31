@@ -342,7 +342,7 @@ public class UCommerceShopTests extends BaseTest {
 
         settlementPage = myPage
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         new GetBalanceService()
@@ -399,7 +399,7 @@ public class UCommerceShopTests extends BaseTest {
 
         settlementPage = myPage
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         new GetBalanceService()

@@ -69,7 +69,7 @@ public class SelfRiskCollectedByServicePartnerTest extends RnVBase {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         verifyRepairPanel(settlementPage,
@@ -114,7 +114,7 @@ public class SelfRiskCollectedByServicePartnerTest extends RnVBase {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .openReopenClaimDialog()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         verifyRepairPanel(settlementPage,
