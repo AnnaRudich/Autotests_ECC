@@ -10,7 +10,7 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -159,7 +159,7 @@ public class OrderDetailsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")
-    public void orderDetailsInvisibilityTest(@UserCompany(BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
+    public void orderDetailsInvisibilityTest(@UserAttributes(company = BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
 
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);

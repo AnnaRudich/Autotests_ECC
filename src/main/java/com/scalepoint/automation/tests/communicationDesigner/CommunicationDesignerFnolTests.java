@@ -106,8 +106,11 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
         Double newPrice = 3000.00;
         String companyName = user.getCompanyName();
 
-        return addNewParameters(parameters, setAllowAutoClose(createClaimRequest, companyName),
-                setAllowAutoClose(itemizationClaimRequest, companyName), password, month, newPrice, communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, setAllowAutoClose(createClaimRequest, companyName),
+                        setAllowAutoClose(itemizationClaimRequest, companyName), password, month, newPrice, communicationDesigner).toArray()
+        };
     }
 
     private static ClaimRequest setAllowAutoClose(ClaimRequest claimRequest, String companyName){

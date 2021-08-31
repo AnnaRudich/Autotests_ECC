@@ -10,7 +10,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -85,7 +85,7 @@ public class EditReasonTests extends BaseTest {
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = EDIT_REASON_PAGE_FROM_ADMIN_DATA_PROVIDER,
             description = "CHARLIE-508 Verify  that native letters are applicable for reason and it's seen in SID.")
-    public void editReasonPageFromAdminTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+    public void editReasonPageFromAdminTest(@UserAttributes(company = TRYGFORSIKRING) User trygUser, Claim claim,
                                             InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
                                             String description, Double customerDemandPrice, String month,
                                             int depreciation, Double discretionaryReasonPrice, Double newPrice) {
@@ -122,7 +122,7 @@ public class EditReasonTests extends BaseTest {
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider =DELETE_REASON_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is not possible to delete reasons which are in use")
-    public void deleteReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+    public void deleteReasonInUseTest(@UserAttributes(company = TRYGFORSIKRING) User trygUser, Claim claim,
                                       InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
                                       String description, Double customerDemandPrice, String month,
                                       int depreciation, Double discretionaryReasonPrice, Double newPrice) {
@@ -178,7 +178,7 @@ public class EditReasonTests extends BaseTest {
     @Test(groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = EDIT_REASON_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is not possible to edit reasons which are in use")
-    public void editReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+    public void editReasonInUseTest(@UserAttributes(company = TRYGFORSIKRING) User trygUser, Claim claim,
                                     InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
                                     String description, Double customerDemandPrice, String month,
                                     int depreciation, Double discretionaryReasonPrice, Double newPrice) {
@@ -239,7 +239,7 @@ public class EditReasonTests extends BaseTest {
     @Test(enabled = false, groups = {TestGroups.ADMIN, TestGroups.EDIT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = DISABLE_REASON_IN_USE_DATA_PROVIDER,
             description = "CHARLIE-508 Verify that it is possible to disable reasons which are in use and they are still visible in SID")
-    public void disableReasonInUseTest(@UserCompany(TRYGFORSIKRING) User trygUser, Claim claim,
+    public void disableReasonInUseTest(@UserAttributes(company = TRYGFORSIKRING) User trygUser, Claim claim,
                                        InsuranceCompany insuranceCompany, ClaimItem claimItem, String reason,
                                        String description, Double customerDemandPrice, String month,
                                        int depreciation, Double discretionaryReasonPrice, Double newPrice) {
@@ -270,8 +270,10 @@ public class EditReasonTests extends BaseTest {
         String reasonWithExceededLength = RandomStringUtils.randomAlphabetic(501);
         String reasonWithAllowedLength = reasonWithExceededLength.substring(0, 500);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reasonWithExceededLength,
-                reasonWithAllowedLength);
+        return new Object[][]{
+
+            TestDataActions.getTestDataWithExternalParameters(method, reasonWithExceededLength, reasonWithAllowedLength).toArray()
+        };
     }
 
     @DataProvider(name = EDIT_REASON_PAGE_FROM_ADMIN_DATA_PROVIDER)
@@ -286,8 +288,10 @@ public class EditReasonTests extends BaseTest {
         Double discretionaryReasonPrice = 400.00;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
-                month, depreciation, discretionaryReasonPrice, newPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, reason, description, customerDemandPrice, month, depreciation, discretionaryReasonPrice, newPrice).toArray()
+        };
     }
 
     @DataProvider(name = DELETE_REASON_IN_USE_DATA_PROVIDER)
@@ -302,8 +306,10 @@ public class EditReasonTests extends BaseTest {
         Double discretionaryReasonPrice = 400.00;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
-                month, depreciation, discretionaryReasonPrice, newPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, reason, description, customerDemandPrice, month, depreciation, discretionaryReasonPrice, newPrice).toArray()
+        };
     }
 
     @DataProvider(name = DELETE_REASON_NOT_IN_USE_DATA_PROVIDER)
@@ -311,7 +317,10 @@ public class EditReasonTests extends BaseTest {
 
         String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reason);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, reason).toArray()
+        };
     }
 
     @DataProvider(name = EDIT_REASON_IN_USE_DATA_PROVIDER)
@@ -326,8 +335,10 @@ public class EditReasonTests extends BaseTest {
         Double discretionaryReasonPrice = 400.00;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
-                month, depreciation, discretionaryReasonPrice, newPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, reason, description, customerDemandPrice, month, depreciation, discretionaryReasonPrice, newPrice).toArray()
+        };
     }
 
     @DataProvider(name = EDIT_REASON_NOT_IN_USE_DATA_PROVIDER)
@@ -335,7 +346,10 @@ public class EditReasonTests extends BaseTest {
 
         String reason = SAMPLE_REASON_TEXT + System.currentTimeMillis();
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reason);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, reason).toArray()
+        };
     }
 
     @DataProvider(name = DISABLE_REASON_IN_USE_DATA_PROVIDER)
@@ -350,8 +364,10 @@ public class EditReasonTests extends BaseTest {
         Double discretionaryReasonPrice = 400.00;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), reason, description, customerDemandPrice,
-                month, depreciation, discretionaryReasonPrice, newPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, reason, description, customerDemandPrice, month, depreciation, discretionaryReasonPrice, newPrice).toArray()
+        };
     }
 
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason,

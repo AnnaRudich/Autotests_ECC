@@ -9,6 +9,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.SystemUser;
 import com.scalepoint.automation.utils.data.entity.input.UserPasswordRules;
 import org.testng.annotations.BeforeMethod;
@@ -100,7 +101,7 @@ public class UserPasswordTests extends BaseTest {
         at(UserAddEditPage.class).createUser(systemUser, userTypes)
                 .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
                 .logout()
-                .login(systemUser.getLogin(), systemUser.getPassword(), MyPage.class);
+                .login(new User(systemUser.getLogin(), systemUser.getPassword()), MyPage.class);
     }
 
     @DataProvider(name = GENERATE_PASSWORD_FOR_NEW_USER_DATA_PROVIDER)

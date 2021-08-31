@@ -9,11 +9,11 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.DISCRETIONARY;
@@ -37,7 +37,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.DISCRETIONARY_REASON_MANDATORY, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
-    public void charlie_508_1_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_508_1_verifyDiscretionaryReasonField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
@@ -61,7 +61,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.DISCRETIONARY_REASON_MANDATORY, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option")
-    public void charlie_508_2_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_508_2_verifyDiscretionaryReasonField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
@@ -84,7 +84,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.DISCRETIONARY_REASON_MANDATORY, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation")
-    public void charlie_508_3_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_508_3_verifyDiscretionaryReasonField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
@@ -107,7 +107,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.DISCRETIONARY_REASON_MANDATORY, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding policy depreciation")
-    public void charlie_508_4_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_508_4_verifyDiscretionaryReasonField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)
@@ -130,7 +130,7 @@ public class DiscretionaryReasonMandatoryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.DISCRETIONARY_REASON_MANDATORY, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify FT Make 'Discretionary reason' mandatory to fill option while adding discretionary depreciation=0%")
-    public void charlie_508_5_verifyDiscretionaryReasonField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_508_5_verifyDiscretionaryReasonField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                              Claim claim,
                                                              ClaimItem claimItem) {
         createClaimAndFillSid(user, claim, claimItem)

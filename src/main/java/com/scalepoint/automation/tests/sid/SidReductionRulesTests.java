@@ -8,7 +8,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
@@ -45,7 +45,7 @@ public class SidReductionRulesTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify reduction rule policy type after clicking Reduction rule button")
-    public void ecc3031_1_reductionRulePolicyType(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+    public void ecc3031_1_reductionRulePolicyType(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
         SettlementDialog settlementDialog = loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
@@ -95,7 +95,7 @@ public class SidReductionRulesTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify reduction rule policy type after ticking Depreciation automatically updated checkbox")
     @RequiredSetting(type = FTSetting.SHOW_POLICY_TYPE, enabled = false)
-    public void ecc3031_2_reductionRulePolicyTypeAutomatic(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+    public void ecc3031_2_reductionRulePolicyTypeAutomatic(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())

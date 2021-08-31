@@ -6,7 +6,7 @@ import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -27,7 +27,7 @@ public class FnolReassignTest extends BaseApiTest {
             TestGroups.FNOL,
             TestGroups.FNOL_REASSIGNE},
             dataProvider = "topdanmarkDataProvider", dataProviderClass = BaseTest.class, description = "FNOL")
-    public void reassignFnolWithExistingLinesFTOffTest(@UserCompany(TOPDANMARK) User user, SelfServiceRequest selfServiceRequest){
+    public void reassignFnolWithExistingLinesFTOffTest(@UserAttributes(company = TOPDANMARK) User user, SelfServiceRequest selfServiceRequest){
 
         reassignFnolWithExistingLines(user, selfServiceRequest)
                 .doAssert(service -> service.assertWarningOpenToAnotherClaimHandler());
@@ -40,7 +40,7 @@ public class FnolReassignTest extends BaseApiTest {
             TestGroups.FNOL_REASSIGNE},
             dataProvider = "topdanmarkDataProvider", dataProviderClass = BaseTest.class, description = "FNOL")
     @RequiredSetting(type = FTSetting.CAN_FNOL_CASE_BE_REASSIGNED)
-    public void reassignFnolWithExistingLinesFTOnTest(@UserCompany(TOPDANMARK) User user, SelfServiceRequest selfServiceRequest){
+    public void reassignFnolWithExistingLinesFTOnTest(@UserAttributes(company = TOPDANMARK) User user, SelfServiceRequest selfServiceRequest){
 
         reassignFnolWithExistingLines(user, selfServiceRequest)
                 .doAssert(service -> service.assertMissingWarningOpenToAnotherClaimHandler());

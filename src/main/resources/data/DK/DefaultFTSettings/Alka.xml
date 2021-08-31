@@ -169,9 +169,9 @@
         <entry>
             <key>SPLIT_REPLACEMENT_EMAIL</key><value>DISABLE</value>
         </entry>
-        <entry>
-            <key>CAN_FNOL_CASE_BE_REASSIGNED</key><value>DISABLE</value>
-        </entry>
+<!--        <entry>-->
+<!--            <key>CAN_FNOL_CASE_BE_REASSIGNED</key><value>DISABLE</value>-->
+<!--        </entry>-->
     </defaultSettings>
 </defaultFTSettings>
 

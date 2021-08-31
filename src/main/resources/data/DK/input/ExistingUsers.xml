@@ -1,37 +1,39 @@
 <?xml version="1.0"?>
 <existingUsers>
-    <user login="autotest-system" password="12341234" company="SCALEPOINT" companyId="7" ftId="1" system="true"/>
+    <user login="autotest-system"                   password="12341234" company="SCALEPOINT"            companyId="7" ftId="1" type="SYSTEM"/>
 
-    <user login="autotest-future50" password="12341234" companyCode="FUTURE50" companyName="Future50" companyId="50" ftId="50" basic="true"/>
-    <user login="autotest-future51" password="12341234" companyCode="FUTURE51" companyName="Future51" companyId="51" ftId="51" basic="true"/>
-    <user login="autotest-future52" password="12341234" companyCode="FUTURE52" companyName="Future52" companyId="52" ftId="52" basic="true"/>
-    <user login="autotest-future53" password="12341234" companyCode="FUTURE53" companyName="Future53" companyId="53" ftId="53" basic="true"/>
-    <user login="autotest-future54" password="12341234" companyCode="FUTURE54" companyName="Future54" companyId="54" ftId="54" basic="true"/>
-    <user login="autotest-future55" password="12341234" companyCode="FUTURE55" companyName="Future55" companyId="55" ftId="55" basic="true"/>
-    <user login="autotest-future56" password="12341234" companyCode="FUTURE56" companyName="Future56" companyId="56" ftId="56" basic="true"/>
-    <user login="autotest-future57" password="12341234" companyCode="FUTURE57" companyName="Future57" companyId="57" ftId="57" basic="true"/>
-    <user login="autotest-future58" password="12341234" companyCode="FUTURE58" companyName="Future58" companyId="58" ftId="58" basic="true"/>
-    <user login="autotest-future59" password="12341234" companyCode="FUTURE59" companyName="Future59" companyId="59" ftId="59" basic="true"/>
-    <user login="autotest-future60" password="12341234" companyCode="FUTURE60" companyName="Future60" companyId="60" ftId="60" basic="true"/>
+    <user login="autotest-future50"                 password="12341234" companyCode="FUTURE50"          companyName="Future50" companyId="50" ftId="50" type="BASIC"/>
+    <user login="autotest-future51"                 password="12341234" companyCode="FUTURE51"          companyName="Future51" companyId="51" ftId="51" type="BASIC"/>
+    <user login="autotest-future52"                 password="12341234" companyCode="FUTURE52"          companyName="Future52" companyId="52" ftId="52" type="BASIC"/>
+    <user login="autotest-future53"                 password="12341234" companyCode="FUTURE53"          companyName="Future53" companyId="53" ftId="53" type="BASIC"/>
+    <user login="autotest-future54"                 password="12341234" companyCode="FUTURE54"          companyName="Future54" companyId="54" ftId="54" type="BASIC"/>
+    <user login="autotest-future55"                 password="12341234" companyCode="FUTURE55"          companyName="Future55" companyId="55" ftId="55" type="BASIC"/>
+    <user login="autotest-future56"                 password="12341234" companyCode="FUTURE56"          companyName="Future56" companyId="56" ftId="56" type="BASIC"/>
+    <user login="autotest-future57"                 password="12341234" companyCode="FUTURE57"          companyName="Future57" companyId="57" ftId="57" type="BASIC"/>
+    <user login="autotest-future58"                 password="12341234" companyCode="FUTURE58"          companyName="Future58" companyId="58" ftId="58" type="BASIC"/>
+    <user login="autotest-future59"                 password="12341234" companyCode="FUTURE59"          companyName="Future59" companyId="59" ftId="59" type="BASIC"/>
+    <user login="autotest-future60"                 password="12341234" companyCode="FUTURE60"          companyName="Future60" companyId="60" ftId="60" type="BASIC"/>
 
-    <user login="autotest-future70" password="12341234" companyCode="FUTURE70" companyName="FUTURE70" companyId="70" ftId="70" basic="false"/>
-    <user login="autotest-future71" password="12341234" companyCode="FUTURE71" companyName="FUTURE71" companyId="71" ftId="71" basic="false"/>
-    <user login="autotest-future72" password="12341234" companyCode="FUTURE72" companyName="FUTURE72" companyId="72" ftId="72" basic="false"/>
+    <user login="autotest-future70"                 password="12341234" companyCode="FUTURE70"          companyName="FUTURE70" companyId="70" ftId="70" type="EXCEPTIONAL"/>
+    <user login="autotest-future71"                 password="12341234" companyCode="FUTURE71"          companyName="FUTURE71" companyId="71" ftId="71" type="EXCEPTIONAL"/>
+    <user login="autotest-future72"                 password="12341234" companyCode="FUTURE72"          companyName="FUTURE72" companyId="72" ftId="72" type="EXCEPTIONAL"/>
 
-    <user login="autotest-basic-admin-role1" password="12341234" companyCode="BASIC_ADMIN_ROLE" companyName="BASIC_ADMIN_ROLE" companyId="61" ftId="61" />
+    <user login="autotest-basic-admin-role1"        password="12341234" companyCode="BASIC_ADMIN_ROLE"  companyName="BASIC_ADMIN_ROLE" companyId="61" ftId="61" type="EXCEPTIONAL"/>
 
-    <user login="autotest-sp"       password="12341234" companyCode="SCALEPOINT"     companyName="Scalepoint" companyId="7"     ftId="1"/>
-    <user login="autotest-lb"       password="12341234" companyCode="LB"             companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052"/>
-    <user login="autotest-bauta"    password="12341234" companyCode="BAUTA"          companyName="Bauta Forsikring" companyId="14"    ftId="140053"/>
-    <user login="autotest-trygfors" password="12341234" companyCode="TRYGFORSIKRING" companyId="17" companyName="Tryg Holding" ftId="140053"/>
-    <user login="autotest-trygholding" password="12341234" companyCode="TRYGHOLDING" companyId="16" companyName="Tryg" ftId="140053"/>
-    <user login="autotest-alka"     password="12341234" companyCode="ALKA"           companyId="6" companyName="ALKA"     ftId="5"/>
-    <user login="autotest-topdanmark"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
-    <user login="autotest-topdanmark1"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
-    <user login="autotest-topdanmark2"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
-    <user login="autotest-topdanmark3"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
-    <user login="autotest-topdanmark4"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
-    <user login="autotest-topdanmark5"     password="12341234" companyCode="TOPDANMARK"           companyId="1" companyName="Topdanmark"     ftId="3"/>
-    <user login="autotest-gjensidige"     password="12341234" companyCode="GJENSIDIGE"           companyId="309" companyName="Gjensidige"     ftId="79052"/>
+    <user login="autotest-sp"                       password="12341234" companyCode="SCALEPOINT"        companyName="Scalepoint" companyId="7"     ftId="1" type="EXCEPTIONAL"/>
+    <user login="autotest-lb"                       password="12341234" companyCode="LB"                companyName="Lærerstandens Brandforsikring" companyId="12"    ftId="140052" type="EXCEPTIONAL"/>
+    <user login="autotest-bauta"                    password="12341234" companyCode="BAUTA"             companyName="Bauta Forsikring" companyId="14"    ftId="140053" type="EXCEPTIONAL"/>
+    <user login="autotest-trygfors"                 password="12341234" companyCode="TRYGFORSIKRING"    companyId="17" companyName="Tryg Holding" ftId="140053" type="EXCEPTIONAL"/>
+    <user login="autotest-trygholding"              password="12341234" companyCode="TRYGHOLDING"       companyId="16" companyName="Tryg" ftId="140053" type="EXCEPTIONAL"/>
+    <user login="autotest-alka"                     password="12341234" companyCode="ALKA"              companyId="6" companyName="ALKA"     ftId="5" type="EXCEPTIONAL"/>
 
+    <user login="autotest-topdanmark"               password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
+    <user login="autotest-topdanmark1"              password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
+    <user login="autotest-topdanmark2"              password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
+    <user login="autotest-topdanmark3"              password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
+    <user login="autotest-topdanmark4"              password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
+    <user login="autotest-topdanmark5"              password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
+    <user login="autotest-gjensidige"               password="12341234" companyCode="GJENSIDIGE"        companyId="309" companyName="Gjensidige"     ftId="79052" type="EXCEPTIONAL"/>
+
+    <user login="a4b@topdanmark.scalepoint.com"     password="1234QWER#" companyCode="TOPDANMARK"       companyId="1" companyName="Topdanmark"     ftId="3" type="SCALEPOINT_ID" />
 </existingUsers>

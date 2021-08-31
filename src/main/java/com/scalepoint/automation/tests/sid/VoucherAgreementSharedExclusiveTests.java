@@ -8,7 +8,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
@@ -36,9 +36,9 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
             UserCompanyGroups.SCALEPOINT},
             dataProvider = "testDataProvider",
             description = "ECC-3030 IC1 voucher is displayed in vouchers list for IC user and not displayed for SP user")
-    public void ecc3030_exclusiveVoucherInVouchersList(@UserCompany(CompanyCode.TRYGFORSIKRING) User trygChildUser,
-                                                       @UserCompany(CompanyCode.TRYGHOLDING) User trygParentUser,
-                                                       @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
+    public void ecc3030_exclusiveVoucherInVouchersList(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User trygChildUser,
+                                                       @UserAttributes(company = CompanyCode.TRYGHOLDING) User trygParentUser,
+                                                       @UserAttributes(company = CompanyCode.SCALEPOINT) User scalepointUser,
                                                        User futureCompanyUser,
                                                        Claim claim,
                                                        Supplier supplier,
@@ -73,8 +73,8 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
             UserCompanyGroups.SCALEPOINT},
             dataProvider = "testDataProvider",
             description = "ECC-3030 Joined Shared voucher is available for IC1 and not available if it's left")
-    public void ecc3030_sharedVoucherInVouchersListForIC(@UserCompany(CompanyCode.TRYGHOLDING) User trygUser,
-                                                         @UserCompany(CompanyCode.SCALEPOINT) User scalepointUser,
+    public void ecc3030_sharedVoucherInVouchersListForIC(@UserAttributes(company = CompanyCode.TRYGHOLDING) User trygUser,
+                                                         @UserAttributes(company = CompanyCode.SCALEPOINT) User scalepointUser,
                                                          User futureCompanyUser,
                                                          Claim claim,
                                                          Supplier supplier,

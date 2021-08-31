@@ -64,7 +64,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.*;
+import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -275,18 +278,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         return testDataProvider;
     }
 
-    public static Object[][] addNewParameters(List parameters, Object ...array){
-
-        Object[][] params = new Object[1][];
-        try {
-            parameters.addAll(Arrays.asList(array));
-            params[0] = parameters.toArray();
-        } catch (Exception ex) {
-            LogManager.getLogger(BaseTest.class).error(ex);
-        }
-        return params;
-    }
-
     protected <T extends Page> T updateFT(User user, Class<T> returnPageClass, FtOperation... operations) {
         FunctionalTemplatesApi functionalTemplatesApi = new FunctionalTemplatesApi(user);
         return functionalTemplatesApi.updateTemplate(user, returnPageClass, operations);
@@ -330,14 +321,37 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
     }
 
     protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
-        login(user, null);
+
+        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+
+            Page.to(LoginPage.class)
+                    .loginViaScalepointId()
+                    .login(user.getLogin(), user.getPassword(), MyPage.class);
+
+        }else {
+
+            login(user, null);
+        }
+
         Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
+
         return new SettlementPage();
     }
 
     protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
-        login(user, null);
+
+        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+
+            Page.to(LoginPage.class)
+                    .loginViaScalepointId()
+                    .login(user.getLogin(), user.getPassword(), MyPage.class);
+        }else {
+
+            login(user, null);
+        }
+
         Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
+
         return Page.at(returnPageClass);
     }
 

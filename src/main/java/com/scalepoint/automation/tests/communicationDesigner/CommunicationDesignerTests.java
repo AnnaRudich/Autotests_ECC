@@ -320,7 +320,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
 
         String password = DEFAULT_PASSWORD;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), password, communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, password, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = SELF_SERVICE_CUSTOMER_WELCOME_WITH_ATTACHMENT_DATA_PROVIDER)
@@ -332,7 +335,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
 
         String password = DEFAULT_PASSWORD;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), password, communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, password, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEM_DATA_PROVIDER)
@@ -347,8 +353,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         String month = DEFAULT_MONTH;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice,
-                communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, password, month, newPrice, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = ITEMIZATION_SUBMIT_AND_SAVE_LOSS_ITEMS_WITH_ATTACHMENTS_DATA_PROVIDER)
@@ -364,8 +372,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         String month = DEFAULT_MONTH;
         Double newPrice = 3000.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), password, month, newPrice,
-                communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, password, month, newPrice, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = CUSTOMER_WELCOME_REJECTION_MAIL_DATA_PROVIDER)
@@ -375,7 +385,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setCustomerWelcomeRejectionMail(false, null);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = CUSTOMER_WELCOME_DATA_PROVIDER)
@@ -385,7 +398,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setCustomerWelcome(false, null);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = CUSTOMER_WELCOME_WITH_OUTSTANDING_DATA_PROVIDER)
@@ -400,8 +416,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(1000.00);
         String selfRisk = "2000";
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, newPrice, repairPrice,
-                selfRisk, communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, newPrice, repairPrice, selfRisk, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = SPLIT_REPLACEMENT_DATA_PROVIDER)
@@ -412,7 +430,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setCustomerWelcome(false, null)
                 .setOrderConfirmation(false, null);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = SPLIT_REPLACEMENT_WITH_ATTACHMENTS_DATA_PROVIDER)
@@ -423,7 +444,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setCustomerWelcome(true, twoAttachments)
                 .setOrderConfirmation(true, oneAttachment);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = ORDER_CONFIRMATION_DATA_PROVIDER)
@@ -433,7 +457,10 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setOrderConfirmation(false, null);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, communicationDesigner).toArray()
+        };
     }
 
     @DataProvider(name = REPLACEMENT_MAIL_DATA_PROVIDER)
@@ -443,6 +470,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .setUseOutputManagement(true)
                 .setReplacementMail(false, null);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), communicationDesigner);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, communicationDesigner).toArray()
+        };
     }
 }

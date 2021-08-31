@@ -11,6 +11,7 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.SystemUser;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import org.testng.annotations.DataProvider;
@@ -50,7 +51,7 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(user.getLogin(), user.getPassword(), MyPage.class)
+                .login(new User(user.getLogin(), user.getPassword()), MyPage.class)
                 .doAssert(MyPage.Asserts::assertAdminLinkDisplayed);
     }
     /**
@@ -118,7 +119,7 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(user.getLogin(), user.getPassword(), SuppliersPage.class)
+                .login(new User(user.getLogin(), user.getPassword()), SuppliersPage.class)
                 .doAssert(SuppliersPage.Asserts::assertsIsToMatchingEngineLinkNotDisplayed);
     }
     /**
@@ -140,7 +141,7 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(user.getLogin(), user.getPassword(), SuppliersPage.class)
+                .login(new User(user.getLogin(), user.getPassword()), SuppliersPage.class)
                 .signOut();
 
         login(getSystemUser(), UsersPage.class)
@@ -151,7 +152,7 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(user.getLogin(), user.getPassword(), MyPage.class);
+                .login(new User(user.getLogin(), user.getPassword()), MyPage.class);
     }
     /**
      * GIVEN: SP user U1 with Admin permissions

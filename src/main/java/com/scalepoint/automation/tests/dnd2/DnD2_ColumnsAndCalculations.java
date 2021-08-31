@@ -8,12 +8,12 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -132,7 +132,7 @@ public class DnD2_ColumnsAndCalculations extends BaseTest {
     @Test(groups = {TestGroups.DND2, TestGroups.COLUMNS_AND_CALCULATIONS, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Test total and sub total sum value when voucher and depreciation is added to claim line and red rule is discretionary type")
     public void charlie514_totalNewPriceShouldBeEqualNewPriceMinusDepreciationValueAndVoucherValueWhenVoucherAndDepreciationIsAddedToLineAndRedRuleIsDiscretionaryType(
-            @UserCompany(CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, Translations translations) {
+            @UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem, Translations translations) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
                 .openSidAndFill(formFiller -> formFiller
                         .withNewPrice(claimItem.getNewPriceSP())

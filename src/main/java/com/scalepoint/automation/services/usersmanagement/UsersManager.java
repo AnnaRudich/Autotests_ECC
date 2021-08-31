@@ -1,17 +1,21 @@
 package com.scalepoint.automation.services.usersmanagement;
 
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.threadlocal.CurrentUser;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.awaitility.Duration;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 
 public class UsersManager {
 
@@ -19,181 +23,157 @@ public class UsersManager {
 
     private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
+    private static BlockingQueue<User> scalepointIdUsersQueue = new LinkedBlockingQueue<>();
     private static User systemUser;
 
     private static Map<String, Set<User>> usersInfo = new HashMap<>();
 
     public static void initManager(ExistingUsers existingUsers) {
+
         logger.info("Initializing UsersManager");
         existingUsers.getUsers().forEach(user -> {
-            if (user.isSystem()) {
+
+            if (user.getType().equals(User.UserType.SYSTEM)) {
+
                 systemUser = user;
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
                 return;
             }
-            if (user.isBasic()) {
+            if (user.getType().equals(User.UserType.BASIC)) {
+
                 basicUsersQueue.add(user);
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
-            } else {
+            }
+            if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+
+                scalepointIdUsersQueue.add(user);
+                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
+            }
+            if(user.getType().equals(User.UserType.EXCEPTIONAL)) {
 
                 CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
                 if(!exceptionalUsersQueues.containsKey(key)) {
+
                     exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompanyCode()),
                             new ArrayBlockingQueue<>(6, true, Collections.singleton(user)));
                 }else{
 
                     exceptionalUsersQueues.get(key).add(user);
                 }
+
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(exceptionalUsersQueues.get(key)));
             }
         });
+
         printQueues();
     }
 
-    public static Map<CompanyMethodArgument, User> fetchUsersWhenAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
+    public static Iterator<User> fetchUsersWhenAvailable(List<RequestedUserAttributes> requestedUsers) {
+
         await()
-                .pollInterval(15, TimeUnit.SECONDS)
-                .timeout(60, TimeUnit.MINUTES)
-                .until(() -> fetchUsersIfAvailable(companyMethodArguments), is(equalTo(true)));
+                .pollInterval(Duration.TEN_SECONDS)
+                .atMost(1, TimeUnit.HOURS)
+                .untilTrue(usersAvailable(requestedUsers));
 
-        return companyMethodArguments;
+        List<User> fetchedUsers = requestedUsers.stream()
+                .map(requestedUserAttributes ->  takeUser(requestedUserAttributes))
+                .collect(Collectors.toList());
+
+        fetchedUsers.stream().forEach(user -> CurrentUser.setUser(user));
+
+        return fetchedUsers.iterator();
     }
 
-    private static synchronized boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
-        String users = companyMethodArguments
-                .entrySet()
-                .stream()
-                .map(e -> (e.getKey().companyCode + ":" + (e.getValue() != null ? e.getValue().getLogin() : "?")))
-                .collect(Collectors.joining(", "));
+    private static synchronized AtomicBoolean usersAvailable(List<RequestedUserAttributes> requestedUsers) {
 
-        logger.info("Requested: {}", users);
-
-        int requestedBasicUsersCount = (int) companyMethodArguments
-                .keySet()
-                .stream()
-                .filter(companyCode -> usersInfo.get(companyCode.companyCode.name())
-                        .stream()
-                        .findFirst()
-                        .orElseThrow(NoSuchElementException::new)
-                        .isBasic())
+        long basicUsersRequestedCount = requestedUsers.stream()
+                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.BASIC))
                 .count();
 
-        boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
-
-        int requestedExceptionalUsersCount = (int) companyMethodArguments
-                .keySet()
-                .stream()
-                .filter(companyCode -> !usersInfo.get(companyCode.companyCode.name())
-                        .stream()
-                        .findFirst()
-                        .orElseThrow(NoSuchElementException::new)
-                        .isBasic())
+        long scalepointIdUsersRequestedCount = requestedUsers.stream()
+                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
                 .count();
 
-        long count = companyMethodArguments.keySet()
-                .stream()
-                .filter(companyMethodArgument -> {
-                    CompanyCode companyCode = companyMethodArgument.companyCode;
-                    boolean notBasicUser = !usersInfo
-                            .get(companyCode.name())
-                            .stream()
-                            .findFirst()
-                            .orElseThrow(NoSuchElementException::new)
-                            .isBasic();
-                    if (notBasicUser && exceptionalUsersQueues.containsKey(companyCode)) {
-                        return !exceptionalUsersQueues.get(companyCode).isEmpty();
-                    }
-                    return notBasicUser;
-                })
-                .count();
+        Map<CompanyCode, Long> exceptionalUsersRequestedCount = new HashMap<>();
 
-        logger.info("Found exceptional users: {}", count);
+        List<RequestedUserAttributes> exceptionalUsersRequested = requestedUsers.stream()
+                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.EXCEPTIONAL))
+                .collect(Collectors.toList());
 
-        boolean exceptionalUsersAvailable = count == requestedExceptionalUsersCount;
+        exceptionalUsersRequested.forEach(requestedUserAttributes -> {
 
-        logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
+            CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
 
-        if (basicUsersAvailable && exceptionalUsersAvailable) {
-            companyMethodArguments.replaceAll((companyMethodArgument, user) -> takeUser(companyMethodArgument.companyCode));
-            return true;
-        } else {
-            return false;
-        }
+            if(exceptionalUsersRequestedCount.containsKey(companyCode)){
+
+                exceptionalUsersRequestedCount.put(companyCode, exceptionalUsersRequestedCount.get(companyCode) + 1L);
+            }
+            else {
+
+                exceptionalUsersRequestedCount.put(companyCode, 1L);
+            }
+        });
+
+        boolean basicUsersAvailable = basicUsersQueue.size() >= basicUsersRequestedCount;
+
+        boolean scalepointIdUsersAvailable = scalepointIdUsersQueue.size() >= scalepointIdUsersRequestedCount;
+
+        boolean exceptionalUsersAvailable = exceptionalUsersRequestedCount.entrySet().stream()
+                .map(entry -> exceptionalUsersQueues.get(entry.getKey()).size() >= entry.getValue())
+                .allMatch(b -> b.equals(true));
+
+        logger.info(String.format("basicUsersAvailable: %b, scalepointIdUsersAvailable: %b, exceptionalUsersAvailable: %b", basicUsersAvailable, scalepointIdUsersAvailable, exceptionalUsersAvailable));
+        AtomicBoolean result =  new AtomicBoolean(basicUsersAvailable && scalepointIdUsersAvailable && exceptionalUsersAvailable);
+
+        return result;
     }
 
-    public static class CompanyMethodArgument {
+    private static User takeUser(RequestedUserAttributes requestedUserAttributes) {
 
-        private int index;
-        private CompanyCode companyCode;
-        private User user;
+        CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
 
-        private CompanyMethodArgument(int index, CompanyCode companyCode) {
-            this.index = index;
-            this.companyCode = companyCode;
-        }
-
-        public static CompanyMethodArgument create(int index, CompanyCode companyCode) {
-            return new CompanyMethodArgument(index, companyCode);
-        }
-
-        public CompanyMethodArgument setUser(User user) {
-            this.user = user;
-            return this;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            CompanyMethodArgument that = (CompanyMethodArgument) o;
-
-            if (index != that.index) return false;
-            return companyCode == that.companyCode;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = index;
-            result = 31 * result + (companyCode != null ? companyCode.hashCode() : 0);
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "CompanyMethodArgument{" +
-                    "index=" + index +
-                    ", companyCode=" + companyCode +
-                    '}';
-        }
-    }
-
-
-    private static User takeUser(CompanyCode companyCode) {
         try {
-            User taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
-            logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
+
+            User taken = null;
+
+            if(requestedUserAttributes.getType().equals(User.UserType.EXCEPTIONAL)) {
+                taken = exceptionalUsersQueues.get(companyCode).take();
+                logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
+            }
+            if(requestedUserAttributes.getType().equals(User.UserType.BASIC)){
+
+                taken = basicUsersQueue.take();
+                logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
+            }
+            if(requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID)) {
+
+                taken = scalepointIdUsersQueue.take();
+                logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
+            }
+
             return taken;
+
         } catch (Exception e) {
+
             logger.error("Can't take user for {} cause {}", companyCode.name(), e.toString());
             throw new IllegalStateException(e);
         }
     }
 
     public static void releaseUser(User user) {
+
         logger.info("Returned: {}", user.getLogin());
-        if (user.isBasic()) {
+        if (user.getType().equals(User.UserType.BASIC)) {
+
             basicUsersQueue.add(user);
-        } else {
+        }
+        if(user.getType().equals(User.UserType.EXCEPTIONAL)){
+
             exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
+        }
+        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+
+            scalepointIdUsersQueue.add(user);
         }
         logger.info("User: {} released", user.getLogin());
     }
@@ -212,5 +192,36 @@ public class UsersManager {
 
     public static synchronized User getSystemUser() {
         return systemUser;
+    }
+
+    public static class RequestedUserAttributes {
+
+        @Getter
+        private CompanyCode companyCode;
+        @Getter
+        private User.UserType type;
+
+        public RequestedUserAttributes(CompanyCode companyCode, User.UserType type) {
+
+            this.companyCode = companyCode;
+            this.type =  type;
+        }
+
+        static public RequestedUserAttributes getRequestedUserAttributes(Annotation[] listOfRequestedUserAttributes) {
+
+            Optional<Annotation> userAttributesAnnotation = Arrays.stream(listOfRequestedUserAttributes)
+                    .filter(annotation -> annotation.annotationType().equals(UserAttributes.class))
+                    .findFirst();
+
+            if(userAttributesAnnotation.isPresent()){
+
+                UserAttributes userAttributes = (UserAttributes) userAttributesAnnotation.get();
+
+                return new RequestedUserAttributes(userAttributes.company(), userAttributes.type());
+            }else {
+
+                return new RequestedUserAttributes(null, User.UserType.BASIC);
+            }
+        }
     }
 }

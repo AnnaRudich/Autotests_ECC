@@ -214,7 +214,10 @@ public class CategoryGroupsTests extends BaseTest {
 
         String updatedName = UPDATED_LINE_DESCRIPTION + System.currentTimeMillis();
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), updatedName);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, updatedName).toArray()
+        };
     }
 
     @DataProvider(name = UPDATE_NEW_PS_CAT_GROUP_DATA_PROVIDER)
@@ -222,7 +225,10 @@ public class CategoryGroupsTests extends BaseTest {
 
         String updatedName = UPDATED_LINE_DESCRIPTION + System.currentTimeMillis();
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), updatedName);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, updatedName).toArray()
+        };
     }
 
     @DataProvider(name = MOVE_CAT_TO_ANOTHER_GROUP_DATA_PROVIDER)
@@ -242,7 +248,10 @@ public class CategoryGroupsTests extends BaseTest {
 
         String updatedName = UPDATED_LINE_DESCRIPTION + System.currentTimeMillis();
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), updatedName);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, updatedName).toArray()
+        };
     }
 
     @DataProvider(name = REMOVE_NEW_PS_CAT_MODEL_DATA_PROVIDER)

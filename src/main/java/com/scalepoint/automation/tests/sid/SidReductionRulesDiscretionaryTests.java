@@ -8,7 +8,7 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.ValuationWithReduction;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
@@ -77,7 +77,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES_DISCRETIONARY, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify reduction rule discretionary type after clicking Reduction rule button")
-    public void ecc3031_3_reductionRulePolicyTypeDiscretionary(@UserCompany(CompanyCode.ALKA) User user,
+    public void ecc3031_3_reductionRulePolicyTypeDiscretionary(@UserAttributes(company = CompanyCode.ALKA) User user,
                                                                Claim claim,
                                                                ClaimItem claimItem,
                                                                ReductionRule reductionRule) {
@@ -129,7 +129,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES_DISCRETIONARY, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify reduction rule discretionary type after ticking Depreciation automatically updated checkbox")
-    public void ecc3031_4_reductionRulePolicyTypeDiscretionaryAutomatic(@UserCompany(CompanyCode.ALKA) User user,
+    public void ecc3031_4_reductionRulePolicyTypeDiscretionaryAutomatic(@UserAttributes(company = CompanyCode.ALKA) User user,
                                                                         Claim claim,
                                                                         ClaimItem claimItem,
                                                                         ReductionRule reductionRule) {
@@ -171,7 +171,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES_DISCRETIONARY, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify reduction rule and automatic depreciation when age is selected in date picker")
-    public void setAgeUsingDatePicker(@UserCompany(CompanyCode.ALKA) User user,
+    public void setAgeUsingDatePicker(@UserAttributes(company = CompanyCode.ALKA) User user,
                                                                         Claim claim,
                                                                         ClaimItem claimItem,
                                                                         ReductionRule reductionRule) {
@@ -227,7 +227,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES_DISCRETIONARY, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify unpublished rule")
-    public void ecc3031_5_reductionRuleUnpublishedPolicy(@UserCompany(CompanyCode.ALKA) User user,
+    public void ecc3031_5_reductionRuleUnpublishedPolicy(@UserAttributes(company = CompanyCode.ALKA) User user,
                                                          Claim claim,
                                                          ClaimItem claimItem,
                                                          ReductionRule reductionRule) {
@@ -273,7 +273,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES_DISCRETIONARY, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify rule with type of Policy indicated after clicking Reduction rule button")
-    public void ecc3031_6_reductionRulePolicyTypeIndicated(@UserCompany(CompanyCode.ALKA) User user,
+    public void ecc3031_6_reductionRulePolicyTypeIndicated(@UserAttributes(company = CompanyCode.ALKA) User user,
                                                            Claim claim,
                                                            ClaimItem claimItem,
                                                            ReductionRule reductionRule) {
@@ -326,7 +326,7 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_REDUCTION_RULES_DISCRETIONARY, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify rule with type of Policy indicated after ticking Depreciation automatically updated checkbox")
-    public void ecc3031_7_reductionRulePolicyTypeIndicatedAutomatic(@UserCompany(CompanyCode.ALKA) User user,
+    public void ecc3031_7_reductionRulePolicyTypeIndicatedAutomatic(@UserAttributes(company = CompanyCode.ALKA) User user,
                                                                     Claim claim,
                                                                     ClaimItem claimItem,
                                                                     ReductionRule reductionRule) {

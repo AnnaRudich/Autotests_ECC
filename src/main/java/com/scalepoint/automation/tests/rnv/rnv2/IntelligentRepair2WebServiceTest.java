@@ -35,6 +35,7 @@ import java.util.List;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
+import static com.scalepoint.automation.tests.api.BaseApiTest.addNewParameters;
 
 public class IntelligentRepair2WebServiceTest extends BaseTest {
 
@@ -392,7 +393,10 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         String lineDescription1 = RandomUtils.randomName(RV_LINE_DESCRIPTION);
         String lineDescription2 = RandomUtils.randomName(RV_LINE_DESCRIPTION);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription1, lineDescription2);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription1, lineDescription2).toArray()
+        };
     }
 
     @DataProvider(name = FEEDBACK_CLAIM_AUTO_COMPLETED_DATA_PROVIDER)
@@ -401,7 +405,10 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
         BigDecimal repairPrice = BigDecimal.valueOf(50.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice).toArray()
+        };
     }
 
     @DataProvider(name = FEEDBACK_REJECTED_DATA_PROVIDER)
@@ -410,7 +417,10 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
         BigDecimal repairPrice = BigDecimal.valueOf(10.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice).toArray()
+        };
     }
 
     @DataProvider(name = FEEDBACK_MANUAL_DATA_PROVIDER)
@@ -419,7 +429,10 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
         BigDecimal repairPrice = BigDecimal.valueOf(100.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice).toArray()
+        };
     }
 
     @DataProvider(name = DAMAGE_TYPE_EDITED_IN_RNV_DATA_PROVIDER)
@@ -427,7 +440,10 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
         String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription).toArray()
+        };
     }
 
     @DataProvider(name = SEND_LINE_TO_RNV_FAILS_ON_SERVICE_PARTNER_SIDE_DATA_PROVIDER)
@@ -435,7 +451,10 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
         String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription).toArray()
+        };
     }
 
     @DataProvider(name = ON_LINE_SENT_TO_RNV_TASK_LINE_DATA_PROVIDER)
@@ -444,6 +463,9 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         String lineDescription1 = RandomUtils.randomName(RV_LINE_DESCRIPTION);
         String lineDescription2 = RandomUtils.randomName(RV_LINE_DESCRIPTION);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription1, lineDescription2);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription1, lineDescription2).toArray()
+        };
     }
 }

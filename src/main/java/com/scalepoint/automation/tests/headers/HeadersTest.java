@@ -7,7 +7,7 @@ import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.api.BaseApiTest;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.rnv.sendToRepairAndValuation.SelectedLinesAndCategories;
@@ -87,7 +87,7 @@ public class HeadersTest extends BaseApiTest {
     }
 
     @Test(groups = {TestGroups.HEADERS}, dataProvider = "staticFilesSelfServiceDataProvider")
-    public void staticFilesSelfServiceTest(@UserCompany(CompanyCode.TOPDANMARK) User user, String url){
+    public void staticFilesSelfServiceTest(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, String url){
 
         ValidatableResponse validatableResponse = selfService(user, url);
 
@@ -95,7 +95,7 @@ public class HeadersTest extends BaseApiTest {
     }
 
     @Test(groups = {TestGroups.HEADERS}, dataProvider = "noCacheSelfServiceDataProvider")
-    public void noCacheSelfServiceTest(@UserCompany(CompanyCode.TOPDANMARK) User user, String url){
+    public void noCacheSelfServiceTest(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, String url){
 
         ValidatableResponse validatableResponse = selfService(user, url);
 

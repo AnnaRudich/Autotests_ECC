@@ -5,7 +5,7 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.attachmentUpdated.Change;
@@ -21,7 +21,7 @@ public class FilesServiceTest extends BaseTest {
 
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.ECC, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
-    public void attachmentImportedFromFNOLTest(@UserCompany(TOPDANMARK) User user, Claim claim){
+    public void attachmentImportedFromFNOLTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim){
 
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();

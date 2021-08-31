@@ -4,11 +4,9 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
-import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.ExistingSuppliers;
 import com.scalepoint.automation.utils.data.entity.input.SimpleSupplier;
-import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 
@@ -20,25 +18,34 @@ import java.util.stream.Collectors;
 public class TestDataActions {
 
     public static List<Object> getTestDataParameters(Method method) {
+        
         MDC.put("sessionid", method.getName());
         Class<?>[] parameterTypes = method.getParameterTypes();
         List<Object> instances = new ArrayList<>(parameterTypes.length);
+
         try {
-            Map<UsersManager.CompanyMethodArgument, User> requestedUsers = UsersManager.fetchUsersWhenAvailable(extractAllCompanyCodesRequested(method));
-            Map<Integer, User> indexToUser = requestedUsers.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getIndex(), Map.Entry::getValue));
+
+            List<UsersManager.RequestedUserAttributes> requestedUsersAttributes = extractAllUsersAttributesRequested(method);
+            Iterator<User> requestedUsers = UsersManager.fetchUsersWhenAvailable(requestedUsersAttributes);
+
             for (int i = 0; i < parameterTypes.length; i++) {
+
                 Class<?> parameterType = parameterTypes[i];
-                if (indexToUser.containsKey(i)) {
-                    User user = indexToUser.get(i);
-                    CurrentUser.setUser(user);
+
+                if (parameterType.equals(User.class)) {
+
+                    User user = requestedUsers.next();
                     instances.add(user);
                 } else if (parameterType.equals(SimpleSupplier.class)) {
+
                     Annotation[] annotations = method.getParameterAnnotations()[i];
                     instances.add(getTestDataForExistingSuppliers(annotations));
                 } else {
                     try {
+
                         instances.add(TestData.Data.getInstance(parameterType));
                     } catch (Exception e) {
+
                         LogManager.getLogger(BaseTest.class).error(e.getMessage());
                         break;
                     }
@@ -52,7 +59,7 @@ public class TestDataActions {
 
     public static List<Object> getTestDataWithExternalParameters(Method method, Object...objects){
 
-        List<Object> list =  getTestDataParameters(method);
+        List<Object> list = getTestDataParameters(method);
         list.addAll(Arrays.asList(objects));
         return list;
     }
@@ -78,23 +85,23 @@ public class TestDataActions {
         return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().orElseThrow(NoSuchElementException::new);
     }
 
-    private static Map<UsersManager.CompanyMethodArgument, User> extractAllCompanyCodesRequested(Method method) {
-        Map<UsersManager.CompanyMethodArgument, User> companyCodes = new HashMap<>();
+    private static List<UsersManager.RequestedUserAttributes> extractAllUsersAttributesRequested(Method method) {
+
+        LinkedList<UsersManager.RequestedUserAttributes> companyCodes = new LinkedList<>();
         Class<?>[] parameterTypes = method.getParameterTypes();
+
         for (int i = 0; i < parameterTypes.length; i++) {
+
             Class<?> parameterType = parameterTypes[i];
+
             if (parameterType.equals(User.class)) {
-                CompanyCode companyCode = CompanyCode.FUTURE50;
+
                 Annotation[] annotations = method.getParameterAnnotations()[i];
-                if (annotations.length > 0) {
-                    Annotation annotation = annotations[0];
-                    if (annotation.annotationType().equals(UserCompany.class)) {
-                        companyCode = ((UserCompany) annotation).value();
-                    }
-                }
-                companyCodes.put(UsersManager.CompanyMethodArgument.create(i, companyCode), null);
+
+                companyCodes.add(UsersManager.RequestedUserAttributes.getRequestedUserAttributes(annotations));
             }
         }
+
         return companyCodes;
     }
 }
