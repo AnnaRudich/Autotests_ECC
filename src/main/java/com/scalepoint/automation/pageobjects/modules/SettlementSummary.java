@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.modules;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Constants;
@@ -73,6 +74,9 @@ public class SettlementSummary extends Module {
     @FindBy(id="reopenClaimBtn")
     private WebElement reopenClaimViewMode;
 
+    @FindBy(id = "closeClaimPreviewBtn")
+    private WebElement closeClaimViewMode;
+
     public void cancel() {
         hoverAndClick($(cancel));
     }
@@ -86,9 +90,23 @@ public class SettlementSummary extends Module {
     }
 
     public SettlementPage reopenClaimFromViewMode(){
-        $(reopenClaimViewMode).click();
+        SelenideElement element = $(reopenClaimViewMode);
+        if (!element.isDisplayed()) {
+            expand();
+        }
+        element.click();
         getAlertTextAndAccept();
         return Page.at(SettlementPage.class);
+    }
+
+    public CustomerDetailsPage closeClaimFromViewMode(){
+        SelenideElement element = $(closeClaimViewMode);
+        if (!element.isDisplayed()) {
+            expand();
+        }
+        element.click();
+        return Page.at(CustomerDetailsPage.class);
+
     }
 
     public void completeClaim() {

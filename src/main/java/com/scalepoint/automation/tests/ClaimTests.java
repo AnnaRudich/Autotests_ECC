@@ -564,7 +564,8 @@ public class ClaimTests extends BaseTest {
                 .doAssert(customerDetailsPage ->
                         customerDetailsPage.assertClaimNumber(claim.getClaimNumber()));
     }
-@RunOn(DriverType.CHROME)
+
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
@@ -582,8 +583,8 @@ public class ClaimTests extends BaseTest {
     @RunOn(DriverType.CHROME)
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE)
     @Test(dataProvider = "testDataProvider",
-            description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
-    public void viewClaimOn(User user, Claim claim, ClaimItem claimItem) {
+            description = "verify Settlement page in view mode")
+    public void claimViewModeE2eTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .addLines(claimItem, "lineDescription")
                 .toCompleteClaimPage()
@@ -611,7 +612,23 @@ public class ClaimTests extends BaseTest {
             functionalMenu.assertImportExcelButtonIsEnabled();
             functionalMenu.assertRequestSelfServiceButtonIsEnabled();
         });
+    }
 
-             //close claim -> details page
+    @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-7254")
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE)
+    @Test(enabled = false, dataProvider = "testDataProvider",
+            description = "verify it's possible to close claim from view mode")
+    public void closeClaimInViewMode(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem, "lineDescription")
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
+                .viewClaim()
+                .getSettlementSummary()
+                .closeClaimFromViewMode()
+                .doAssert(c -> c.assertClaimNumber(claim.getClaimNumber()));
     }
 }
