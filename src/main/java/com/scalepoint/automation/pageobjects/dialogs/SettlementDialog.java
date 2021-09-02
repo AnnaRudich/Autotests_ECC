@@ -1212,7 +1212,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertVoucherCashValueIs(String expectedValue) {
-            assertEquals(voucherCashValueFieldText(), OperationalUtils.getDoubleValue(expectedValue));
+            assertThat(voucherCashValueFieldText()).isEqualTo(OperationalUtils.getDoubleValue(expectedValue));
             return this;
         }
 

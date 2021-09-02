@@ -5,6 +5,7 @@ import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.*;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -66,10 +67,10 @@ public class UnifiedPaymentsAssertUtils {
 
     public static void assertSummary(EventClaimSettled event, double expectedManualReduction, double expectedShareOfVat, double expectedDeductible, double expectedDepreciation) {
         final Summary summary = event.getSettlement().getSummary();
-        assertEquals(summary.getDeductible(), expectedDeductible);
-        assertEquals(summary.getShareOfVat(), expectedShareOfVat);
-        assertEquals(summary.getDepreciation(), expectedDepreciation);
-        assertEquals(summary.getManualReduction(), expectedManualReduction);
+        assertThat(summary.getDeductible()).isEqualTo(expectedDeductible);
+        assertThat(summary.getShareOfVat()).isEqualTo(expectedShareOfVat);
+        assertThat(summary.getDepreciation()).isEqualTo(expectedDepreciation);
+        assertThat(summary.getManualReduction()).isEqualTo(expectedManualReduction);
     }
 
 

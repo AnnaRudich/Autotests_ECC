@@ -52,7 +52,7 @@ public class LoginTests extends BaseTest {
 
         Object[][] objects = new Object[][]{
 
-                {UsersManager.fetchUsersWhenAvailable(Collections.singletonList(new UsersManager.RequestedUserAttributes(CompanyCode.TOPDANMARK, User.UserType.SCALEPOINT_ID)))},
+                {UsersManager.fetchUsersWhenAvailable(Collections.singletonList(new UsersManager.RequestedUserAttributes(CompanyCode.TOPDANMARK, User.UserType.SCALEPOINT_ID))).iterator().next()},
                 TestDataActions.getTestDataParameters(method).toArray()
         };
 

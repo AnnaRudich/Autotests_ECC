@@ -18,15 +18,19 @@ import java.util.stream.Collectors;
 public class TestDataActions {
 
     public static List<Object> getTestDataParameters(Method method) {
-        
+
+        List<User> requestedUsers = UsersManager.fetchUsersWhenAvailable(extractAllUsersAttributesRequested(method));
+
+        return getTestDataParameters(method, requestedUsers);
+    }
+
+    public static List<Object> getTestDataParameters(Method method, List<User> requestedUsers){
         MDC.put("sessionid", method.getName());
         Class<?>[] parameterTypes = method.getParameterTypes();
         List<Object> instances = new ArrayList<>(parameterTypes.length);
+        Iterator<User> requestedUserIterator = requestedUsers.iterator();
 
         try {
-
-            List<UsersManager.RequestedUserAttributes> requestedUsersAttributes = extractAllUsersAttributesRequested(method);
-            Iterator<User> requestedUsers = UsersManager.fetchUsersWhenAvailable(requestedUsersAttributes);
 
             for (int i = 0; i < parameterTypes.length; i++) {
 
@@ -34,7 +38,7 @@ public class TestDataActions {
 
                 if (parameterType.equals(User.class)) {
 
-                    User user = requestedUsers.next();
+                    User user = requestedUserIterator.next();
                     instances.add(user);
                 } else if (parameterType.equals(SimpleSupplier.class)) {
 
@@ -85,7 +89,7 @@ public class TestDataActions {
         return existingSuppliers.getSuppliers().stream().filter(sup -> sup.getInsuranceCompany().equals(CompanyCode.SCALEPOINT.name())).findFirst().orElseThrow(NoSuchElementException::new);
     }
 
-    private static List<UsersManager.RequestedUserAttributes> extractAllUsersAttributesRequested(Method method) {
+    public static List<UsersManager.RequestedUserAttributes> extractAllUsersAttributesRequested(Method method) {
 
         LinkedList<UsersManager.RequestedUserAttributes> companyCodes = new LinkedList<>();
         Class<?>[] parameterTypes = method.getParameterTypes();

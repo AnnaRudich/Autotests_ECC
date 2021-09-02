@@ -91,6 +91,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
+import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
 import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getDefaultFTSettings;
 
 @SpringBootTest(classes = Application.class)
@@ -322,7 +323,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
 
     protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
 
-        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+        if(user.getType().equals(SCALEPOINT_ID)){
 
             Page.to(LoginPage.class)
                     .loginViaScalepointId()
@@ -340,7 +341,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
 
     protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
 
-        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+        if(user.getType().equals(SCALEPOINT_ID)){
 
             Page.to(LoginPage.class)
                     .loginViaScalepointId()

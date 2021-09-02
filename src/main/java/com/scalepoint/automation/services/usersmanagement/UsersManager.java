@@ -5,6 +5,7 @@ import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.awaitility.Duration;
@@ -68,7 +69,7 @@ public class UsersManager {
         printQueues();
     }
 
-    public static Iterator<User> fetchUsersWhenAvailable(List<RequestedUserAttributes> requestedUsers) {
+    public static List<User> fetchUsersWhenAvailable(List<RequestedUserAttributes> requestedUsers) {
 
         await()
                 .pollInterval(Duration.TEN_SECONDS)
@@ -81,7 +82,7 @@ public class UsersManager {
 
         fetchedUsers.stream().forEach(user -> CurrentUser.setUser(user));
 
-        return fetchedUsers.iterator();
+        return fetchedUsers;
     }
 
     private static synchronized AtomicBoolean usersAvailable(List<RequestedUserAttributes> requestedUsers) {
@@ -199,6 +200,7 @@ public class UsersManager {
         @Getter
         private CompanyCode companyCode;
         @Getter
+        @Setter
         private User.UserType type;
 
         public RequestedUserAttributes(CompanyCode companyCode, User.UserType type) {

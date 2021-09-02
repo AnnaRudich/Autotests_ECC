@@ -1,15 +1,21 @@
 package com.scalepoint.automation.utils.listeners;
 
+import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.tests.TestCountdown;
+import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
+import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.testng.ISuite;
-import org.testng.ISuiteListener;
+import org.testng.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class SuiteListener implements ISuiteListener {
+import static java.util.stream.Collectors.toList;
+
+public class SuiteListener implements ISuiteListener , IDataProviderInterceptor {
 
     protected static Logger log = LogManager.getLogger(SuiteListener.class);
 
@@ -29,5 +35,29 @@ public class SuiteListener implements ISuiteListener {
     @Override
     public void onFinish(ISuite iSuite) {
         log.info("Finished suite {}", iSuite.getName());
+    }
+
+    @Override
+    public Iterator<Object[]> intercept(Iterator<Object[]> iterator, IDataProviderMethod iDataProviderMethod, ITestNGMethod iTestNGMethod, ITestContext iTestContext) {
+
+        List<Object[]> testData = new LinkedList<>();
+
+        Method method = iTestNGMethod.getConstructorOrMethod().getMethod();
+
+        if(Arrays.stream(method.getAnnotations())
+                .anyMatch(annotation -> annotation.annotationType().equals(ScalepointIdTest.class))){
+
+            List<UsersManager.RequestedUserAttributes> scalepointIdUsersAttributes = TestDataActions
+                    .extractAllUsersAttributesRequested(method)
+                    .stream()
+                    .map(requestedUserAttributes -> new UsersManager.RequestedUserAttributes(requestedUserAttributes.getCompanyCode(), User.UserType.SCALEPOINT_ID))
+                    .collect(Collectors.toList());
+
+            testData.add(TestDataActions.getTestDataParameters(method, UsersManager.fetchUsersWhenAvailable(scalepointIdUsersAttributes)).toArray());
+        }
+
+        iterator.forEachRemaining(testData::add);
+
+        return testData.iterator();
     }
 }
