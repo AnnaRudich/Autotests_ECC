@@ -229,6 +229,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                     <release>${java.version}</release>
                     <encoding>UTF-8</encoding>
                 </configuration>
