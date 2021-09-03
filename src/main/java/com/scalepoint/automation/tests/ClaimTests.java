@@ -11,14 +11,12 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserCompany;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -549,7 +547,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(customerDetailsPage ->
                         customerDetailsPage.assertPolicyType(EMPTY));
     }
-    @RunOn(DriverType.CHROME)
+
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(dataProvider = "testDataProvider",
     description = "verify the option to show Settlement Page without having to reopen the claim")
@@ -565,7 +563,6 @@ public class ClaimTests extends BaseTest {
                         customerDetailsPage.assertClaimNumber(claim.getClaimNumber()));
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, enabled = false)
     @Test(dataProvider = "testDataProvider",
             description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
@@ -580,7 +577,6 @@ public class ClaimTests extends BaseTest {
                         settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
 
-    @RunOn(DriverType.CHROME)
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE)
     @Test(dataProvider = "testDataProvider",
             description = "verify Settlement page in view mode")
