@@ -550,15 +550,15 @@ public class ClaimTests extends BaseTest {
 
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(dataProvider = "testDataProvider",
-    description = "verify the option to show Settlement Page without having to reopen the claim")
-    public void viewClaim(User user, Claim claim){
+    description = "verify cancel open the claim")
+    public void cancelOpenClaim(User user, Claim claim){
         loginAndCreateClaim(user, claim).
                 toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
                 .startReopenClaimWhenViewModeIsEnabled()
-                .cancelViewClaim()
+                .cancelOpenClaim()
                 .doAssert(customerDetailsPage ->
                         customerDetailsPage.assertClaimNumber(claim.getClaimNumber()));
     }
@@ -577,7 +577,7 @@ public class ClaimTests extends BaseTest {
                         settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
 
-    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE)
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(dataProvider = "testDataProvider",
             description = "verify Settlement page in view mode")
     public void claimViewModeE2eTest(User user, Claim claim, ClaimItem claimItem) {
@@ -611,7 +611,7 @@ public class ClaimTests extends BaseTest {
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-7254")
-    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE)
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "verify it's possible to close claim from view mode")
     public void closeClaimInViewMode(User user, Claim claim, ClaimItem claimItem) {

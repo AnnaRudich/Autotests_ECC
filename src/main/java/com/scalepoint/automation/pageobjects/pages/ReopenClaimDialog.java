@@ -24,7 +24,7 @@ public class ReopenClaimDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
-    public CustomerDetailsPage cancelViewClaim(){
+    public CustomerDetailsPage cancelOpenClaim(){
         $(By.id("cancel-open-claim-button")).click();
         return Page.at(CustomerDetailsPage.class);
     }
