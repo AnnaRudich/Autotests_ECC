@@ -36,7 +36,7 @@ public class CategoryGroupsTests extends BaseTest {
 
         List parameters = Arrays.asList(objects);
 
-        User user = getObjectByClass(parameters, User.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
 
         login(user, AdminPage.class);
     }

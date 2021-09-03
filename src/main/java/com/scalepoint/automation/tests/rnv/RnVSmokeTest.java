@@ -38,11 +38,11 @@ public class RnVSmokeTest extends RnVBase {
 
         List parameters = Arrays.asList(objects);
 
-        User user = getObjectByClass(parameters, User.class).get(0);
-        Claim claim = getObjectByClass(parameters, Claim.class).get(0);
-        ServiceAgreement agreement = getObjectByClass(parameters, ServiceAgreement.class).get(0);
-        Translations translations = getObjectByClass(parameters, Translations.class).get(0);
-        String lineDescription = getObjectByClass(parameters, String.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
+        Claim claim = getLisOfObjectByClass(parameters, Claim.class).get(0);
+        ServiceAgreement agreement = getLisOfObjectByClass(parameters, ServiceAgreement.class).get(0);
+        Translations translations = getLisOfObjectByClass(parameters, Translations.class).get(0);
+        String lineDescription = getLisOfObjectByClass(parameters, String.class).get(0);
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()

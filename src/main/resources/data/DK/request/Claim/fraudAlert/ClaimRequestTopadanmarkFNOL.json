@@ -27,5 +27,11 @@
   "extraModifiers": [{
     "type": "postItemizationCompletedUrl",
     "value": "http://www.abcinsurance.com/thankyou.aspx?userid=DPMWI29us9IcUvGb"
-  }]
+  }],
+  "assignTo": [
+    {
+      "role": "caseOwner",
+      "email": "ecc_auto@scalepoint.com"
+    }
+  ]
 }

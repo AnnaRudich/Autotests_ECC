@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.widget;
 
-import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
@@ -107,6 +106,26 @@ public class WidgetTest extends BaseTest {
         createAndVerifyClaimSelfService(user);
     }
 
+    @Test(groups = {TestGroups.WIDGET, TestGroups.SELF_SERVICE2}, dataProvider = TEST_DATA_PROVIDER,
+            description = "Verify flow when request is sent from an unauthenticated domain")
+    public void corsNonAuthDomainTest(User user) {
+
+        String tenant = user.getCompanyName().toLowerCase();
+
+        ClaimRequest itemizationRequest = setTenantAndCompanyCode(TestData.getClaimRequestItemizationCaseTopdanmarkFNOL(), tenant);
+
+        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
+        String token = unifiedIntegrationService
+                .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), itemizationRequest);
+
+        openGenerateWidgetPageNonAuth()
+                .setCountry(itemizationRequest.getCountry())
+                .setServer(server)
+                .setCaseToken(token)
+                .generateWidget()
+                .doAssert(ss2Page -> ss2Page.assertAlertIsDisplayed());
+    }
+
     private TestWidgetPage createItemWidget(ClaimRequest itemizationRequest, ClaimItem claimItem, String token){
 
         return openGenerateWidgetPage()
@@ -145,9 +164,7 @@ public class WidgetTest extends BaseTest {
 
         token = unifiedIntegrationService.createClaimFNOL(claimRequest);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, CustomerDetailsPage.class)
-                .startReopenClaimWhenViewModeIsEnabled()
-                .reopenClaim()
+        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
                 .doAssert(settlementPage -> settlementPage.assertItemIsPresent(descriptionWidget));
     }
 

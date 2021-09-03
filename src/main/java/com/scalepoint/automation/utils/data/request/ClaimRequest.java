@@ -61,6 +61,8 @@ public class ClaimRequest {
     private Customer customer;
     @JsonProperty("extraModifiers")
     private List<ExtraModifier> extraModifiers = null;
+    @JsonProperty("assignTo")
+    private List<AssignTo> assignTo;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 

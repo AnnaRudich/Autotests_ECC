@@ -30,7 +30,14 @@ public interface BasePath {
     String EXCEL = "/{userId}/rest/lossImport/excel";
     String MATCH = "/{userId}/rest/lossImport/match";
     String SELF_SERVICE_LOSS_ITEMS = "/self-service/dk/lossItems/";
+    String SELF_SERVICE_INIT_DATA = "/self-service/dk/initdata";
+    String SELF_SERVICE_DELETE_LOSS_ITEMS = "/self-service/dk/lossItems/{Id}";
     String SELF_SERVICE_SUBMITTED = "/self-service/dk/submitted";
+    String SELF_SERVICE_SAVED = "/self-service/dk/saved";
+    String SELF_SERVICE_CASE_WIDGET = "/self-service/dk/api/case/{caseToken}";
+    String SELF_SERVICE_FILES_UPLOAD = "/self-service/dk/lossItemAttachments/filesUpload";
+    String SELF_SERVICE_LOSS_ITEM_ATTACHMENTS = "/self-service/dk/lossItemAttachments";
+    String SELF_SERVICE_LOSS = "/self-service/dk/loss/";
     String ATTACHMENTS = "/{userId}/rest/settlement/attachments";
     String TEXT_SEARCH = "/{userId}/search/TextSearch";
     String SECURED_IMAGE = "/rest/settlement/resource/securedimage";
