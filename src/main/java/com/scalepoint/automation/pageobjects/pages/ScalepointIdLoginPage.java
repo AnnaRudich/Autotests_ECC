@@ -58,6 +58,7 @@ public class ScalepointIdLoginPage extends Page {
     public void loginWithoutExpectedPage(String userLogin, String userPassword) {
         getUsernameField().setValue(userLogin);
         getPasswordField().setValue(userPassword);
+        Wait.waitMillis(1000);
         SelenideElement loginButton  = getLoginButton();
 
         loginButton

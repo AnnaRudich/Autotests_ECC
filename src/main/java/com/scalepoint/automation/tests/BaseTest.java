@@ -64,10 +64,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.IConfigurable;
-import org.testng.IConfigureCallBack;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
+import org.testng.*;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -99,7 +96,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable {
+public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
     protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
@@ -160,7 +157,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
     protected FraudAlertMock fraudAlertMock;
 
     @BeforeMethod
-    public void baseInit(Method method, ITestContext context, Object[] objects) throws Exception {
+    public void baseInit(Method method, ITestContext context, Object[] objects) {
 
         try {
             Thread.currentThread().setName("Thread " + method.getName());
@@ -175,6 +172,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
             Window.init(driver);
             WebDriverRunner.setWebDriver(driver);
             ServiceData.init(databaseApi);
+
+            List<User> users = getObjectByClass(Arrays.asList(objects), User.class);
+
+            users.stream().forEach(user -> CurrentUser.setUser(user));
 
             JavascriptHelper.initializeCommonFunctions();
 
@@ -251,7 +252,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         log.info("Clean up completed after: {} ", method.getName());
     }
 
-    @DataProvider(name = TEST_DATA_PROVIDER)
+    @DataProvider(parallel = true, name = TEST_DATA_PROVIDER)
     public static Object[][] provide(Method method) {
         Thread.currentThread().setName("Thread " + method.getName());
         Object[][] params = new Object[1][];
@@ -264,7 +265,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         return params;
     }
 
-    @DataProvider(name = "topdanmarkDataProvider")
+    @DataProvider(parallel = true, name = "topdanmarkDataProvider")
     public static Object[][] topdanmarkDataProvider(Method method) {
 
         Object[][] testDataProvider = provide(method);
@@ -285,6 +286,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
+
         Page.to(LoginPage.class);
 
         ClaimApi claimApi = new ClaimApi(user);
@@ -619,19 +621,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         return (List<T>) objects
                 .stream()
                 .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
-    }
-
-    @Override
-    public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
-        iConfigureCallBack.runConfigurationMethod(iTestResult);
-        if (iTestResult.getThrowable() != null) {
-            for (int i = 0; i <= 3; i++) {
-                iConfigureCallBack.runConfigurationMethod(iTestResult);
-                if (iTestResult.getThrowable() == null) {
-                    break;
-                }
-            }
-        }
     }
 }
 

@@ -24,7 +24,7 @@ public class UsersManager {
 
     private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
-    private static BlockingQueue<User> scalepointIdUsersQueue = new LinkedBlockingQueue<>();
+    private static ConcurrentMap<CompanyCode, BlockingQueue<User>> scalepointIdUsersQueue = new ConcurrentHashMap<>();
     private static User systemUser;
 
     private static Map<String, Set<User>> usersInfo = new HashMap<>();
@@ -46,8 +46,16 @@ public class UsersManager {
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
             }
             if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+                
+                CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
+                if(!scalepointIdUsersQueue.containsKey(key)) {
 
-                scalepointIdUsersQueue.add(user);
+                    scalepointIdUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()),
+                            new ArrayBlockingQueue<>(6, true, Collections.singleton(user)));
+                }else{
+
+                    exceptionalUsersQueues.get(key).add(user);
+                }
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
             }
             if(user.getType().equals(User.UserType.EXCEPTIONAL)) {
@@ -80,8 +88,6 @@ public class UsersManager {
                 .map(requestedUserAttributes ->  takeUser(requestedUserAttributes))
                 .collect(Collectors.toList());
 
-        fetchedUsers.stream().forEach(user -> CurrentUser.setUser(user));
-
         return fetchedUsers;
     }
 
@@ -91,9 +97,25 @@ public class UsersManager {
                 .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.BASIC))
                 .count();
 
-        long scalepointIdUsersRequestedCount = requestedUsers.stream()
+        Map<CompanyCode, Long> scalepointIdUsersRequestedCount = new HashMap<>();
+
+        List<RequestedUserAttributes> scalepointIdUsersUsersRequested = requestedUsers.stream()
                 .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
-                .count();
+                .collect(Collectors.toList());
+
+        scalepointIdUsersUsersRequested.forEach(requestedUserAttributes -> {
+
+            CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
+
+            if(scalepointIdUsersRequestedCount.containsKey(companyCode)){
+
+                scalepointIdUsersRequestedCount.put(companyCode, scalepointIdUsersRequestedCount.get(companyCode) + 1L);
+            }
+            else {
+
+                scalepointIdUsersRequestedCount.put(companyCode, 1L);
+            }
+        });
 
         Map<CompanyCode, Long> exceptionalUsersRequestedCount = new HashMap<>();
 
@@ -117,7 +139,9 @@ public class UsersManager {
 
         boolean basicUsersAvailable = basicUsersQueue.size() >= basicUsersRequestedCount;
 
-        boolean scalepointIdUsersAvailable = scalepointIdUsersQueue.size() >= scalepointIdUsersRequestedCount;
+        boolean scalepointIdUsersAvailable = scalepointIdUsersRequestedCount.entrySet().stream()
+                .map(entry -> scalepointIdUsersQueue.get(entry.getKey()).size() >= entry.getValue())
+                .allMatch(b -> b.equals(true));
 
         boolean exceptionalUsersAvailable = exceptionalUsersRequestedCount.entrySet().stream()
                 .map(entry -> exceptionalUsersQueues.get(entry.getKey()).size() >= entry.getValue())
@@ -148,7 +172,7 @@ public class UsersManager {
             }
             if(requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID)) {
 
-                taken = scalepointIdUsersQueue.take();
+                taken = scalepointIdUsersQueue.get(companyCode).take();
                 logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
             }
 
@@ -174,7 +198,7 @@ public class UsersManager {
         }
         if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
 
-            scalepointIdUsersQueue.add(user);
+            scalepointIdUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
         }
         logger.info("User: {} released", user.getLogin());
     }

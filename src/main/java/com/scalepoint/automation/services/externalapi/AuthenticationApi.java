@@ -1,6 +1,8 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.exceptions.ServerApiException;
+import com.scalepoint.automation.pageobjects.pages.LoginPage;
+import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -22,6 +24,7 @@ import javax.net.ssl.SSLContext;
 import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.*;
+import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
 
 public class AuthenticationApi {
 
@@ -50,7 +53,36 @@ public class AuthenticationApi {
     protected Executor executor;
 
     public <T extends Page> T login(User user, Class<T> returnPageClass) {
-        return login(user, returnPageClass, null);
+
+        if(user.getType().equals(SCALEPOINT_ID)){
+
+            try {
+                SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+
+                sslContext.init(null, null, null);
+
+                CookieStore cookieStore = new BasicCookieStore();
+
+                HttpClient httpClient = HttpClientBuilder.create().
+                        setSSLContext(sslContext).
+                        setRedirectStrategy(new DefaultRedirectStrategy()).
+                        setDefaultCookieStore(cookieStore).
+                        build();
+
+                executor = Executor.newInstance(httpClient);
+
+                Page.to(LoginPage.class)
+                        .loginViaScalepointId()
+                        .login(user.getLogin(), user.getPassword(), MyPage.class);
+                return null;
+            } catch (Exception e) {
+                log.error("Can't login", e);
+                throw new ServerApiException(e);
+            }
+        }else {
+
+            return login(user, returnPageClass, null);
+        }
     }
 
     public <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
