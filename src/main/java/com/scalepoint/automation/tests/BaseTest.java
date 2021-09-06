@@ -242,14 +242,17 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
                 log.error(e.getMessage(), e);
+            }finally {
+
+                Browser.quit();
+                Window.cleanUp();
+                CurrentUser.cleanUp();
+                Page.PagesCache.cleanUp();
+                ThreadContext.clearMap();
+                log.info("Clean up completed after: {} ", method.getName());
             }
         }
-        Browser.quit();
-        Window.cleanUp();
-        CurrentUser.cleanUp();
-        Page.PagesCache.cleanUp();
-        ThreadContext.clearMap();
-        log.info("Clean up completed after: {} ", method.getName());
+
     }
 
     @DataProvider(parallel = true, name = TEST_DATA_PROVIDER)
