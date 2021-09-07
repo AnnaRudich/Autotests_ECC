@@ -176,7 +176,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
             WebDriverRunner.setWebDriver(driver);
             ServiceData.init(databaseApi);
 
-            List<User> users = getObjectByClass(Arrays.asList(objects), User.class);
+            List<User> users = getLisOfObjectByClass(Arrays.asList(objects), User.class);
 
             users.stream().forEach(user -> CurrentUser.setUser(user));
 
