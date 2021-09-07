@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.shared.ClaimStatus;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -101,13 +102,15 @@ public class ClaimSearchPage extends Page {
     }
 
     public ClaimSearchPage fillClaimHandler(String claimHandler) {
+
         claimhandlerInput.clear();
         claimhandlerInput.sendKeys(claimHandler);
         return this;
     }
 
-    public static class ClaimRow {
+    public static class ClaimRow implements Actions {
 
+        private WebElement element;
         private String name;
         private String claimNumber;
         private String claimHandler;
@@ -117,6 +120,8 @@ public class ClaimSearchPage extends Page {
         private String activeDate;
 
         ClaimRow(WebElement element) {
+
+            this.element = element;
             this.name = element.findElement(By.xpath("./td[1]//label")).getText();
             this.claimNumber = element.findElement(By.xpath("./td[2]")).getText();
             this.claimHandler = element.findElement(By.xpath("./td[3]")).getText();
@@ -152,6 +157,13 @@ public class ClaimSearchPage extends Page {
 
         public String getActiveDate() {
             return activeDate;
+        }
+
+        public CustomerDetailsPage2 openClaim(){
+
+            element.findElement(By.cssSelector("a")).click();
+            switchToLast();
+            return Page.at(CustomerDetailsPage2.class);
         }
     }
 

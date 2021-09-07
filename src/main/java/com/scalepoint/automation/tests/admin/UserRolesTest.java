@@ -199,7 +199,7 @@ public class UserRolesTest extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, USER_ALL_ROLES}
@@ -211,7 +211,7 @@ public class UserRolesTest extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, USER_ALL_ROLES}
@@ -223,7 +223,7 @@ public class UserRolesTest extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, USER_ALL_ROLES}
@@ -235,7 +235,7 @@ public class UserRolesTest extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, new UserAddEditPage.UserType[] {CLAIMSHANDLER, SUPPLYMANAGER}}
@@ -247,7 +247,7 @@ public class UserRolesTest extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, new UserAddEditPage.UserType[] {SUPPLYMANAGER}}
@@ -259,7 +259,7 @@ public class UserRolesTest extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, new UserAddEditPage.UserType[] {SUPPLYMANAGER}}

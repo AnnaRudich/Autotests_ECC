@@ -153,7 +153,7 @@ public enum DriversFactory {
         options.addArguments("--window-position=0,0");
         options.addArguments("--disable-popup-blocking");
 //        options.addArguments("-incognito");
-        options.addArguments("--disable-web-security");
+//        options.addArguments("--disable-web-security");
         options.addArguments("allow-http-screen-capture");
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");

@@ -11,10 +11,10 @@ import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.TestDataActions;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.AutomaticCustomerWelcomeEmailTemplate;
-import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.CommunicationDesignerEmailTemplates;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -36,9 +36,9 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
 
         List parameters = Arrays.asList(objects);
 
-        User user = getObjectByClass(parameters, User.class).get(0);
-        ClaimRequest createClaimRequest = getObjectByClass(parameters, ClaimRequest.class).get(0);
-        ClaimRequest itemizationClaimRequest = getObjectByClass(parameters, ClaimRequest.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
+        ClaimRequest createClaimRequest = getLisOfObjectByClass(parameters, ClaimRequest.class).get(0);
+        ClaimRequest itemizationClaimRequest = getLisOfObjectByClass(parameters, ClaimRequest.class).get(0);
 
         String token = createFNOLClaimAndGetClaimToken(itemizationClaimRequest, createClaimRequest);
         loginAndOpenUnifiedIntegrationClaimByToken(user, token);
@@ -100,7 +100,7 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
 
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
         ClaimRequest itemizationClaimRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
-        User user = getObjectByClass(parameters, User.class).get(0);
+        User user = getLisOfObjectByClass(parameters, User.class).get(0);
         String password = DEFAULT_PASSWORD;
         String month = DEFAULT_MONTH;
         Double newPrice = 3000.00;

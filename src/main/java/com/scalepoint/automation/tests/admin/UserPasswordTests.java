@@ -109,7 +109,7 @@ public class UserPasswordTests extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, USER_ALL_ROLES}
@@ -121,7 +121,7 @@ public class UserPasswordTests extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, USER_ALL_ROLES}
@@ -133,7 +133,7 @@ public class UserPasswordTests extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, USER_ALL_ROLES}
@@ -145,7 +145,7 @@ public class UserPasswordTests extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
         UserPasswordRules userPasswordRules = TestData.getUserPasswordRules();
 
         String loginAsPartOf = systemUser.getLogin() + userPasswordRules.getLoginAsPartOf();
@@ -162,7 +162,7 @@ public class UserPasswordTests extends BaseTest {
 
         List parameters = TestDataActions.getTestDataParameters(method);
 
-        SystemUser systemUser = getObjectByClass(parameters, SystemUser.class).get(0);
+        SystemUser systemUser = getLisOfObjectByClass(parameters, SystemUser.class).get(0);
 
         return new Object[][]{
                 {systemUser, DEFAULT_USER_PASSWORD, USER_ALL_ROLES}

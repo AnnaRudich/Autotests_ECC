@@ -37,5 +37,11 @@
     {
       "type": "replyToCaseEmail",
       "value": "bna@scalepoint.com"
-    }]
+    }],
+  "assignTo": [
+    {
+      "role": "caseOwner",
+      "email": "ecc_auto@scalepoint.com"
+    }
+  ]
 }

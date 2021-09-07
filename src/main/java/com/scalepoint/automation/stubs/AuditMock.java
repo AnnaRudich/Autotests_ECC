@@ -30,6 +30,8 @@ public class AuditMock extends EccMock {
 
     public class AuditStub {
 
+        private final StringValuePattern autoCompleteStringValuePattern = equalToJson("{ \"autoComplete\": true}", true, true);
+
         @Getter
         private final String baseUrl = "/auditEndpointURL/integration-api/reports";
 
@@ -41,6 +43,7 @@ public class AuditMock extends EccMock {
         public AuditStub auditSelfServiceSubmitApprovedStub() {
             wireMock.stubFor(post(urlPathEqualTo(baseUrl))
                     .withRequestBody(getTriggerPointPattern("selfServiceSubmit"))
+                    .withRequestBody(autoCompleteStringValuePattern)
                     .willReturn(aResponse().withStatus(200).withBody(getAuditResponse())));
             return this;
         }
@@ -48,6 +51,7 @@ public class AuditMock extends EccMock {
         public AuditStub auditCloseClaimEventApprovedStub() {
             wireMock.stubFor(post(urlPathEqualTo(baseUrl))
                     .withRequestBody(getTriggerPointPattern("closeClaimEvent"))
+                    .withRequestBody(autoCompleteStringValuePattern)
                     .willReturn(aResponse().withStatus(200).withBody(getAuditResponse())));
             return this;
         }
@@ -55,6 +59,7 @@ public class AuditMock extends EccMock {
         public AuditStub auditFnolSubmitEventApprovedStub() {
             wireMock.stubFor(post(urlPathEqualTo(baseUrl))
                     .withRequestBody(getTriggerPointPattern("fnolSubmit"))
+                    .withRequestBody(autoCompleteStringValuePattern)
                     .willReturn(aResponse().withStatus(200).withBody(getAuditResponse())));
             return this;
         }

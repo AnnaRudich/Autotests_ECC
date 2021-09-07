@@ -294,6 +294,18 @@ public class SelfService2Page extends Page {
             return line.is(Condition.visible);
         }
 
+        public Asserts assertAlertIsDisplayed() {
+            assertThat(verifyElementVisible($("div[class^=alert]"))).as("alert should be displayed").isTrue();
+            return this;
+        }
+
+        public Asserts assertAlertIsMissing() {
+            assertThat(verifyElementVisible($("div[class^=alert]"))).as("alert should not be displayed").isTrue();
+            return this;
+        }
+
+
+
         public Asserts assertLogOutIsDisplayed() {
             assertThat(isDisplayed(logout)).as("logout button should be displayed").isTrue();
             return this;
