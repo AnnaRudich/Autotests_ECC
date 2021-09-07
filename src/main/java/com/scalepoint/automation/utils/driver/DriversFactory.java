@@ -155,6 +155,8 @@ public enum DriversFactory {
         options.addArguments("--whitelisted-ips=\"\"");
 //        options.addArguments("-incognito");
 //        options.addArguments("--disable-web-security");
+        options.addArguments("--disable-gpu");
+
         options.addArguments("allow-http-screen-capture");
         options.addArguments("allow-running-insecure-content");
         options.addArguments("disable-prompt-on-repost");
