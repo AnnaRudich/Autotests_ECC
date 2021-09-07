@@ -152,7 +152,7 @@ public enum DriversFactory {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--window-position=0,0");
         options.addArguments("--disable-popup-blocking");
-        options.addArguments("--whitelisted-ips");
+        options.addArguments("--whitelisted-ips=\"\"");
 //        options.addArguments("-incognito");
 //        options.addArguments("--disable-web-security");
         options.addArguments("allow-http-screen-capture");
