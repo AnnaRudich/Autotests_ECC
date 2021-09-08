@@ -25,7 +25,7 @@ public class LoginPage extends Page {
     @FindBy(css = "[value=Login]")
     private Button loginButton;
 
-    @FindBy(css =  "j_username")
+    @FindBy(id = "j_username")
     private WebElement username;
 
     @FindBy(id = "j_password")
@@ -99,7 +99,7 @@ public class LoginPage extends Page {
         try {
             Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
                 try {
-                    driver.findElement(By.id("loginError"));
+                    driver.findElement(By.id("loginErrorPlaceHolder"));
                     return true;
                 } catch (Exception e) {
                     return false;
