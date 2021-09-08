@@ -181,6 +181,9 @@
         <entry>
             <key>CAN_FNOL_CASE_BE_REASSIGNED</key><value>DISABLE</value>
         </entry>
+        <entry>
+            <key>ENABLE_SHOW_SETTLEMENT_PAGE</key><value>ENABLE</value>
+        </entry>
     </defaultSettings>
 </defaultFTSettings>
 

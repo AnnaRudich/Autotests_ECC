@@ -138,6 +138,7 @@ public class OrderDetailsTests extends BaseTest {
                 .fillClaimForm(claim)
                 .openReplacementWizard(true)
                 .replaceAllItems()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)

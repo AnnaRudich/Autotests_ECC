@@ -99,9 +99,14 @@ public class CustomerDetailsPage extends BaseClaimPage {
         return at(CustomerDetailsPage.class);
     }
 
-    public SettlementPage reopenClaim() {
+    public ReopenClaimDialog startReopenClaimWhenViewModeIsEnabled() {
         $(By.id("genoptag")).click();
-        $(By.id("reopen-claim-button")).click();
+        return BaseDialog.at(ReopenClaimDialog.class);
+    }
+
+    public SettlementPage reopenClaimWhenViewModeIsDisabled(){
+        $(By.id("genoptag")).click();
+        getAlertTextAndAccept();
         return at(SettlementPage.class);
     }
 
@@ -211,6 +216,14 @@ public class CustomerDetailsPage extends BaseClaimPage {
             assertThat(isDisplayed).isFalse();
             return this;
         }
+
+        public Asserts assertCustomerDetailsPagePresent(){
+            assertThat($(reopenClaim).is(Condition.visible))
+                    .as("CustomerDetails page is not loaded")
+                    .isTrue();
+            return this;
+        }
+
     }
 
 }

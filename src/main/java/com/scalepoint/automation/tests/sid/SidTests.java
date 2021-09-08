@@ -112,6 +112,7 @@ public class SidTests extends BaseTest {
                 .enterZipCode(postalCode)
                 .saveClaim(gdpr)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .findClaimLine(Constants.TEXT_LINE)
                 .editLine();
