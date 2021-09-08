@@ -22,10 +22,10 @@ public class LoginPage extends Page {
 
     private static final By LOGIN_VIA_SCALEPOINT_ID_LINK_PATH = By.cssSelector("#loginform > a");
 
-    @FindBy(css = "#loginFormBlock .login-button")
+    @FindBy(css = "[value=Login]")
     private Button loginButton;
 
-    @FindBy(id = "j_username")
+    @FindBy(css =  "j_username")
     private WebElement username;
 
     @FindBy(id = "j_password")

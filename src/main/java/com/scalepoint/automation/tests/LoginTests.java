@@ -21,7 +21,7 @@ public class LoginTests extends BaseTest {
 
     private static final String INVALID_DATA_CREDENTIALS_DATA_PROVIDER = "invalidCredentialsDataProvider";
     private static final String USERS_CREDENTIAL_DATA_PROVIDER = "usersCredentialDataProvider";
-
+@RunOn(DriverType.CHROME)
     @Test(groups = {TestGroups.LOGIN}, description = "It is not possible to sign in with blank credentials",
             expectedExceptions = {LoginInvalidException.class},
             dataProvider = INVALID_DATA_CREDENTIALS_DATA_PROVIDER)

@@ -293,12 +293,26 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
 
-        Page.to(LoginPage.class);
+        LoginPage loginPage = Page.to(LoginPage.class);
 
-        ClaimApi claimApi = new ClaimApi(user);
-        claimApi.createClaim(claim, policyType);
+        if(user.getType().equals(SCALEPOINT_ID))
+        {
 
-        return redirectToSettlementPage(user);
+            loginPage
+                    .loginViaScalepointId()
+                    .login(user.getLogin(), user.getPassword());
+
+            ClaimApi.createClaim(claim, 1);
+            return Page.to(SettlementPage.class);
+
+        }else {
+
+            ClaimApi claimApi = new ClaimApi(user);
+            claimApi.createClaim(claim, policyType);
+            return redirectToSettlementPage(user);
+        }
+
+
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {

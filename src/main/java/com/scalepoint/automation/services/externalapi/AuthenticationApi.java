@@ -54,35 +54,7 @@ public class AuthenticationApi {
 
     public <T extends Page> T login(User user, Class<T> returnPageClass) {
 
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            try {
-                SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-
-                sslContext.init(null, null, null);
-
-                CookieStore cookieStore = new BasicCookieStore();
-
-                HttpClient httpClient = HttpClientBuilder.create().
-                        setSSLContext(sslContext).
-                        setRedirectStrategy(new DefaultRedirectStrategy()).
-                        setDefaultCookieStore(cookieStore).
-                        build();
-
-                executor = Executor.newInstance(httpClient);
-
-                Page.to(LoginPage.class)
-                        .loginViaScalepointId()
-                        .login(user.getLogin(), user.getPassword(), MyPage.class);
-                return null;
-            } catch (Exception e) {
-                log.error("Can't login", e);
-                throw new ServerApiException(e);
-            }
-        }else {
-
             return login(user, returnPageClass, null);
-        }
     }
 
     public <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {

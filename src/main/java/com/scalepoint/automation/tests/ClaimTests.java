@@ -11,12 +11,15 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
+import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -63,12 +66,13 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
-
+@RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+//    @ScalepointIdTest
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void charlie544_2629_completeClaimWithMail(User user, Claim claim) {
+    public void charlie544_2629_completeClaimWithMail(@UserAttributes(company = CompanyCode.FUTURE50, type = User.UserType.SCALEPOINT_ID) User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
