@@ -217,6 +217,13 @@ public class CustomerDetailsPage extends BaseClaimPage {
             return this;
         }
 
+        public Asserts assertCustomerDetailsPagePresent(){
+            assertThat($(reopenClaim).is(Condition.visible))
+                    .as("CustomerDetails page is not loaded")
+                    .isTrue();
+            return this;
+        }
+
     }
 
 }

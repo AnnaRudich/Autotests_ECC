@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -559,8 +560,7 @@ public class ClaimTests extends BaseTest {
                 .openRecentClaim()
                 .startReopenClaimWhenViewModeIsEnabled()
                 .cancelOpenClaim()
-                .doAssert(customerDetailsPage ->
-                        customerDetailsPage.assertClaimNumber(claim.getClaimNumber()));
+                .doAssert(CustomerDetailsPage.Asserts::assertCustomerDetailsPagePresent);
     }
 
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, enabled = false)
