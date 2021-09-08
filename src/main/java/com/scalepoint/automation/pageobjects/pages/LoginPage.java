@@ -20,7 +20,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 @EccAdminPage
 public class LoginPage extends Page {
 
-    @FindBy(css = "#loginFormBlock .login-button")
+    @FindBy(css = "[value=Login]")
     private Button loginButton;
 
     @FindBy(id = "j_username")
@@ -87,7 +87,7 @@ public class LoginPage extends Page {
         try {
             Wait.forCondition((Function<WebDriver, Object>) webDriver -> {
                 try {
-                    driver.findElement(By.id("loginError"));
+                    driver.findElement(By.id("loginErrorPlaceHolder"));
                     return true;
                 } catch (Exception e) {
                     return false;
