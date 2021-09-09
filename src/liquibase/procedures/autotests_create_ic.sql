@@ -59,7 +59,7 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
 
 	DECLARE @departmentId UNIQUEIDENTIFIER = NEWID()
 	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email) VALUES (@departmentId, NULL, @ICNAME, 1, @ICCOMMAIL)
-	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email) VALUES (NEWID(), @departmentId, @ICNAME+' Department', 1, @ICCOMMAIL)
+	INSERT INTO Department (DepartmentToken, Parent, Description, Active, Email, ScalepointIdExternalId) VALUES (NEWID(), @departmentId, @ICNAME+' Department', 1, @ICCOMMAIL, 'DEPARTMENT_' + @CompanyCode + '_DEPARTMENT1_GROUP')
 
 	DECLARE @ftExists BIT = 1
 
@@ -298,7 +298,8 @@ INSERT INTO [INSCOMP]
        ,[omTenantAlias]
        ,[omCompanyAlias]
        ,[cwaTenant]
-       ,[mailserviceAlias])
+       ,[mailserviceAlias]
+       ,[scalepointIdDomains])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -339,7 +340,8 @@ INSERT INTO [INSCOMP]
            ,lower(@ICNAME)
            ,lower(@ICNAME)
            ,lower(@ICNAME)
-           ,lower(@ICNAME))
+           ,lower(@ICNAME)
+           ,lower(@ICNAME) + '.scalepoint.com')
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId

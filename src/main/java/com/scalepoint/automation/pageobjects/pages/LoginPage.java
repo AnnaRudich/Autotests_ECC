@@ -20,7 +20,7 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 @EccAdminPage
 public class LoginPage extends Page {
 
-    private static final By LOGIN_VIA_SCALEPOINT_ID_LINK_PATH = By.cssSelector("#loginform > a");
+    private static final By LOGIN_VIA_SCALEPOINT_ID_LINK_PATH = By.cssSelector("#loginSPID");
 
     @FindBy(css = "[value=Login]")
     private Button loginButton;
