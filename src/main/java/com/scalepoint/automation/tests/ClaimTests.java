@@ -11,6 +11,7 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -35,7 +36,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 public class ClaimTests extends BaseTest {
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
-
+    @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
@@ -52,6 +53,7 @@ public class ClaimTests extends BaseTest {
      * WHEN: User cancels C1
      * THEN: "Cancelled" is the status of C1
      */
+    @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
@@ -63,7 +65,7 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
-
+    @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
@@ -374,7 +376,6 @@ public class ClaimTests extends BaseTest {
      * WHEN: User completes claim with wizard
      * THEN: C1 status is "Completed"
      */
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +

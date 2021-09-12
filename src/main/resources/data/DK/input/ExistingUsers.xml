@@ -37,4 +37,14 @@
 
     <user login="a4b@topdanmark.scalepoint.com"     password="1234QWER#" companyCode="TOPDANMARK"       companyId="1" companyName="Topdanmark"     ftId="3" type="SCALEPOINT_ID" />
     <user login="f0a@future50.scalepoint.com"     password="1234QWER#" companyCode="FUTURE50"       companyId="50" companyName="Future50"     ftId="50" type="SCALEPOINT_ID" />
+    <user login="f1a@future51.scalepoint.com"     password="1234QWER#" companyCode="FUTURE51"       companyId="51" companyName="Future51"     ftId="51" type="SCALEPOINT_ID" />
+    <user login="f2a@future52.scalepoint.com"     password="1234QWER#" companyCode="FUTURE52"       companyId="52" companyName="Future52"     ftId="52" type="SCALEPOINT_ID" />
+    <user login="f3a@future53.scalepoint.com"     password="1234QWER#" companyCode="FUTURE53"       companyId="53" companyName="Future53"     ftId="53" type="SCALEPOINT_ID" />
+    <user login="f4a@future54.scalepoint.com"     password="1234QWER#" companyCode="FUTURE54"       companyId="54" companyName="Future54"     ftId="54" type="SCALEPOINT_ID" />
+    <user login="f5a@future55.scalepoint.com"     password="1234QWER#" companyCode="FUTURE55"       companyId="55" companyName="Future55"     ftId="55" type="SCALEPOINT_ID" />
+    <user login="f6a@future56.scalepoint.com"     password="1234QWER#" companyCode="FUTURE56"       companyId="56" companyName="Future56"     ftId="56" type="SCALEPOINT_ID" />
+    <user login="f7a@future57.scalepoint.com"     password="1234QWER#" companyCode="FUTURE57"       companyId="57" companyName="Future57"     ftId="57" type="SCALEPOINT_ID" />
+    <user login="f8a@future58.scalepoint.com"     password="1234QWER#" companyCode="FUTURE58"       companyId="58" companyName="Future58"     ftId="58" type="SCALEPOINT_ID" />
+    <user login="f9a@future59.scalepoint.com"     password="1234QWER#" companyCode="FUTURE59"       companyId="59" companyName="Future59"     ftId="59" type="SCALEPOINT_ID" />
+    <user login="f60a@future60.scalepoint.com"     password="1234QWER#" companyCode="FUTURE60"       companyId="60" companyName="Future60"     ftId="60" type="SCALEPOINT_ID" />
 </existingUsers>
