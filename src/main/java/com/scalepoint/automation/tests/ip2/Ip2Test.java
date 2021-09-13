@@ -22,18 +22,18 @@ public class Ip2Test extends BaseTest {
     public void claimSettledEventSettlementDoc(@UserAttributes(company = CompanyCode.FUTURE70) User user,
                                                Claim claim,
                                                ClaimItem claimItem) {
-       loginAndCreateClaim(user, claim)
+        loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
                 .closeSidWithOk()
-               .toCompleteClaimPage()
-               .fillClaimForm(claim)
-               .completeWithEmail(claim, databaseApi, true)
-               .openRecentClaim();
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim();
 
-       new IP2Api()
-               .assertTransactionWasProcessed(databaseApi.getUserIdByClaimNumber(claim.getClaimNumber()));
+        new IP2Api()
+                .assertTransactionWasProcessed(databaseApi.getUserIdByClaimNumber(claim.getClaimNumber()));
 
 
     }

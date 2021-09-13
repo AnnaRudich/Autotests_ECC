@@ -34,8 +34,10 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
+
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
+
     @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
@@ -47,7 +49,6 @@ public class ClaimTests extends BaseTest {
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
-
     /**
      * GIVEN: SP User, saved claim C1
      * WHEN: User cancels C1
@@ -65,6 +66,7 @@ public class ClaimTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
+
     @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
@@ -157,6 +159,7 @@ public class ClaimTests extends BaseTest {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
     }
+
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
@@ -170,8 +173,6 @@ public class ClaimTests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD);
     }
-
-
     /*
     the claim which will be validated in Audit must have mobile, zipcode, address and city as required fields
     IC Validation code should be = topdanmark always
@@ -370,7 +371,6 @@ public class ClaimTests extends BaseTest {
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
     }
-
     /**
      * GIVEN: SP User, active claim C1
      * WHEN: User completes claim with wizard

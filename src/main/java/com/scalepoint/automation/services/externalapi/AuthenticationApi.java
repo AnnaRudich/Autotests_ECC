@@ -1,8 +1,6 @@
 package com.scalepoint.automation.services.externalapi;
 
 import com.scalepoint.automation.exceptions.ServerApiException;
-import com.scalepoint.automation.pageobjects.pages.LoginPage;
-import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -24,7 +22,6 @@ import javax.net.ssl.SSLContext;
 import java.util.List;
 
 import static com.scalepoint.automation.utils.Http.*;
-import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
 
 public class AuthenticationApi {
 
@@ -54,7 +51,7 @@ public class AuthenticationApi {
 
     public <T extends Page> T login(User user, Class<T> returnPageClass) {
 
-            return login(user, returnPageClass, null);
+        return login(user, returnPageClass, null);
     }
 
     public <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {

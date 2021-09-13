@@ -73,7 +73,6 @@ public class ClaimApi extends AuthenticationApi {
     }
 
     public static void createClaim(Claim claim, int attempt) {
-//        log.info("Create client: " + claim.getClaimNumber());
 
         try{
 
@@ -94,19 +93,9 @@ public class ClaimApi extends AuthenticationApi {
                     .extract()
                     .header("Location");
 
-//            HttpResponse createUserResponse = post(URL_CREATE_CUSTOMER, clientParams, executor).returnResponse();
-//            ensure302Code(createUserResponse.getStatusLine().getStatusCode());
-
-//            Header headerLocation = createUserResponse.getHeaders("Location").length > 0 ?
-//                    createUserResponse.getHeaders("Location")[0] :
-//                    new BasicHeader("Location", "error=1");
-
             if (location.contains("error=1")) {
                 throw new IllegalStateException("Response contains wrong location: " + location);
             }
-
-//            log.info("CreateUser redirected to: " + location);
-//            log.info("Base ECC URL is:          " + Configuration.getEccUrl());
 
             String claimId = location.replaceAll(".*/([0-9]+)/.*", "$1");
             CurrentUser.setClaimId(claimId);

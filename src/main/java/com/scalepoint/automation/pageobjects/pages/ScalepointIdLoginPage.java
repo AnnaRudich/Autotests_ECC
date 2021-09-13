@@ -5,7 +5,6 @@ import com.codeborne.selenide.ex.TimeoutException;
 import com.scalepoint.automation.utils.Wait;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;

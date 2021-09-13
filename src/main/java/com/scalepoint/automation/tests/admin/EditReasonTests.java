@@ -272,7 +272,7 @@ public class EditReasonTests extends BaseTest {
 
         return new Object[][]{
 
-            TestDataActions.getTestDataWithExternalParameters(method, reasonWithExceededLength, reasonWithAllowedLength).toArray()
+                TestDataActions.getTestDataWithExternalParameters(method, reasonWithExceededLength, reasonWithAllowedLength).toArray()
         };
     }
 

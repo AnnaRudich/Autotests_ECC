@@ -9,9 +9,9 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -36,7 +36,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.IMPORT_EXCEL_DISCRETIONARY_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+                    " drop-down for choosing reason is enabled")
     public void charlie508_1_ImportExcelWithDiscretionaryValuation(@UserAttributes(company = TRYGFORSIKRING) User trygUser,
                                                                    Claim claim) {
         loginAndCreateClaim(trygUser, claim)
@@ -59,7 +59,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.IMPORT_EXCEL_DISCRETIONARY_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify that after importing excel and adding manually discretionary valuation" +
-            " Selected reason 1 is still applicable for the converted item")
+                    " Selected reason 1 is still applicable for the converted item")
     public void charlie508_2_ImportEcxelAddManuallyDiscrValuation(@UserAttributes(company = TRYGFORSIKRING) User trygUser,
                                                                   Claim claim, Translations translations) {
         String claimLineDescription = "APPLE iphone 1";
@@ -95,7 +95,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.IMPORT_EXCEL_DISCRETIONARY_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-508 Verify that after importing excel and adding manually discretionary depreciation" +
-            " Selected reason 1 is still applicable for the converted item")
+                    " Selected reason 1 is still applicable for the converted item")
     public void charlie508_3_ImportEcxelAddManuallyDiscrDepreciation(@UserAttributes(company = TRYGFORSIKRING) User trygUser,
                                                                      Claim claim, Translations translations) {
         String claimLineDescription = "APPLE iphone 2";

@@ -35,7 +35,6 @@ import java.util.List;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
-import static com.scalepoint.automation.tests.api.BaseApiTest.addNewParameters;
 
 public class IntelligentRepair2WebServiceTest extends BaseTest {
 

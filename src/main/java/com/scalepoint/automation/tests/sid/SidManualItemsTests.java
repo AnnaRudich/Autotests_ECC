@@ -161,6 +161,7 @@ public class SidManualItemsTests extends BaseTest {
                 });
 
     }
+
     @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},

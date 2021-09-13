@@ -5,7 +5,6 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -19,7 +18,7 @@ import static com.scalepoint.automation.services.usersmanagement.CompanyCode.TOP
 public class FilesServiceTest extends BaseTest {
 
     private static final String IPHONE = "iPhone";
-    @ScalepointIdTest
+
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.ECC, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
     public void attachmentImportedFromFNOLTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim){

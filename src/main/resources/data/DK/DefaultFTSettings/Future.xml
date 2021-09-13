@@ -178,9 +178,9 @@
         <entry>
             <key>ADD_ACCEPTANCE_TEXT_AND_CHECKBOX_WIDGET_ONLY</key><value>DISABLE</value>
         </entry>
-<!--        <entry>-->
-<!--            <key>CAN_FNOL_CASE_BE_REASSIGNED</key><value>DISABLE</value>-->
-<!--        </entry>-->
+        <entry>
+            <key>CAN_FNOL_CASE_BE_REASSIGNED</key><value>DISABLE</value>
+        </entry>
     </defaultSettings>
 </defaultFTSettings>
 

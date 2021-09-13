@@ -3,7 +3,6 @@ package com.scalepoint.automation.services.usersmanagement;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
-import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +45,7 @@ public class UsersManager {
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
             }
             if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
-                
+
                 CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
                 if(!scalepointIdUsersQueue.containsKey(key)) {
 

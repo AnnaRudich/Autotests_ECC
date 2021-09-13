@@ -50,7 +50,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
         loginAndCreateClaim(user, claim);
 
         Integer depreciationPercentageFromReductionRule =
-        claimLinesHelper.startAddLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
+                claimLinesHelper.startAddLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
                         .getDepreciationPercentage();
         claimLinesHelper.finishAddLine();
         claimLinesHelper.addLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)

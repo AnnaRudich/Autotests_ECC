@@ -113,9 +113,9 @@ public class FraudAlertTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.ECC, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+                    " drop-down for choosing reason is enabled")
     public void importExcelNoFraudTest(@UserAttributes(company = TOPDANMARK) User user,
-                                   ClaimRequest claimRequest) throws IOException {
+                                       ClaimRequest claimRequest) throws IOException {
 
         importExcel(claimRequest, user, EventApiService.FraudStatus.NOT_FRAUDULENT)
                 .getSettlementSummary()
@@ -124,9 +124,9 @@ public class FraudAlertTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.ECC, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
-            " drop-down for choosing reason is enabled")
+                    " drop-down for choosing reason is enabled")
     public void importExcelFraudTest(@UserAttributes(company = TOPDANMARK) User user,
-                                 ClaimRequest claimRequest) throws IOException {
+                                     ClaimRequest claimRequest) throws IOException {
 
         importExcel(claimRequest, user, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()

@@ -6,7 +6,6 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -30,7 +29,6 @@ public class FilesServiceSystemTest extends BaseTest {
     private File attachment1 = new File("src\\main\\resources\\attachments\\bw.jpg");
     private static final String IPHONE = "iPhone";
 
-    @ScalepointIdTest
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "attachmentAddedFromClaimLineLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLineLevelToClaimLineLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
@@ -60,7 +58,6 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LINE_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-    @ScalepointIdTest
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "attachmentAddedFromClaimLevelToClaimLineLevel")
     public void attachmentAddedFromClaimLevelToClaimLineLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
@@ -87,7 +84,6 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_ADDED_FROM_CLAIM_LEVEL_TO_CLAIM_LINE_LEVEL, 1);
     }
 
-    @ScalepointIdTest
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "attachmentDeletedFromClaimLevel")
     public void attachmentDeletedFromClaimLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
@@ -114,7 +110,6 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_DELETED_FROM_CLAIM_LEVEL, 1);
     }
 
-    @ScalepointIdTest
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "attachmentUnlinkedFromClaimLineLevel")
     public void attachmentUnlinkedFromClaimLineLevelSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem){
@@ -143,7 +138,6 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_UNLINKED_FROM_CLAIM_LINE_LEVEL, 1);
     }
 
-    @ScalepointIdTest
     @Test(groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
     public void attachmentImportedFromSelfServiceSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
@@ -169,7 +163,6 @@ public class FilesServiceSystemTest extends BaseTest {
                         Change.Property.ATTACHMENT_IMPORTED_FROM_SELFSERVICE,1);
     }
 
-    @ScalepointIdTest
     @Test(enabled = false, groups = {TestGroups.FILE_SERVICE, TestGroups.UNI, UserCompanyGroups.TOPDANMARK},
             dataProvider = "topdanmarkDataProvider",
             description = "FNOL")

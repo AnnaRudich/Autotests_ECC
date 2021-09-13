@@ -172,9 +172,9 @@ public class SidReductionRulesDiscretionaryTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "ECC-3031 Verify reduction rule and automatic depreciation when age is selected in date picker")
     public void setAgeUsingDatePicker(@UserAttributes(company = CompanyCode.ALKA) User user,
-                                                                        Claim claim,
-                                                                        ClaimItem claimItem,
-                                                                        ReductionRule reductionRule) {
+                                      Claim claim,
+                                      ClaimItem claimItem,
+                                      ReductionRule reductionRule) {
         SettlementDialog settlementDialog = loginAndCreateClaim(user, claim, claim.getPolicyTypeFF())
                 .openSid()
                 .automaticDepreciation(false)

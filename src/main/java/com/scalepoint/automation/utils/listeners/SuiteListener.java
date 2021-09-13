@@ -1,18 +1,18 @@
 package com.scalepoint.automation.utils.listeners;
 
-        import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-        import com.scalepoint.automation.services.usersmanagement.UsersManager;
-        import com.scalepoint.automation.tests.TestCountdown;
-        import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
-        import com.scalepoint.automation.utils.data.TestDataActions;
-        import com.scalepoint.automation.utils.data.entity.credentials.User;
-        import org.apache.logging.log4j.LogManager;
-        import org.apache.logging.log4j.Logger;
-        import org.testng.*;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.tests.TestCountdown;
+import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
+import com.scalepoint.automation.utils.data.TestDataActions;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.*;
 
-        import java.lang.reflect.Method;
-        import java.util.*;
-        import java.util.stream.Collectors;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SuiteListener implements ISuiteListener, IDataProviderInterceptor, IDataProviderListener {
 
