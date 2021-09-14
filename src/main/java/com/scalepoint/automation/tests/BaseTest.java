@@ -48,6 +48,8 @@ import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.OrderRandomizer;
 import com.scalepoint.automation.utils.listeners.SuiteListener;
+import com.scalepoint.automation.utils.testng.Retrier;
+import com.scalepoint.automation.utils.testng.RetryListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -64,14 +66,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.IConfigurable;
-import org.testng.IConfigureCallBack;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
+import org.testng.*;
+import org.testng.annotations.*;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -84,6 +80,7 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
@@ -158,6 +155,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
 
     @Autowired
     protected FraudAlertMock fraudAlertMock;
+
+    @BeforeTest
+    public void setRetrier(ITestContext iTestContext){
+
+        Arrays.stream(iTestContext.getAllTestMethods())
+                .forEach(iTestNGMethod -> iTestNGMethod.setRetryAnalyzerClass(Retrier.class));
+    }
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) {
