@@ -10,6 +10,7 @@ import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.logging.log4j.LogManager;
@@ -65,12 +66,15 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     protected String fraudStatusSubscriptionId;
 
     @BeforeMethod
-    public void setUpData(Method method) {
+    public void setUpData(Method method, Object[] objects) {
 
         Thread.currentThread().setName("Thread " + method.getName());
         ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
         ServiceData.init(databaseApi);
+        List<User> users = getLisOfObjectByClass(Arrays.asList(objects), User.class);
+
+        users.stream().forEach(user -> CurrentUser.setUser(user));
     }
 
     @AfterMethod
@@ -108,6 +112,14 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
                 .stream()
                 .filter(object -> object.getClass().equals(clazz))
                 .map(object -> (T)object)
+                .collect(Collectors.toList());
+    }
+
+    protected static  <T> List<T> getLisOfObjectByClass(List objects, Class<T> clazz){
+
+        return (List<T>) objects
+                .stream()
+                .filter(o -> o.getClass().equals(clazz))
                 .collect(Collectors.toList());
     }
 
