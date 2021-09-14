@@ -64,6 +64,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -97,7 +99,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-public class BaseTest extends AbstractTestNGSpringContextTests {
+public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
     protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
@@ -180,6 +182,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
             JavascriptHelper.initializeCommonFunctions();
 
+
             Configuration.savePageSource = false;
 
             log.info("Initialization completed for : {}", method.getName());
@@ -256,7 +259,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @DataProvider(parallel = true, name = TEST_DATA_PROVIDER)
+    @DataProvider(name = TEST_DATA_PROVIDER)
     public static Object[][] provide(Method method) {
         Thread.currentThread().setName("Thread " + method.getName());
         Object[][] params = new Object[1][];
@@ -269,7 +272,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return params;
     }
 
-    @DataProvider(parallel = true, name = "topdanmarkDataProvider")
+    @DataProvider(name = "topdanmarkDataProvider")
     public static Object[][] topdanmarkDataProvider(Method method) {
 
         Object[][] testDataProvider = provide(method);
@@ -644,6 +647,19 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return (List<T>) objects
                 .stream()
                 .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
+    }
+
+        @Override
+    public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
+        iConfigureCallBack.runConfigurationMethod(iTestResult);
+        if (iTestResult.getThrowable() != null) {
+            for (int i = 0; i <= 3; i++) {
+                iConfigureCallBack.runConfigurationMethod(iTestResult);
+                if (iTestResult.getThrowable() == null) {
+                    break;
+                }
+            }
+        }
     }
 }
 
