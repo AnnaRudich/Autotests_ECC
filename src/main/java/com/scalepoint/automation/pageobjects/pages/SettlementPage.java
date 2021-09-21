@@ -82,8 +82,6 @@ public class SettlementPage extends BaseClaimPage {
 
     private SettlementSummary settlementSummary = new SettlementSummary();
 
-    private FunctionalMenu functionalMenu = new FunctionalMenu();
-
     private ToolBarMenu toolBarMenu = new ToolBarMenu();
 
     private ClaimOperationsMenu claimOperationsMenu = new ClaimOperationsMenu();
@@ -173,7 +171,7 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public LossImportDialog openImportSelfServiceDialog() {
-        return claimOperationsMenu.openImportDialog();
+        return claimOperationsMenu.openImportExcelDialog();
     }
 
     public ClaimOperationsMenu getClaimOperationsMenu() {
@@ -188,12 +186,8 @@ public class SettlementPage extends BaseClaimPage {
         return settlementSummary;
     }
 
-    public FunctionalMenu getFunctionalMenu(){
-        return functionalMenu;
-    }
-
     public TextSearchPage toTextSearchPage() {
-        functionalMenu.findInCatalogue();
+        claimOperationsMenu.findInCatalogue();
         return Page.at(TextSearchPage.class);
     }
 
@@ -203,7 +197,7 @@ public class SettlementPage extends BaseClaimPage {
 
     public SettlementDialog openSid() {
 
-        return functionalMenu.addManually();
+        return claimOperationsMenu.addManually();
     }
 
     public SettlementPage openSid(String description, PseudoCategory pseudoCategory, Double newPrice) {
@@ -373,13 +367,13 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementPage importExcelFile(String filePath) {
-        return functionalMenu.
+        return claimOperationsMenu.
                 openImportExcelDialog().
                 uploadExcelNoErrors(filePath);
     }
 
     public LossLineImportDialog startImportExcelFile(String filePath){
-        return functionalMenu.
+        return claimOperationsMenu.
                 openImportExcelDialog().
                 uploadExcelWithErrors(filePath);
 

@@ -589,11 +589,11 @@ public class ClaimTests extends BaseTest {
                 .openRecentClaim()
                 .startReopenClaimWhenViewModeIsEnabled()
                 .viewClaim()
-                .getFunctionalMenu()
-                .doAssert(functionalMenu -> {
-                        functionalMenu.assertAddManuallyButtonIsDisabled();
-                        functionalMenu.assertImportExcelButtonIsDisabled();
-                        functionalMenu.assertRequestSelfServiceButtonIsDisabled();
+                .getClaimOperationsMenu()
+                .doAssert(claimOperationsMenu -> {
+                        claimOperationsMenu.assertAddManuallyButtonIsDisabled();
+                        claimOperationsMenu.assertImportExcelButtonIsDisabled();
+                        claimOperationsMenu.assertRequestSelfServiceButtonIsDisabled();
                 });
 
         new SettlementPage().findClaimLine("lineDescription").editLine()
@@ -602,11 +602,11 @@ public class ClaimTests extends BaseTest {
                 .cancel()
                 .getSettlementSummary()
                 .reopenClaimFromViewMode()
-                .getFunctionalMenu()
-                .doAssert(functionalMenu -> {
-            functionalMenu.assertAddManuallyButtonIsEnabled();
-            functionalMenu.assertImportExcelButtonIsEnabled();
-            functionalMenu.assertRequestSelfServiceButtonIsEnabled();
+                .getClaimOperationsMenu()
+                .doAssert(claimOperationsMenu -> {
+                    claimOperationsMenu.assertAddManuallyButtonIsEnabled();
+                    claimOperationsMenu.assertImportExcelButtonIsEnabled();
+                    claimOperationsMenu.assertRequestSelfServiceButtonIsEnabled();
         });
     }
 
