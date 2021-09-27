@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
 
 public class UsersManager {
 
@@ -23,7 +24,7 @@ public class UsersManager {
 
     private static ConcurrentMap<CompanyCode, ConcurrentMap<User.UserType, User>> basicUsersQueue = new ConcurrentHashMap<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
-//    private static ConcurrentMap<CompanyCode, BlockingQueue<User>> scalepointIdUsersQueue = new ConcurrentHashMap<>();
+    //    private static ConcurrentMap<CompanyCode, BlockingQueue<User>> scalepointIdUsersQueue = new ConcurrentHashMap<>();
     private static User systemUser;
 
     private static Map<String, Set<User>> usersInfo = new HashMap<>();
@@ -98,9 +99,10 @@ public class UsersManager {
     public static List<User> fetchUsersWhenAvailable(List<RequestedUserAttributes> requestedUsers) {
 
         await()
-                .pollInterval(Duration.TEN_SECONDS)
-                .atMost(1, TimeUnit.HOURS)
-                .untilTrue(usersAvailable(requestedUsers));
+                .with()
+                .pollInterval(10, TimeUnit.SECONDS)
+                .timeout(1, TimeUnit.HOURS)
+                .until(() -> usersAvailable(requestedUsers), equalTo(true));
 
 //        List<User> fetchedUsers = requestedUsers.stream()
 //                .map(requestedUserAttributes ->  takeUser(requestedUserAttributes))
@@ -114,7 +116,7 @@ public class UsersManager {
         return fetchedUsers;
     }
 
-    private static synchronized AtomicBoolean usersAvailable(List<RequestedUserAttributes> requestedUsers) {
+    private static synchronized boolean usersAvailable(List<RequestedUserAttributes> requestedUsers) {
 
         long basicUsersRequestedCount = requestedUsers.stream()
                 .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.BASIC) || requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
@@ -174,9 +176,9 @@ public class UsersManager {
                 .allMatch(b -> b.equals(true));
 
         logger.info(String.format("basicUsersAvailable: %b, exceptionalUsersAvailable: %b", basicUsersAvailable, exceptionalUsersAvailable));
-        AtomicBoolean result =  new AtomicBoolean(basicUsersAvailable /*&& scalepointIdUsersAvailable*/ && exceptionalUsersAvailable);
+        boolean result =  basicUsersAvailable /*&& scalepointIdUsersAvailable*/ && exceptionalUsersAvailable;
 
-        if(result.get()){
+        if(result){
 
             requestedUsers.stream()
                     .forEach(requestedUserAttribute ->  requestedUserAttribute.setUser( takeUser(requestedUserAttribute)));
