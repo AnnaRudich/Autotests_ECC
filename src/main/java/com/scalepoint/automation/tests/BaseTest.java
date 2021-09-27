@@ -210,7 +210,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         }catch (Exception e){
             Browser.quit();
             Window.cleanUp();
-            WebDriverRunner.closeWebDriver();
             CurrentUser.cleanUp();
             Page.PagesCache.cleanUp();
             ThreadContext.clearMap();
@@ -260,7 +259,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         }
         Browser.quit();
         Window.cleanUp();
-        WebDriverRunner.closeWebDriver();
         CurrentUser.cleanUp();
         Page.PagesCache.cleanUp();
         ThreadContext.clearMap();
