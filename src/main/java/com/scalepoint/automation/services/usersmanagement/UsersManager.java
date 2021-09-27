@@ -175,7 +175,11 @@ public class UsersManager {
                 .map(entry -> exceptionalUsersQueues.get(entry.getKey()).size() >= entry.getValue())
                 .allMatch(b -> b.equals(true));
 
+
         logger.info(String.format("basicUsersAvailable: %b, exceptionalUsersAvailable: %b", basicUsersAvailable, exceptionalUsersAvailable));
+        requestedUsers.stream().forEach(requestedUserAttributes -> logger.info(String.format("Requested: %s - %s", requestedUserAttributes.getCompanyCode(), requestedUserAttributes.getType())));
+        printQueues();
+
         boolean result =  basicUsersAvailable /*&& scalepointIdUsersAvailable*/ && exceptionalUsersAvailable;
 
         if(result){
@@ -260,9 +264,12 @@ public class UsersManager {
 
     private static void printQueues() {
         logger.info(" * * * basic * * *");
-//        for (User user : basicUsersQueue) {
-//            logger.info(user.getCompanyCode());
-//        }
+        for (Map.Entry<CompanyCode, ConcurrentMap<User.UserType, User>> companyCode : basicUsersQueue.entrySet()) {
+            logger.info(companyCode.getKey());
+            for (Map.Entry<User.UserType, User> user : companyCode.getValue().entrySet()){
+                logger.info(user.getValue().getLogin());
+            }
+        }
         logger.info(" * * * specific * * *");
         for (CompanyCode companyCode : exceptionalUsersQueues.keySet()) {
             logger.info(companyCode.name());
