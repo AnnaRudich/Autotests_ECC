@@ -1,0 +1,85 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="SmokeTests" configfailurepolicy="continue" parallel="methods" thread-count="4">
+    <parameter name="included" value="${included}" />
+    <test verbose="1" name="SmokeTest" group-by-instances="false" enabled="true" preserve-order="true">
+        <classes>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+                <methods>
+                    <include name="charlie544_2629_completeClaimWithMail"/>
+                    <include name="charlie544_cancelSavedClaim"/>
+                    <include name="charlie544_reopenSavedClaim"/>
+                    <include name="ecc2631_addMatchedProductFromCatalog"/>
+                    <include name="charlie544_2632_completeSPSimpleClaimWizard"/>
+                    <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+                <methods>
+                    <include name="charlie515_completeClaimExternallyFromSettlementPage"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.sid.SidTests">
+                <methods>
+                    <include name="ecc3025_selectVoucherExistingCatAddDialog"/>
+                    <include name="ecc3025_cashCompensationWithAddedDepVoucher"/>
+                    <include name="ecc3025_cashCompensationWithoutDepNoVoucher"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+                <methods>
+
+                    <include name="ecc3144_1_setIncludeInClaimCheckbox"/>
+                    <include name="ecc3144_2_selectCategory"/>
+                    <include name="ecc3144_3_inputCustomDemand"/>
+                    <include name="ecc3144_4_inputNewPrice"/>
+                    <include name="ecc3144_5_manualDepreciation"/>
+                    <include name="charlie_532_depreciationFromSuggestionShouldBeNotUpdatedAfterChanging"/>
+                    <include name="charlie_532_depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSid"/>
+                    <include name="ecc3144_6_SaveAllEnteredResults"/>
+                    <include name="ecc3144_7_CancelEnteredResults"/>
+                    <include name="ecc3144_8_addNewValuation"/>
+                    <include name="ecc3144_9_disableIncludeInClaim"/>
+                    <include name="ecc3144_11_enableIncludeInClaimSecondClaim"/>
+                    <include name="ecc3144_10_disableIncludeInClaimAndReviewed"/>
+                    <include name="ecc3144_12_completeClaimIsEnabled"/>
+                    <include name="ecc3144_14_ReviewedBoxNotDisplayed"/>
+                    <include name="ecc3144_13_completeClaimIsEnabled"/>
+                    <include name="ecc3144_15_cancelledClaimNotAdded"/>
+                    <include name="ecc3144_16_cashCompensationEqualV1"/>
+                    <include name="ecc3144_17_openAddValuationDialogInSID"/>
+                    <include name="ecc3144_18_addNewValuationPriceInAddValuationDialog"/>
+                    <include name="ecc3144_19_addNewValuationPriceInAddValuationDialog"/>
+                    <include name="ecc3144_20_addNewValuationPriceInAddValuationDialog"/>
+                    <include name="ecc3144_22_enableAgeOption"/>
+                    <include name="ecc3144_23_addYearsAndMonthAndSave"/>
+                    <include name="ecc3144_24_disableAgeAndSave"/>
+                </methods>
+            </class>
+
+            <class name="com.scalepoint.automation.tests.OrderDetailsTests">
+                <methods>
+                    <include name="shopSmokeE2E"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test>
+    <test verbose="1" name="Api" enabled="true" preserve-order="true" thread-count="1">
+        <classes>
+            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>
+            <class name="com.scalepoint.automation.tests.api.unifiedpayments.v1.CaseSettlementDataApiTests"/>
+        </classes>
+    </test>
+
+    <suite-files>
+        <suite-file path="qunit_testng.xml" />
+    </suite-files>
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+
+</suite>

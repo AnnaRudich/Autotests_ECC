@@ -2,6 +2,7 @@ package com.scalepoint.automation.services.usersmanagement;
 
 public enum CompanyCode {
     SCALEPOINT,
+    FUTURE,
     FUTURE50,
     FUTURE51,
     FUTURE52,

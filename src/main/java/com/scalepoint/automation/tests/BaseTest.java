@@ -49,7 +49,6 @@ import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.OrderRandomizer;
 import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.testng.Retrier;
-import com.scalepoint.automation.utils.testng.RetryListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -66,8 +65,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.*;
+import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
+import org.testng.internal.annotations.IAnnotationTransformer;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -76,11 +79,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.*;
 import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
@@ -96,7 +100,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable {
+public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable, IAnnotationTransformer {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
     protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
@@ -157,7 +161,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
     protected FraudAlertMock fraudAlertMock;
 
     @BeforeTest
-    public void setRetrier(ITestContext iTestContext){
+    public void setRetry(ITestContext iTestContext){
 
         Arrays.stream(iTestContext.getAllTestMethods())
                 .forEach(iTestNGMethod -> iTestNGMethod.setRetryAnalyzerClass(Retrier.class));
@@ -206,10 +210,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         }catch (Exception e){
             Browser.quit();
             Window.cleanUp();
+            WebDriverRunner.closeWebDriver();
             CurrentUser.cleanUp();
             Page.PagesCache.cleanUp();
             ThreadContext.clearMap();
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 
@@ -254,6 +259,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
 
                 Browser.quit();
                 Window.cleanUp();
+                WebDriverRunner.closeWebDriver();
                 CurrentUser.cleanUp();
                 Page.PagesCache.cleanUp();
                 ThreadContext.clearMap();
@@ -653,7 +659,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
                 .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
     }
 
-        @Override
+    @Override
+    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod, Class<?> occurringClazz){
+
+        annotation.setRetryAnalyzer(Retrier.class);
+    }
+
+    @Override
     public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
         iConfigureCallBack.runConfigurationMethod(iTestResult);
         if (iTestResult.getThrowable() != null) {

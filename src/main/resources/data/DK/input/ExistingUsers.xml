@@ -35,7 +35,7 @@
     <user login="autotest-topdanmark5"              password="12341234" companyCode="TOPDANMARK"        companyId="1" companyName="Topdanmark"     ftId="3" type="EXCEPTIONAL"/>
     <user login="autotest-gjensidige"               password="12341234" companyCode="GJENSIDIGE"        companyId="309" companyName="Gjensidige"     ftId="79052" type="EXCEPTIONAL"/>
 
-    <user login="a4b@topdanmark.scalepoint.com"     password="1234QWER#" companyCode="TOPDANMARK"       companyId="1" companyName="Topdanmark"     ftId="3" type="SCALEPOINT_ID" />
+<!--    <user login="a4b@topdanmark.scalepoint.com"     password="1234QWER#" companyCode="TOPDANMARK"       companyId="1" companyName="Topdanmark"     ftId="3" type="SCALEPOINT_ID" />-->
     <user login="f0a@future50.scalepoint.com"     password="1234QWER#" companyCode="FUTURE50"       companyId="50" companyName="Future50"     ftId="50" type="SCALEPOINT_ID" />
     <user login="f1a@future51.scalepoint.com"     password="1234QWER#" companyCode="FUTURE51"       companyId="51" companyName="Future51"     ftId="51" type="SCALEPOINT_ID" />
     <user login="f2a@future52.scalepoint.com"     password="1234QWER#" companyCode="FUTURE52"       companyId="52" companyName="Future52"     ftId="52" type="SCALEPOINT_ID" />

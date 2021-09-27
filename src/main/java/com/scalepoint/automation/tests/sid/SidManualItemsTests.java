@@ -8,13 +8,14 @@ import com.scalepoint.automation.pageobjects.pages.admin.PseudoCategoryGroupPage
 import com.scalepoint.automation.services.externalapi.VoucherAgreementApi;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.sid.SidCalculator.PriceValuation;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -31,6 +32,7 @@ import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CUSTOMER_DE
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
@@ -40,11 +42,10 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: Include in claim option is ON
      * THEN:Amount of claim line is summed up to the total amount of claim
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Include in claim option is ON")
-    public void ecc3144_1_setIncludeInClaimCheckbox(User user, Claim claim, ClaimItem claimItem) {
+    public void setIncludeInClaimCheckboxTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setNewPrice(Constants.PRICE_2400)
@@ -52,6 +53,14 @@ public class SidManualItemsTests extends BaseTest {
                 .doAssert(SettlementDialog.Asserts::assertIncludeInClaimSelected)
                 .includeInClaim(false)
                 .doAssert(SettlementDialog.Asserts::assertIncludeInClaimNotSelected);
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify Include in claim option is ON")
+    public void setIncludeInClaimCheckboxScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        setIncludeInClaimCheckboxTest(user, claim, claimItem);
     }
 
     /**
@@ -86,12 +95,12 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: input Custom demand
      * THEN: A new valuation is added to the table
      */
-    @ScalepointIdTest
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to input Customer demand")
-    public void ecc3144_3_inputCustomDemand(User user, Claim claim, ClaimItem claimItem) {
+    public void inputCustomDemandTest(User user, Claim claim, ClaimItem claimItem) {
         Double customerDemand = Constants.PRICE_500;
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -101,17 +110,24 @@ public class SidManualItemsTests extends BaseTest {
                 .doAssert(valuation -> valuation.assertCashCompensationIs(customerDemand));
     }
 
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it is possible to input Customer demand")
+    public void inputCustomDemandScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        inputCustomDemandTest(user, claim, claimItem);
+    }
 
     /**
      * WHEN: input New Price
      * THEN: A new valuation is added to the table
      */
-    @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to input New price")
-    public void ecc3144_4_inputNewPrice(User user, Claim claim, ClaimItem claimItem) {
+    public void inputNewPriceTest(User user, Claim claim, ClaimItem claimItem) {
         Double newPrice = Constants.PRICE_2400;
         loginAndCreateClaim(user, claim)
                 .openSid()
@@ -119,6 +135,15 @@ public class SidManualItemsTests extends BaseTest {
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertCashCompensationIs(newPrice));
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it is possible to input New price")
+    public void inputNewPriceScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        inputNewPriceTest(user, claim, claimItem);
     }
 
     /**
@@ -162,7 +187,6 @@ public class SidManualItemsTests extends BaseTest {
 
     }
 
-    @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
@@ -170,7 +194,7 @@ public class SidManualItemsTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
-    public void charlie_532_depreciationFromSuggestionShouldBeNotUpdatedAfterChanging(User user, Claim claim, ClaimItem claimItem) {
+    public void depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
@@ -194,14 +218,25 @@ public class SidManualItemsTests extends BaseTest {
                 .doAssert(sid -> sid.assertDepreciationPercentageIs("20"));
     }
 
-    @ScalepointIdTest
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3953 Verify depreciation is not updated if type of depreciation is changed")
+    @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+    @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
+    @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
+    public void depreciationFromSuggestionShouldBeNotUpdatedAfterChangingScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest(user, claim, claimItem);
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3953 .doAssert(sid -> sid.assertDepreciationPercentageIs(\"10\"))")
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
-    public void charlie_532_depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSid(User user, Claim claim, ClaimItem claimItem) {
+    public void depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setDescription(claimItem.getTextFieldSP())
@@ -226,18 +261,29 @@ public class SidManualItemsTests extends BaseTest {
                 .editFirstClaimLine()
                 .doAssert(sid -> sid.assertDepreciationPercentageIs("15"));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3953 .doAssert(sid -> sid.assertDepreciationPercentageIs(\"10\"))")
+    @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
+    @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
+    public void depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest(user, claim, claimItem);
+    }
     /**
      * WHEN: fill in all the fields
      * WHEN: Click Save button
      * WHEN: Open again SID
      * THEN: all the results are present
      */
-    @ScalepointIdTest
+
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to Save all results entered")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void ecc3144_6_SaveAllEnteredResults(User user, Claim claim, ClaimItem claimItem) {
+    public void saveAllEnteredResultsTest(User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
 
         loginAndCreateClaim(user, claim)
@@ -255,6 +301,16 @@ public class SidManualItemsTests extends BaseTest {
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it is possible to Save all results entered")
+    @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+    public void saveAllEnteredResultsScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+
+        saveAllEnteredResultsTest(user, claim, claimItem);
+    }
     /**
      * WHEN: fill in all the fields
      * WHEN: Click Save button
@@ -265,12 +321,11 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: Open again SID
      * THEN: all the new results are not present
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void ecc3144_7_CancelEnteredResults(User user, Claim claim, ClaimItem claimItem) {
+    public void cancelEnteredResultsTest(User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory pseudoCategory = claimItem.getCategoryBabyItems();
 
         loginAndCreateClaim(user, claim)
@@ -303,6 +358,15 @@ public class SidManualItemsTests extends BaseTest {
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuationRow -> valuationRow.assertTotalAmountIs(Constants.PRICE_2400));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
+    @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+    public void cancelEnteredResultsScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        cancelEnteredResultsTest(user, claim, claimItem);
+    }
     /**
      * WHEN: Click Add new valuation
      * WHEN: Select new valuation
@@ -310,13 +374,12 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 fills settlement dialog with valid values
      * THEN: New valuation appears in SID
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to add new valuation")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void ecc3144_8_addNewValuation(User user, Claim claim, ClaimItem claimItem) {
+    public void addNewValuationTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -327,6 +390,16 @@ public class SidManualItemsTests extends BaseTest {
                 .parseValuationRow(NEW_PRICE)
                 .doAssert(valuation -> valuation.assertTotalAmountIs(Constants.PRICE_2400));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it is possible to add new valuation")
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
+    public void addNewValuationScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationTest(user, claim, claimItem);
+    }
     /**
      * WHEN: Input price
      * WHEN: U1 fills settlement dialog with valid values
@@ -335,13 +408,12 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: description D1 of claim line CL1 is colored in blue
      * THEN: Claim sum value CSV = 0.00
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Claim line description is displayed in blue if the options \"Include in claim\" disabled" +
                     "- Claim line value is not added to Total claims sum")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
-    public void ecc3144_9_disableIncludeInClaim(User user, Claim claim, ClaimItem claimItem) {
+    public void disableIncludeInClaimTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -354,6 +426,16 @@ public class SidManualItemsTests extends BaseTest {
                 .getSettlementSummary()
                 .doAssert(menu -> menu.assertClaimSumValueIs(0.00));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify Claim line description is displayed in blue if the options \"Include in claim\" disabled" +
+                    "- Claim line value is not added to Total claims sum")
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
+    public void disableIncludeInClaimScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        disableIncludeInClaimTest(user, claim, claimItem);
+    }
     /**
      * WHEN: U1 adds claim line 1 with and review and  "Include in claim" option disabled
      * WHEN: U1 adds claim line 2 CL2 with review and include to claim options are enabled
@@ -362,13 +444,12 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: CSV = V1
      * THEN: Subtotal claim value SCV = V1
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify that second claim line value is not added to Total claims sum if the options " +
                     "'Include in claim' and 'Reviewed' enabled")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
-    public void ecc3144_11_enableIncludeInClaimSecondClaim(User user, Claim claim, ClaimItem claimItem) {
+    public void enableIncludeInClaimSecondClaimTest(User user, Claim claim, ClaimItem claimItem) {
         String secondClaimDescription = claimItem.getTextFieldSP().concat("second");
 
         SettlementPage settlementPage = loginAndCreateClaim(user, claim);
@@ -394,6 +475,16 @@ public class SidManualItemsTests extends BaseTest {
                     menu.assertSubtotalSumValueIs(claimValue);
                 });
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify that second claim line value is not added to Total claims sum if the options " +
+                    "'Include in claim' and 'Reviewed' enabled")
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
+    public void enableIncludeInClaimSecondClaimScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        enableIncludeInClaimSecondClaimTest(user, claim, claimItem);
+    }
     /**
      * WHEN: Input price
      * WHEN: U1 fills settlement dialog with valid values
@@ -401,12 +492,12 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: "Include in claim" option is disabled
      * THEN: description D1 of claim line CL1 is colored in pink
      */
-    @ScalepointIdTest
+
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Claim line description is displayed in pink if the options 'Include in claim'  " +
                     "and 'Reviewed' disabled")
-    public void ecc3144_10_disableIncludeInClaimAndReviewed(User user, Claim claim, ClaimItem claimItem) {
+    public void disableIncludeInClaimAndReviewedTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -416,18 +507,27 @@ public class SidManualItemsTests extends BaseTest {
                 .findClaimLine(claimItem.getTextFieldSP())
                 .doAssert(claimLine -> claimLine.assertLineHasComputedColor(claimItem.getPinkColor()));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify Claim line description is displayed in pink if the options 'Include in claim'  " +
+                    "and 'Reviewed' disabled")
+    public void disableIncludeInClaimAndReviewedScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        disableIncludeInClaimAndReviewedTest(user, claim, claimItem);
+    }
     /**
      * WHEN: Allow users to mark settlement items as reviewed" is enabled in FT
      * WHEN: Review of all claim lines are required to complete claim" is disabled in FT
      * WHEN: U1 adds claim line CL1 where "Reviewed" option is disabled
      * THEN: "Complete claim" button is enabled
      */
-    @ScalepointIdTest
+
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify 'Complete claim' is enable if 'Reviewed' is disabled in SID")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
-    public void ecc3144_12_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
+    public void completeClaimIsEnabledTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -436,22 +536,41 @@ public class SidManualItemsTests extends BaseTest {
                 .getSettlementSummary()
                 .doAssert(SettlementSummary.Asserts::assertCompleteClaimEnabled);
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify 'Complete claim' is enable if 'Reviewed' is disabled in SID")
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
+    public void completeClaimIsEnabledScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        completeClaimIsEnabledTest(user, claim, claimItem);
+    }
     /**
      * WHEN: Allow users to mark settlement items as reviewed" is disabled in FT
      * WHEN: Review of all claim lines are required to complete claim" is disabled in FT
      * THEN "Reviewed" option is not displayed in SID
      */
-    @ScalepointIdTest
     @Bug(bug = "CHARLIE-391")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify 'Reviewed' box is not displayed")
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED, enabled = false)
-    public void ecc3144_14_ReviewedBoxNotDisplayed(User user, Claim claim) {
+    public void reviewedBoxNotDisplayedTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .doAssert(SettlementDialog.Asserts::assertReviewedNotPresent);
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Bug(bug = "CHARLIE-391")
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify 'Reviewed' box is not displayed")
+    @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED, enabled = false)
+    public void reviewedBoxNotDisplayedScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim) {
+        reviewedBoxNotDisplayedTest(user, claim);
     }
     /**
      * WHEN: Allow users to mark settlement items as reviewed" is enabled in FT
@@ -459,13 +578,12 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 adds claim line CL1 where "Reviewed" option is disabled
      * THEN: "Complete claim" button is enabled
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify 'Complete claim' is enabled if 'Reviewed' is disabled in SID")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM)
-    public void ecc3144_13_completeClaimIsEnabled(User user, Claim claim, ClaimItem claimItem) {
+    public void completeClaimIsEnabled2Test(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -474,36 +592,61 @@ public class SidManualItemsTests extends BaseTest {
                 .getSettlementSummary()
                 .doAssert(SettlementSummary.Asserts::assertCompleteClaimEnabled);
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify 'Complete claim' is enabled if 'Reviewed' is disabled in SID")
+    @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
+    @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM)
+    public void completeClaimIsEnabled2ScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        completeClaimIsEnabled2Test(user, claim, claimItem);
+    }
     /**
      * WHEN: U1 opens SID, fills all field with valid values(description D1 etc)
      * WHEN: select cancel
      * THEN: Cancelled claim line is not added to the claim
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify cancelled claim line is not added to the claim")
-    public void ecc3144_15_cancelledClaimNotAdded(User user, Claim claim, ClaimItem claimItem) {
+    public void cancelledClaimNotAddedTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .cancel()
                 .doAssert(settlementPage -> settlementPage.assertItemNotPresent(claimItem.getTextFieldSP()));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify cancelled claim line is not added to the claim")
+    public void cancelledClaimNotAddedScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        cancelledClaimNotAddedTest(user, claim, claimItem);
+    }
     /**
      * WHEN: U1 opens SID
      * WHEN: U1 adds New price amount V1
      * THEN: Cash compensation CC is assertEqualsDouble to V1
      */
-    @ScalepointIdTest
+
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Cash compensation CC is equal to V1")
-    public void ecc3144_16_cashCompensationEqualV1(User user, Claim claim, ClaimItem claimItem) {
+    public void cashCompensationEqualV1Test(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getCustomerDemand()));
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify Cash compensation CC is equal to V1")
+    public void cashCompensationEqualV1ScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        cashCompensationEqualV1Test(user, claim, claimItem);
     }
     /**
      * WHEN: U1 opens SID
@@ -512,15 +655,22 @@ public class SidManualItemsTests extends BaseTest {
      * WHEN: U1 selects Add valuation option
      * THEN: Add valuation dialogs is displayed
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to open Add Valuation dialogs in SID")
-    public void ecc3144_17_openAddValuationDialogInSID(User user, Claim claim, ClaimItem claimItem) {
+    public void openAddValuationDialogInSIDTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .openAddValuationForm();
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it's possible to open Add Valuation dialogs in SID")
+    public void openAddValuationDialogInSIDScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        openAddValuationDialogInSIDTest(user, claim, claimItem);
     }
     /**
      * WHEN: U1 opens SID
@@ -533,12 +683,11 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: V2 is displayed in SID
      * THEN: CC is equal to V2
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add new valuation price in add " +
                     "valuation dialogs (user selects 3d type)")
-    public void ecc3144_18_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
+    public void addNewValuationPriceInAddValuationDialogTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -546,6 +695,15 @@ public class SidManualItemsTests extends BaseTest {
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeUsedPrice(), claimItem.getLowerPrice())
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it's possible to add new valuation price in add " +
+                    "valuation dialogs (user selects 3d type)")
+    public void addNewValuationPriceInAddValuationDialogScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationPriceInAddValuationDialogTest(user, claim, claimItem);
     }
     /**
      * WHEN: U1 opens SID
@@ -558,11 +716,10 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: V2 is displayed in SID
      * THEN: CC is equal to V2
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialogs (user selects 4th type)")
-    public void ecc3144_19_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
+    public void addNewValuationPriceInAddValuationDialog2Test(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -570,6 +727,14 @@ public class SidManualItemsTests extends BaseTest {
                 .openAddValuationForm()
                 .addValuation(claimItem.getValuationTypeDiscretionary(), claimItem.getLowerPrice())
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialogs (user selects 4th type)")
+    public void addNewValuationPriceInAddValuationDialog2ScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationPriceInAddValuationDialogTest(user, claim, claimItem);
     }
     /**
      * WHEN: U1 opens SID
@@ -582,12 +747,11 @@ public class SidManualItemsTests extends BaseTest {
      * THEN: V2 is displayed in SID
      * THEN: CC is equal to V2
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add new valuation price in " +
                     "add valuation dialogs (user selects 5th type)")
-    public void ecc3144_20_addNewValuationPriceInAddValuationDialog(User user, Claim claim, ClaimItem claimItem) {
+    public void addNewValuationPriceInAddValuationDialog3Test(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -596,17 +760,25 @@ public class SidManualItemsTests extends BaseTest {
                 .addValuation(claimItem.getValuationTypeRepair(), claimItem.getLowerPrice())
                 .doAssert(sid -> sid.assertCashValueIs(claimItem.getLowerPrice()));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it's possible to add new valuation price in " +
+                    "add valuation dialogs (user selects 5th type)")
+    public void addNewValuationPriceInAddValuationDialog3ScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationPriceInAddValuationDialog3Test(user, claim, claimItem);
+    }
     /**
      * WHEN: U1 opens SID
      * AND: U1 enables Age option (switch the radio button on)
      * THEN: Years field is enabled
      * THEN: Months drop dwn menu is enabled
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to enable age option")
-    public void ecc3144_22_enableAgeOption(User user, Claim claim, ClaimItem claimItem) {
+    public void enableAgeOptionTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -616,6 +788,14 @@ public class SidManualItemsTests extends BaseTest {
                     sid.assertMonthMenuEnabled();
                 });
 
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it's possible to enable age option")
+    public void enableAgeOptionScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        enableAgeOptionTest(user, claim, claimItem);
     }
     /**
      * WHEN: U1 opens SID
@@ -628,11 +808,10 @@ public class SidManualItemsTests extends BaseTest {
      * AND: U1 opens SID again
      * THEN: Y1 and M1 are displayed
      */
-    @ScalepointIdTest
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add years & month and save set")
-    public void ecc3144_23_addYearsAndMonthAndSave(User user, Claim claim, ClaimItem claimItem) {
+    public void addYearsAndMonthAndSaveTest(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
@@ -646,6 +825,14 @@ public class SidManualItemsTests extends BaseTest {
                     sid.assertYearsValueIs("10");
                     sid.assertMonthValueIs("6");
                 });
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS, TestGroups.SCALEPOINT_ID},
+            dataProvider = "testDataProvider",
+            description = "ECC-3144 Verify it's possible to add years & month and save set")
+    public void addYearsAndMonthAndSaveScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
+        addYearsAndMonthAndSaveTest(user, claim, claimItem);
     }
     /**
      * WHEN: U1 opens SID

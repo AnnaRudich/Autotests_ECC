@@ -21,14 +21,16 @@ public class UsersManager {
 
     private static Logger logger = LogManager.getLogger(UsersManager.class);
 
-    private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
+    private static ConcurrentMap<CompanyCode, ConcurrentMap<User.UserType, User>> basicUsersQueue = new ConcurrentHashMap<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
-    private static ConcurrentMap<CompanyCode, BlockingQueue<User>> scalepointIdUsersQueue = new ConcurrentHashMap<>();
+//    private static ConcurrentMap<CompanyCode, BlockingQueue<User>> scalepointIdUsersQueue = new ConcurrentHashMap<>();
     private static User systemUser;
 
     private static Map<String, Set<User>> usersInfo = new HashMap<>();
 
     public static void initManager(ExistingUsers existingUsers) {
+
+//        List newList = new ArrayList<>();
 
         logger.info("Initializing UsersManager");
         existingUsers.getUsers().forEach(user -> {
@@ -39,24 +41,41 @@ public class UsersManager {
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
                 return;
             }
-            if (user.getType().equals(User.UserType.BASIC)) {
-
-                basicUsersQueue.add(user);
-                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
-            }
-            if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+            if (user.getType().equals(User.UserType.BASIC) || user.getType().equals(User.UserType.SCALEPOINT_ID)) {
 
                 CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
-                if(!scalepointIdUsersQueue.containsKey(key)) {
+                if(!basicUsersQueue.containsKey(key)) {
 
-                    scalepointIdUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()),
-                            new ArrayBlockingQueue<>(6, true, Collections.singleton(user)));
+                    ConcurrentMap usersMap = new ConcurrentHashMap<>();
+                    usersMap.put(user.getType(), user);
+
+                    basicUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()),
+                            usersMap);
+
                 }else{
 
-                    exceptionalUsersQueues.get(key).add(user);
+                    ConcurrentMap usersMap = basicUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode()));
+                    usersMap.put(user.getType(), user);
+                    basicUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()), usersMap);
                 }
-                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
+
+//                usersInfo.put(user.getCompanyCode(), new HashSet<>(exceptionalUsersQueues.get(key)));
+//                basicUsersQueue.add(user);
+//                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
             }
+//            if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+//
+//                CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
+//                if(!scalepointIdUsersQueue.containsKey(key)) {
+//
+//                    scalepointIdUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()),
+//                            new ArrayBlockingQueue<>(6, true, Collections.singleton(user)));
+//                }else{
+//
+//                    exceptionalUsersQueues.get(key).add(user);
+//                }
+//                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
+//            }
             if(user.getType().equals(User.UserType.EXCEPTIONAL)) {
 
                 CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
@@ -69,7 +88,7 @@ public class UsersManager {
                     exceptionalUsersQueues.get(key).add(user);
                 }
 
-                usersInfo.put(user.getCompanyCode(), new HashSet<>(exceptionalUsersQueues.get(key)));
+//                usersInfo.put(user.getCompanyCode(), new HashSet<>(exceptionalUsersQueues.get(key)));
             }
         });
 
@@ -83,8 +102,13 @@ public class UsersManager {
                 .atMost(1, TimeUnit.HOURS)
                 .untilTrue(usersAvailable(requestedUsers));
 
-        List<User> fetchedUsers = requestedUsers.stream()
-                .map(requestedUserAttributes ->  takeUser(requestedUserAttributes))
+//        List<User> fetchedUsers = requestedUsers.stream()
+//                .map(requestedUserAttributes ->  takeUser(requestedUserAttributes))
+////                .collect(Collectors.toList());
+
+        List<User> fetchedUsers = requestedUsers
+                .stream()
+                .map(requestedUserAttribute -> requestedUserAttribute.getUser())
                 .collect(Collectors.toList());
 
         return fetchedUsers;
@@ -93,28 +117,31 @@ public class UsersManager {
     private static synchronized AtomicBoolean usersAvailable(List<RequestedUserAttributes> requestedUsers) {
 
         long basicUsersRequestedCount = requestedUsers.stream()
-                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.BASIC))
+                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.BASIC) || requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
                 .count();
 
-        Map<CompanyCode, Long> scalepointIdUsersRequestedCount = new HashMap<>();
 
-        List<RequestedUserAttributes> scalepointIdUsersUsersRequested = requestedUsers.stream()
-                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
-                .collect(Collectors.toList());
 
-        scalepointIdUsersUsersRequested.forEach(requestedUserAttributes -> {
 
-            CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
+//        Map<CompanyCode, Long> scalepointIdUsersRequestedCount = new HashMap<>();
+//
+//        List<RequestedUserAttributes> scalepointIdUsersUsersRequested = requestedUsers.stream()
+//                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
+//                .collect(Collectors.toList());
 
-            if(scalepointIdUsersRequestedCount.containsKey(companyCode)){
-
-                scalepointIdUsersRequestedCount.put(companyCode, scalepointIdUsersRequestedCount.get(companyCode) + 1L);
-            }
-            else {
-
-                scalepointIdUsersRequestedCount.put(companyCode, 1L);
-            }
-        });
+//        scalepointIdUsersUsersRequested.forEach(requestedUserAttributes -> {
+//
+//            CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
+//
+//            if(scalepointIdUsersRequestedCount.containsKey(companyCode)){
+//
+//                scalepointIdUsersRequestedCount.put(companyCode, scalepointIdUsersRequestedCount.get(companyCode) + 1L);
+//            }
+//            else {
+//
+//                scalepointIdUsersRequestedCount.put(companyCode, 1L);
+//            }
+//        });
 
         Map<CompanyCode, Long> exceptionalUsersRequestedCount = new HashMap<>();
 
@@ -136,18 +163,25 @@ public class UsersManager {
             }
         });
 
-        boolean basicUsersAvailable = basicUsersQueue.size() >= basicUsersRequestedCount;
+        boolean basicUsersAvailable = basicUsersQueue.entrySet().stream().filter(entrySet -> entrySet.getValue().size() == 2).count() >= basicUsersRequestedCount;
 
-        boolean scalepointIdUsersAvailable = scalepointIdUsersRequestedCount.entrySet().stream()
-                .map(entry -> scalepointIdUsersQueue.get(entry.getKey()).size() >= entry.getValue())
-                .allMatch(b -> b.equals(true));
+//        boolean scalepointIdUsersAvailable = scalepointIdUsersRequestedCount.entrySet().stream()
+//                .map(entry -> scalepointIdUsersQueue.get(entry.getKey()).size() >= entry.getValue())
+//                .allMatch(b -> b.equals(true));
 
         boolean exceptionalUsersAvailable = exceptionalUsersRequestedCount.entrySet().stream()
                 .map(entry -> exceptionalUsersQueues.get(entry.getKey()).size() >= entry.getValue())
                 .allMatch(b -> b.equals(true));
 
-        logger.info(String.format("basicUsersAvailable: %b, scalepointIdUsersAvailable: %b, exceptionalUsersAvailable: %b", basicUsersAvailable, scalepointIdUsersAvailable, exceptionalUsersAvailable));
-        AtomicBoolean result =  new AtomicBoolean(basicUsersAvailable && scalepointIdUsersAvailable && exceptionalUsersAvailable);
+        logger.info(String.format("basicUsersAvailable: %b, exceptionalUsersAvailable: %b", basicUsersAvailable, exceptionalUsersAvailable));
+        AtomicBoolean result =  new AtomicBoolean(basicUsersAvailable /*&& scalepointIdUsersAvailable*/ && exceptionalUsersAvailable);
+
+        if(result.get()){
+
+            requestedUsers.stream()
+                    .forEach(requestedUserAttribute ->  requestedUserAttribute.setUser( takeUser(requestedUserAttribute)));
+
+        }
 
         return result;
     }
@@ -164,16 +198,34 @@ public class UsersManager {
                 taken = exceptionalUsersQueues.get(companyCode).take();
                 logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
             }
-            if(requestedUserAttributes.getType().equals(User.UserType.BASIC)){
+            if(requestedUserAttributes.getType().equals(User.UserType.BASIC) || requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID)){
 
-                taken = basicUsersQueue.take();
-                logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
-            }
-            if(requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID)) {
+                taken = basicUsersQueue.entrySet()
+                        .stream()
+                        .filter(entrySet -> entrySet.getValue().size() == 2)
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new)
+                        .getValue()
+                        .get(requestedUserAttributes.getType());
 
-                taken = scalepointIdUsersQueue.get(companyCode).take();
-                logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
+                ConcurrentMap<User.UserType, User> test = basicUsersQueue
+                        .get(CompanyCode.valueOf(taken.getCompanyCode()));
+
+                test
+                        .remove(taken.getType());
+
+//                taken = basicUsersQueue.get(companyCode).get(requestedUserAttributes.getType());
+
+//                List usersList = basicUsersQueue.get(companyCode);
+//                logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
+//                taken = basicUsersQueue.take();
+//                logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
             }
+//            if(requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID)) {
+//
+//                taken = scalepointIdUsersQueue.get(companyCode).take();
+//                logger.info("Requested: {} Taken: {}", requestedUserAttributes.getType().name(), taken.getLogin());
+//            }
 
             return taken;
 
@@ -187,26 +239,28 @@ public class UsersManager {
     public static void releaseUser(User user) {
 
         logger.info("Returned: {}", user.getLogin());
-        if (user.getType().equals(User.UserType.BASIC)) {
+        if (user.getType().equals(User.UserType.BASIC) || user.getType().equals(User.UserType.SCALEPOINT_ID)) {
 
-            basicUsersQueue.add(user);
+            ConcurrentMap usersMap = basicUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode()));
+            usersMap.put(user.getType(), user);
+            basicUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()), usersMap);
         }
         if(user.getType().equals(User.UserType.EXCEPTIONAL)){
 
             exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
         }
-        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
-
-            scalepointIdUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
-        }
+//        if(user.getType().equals(User.UserType.SCALEPOINT_ID)){
+//
+//            scalepointIdUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
+//        }
         logger.info("User: {} released", user.getLogin());
     }
 
     private static void printQueues() {
         logger.info(" * * * basic * * *");
-        for (User user : basicUsersQueue) {
-            logger.info(user.getCompanyCode());
-        }
+//        for (User user : basicUsersQueue) {
+//            logger.info(user.getCompanyCode());
+//        }
         logger.info(" * * * specific * * *");
         for (CompanyCode companyCode : exceptionalUsersQueues.keySet()) {
             logger.info(companyCode.name());
@@ -225,11 +279,15 @@ public class UsersManager {
         @Getter
         @Setter
         private User.UserType type;
+        @Getter
+        @Setter
+        private User user;
 
         public RequestedUserAttributes(CompanyCode companyCode, User.UserType type) {
 
             this.companyCode = companyCode;
             this.type =  type;
+            this.user = null;
         }
 
         static public RequestedUserAttributes getRequestedUserAttributes(Annotation[] listOfRequestedUserAttributes) {

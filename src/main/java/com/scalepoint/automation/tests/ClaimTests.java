@@ -11,8 +11,8 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.ScalepointIdTest;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -28,6 +28,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
@@ -38,27 +39,34 @@ public class ClaimTests extends BaseTest {
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
 
-    @ScalepointIdTest
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void charlie544_reopenSavedClaim(User user, Claim claim) {
+    public void reopenSavedClaimTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
+    public void reopenSavedClaimScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE50, type = User.UserType.SCALEPOINT_ID) User user, Claim claim) {
+        reopenSavedClaimTest(user, claim);
+    }
     /**
      * GIVEN: SP User, saved claim C1
      * WHEN: User cancels C1
      * THEN: "Cancelled" is the status of C1
      */
-    @ScalepointIdTest
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
-    public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
+    public void cancelSavedClaimTest(User user, Claim claim) throws Exception {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
@@ -67,12 +75,19 @@ public class ClaimTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
 
-    @ScalepointIdTest
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
+    public void cancelSavedClaimScalepointIdTest(User user, Claim claim) throws Exception {
+        cancelSavedClaimTest(user, claim);
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void charlie544_2629_completeClaimWithMail(User user, Claim claim) {
+    public void completeClaimWithMailTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -81,6 +96,15 @@ public class ClaimTests extends BaseTest {
                 .openRecentClaim()
                 .toMailsPage()
                 .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
+            description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
+                    "Completed claim is added to the latest claims list with Completed status")
+    public void completeClaimWithMailScalepointIdTest(User user, Claim claim) {
+        completeClaimWithMailTest(user, claim);
     }
 
     @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)

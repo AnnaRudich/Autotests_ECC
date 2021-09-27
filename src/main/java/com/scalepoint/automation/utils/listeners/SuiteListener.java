@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SuiteListener implements ISuiteListener, IDataProviderInterceptor, IDataProviderListener {
+public class SuiteListener implements ISuiteListener {
 
     protected static Logger log = LogManager.getLogger(SuiteListener.class);
 
@@ -36,30 +36,5 @@ public class SuiteListener implements ISuiteListener, IDataProviderInterceptor, 
     @Override
     public void onFinish(ISuite iSuite) {
         log.info("Finished suite {}", iSuite.getName());
-    }
-
-    @Override
-    public Iterator<Object[]> intercept(Iterator<Object[]> iterator, IDataProviderMethod iDataProviderMethod, ITestNGMethod iTestNGMethod, ITestContext iTestContext) {
-
-        List<Object[]> testData = new LinkedList<>();
-
-        Method method = iTestNGMethod.getConstructorOrMethod().getMethod();
-
-        iterator.forEachRemaining(testData::add);
-
-        if(Arrays.stream(method.getAnnotations())
-                .anyMatch(annotation -> annotation.annotationType().equals(ScalepointIdTest.class))){
-
-            List<UsersManager.RequestedUserAttributes> scalepointIdUsersAttributes = Arrays.stream(testData.get(0))
-                    .filter(object -> object.getClass().equals(User.class))
-                    .map(user -> new UsersManager.RequestedUserAttributes(CompanyCode.valueOf(((User) user).getCompanyCode()), User.UserType.SCALEPOINT_ID))
-                    .collect(Collectors.toList());
-
-            testData.add(TestDataActions.getTestDataParameters(method, UsersManager.fetchUsersWhenAvailable(scalepointIdUsersAttributes)).toArray());
-        }
-
-        iterator.forEachRemaining(testData::add);
-
-        return testData.iterator();
     }
 }

@@ -8,6 +8,8 @@ public class TestGroups {
     public static final String ECC = "ecc";
     public static final String HEADERS = "headers";
     public static final String SID_QUNIT = "sidQunit";
+    public static final String SCALEPOINT_ID = "scalepointID";
+    public static final String SMOKE = "smoke";
 
     public static final String BACKEND = "backend";
 
