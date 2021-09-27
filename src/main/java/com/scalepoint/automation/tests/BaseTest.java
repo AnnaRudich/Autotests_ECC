@@ -214,7 +214,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
             CurrentUser.cleanUp();
             Page.PagesCache.cleanUp();
             ThreadContext.clearMap();
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
