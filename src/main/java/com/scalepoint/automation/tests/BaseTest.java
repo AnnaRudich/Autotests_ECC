@@ -255,18 +255,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
             } catch (Exception e) {
                 /* if not caught it breaks the call of AfterMethod*/
                 log.error(e.getMessage(), e);
-            }finally {
 
-                Browser.quit();
-                Window.cleanUp();
-                WebDriverRunner.closeWebDriver();
-                CurrentUser.cleanUp();
-                Page.PagesCache.cleanUp();
-                ThreadContext.clearMap();
-                log.info("Clean up completed after: {} ", method.getName());
             }
         }
-
+        Browser.quit();
+        Window.cleanUp();
+        WebDriverRunner.closeWebDriver();
+        CurrentUser.cleanUp();
+        Page.PagesCache.cleanUp();
+        ThreadContext.clearMap();
+        log.info("Clean up completed after: {} ", method.getName());
     }
 
     @DataProvider(name = TEST_DATA_PROVIDER)
