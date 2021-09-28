@@ -51,7 +51,11 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(new User(user.getLogin(), user.getPassword()), MyPage.class)
+                .login(User.builder()
+                        .login(user.getLogin())
+                        .password(user.getPassword())
+                        .type(User.UserType.BASIC)
+                        .build(), MyPage.class)
                 .doAssert(MyPage.Asserts::assertAdminLinkDisplayed);
     }
     /**
@@ -119,7 +123,11 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(new User(user.getLogin(), user.getPassword()), SuppliersPage.class)
+                .login(User.builder()
+                        .login(user.getLogin())
+                        .password(user.getPassword())
+                        .type(User.UserType.BASIC)
+                        .build(), SuppliersPage.class)
                 .doAssert(SuppliersPage.Asserts::assertsIsToMatchingEngineLinkNotDisplayed);
     }
     /**
@@ -141,7 +149,11 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(new User(user.getLogin(), user.getPassword()), SuppliersPage.class)
+                .login(User.builder()
+                        .login(user.getLogin())
+                        .password(user.getPassword())
+                        .type(User.UserType.BASIC)
+                        .build(), SuppliersPage.class)
                 .signOut();
 
         login(getSystemUser(), UsersPage.class)
@@ -152,7 +164,11 @@ public class UserRolesTest extends BaseTest {
                 .toMatchingEngine()
                 .getClaimMenu()
                 .logout()
-                .login(new User(user.getLogin(), user.getPassword()), MyPage.class);
+                .login(User.builder()
+                        .login(user.getLogin())
+                        .password(user.getPassword())
+                        .type(User.UserType.BASIC)
+                        .build(), MyPage.class);
     }
     /**
      * GIVEN: SP user U1 with Admin permissions

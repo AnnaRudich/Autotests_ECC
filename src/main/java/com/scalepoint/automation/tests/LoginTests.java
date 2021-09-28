@@ -38,10 +38,17 @@ public class LoginTests extends BaseTest {
 
     @DataProvider(name = INVALID_DATA_CREDENTIALS_DATA_PROVIDER)
     public Object[][] invalidCredentialsDataProvider() {
+
         return new Object[][]{
 
-                {new User("", "")},
-                {new User("wrong", "wrong")}
+                {User.builder()
+                        .login("")
+                        .password("")
+                        .type(User.UserType.BASIC).build()},
+                {User.builder()
+                        .login("wrong")
+                        .password("wrong")
+                        .type(User.UserType.BASIC).build()}
         };
     }
 
@@ -50,7 +57,7 @@ public class LoginTests extends BaseTest {
 
         Object[][] objects = new Object[][]{
 
-                {UsersManager.fetchUsersWhenAvailable(Collections.singletonList(new UsersManager.RequestedUserAttributes(CompanyCode.TOPDANMARK, User.UserType.SCALEPOINT_ID))).iterator().next()},
+                {UsersManager.fetchUsersWhenAvailable(Collections.singletonList(new UsersManager.RequestedUserAttributes(CompanyCode.FUTURE, User.UserType.SCALEPOINT_ID))).iterator().next()},
                 TestDataActions.getTestDataParameters(method).toArray()
         };
 

@@ -101,7 +101,11 @@ public class UserPasswordTests extends BaseTest {
         at(UserAddEditPage.class).createUser(systemUser, userTypes)
                 .doAssert(usersPage -> usersPage.assertUserExists(systemUser))
                 .logout()
-                .login(new User(systemUser.getLogin(), systemUser.getPassword()), MyPage.class);
+                .login(User.builder()
+                        .login(systemUser.getLogin())
+                        .password(systemUser.getPassword())
+                        .type(User.UserType.BASIC)
+                        .build(), MyPage.class);
     }
 
     @DataProvider(name = GENERATE_PASSWORD_FOR_NEW_USER_DATA_PROVIDER)
