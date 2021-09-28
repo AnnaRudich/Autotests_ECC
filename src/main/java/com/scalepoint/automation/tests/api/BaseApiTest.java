@@ -72,9 +72,6 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
         ThreadContext.put("sessionid", method.getName());
         log.info("Starting {}, thread {}", method.getName(), Thread.currentThread().getId());
         ServiceData.init(databaseApi);
-        List<User> users = getLisOfObjectByClass(Arrays.asList(objects), User.class);
-
-        users.stream().forEach(user -> CurrentUser.setUser(user));
     }
 
     @AfterMethod

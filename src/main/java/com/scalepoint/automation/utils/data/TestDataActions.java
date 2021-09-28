@@ -7,6 +7,7 @@ import com.scalepoint.automation.utils.annotations.SupplierCompany;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.ExistingSuppliers;
 import com.scalepoint.automation.utils.data.entity.input.SimpleSupplier;
+import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.log4j.MDC;
 import org.apache.logging.log4j.LogManager;
 
@@ -39,6 +40,7 @@ public class TestDataActions {
                 if (parameterType.equals(User.class)) {
 
                     User user = requestedUserIterator.next();
+                    CurrentUser.setUser(user);
                     instances.add(user);
                 } else if (parameterType.equals(SimpleSupplier.class)) {
 
