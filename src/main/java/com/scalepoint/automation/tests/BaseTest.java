@@ -100,7 +100,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable, IAnnotationTransformer {
+public class BaseTest extends AbstractTestNGSpringContextTests implements /*IConfigurable,*/ IAnnotationTransformer {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
     protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
@@ -657,18 +657,18 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         annotation.setRetryAnalyzer(Retrier.class);
     }
 
-    @Override
-    public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
-        iConfigureCallBack.runConfigurationMethod(iTestResult);
-        if (iTestResult.getThrowable() != null) {
-            for (int i = 0; i <= 3; i++) {
-                iConfigureCallBack.runConfigurationMethod(iTestResult);
-                if (iTestResult.getThrowable() == null) {
-                    break;
-                }
-            }
-        }
-    }
+//    @Override
+//    public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
+//        iConfigureCallBack.runConfigurationMethod(iTestResult);
+//        if (iTestResult.getThrowable() != null) {
+//            for (int i = 0; i <= 3; i++) {
+//                iConfigureCallBack.runConfigurationMethod(iTestResult);
+//                if (iTestResult.getThrowable() == null) {
+//                    break;
+//                }
+//            }
+//        }
+//    }
 }
 
 

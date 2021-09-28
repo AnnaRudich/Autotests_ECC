@@ -5,8 +5,11 @@
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
                     <include name="completeClaimWithMailTest"/>
+                    <include name="completeClaimWithMailScalepointIdTest"/>
                     <include name="cancelSavedClaimTest"/>
+                    <include name="cancelSavedClaimScalepointIdTest"/>
                     <include name="reopenSavedClaimTest"/>
+                    <include name="reopenSavedClaimScalepointIdTest"/>
                     <include name="ecc2631_addMatchedProductFromCatalog"/>
                     <include name="charlie544_2632_completeSPSimpleClaimWizard"/>
                     <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>
@@ -15,6 +18,7 @@
             <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
                 <methods>
                     <include name="completeClaimExternallyFromSettlementPageTest"/>
+                    <include name="completeClaimExternallyFromSettlementPageScalepointIdTest"/>
                 </methods>
             </class>
             <class name="com.scalepoint.automation.tests.sid.SidTests">
@@ -28,11 +32,15 @@
                 <methods>
 
                     <include name="setIncludeInClaimCheckboxTest"/>
+                    <include name="setIncludeInClaimCheckboxScalepointIdTest"/>
                     <include name="ecc3144_2_selectCategory"/>
                     <include name="inputCustomDemandTest"/>
+                    <include name="inputCustomDemandScalepointIdTest"/>
                     <include name="inputNewPriceTest"/>
+                    <include name="inputNewPriceScalepointIdTest"/>
                     <include name="ecc3144_5_manualDepreciation"/>
                     <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest"/>
+                    <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingScalepointIdTest"/>
                     <include name="depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest"/>
                     <include name="saveAllEnteredResultsTest"/>
                     <include name="cancelEnteredResultsTest"/>

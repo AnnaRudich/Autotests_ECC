@@ -74,7 +74,7 @@ public class FunctionalTemplatesApi extends AuthenticationApi {
                     }
 
                     templatePage.saveTemplate();
-                    BaseService.loginUser(user).reloadFunctionTemplate();
+//                    BaseService.loginUser(user).reloadFunctionTemplate();
                     return detectPage(currentUrl, returnPageClass);
 
                 } finally {
