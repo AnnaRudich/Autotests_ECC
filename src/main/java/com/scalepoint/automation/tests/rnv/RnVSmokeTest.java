@@ -50,6 +50,7 @@ public class RnVSmokeTest extends RnVBase {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .openSid()
                 .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)

@@ -110,6 +110,7 @@ public class RejectReasonTests extends BaseTest {
 
         login(user)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .editFirstClaimLine()
                 .doAssert(sid -> {

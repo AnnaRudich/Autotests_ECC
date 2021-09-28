@@ -71,6 +71,7 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         verifyRepairPanel(settlementPage,
@@ -114,6 +115,7 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         verifyRepairPanel(settlementPage,
@@ -155,6 +157,7 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim();
 
         verifyRepairPanel(settlementPage,

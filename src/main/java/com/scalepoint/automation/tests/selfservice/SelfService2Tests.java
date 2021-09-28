@@ -170,6 +170,7 @@ public class SelfService2Tests extends BaseTest {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .requestSelfServiceWithEnabledNewPassword(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)

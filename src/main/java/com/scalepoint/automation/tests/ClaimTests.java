@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
+import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -26,7 +27,10 @@ import java.time.Year;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
@@ -48,6 +52,7 @@ public class ClaimTests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
@@ -218,8 +223,8 @@ public class ClaimTests extends BaseTest {
                 .enterAddress(claim.getAddress(), claim.getAddress2(), claim.getCity(), claim.getZipCode())
                 .saveClaim(true)
                 .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
-
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -569,5 +574,84 @@ public class ClaimTests extends BaseTest {
                 .toCustomerDetails()
                 .doAssert(customerDetailsPage ->
                         customerDetailsPage.assertPolicyType(EMPTY));
+    }
+
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
+    @Test(dataProvider = "testDataProvider",
+    description = "verify cancel open the claim")
+    public void cancelOpenClaim(User user, Claim claim){
+        loginAndCreateClaim(user, claim).
+                toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
+                .cancelOpenClaim()
+                .doAssert(CustomerDetailsPage.Asserts::assertCustomerDetailsPagePresent);
+    }
+
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, enabled = false)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify the option to show Settlement Page without having to reopen the claim is disabled")
+    public void viewClaimIsOff(User user, Claim claim) {
+        loginAndCreateClaim(user, claim)
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .reopenClaimWhenViewModeIsDisabled()
+                .doAssert(settlementPage ->
+                        settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
+    }
+
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
+    @Test(dataProvider = "testDataProvider",
+            description = "verify Settlement page in view mode")
+    public void claimViewModeE2eTest(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem, "lineDescription")
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
+                .viewClaim()
+                .getClaimOperationsMenu()
+                .doAssert(claimOperationsMenu -> {
+                        claimOperationsMenu.assertAddManuallyButtonIsDisabled();
+                        claimOperationsMenu.assertImportExcelButtonIsDisabled();
+                        claimOperationsMenu.assertRequestSelfServiceButtonIsDisabled();
+                });
+
+        new SettlementPage().findClaimLine("lineDescription").editLine()
+                .doAssert(SettlementDialog.Asserts::assertOkButtonIsDisabled);
+        new SettlementDialog()
+                .cancel()
+                .getSettlementSummary()
+                .reopenClaimFromViewMode()
+                .getClaimOperationsMenu()
+                .doAssert(claimOperationsMenu -> {
+                    claimOperationsMenu.assertAddManuallyButtonIsEnabled();
+                    claimOperationsMenu.assertImportExcelButtonIsEnabled();
+                    claimOperationsMenu.assertRequestSelfServiceButtonIsEnabled();
+        });
+    }
+
+    @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-7254")
+    @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
+    @Test(enabled = false, dataProvider = "testDataProvider",
+            description = "verify it's possible to close claim from view mode")
+    public void closeClaimInViewMode(User user, Claim claim, ClaimItem claimItem) {
+        loginAndCreateClaim(user, claim)
+                .addLines(claimItem, "lineDescription")
+                .toCompleteClaimPage()
+                .fillClaimForm(claim)
+                .completeWithEmail(claim, databaseApi, true)
+                .openRecentClaim()
+                .startReopenClaimWhenViewModeIsEnabled()
+                .viewClaim()
+                .getSettlementSummary()
+                .closeClaimFromViewMode()
+                .doAssert(c -> c.assertClaimNumber(claim.getClaimNumber()));
     }
 }
