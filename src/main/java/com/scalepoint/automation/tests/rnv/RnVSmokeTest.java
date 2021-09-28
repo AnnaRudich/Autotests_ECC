@@ -247,7 +247,7 @@ public class RnVSmokeTest extends RnVBase {
 
         return new Object[][]{
 
-                TestDataActions.getTestDataWithExternalParameters(method, lineDescription).toArray()
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, TEST_MESSAGE).toArray()
         };
     }
 
@@ -277,7 +277,7 @@ public class RnVSmokeTest extends RnVBase {
 
         return new Object[][]{
 
-                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice, invoicePrice, creditNote).toArray()
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, invoicePrice, creditNote, repairPrice).toArray()
         };
     }
 
@@ -290,7 +290,7 @@ public class RnVSmokeTest extends RnVBase {
 
         return new Object[][]{
 
-                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice, invoicePrice).toArray()
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, invoicePrice, repairPrice).toArray()
         };
     }
 

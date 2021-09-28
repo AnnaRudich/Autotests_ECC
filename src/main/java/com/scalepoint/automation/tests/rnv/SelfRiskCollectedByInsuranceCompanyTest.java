@@ -38,7 +38,7 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
 
         setSelfRiskCollectedByInsuranceCompany(user);
     }
-@RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.ENABLE_AUTOMATIC_RV_INVOICE_PAYMENT)
     @RequiredSetting(type = FTSetting.DEFAULT_AUTOMATIC_INVOICE_PAYMENTS, value = "Insurance company")
     @Test(groups = {TestGroups.RNV, TestGroups.RNV_SMOKE}, dataProvider = SELR_RISK_LOWER_THAN_REPAIR_PRICE_DATA_PROVIDER,
