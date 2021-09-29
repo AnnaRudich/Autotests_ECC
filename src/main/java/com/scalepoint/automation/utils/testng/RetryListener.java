@@ -19,7 +19,7 @@ public class RetryListener implements IAnnotationTransformer, IConfigurable {
         iTestAnnotation.setRetryAnalyzer(Retrier.class);
     }
 
-//    @Override
+    @Override
     public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
         iConfigureCallBack.runConfigurationMethod(iTestResult);
         if (iTestResult.getThrowable() != null) {
