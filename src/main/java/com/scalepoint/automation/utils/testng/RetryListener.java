@@ -1,7 +1,5 @@
 package com.scalepoint.automation.utils.testng;
 
-import org.testng.IConfigureCallBack;
-import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
 import org.testng.internal.annotations.IAnnotationTransformer;
 

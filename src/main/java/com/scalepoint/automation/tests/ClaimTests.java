@@ -12,7 +12,6 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -20,17 +19,13 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.Test;
 
 import java.time.Year;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
@@ -578,7 +573,7 @@ public class ClaimTests extends BaseTest {
 
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(dataProvider = "testDataProvider",
-    description = "verify cancel open the claim")
+            description = "verify cancel open the claim")
     public void cancelOpenClaim(User user, Claim claim){
         loginAndCreateClaim(user, claim).
                 toCompleteClaimPage()
@@ -618,9 +613,9 @@ public class ClaimTests extends BaseTest {
                 .viewClaim()
                 .getClaimOperationsMenu()
                 .doAssert(claimOperationsMenu -> {
-                        claimOperationsMenu.assertAddManuallyButtonIsDisabled();
-                        claimOperationsMenu.assertImportExcelButtonIsDisabled();
-                        claimOperationsMenu.assertRequestSelfServiceButtonIsDisabled();
+                    claimOperationsMenu.assertAddManuallyButtonIsDisabled();
+                    claimOperationsMenu.assertImportExcelButtonIsDisabled();
+                    claimOperationsMenu.assertRequestSelfServiceButtonIsDisabled();
                 });
 
         new SettlementPage().findClaimLine("lineDescription").editLine()
@@ -634,7 +629,7 @@ public class ClaimTests extends BaseTest {
                     claimOperationsMenu.assertAddManuallyButtonIsEnabled();
                     claimOperationsMenu.assertImportExcelButtonIsEnabled();
                     claimOperationsMenu.assertRequestSelfServiceButtonIsEnabled();
-        });
+                });
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-7254")

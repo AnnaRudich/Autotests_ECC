@@ -10,7 +10,6 @@ import com.scalepoint.automation.spring.Application;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.logging.log4j.LogManager;

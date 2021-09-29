@@ -7,6 +7,7 @@ import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.DataProvider;
@@ -14,6 +15,8 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 
 public class LoginTests extends BaseTest {
 
@@ -28,6 +31,7 @@ public class LoginTests extends BaseTest {
                 .login(user);
     }
 
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
     @Test(groups = {TestGroups.LOGIN}, description = "Login different user types",
             dataProvider = USERS_CREDENTIAL_DATA_PROVIDER)
     public void differentUserTypesLoginTest(User user){
