@@ -5,11 +5,8 @@
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
                     <include name="completeClaimWithMailTest"/>
-                    <include name="completeClaimWithMailScalepointIdTest"/>
                     <include name="cancelSavedClaimTest"/>
-                    <include name="cancelSavedClaimScalepointIdTest"/>
                     <include name="reopenSavedClaimTest"/>
-                    <include name="reopenSavedClaimScalepointIdTest"/>
                     <include name="ecc2631_addMatchedProductFromCatalog"/>
                     <include name="charlie544_2632_completeSPSimpleClaimWizard"/>
                     <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>
@@ -18,7 +15,6 @@
             <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
                 <methods>
                     <include name="completeClaimExternallyFromSettlementPageTest"/>
-                    <include name="completeClaimExternallyFromSettlementPageScalepointIdTest"/>
                 </methods>
             </class>
             <class name="com.scalepoint.automation.tests.sid.SidTests">
@@ -30,17 +26,12 @@
             </class>
             <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
                 <methods>
-
                     <include name="setIncludeInClaimCheckboxTest"/>
-                    <include name="setIncludeInClaimCheckboxScalepointIdTest"/>
                     <include name="ecc3144_2_selectCategory"/>
                     <include name="inputCustomDemandTest"/>
-                    <include name="inputCustomDemandScalepointIdTest"/>
                     <include name="inputNewPriceTest"/>
-                    <include name="inputNewPriceScalepointIdTest"/>
                     <include name="ecc3144_5_manualDepreciation"/>
                     <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest"/>
-                    <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingScalepointIdTest"/>
                     <include name="depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest"/>
                     <include name="saveAllEnteredResultsTest"/>
                     <include name="cancelEnteredResultsTest"/>
@@ -65,6 +56,49 @@
             <class name="com.scalepoint.automation.tests.OrderDetailsTests">
                 <methods>
                     <include name="shopSmokeE2E"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="1" name="ScalepointIdSmokeTest" group-by-instances="false" enabled="true" preserve-order="true"  thread-count="4">
+        <classes>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+                <methods>
+                    <include name="completeClaimWithMailScalepointIdTest"/>
+                    <include name="cancelSavedClaimScalepointIdTest"/>
+                    <include name="reopenSavedClaimScalepointIdTest"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+                <methods>
+                    <include name="completeClaimExternallyFromSettlementPageScalepointIdTest"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+                <methods>
+                    <include name="setIncludeInClaimCheckboxScalepointIdTest"/>
+                    <include name="inputCustomDemandScalepointIdTest"/>
+                    <include name="inputNewPriceScalepointIdTest"/>
+                    <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingScalepointIdTest"/>
+                    <include name="depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidScalepointIdTest"/>
+                    <include name="saveAllEnteredResultsScalepointIdTest"/>
+                    <include name="cancelEnteredResultsScalepointIdTest"/>
+                    <include name="addNewValuationScalepointIdTest"/>
+                    <include name="disableIncludeInClaimScalepointIdTest"/>
+                    <include name="enableIncludeInClaimSecondClaimScalepointIdTest"/>
+                    <include name="disableIncludeInClaimAndReviewedScalepointIdTest"/>
+                    <include name="completeClaimIsEnabledScalepointIdTest"/>
+                    <include name="reviewedBoxNotDisplayedScalepointIdTest"/>
+                    <include name="completeClaimIsEnabledScalepointIdTest"/>
+                    <include name="cancelledClaimNotAddedScalepointIdTest"/>
+                    <include name="cashCompensationEqualV1ScalepointIdTest"/>
+                    <include name="openAddValuationDialogInSIDScalepointIdTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialogScalepointIdTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialog2ScalepointIdTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialog3ScalepointIdTest"/>
+                    <include name="enableAgeOptionScalepointIdTest"/>
+                    <include name="addYearsAndMonthAndSaveScalepointIdTest"/>
                 </methods>
             </class>
         </classes>
