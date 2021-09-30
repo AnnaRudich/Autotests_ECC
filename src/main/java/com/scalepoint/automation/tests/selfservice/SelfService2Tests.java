@@ -14,7 +14,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -132,7 +132,7 @@ public class SelfService2Tests extends BaseTest {
     @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
     @Test(groups = {TestGroups.SELF_SERVICE2, UserCompanyGroups.TOPDANMARK}, dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
-    public void Charlie735_addLine_ageAsSingleValue_notes(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
+    public void Charlie735_addLine_ageAsSingleValue_notes(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)

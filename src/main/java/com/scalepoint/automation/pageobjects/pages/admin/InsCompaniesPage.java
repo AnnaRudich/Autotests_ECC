@@ -1,15 +1,16 @@
 package com.scalepoint.automation.pageobjects.pages.admin;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.scalepoint.automation.utils.annotations.page.EccPage;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
-import ru.yandex.qatools.htmlelements.element.Select;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
 
 @EccPage
@@ -20,9 +21,6 @@ public class InsCompaniesPage extends AdminBasePage {
 
     @FindBy(id = "btnEdit")
     private WebElement editButton;
-
-    @FindBy(name = "icList")
-    private Select companies;
 
     @Override
     protected void ensureWeAreOnPage() {
@@ -41,9 +39,15 @@ public class InsCompaniesPage extends AdminBasePage {
         return at(InsCompAddEditPage.class);
     }
 
+    private ElementsCollection getCompanies(){
+
+        return $$("[name=icList] > option");
+    }
+
     public boolean isCompanyDisplayed(InsuranceCompany insuranceCompany) {
         try {
-            companies.selectByVisibleText(insuranceCompany.getIcName());
+
+            getCompanies().findBy(Condition.text(insuranceCompany.getIcName()));
         } catch (NoSuchElementException e) {
             return false;
         }
@@ -55,7 +59,7 @@ public class InsCompaniesPage extends AdminBasePage {
     }
 
     public InsCompAddEditPage editCompany(String icName) {
-        companies.selectByVisibleText(icName);
+        getCompanies().findBy(Condition.text(icName)).click();
         selectEditOption();
         return at(InsCompAddEditPage.class);
     }

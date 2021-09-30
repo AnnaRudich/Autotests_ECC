@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -51,10 +49,8 @@ public class User {
     protected Integer companyId;
     @XmlAttribute(name = "ftId")
     protected Integer ftId;
-    @XmlAttribute(name = "basic")
-    protected boolean basic;
-    @XmlAttribute(name = "system")
-    protected boolean system;
+    @XmlAttribute(name = "type")
+    protected UserType type;
 
     public User(String login, String password) {
         this.login = login;
@@ -73,5 +69,16 @@ public class User {
                 "login='" + login + '\'' +
                 ", companyCode='" + companyCode + '\'' +
                 '}';
+    }
+    @XmlEnum()
+    public enum UserType{
+        @XmlEnumValue("BASIC")
+        BASIC,
+        @XmlEnumValue("SYSTEM")
+        SYSTEM,
+        @XmlEnumValue("SCALEPOINT_ID")
+        SCALEPOINT_ID,
+        @XmlEnumValue("EXCEPTIONAL")
+        EXCEPTIONAL
     }
 }

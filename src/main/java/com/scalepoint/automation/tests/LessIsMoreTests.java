@@ -7,7 +7,7 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -97,7 +97,7 @@ public class LessIsMoreTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON)
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Create valuation group")
-    public void charlie550_createValuationGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie550_createValuationGroup(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
@@ -145,7 +145,7 @@ public class LessIsMoreTests extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_DISCREATIONARY_REASON, enabled = false)
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Check reason is not visible")
-    public void charlie550_createValuationGroupWithoutReason(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie550_createValuationGroupWithoutReason(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         SettlementPage settlementPage = loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .selectLinesByDescriptions(lineDescriptions[0])
@@ -169,7 +169,7 @@ public class LessIsMoreTests extends BaseTest {
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "NEW_PRICE")
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Check if new price is mandatory")
-    public void charlie550_createValuationGroupWithMandatoryNewPrice(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie550_createValuationGroupWithMandatoryNewPrice(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .selectLinesByDescriptions(lineDescriptions[0])
@@ -195,7 +195,7 @@ public class LessIsMoreTests extends BaseTest {
     @RequiredSetting(type = FTSetting.REQUIRED_VALUATION_FOR_DISCRETIONARY_VALUATION, value = "CUSTOMER_DEMAND")
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Check if new price is mandatory")
-    public void charlie550_createValuationGroupWithMandatoryCustomerDemand(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie550_createValuationGroupWithMandatoryCustomerDemand(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0])
                 .selectLinesByDescriptions(lineDescriptions[0])
@@ -297,7 +297,7 @@ public class LessIsMoreTests extends BaseTest {
 
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Delete valuation group")
-    public void charlie_550_deleteGroup(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie_550_deleteGroup(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .addLines(claimItem, lineDescriptions[0], lineDescriptions[1])
                 .selectLinesByDescriptions(lineDescriptions[0], lineDescriptions[1])
@@ -315,7 +315,7 @@ public class LessIsMoreTests extends BaseTest {
 
     @Test(groups = {TestGroups.LESS_IS_MORE, UserCompanyGroups.SCALEPOINT}, dataProvider = "testDataProvider",
             description = "Excel import with grouping")
-    public void charlie_550_excelImportWithGrouping(@UserCompany(value = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimLineGroup claimLineGroup) {
+    public void charlie_550_excelImportWithGrouping(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, Claim claim, ClaimLineGroup claimLineGroup) {
 
         loginAndCreateClaim(user, claim)
                 .importExcelFile(new File(claimLineGroup.getExcelWithGroupsFilePath()).getAbsolutePath())

@@ -11,7 +11,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
@@ -104,7 +104,7 @@ public class SidShowVoucherDetails extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.SID_SHOW_VOUCHER, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "ECC-5519 Verify exclusive voucher")
-    public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserCompany(CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
+    public void ecc5519_1_exclusiveVoucherAndTagsBrandInSID(@UserAttributes(company = CompanyCode.ALKA) User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
 
         SettlementPage settlementPage = loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel();

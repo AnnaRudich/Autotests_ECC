@@ -3,7 +3,11 @@ package com.scalepoint.automation.utils.threadlocal;
 import com.scalepoint.automation.utils.driver.DriverType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class Browser {
@@ -19,6 +23,11 @@ public class Browser {
     public static WebDriver driver() {
         if (holder.get() != null) return holder.get().getDriver();
         else throw new IllegalStateException("Driver is not initialized");
+    }
+
+    public static Map<String, String> cookies(){
+
+        return driver().manage().getCookies().stream().collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
     }
 
     public static boolean hasDriver() {

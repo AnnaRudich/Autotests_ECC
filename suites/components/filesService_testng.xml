@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Files Service" configfailurepolicy="continue" parallel="methods">
-    <test verbose="1" name="Files Service" enabled="true" preserve-order="true" thread-count="6">
+<suite name="Files Service" configfailurepolicy="continue"   >
+    <test verbose="1" name="Files Service" enabled="true" preserve-order="true" thread-count="6" parallel="methods">
         <packages>
             <package name="com.scalepoint.automation.tests.filesService" />
         </packages>

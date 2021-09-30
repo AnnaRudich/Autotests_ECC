@@ -20,6 +20,8 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 @EccAdminPage
 public class LoginPage extends Page {
 
+    private static final By LOGIN_VIA_SCALEPOINT_ID_LINK_PATH = By.cssSelector("#loginSPID");
+
     @FindBy(css = "[value=Login]")
     private Button loginButton;
 
@@ -58,16 +60,26 @@ public class LoginPage extends Page {
         }
     }
 
+    public ScalepointIdLoginPage loginViaScalepointId(){
+
+        $(LOGIN_VIA_SCALEPOINT_ID_LINK_PATH).click();
+        return at(ScalepointIdLoginPage.class);
+    }
+
     public SettlementPage login(User user) {
-        return login(user.getLogin(), user.getPassword());
+        return login(user, SettlementPage.class);
     }
 
-    public SettlementPage login(String userLogin, String userPassword) {
-        return login(userLogin, userPassword, SettlementPage.class);
-    }
+    public <T extends Page> T login(User user, Class<T> pageClass) {
+        if(user.getType().equals(User.UserType.SCALEPOINT_ID)) {
 
-    public <T extends Page> T login(String userLogin, String userPassword, Class<T> pageClass) {
-        loginWithoutExpectedPage(userLogin, userPassword);
+            loginViaScalepointId()
+                    .login(user.getLogin(), user.getPassword(), pageClass);
+        }else {
+
+            loginWithoutExpectedPage(user.getLogin(), user.getPassword());
+        }
+
         return at(pageClass);
     }
 

@@ -8,7 +8,7 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
@@ -52,7 +52,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Add reason to claim created before reason was created")
-    public void charlie_549_checkIfCanAddNewRejectReasonToClaimCreatedBefore(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_checkIfCanAddNewRejectReasonToClaimCreatedBefore(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                              InsuranceCompany insuranceCompany, EccIntegration eccIntegration) {
         String location = createClaimAndLineUsingEccIntegration(user, eccIntegration).getResponse().extract().header("Location");
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
@@ -79,7 +79,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check what happens with reasone after disabling it", enabled = false)
-    public void charlie_549_disableReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_disableReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                           ClaimItem claimItem, InsuranceCompany insuranceCompany, Claim claim) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
@@ -124,7 +124,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if reason is mandatory w/o discretionary and next w/o reject")
-    public void charlie_549_makeRejectReasonMandatory(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeRejectReasonMandatory(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                       Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Discretionary reason åæéø " + System.currentTimeMillis();
 
@@ -164,7 +164,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if reason is mandatory w/o discretionary but with filled reject")
-    public void charlie_549_makeRejectReasonMandatoryWithRejectReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeRejectReasonMandatoryWithRejectReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                       Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
@@ -199,7 +199,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if reasons are mandatory and filled claim will be created")
-    public void charlie_549_makeRejectReasonMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeRejectReasonMandatoryRejectClaim(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                  Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
@@ -209,7 +209,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if DISCREATIONARY reason is mandatory and filled claim will be created")
-    public void charlie_549_makeRejectReasonNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeRejectReasonNotMandatoryRejectClaim(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                     Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
@@ -221,7 +221,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if reject reasons will be not filled claim will be created")
-    public void charlie_549_makeRejectReasonNotMandatoryRejectClaimWithoutReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeRejectReasonNotMandatoryRejectClaimWithoutReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                  Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
@@ -252,7 +252,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if reject reasons will be not filled claim will be created")
-    public void charlie_549_makeRejectReasonNotMandatoryRejectClaimWithoutDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeRejectReasonNotMandatoryRejectClaimWithoutDiscretionaryReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                               Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
@@ -292,7 +292,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if discretionary reason is mandatory and filled claim will be created")
-    public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaim(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                            Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
@@ -303,7 +303,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if discretionary reasons will be not filled claim will be created")
-    public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaimWithoutReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaimWithoutReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                         Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
@@ -335,7 +335,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if discretionary reasons will be not filled claim will be created")
-    public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaimWithoutDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeDiscretionaryReasonNotMandatoryRejectClaimWithoutDiscretionaryReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
@@ -375,7 +375,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if any reason is mandatory and filled claim will be created")
-    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaim(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaim(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                   Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         createClaimWithItemAndCloseWithReasons(user, claim, claimItem, insuranceCompany);
     }
@@ -385,7 +385,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if discretionary reasons will be not filled claim will be created")
-    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithoutReasons(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithoutReasons(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                 Claim claim, ClaimItem claimItem) {
         loginAndCreateClaimToEditPolicyDialog(user, claim)
                 .cancel()
@@ -408,7 +408,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if discretionary reasons will be not filled claim will be created")
-    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithRejectReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithRejectReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                   Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
@@ -440,7 +440,7 @@ public class RejectReasonTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.REJECT_REASON, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "Check if discretionary reasons will be not filled claim will be created")
-    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithDiscretionaryReason(@UserCompany(CompanyCode.TRYGFORSIKRING) User user,
+    public void charlie_549_makeAnyReasonsNotMandatoryRejectClaimWithDiscretionaryReason(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user,
                                                                                          Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
@@ -467,7 +467,7 @@ public class RejectReasonTests extends BaseTest {
     }
 
 
-    private void createClaimWithItemAndCloseWithReasons(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
+    private void createClaimWithItemAndCloseWithReasons(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 

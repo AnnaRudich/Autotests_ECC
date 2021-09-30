@@ -10,7 +10,7 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.services.usersmanagement.CompanyCode.BASIC_ADMIN_ROLE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-540")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
@@ -53,19 +54,29 @@ public class OrderDetailsTests extends BaseTest {
 
         Assert.assertEquals(ordersPage.getLegendItemText(), orderDetails.getTotalText());
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(companyName));
-        Assert.assertEquals(ordersPage.getIdemnityValue(), 0.0d, "Idemnity value is not 0");
+        assertThat(ordersPage.getIdemnityValue())
+                .as("Idemnity value is not 0")
+                .isEqualTo(0.0d);
 
         Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
-        Assert.assertEquals(ordersPage.getOrderedItemsValue(), 0.0d, "Ordered value is 0");
+        assertThat(ordersPage.getOrderedItemsValue())
+                .as("Ordered value is 0")
+                .isEqualTo(0.0d);
 
         Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0d, "Withdraw value is 0");
+        assertThat(ordersPage.getWithdrawValue())
+                .as("Withdraw value is 0")
+                .isEqualTo(0.0d);
 
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
-        Assert.assertEquals(ordersPage.getDepositValue(), 0.0d, "Deposits value is 0");
+       assertThat(ordersPage.getDepositValue())
+               .as("Deposits value is 0")
+               .isEqualTo(0.0d);
 
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
-        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0d, "Remaining value is 0");
+        assertThat(ordersPage.getRemainingValue())
+                .as("Remaining value is 0")
+                .isEqualTo(0.0d);
     }
 
     /**
@@ -110,11 +121,17 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getIdemnityText(), orderDetails.getIndemnity(user.getCompanyName()));
         Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
         Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
-        Assert.assertEquals(ordersPage.getOrderedItemsValue(), 0.0, "Ordered value(" + ordersPage.getOrderedItemsValue() + " is 0");
+        assertThat(ordersPage.getOrderedItemsValue())
+                .as("Ordered value(" + ordersPage.getOrderedItemsValue() + " is 0")
+                .isEqualTo(0.0);
         Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0");
+       assertThat(ordersPage.getWithdrawValue())
+               .as("Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0")
+               .isEqualTo(0.0);
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
-        Assert.assertEquals(ordersPage.getDepositValue(), 0.0, "Deposits value(" + ordersPage.getDepositValue() + " is 0");
+        assertThat(ordersPage.getDepositValue())
+                .as("Deposits value(" + ordersPage.getDepositValue() + " is 0")
+                .isEqualTo(0.0);
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         Assert.assertEquals(ordersPage.getRemainingValue() - price, 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is equal to " + price);
     }
@@ -151,16 +168,20 @@ public class OrderDetailsTests extends BaseTest {
         Assert.assertEquals(ordersPage.getIdemnityValue() - price, 0.0, "Idemnity value(" + ordersPage.getIdemnityValue() + ") is equal to price=" + price);
         Assert.assertEquals(ordersPage.getOrderedItemsText(), orderDetails.getOrderedItemsText());
         Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
-        Assert.assertEquals(ordersPage.getWithdrawValue(), 0.0, "Withdraw value(" + ordersPage.getWithdrawValue() + ") is equals to 0");
+        assertThat(ordersPage.getWithdrawValue())
+                .as("Withdraw value(" + ordersPage.getWithdrawValue() + ") is equals to 0")
+                .isEqualTo(0.0);
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
-        Assert.assertEquals(ordersPage.getRemainingValue(), 0.0, "Remaining value(" + ordersPage.getRemainingValue() + " is 0");
+        assertThat(ordersPage.getRemainingValue())
+                .as("Remaining value(" + ordersPage.getRemainingValue() + " is 0")
+                .isEqualTo(0.0);
     }
 
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")
-    public void orderDetailsInvisibilityTest(@UserCompany(BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
+    public void orderDetailsInvisibilityTest(@UserAttributes(company = BASIC_ADMIN_ROLE)User user, Claim claim, ClaimItem claimItem) {
 
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);

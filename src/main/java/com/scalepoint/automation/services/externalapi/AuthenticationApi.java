@@ -50,6 +50,7 @@ public class AuthenticationApi {
     protected Executor executor;
 
     public <T extends Page> T login(User user, Class<T> returnPageClass) {
+
         return login(user, returnPageClass, null);
     }
 

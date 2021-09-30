@@ -9,7 +9,7 @@ import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
@@ -31,7 +31,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
-    public void productSearchFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
+    public void productSearchFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         productSearch(claimRequest, user, claimItem, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()
@@ -40,7 +40,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
-    public void productSearchNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
+    public void productSearchNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         productSearch(claimRequest, user, claimItem, EventApiService.FraudStatus.NOT_FRAUDULENT)
                 .getSettlementSummary()
@@ -49,7 +49,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
-    public void manualClaimHandlingAddFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
+    public void manualClaimHandlingAddFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
         manualClaimHandlingAdd(claimRequest, user, claimItem, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()
@@ -58,7 +58,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
-    public void manualClaimHandlingAddNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingAddNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         manualClaimHandlingAdd(claimRequest, user, claimItem, EventApiService.FraudStatus.NOT_FRAUDULENT)
                 .getSettlementSummary()
@@ -67,7 +67,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Remove")
-    public void manualClaimHandlingRemoveFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingRemoveFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         manualClaimHandlingRemove(claimRequest, user, claimItem, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()
@@ -76,7 +76,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Remove")
-    public void manualClaimHandlingRemoveNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingRemoveNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         manualClaimHandlingRemove(claimRequest, user, claimItem, EventApiService.FraudStatus.NOT_FRAUDULENT)
                 .getSettlementSummary()
@@ -85,7 +85,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Edit")
-    public void manualClaimHandlingEditFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingEditFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         manualClaimHandlingEdit(claimRequest, user, claimItem, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()
@@ -94,7 +94,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Edit")
-    public void manualClaimHandlingEditNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
+    public void manualClaimHandlingEditNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
         manualClaimHandlingEdit(claimRequest, user, claimItem, EventApiService.FraudStatus.NOT_FRAUDULENT)
                 .getSettlementSummary()
@@ -103,7 +103,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
-    public void selfServiceAddFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
+    public void selfServiceAddFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         selfService(claimRequest, user, claim, EventApiService.FraudStatus.FRAUDULENT, SettlementPage.class)
                 .getSettlementSummary()
@@ -112,7 +112,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
-    public void selfServiceAddNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
+    public void selfServiceAddNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
         selfService(claimRequest, user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT, CustomerDetailsPage.class)
                 .startReopenClaimWhenViewModeIsEnabled()
@@ -124,7 +124,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
                     " drop-down for choosing reason is enabled")
-    public void importExcelNoFraudSystemTest(@UserCompany(TOPDANMARK) User user,
+    public void importExcelNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user,
                                              ClaimRequest claimRequest) throws IOException {
 
         importExcel(claimRequest, user, EventApiService.FraudStatus.NOT_FRAUDULENT)
@@ -135,7 +135,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
                     " drop-down for choosing reason is enabled")
-    public void importExcelFraudSystemTest(@UserCompany(TOPDANMARK) User user,
+    public void importExcelFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user,
                                            ClaimRequest claimRequest) throws IOException {
 
         importExcel(claimRequest, user, EventApiService.FraudStatus.FRAUDULENT)
@@ -145,7 +145,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
-    public void fnolFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim) throws IOException {
+    public void fnolFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim) throws IOException {
 
         fnol(user, claim, EventApiService.FraudStatus.FRAUDULENT)
                 .getSettlementSummary()
@@ -154,7 +154,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
     @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
-    public void fnolNoFraudSystemTest(@UserCompany(TOPDANMARK) User user, Claim claim) throws IOException {
+    public void fnolNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim) throws IOException {
 
         fnol(user, claim, EventApiService.FraudStatus.NOT_FRAUDULENT);
         at(CustomerDetailsPage.class)

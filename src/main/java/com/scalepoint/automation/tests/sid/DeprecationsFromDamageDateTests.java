@@ -9,7 +9,7 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.eccIntegration.EccIntegration;
@@ -73,7 +73,7 @@ public class DeprecationsFromDamageDateTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.DEPRECATIONS_FROM_DAMAGE_DATE, UserCompanyGroups.ALKA},
             dataProvider = "testDataProvider",
             description = "Check if damage date created/updated for empty claims")
-    public void charlie_554_ip1_shouldCreateAndUpdateClaimWithDamageDate(@UserCompany(CompanyCode.ALKA) User user, Claim claim) {
+    public void charlie_554_ip1_shouldCreateAndUpdateClaimWithDamageDate(@UserAttributes(company = CompanyCode.ALKA) User user, Claim claim) {
         LocalDate initialDamageDate = LocalDate.now();
         claim.setDamageDate(toDamageFormat(initialDamageDate));
 

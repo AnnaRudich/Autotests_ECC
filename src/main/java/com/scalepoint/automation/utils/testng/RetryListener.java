@@ -13,10 +13,12 @@ import java.lang.reflect.Method;
  * Created by bza on 1/16/2018.
  */
 public class RetryListener implements IAnnotationTransformer, IConfigurable {
+
     @Override
     public void transform(ITestAnnotation iTestAnnotation, Class aClass, Constructor constructor, Method method) {
         iTestAnnotation.setRetryAnalyzer(Retrier.class);
     }
+
     @Override
     public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
         iConfigureCallBack.runConfigurationMethod(iTestResult);

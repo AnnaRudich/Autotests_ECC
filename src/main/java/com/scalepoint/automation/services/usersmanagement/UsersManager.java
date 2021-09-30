@@ -1,207 +1,204 @@
 package com.scalepoint.automation.services.usersmanagement;
 
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.ExistingUsers;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 
 public class UsersManager {
 
     private static Logger logger = LogManager.getLogger(UsersManager.class);
 
-    private static BlockingQueue<User> basicUsersQueue = new LinkedBlockingQueue<>();
+    private static ConcurrentMap<CompanyCode, ConcurrentMap<User.UserType, User>> basicUsersQueue = new ConcurrentHashMap<>();
     private static ConcurrentMap<CompanyCode, BlockingQueue<User>> exceptionalUsersQueues = new ConcurrentHashMap<>();
     private static User systemUser;
 
     private static Map<String, Set<User>> usersInfo = new HashMap<>();
 
     public static void initManager(ExistingUsers existingUsers) {
+
         logger.info("Initializing UsersManager");
         existingUsers.getUsers().forEach(user -> {
-            if (user.isSystem()) {
+
+            if (user.getType().equals(User.UserType.SYSTEM)) {
+
                 systemUser = user;
                 usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
                 return;
             }
-            if (user.isBasic()) {
-                basicUsersQueue.add(user);
-                usersInfo.put(user.getCompanyCode(), new HashSet<>(Arrays.asList(new User[]{user})));
-            } else {
+            if (user.getType().equals(User.UserType.BASIC) || user.getType().equals(User.UserType.SCALEPOINT_ID)) {
+
+                CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
+                if(!basicUsersQueue.containsKey(key)) {
+
+                    ConcurrentMap usersMap = new ConcurrentHashMap<>();
+                    usersMap.put(user.getType(), user);
+
+                    basicUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()),
+                            usersMap);
+
+                }else{
+
+                    ConcurrentMap usersMap = basicUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode()));
+                    usersMap.put(user.getType(), user);
+                    basicUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()), usersMap);
+                }
+            }
+
+            if(user.getType().equals(User.UserType.EXCEPTIONAL)) {
 
                 CompanyCode key = CompanyCode.valueOf(user.getCompanyCode());
                 if(!exceptionalUsersQueues.containsKey(key)) {
+
                     exceptionalUsersQueues.put(CompanyCode.valueOf(user.getCompanyCode()),
                             new ArrayBlockingQueue<>(6, true, Collections.singleton(user)));
                 }else{
 
                     exceptionalUsersQueues.get(key).add(user);
                 }
-                usersInfo.put(user.getCompanyCode(), new HashSet<>(exceptionalUsersQueues.get(key)));
             }
         });
+
         printQueues();
     }
 
-    public static Map<CompanyMethodArgument, User> fetchUsersWhenAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
+    public static List<User> fetchUsersWhenAvailable(List<RequestedUserAttributes> requestedUsers) {
+
         await()
-                .pollInterval(15, TimeUnit.SECONDS)
-                .timeout(60, TimeUnit.MINUTES)
-                .until(() -> fetchUsersIfAvailable(companyMethodArguments), is(equalTo(true)));
+                .with()
+                .pollInterval(10, TimeUnit.SECONDS)
+                .timeout(1, TimeUnit.HOURS)
+                .until(() -> usersAvailable(requestedUsers), equalTo(true));
 
-        return companyMethodArguments;
+        List<User> fetchedUsers = requestedUsers
+                .stream()
+                .map(requestedUserAttribute -> requestedUserAttribute.getUser())
+                .collect(Collectors.toList());
+
+        return fetchedUsers;
     }
 
-    private static synchronized boolean fetchUsersIfAvailable(Map<CompanyMethodArgument, User> companyMethodArguments) {
-        String users = companyMethodArguments
-                .entrySet()
-                .stream()
-                .map(e -> (e.getKey().companyCode + ":" + (e.getValue() != null ? e.getValue().getLogin() : "?")))
-                .collect(Collectors.joining(", "));
+    private static synchronized boolean usersAvailable(List<RequestedUserAttributes> requestedUsers) {
 
-        logger.info("Requested: {}", users);
-
-        int requestedBasicUsersCount = (int) companyMethodArguments
-                .keySet()
-                .stream()
-                .filter(companyCode -> usersInfo.get(companyCode.companyCode.name())
-                        .stream()
-                        .findFirst()
-                        .orElseThrow(NoSuchElementException::new)
-                        .isBasic())
+        long basicUsersRequestedCount = requestedUsers.stream()
+                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.BASIC) || requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID))
                 .count();
 
-        boolean basicUsersAvailable = basicUsersQueue.size() >= requestedBasicUsersCount;
+        Map<CompanyCode, Long> exceptionalUsersRequestedCount = new HashMap<>();
 
-        int requestedExceptionalUsersCount = (int) companyMethodArguments
-                .keySet()
-                .stream()
-                .filter(companyCode -> !usersInfo.get(companyCode.companyCode.name())
-                        .stream()
-                        .findFirst()
-                        .orElseThrow(NoSuchElementException::new)
-                        .isBasic())
-                .count();
+        List<RequestedUserAttributes> exceptionalUsersRequested = requestedUsers.stream()
+                .filter(requestedUserAttributes -> requestedUserAttributes.getType().equals(User.UserType.EXCEPTIONAL))
+                .collect(Collectors.toList());
 
-        long count = companyMethodArguments.keySet()
-                .stream()
-                .filter(companyMethodArgument -> {
-                    CompanyCode companyCode = companyMethodArgument.companyCode;
-                    boolean notBasicUser = !usersInfo
-                            .get(companyCode.name())
-                            .stream()
-                            .findFirst()
-                            .orElseThrow(NoSuchElementException::new)
-                            .isBasic();
-                    if (notBasicUser && exceptionalUsersQueues.containsKey(companyCode)) {
-                        return !exceptionalUsersQueues.get(companyCode).isEmpty();
-                    }
-                    return notBasicUser;
-                })
-                .count();
+        exceptionalUsersRequested.forEach(requestedUserAttributes -> {
 
-        logger.info("Found exceptional users: {}", count);
+            CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
 
-        boolean exceptionalUsersAvailable = count == requestedExceptionalUsersCount;
+            if(exceptionalUsersRequestedCount.containsKey(companyCode)){
 
-        logger.info("Basic users available: {} Exceptional Users Available: {}", basicUsersAvailable, exceptionalUsersAvailable);
+                exceptionalUsersRequestedCount.put(companyCode, exceptionalUsersRequestedCount.get(companyCode) + 1L);
+            }
+            else {
 
-        if (basicUsersAvailable && exceptionalUsersAvailable) {
-            companyMethodArguments.replaceAll((companyMethodArgument, user) -> takeUser(companyMethodArgument.companyCode));
-            return true;
-        } else {
-            return false;
+                exceptionalUsersRequestedCount.put(companyCode, 1L);
+            }
+        });
+
+        boolean basicUsersAvailable = basicUsersQueue.entrySet().stream().filter(entrySet -> entrySet.getValue().size() == 2).count() >= basicUsersRequestedCount;
+
+        boolean exceptionalUsersAvailable = exceptionalUsersRequestedCount.entrySet().stream()
+                .map(entry -> exceptionalUsersQueues.get(entry.getKey()).size() >= entry.getValue())
+                .allMatch(b -> b.equals(true));
+
+
+        logger.info(String.format("basicUsersAvailable: %b, exceptionalUsersAvailable: %b", basicUsersAvailable, exceptionalUsersAvailable));
+        requestedUsers.stream().forEach(requestedUserAttributes -> logger.info(String.format("Requested: %s - %s", requestedUserAttributes.getCompanyCode(), requestedUserAttributes.getType())));
+        printQueues();
+
+        boolean result =  basicUsersAvailable && exceptionalUsersAvailable;
+
+        if(result){
+
+            requestedUsers.stream()
+                    .forEach(requestedUserAttribute ->  requestedUserAttribute.setUser( takeUser(requestedUserAttribute)));
+
         }
+
+        return result;
     }
 
-    public static class CompanyMethodArgument {
+    private static User takeUser(RequestedUserAttributes requestedUserAttributes) {
 
-        private int index;
-        private CompanyCode companyCode;
-        private User user;
+        CompanyCode companyCode = requestedUserAttributes.getCompanyCode();
 
-        private CompanyMethodArgument(int index, CompanyCode companyCode) {
-            this.index = index;
-            this.companyCode = companyCode;
-        }
-
-        public static CompanyMethodArgument create(int index, CompanyCode companyCode) {
-            return new CompanyMethodArgument(index, companyCode);
-        }
-
-        public CompanyMethodArgument setUser(User user) {
-            this.user = user;
-            return this;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            CompanyMethodArgument that = (CompanyMethodArgument) o;
-
-            if (index != that.index) return false;
-            return companyCode == that.companyCode;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = index;
-            result = 31 * result + (companyCode != null ? companyCode.hashCode() : 0);
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "CompanyMethodArgument{" +
-                    "index=" + index +
-                    ", companyCode=" + companyCode +
-                    '}';
-        }
-    }
-
-
-    private static User takeUser(CompanyCode companyCode) {
         try {
-            User taken = exceptionalUsersQueues.getOrDefault(companyCode, basicUsersQueue).take();
-            logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
+
+            User taken = null;
+
+            if(requestedUserAttributes.getType().equals(User.UserType.EXCEPTIONAL)) {
+                taken = exceptionalUsersQueues.get(companyCode).take();
+                logger.info("Requested: {} Taken: {}", companyCode.name(), taken.getLogin());
+            }
+            if(requestedUserAttributes.getType().equals(User.UserType.BASIC) || requestedUserAttributes.getType().equals(User.UserType.SCALEPOINT_ID)){
+
+                taken = basicUsersQueue.entrySet()
+                        .stream()
+                        .filter(entrySet -> entrySet.getValue().size() == 2)
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new)
+                        .getValue()
+                        .get(requestedUserAttributes.getType());
+
+                ConcurrentMap<User.UserType, User> test = basicUsersQueue
+                        .get(CompanyCode.valueOf(taken.getCompanyCode()));
+
+                test.remove(taken.getType());
+            }
+
             return taken;
+
         } catch (Exception e) {
+
             logger.error("Can't take user for {} cause {}", companyCode.name(), e.toString());
             throw new IllegalStateException(e);
         }
     }
 
     public static void releaseUser(User user) {
+
         logger.info("Returned: {}", user.getLogin());
-        if (user.isBasic()) {
-            basicUsersQueue.add(user);
-        } else {
+        if (user.getType().equals(User.UserType.BASIC) || user.getType().equals(User.UserType.SCALEPOINT_ID)) {
+
+            ConcurrentMap usersMap = basicUsersQueue.get(CompanyCode.valueOf(user.getCompanyCode()));
+            usersMap.put(user.getType(), user);
+            basicUsersQueue.put(CompanyCode.valueOf(user.getCompanyCode()), usersMap);
+        }
+        if(user.getType().equals(User.UserType.EXCEPTIONAL)){
+
             exceptionalUsersQueues.get(CompanyCode.valueOf(user.getCompanyCode())).add(user);
         }
+
         logger.info("User: {} released", user.getLogin());
     }
 
     private static void printQueues() {
         logger.info(" * * * basic * * *");
-        for (User user : basicUsersQueue) {
-            logger.info(user.getCompanyCode());
+        for (Map.Entry<CompanyCode, ConcurrentMap<User.UserType, User>> companyCode : basicUsersQueue.entrySet()) {
+            logger.info(companyCode.getKey());
+            for (Map.Entry<User.UserType, User> user : companyCode.getValue().entrySet()){
+                logger.info(user.getValue().getLogin());
+            }
         }
         logger.info(" * * * specific * * *");
         for (CompanyCode companyCode : exceptionalUsersQueues.keySet()) {
@@ -212,5 +209,41 @@ public class UsersManager {
 
     public static synchronized User getSystemUser() {
         return systemUser;
+    }
+
+    public static class RequestedUserAttributes {
+
+        @Getter
+        private CompanyCode companyCode;
+        @Getter
+        @Setter
+        private User.UserType type;
+        @Getter
+        @Setter
+        private User user;
+
+        public RequestedUserAttributes(CompanyCode companyCode, User.UserType type) {
+
+            this.companyCode = companyCode;
+            this.type =  type;
+            this.user = null;
+        }
+
+        static public RequestedUserAttributes getRequestedUserAttributes(Annotation[] listOfRequestedUserAttributes) {
+
+            Optional<Annotation> userAttributesAnnotation = Arrays.stream(listOfRequestedUserAttributes)
+                    .filter(annotation -> annotation.annotationType().equals(UserAttributes.class))
+                    .findFirst();
+
+            if(userAttributesAnnotation.isPresent()){
+
+                UserAttributes userAttributes = (UserAttributes) userAttributesAnnotation.get();
+
+                return new RequestedUserAttributes(userAttributes.company(), userAttributes.type());
+            }else {
+
+                return new RequestedUserAttributes(null, User.UserType.BASIC);
+            }
+        }
     }
 }

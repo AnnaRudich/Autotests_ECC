@@ -4,8 +4,8 @@ import com.scalepoint.automation.pageobjects.pages.LoginPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Configuration;
-import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
@@ -19,7 +19,7 @@ public class IP1Api {
     public static SettlementPage doGetIntegration(User user, Claim claim, boolean withLogin) {
         String url = buildUrl(claim);
         if (withLogin) {
-            SettlementPage settlementPage = Page.getUrlAndExpectPage(url, LoginPage.class).login(user.getLogin(), user.getPassword(), SettlementPage.class);
+            SettlementPage settlementPage = Page.getUrlAndExpectPage(url, LoginPage.class).login(user, SettlementPage.class);
             SolrApi.waitForClaimAppearedInIndexByClaimNumber(claim);
             return settlementPage;
         }

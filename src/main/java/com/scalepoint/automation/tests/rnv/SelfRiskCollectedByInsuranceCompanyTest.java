@@ -174,8 +174,10 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
         BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription,
-                selfRiskByServicePartner, repairPrice, selfRisk);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, selfRiskByServicePartner, repairPrice, selfRisk).toArray()
+        };
     }
 
     @DataProvider(name = SELF_RISK_EQUAL_TO_REPAIR_PRICE_DATA_PROVIDER)
@@ -186,8 +188,10 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
         BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, selfRiskByServicePartner,
-                repairPrice, selfRisk);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, selfRiskByServicePartner, repairPrice, selfRisk).toArray()
+        };
     }
 
     @DataProvider(name = SELF_RISK_HIGHER_THAN_REPAIR_PRICE_DATA_PROVIDER)
@@ -198,8 +202,10 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
         BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(20.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, selfRiskByServicePartner,
-                repairPrice, selfRisk);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, selfRiskByServicePartner, repairPrice, selfRisk).toArray()
+        };
     }
 }
 

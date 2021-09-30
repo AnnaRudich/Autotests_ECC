@@ -15,7 +15,7 @@ import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.SharedEccAdminFlows;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.SupplierCompany;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.AttachmentFiles;
 import com.scalepoint.automation.utils.data.entity.input.SimpleSupplier;
@@ -166,7 +166,7 @@ public class SupplierTests extends BaseTest {
     @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER, UserCompanyGroups.SCALEPOINT},
             dataProvider = "testDataProvider",
             description = "ECC-3037 IC supplier is not available for SP")
-    public void ecc3037_icSupplierUnavailableForSP(@UserCompany(CompanyCode.SCALEPOINT) User spUser, User futureUser, Supplier supplier) {
+    public void ecc3037_icSupplierUnavailableForSP(@UserAttributes(company = CompanyCode.SCALEPOINT) User spUser, User futureUser, Supplier supplier) {
         checkVisibility(futureUser, spUser, supplier, false);
     }
 
@@ -192,7 +192,7 @@ public class SupplierTests extends BaseTest {
             UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "ECC-3037 Parent IC supplier is available for child IC")
-    public void ecc3037_parentICSupplierAvailableForChildIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
+    public void ecc3037_parentICSupplierAvailableForChildIC(@UserAttributes(company = CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserAttributes(company = CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
         checkVisibility(parentCompanyUser, childCompanyUser, supplier, true);
     }
 
@@ -207,7 +207,7 @@ public class SupplierTests extends BaseTest {
             UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "ECC-3037 Child IC supplier is available for parent IC")
-    public void ecc3037_childICSupplierAvailableForParentIC(@UserCompany(CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserCompany(CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
+    public void ecc3037_childICSupplierAvailableForParentIC(@UserAttributes(company = CompanyCode.TRYGHOLDING) User parentCompanyUser, @UserAttributes(company = CompanyCode.TRYGFORSIKRING) User childCompanyUser, Supplier supplier) {
         checkVisibility(childCompanyUser, parentCompanyUser, supplier, true);
     }
 
@@ -217,7 +217,7 @@ public class SupplierTests extends BaseTest {
             dataProvider = "testDataProvider",
             description = "Voucher tick should not be visible in supply management, suppliers list")
     public void ecc3039_voucherTickIsNotAvailableInSuppliersList(
-            @UserCompany(CompanyCode.SCALEPOINT) User user, @SupplierCompany(areWithVouchers = false) SimpleSupplier simpleSupplier) {
+            @UserAttributes(company = CompanyCode.SCALEPOINT) User user, @SupplierCompany(areWithVouchers = false) SimpleSupplier simpleSupplier) {
         loginToEccAdmin(user)
                 .doAssert(asserts -> asserts.assertsIsVoucherTickForSupplierNotDisplayed(simpleSupplier.getName()));
     }
@@ -226,7 +226,7 @@ public class SupplierTests extends BaseTest {
             TestGroups.SUPPLIER,
             UserCompanyGroups.BAUTA},
             dataProvider = "testDataProvider")
-    public void ecc3039_exclusiveTickIsAvailableForIC(@UserCompany(CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier) {
+    public void ecc3039_exclusiveTickIsAvailableForIC(@UserAttributes(company = CompanyCode.BAUTA) User user, @SupplierCompany(CompanyCode.BAUTA) SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
 
@@ -243,7 +243,7 @@ public class SupplierTests extends BaseTest {
             UserCompanyGroups.SCALEPOINT},
             dataProvider = "testDataProvider",
             description = "Check if invoiceSetting is set correctly")
-    public void contents3950_settingInvoiceSettingTest(@UserCompany(CompanyCode.SCALEPOINT) User user) {
+    public void contents3950_settingInvoiceSettingTest(@UserAttributes(company = CompanyCode.SCALEPOINT) User user) {
         SuppliersPage suppliersPage = loginToEccAdmin(user);
         suppliersPage.openFirstSupplier()
                 .selectOrdersTab()
@@ -265,7 +265,7 @@ public class SupplierTests extends BaseTest {
             TestGroups.SUPPLIER,
             UserCompanyGroups.SCALEPOINT},
             dataProvider = "testDataProvider")
-    public void ecc3039_sharedDataAreEditableForScalepoint(@UserCompany(CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier) {
+    public void ecc3039_sharedDataAreEditableForScalepoint(@UserAttributes(company = CompanyCode.SCALEPOINT) User user, SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
         final String scalepointAgreement = simpleSupplier.getScalepointAgreement();
         final String inactiveAgreement = simpleSupplier.getInactiveAgreement();
@@ -288,7 +288,7 @@ public class SupplierTests extends BaseTest {
             TestGroups.SUPPLIER,
             UserCompanyGroups.BAUTA},
             dataProvider = "testDataProvider")
-    public void ecc3039_sharedDataAreInViewModeForIC(@UserCompany(CompanyCode.BAUTA) User user, SimpleSupplier simpleSupplier) {
+    public void ecc3039_sharedDataAreInViewModeForIC(@UserAttributes(company = CompanyCode.BAUTA) User user, SimpleSupplier simpleSupplier) {
         final String supplierName = simpleSupplier.getName();
         final String agreement = simpleSupplier.getAgreement();
 

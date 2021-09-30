@@ -12,7 +12,8 @@ import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
+import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -24,26 +25,25 @@ import java.time.Year;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
 import static com.scalepoint.automation.pageobjects.pages.Page.to;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.disable;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettings.enable;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
+
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void charlie544_reopenSavedClaim(User user, Claim claim) {
+    public void reopenSavedClaimTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
@@ -52,15 +52,23 @@ public class ClaimTests extends BaseTest {
                 .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
     }
 
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
+    public void reopenSavedClaimScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE50, type = User.UserType.SCALEPOINT_ID) User user, Claim claim) {
+        reopenSavedClaimTest(user, claim);
+    }
     /**
      * GIVEN: SP User, saved claim C1
      * WHEN: User cancels C1
      * THEN: "Cancelled" is the status of C1
      */
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
-    public void charlie544_cancelSavedClaim(User user, Claim claim) throws Exception {
+    public void cancelSavedClaimTest(User user, Claim claim) throws Exception {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
@@ -69,11 +77,19 @@ public class ClaimTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
 
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
+            description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
+    public void cancelSavedClaimScalepointIdTest(User user, Claim claim) throws Exception {
+        cancelSavedClaimTest(user, claim);
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void charlie544_2629_completeClaimWithMail(User user, Claim claim) {
+    public void completeClaimWithMailTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -82,6 +98,15 @@ public class ClaimTests extends BaseTest {
                 .openRecentClaim()
                 .toMailsPage()
                 .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
+    }
+
+    @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
+    @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
+    @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
+            description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
+                    "Completed claim is added to the latest claims list with Completed status")
+    public void completeClaimWithMailScalepointIdTest(User user, Claim claim) {
+        completeClaimWithMailTest(user, claim);
     }
 
     @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)
@@ -160,6 +185,7 @@ public class ClaimTests extends BaseTest {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
     }
+
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "It's possible to login to Self Service 2.0 from email")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
@@ -173,8 +199,6 @@ public class ClaimTests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD);
     }
-
-
     /*
     the claim which will be validated in Audit must have mobile, zipcode, address and city as required fields
     IC Validation code should be = topdanmark always
@@ -185,7 +209,7 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
-    public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserCompany(CompanyCode.TOPDANMARK) User user, Claim claim) {
+    public void charlie_1585_auditApprovedClaimAfterSelfServiceSubmit(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, Claim claim) {
         login(getSystemUser());
         new InsCompaniesPage().enableAuditForIc(user.getCompanyName());
 
@@ -373,13 +397,11 @@ public class ClaimTests extends BaseTest {
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
     }
-
     /**
      * GIVEN: SP User, active claim C1
      * WHEN: User completes claim with wizard
      * THEN: C1 status is "Completed"
      */
-
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2632 It's possible to complete claim with replacement wizard for SP user. " +
@@ -551,7 +573,7 @@ public class ClaimTests extends BaseTest {
 
     @RequiredSetting(type= FTSetting.ENABLE_SHOW_SETTLEMENT_PAGE, isDefault = true)
     @Test(dataProvider = "testDataProvider",
-    description = "verify cancel open the claim")
+            description = "verify cancel open the claim")
     public void cancelOpenClaim(User user, Claim claim){
         loginAndCreateClaim(user, claim).
                 toCompleteClaimPage()
@@ -591,9 +613,9 @@ public class ClaimTests extends BaseTest {
                 .viewClaim()
                 .getClaimOperationsMenu()
                 .doAssert(claimOperationsMenu -> {
-                        claimOperationsMenu.assertAddManuallyButtonIsDisabled();
-                        claimOperationsMenu.assertImportExcelButtonIsDisabled();
-                        claimOperationsMenu.assertRequestSelfServiceButtonIsDisabled();
+                    claimOperationsMenu.assertAddManuallyButtonIsDisabled();
+                    claimOperationsMenu.assertImportExcelButtonIsDisabled();
+                    claimOperationsMenu.assertRequestSelfServiceButtonIsDisabled();
                 });
 
         new SettlementPage().findClaimLine("lineDescription").editLine()
@@ -607,7 +629,7 @@ public class ClaimTests extends BaseTest {
                     claimOperationsMenu.assertAddManuallyButtonIsEnabled();
                     claimOperationsMenu.assertImportExcelButtonIsEnabled();
                     claimOperationsMenu.assertRequestSelfServiceButtonIsEnabled();
-        });
+                });
     }
 
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-7254")

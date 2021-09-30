@@ -8,7 +8,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -34,7 +34,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-505 Verify automatic overwrite of the depreciation field")
-    public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie_505_1_verifyAutomaticOverwriteDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
@@ -58,7 +58,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-505 Update automatic overwrite of the depreciation field")
-    public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie_505_2_3_updateAgeAutomaticOverwriteDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
@@ -93,7 +93,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-505 Verify that changing category automatically reset of the depreciation field to 0")
-    public void charlie_505_4_changeCategoryResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie_505_4_changeCategoryResetDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)
@@ -122,7 +122,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     @Test(groups = {TestGroups.SID, TestGroups.FILL_CALC_DEPR2_RULES_AND_DEPRECATION, UserCompanyGroups.TRYGFORSIKRING},
             dataProvider = "testDataProvider",
             description = "CHARLIE-505 Verify that select other age than specified in the rules automatically reset of the depreciation field to 0")
-    public void charlie_505_5_changeAgeResetDepreciationField(@UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+    public void charlie_505_5_changeAgeResetDepreciationField(@UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         createClaimAndPrepareSid(user, claim, claimItem)
                 .valuationGrid()
                 .parseValuationRow(NEW_PRICE)

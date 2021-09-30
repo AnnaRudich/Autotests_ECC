@@ -233,7 +233,10 @@ public class RnVSmokeTest extends RnVBase {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
         Double lineTotal = 50.00;
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice, lineTotal);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice, lineTotal).toArray()
+        };
     }
 
     @DataProvider(name = MESSAGES_DATA_PROVIDER)
@@ -241,7 +244,10 @@ public class RnVSmokeTest extends RnVBase {
 
         String lineDescription = RandomUtils.randomName(RV_LINE_DESCRIPTION);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, TEST_MESSAGE);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, TEST_MESSAGE).toArray()
+        };
     }
 
     @DataProvider(name = SINGLE_INVOICE_CREDIT_NOTES_DATA_PROVIDER)
@@ -254,8 +260,10 @@ public class RnVSmokeTest extends RnVBase {
         BigDecimal creditNote2 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(10.00);
         BigDecimal creditNote3 = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, repairPrice,
-                invoicePrice, creditNote1, creditNote2, creditNote3);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, repairPrice, invoicePrice, creditNote1, creditNote2, creditNote3).toArray()
+        };
     }
 
     @DataProvider(name = MULTIPLE_INVOICED_CREDIT_NOTES_DATA_PROVIDER)
@@ -266,8 +274,10 @@ public class RnVSmokeTest extends RnVBase {
         BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
         BigDecimal creditNote = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(75.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription,
-                invoicePrice, creditNote, repairPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, invoicePrice, creditNote, repairPrice).toArray()
+        };
     }
 
     @DataProvider(name = CREDIT_NOTE_WITHOUT_INVOICE_NUMBER_DATA_PROVIDER)
@@ -277,7 +287,10 @@ public class RnVSmokeTest extends RnVBase {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
         BigDecimal invoicePrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(50.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription, invoicePrice, repairPrice);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, invoicePrice, repairPrice).toArray()
+        };
     }
 
     @DataProvider(name = SELF_RISK_LOWER_THAN_TOTAL_AMOUNT_OF_COMPENSATION_DATA_PROVIDER)
@@ -288,8 +301,10 @@ public class RnVSmokeTest extends RnVBase {
         BigDecimal repairPrice = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(30.00);
         BigDecimal selfRisk = NumberFormatUtils.formatBigDecimalToHaveTwoDigits(15.00);
 
-        return addNewParameters(TestDataActions.getTestDataParameters(method), lineDescription,
-                selfRiskByServicePartner, repairPrice, selfRisk);
+        return new Object[][]{
+
+                TestDataActions.getTestDataWithExternalParameters(method, lineDescription, selfRiskByServicePartner, repairPrice, selfRisk).toArray()
+        };
     }
 }
 

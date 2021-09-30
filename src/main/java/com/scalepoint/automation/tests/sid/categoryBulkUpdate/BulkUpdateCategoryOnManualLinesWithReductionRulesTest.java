@@ -8,7 +8,7 @@ import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.UserCompany;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -43,14 +43,14 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
             enabled = false, dataProvider = "testDataProvider",
             description = "select category with NO reduction rules mapped, apply rules automatically is enabled")
     public void bulkUpdateCategories_applyRulesAutomatically(
-            @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+            @UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
         PseudoCategory categoryWithReductionRulesMapped = claimItem.getCategoryMobilePhones();
 
         loginAndCreateClaim(user, claim);
 
         Integer depreciationPercentageFromReductionRule =
-        claimLinesHelper.startAddLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
+                claimLinesHelper.startAddLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
                         .getDepreciationPercentage();
         claimLinesHelper.finishAddLine();
         claimLinesHelper.addLine(categoryWithReductionRulesMapped, true, newPriceValue, 2)
@@ -116,7 +116,7 @@ public class BulkUpdateCategoryOnManualLinesWithReductionRulesTest extends BaseT
             enabled = false, dataProvider = "testDataProvider",
             description = "select category with NO reduction rules mapped, apply rules automatically is disabled")
     public void bulkUpdateLinesWithCategoriesWhereNoReductionRulesMapped_applyRulesManually(
-            @UserCompany(CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
+            @UserAttributes(company = CompanyCode.TRYGFORSIKRING) User user, Claim claim, ClaimItem claimItem) {
 
         PseudoCategory categoryWithNoReductionRulesMapped = claimItem.getCategoryPersonalMedicine();
         PseudoCategory categoryWithReductionRulesMapped = claimItem.getCategoryMobilePhones();

@@ -39,9 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.disappears;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.NEW_PRICE;
@@ -1218,7 +1216,7 @@ public class SettlementDialog extends BaseDialog {
         }
 
         public Asserts assertVoucherCashValueIs(String expectedValue) {
-            assertEquals(voucherCashValueFieldText(), OperationalUtils.getDoubleValue(expectedValue));
+            assertThat(voucherCashValueFieldText()).isEqualTo(OperationalUtils.getDoubleValue(expectedValue));
             return this;
         }
 
