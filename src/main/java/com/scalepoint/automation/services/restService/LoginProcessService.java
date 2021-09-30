@@ -27,6 +27,15 @@ public class LoginProcessService extends BaseService {
         this.response = response;
     }
 
+    public LoginProcessService(){
+        super();
+    }
+
+    public LoginProcessService(String eccSessionId){
+        super();
+        data.setEccSessionId(eccSessionId);
+    }
+
     public LoginProcessService login(User user) {
 
         Response loginProcessResponse = given()

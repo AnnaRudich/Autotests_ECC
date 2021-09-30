@@ -65,6 +65,11 @@ public class BaseService {
                 .login(user);
     }
 
+    public static LoginProcessService setEccSessionId(String eccSessionId){
+        return new LoginProcessService(eccSessionId);
+    }
+
+
     public ImportExcelService importExcel() throws IOException {
 
         return new ImportExcelService()
