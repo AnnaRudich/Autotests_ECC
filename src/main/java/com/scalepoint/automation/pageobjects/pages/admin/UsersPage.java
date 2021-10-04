@@ -90,6 +90,7 @@ public class UsersPage extends AdminBasePage {
         WebElement item = $(By.xpath(String.format(byUserLoginXpath, userName)));
         if (item.getText().contains(userName)) {
             $(item).scrollTo();
+            element.click();
             element.doubleClick();
         }
         return at(UserAddEditPage.class);
