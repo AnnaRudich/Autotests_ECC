@@ -16,6 +16,8 @@ public class Token {
     private int expiresIn;
     @JsonProperty("token_type")
     private String tokenType;
+    @JsonProperty("scope")
+    private String scope;
 
     public Header getAuthorizationHeader() {
         return new Header("Authorization", tokenType + " " + accessToken);

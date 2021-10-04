@@ -299,7 +299,8 @@ INSERT INTO [INSCOMP]
        ,[omCompanyAlias]
        ,[cwaTenant]
        ,[mailserviceAlias]
-       ,[scalepointIdDomains])
+       ,[scalepointIdDomains]
+       ,[enabledOMTemplates])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
        @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
@@ -341,7 +342,8 @@ INSERT INTO [INSCOMP]
            ,lower(@ICNAME)
            ,lower(@ICNAME)
            ,lower(@ICNAME)
-           ,lower(@ICNAME) + '.scalepoint.com')
+           ,lower(@ICNAME) + '.scalepoint.com'
+           ,'')
 
 INSERT INTO [PseudocatVouchers] ([PseudoCategoryId], [VoucherAgreementId], [insuranceCompanyId])
 	  SELECT [PseudoCategoryId], [VoucherAgreementId], @ICRFNBR FROM [PseudocatVouchers] where insuranceCompanyId = @scalepointId
