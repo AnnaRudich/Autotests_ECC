@@ -160,12 +160,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests /*implements ICon
     @Autowired
     protected FraudAlertMock fraudAlertMock;
 
-    @BeforeTest
-    public void setRetry(ITestContext iTestContext){
-
-        Arrays.stream(iTestContext.getAllTestMethods())
-                .forEach(iTestNGMethod -> iTestNGMethod.setRetryAnalyzerClass(Retrier.class));
-    }
+//    @BeforeTest
+//    public void setRetry(ITestContext iTestContext){
+//
+//        Arrays.stream(iTestContext.getAllTestMethods())
+//                .forEach(iTestNGMethod -> iTestNGMethod.setRetryAnalyzerClass(Retrier.class));
+//    }
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) {
