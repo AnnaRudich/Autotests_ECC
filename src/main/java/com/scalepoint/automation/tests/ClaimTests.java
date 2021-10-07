@@ -56,7 +56,7 @@ public class ClaimTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void reopenSavedClaimScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE50, type = User.UserType.SCALEPOINT_ID) User user, Claim claim) {
+    public void reopenSavedClaimScalepointIdTest(User user, Claim claim) {
         reopenSavedClaimTest(user, claim);
     }
     /**

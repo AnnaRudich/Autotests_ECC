@@ -48,7 +48,6 @@ import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
 import com.scalepoint.automation.utils.listeners.OrderRandomizer;
 import com.scalepoint.automation.utils.listeners.SuiteListener;
-import com.scalepoint.automation.utils.testng.Retrier;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
@@ -65,12 +64,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.IConfigurable;
-import org.testng.IConfigureCallBack;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
-import org.testng.internal.annotations.IAnnotationTransformer;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -79,11 +78,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,7 +97,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-public class BaseTest extends AbstractTestNGSpringContextTests implements IConfigurable, IAnnotationTransformer {
+public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
     protected static final String RV_LINE_DESCRIPTION = "RnVLine åæéø";
@@ -159,13 +156,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
 
     @Autowired
     protected FraudAlertMock fraudAlertMock;
-
-    @BeforeTest
-    public void setRetry(ITestContext iTestContext){
-
-        Arrays.stream(iTestContext.getAllTestMethods())
-                .forEach(iTestNGMethod -> iTestNGMethod.setRetryAnalyzerClass(Retrier.class));
-    }
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) {
@@ -649,25 +639,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements IConfi
         return (List<T>) objects
                 .stream()
                 .filter(o -> !o.getClass().equals(clazz)).collect(Collectors.toList());
-    }
-
-    @Override
-    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod, Class<?> occurringClazz){
-
-        annotation.setRetryAnalyzer(Retrier.class);
-    }
-
-    @Override
-    public void run(IConfigureCallBack iConfigureCallBack, ITestResult iTestResult) {
-        iConfigureCallBack.runConfigurationMethod(iTestResult);
-        if (iTestResult.getThrowable() != null) {
-            for (int i = 0; i <= 3; i++) {
-                iConfigureCallBack.runConfigurationMethod(iTestResult);
-                if (iTestResult.getThrowable() == null) {
-                    break;
-                }
-            }
-        }
     }
 }
 
