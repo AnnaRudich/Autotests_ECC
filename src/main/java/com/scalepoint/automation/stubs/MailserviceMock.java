@@ -29,7 +29,8 @@ public class MailserviceMock extends EccMock {
         return stub = new MailserviceStub()
                 .stubForInternalServerError()
                 .stubForNotFound()
-                .stubMissingToken();
+                .stubMissingToken()
+                /*.test()*/;
     }
 
     public class MailserviceStub {
@@ -64,6 +65,14 @@ public class MailserviceMock extends EccMock {
                             .withRequestBody(containing(getTestMobileNumberForStatusCode(responseCode)))
                             .atPriority(1)
                             .willReturn(aResponse().withStatus(responseCode).withBody(String.format(response, responseCode))));
+            return this;
+        }
+        public MailserviceStub test() {
+
+            wireMock.stubFor(
+                    post(urlMatching("/api/v1/email"))
+                            .atPriority(2)
+                            .willReturn(aResponse().withStatus(200).withBody("TOKEN:STATUS:OK")));
             return this;
         }
     }
