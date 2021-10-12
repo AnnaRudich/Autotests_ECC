@@ -51,7 +51,7 @@ public class CompleteClaimExternally extends BaseTest {
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }
-
+@RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
