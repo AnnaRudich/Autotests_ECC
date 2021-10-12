@@ -1,15 +1,17 @@
 package com.scalepoint.automation.spring;
 
-        import com.github.tomakehurst.wiremock.client.WireMock;
-        import com.github.tomakehurst.wiremock.client.WireMockBuilder;
-        import com.scalepoint.automation.shared.WiremockServer;
-        import com.scalepoint.automation.stubs.*;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-        import org.springframework.context.annotation.Bean;
-        import org.springframework.context.annotation.Configuration;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.client.WireMockBuilder;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
+import com.scalepoint.automation.shared.WiremockServer;
+import com.scalepoint.automation.stubs.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-        import java.io.IOException;
+import java.io.IOException;
 
 @Configuration
 @EnableAutoConfiguration
@@ -23,6 +25,9 @@ public class WireMockConfig {
 
     @Value("${wiremock.port}")
     String port;
+
+    @Autowired
+    public DatabaseApi databaseApi;
 
     @Bean
     public WireMock wireMock(){
@@ -70,5 +75,10 @@ public class WireMockConfig {
     @Bean
     public PostalCodeMock.PostalCodeStubs postalCodeMock() throws IOException {
         return new PostalCodeMock(wireMock()).addStub();
+    }
+
+    @Bean
+    public MailserviceMock.MailserviceStub mailserviceStub() throws IOException {
+        return new MailserviceMock(wireMock(),databaseApi).addStub();
     }
 }

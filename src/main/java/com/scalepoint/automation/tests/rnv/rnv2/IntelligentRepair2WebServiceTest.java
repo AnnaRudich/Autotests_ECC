@@ -100,7 +100,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         Page.to(MyPage.class)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .doAssert(mail -> {
                     mail.isMailExist(CUSTOMER_WELCOME);
                 });
@@ -153,7 +153,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
         Page.to(MyPage.class)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
-                .openRecentClaim().toMailsPage();
+                .openRecentClaim().toMailsPage(mailserviceStub, databaseApi);
 
         new CustomerDetailsPage().toRepairValuationProjectsPage()
                 .getAssertion()

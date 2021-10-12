@@ -1,17 +1,20 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
+import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.BankAccount;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
@@ -25,7 +28,6 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
     protected static String oneAttachment;
     protected static String twoAttachments;
-
 
     @BeforeMethod
     public void setCommunicationDesignerSection(Object[] objects) throws IOException {
@@ -63,7 +65,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted)
                 .openRecentClaim()
-                .toMailsPage();
+                .toMailsPage(mailserviceStub, databaseApi);
     }
 
     protected void sendSelfServiceCustomerWelcomeEmail(Claim claim, String companyCode, String password,
@@ -74,7 +76,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         MailsPage mailsPage = Page.at(SettlementPage.class)
                 .requestSelfService(claim, password)
-                .toMailsPage();
+                .toMailsPage(mailserviceStub, databaseApi);
 
         mailsPage
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME, title)
@@ -99,7 +101,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         Page.at(SettlementPage.class)
                 .requestSelfServiceWithEnabledAutoClose(claim, password)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(password)
@@ -115,7 +117,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
                 .sendResponseToEcc();
 
         to(MyPage.class).openActiveRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .doAssert(mail -> {
                     mail.isMailExist(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL);
                     mail.isMailExist(MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL);

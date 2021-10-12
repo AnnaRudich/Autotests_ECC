@@ -239,7 +239,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim, ClaimItem claimItem) {
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)

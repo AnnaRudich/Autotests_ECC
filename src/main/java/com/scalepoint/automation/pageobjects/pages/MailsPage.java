@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.pages;
         import com.codeborne.selenide.Condition;
         import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
         import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
+        import com.scalepoint.automation.stubs.MailserviceMock;
         import com.scalepoint.automation.utils.Wait;
         import com.scalepoint.automation.utils.annotations.page.EccPage;
         import com.scalepoint.automation.utils.types.SortType;
@@ -80,6 +81,12 @@ public class MailsPage extends BaseClaimPage {
     }
 
     public MailViewDialog viewMail(MailType mailType) {
+
+        return parseMails().findMailByType(mailType).viewMail();
+    }
+
+    public MailViewDialog viewMail(MailType mailType, MailserviceMock.MailserviceStub mailserviceStub) {
+
         return parseMails().findMailByType(mailType).viewMail();
     }
 

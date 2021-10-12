@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
@@ -9,9 +10,11 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
+import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -19,6 +22,8 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.driver.DriverType;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -36,6 +41,20 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
+
+    MailserviceMock.MailserviceStub mailserviceStub;
+
+    @BeforeClass
+    public void startWireMock() {
+
+        WireMock.configureFor(wireMock);
+        wireMock.resetMappings();
+        mailserviceStub = new MailserviceMock(wireMock, databaseApi).addStub();
+        wireMock.allStubMappings()
+                .getMappings()
+                .stream()
+                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+    }
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
@@ -96,7 +115,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
     }
 
@@ -120,7 +139,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
                 .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
                 .doAssert(mailViewDialog -> mailViewDialog.isTextVisible(claim.getAgentEmail()));
@@ -137,7 +156,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
                 .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
                 .doAssert(mailViewDialog -> mailViewDialog.isTextInvisible(claim.getAgentEmail()));
@@ -194,7 +213,7 @@ public class ClaimTests extends BaseTest {
     public void loginToSelfService2_0(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD);
@@ -221,7 +240,7 @@ public class ClaimTests extends BaseTest {
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -310,7 +329,7 @@ public class ClaimTests extends BaseTest {
                     asserts.assertProductDetailsIconIsDisplayed();
                 });
     }
-
+@RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-511")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-2631 It's possible to openSidForFirstProduct product via Quick openSidForFirstProduct icon for SelfService imported claim lines")
@@ -325,7 +344,7 @@ public class ClaimTests extends BaseTest {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -360,7 +379,7 @@ public class ClaimTests extends BaseTest {
                 });
 
         to(MyPage.class).openActiveRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
 
                 .doAssert(mail -> {
                     mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);

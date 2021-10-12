@@ -33,7 +33,7 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_addSSLineWithoutDocsAndNotes(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -68,7 +68,7 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_reloadedDataSaved(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -108,7 +108,7 @@ public class SelfServiceTest extends BaseTest {
     public void charlie504_deleteLine(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -139,7 +139,7 @@ public class SelfServiceTest extends BaseTest {
 
         String description = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -178,7 +178,7 @@ public class SelfServiceTest extends BaseTest {
 
         SelfServiceGridRow selfServiceGridRow = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -219,7 +219,7 @@ public class SelfServiceTest extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -253,7 +253,7 @@ public class SelfServiceTest extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -287,7 +287,7 @@ public class SelfServiceTest extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -325,7 +325,7 @@ public class SelfServiceTest extends BaseTest {
 
         SelfServiceGridRow selfServiceGridRow = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)

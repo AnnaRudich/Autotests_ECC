@@ -157,6 +157,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected FraudAlertMock fraudAlertMock;
 
+    @Autowired
+    protected MailserviceMock.MailserviceStub mailserviceStub;
+
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) {
 

@@ -49,7 +49,7 @@ public class EccIntegrationsWithCwaClaimSSTests extends BaseTest {
         )).isTrue();
 
         settlementPage
-                .toMailsPage()
+                .toMailsPage(mailserviceStub, databaseApi)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
