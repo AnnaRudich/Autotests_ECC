@@ -93,7 +93,7 @@ public class DepreciationDeductedCombinedTests extends BaseTest {
                 .fillClaimFormWithPassword(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
         login(user).openRecentClaim()

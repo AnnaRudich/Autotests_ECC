@@ -16,13 +16,11 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -131,7 +129,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(title)
@@ -159,7 +157,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(title)
@@ -219,7 +217,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(title)
@@ -279,14 +277,14 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         new CreateOrderService().createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
-        new CustomerDetailsPage().toMailsPage(mailserviceStub, databaseApi)
+        new CustomerDetailsPage().toMailsPage()
                 .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, orderConfirmationTitle)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(orderConfirmationTitle));
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
-@RunOn(DriverType.CHROME)
+
     @CommunicationDesignerCleanUp
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
     @RequiredSetting(type = FTSetting.SPLIT_REPLACEMENT_EMAIL)

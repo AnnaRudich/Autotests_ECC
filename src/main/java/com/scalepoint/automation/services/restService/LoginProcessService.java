@@ -1,7 +1,9 @@
 package com.scalepoint.automation.services.restService;
 
 import com.scalepoint.automation.services.restService.common.BaseService;
+import com.scalepoint.automation.services.restService.common.Data;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.request.CustomerMailListItem;
 import com.scalepoint.automation.utils.data.response.Token;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -34,6 +36,10 @@ public class LoginProcessService extends BaseService {
     public LoginProcessService(String eccSessionId){
         super();
         data.setEccSessionId(eccSessionId);
+    }
+    public LoginProcessService(Data data){
+        super();
+        this.data=data;
     }
 
     public LoginProcessService login(User user) {
@@ -85,6 +91,11 @@ public class LoginProcessService extends BaseService {
     }
 
     public SelfServiceService reloadFunctionTemplate(){return new SelfServiceService().reloadFunctionTemplate();}
+
+    public CustomerMailListItem[] getCustomerMailList(){
+
+        return new CustomerMailService(data).getCustomerMailList();
+    }
 
     private String getLocationHeader(Response response) {
         return response.getHeader("Location");

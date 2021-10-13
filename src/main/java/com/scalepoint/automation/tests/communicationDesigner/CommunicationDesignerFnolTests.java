@@ -62,7 +62,7 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
         Page.at(SettlementPage.class)
                 .cancelPolicy()
                 .requestSelfServiceWithEnabledNewPassword(createClaimRequest, password)
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(password)
@@ -75,7 +75,7 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
                 .sendResponseToEcc();
 
         to(MyPage.class).openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mail ->
                         mail.noOtherMailsOnThePage(
                                 Arrays.asList(

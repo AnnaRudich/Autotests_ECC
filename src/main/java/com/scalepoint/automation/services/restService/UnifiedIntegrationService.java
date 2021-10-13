@@ -1,6 +1,7 @@
 package com.scalepoint.automation.services.restService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
@@ -8,6 +9,7 @@ import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.changed.Case;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.response.Token;
+import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
@@ -104,11 +106,14 @@ public class UnifiedIntegrationService extends BaseService {
                 .getBody().print();
     }
 
-    public String createClaimFNOL(ClaimRequest claimRequest){
+    public String createClaimFNOL(ClaimRequest claimRequest, DatabaseApi databaseApi){
 
         response = new CreateClaimService(token)
                 .addClaim(claimRequest)
                 .getResponse();
+
+
+        CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
 
         return response
                 .jsonPath()

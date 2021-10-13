@@ -115,7 +115,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
     }
 
@@ -139,7 +139,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
                 .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
                 .doAssert(mailViewDialog -> mailViewDialog.isTextVisible(claim.getAgentEmail()));
@@ -156,7 +156,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
                 .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
                 .doAssert(mailViewDialog -> mailViewDialog.isTextInvisible(claim.getAgentEmail()));
@@ -213,7 +213,7 @@ public class ClaimTests extends BaseTest {
     public void loginToSelfService2_0(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD);
@@ -240,7 +240,7 @@ public class ClaimTests extends BaseTest {
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -344,7 +344,7 @@ public class ClaimTests extends BaseTest {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -379,7 +379,7 @@ public class ClaimTests extends BaseTest {
                 });
 
         to(MyPage.class).openActiveRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
 
                 .doAssert(mail -> {
                     mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);

@@ -201,7 +201,7 @@ public class OrderDetailsTests extends BaseTest {
         new CustomerDetailsPage()
                 .toOrdersDetailsPage()
                 .doAssert(orderDetailsPage -> orderDetailsPage.assertDetailsAreInvisible())
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mailsPage ->
                         mailsPage.noOtherMailsOnThePage(Arrays.asList(SETTLEMENT_NOTIFICATION_TO_IC, CUSTOMER_WELCOME
                         )));
@@ -230,7 +230,7 @@ public class OrderDetailsTests extends BaseTest {
         new CustomerDetailsPage()
                 .toOrdersDetailsPage()
                 .doAssert(orderDetailsPage -> orderDetailsPage.assertDetailsAreVisible())
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mailsPage ->
                         mailsPage.noOtherMailsOnThePage(Arrays.asList(
                                 SETTLEMENT_NOTIFICATION_TO_IC,

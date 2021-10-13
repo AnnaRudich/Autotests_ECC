@@ -336,7 +336,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         String test = unifiedIntegrationService.createItemizationCaseFNOL(createClaimRequest.getCountry(), createClaimRequest.getTenant(), itemizationRequest);
         createClaimRequest.setItemizationCaseReference(test);
         createClaimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        return unifiedIntegrationService.createClaimFNOL(createClaimRequest);
+        return unifiedIntegrationService.createClaimFNOL(createClaimRequest, databaseApi);
     }
 
     protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {

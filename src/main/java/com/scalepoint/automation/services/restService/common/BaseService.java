@@ -46,6 +46,12 @@ public class BaseService {
         data.setUserId(data.getDatabaseApi().getUserIdByClaimNumber(claimNumber));
     }
 
+    public BaseService setUserId(String userId){
+
+        data.setUserId(Integer.valueOf(userId));
+        return this;
+    }
+
     public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items) {
         return loginAndOpenClaim(user, claimRequest)
                 .claimLines()
@@ -67,6 +73,10 @@ public class BaseService {
 
     public static LoginProcessService setEccSessionId(String eccSessionId){
         return new LoginProcessService(eccSessionId);
+    }
+
+    public static LoginProcessService setData(Data data){
+        return new LoginProcessService(data);
     }
 
 

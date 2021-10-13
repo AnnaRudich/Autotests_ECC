@@ -88,7 +88,7 @@ public class ReplacementDialogTests extends BaseTest {
 
                 .doAssert(MyPage.Asserts::assertClaimCompleted)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub, databaseApi)
+                .toMailsPage()
                 .doAssert(mail ->
                         mail.isMailExist(REPLACEMENT_WITH_MAIL));
     }
