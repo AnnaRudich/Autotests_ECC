@@ -36,6 +36,7 @@ public class SelfService2Tests extends BaseTest {
 
     private String description;
     private String newPasswordToSelfService;
+    
     MailserviceMock mailserviceMock;
 
     @BeforeClass

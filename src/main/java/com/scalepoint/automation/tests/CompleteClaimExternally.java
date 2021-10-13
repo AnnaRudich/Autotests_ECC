@@ -5,12 +5,10 @@ import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -32,7 +30,7 @@ public class CompleteClaimExternally extends BaseTest {
                 .stream()
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
     }
-@RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
     @Test(groups = {TestGroups.COMPLETE_CLAIM_EXTERNALLY}, dataProvider = "testDataProvider",
@@ -51,7 +49,7 @@ public class CompleteClaimExternally extends BaseTest {
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }
-@RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
