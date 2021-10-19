@@ -92,10 +92,10 @@ public class LoginProcessService extends BaseService {
 
     public SelfServiceService reloadFunctionTemplate(){return new SelfServiceService().reloadFunctionTemplate();}
 
-    public CustomerMailListItem[] getCustomerMailList(){
-
-        return new CustomerMailService(data).getCustomerMailList();
-    }
+//    public CustomerMailListItem[] getCustomerMailList(){
+//
+//        return new CustomerMailService(data).getCustomerMailList();
+//    }
 
     private String getLocationHeader(Response response) {
         return response.getHeader("Location");

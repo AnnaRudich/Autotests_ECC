@@ -77,6 +77,16 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
+        public String getTestMobileNumberForStatusCode(int responseCode){
+
+            return  testMobileNumber
+                    .stream()
+                    .filter(testMobile -> testMobile.getTestMobileOwner().contains(String.valueOf(responseCode)))
+                    .findFirst()
+                    .orElseThrow(NoSuchElementException::new)
+                    .getTestMobileNumber();
+        }
+
         public MailserviceStub test() {
 
 //            wireMock.stubFor(
@@ -152,14 +162,6 @@ public class MailserviceMock extends EccMock {
         }
     }
 
-    public String getTestMobileNumberForStatusCode(int responseCode){
 
-        return  testMobileNumber
-                .stream()
-                .filter(testMobile -> testMobile.getTestMobileOwner().contains(String.valueOf(responseCode)))
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new)
-                .getTestMobileNumber();
-    }
 }
 

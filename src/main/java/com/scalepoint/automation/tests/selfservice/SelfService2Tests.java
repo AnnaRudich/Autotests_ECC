@@ -36,21 +36,21 @@ public class SelfService2Tests extends BaseTest {
 
     private String description;
     private String newPasswordToSelfService;
-    
-    MailserviceMock mailserviceMock;
 
-    @BeforeClass
-    public void startWireMock() {
-
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        mailserviceMock = new MailserviceMock(wireMock, databaseApi);
-        mailserviceMock.addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
+//    MailserviceMock mailserviceMock;
+//
+//    @BeforeClass
+//    public void startWireMock() {
+//
+//        WireMock.configureFor(wireMock);
+//        wireMock.resetMappings();
+//        mailserviceMock = new MailserviceMock(wireMock, databaseApi);
+//        mailserviceMock.addStub();
+//        wireMock.allStubMappings()
+//                .getMappings()
+//                .stream()
+//                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+//    }
 
     @BeforeMethod
     void init() {
@@ -219,7 +219,7 @@ public class SelfService2Tests extends BaseTest {
 
     private void sendSMSandVerifyResponse(User user, Claim claim, int httpStatus){
 
-        claim.setCellNumber(mailserviceMock.getTestMobileNumberForStatusCode(httpStatus));
+        claim.setCellNumber(mailserviceStub.getTestMobileNumberForStatusCode(httpStatus));
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
 

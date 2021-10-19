@@ -17,19 +17,19 @@ import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.
 
 public class CompleteClaimExternally extends BaseTest {
 
-    MailserviceMock.MailserviceStub mailserviceStub;
-
-    @BeforeClass
-    public void startWireMock() {
-
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        mailserviceStub = new MailserviceMock(wireMock, databaseApi).addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
+//    MailserviceMock.MailserviceStub mailserviceStub;
+//
+//    @BeforeClass
+//    public void startWireMock() {
+//
+//        WireMock.configureFor(wireMock);
+//        wireMock.resetMappings();
+//        mailserviceStub = new MailserviceMock(wireMock, databaseApi).addStub();
+//        wireMock.allStubMappings()
+//                .getMappings()
+//                .stream()
+//                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+//    }
 
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")

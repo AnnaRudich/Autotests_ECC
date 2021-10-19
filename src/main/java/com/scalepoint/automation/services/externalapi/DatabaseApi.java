@@ -77,14 +77,14 @@ public class DatabaseApi {
         }
     }
 
-    public String getItemizationCaseReferenceByClaimNumber(String claimNumber) {
-        try {
-            return jdbcTemplate.queryForObject("select ItemizationCaseReference from [dbo].[User] where ClaimNumber = ?", String.class, claimNumber);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            return null;
-        }
-    }
+//    public String getItemizationCaseReferenceByClaimNumber(String claimNumber) {
+//        try {
+//            return jdbcTemplate.queryForObject("select ItemizationCaseReference from [dbo].[User] where ClaimNumber = ?", String.class, claimNumber);
+//        } catch (Exception ex) {
+//            logger.error(ex.getMessage());
+//            return null;
+//        }
+//    }
 
     public List<CwaTaskLog> getCwaTaskLogsForClaimId(Integer claimId) {
         return this.jdbcTemplate.query(

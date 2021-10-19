@@ -40,19 +40,19 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
 
-    MailserviceMock.MailserviceStub mailserviceStub;
-
-    @BeforeClass
-    public void startWireMock() {
-
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        mailserviceStub = new MailserviceMock(wireMock, databaseApi).addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
+//    MailserviceMock.MailserviceStub mailserviceStub;
+//
+//    @BeforeClass
+//    public void startWireMock() {
+//
+//        WireMock.configureFor(wireMock);
+//        wireMock.resetMappings();
+//        mailserviceStub = new MailserviceMock(wireMock, databaseApi).addStub();
+//        wireMock.allStubMappings()
+//                .getMappings()
+//                .stream()
+//                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
+//    }
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";

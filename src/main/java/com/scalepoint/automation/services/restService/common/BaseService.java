@@ -46,11 +46,11 @@ public class BaseService {
         data.setUserId(data.getDatabaseApi().getUserIdByClaimNumber(claimNumber));
     }
 
-    public BaseService setUserId(String userId){
-
-        data.setUserId(Integer.valueOf(userId));
-        return this;
-    }
+//    public BaseService setUserId(String userId){
+//
+//        data.setUserId(Integer.valueOf(userId));
+//        return this;
+//    }
 
     public static ClaimSettlementItemsService loginAndOpenClaimWithItems(User user, ClaimRequest claimRequest, InsertSettlementItem... items) {
         return loginAndOpenClaim(user, claimRequest)
@@ -75,9 +75,9 @@ public class BaseService {
         return new LoginProcessService(eccSessionId);
     }
 
-    public static LoginProcessService setData(Data data){
-        return new LoginProcessService(data);
-    }
+//    public static LoginProcessService setData(Data data){
+////        return new LoginProcessService(data);
+////    }
 
 
     public ImportExcelService importExcel() throws IOException {

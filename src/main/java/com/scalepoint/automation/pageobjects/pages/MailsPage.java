@@ -85,10 +85,10 @@ public class MailsPage extends BaseClaimPage {
         return parseMails().findMailByType(mailType).viewMail();
     }
 
-    public MailViewDialog viewMail(MailType mailType, MailserviceMock.MailserviceStub mailserviceStub) {
-
-        return parseMails().findMailByType(mailType).viewMail();
-    }
+//    public MailViewDialog viewMail(MailType mailType, MailserviceMock.MailserviceStub mailserviceStub) {
+//
+//        return parseMails().findMailByType(mailType).viewMail();
+//    }
 
     public MailViewDialog viewMail(MailType mailType, String mailSubject) {
 

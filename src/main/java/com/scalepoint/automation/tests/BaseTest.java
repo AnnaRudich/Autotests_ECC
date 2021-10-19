@@ -163,25 +163,25 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     WireMockServer wireMockServer;
 
-    @BeforeSuite
-    public void start(){
+//    @BeforeSuite
+//    public void start(){
+//
+//        int httpPort = 8787;
+//
+//        wireMockServer = new WireMockServer(wireMockConfig().port(httpPort));
+//        wireMockServer.start();
+//        WireMock.configureFor("localhost", httpPort);
+//
+//        wireMockServer.stubFor(WireMock.get("/test").willReturn(aResponse().withStatus(200).withBody("maka paka af af")));
+//
+//        log.info(wireMockServer.isRunning());
+//
+//    }
 
-        int httpPort = 8787;
-
-        wireMockServer = new WireMockServer(wireMockConfig().port(httpPort));
-        wireMockServer.start();
-        WireMock.configureFor("localhost", httpPort);
-
-        wireMockServer.stubFor(WireMock.get("/test").willReturn(aResponse().withStatus(200).withBody("maka paka af af")));
-
-        log.info(wireMockServer.isRunning());
-
-    }
-
-    @AfterSuite
-    public void test(){
-        wireMockServer.stop();
-    }
+//    @AfterSuite
+//    public void test(){
+//        wireMockServer.stop();
+//    }
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) {
