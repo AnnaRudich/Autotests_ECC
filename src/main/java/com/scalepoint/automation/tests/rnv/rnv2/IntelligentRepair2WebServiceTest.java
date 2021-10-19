@@ -1,5 +1,6 @@
 package com.scalepoint.automation.tests.rnv.rnv2;
 
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
@@ -32,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
@@ -274,6 +276,9 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .doAssert(claimLine -> {
                     claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
                 });
+
+        List<LoggedRequest> test = wireMock.find(anyRequestedFor(urlMatching("/api/v1/email")));
+        System.out.println();
     }
     /*
      * send line to RnV

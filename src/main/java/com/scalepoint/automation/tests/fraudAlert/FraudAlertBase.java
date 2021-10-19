@@ -7,9 +7,7 @@ import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,23 +28,13 @@ public class FraudAlertBase extends BaseTest {
     static final String COUNTRY = "dk";
     FraudAlertStubs fraudAlertStubs;
 
-    WireMockServer wireMockServer;
+
+
+
+
 
     @BeforeClass
     public void startWireMock() throws IOException {
-
-        int httpPort = 8080;
-
-         wireMockServer = new WireMockServer(wireMockConfig().port(httpPort));
-        wireMockServer.start();
-        WireMock.configureFor("localhost", httpPort);
-        wireMock = new WireMock("localhost", httpPort);
-        wireMockServer.stubFor(WireMock.get("/test").willReturn(aResponse().withStatus(200)));
-//        given().log().all()
-//                .get("http://124.0.0.1:7777/test")
-//                .then().log().all();
-        log.info(wireMockServer.isRunning());
-
 
         fraudAlertStubs = fraudAlertMock.addStub(TENANT);
 
@@ -56,10 +44,7 @@ public class FraudAlertBase extends BaseTest {
 
     }
 
-    @AfterClass
-            public void test(){
-        wireMockServer.stop();
-    }
+
 
     String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 
