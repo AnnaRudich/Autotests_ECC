@@ -240,7 +240,7 @@ public class ClaimTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "ECC-3256, ECC-3050 It's possible add note on Settlement page")
     @RequiredSetting(type = FTSetting.USE_INTERNAL_NOTES)
-    @RequiredSetting(type = FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON)
+//    @RequiredSetting(type = FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON)
     @RequiredSetting(type = FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON)
     public void ecc3256_3050_addInternalAndCustomerNotes(User user, Claim claim) {
 
@@ -259,7 +259,7 @@ public class ClaimTests extends BaseTest {
 
         updateFT(user, SettlementPage.class,
                 disable(FTSetting.USE_INTERNAL_NOTES),
-                disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
+//                disable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 disable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
                 .toNotesPage()
                 .doAssert(notesPage -> {
@@ -269,7 +269,7 @@ public class ClaimTests extends BaseTest {
 
         updateFT(user, SettlementPage.class,
                 enable(FTSetting.USE_INTERNAL_NOTES),
-                enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
+//                enable(FTSetting.SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON),
                 enable(FTSetting.SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON))
                 .toNotesPage()
                 .doAssert(notesPage -> {

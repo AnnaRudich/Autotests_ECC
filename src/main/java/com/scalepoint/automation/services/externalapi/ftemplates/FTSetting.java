@@ -11,7 +11,7 @@ public enum FTSetting {
     ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE("input[name=ftfunctionflag3][value='4194304']", CHECKBOX),
     ENABLE_REGISTRATION_LINE_SELF_SERVICE("input[name=ftSelfServiceFlag][value='2048']", CHECKBOX),
     USE_INTERNAL_NOTES("input[name=ftfunctionflag][value='2048']", CHECKBOX),
-    SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON("input[name=ftfunctionflag][value='4096']", CHECKBOX),
+//    SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON("input[name=ftfunctionflag][value='4096']", CHECKBOX),
     SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON("input[name=ftfunctionflag][value='8192']", CHECKBOX),
     USE_REPLACEMENT_FROM_ME("input[name=ftfunctionflag][value='8388608']", CHECKBOX),
     USE_REPLACEMENT_THROUGH_THE_SHOP("input[name=ftfunctionflag2][value='4096']", CHECKBOX),
