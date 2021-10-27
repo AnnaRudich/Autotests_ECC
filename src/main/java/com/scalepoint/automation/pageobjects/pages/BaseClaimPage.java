@@ -87,6 +87,7 @@ public abstract class BaseClaimPage extends Page {
                         .build())
                 .collect(Collectors.toList());
 
+        Wait.waitMillis(2000);
         mailserviceStub.forCase(mailListItems);
 //        mails.stream()
 //                .filter(m -> m.getMailType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
