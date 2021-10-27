@@ -17,9 +17,6 @@
             <key>USE_INTERNAL_NOTES</key><value>ENABLE</value>
         </entry>
         <entry>
-            <key>SETTLEMENT_PAGE_INTERNAL_NOTEBUTTON</key><value>DISABLE</value>
-        </entry>
-        <entry>
             <key>SETTLEMENT_PAGE_CUSTOMER_NOTEBUTTON</key><value>DISABLE</value>
         </entry>
         <entry>
