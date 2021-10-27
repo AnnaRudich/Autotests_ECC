@@ -298,7 +298,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
         String token = getToken(claimRequest);
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -361,7 +361,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
         String token = createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
         loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)

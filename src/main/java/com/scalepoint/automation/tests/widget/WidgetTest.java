@@ -145,7 +145,7 @@ public class WidgetTest extends BaseTest {
 
         return loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
