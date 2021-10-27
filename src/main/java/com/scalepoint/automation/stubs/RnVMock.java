@@ -62,6 +62,7 @@ public class RnVMock extends EccMock{
             wireMock.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
                     .withRequestBody(notMatching(unauthorizedRegex))
                     .willReturn(aResponse().withStatus(200)));
+
             return this;
         }
 
@@ -70,6 +71,7 @@ public class RnVMock extends EccMock{
             wireMock.stubFor(post(urlPathEqualTo(rvTaskWebServiceUrl))
                     .withRequestBody(matching(unauthorizedRegex))
                     .willReturn(aResponse().withStatus(401)));
+
             return this;
         }
 

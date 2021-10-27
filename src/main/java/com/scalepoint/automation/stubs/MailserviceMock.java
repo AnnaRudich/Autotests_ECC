@@ -8,18 +8,15 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.shared.TestMobileNumber;
 import com.scalepoint.automation.utils.data.request.Mail;
-import com.scalepoint.automation.utils.data.request.MailContent;
 import com.scalepoint.automation.utils.data.request.MailListItem;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 
 public class MailserviceMock extends EccMock {
 
@@ -39,12 +36,14 @@ public class MailserviceMock extends EccMock {
                 .stubForInternalServerError()
                 .stubForNotFound()
                 .stubMissingToken()
+                .stubDateOfFirstSelfServiceWelcome()
+                .stubEmail()
                 .test();
     }
 
     public class MailserviceStub {
 
-        private static final String URL = "/api/.*/sms";
+        private static final String SMS_URL = "/api/.*/sms";
 
         public MailserviceStub() {
 
@@ -53,24 +52,48 @@ public class MailserviceMock extends EccMock {
 
         public MailserviceStub stubForInternalServerError() {
 
-            stub(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            stubSMS(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return this;
         }
 
         public MailserviceStub stubForNotFound() {
-            stub(HttpStatus.SC_NOT_FOUND);
+            stubSMS(HttpStatus.SC_NOT_FOUND);
             return this;
         }
 
         public MailserviceStub stubMissingToken() {
-            stub(HttpStatus.SC_OK);
+            stubSMS(HttpStatus.SC_OK);
             return this;
         }
 
-        public MailserviceStub stub(int responseCode) {
+        public MailserviceStub stubDateOfFirstSelfServiceWelcome(){
 
             wireMock.stubFor(
-                    any(urlMatching(URL))
+                    get(urlMatching("/api/v1/email/dateOfFirstSelfServiceWelcome/.*"))
+                            .atPriority(1)
+                            .willReturn(aResponse()
+                                    .withStatus(204)
+                                    .withBody("{content=null, binary=true, json=false")));
+
+            return this;
+        }
+
+        public MailserviceStub stubEmail(){
+
+            wireMock.stubFor(
+                    post(urlEqualTo("/api/v1/email"))
+                            .atPriority(1)
+                            .willReturn(aResponse()
+                                    .withStatus(200)
+                                    .withBody(String.format("{content=\"TOKEN:%s;STATUS:OK\", binary=false, json=false}", UUID.randomUUID().toString()))));
+
+            return this;
+        }
+
+        public MailserviceStub stubSMS(int responseCode) {
+
+            wireMock.stubFor(
+                    any(urlMatching(SMS_URL))
                             .withRequestBody(containing(getTestMobileNumberForStatusCode(responseCode)))
                             .atPriority(1)
                             .willReturn(aResponse().withStatus(responseCode).withBody(String.format(response, responseCode))));
@@ -96,24 +119,24 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public MailserviceStub test3(List<MailListItem> mailListItems) {
+        public MailserviceStub forCase(List<MailListItem> mailListItems) {
 
-//            mailListItems.get(0).getToken();
-//            String body =  null;
-//            try
-//            {
-//                body = new ObjectMapper().writeValueAsString(mailListItems);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//
-//            wireMock.stubFor(
-//                    get(urlMatching("/api/v1/email/forCase/".concat(mailListItems.get(0).getToken())))
-//                            .atPriority(3)
-//                            .willReturn(aResponse()
-//                                    .withHeader("Content-Type", "application/json;charset=utf-8")
-//                                    .withStatus(200)
-//                                    .withBody(body)));
+            mailListItems.get(0).getToken();
+            String body =  null;
+            try
+            {
+                body = new ObjectMapper().writeValueAsString(mailListItems);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            wireMock.stubFor(
+                    get(urlMatching("/api/v1/email/forCase/".concat(mailListItems.get(0).getToken())))
+                            .atPriority(3)
+                            .willReturn(aResponse()
+                                    .withHeader("Content-Type", "application/json;charset=utf-8")
+                                    .withStatus(200)
+                                    .withBody(body)));
             return this;
         }
 
@@ -155,7 +178,7 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public List<LoggedRequest> test2(){
+        public List<LoggedRequest> findSentEmails(){
 
             return wireMock
                     .find(postRequestedFor(urlMatching("/api/v1/email")));

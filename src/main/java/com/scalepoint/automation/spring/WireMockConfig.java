@@ -40,7 +40,7 @@ public class WireMockConfig {
                 .build();
 
         WireMock.configureFor(wireMock);
-//        wireMock.resetMappings();
+        wireMock.resetMappings();
 
         return wireMock;
     }
@@ -76,6 +76,11 @@ public class WireMockConfig {
     public PostalCodeMock.PostalCodeStubs postalCodeMock() throws IOException {
         return new PostalCodeMock(wireMock()).addStub();
     }
+
+//    @Bean
+//    public OldMappingsMock oldMappingsMock(){
+//        return new OldMappingsMock(wireMock()).registerStubs();
+//    }
 
     @Bean
     public MailserviceMock.MailserviceStub mailserviceStub() throws IOException {

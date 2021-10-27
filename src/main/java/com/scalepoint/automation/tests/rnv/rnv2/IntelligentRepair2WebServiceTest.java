@@ -1,5 +1,7 @@
 package com.scalepoint.automation.tests.rnv.rnv2;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
@@ -17,6 +19,7 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -24,6 +27,7 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -250,6 +254,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .assertTaskHasCompletedStatus(agreement)
                 .assertEvaluateTaskButtonIsDisabled();
     }
+    @RunOn(DriverType.CHROME)
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
@@ -258,6 +263,8 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
             description = "damageType is actualized in SID when it was changed in RnV wizard")
     public void damageTypeEditedInRnvTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
                                           ClaimItem claimItem, String lineDescription) {
+
+        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
 
         BaseDialog.at(SettlementDialog.class)
                 .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
@@ -277,8 +284,11 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                     claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
                 });
 
-        List<LoggedRequest> test = wireMock.find(anyRequestedFor(urlMatching("/api/v1/email")));
-        System.out.println();
+        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
+
+
+        List<StubMapping> test = wireMock.takeSnapshotRecording();
+        list.get(0);
     }
     /*
      * send line to RnV

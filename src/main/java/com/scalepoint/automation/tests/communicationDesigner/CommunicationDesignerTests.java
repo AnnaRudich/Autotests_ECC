@@ -16,11 +16,13 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -137,7 +139,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
-
+@RunOn(DriverType.CHROME)
     @CommunicationDesignerCleanUp
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcome")
