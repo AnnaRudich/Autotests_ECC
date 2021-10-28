@@ -12,9 +12,12 @@ import com.scalepoint.automation.utils.data.request.MailListItem;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
@@ -23,11 +26,13 @@ public class MailserviceMock extends EccMock {
     MailserviceStub stub;
     List<TestMobileNumber> testMobileNumber;
     String response = "Mock %d";
+    DatabaseApi databaseApi;
 
     public MailserviceMock(WireMock wireMock, DatabaseApi databaseApi){
         super(wireMock);
         log = LogManager.getLogger(MailserviceMock.class);
         testMobileNumber = databaseApi.findTestMobileNumbers();
+        this.databaseApi = databaseApi;
     }
 
     public MailserviceStub addStub(){
@@ -85,7 +90,7 @@ public class MailserviceMock extends EccMock {
                             .atPriority(1)
                             .willReturn(aResponse()
                                     .withStatus(200)
-                                    .withBody(String.format("{content=\"TOKEN:%s;STATUS:OK\", binary=false, json=false}", UUID.randomUUID().toString()))));
+                                    .withBody("TOKEN:{{randomValue type='UUID'}}STATUS:OK")));
 
             return this;
         }
@@ -119,9 +124,8 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public MailserviceStub forCase(List<MailListItem> mailListItems) {
+        public MailserviceStub forCase(String userToken, List<MailListItem> mailListItems) {
 
-            mailListItems.get(0).getToken();
             String body =  null;
             try
             {
@@ -131,7 +135,7 @@ public class MailserviceMock extends EccMock {
             }
 
             wireMock.stubFor(
-                    get(urlMatching("/api/v1/email/forCase/".concat(mailListItems.get(0).getToken())))
+                    get(urlMatching("/api/v1/email/forCase/".concat(userToken.toLowerCase())))
                             .atPriority(3)
                             .willReturn(aResponse()
                                     .withHeader("Content-Type", "application/json;charset=utf-8")
@@ -178,10 +182,43 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public List<LoggedRequest> findSentEmails(){
+        public MailserviceStub findSentEmails(String claimId){
 
-            return wireMock
-                    .find(postRequestedFor(urlMatching("/api/v1/email")));
+            String claimNumber = databaseApi.getClaimNumberByClaimId(claimId);
+            String userToken = databaseApi.getUserTokenByClaimId(claimId);
+
+            List<Mail> mails = wireMock
+                    .find(postRequestedFor(urlMatching("/api/v1/email")))
+                    .stream()
+                    .map(loggedRequest -> readMail(loggedRequest))
+                    .filter(m -> m.getCaseId().toLowerCase().equals(userToken.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            List<MailListItem> mailList = mails
+                    .stream()
+                    .map(m -> MailListItem.builder()
+                            .date(LocalDateTime.now().toString())
+                            .eventType(m.getEventType())
+                            .status(3)
+                            .subject(m.getSubject())
+                            .token(UUID.randomUUID().toString())
+                            .type(m.getMailType())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return forCase(userToken, mailList);
+        }
+
+        public Mail readMail(LoggedRequest loggedRequest){
+
+            Mail mail = null;
+            String lr = loggedRequest.getBodyAsString();
+            try {
+                mail = new ObjectMapper().readValue(lr, Mail.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return mail;
         }
     }
 

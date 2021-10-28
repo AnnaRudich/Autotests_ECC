@@ -1,6 +1,8 @@
 package com.scalepoint.automation.tests;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
@@ -14,6 +16,7 @@ import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -21,11 +24,13 @@ import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
+import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.Year;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
@@ -101,12 +106,15 @@ public class ClaimTests extends BaseTest {
     public void cancelSavedClaimScalepointIdTest(User user, Claim claim) throws Exception {
         cancelSavedClaimTest(user, claim);
     }
-
+@RunOn(DriverType.CHROME)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailTest(User user, Claim claim) {
+
+        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
+
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -114,7 +122,12 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
                 .toMailsPage(mailserviceStub)
-                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
+//                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME))
+        ;
+
+        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
+        List<StubMapping> test = wireMock.takeSnapshotRecording();
+        list.get(0);
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)

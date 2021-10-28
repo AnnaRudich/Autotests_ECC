@@ -77,6 +77,15 @@ public class DatabaseApi {
         }
     }
 
+    public String getClaimNumberByClaimId(String claimId) {
+        return jdbcTemplate.queryForObject("select ClaimNumber from [dbo].[User] where UserID = ?", String.class, claimId);
+    }
+
+
+    public String getUserTokenByClaimId(String claimId) {
+        return jdbcTemplate.queryForObject("select UserToken from [dbo].[User] where UserID = ?", String.class, claimId);
+    }
+
 //    public String getItemizationCaseReferenceByClaimNumber(String claimNumber) {
 //        try {
 //            return jdbcTemplate.queryForObject("select ItemizationCaseReference from [dbo].[User] where ClaimNumber = ?", String.class, claimNumber);
