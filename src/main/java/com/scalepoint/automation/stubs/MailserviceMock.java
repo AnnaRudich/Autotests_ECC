@@ -134,13 +134,14 @@ public class MailserviceMock extends EccMock {
                 e.printStackTrace();
             }
 
-            wireMock.stubFor(
+            stubFor(
                     get(urlMatching("/api/v1/email/forCase/".concat(userToken.toLowerCase())))
                             .atPriority(3)
                             .willReturn(aResponse()
                                     .withHeader("Content-Type", "application/json;charset=utf-8")
                                     .withStatus(200)
                                     .withBody(body)));
+
             return this;
         }
 
@@ -184,7 +185,7 @@ public class MailserviceMock extends EccMock {
 
         public MailserviceStub findSentEmails(String claimId){
 
-            String claimNumber = databaseApi.getClaimNumberByClaimId(claimId);
+//            String claimNumber = databaseApi.getClaimNumberByClaimId(claimId);
             String userToken = databaseApi.getUserTokenByClaimId(claimId);
 
             List<Mail> mails = wireMock
