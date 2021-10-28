@@ -35,7 +35,7 @@ public class CompleteClaimExternally extends BaseTest {
 //                .stream()
 //                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
 //    }
-    @RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
     @Test(groups = {TestGroups.COMPLETE_CLAIM_EXTERNALLY}, dataProvider = "testDataProvider",

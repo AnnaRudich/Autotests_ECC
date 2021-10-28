@@ -179,7 +179,7 @@ public class OrderDetailsTests extends BaseTest {
                 .as("Remaining value(" + ordersPage.getRemainingValue() + " is 0")
                 .isEqualTo(0.0);
     }
-@RunOn(DriverType.CHROME)
+
     @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP)
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "The order details should not be visible for user without VIEW_CUSTOMER_ORDERS permission")

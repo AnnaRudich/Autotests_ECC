@@ -139,7 +139,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
 
         schemaValidation(user.getCompanyName().toLowerCase(), claim.getClaimNumber());
     }
-@RunOn(DriverType.CHROME)
+
     @CommunicationDesignerCleanUp
     @Test(groups = {TestGroups.COMMUNICATION_DESIGNER}, dataProvider = CUSTOMER_WELCOME_DATA_PROVIDER,
             description = "Use communication designer to prepare CustomerWelcome")

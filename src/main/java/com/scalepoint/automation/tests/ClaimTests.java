@@ -106,7 +106,7 @@ public class ClaimTests extends BaseTest {
     public void cancelSavedClaimScalepointIdTest(User user, Claim claim) throws Exception {
         cancelSavedClaimTest(user, claim);
     }
-@RunOn(DriverType.CHROME)
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
