@@ -124,7 +124,9 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public MailserviceStub forCase(String userToken, List<MailListItem> mailListItems) {
+        public MailserviceStub forCase(String claimId, List<MailListItem> mailListItems) {
+
+            String userToken = databaseApi.getUserTokenByClaimId(claimId);
 
             String body =  null;
             try
@@ -134,7 +136,7 @@ public class MailserviceMock extends EccMock {
                 e.printStackTrace();
             }
 
-            stubFor(
+            wireMock.stubFor(
                     get(urlMatching("/api/v1/email/forCase/".concat(userToken.toLowerCase())))
                             .atPriority(3)
                             .willReturn(aResponse()
@@ -183,7 +185,7 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public MailserviceStub findSentEmails(String claimId){
+        public List<MailListItem> findSentEmails(String claimId){
 
 //            String claimNumber = databaseApi.getClaimNumberByClaimId(claimId);
             String userToken = databaseApi.getUserTokenByClaimId(claimId);
@@ -195,7 +197,7 @@ public class MailserviceMock extends EccMock {
                     .filter(m -> m.getCaseId().toLowerCase().equals(userToken.toLowerCase()))
                     .collect(Collectors.toList());
 
-            List<MailListItem> mailList = mails
+            return mails
                     .stream()
                     .map(m -> MailListItem.builder()
                             .date(LocalDateTime.now().toString())
@@ -206,8 +208,6 @@ public class MailserviceMock extends EccMock {
                             .type(m.getMailType())
                             .build())
                     .collect(Collectors.toList());
-
-            return forCase(userToken, mailList);
         }
 
         public Mail readMail(LoggedRequest loggedRequest){

@@ -264,7 +264,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     public void damageTypeEditedInRnvTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
                                           ClaimItem claimItem, String lineDescription) {
 
-        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
+//        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
 
         BaseDialog.at(SettlementDialog.class)
                 .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
@@ -284,11 +284,11 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                     claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
                 });
 
-        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
-
-
-        List<StubMapping> test = wireMock.takeSnapshotRecording();
-        list.get(0);
+//        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
+//
+//
+//        List<StubMapping> test = wireMock.takeSnapshotRecording();
+//        list.get(0);
     }
     /*
      * send line to RnV

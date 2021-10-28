@@ -113,7 +113,7 @@ public class ClaimTests extends BaseTest {
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailTest(User user, Claim claim) {
 
-        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
+//        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
@@ -125,9 +125,9 @@ public class ClaimTests extends BaseTest {
 //                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME))
         ;
 
-        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
-        List<StubMapping> test = wireMock.takeSnapshotRecording();
-        list.get(0);
+//        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
+//        List<StubMapping> test = wireMock.takeSnapshotRecording();
+//        list.get(0);
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
