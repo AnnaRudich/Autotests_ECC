@@ -5,11 +5,11 @@
             <class name="com.scalepoint.automation.tests.ClaimTests">
                 <methods>
                     <include name="completeClaimWithMailTest"/>
-<!--                    <include name="cancelSavedClaimTest"/>-->
-<!--                    <include name="reopenSavedClaimTest"/>-->
-<!--                    <include name="ecc2631_addMatchedProductFromCatalog"/>-->
-<!--                    <include name="charlie544_2632_completeSPSimpleClaimWizard"/>-->
-<!--                    <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>-->
+                    <include name="cancelSavedClaimTest"/>
+                    <include name="reopenSavedClaimTest"/>
+                    <include name="ecc2631_addMatchedProductFromCatalog"/>
+                    <include name="charlie544_2632_completeSPSimpleClaimWizard"/>
+                    <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>
                 </methods>
             </class>
             <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
@@ -17,42 +17,42 @@
                     <include name="completeClaimExternallyFromSettlementPageTest"/>
                 </methods>
             </class>
-<!--            <class name="com.scalepoint.automation.tests.sid.SidTests">-->
-<!--                <methods>-->
-<!--                    <include name="ecc3025_selectVoucherExistingCatAddDialog"/>-->
-<!--                    <include name="ecc3025_cashCompensationWithAddedDepVoucher"/>-->
-<!--                    <include name="ecc3025_cashCompensationWithoutDepNoVoucher"/>-->
-<!--                </methods>-->
-<!--            </class>-->
-<!--            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">-->
-<!--                <methods>-->
-<!--                    <include name="setIncludeInClaimCheckboxTest"/>-->
-<!--                    <include name="ecc3144_2_selectCategory"/>-->
-<!--                    <include name="inputCustomDemandTest"/>-->
-<!--                    <include name="inputNewPriceTest"/>-->
-<!--                    <include name="ecc3144_5_manualDepreciation"/>-->
-<!--                    <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest"/>-->
-<!--                    <include name="depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest"/>-->
-<!--                    <include name="saveAllEnteredResultsTest"/>-->
-<!--                    <include name="cancelEnteredResultsTest"/>-->
-<!--                    <include name="addNewValuationTest"/>-->
-<!--                    <include name="disableIncludeInClaimTest"/>-->
-<!--                    <include name="enableIncludeInClaimSecondClaimTest"/>-->
-<!--                    <include name="disableIncludeInClaimAndReviewedTest"/>-->
-<!--                    <include name="completeClaimIsEnabledTest"/>-->
-<!--                    <include name="reviewedBoxNotDisplayedTest"/>-->
-<!--                    <include name="completeClaimIsEnabledTest"/>-->
-<!--                    <include name="cancelledClaimNotAddedTest"/>-->
-<!--                    <include name="cashCompensationEqualV1Test"/>-->
-<!--                    <include name="openAddValuationDialogInSIDTest"/>-->
-<!--                    <include name="addNewValuationPriceInAddValuationDialogTest"/>-->
-<!--                    <include name="addNewValuationPriceInAddValuationDialog2Test"/>-->
-<!--                    <include name="addNewValuationPriceInAddValuationDialog3Test"/>-->
-<!--                    <include name="enableAgeOptionTest"/>-->
-<!--                    <include name="addYearsAndMonthAndSaveTest"/>-->
-<!--                    <include name="ecc3144_24_disableAgeAndSave"/>-->
-<!--                </methods>-->
-<!--            </class>-->
+            <class name="com.scalepoint.automation.tests.sid.SidTests">
+                <methods>
+                    <include name="ecc3025_selectVoucherExistingCatAddDialog"/>
+                    <include name="ecc3025_cashCompensationWithAddedDepVoucher"/>
+                    <include name="ecc3025_cashCompensationWithoutDepNoVoucher"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+                <methods>
+                    <include name="setIncludeInClaimCheckboxTest"/>
+                    <include name="ecc3144_2_selectCategory"/>
+                    <include name="inputCustomDemandTest"/>
+                    <include name="inputNewPriceTest"/>
+                    <include name="ecc3144_5_manualDepreciation"/>
+                    <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest"/>
+                    <include name="depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest"/>
+                    <include name="saveAllEnteredResultsTest"/>
+                    <include name="cancelEnteredResultsTest"/>
+                    <include name="addNewValuationTest"/>
+                    <include name="disableIncludeInClaimTest"/>
+                    <include name="enableIncludeInClaimSecondClaimTest"/>
+                    <include name="disableIncludeInClaimAndReviewedTest"/>
+                    <include name="completeClaimIsEnabledTest"/>
+                    <include name="reviewedBoxNotDisplayedTest"/>
+                    <include name="completeClaimIsEnabledTest"/>
+                    <include name="cancelledClaimNotAddedTest"/>
+                    <include name="cashCompensationEqualV1Test"/>
+                    <include name="openAddValuationDialogInSIDTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialogTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialog2Test"/>
+                    <include name="addNewValuationPriceInAddValuationDialog3Test"/>
+                    <include name="enableAgeOptionTest"/>
+                    <include name="addYearsAndMonthAndSaveTest"/>
+                    <include name="ecc3144_24_disableAgeAndSave"/>
+                </methods>
+            </class>
             <class name="com.scalepoint.automation.tests.OrderDetailsTests">
                 <methods>
                     <include name="shopSmokeE2E"/>
@@ -103,18 +103,18 @@
 <!--            </class>-->
 <!--        </classes>-->
 <!--    </test>-->
-<!--    <test verbose="1" name="Api" enabled="true" preserve-order="true" thread-count="1">-->
-<!--        <classes>-->
-<!--            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>-->
-<!--            <class name="com.scalepoint.automation.tests.api.unifiedpayments.v1.CaseSettlementDataApiTests"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test verbose="1" name="Api" enabled="true" preserve-order="true" thread-count="1">
+        <classes>
+            <class name="com.scalepoint.automation.tests.api.ClaimIntegrationTests"/>
+            <class name="com.scalepoint.automation.tests.api.unifiedpayments.v1.CaseSettlementDataApiTests"/>
+        </classes>
+    </test>
 
-<!--    <suite-files>-->
-<!--        <suite-file path="qunit_testng.xml" />-->
-<!--    </suite-files>-->
+    <suite-files>
+        <suite-file path="qunit_testng.xml" />
+    </suite-files>
 
-<!--    <listeners>-->
-<!--        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>-->
-<!--    </listeners>-->
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
 </suite>

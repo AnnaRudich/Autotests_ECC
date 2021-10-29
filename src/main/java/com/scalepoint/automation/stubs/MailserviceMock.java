@@ -50,11 +50,6 @@ public class MailserviceMock extends EccMock {
 
         private static final String SMS_URL = "/api/.*/sms";
 
-        public MailserviceStub() {
-
-            WireMock.configureFor(wireMock);
-        }
-
         public MailserviceStub stubForInternalServerError() {
 
             stubSMS(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -125,6 +120,8 @@ public class MailserviceMock extends EccMock {
         }
 
         public MailserviceStub forCase(String claimId, List<MailListItem> mailListItems) {
+
+            WireMock.configureFor(wireMock);
 
             String userToken = databaseApi.getUserTokenByClaimId(claimId);
 

@@ -26,9 +26,6 @@ public class WireMockConfig {
     @Value("${wiremock.port}")
     String port;
 
-    @Autowired
-    public DatabaseApi databaseApi;
-
     @Bean
     public WireMock wireMock(){
 
@@ -43,47 +40,5 @@ public class WireMockConfig {
         wireMock.resetMappings();
 
         return wireMock;
-    }
-
-    @Bean
-    public RnVMock.RnvStub rnvStub() {
-        return new RnVMock(wireMock())
-                .addStub();
-    }
-
-    @Bean
-    public AuditMock.AuditStub auditStub() {
-        return new AuditMock(wireMock())
-                .addStub();
-    }
-
-    @Bean
-    public CommunicationDesignerMock communicationDesignerMock() {
-        return new CommunicationDesignerMock(wireMock());
-    }
-
-    @Bean
-    public EVBMock.EVBStubs evbMock() throws IOException {
-        return new EVBMock(wireMock()).addStub();
-    }
-
-    @Bean
-    public FraudAlertMock fraudAlertMock(){
-        return new FraudAlertMock(wireMock());
-    }
-
-    @Bean
-    public PostalCodeMock.PostalCodeStubs postalCodeMock() throws IOException {
-        return new PostalCodeMock(wireMock()).addStub();
-    }
-
-//    @Bean
-//    public OldMappingsMock oldMappingsMock(){
-//        return new OldMappingsMock(wireMock()).registerStubs();
-//    }
-
-    @Bean
-    public MailserviceMock.MailserviceStub mailserviceStub() throws IOException {
-        return new MailserviceMock(wireMock(),databaseApi).addStub();
     }
 }

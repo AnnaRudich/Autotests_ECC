@@ -161,7 +161,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected MailserviceMock.MailserviceStub mailserviceStub;
 
-    WireMockServer wireMockServer;
 
 //    @BeforeSuite
 //    public void start(){
