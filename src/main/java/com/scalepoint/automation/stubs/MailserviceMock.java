@@ -8,6 +8,7 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.shared.TestMobileNumber;
 import com.scalepoint.automation.utils.data.request.Mail;
+import com.scalepoint.automation.utils.data.request.MailContent;
 import com.scalepoint.automation.utils.data.request.MailListItem;
 import org.apache.http.HttpStatus;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 
 public class MailserviceMock extends EccMock {
 
@@ -144,45 +146,45 @@ public class MailserviceMock extends EccMock {
             return this;
         }
 
-        public MailserviceStub test4(Mail mail, DatabaseApi databaseApi) {
+        public MailserviceStub viewEmail(Mail mail, String token) {
 
-//            String itemization = databaseApi.getItemizationCaseReferenceByClaimNumber(mail.getClaimNumber());
-//
-//            MailContent mailContent = MailContent.builder()
-//                                                .output(String.format("<html><body>test<a href=\"%sshop/LoginToShop?selfService=true&amp;login=%s\" style=\"color: #447198\">Selvbetjening</a></body></html>",getEccUrl(), itemization))
-//                                                .caseId(mail.getCaseId())
-//                                                .company(mail.getCompanyCode())
-//                                                .country(mail.getCountryCode())
-//                                                .date(LocalDateTime.now().toString())
-//                                                .eventId(mail.getEventId())
-//                                                .eventType(mail.getEventType())
-//                                                .from(mail.getFrom())
-//                                                .replyTo(mail.getReplyTo())
-//                                                .status(3)
-//                                                .subject(mail.getSubject())
-//                                                .token(mail.getCaseId())
-//                                                .type(mail.getMailType())
-//                                                .addresses(null)
-//                                                .build();
-//            String body =  null;
-//            try
-//            {
-//                body = new ObjectMapper().writeValueAsString(mailContent);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//
-//            wireMock.stubFor(
-//                    get(urlMatching("/api/v1/email/".concat(mail.getCaseId())))
-//                            .atPriority(3)
-//                            .willReturn(aResponse()
-//                                    .withHeader("Content-Type", "application/json;charset=utf-8")
-//                                    .withStatus(200)
-//                                    .withBody(body)));
+            String itemization = databaseApi.getItemizationCaseReferenceByClaimNumber(mail.getClaimNumber());
+
+            MailContent mailContent = MailContent.builder()
+                                                .output(String.format("<html><body>test<a href=\"%sshop/LoginToShop?selfService=true&amp;login=%s\" style=\"color: #447198\">Selvbetjening</a></body></html>", getEccUrl(), itemization))
+                                                .caseId(mail.getCaseId())
+                                                .company(mail.getCompanyCode())
+                                                .country(mail.getCountryCode())
+                                                .date(LocalDateTime.now().toString())
+                                                .eventId(mail.getEventId())
+                                                .eventType(mail.getEventType())
+                                                .from(mail.getFrom())
+                                                .replyTo(mail.getReplyTo())
+                                                .status(3)
+                                                .subject(mail.getSubject())
+                                                .token(token)
+                                                .type(mail.getMailType())
+                                                .addresses(null)
+                                                .build();
+            String body =  null;
+            try
+            {
+                body = new ObjectMapper().writeValueAsString(mailContent);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            wireMock.stubFor(
+                    get(urlMatching("/api/v1/email/".concat(token)))
+                            .atPriority(3)
+                            .willReturn(aResponse()
+                                    .withHeader("Content-Type", "application/json;charset=utf-8")
+                                    .withStatus(200)
+                                    .withBody(body)));
             return this;
         }
 
-        public List<MailListItem> findSentEmails(String claimId){
+        public MailserviceStub findSentEmails(String claimId){
 
 //            String claimNumber = databaseApi.getClaimNumberByClaimId(claimId);
             String userToken = databaseApi.getUserTokenByClaimId(claimId);
@@ -194,7 +196,7 @@ public class MailserviceMock extends EccMock {
                     .filter(m -> m.getCaseId().toLowerCase().equals(userToken.toLowerCase()))
                     .collect(Collectors.toList());
 
-            return mails
+            List<MailListItem> mailListItems = mails
                     .stream()
                     .map(m -> MailListItem.builder()
                             .date(LocalDateTime.now().toString())
@@ -205,6 +207,24 @@ public class MailserviceMock extends EccMock {
                             .type(m.getMailType())
                             .build())
                     .collect(Collectors.toList());
+
+            Mail selfServiceCustomerWelcome = mails
+                    .stream()
+                    .filter(m -> m.getMailType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
+                    .findFirst()
+                    .orElseThrow(NoSuchElementException::new);
+
+            String selfServiceCustomerWelcomeToken = mailListItems.stream()
+                    .filter(m -> m.getType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
+                    .map(m -> m.getToken())
+                    .findFirst()
+                    .orElseThrow(NoSuchElementException::new);
+
+            forCase(claimId, mailListItems);
+
+            viewEmail(selfServiceCustomerWelcome, selfServiceCustomerWelcomeToken);
+
+            return this;
         }
 
         public Mail readMail(LoggedRequest loggedRequest){

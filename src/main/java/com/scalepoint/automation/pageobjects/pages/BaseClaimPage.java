@@ -50,8 +50,8 @@ public abstract class BaseClaimPage extends Page {
 //    }
 
     public MailsPage toMailsPage(MailserviceMock.MailserviceStub mailserviceStub) {
-        List<MailListItem> mailList = mailserviceStub.findSentEmails(CurrentUser.getClaimId());
-        mailserviceStub.forCase(CurrentUser.getClaimId(), mailList);
+        mailserviceStub.findSentEmails(CurrentUser.getClaimId());
+//        mailserviceStub.forCase(CurrentUser.getClaimId(), mailList);
 //        String test = sentEmails.get(0).getBodyAsString();
 //        Mail mail = null;
 //        try {

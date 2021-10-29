@@ -129,8 +129,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected MongoDbApi mongoDbApi;
 
-//    @Autowired
-//    protected WireMock wireMock;
+    @Autowired
+    protected WireMock wireMock;
 
     @Value("${driver.type}")
     protected String browserMode;

@@ -1,5 +1,8 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;

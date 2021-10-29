@@ -1,6 +1,9 @@
 package com.scalepoint.automation.tests.selfservice;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -8,22 +11,24 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
+import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
+import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
 @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
@@ -57,6 +62,7 @@ public class SelfService2Tests extends BaseTest {
         description = null;
         newPasswordToSelfService = null;
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -66,11 +72,21 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
     public void Charlie735_addLineWithDocumentation(User user, Claim claim, Translations translations) {
 
-        loginAndCreateClaim(user, claim)
+        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
+
+        MailViewDialog mailsPage = loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage(mailserviceStub)
-                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME);
+
+
+        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
+
+        List<StubMapping> test = wireMock.takeSnapshotRecording();
+        list.get(0);
+
+        mailsPage
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription(IPHONE)
