@@ -117,7 +117,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
          ,[FTACCOUNTNBRFLAGS]
          ,[FTTRADEUPMULTIPLIER]
          ,[FTZIPCODECHECKFLAGS]
-         ,[ftmailflags]
          ,[FTDEFDEDUC]
          ,[FTVATPRC]
          ,[FTTMPLNAME]
@@ -182,7 +181,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
           ,[FTACCOUNTNBRFLAGS]
           ,[FTTRADEUPMULTIPLIER]
           ,[FTZIPCODECHECKFLAGS]
-          ,[ftmailflags]
           ,[FTDEFDEDUC]
           ,[FTVATPRC]
           ,@ICNAME
