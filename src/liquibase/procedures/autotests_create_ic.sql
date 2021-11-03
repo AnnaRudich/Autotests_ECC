@@ -41,7 +41,6 @@ DECLARE @ICADDR1 nvarchar(50) = '57 Ladymead'
 DECLARE @ICADDR2 nvarchar(50) = 'Surrey'
 DECLARE @icInsuranceCompanyToken uniqueidentifier = NEWID()
 DECLARE @ICSTATECODE nvarchar(2) = NULL
-DECLARE @icNewShopLogo nvarchar(256) = NULL
 DECLARE @IcAllowCreateOwn BIT = 1
 DECLARE @SMSDISPLAYNAME VARCHAR(11) = ''
 DECLARE @icFlagOverride INT  = 0
@@ -255,7 +254,6 @@ INSERT INTO [INSCOMP]
        ,[ICSTATECODE]
        ,[icDepartment]
        ,[icCulture]
-       ,[icNewShopLogo]
        ,[IcAllowCreateOwn]
        ,[icRecieveSPNotification]
        ,[icSendSPNotificationTo]
@@ -299,7 +297,7 @@ INSERT INTO [INSCOMP]
        ,[enabledOMTemplates])
    VALUES
        (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICRFNBR,@ICPRFNBR,
-       @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
+       @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@IcAllowCreateOwn
        ,@icRecieveSPNotification
        ,@icSendSPNotificationTo
        ,@SMSDISPLAYNAME
