@@ -863,7 +863,6 @@ public class SidManualItemsTests extends BaseTest {
                 });
     }
 
-    @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM, enabled = true)
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",
@@ -888,7 +887,6 @@ public class SidManualItemsTests extends BaseTest {
                 .closeSidWithOk();
     }
 
-    @FeatureToggleSetting(type = FeatureIds.SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM)
     @Jira("https://jira.scalepoint.com/browse/CLAIMSHOP-4667")
     @Test(groups = {TestGroups.SID, TestGroups.SID_MANUAL_ITEMS},
             dataProvider = "testDataProvider",

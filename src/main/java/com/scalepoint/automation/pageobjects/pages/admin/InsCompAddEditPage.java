@@ -77,8 +77,6 @@ public class InsCompAddEditPage extends AdminBasePage {
 
     private String byFTPath = "select[name='icftnbr']";
 
-//    private String byGUIPath = "select[name='icgtnbr']";
-
     private String byICCulturePath = "select[name='icCulture']";
 
     private String byAuditPath = "select[name='auditEnabled']";
@@ -127,7 +125,6 @@ public class InsCompAddEditPage extends AdminBasePage {
         }
 
         $(byFTPath).selectOption(insuranceCompany.getFunctionTemplate());
-//        $(byGUIPath).selectOption(insuranceCompany.getGuiTemplate());
         $(byICCulturePath).selectOption(insuranceCompany.getIcCulture());
 
         companyContactNumberField.sendKeys(insuranceCompany.getContactNumber());
