@@ -76,7 +76,7 @@ public class SelfServiceService extends BaseService {
                 .pathParam("userId", data.getUserId())
                 .contentType("application/json")
                 .get(CUSTOMER_MAIL_LIST)
-                .then()
+                .then().log().all()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -162,7 +162,7 @@ public class SelfServiceService extends BaseService {
                 .formParam("username", username)
                 .formParam("password", password)
                 .post(SELF_SERVICE_LOGIN)
-                .then()
+                .then().log().all()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 

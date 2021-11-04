@@ -25,7 +25,7 @@ public interface BasePath {
     String REOPEN = "ReopenCustomer";
     String SETTLEMENT_TOTALS = "/{userId}/rest/settlement/settlementSummaryTotals.json";
     String SELF_SERVICE_REQUEST = "/{userId}/rest/settlement/selfServiceRequest.json";
-    String CUSTOMER_MAIL_LIST = "/{userId}/rest/customer-mail/list/{userId}";
+//    String CUSTOMER_MAIL_LIST = "/{userId}/rest/customer-mail/list/{userId}";
     String CUSTOMER_MAIL_CONTENT = "/{userId}/rest/customer-mail/content/{emailToken}";
     String SELF_SERVICE_LOGIN = "/self-service/dk/login";
     String SELF_SERVICE_RELOAD_FT= "/rest/selfservicereload/functiontemplate";
