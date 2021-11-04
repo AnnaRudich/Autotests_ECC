@@ -112,7 +112,6 @@ public class UnifiedIntegrationService extends BaseService {
                 .addClaim(claimRequest)
                 .getResponse();
 
-
         CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
 
         return response

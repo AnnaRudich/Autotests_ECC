@@ -1,23 +1,18 @@
 package com.scalepoint.automation.tests.fraudAlert;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.services.externalapi.EventApiService;
 import com.scalepoint.automation.stubs.FraudAlertMock.FraudAlertStubs;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.eventsApiEntity.fraudStatus.ClaimLineChanged;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeClass;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
-import static io.restassured.RestAssured.given;
 
 public class FraudAlertBase extends BaseTest {
 
@@ -28,11 +23,6 @@ public class FraudAlertBase extends BaseTest {
     static final String COUNTRY = "dk";
     FraudAlertStubs fraudAlertStubs;
 
-
-
-
-
-
     @BeforeClass
     public void startWireMock() throws IOException {
 
@@ -40,8 +30,6 @@ public class FraudAlertBase extends BaseTest {
 
         new EventApiService().scheduleSubscription(claimLineChangedSubscriptionId);
         new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
-
-
     }
 
 

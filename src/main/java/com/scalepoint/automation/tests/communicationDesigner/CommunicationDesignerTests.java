@@ -1,8 +1,5 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.stubbing.StubMapping;
-import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
@@ -19,13 +16,11 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.RandomUtils;
 import com.scalepoint.automation.utils.annotations.CommunicationDesignerCleanUp;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.*;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

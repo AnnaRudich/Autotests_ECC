@@ -1,20 +1,17 @@
 package com.scalepoint.automation.tests.communicationDesigner;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.MyPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompAddEditPage.CommunicationDesigner;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
-import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.*;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.BankAccount;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;

@@ -44,8 +44,7 @@ public class MailserviceMock extends EccMock {
                 .stubForNotFound()
                 .stubMissingToken()
                 .stubDateOfFirstSelfServiceWelcome()
-                .stubEmail()
-                .test();
+                .stubEmail();
     }
 
     public class MailserviceStub {
@@ -112,15 +111,6 @@ public class MailserviceMock extends EccMock {
                     .getTestMobileNumber();
         }
 
-        public MailserviceStub test() {
-
-//            wireMock.stubFor(
-//                    post(urlMatching("/api/v1/email"))
-//                            .atPriority(2)
-//                            .willReturn(aResponse().withStatus(200).withBody("TOKEN:{{randomValue type='UUID'}}STATUS:OK")));
-            return this;
-        }
-
         public MailserviceStub forCase(String claimId, List<MailListItem> mailListItems) {
 
             WireMock.configureFor(wireMock);
@@ -151,21 +141,21 @@ public class MailserviceMock extends EccMock {
             String itemization = databaseApi.getItemizationCaseReferenceByClaimNumber(mail.getClaimNumber());
 
             MailContent mailContent = MailContent.builder()
-                                                .output(String.format("<html><body>test<a href=\"%sshop/LoginToShop?selfService=true&amp;login=%s\" style=\"color: #447198\">Selvbetjening</a></body></html>", getEccUrl(), itemization))
-                                                .caseId(mail.getCaseId())
-                                                .company(mail.getCompanyCode())
-                                                .country(mail.getCountryCode())
-                                                .date(LocalDateTime.now().toString())
-                                                .eventId(mail.getEventId())
-                                                .eventType(mail.getEventType())
-                                                .from(mail.getFrom())
-                                                .replyTo(mail.getReplyTo())
-                                                .status(3)
-                                                .subject(mail.getSubject())
-                                                .token(token)
-                                                .type(mail.getMailType())
-                                                .addresses(null)
-                                                .build();
+                    .output(String.format("<html><body>test<a href=\"%sshop/LoginToShop?selfService=true&amp;login=%s\" style=\"color: #447198\">Selvbetjening</a></body></html>", getEccUrl(), itemization))
+                    .caseId(mail.getCaseId())
+                    .company(mail.getCompanyCode())
+                    .country(mail.getCountryCode())
+                    .date(LocalDateTime.now().toString())
+                    .eventId(mail.getEventId())
+                    .eventType(mail.getEventType())
+                    .from(mail.getFrom())
+                    .replyTo(mail.getReplyTo())
+                    .status(3)
+                    .subject(mail.getSubject())
+                    .token(token)
+                    .type(mail.getMailType())
+                    .addresses(null)
+                    .build();
             String body =  null;
             try
             {
@@ -181,12 +171,12 @@ public class MailserviceMock extends EccMock {
                                     .withHeader("Content-Type", "application/json;charset=utf-8")
                                     .withStatus(200)
                                     .withBody(body)));
+
             return this;
         }
 
         public MailserviceStub findSentEmails(String claimId){
 
-//            String claimNumber = databaseApi.getClaimNumberByClaimId(claimId);
             String userToken = databaseApi.getUserTokenByClaimId(claimId);
 
             List<Mail> mails = wireMock
@@ -208,21 +198,31 @@ public class MailserviceMock extends EccMock {
                             .build())
                     .collect(Collectors.toList());
 
-            Mail selfServiceCustomerWelcome = mails
-                    .stream()
-                    .filter(m -> m.getMailType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
-                    .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
 
-            String selfServiceCustomerWelcomeToken = mailListItems.stream()
-                    .filter(m -> m.getType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
-                    .map(m -> m.getToken())
-                    .findFirst()
-                    .orElseThrow(NoSuchElementException::new);
+            Mail selfServiceCustomerWelcome = null;
+            String selfServiceCustomerWelcomeToken = null;
+            try {
+                selfServiceCustomerWelcome = mails
+                        .stream()
+                        .filter(m -> m.getMailType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new);
+
+                selfServiceCustomerWelcomeToken = mailListItems.stream()
+                        .filter(m -> m.getType().equals("SELFSERVICE_CUSTOMER_WELCOME"))
+                        .map(m -> m.getToken())
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new);
+            }catch (NoSuchElementException e){
+
+                log.info("Missing SELFSERVICE_CUSTOMER_WELCOME");
+            }
 
             forCase(claimId, mailListItems);
+            if(selfServiceCustomerWelcome != null && selfServiceCustomerWelcomeToken != null) {
 
-            viewEmail(selfServiceCustomerWelcome, selfServiceCustomerWelcomeToken);
+                viewEmail(selfServiceCustomerWelcome, selfServiceCustomerWelcomeToken);
+            }
 
             return this;
         }

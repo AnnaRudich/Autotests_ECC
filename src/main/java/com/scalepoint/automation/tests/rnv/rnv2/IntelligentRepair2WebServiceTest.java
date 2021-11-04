@@ -1,8 +1,5 @@
 package com.scalepoint.automation.tests.rnv.rnv2;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.stubbing.StubMapping;
-import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.ClaimNavigationMenu;
@@ -19,7 +16,6 @@ import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.RandomUtils;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestDataActions;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -27,7 +23,6 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.ServiceAgreement;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -37,7 +32,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.rnv.ProjectsPage.AuditResultEvaluationStatus.*;
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.SHOW_DAMAGE_TYPE_CONTROLS_IN_SID;
@@ -264,8 +258,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     public void damageTypeEditedInRnvTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
                                           ClaimItem claimItem, String lineDescription) {
 
-//        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
-
         BaseDialog.at(SettlementDialog.class)
                 .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .enableDamage()
@@ -283,12 +275,6 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .doAssert(claimLine -> {
                     claimLine.assertDamageTypeEqualTo(claimItem.getCategoryPersonalMedicine().getDamageTypes().get(1));
                 });
-
-//        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
-//
-//
-//        List<StubMapping> test = wireMock.takeSnapshotRecording();
-//        list.get(0);
     }
     /*
      * send line to RnV

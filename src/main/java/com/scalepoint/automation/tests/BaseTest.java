@@ -3,7 +3,6 @@ package com.scalepoint.automation.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
-import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.exceptions.InvalidFtOperationException;
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
@@ -67,7 +66,10 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -80,11 +82,8 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
@@ -160,27 +159,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected MailserviceMock.MailserviceStub mailserviceStub;
-
-
-//    @BeforeSuite
-//    public void start(){
-//
-//        int httpPort = 8787;
-//
-//        wireMockServer = new WireMockServer(wireMockConfig().port(httpPort));
-//        wireMockServer.start();
-//        WireMock.configureFor("localhost", httpPort);
-//
-//        wireMockServer.stubFor(WireMock.get("/test").willReturn(aResponse().withStatus(200).withBody("maka paka af af")));
-//
-//        log.info(wireMockServer.isRunning());
-//
-//    }
-
-//    @AfterSuite
-//    public void test(){
-//        wireMockServer.stop();
-//    }
 
     @BeforeMethod
     public void baseInit(Method method, ITestContext context, Object[] objects) {

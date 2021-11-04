@@ -1,8 +1,5 @@
 package com.scalepoint.automation.tests;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.stubbing.StubMapping;
-import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.dialogs.SettlementDialog;
 import com.scalepoint.automation.pageobjects.modules.SettlementSummary;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
@@ -12,7 +9,6 @@ import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
@@ -25,12 +21,10 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.PseudoCategory;
 import com.scalepoint.automation.utils.driver.DriverType;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.Year;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.*;
@@ -44,20 +38,6 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
 public class ClaimTests extends BaseTest {
-
-//    MailserviceMock.MailserviceStub mailserviceStub;
-//
-//    @BeforeClass
-//    public void startWireMock() {
-//
-//        WireMock.configureFor(wireMock);
-//        wireMock.resetMappings();
-//        mailserviceStub = new MailserviceMock(wireMock, databaseApi).addStub();
-//        wireMock.allStubMappings()
-//                .getMappings()
-//                .stream()
-//                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-//    }
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
@@ -113,8 +93,6 @@ public class ClaimTests extends BaseTest {
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailTest(User user, Claim claim) {
 
-//        wireMock.startStubRecording("https://qa-shr-ms.spcph.local");
-
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -122,12 +100,7 @@ public class ClaimTests extends BaseTest {
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
                 .toMailsPage(mailserviceStub)
-//                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME))
-        ;
-
-//        List<LoggedRequest> list = wireMock.find(WireMock.anyRequestedFor(WireMock.urlMatching("/api/v1/email.*")));
-//        List<StubMapping> test = wireMock.takeSnapshotRecording();
-//        list.get(0);
+                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)

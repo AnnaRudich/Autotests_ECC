@@ -10,7 +10,6 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.utils.NumberFormatUtils;
 import com.scalepoint.automation.utils.annotations.Jira;
-import com.scalepoint.automation.utils.annotations.RunOn;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -19,7 +18,6 @@ import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.automation.utils.data.entity.input.Voucher;
 import com.scalepoint.automation.utils.data.entity.translations.OrderDetails;
-import com.scalepoint.automation.utils.driver.DriverType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -71,9 +69,9 @@ public class OrderDetailsTests extends BaseTest {
                 .isEqualTo(0.0d);
 
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
-       assertThat(ordersPage.getDepositValue())
-               .as("Deposits value is 0")
-               .isEqualTo(0.0d);
+        assertThat(ordersPage.getDepositValue())
+                .as("Deposits value is 0")
+                .isEqualTo(0.0d);
 
         Assert.assertEquals(ordersPage.getRemainingIdemnityText(), orderDetails.getRemainingCompensationText());
         assertThat(ordersPage.getRemainingValue())
@@ -127,9 +125,9 @@ public class OrderDetailsTests extends BaseTest {
                 .as("Ordered value(" + ordersPage.getOrderedItemsValue() + " is 0")
                 .isEqualTo(0.0);
         Assert.assertEquals(ordersPage.getWithdrawText(), orderDetails.getWithdrawallsText());
-       assertThat(ordersPage.getWithdrawValue())
-               .as("Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0")
-               .isEqualTo(0.0);
+        assertThat(ordersPage.getWithdrawValue())
+                .as("Withdraw value(" + ordersPage.getWithdrawValue() + ") is 0")
+                .isEqualTo(0.0);
         Assert.assertEquals(ordersPage.getDepositText(), orderDetails.getDepositsText());
         assertThat(ordersPage.getDepositValue())
                 .as("Deposits value(" + ordersPage.getDepositValue() + " is 0")

@@ -1,12 +1,9 @@
 package com.scalepoint.automation.spring;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.client.WireMockBuilder;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
-import com.scalepoint.automation.shared.WiremockServer;
 import com.scalepoint.automation.stubs.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,11 +58,6 @@ public class WireMockStubsConfig {
         return new PostalCodeMock(wireMock)
                 .addStub();
     }
-
-//    @Bean
-//    public OldMappingsMock oldMappingsMock(){
-//        return new OldMappingsMock(wireMock()).registerStubs();
-//    }
 
     @Bean
     public MailserviceMock.MailserviceStub mailserviceStub() throws IOException {

@@ -56,5 +56,5 @@ public interface BasePath {
     String ORDER_ACTION = "order.action";
     String TASKS_STATUSES = "tasksStatuses.json";
     String HEALTCH_CHECK = "/health/status";
-    String CUSTOMER_MAIL_LIST = "/rest/customer-mail/list/{userId2}";
+    String CUSTOMER_MAIL_LIST = "/rest/customer-mail/list/{userId}";
 }
