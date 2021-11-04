@@ -343,8 +343,6 @@ public class HeadersTest extends BaseApiTest {
     }
 
     public static String[] staticFilesECC= {
-            "wwwroot/shop/scripts/ExtJS6/classic/theme-classic/resources/theme-classic-all_1.css",
-            "wwwroot/shop/scripts/ExtJS4/ext-all-custom.js?build=2.14.0.26063-(Tech-Jan2014)",
             "wwwroot/scripts/matching_engine/menu/app/controller/MenuController.js?dc=BUILDNUMBER_",
             "wwwroot/images/common/matching_engine/images/scalepoint_logo_small_transparent.png"
     };

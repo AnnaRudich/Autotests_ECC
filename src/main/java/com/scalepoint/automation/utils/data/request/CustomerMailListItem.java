@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerMailListItem {
-
     private String token;
     private String subject;
     private String type;
+    private boolean resendAllowed;
     private int status;
     private String date;
-    @JsonProperty("resendAllowed")
-    private boolean resendAllowed;
 }
