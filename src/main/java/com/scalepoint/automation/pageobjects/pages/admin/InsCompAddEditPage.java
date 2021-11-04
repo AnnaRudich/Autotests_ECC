@@ -158,7 +158,7 @@ public class InsCompAddEditPage extends AdminBasePage {
 //        $("[name=OM_SettlementNotification]").setSelected(communicationDesigner.omSettlementNotification);
 //        $("[name=OM_SettlementNotificationClosedExternal]").setSelected(communicationDesigner.omSettlementNotificationClosedExternal);
 //        $("[name=OM_SettlementPreview]").setSelected(communicationDesigner.omSettlementPreview);
-        $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
+//        $("[name=OM_OrderConfirmationEmployee]").setSelected(communicationDesigner.omOrderConfirmationEmployee);
         $("[name=OM_OrderConfirmation_uCommerceEmployee]").setSelected(communicationDesigner.omOrderConfirmation_uCommerceEmployee);
 //        $("[name=OM_InvoiceToIC]").setSelected(communicationDesigner.omInvoiceToIC);
 //        $("[name=OM_PayoutNotification]").setSelected(communicationDesigner.omPayoutNotification);
@@ -184,7 +184,7 @@ public class InsCompAddEditPage extends AdminBasePage {
         //        boolean omSettlementNotification;
 //        boolean omSettlementNotificationClosedExternal;
 //        boolean omSettlementPreview;
-        boolean omOrderConfirmationEmployee;
+//        boolean omOrderConfirmationEmployee;
         boolean omOrderConfirmation_uCommerceEmployee;
 //        boolean omInvoiceToIC;
 //        boolean omPayoutNotification;
@@ -236,7 +236,7 @@ public class InsCompAddEditPage extends AdminBasePage {
                     .setOmNotificationToClaimant(false)
                     .setOmReminderMail(false)
                     .setOmBlockedAccount(false)
-                    .setOmOrderConfirmationEmployee(false)
+//                    .setOmOrderConfirmationEmployee(false)
                     .setOmOrderConfirmation_uCommerceEmployee(false)
                     .resetEmails(new SelfServiceCustomerWelcome())
                     .resetEmails(new CustomerWelcome())

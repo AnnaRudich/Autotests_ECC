@@ -370,8 +370,7 @@
                 "login",
                 "culture",
                 "scalepointCustomerNumber",
-                "isPasswordSentViaSms",
-                "conditionsLink"
+                "isPasswordSentViaSms"
               ]
             },
             "notes": {
