@@ -35,14 +35,12 @@ DECLARE @CompanyCode nvarchar(50) = UPPER(@ICNAME)
 DECLARE @ICZIPC nvarchar(10) = 'BS1 4DJ2'
 DECLARE @ICCITY nvarchar(50)= 'Bristol2'
 DECLARE @ICURL nvarchar(254)= 'http://www.scalepoint.com2'
-DECLARE @ICGTNBR INT = 1
 DECLARE @icCulture INT =  (SELECT LCID FROM Culture c JOIN FormattingProperties f ON c.Culture = f.VALUE WHERE f.[KEY] = 'scalepoint_culture_code')
 DECLARE @ICLOGO nvarchar(254) = NULL
 DECLARE @ICADDR1 nvarchar(50) = '57 Ladymead'
 DECLARE @ICADDR2 nvarchar(50) = 'Surrey'
 DECLARE @icInsuranceCompanyToken uniqueidentifier = NEWID()
 DECLARE @ICSTATECODE nvarchar(2) = NULL
-DECLARE @icNewShopLogo nvarchar(256) = NULL
 DECLARE @IcAllowCreateOwn BIT = 1
 DECLARE @SMSDISPLAYNAME VARCHAR(11) = ''
 DECLARE @icFlagOverride INT  = 0
@@ -139,7 +137,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
          ,[ftfunctionflags3]
          ,[ftStripText]
          ,[ftvoucherflags]
-         ,[ftemcflags]
          ,[ftscreenwidth]
          ,[ftscreenheight]
          ,[ftCategorySelection]
@@ -204,7 +201,6 @@ IF EXISTS(SELECT * FROM dbo.INSCOMP ic WHERE ic.ICNAME = @ICNAME) OR EXISTS(SELE
           ,[ftfunctionflags3]
           ,[ftStripText]
           ,[ftvoucherflags]
-          ,[ftemcflags]
           ,[ftscreenwidth]
           ,[ftscreenheight]
           ,[ftCategorySelection]
@@ -251,7 +247,6 @@ INSERT INTO [INSCOMP]
        ,[ICCITY]
        ,[ICURL]
        ,[ICCOMMAIL]
-       ,[ICGTNBR]
        ,[ICFTNBR]
        ,[ICPRFNBR]
        ,[CompanyCode]
@@ -259,7 +254,6 @@ INSERT INTO [INSCOMP]
        ,[ICSTATECODE]
        ,[icDepartment]
        ,[icCulture]
-       ,[icNewShopLogo]
        ,[IcAllowCreateOwn]
        ,[icRecieveSPNotification]
        ,[icSendSPNotificationTo]
@@ -302,8 +296,8 @@ INSERT INTO [INSCOMP]
        ,[scalepointIdDomains]
        ,[enabledOMTemplates])
    VALUES
-       (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICGTNBR,@ICRFNBR,@ICPRFNBR,
-       @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@icNewShopLogo,@IcAllowCreateOwn
+       (@ICRFNBR,@ICNAME,@ICLOGO,@ICADDR1,@ICADDR2,@ICZIPC ,@ICCITY,@ICURL,@ICCOMMAIL,@ICRFNBR,@ICPRFNBR,
+       @CompanyCode,@icInsuranceCompanyToken,@ICSTATECODE,@departmentId,@icCulture,@IcAllowCreateOwn
        ,@icRecieveSPNotification
        ,@icSendSPNotificationTo
        ,@SMSDISPLAYNAME
