@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,9 @@ import static com.scalepoint.automation.utils.Configuration.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class SelfServiceService extends BaseService {
 
@@ -59,7 +63,7 @@ public class SelfServiceService extends BaseService {
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
-        this.linkToSS = getLinkToSS(getSelfServiceEmailToken());
+        this.linkToSS = getLinkToSS(getToken());
 
         return this;
     }
@@ -84,6 +88,16 @@ public class SelfServiceService extends BaseService {
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .getToken();
+    }
+
+    public String getToken() {
+
+        return await()
+                .ignoreException(NoSuchElementException.class)
+                .pollInterval(2, TimeUnit.SECONDS)
+                .timeout(1, TimeUnit.MINUTES)
+                .until(() -> getSelfServiceEmailToken(),
+                        notNullValue());
     }
 
     public String getLinkToSS(String selfServiceEmailToken){
