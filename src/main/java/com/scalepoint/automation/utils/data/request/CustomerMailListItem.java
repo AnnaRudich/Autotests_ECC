@@ -10,17 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MailListItem {
-    @JsonProperty("Token")
+public class CustomerMailListItem {
     private String token;
-    @JsonProperty("Subject")
     private String subject;
-    @JsonProperty("Type")
     private String type;
-    @JsonProperty("EventType")
-    private String eventType;
-    @JsonProperty("Status")
+    private boolean resendAllowed;
     private int status;
-    @JsonProperty("Date")
     private String date;
 }

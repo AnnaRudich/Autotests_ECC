@@ -1,7 +1,9 @@
 package com.scalepoint.automation.services.restService;
 
+import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.restService.common.BaseService;
 import com.scalepoint.automation.utils.Configuration;
+import com.scalepoint.automation.utils.data.request.CustomerMailListItem;
 import com.scalepoint.automation.utils.data.request.SelfServiceInitData;
 import com.scalepoint.automation.utils.data.request.SelfServiceLossItems;
 import com.scalepoint.automation.utils.data.request.SelfServiceRequest;
@@ -11,11 +13,14 @@ import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME;
 import static com.scalepoint.automation.services.restService.common.BasePath.*;
 import static com.scalepoint.automation.utils.Configuration.*;
 import static io.restassured.RestAssured.given;
@@ -54,13 +59,54 @@ public class SelfServiceService extends BaseService {
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
-        this.linkToSS = response
-                .jsonPath()
-                .get("data.linkToSS")
-                .toString()
-                .concat("&selfService=true");
+        this.linkToSS = getLinkToSS(getSelfServiceEmailToken());
 
         return this;
+    }
+
+    public String getSelfServiceEmailToken(){
+
+        this.response = given()
+                .baseUri(getEccUrl())
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .contentType("application/json")
+                .get(CUSTOMER_MAIL_LIST)
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
+
+        CustomerMailListItem[] mailListItems = response.getBody().as(CustomerMailListItem[].class);
+
+        return Arrays.stream(mailListItems)
+                .filter(customerMailListItem ->
+                        MailsPage.MailType.findByText(customerMailListItem.getType()).equals(SELFSERVICE_CUSTOMER_WELCOME))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new)
+                .getToken();
+    }
+
+    public String getLinkToSS(String selfServiceEmailToken){
+
+        this.response = given().log().all()
+                .baseUri(getEccUrl())
+                .sessionId(data.getEccSessionId())
+                .pathParam("userId", data.getUserId())
+                .pathParam("emailToken", selfServiceEmailToken)
+                .contentType("application/json")
+                .get(CUSTOMER_MAIL_CONTENT)
+                .then().log().all()
+                .statusCode(HttpStatus.SC_OK)
+                .extract().response();
+
+        String body = response.getBody().asString();
+
+        Matcher matcher = Pattern.compile("<a href=\\\\\"(http://.+?/shop/LoginToShop\\?selfService=true.+?)\\\\\"")
+                .matcher(body);
+
+        matcher.find();
+
+        return matcher.group(1).replace("amp;", "");
     }
 
     public SelfServiceService getCaseWidget(String caseToken, String ssoToken) {
