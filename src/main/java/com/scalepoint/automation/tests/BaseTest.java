@@ -51,6 +51,7 @@ import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
+import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -322,7 +323,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
         Token token = new OauthTestAccountsApi().sendRequest().getToken();
-        return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
+
+        Response response = new CreateClaimService(token).addClaim(claimRequest).getResponse();
+
+        CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
+
+        return response.jsonPath().get("token");
     }
 
     protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {

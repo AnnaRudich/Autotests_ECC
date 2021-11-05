@@ -26,7 +26,11 @@ public abstract class BaseClaimPage extends Page {
         return claimNavigationMenu.toMailsPage();
     }
 
-    public MailsPage toEmptyMailsPage() {
+    public MailsPage toEmptyMailsPage(MailserviceMock.MailserviceStub mailserviceStub) {
+
+        mailserviceStub.findSentEmails(CurrentUser.getClaimId());
+
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return claimNavigationMenu.toEmptyMailsPage();
     }
 
