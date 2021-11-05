@@ -183,7 +183,8 @@ public class ClaimTests extends BaseTest {
                 .completeWithoutEmail()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
-                .openRecentClaim().toEmptyMailsPage()
+                .openRecentClaim()
+                .toEmptyMailsPage(mailserviceStub)
                 .doAssert(mail -> {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
