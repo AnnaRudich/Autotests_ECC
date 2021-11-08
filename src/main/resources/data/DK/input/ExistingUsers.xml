@@ -45,6 +45,6 @@
     <user login="f6a@future56.scalepoint.com"     password="1234QWER#" companyCode="FUTURE56"       companyId="56" companyName="Future56"     ftId="56" type="SCALEPOINT_ID" />
     <user login="f7a@future57.scalepoint.com"     password="1234QWER#" companyCode="FUTURE57"       companyId="57" companyName="Future57"     ftId="57" type="SCALEPOINT_ID" />
     <user login="f8a@future58.scalepoint.com"     password="1234QWER#" companyCode="FUTURE58"       companyId="58" companyName="Future58"     ftId="58" type="SCALEPOINT_ID" />
-    <user login="f9a@future59.scalepoint.com"     password="1234QWER#" companyCode="FUTURE59"       companyId="59" companyName="Future59"     ftId="59" type="SCALEPOINT_ID" />
+<!--    <user login="f9a@future59.scalepoint.com"     password="1234QWER#" companyCode="FUTURE59"       companyId="59" companyName="Future59"     ftId="59" type="SCALEPOINT_ID" />-->
     <user login="f60a@future60.scalepoint.com"     password="1234QWER#" companyCode="FUTURE60"       companyId="60" companyName="Future60"     ftId="60" type="SCALEPOINT_ID" />
 </existingUsers>
