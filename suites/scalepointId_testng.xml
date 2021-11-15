@@ -1,0 +1,50 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ScalepointId" configfailurepolicy="continue" parallel="methods">
+    <parameter name="FeatureToggleSetting" value="SCALEPOINTID_LOGIN_ENABLED"/>
+    <test verbose="1" name="ScalepointIdSmokeTest" group-by-instances="false" enabled="true" preserve-order="true"  thread-count="4">
+        <classes>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+                <methods>
+                    <include name="completeClaimWithMailScalepointIdTest"/>
+                    <include name="cancelSavedClaimScalepointIdTest"/>
+                    <include name="reopenSavedClaimScalepointIdTest"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+                <methods>
+                    <include name="completeClaimExternallyFromSettlementPageScalepointIdTest"/>
+                </methods>
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+                <methods>
+                    <include name="setIncludeInClaimCheckboxScalepointIdTest"/>
+                    <include name="inputCustomDemandScalepointIdTest"/>
+                    <include name="inputNewPriceScalepointIdTest"/>
+                    <include name="depreciationFromSuggestionShouldBeNotUpdatedAfterChangingScalepointIdTest"/>
+                    <include name="depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidScalepointIdTest"/>
+                    <include name="saveAllEnteredResultsScalepointIdTest"/>
+                    <include name="cancelEnteredResultsScalepointIdTest"/>
+                    <include name="addNewValuationScalepointIdTest"/>
+                    <include name="disableIncludeInClaimScalepointIdTest"/>
+                    <include name="enableIncludeInClaimSecondClaimScalepointIdTest"/>
+                    <include name="disableIncludeInClaimAndReviewedScalepointIdTest"/>
+                    <include name="completeClaimIsEnabledScalepointIdTest"/>
+                    <include name="reviewedBoxNotDisplayedScalepointIdTest"/>
+                    <include name="completeClaimIsEnabledScalepointIdTest"/>
+                    <include name="cancelledClaimNotAddedScalepointIdTest"/>
+                    <include name="cashCompensationEqualV1ScalepointIdTest"/>
+                    <include name="openAddValuationDialogInSIDScalepointIdTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialogScalepointIdTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialog2ScalepointIdTest"/>
+                    <include name="addNewValuationPriceInAddValuationDialog3ScalepointIdTest"/>
+                    <include name="enableAgeOptionScalepointIdTest"/>
+                    <include name="addYearsAndMonthAndSaveScalepointIdTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+<!--    <listeners>-->
+<!--        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>-->
+<!--    </listeners>-->
+</suite>

@@ -11,19 +11,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
-@Configuration
+@TestConfiguration
 @EnableAutoConfiguration
 public class BeansConfiguration {
 
@@ -74,30 +73,29 @@ public class BeansConfiguration {
 
     @SuppressWarnings("Convert2Lambda")
     @Bean
-    public ApplicationListener<ApplicationReadyEvent> listener() {
-        return new ApplicationListener<ApplicationReadyEvent>() {
-            @Override
-            public void onApplicationEvent(ApplicationReadyEvent event) {
-                com.scalepoint.automation.utils.Configuration.getInstance()
-                        .setProtocol(protocol)
-                        .setLocale(locale)
-                        .setServerUrl(serverUrl)
-                        .setEnvironmentUrl(environmentUrl)
-                        .setEventApiUrl(eventApiUrl)
-                        .setEccContext(eccContext)
-                        .setEccAdminContext(eccAdminContext)
-                        .setEccRnvContext(eccRnvContext)
-                        .setSelfServiceContext(eccSelfServiceContext)
-                        .setSolrBaseUrl(solrBaseUrl)
-                        .setHubRemote(hubRemoteUrl)
-                        .setHubLocalZalenium(hubLocalZaleniumUrl)
-                        .setHubRemoteZalenium(hubRemoteZaleniumUrl)
-                        .setUrlTestWidget(urlTestWidget)
-                        .setTestWidgetProtocol(testWidgetProtocol)
-                        .setDomainTestWidget(domainTestWidget);
-                UsersManager.initManager(TestData.getSystemUsers());
-            }
-        };
+    public com.scalepoint.automation.utils.Configuration listener() {
+
+        com.scalepoint.automation.utils.Configuration configuration = com.scalepoint.automation.utils.Configuration.getInstance()
+                .setProtocol(protocol)
+                .setLocale(locale)
+                .setServerUrl(serverUrl)
+                .setEnvironmentUrl(environmentUrl)
+                .setEventApiUrl(eventApiUrl)
+                .setEccContext(eccContext)
+                .setEccAdminContext(eccAdminContext)
+                .setEccRnvContext(eccRnvContext)
+                .setSelfServiceContext(eccSelfServiceContext)
+                .setSolrBaseUrl(solrBaseUrl)
+                .setHubRemote(hubRemoteUrl)
+                .setHubLocalZalenium(hubLocalZaleniumUrl)
+                .setHubRemoteZalenium(hubRemoteZaleniumUrl)
+                .setUrlTestWidget(urlTestWidget)
+                .setTestWidgetProtocol(testWidgetProtocol)
+                .setDomainTestWidget(domainTestWidget);
+
+        UsersManager.initManager(TestData.getSystemUsers());
+
+        return configuration;
     }
 
     @Bean
