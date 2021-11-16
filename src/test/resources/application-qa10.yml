@@ -9,7 +9,7 @@ subscription.claimline_changed.id: 1
 subscription.fraud_status.id: 2
 
 # liquibase/database
-url: "jdbc:sqlserver://SQL-ECC01.spcph.local;characterEncoding=UTF-8;SelectMethod=cursor;databaseName=QA10_ECC_DK;integratedSecurity=true"
+url: jdbc:sqlserver://SQL-ECC01.spcph.local;characterEncoding=UTF-8;SelectMethod=cursor;databaseName=QA10_ECC_DK;integratedSecurity=true
 #username=QA01_ECC_DK
 #password=ImhkWAXJbGcTN90X
 
