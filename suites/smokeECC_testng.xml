@@ -69,10 +69,6 @@
     </test>
 
     <suite-files>
-        <suite-file path="scalepointId_testng.xml" />
-    </suite-files>
-
-    <suite-files>
         <suite-file path="qunit_testng.xml" />
     </suite-files>
 
