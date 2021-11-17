@@ -1,5 +1,6 @@
 package com.scalepoint.automation.utils.testng;
 
+import com.scalepoint.automation.testGroups.TestGroups;
 import org.testng.*;
 
 import java.util.*;
@@ -46,6 +47,14 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
         }
 
         return list;
+    }
+
+    private List removeScalepointIdTestsFromRegressionSuite(List<IMethodInstance> list){
+
+        return list.stream()
+                .filter(iMethodInstance -> !Arrays.stream(iMethodInstance.getMethod().getGroups())
+                        .anyMatch(group -> group.equals(TestGroups.SCALEPOINT_ID)) && !Suite.findSuite(iMethodInstance.getMethod().getXmlTest().getSuite().getName()).equals(Suite.REGRESSION))
+                .collect(Collectors.toList());
     }
 
     private boolean isSuitePassed(ISuite iSuite){
