@@ -46,7 +46,7 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
             throw new RuntimeException(incorrectIncludeSyntax);
         }
 
-        return list;
+        return removeScalepointIdTestsFromRegressionSuite(list);
     }
 
     private List removeScalepointIdTestsFromRegressionSuite(List<IMethodInstance> list){
