@@ -38,7 +38,7 @@ public class FnolReassignTest extends BaseTest {
     private final static String REASSIGN_FNOL_DATA_PROVIDER = "reassignFnolDataProvider";
     private final static String REASSIGN_FNOL_AUTO_CLOSE_DATA_PROVIDER = "reassignFnolAutoCloseDataProvider";
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setUp() {
 
         Matcher matcher = Pattern
@@ -48,7 +48,7 @@ public class FnolReassignTest extends BaseTest {
         server = matcher.group(2);
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void test(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

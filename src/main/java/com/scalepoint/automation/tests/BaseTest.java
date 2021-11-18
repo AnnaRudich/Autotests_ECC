@@ -162,7 +162,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected FraudAlertMock fraudAlertMock;
 
-    @BeforeClass()
+    @BeforeClass(alwaysRun = true)
     public void updateFeatureToggle(ITestContext context){
 
         ServiceData.init(databaseApi);
@@ -173,7 +173,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    @AfterClass()
+    @AfterClass(alwaysRun = true)
     public void rollbackFeatureToggle(ITestContext context){
 
         if (featureTogglesDefaultState.isEmpty()) {
@@ -188,7 +188,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void baseInit(Method method, ITestContext context, Object[] objects) {
 
         try {
@@ -238,7 +238,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void cleanup(Method method, ITestResult iTestResult, ITestContext context, Object[] objects) {
         log.info("Clean up after: {}", method.toString());
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));

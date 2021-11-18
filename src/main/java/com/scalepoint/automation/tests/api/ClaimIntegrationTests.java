@@ -21,7 +21,7 @@ public class ClaimIntegrationTests extends BaseApiTest {
 
     private EccIntegrationService eccIntegrationService;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

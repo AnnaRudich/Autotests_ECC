@@ -26,7 +26,7 @@ public class FuncTemplatesTests extends BaseTest {
     private static final String DELETE_NEW_FT_DATA_PROVIDER = "deleteNewFtDataProvider";
     private static final String EDIT_FT_DATA_PROVIDER = "editFtDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toFunctionalTemplatesPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

@@ -30,7 +30,7 @@ public class UserPasswordTests extends BaseTest {
     private static final String GENERATE_PASSWORD_FOR_EXISTING_USER_DATA_PROVIDER = "generatePasswordForExistingUserDataProvider";
     private static final String GENERATE_PASSWORD_FROM_PREFERENCES_DATA_PROVIDER = "generatePasswordFromPreferencesDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toEditReasonPage(Object[] objects) {
 
         login(getSystemUser(), UsersPage.class)

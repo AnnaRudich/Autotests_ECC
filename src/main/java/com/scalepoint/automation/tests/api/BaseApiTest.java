@@ -69,7 +69,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Value("${subscription.fraud_status.id}")
     protected String fraudStatusSubscriptionId;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUpData(Method method, Object[] objects) {
 
         Thread.currentThread().setName("Thread " + method.getName());
@@ -78,7 +78,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
         ServiceData.init(databaseApi);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
         log.info("Clean up after: {}", method.toString());
         CurrentUser.cleanUp();
