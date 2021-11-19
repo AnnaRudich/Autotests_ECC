@@ -1,9 +1,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="All" configfailurepolicy="continue">
-    <parameter name="included" value="${included}" />
+    <parameter name="included" value="" />
     <suite-files>
         <suite-file path="critical_testng.xml" />
         <suite-file path="regression_testng.xml" />
+        <suite-file path="scalepointId_testng.xml" />
         <suite-file path="qunit_testng.xml" />
     </suite-files>
     <listeners>

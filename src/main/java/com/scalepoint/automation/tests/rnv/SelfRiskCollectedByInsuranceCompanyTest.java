@@ -26,7 +26,7 @@ public class SelfRiskCollectedByInsuranceCompanyTest extends RnVBase {
     private static final String SELF_RISK_EQUAL_TO_REPAIR_PRICE_DATA_PROVIDER = "selfRiskEqualToRepairPriceDataProvider";
     private static final String SELF_RISK_HIGHER_THAN_REPAIR_PRICE_DATA_PROVIDER = "selfRiskHigherThanRepairPriceDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toSettlementPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

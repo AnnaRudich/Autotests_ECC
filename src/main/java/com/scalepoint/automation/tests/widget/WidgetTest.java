@@ -38,7 +38,7 @@ public class WidgetTest extends BaseTest {
     private String descriptionSelfService = "testSelfService";
     private String server;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setUp() {
 
         Matcher matcher = Pattern

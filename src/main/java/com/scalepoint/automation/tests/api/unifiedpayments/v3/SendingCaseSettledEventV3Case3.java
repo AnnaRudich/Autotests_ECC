@@ -29,7 +29,7 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
     private static final String CLOSE_SENDING_CASE_SETTLED_EVENT_V3_CASE3_DATA_PROVIDER = "closeSendingCaseSettledEventV3Case3DataProvider";
     private static final String CLOSE_EXTERNALLY_SENDING_CASE_SETTLED_EVENT_V3_CASE3_DATA_PROVIDER = "closeExternallySendingCaseSettledEventV3Case3DataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     private void setUp(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

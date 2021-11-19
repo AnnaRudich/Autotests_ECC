@@ -21,7 +21,7 @@ import static com.scalepoint.automation.pageobjects.pages.Page.to;
 @Jira("https://jira.scalepoint.com/browse/CHARLIE-535")
 public class GenericItemsTests extends BaseTest {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toGenericItemsAdminPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

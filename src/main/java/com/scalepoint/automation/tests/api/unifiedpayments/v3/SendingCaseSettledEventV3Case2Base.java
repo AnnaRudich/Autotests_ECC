@@ -25,7 +25,7 @@ public class SendingCaseSettledEventV3Case2Base extends BaseUnifiedPaymentsApiTe
     protected static final String CLOSE_SENDING_CASE_SETTLED_EVENT_V3_CASE2_DATA_PROVIDER = "closeSendingCaseSettledEventV3Case2DataProvider";
     protected static final String CLOSE_EXTERNALLY_SENDING_CASE_SETTLED_EVENT_V3_CASE2_DATA_PROVIDER = "closeExternallySendingCaseSettledEventV3Case2DataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     void setUp(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

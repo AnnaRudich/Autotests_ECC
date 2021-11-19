@@ -1,0 +1,25 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="scalepointId" configfailurepolicy="continue" parallel="methods">
+    <parameter name="FeatureToggleSetting" value="SCALEPOINTID_LOGIN_ENABLED"/>
+
+    <test verbose="1" name="ScalepointIdSmokeTest" group-by-instances="false" enabled="true" preserve-order="true"  thread-count="4">
+        <groups>
+            <run>
+                <include name="scalepointID"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.scalepoint.automation.tests.ClaimTests">
+            </class>
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+            </class>
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+            </class>
+        </classes>
+    </test>
+
+
+    <listeners>
+        <listener class-name="com.scalepoint.automation.utils.testng.RetryListener"/>
+    </listeners>
+</suite>

@@ -26,7 +26,7 @@ public class SelfRiskCollectedByServicePartnerTest extends RnVBase {
     private static final String SELF_RISK_EQUAL_TO_TOTAL_AMOUNT_OF_COMPENSATION_DATA_PROVIDER = "selfRiskEqualToTotalAmountOfCompensationDataProvider";
     private static final String SELF_RISK_HIGHER_THAN_TOTAL_AMOUNT_OF_COMPENSATION_DATA_PROVIDER = "selfRiskHigherThanTotalAmountOfCompensationDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toSettlementPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

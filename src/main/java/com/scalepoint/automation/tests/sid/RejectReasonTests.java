@@ -26,7 +26,7 @@ public class RejectReasonTests extends BaseTest {
 
     private ITestResult iTestResult;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setITestResult(ITestResult iTestResult) {
         this.iTestResult = iTestResult;
     }

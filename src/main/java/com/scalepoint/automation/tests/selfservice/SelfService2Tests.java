@@ -38,7 +38,7 @@ public class SelfService2Tests extends BaseTest {
     private String newPasswordToSelfService;
     MailserviceMock mailserviceMock;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void startWireMock() {
 
         WireMock.configureFor(wireMock);
@@ -51,7 +51,7 @@ public class SelfService2Tests extends BaseTest {
                 .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     void init() {
         description = null;
         newPasswordToSelfService = null;

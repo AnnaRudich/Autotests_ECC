@@ -42,7 +42,7 @@ public class EditReasonTests extends BaseTest {
     private static final String EDIT_REASON_NOT_IN_USE_DATA_PROVIDER = "editReasonNotInUseDataProvider";
     private static final String DISABLE_REASON_IN_USE_DATA_PROVIDER = "disableReasonInUseDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toEditReasonPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

@@ -1,0 +1,22 @@
+# suppress inspection "SpringBootApplicationProperties" for whole file
+driver.type: "chrome.remote"
+url.base.server: "qa14.scalepoint.com"
+url.solr.base: "http://ecc-qa14.spcph.local:82/solr"
+url.environment: "qa14.scalepoint.com"
+url.eventapi: "http://ecc-qa14.spcph.local:86"
+
+subscription.claimline_changed.id: 9
+subscription.fraud_status.id: 8
+
+# liquibase/database
+url: jdbc:sqlserver://SQL-A-ECC.spcph.local;SelectMethod=cursor;databaseName=QA14_ECC_DK;integratedSecurity=true
+#username=QA14_ECC_DK
+#password=wSMu1zvsMwUmWh8e
+
+wiremock.host: "ecc-tools.spcph.local"
+#mongoDb
+mongoDbConnectionString: "mongodb://ecc:NAl4EPRDtlT(8k8#@ecc-tools.spcph.local:27017"
+mongoVoucherPredictionCollectionName: VoucherPrediction
+
+# events-api
+eventApiDbUrl: "jdbc:sqlserver://SQL-A-ECC.spcph.local;database=qa14_unified-events;integratedSecurity=true"
