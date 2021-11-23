@@ -27,10 +27,7 @@ import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
-import com.scalepoint.automation.spring.Application;
-import com.scalepoint.automation.spring.BeansConfiguration;
-import com.scalepoint.automation.spring.EventApiDatabaseConfig;
-import com.scalepoint.automation.spring.WireMockConfig;
+import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.JavascriptHelper;
@@ -102,7 +99,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
