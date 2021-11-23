@@ -176,13 +176,13 @@
     <build>
         <resources>
             <resource>
-                <directory>src/test/resources</directory>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources-filtered</directory>
                 <filtering>true</filtering>
             </resource>
-<!--            <resource>-->
-<!--                <directory>src/main/resources-filtered</directory>-->
-<!--                <filtering>true</filtering>-->
-<!--            </resource>-->
         </resources>
         <plugins>
             <plugin>
