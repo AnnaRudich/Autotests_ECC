@@ -32,7 +32,7 @@ public class WireMockConfig {
                 .build();
 
         WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
+//        wireMock.resetMappings();
 
         return wireMock;
     }
