@@ -25,7 +25,7 @@ public class FnolCorsWidgetTest extends FnolBaseTest {
     private static final String FNOL_CORS_DATA_PROVIDER = "fnolCorsDataProvider";
     private static final String FNOL_CORS_WITH_ATTACHMENT_DATA_PROVIDER = "fnolCorsWithAttachmentDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     protected void getSSToken(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

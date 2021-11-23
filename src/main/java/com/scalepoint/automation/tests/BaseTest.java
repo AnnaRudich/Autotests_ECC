@@ -28,6 +28,9 @@ import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.Application;
+import com.scalepoint.automation.spring.BeansConfiguration;
+import com.scalepoint.automation.spring.EventApiDatabaseConfig;
+import com.scalepoint.automation.spring.WireMockConfig;
 import com.scalepoint.automation.stubs.*;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.JavascriptHelper;
@@ -46,6 +49,7 @@ import com.scalepoint.automation.utils.data.response.Token;
 import com.scalepoint.automation.utils.driver.DriverHelper;
 import com.scalepoint.automation.utils.driver.DriverType;
 import com.scalepoint.automation.utils.driver.DriversFactory;
+import com.scalepoint.automation.utils.listeners.FeatureToggleSettingsUtils;
 import com.scalepoint.automation.utils.listeners.OrderRandomizer;
 import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
@@ -61,16 +65,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
@@ -82,10 +84,12 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.scalepoint.automation.pageobjects.pages.admin.UserAddEditPage.UserType.*;
+import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
@@ -98,6 +102,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
@@ -161,7 +166,33 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected MailserviceMock.MailserviceStub mailserviceStub;
 
-    @BeforeMethod
+    @BeforeClass(alwaysRun = true)
+    public void updateFeatureToggle(ITestContext context){
+
+        ServiceData.init(databaseApi);
+
+        if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
+
+            updateFeatureToggle(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
+        }
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void rollbackFeatureToggle(ITestContext context){
+
+        if (featureTogglesDefaultState.isEmpty()) {
+
+            log.info("No feature toggle to rollback");
+        } else {
+
+            if(FeatureToggleSettingsUtils.isFeatureToggleSettingEnabled(context, SCALEPOINTID_LOGIN_ENABLED)) {
+
+                rollbackToggleSetting(FeatureToggleSettingsUtils.scalepointIdLoginEnabled());
+            }
+        }
+    }
+
+    @BeforeMethod(alwaysRun = true)
     public void baseInit(Method method, ITestContext context, Object[] objects) {
 
         try {
@@ -194,7 +225,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 Optional<User> optionalUser = getLisOfObjectByClass(Arrays.asList(objects), User.class).stream().findFirst();
 
                 retryUpdateFtTemplate(method, optionalUser);
-                updateFeatureToggle(method);
+
+                if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
+
+                    updateFeatureToggle(getToggleSetting(method));
+                }
             }
 
         }catch (Exception e){
@@ -207,8 +242,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    @AfterMethod
-    public void cleanup(Method method, ITestResult iTestResult, Object[] objects) {
+    @AfterMethod(alwaysRun = true)
+    public void cleanup(Method method, ITestResult iTestResult, ITestContext context, Object[] objects) {
         log.info("Clean up after: {}", method.toString());
         Cookie cookie = new Cookie("zaleniumTestPassed", String.valueOf(iTestResult.isSuccess()));
         try {
@@ -234,9 +269,14 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
                 cleanUpCDTemplates(method, objects);
 
                 if (featureTogglesDefaultState.isEmpty()) {
+
                     log.info("No feature toggle to rollback");
                 } else {
-                    rollbackToggleSetting(method);
+
+                    if(FeatureToggleSettingsUtils.getFeatureToggleSetting(context).isEmpty()) {
+
+                        rollbackToggleSetting(getToggleSetting(method));
+                    }
                 }
 
                 Browser.open(com.scalepoint.automation.utils.Configuration.getLogoutUrl());
@@ -496,10 +536,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         }
     }
 
-    private void rollbackToggleSetting(Method method) {
+    private void rollbackToggleSetting(FeatureToggleSetting toggleSetting) {
 
         FeaturesToggleAdministrationService featuresToggleAdminApi = new FeaturesToggleAdministrationService();
-        final FeatureToggleSetting toggleSetting = getToggleSetting(method);
         if (toggleSetting == null) {
             return;
         }
@@ -544,10 +583,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
 
-    private void updateFeatureToggle(Method method) {
+    private void updateFeatureToggle(FeatureToggleSetting toggleSetting) {
         FeaturesToggleAdministrationService featureToggleService = new FeaturesToggleAdministrationService();
 
-        FeatureToggleSetting toggleSetting = getToggleSetting(method);
         if (toggleSetting == null) {
             return;
         }

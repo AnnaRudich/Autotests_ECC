@@ -46,7 +46,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     private static final String ON_LINE_SENT_TO_RNV_TASK_LINE_DATA_PROVIDER = "onLineSentToRnVTaskLineDataProvider";
     private static final String MULTIPLE_LINES_SENT_TO_RNV_TASK_LINE_DATA_PROVIDER = "multipleLinesSentToRnVTaskLineDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toSettlementDialog(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

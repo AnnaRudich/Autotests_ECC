@@ -44,7 +44,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
     private static final String ORDER_CONFIRMATION_DATA_PROVIDER = "orderConfirmationDataProvider";
     private static final String REPLACEMENT_MAIL_DATA_PROVIDER = "replacementMailDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toAdminPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

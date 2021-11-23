@@ -26,7 +26,8 @@ public class CommunicationDesignerBaseTests extends BaseTest {
     protected static String oneAttachment;
     protected static String twoAttachments;
 
-    @BeforeMethod
+
+    @BeforeMethod(alwaysRun = true)
     public void setCommunicationDesignerSection(Object[] objects) throws IOException {
 
         List parameters = Arrays.asList(objects);

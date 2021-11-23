@@ -29,20 +29,20 @@ public class FileServicePerformanceTest extends BaseApiTest {
     private CSVWriter csv;
     
     @Parameters({"users"})
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void startWireMock(String users){
 
         this.users = Integer.valueOf(users);
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void createFile(ITestContext iTestContext) throws IOException {
 
         String name = iTestContext.getName();
         csv = new CSVWriter(new FileWriter(new File(name.concat(".csv"))));
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void closeFile() throws IOException {
 
         csv.close();

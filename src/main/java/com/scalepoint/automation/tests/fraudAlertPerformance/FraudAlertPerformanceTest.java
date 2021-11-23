@@ -41,7 +41,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
     private Map<String, List<Duration>> bulk = new HashMap();
 
     @Parameters({"users"})
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void startWireMock(String users) throws IOException {
 
         this.users = Integer.valueOf(users);
@@ -52,7 +52,7 @@ public class FraudAlertPerformanceTest extends BaseApiTest {
         new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void measurement() throws IOException {
 
         printResults(manual, "manual");

@@ -1,0 +1,30 @@
+# suppress inspection "SpringBootApplicationProperties" for whole file
+spring.profiles.active: qa14
+spring.output.ansi.enabled: ALWAYS
+
+#selenium hub
+hub.remote: "http://dev-ecc-tool03.spcph.local:4444/wd/hub"
+hub.remote.zalenium: "http://dev-ecc-tool01:4444/wd/hub"
+hub.local.zalenium: "http://localhost:4444/wd/hub"
+
+# tests specific
+app.locale: "dk"
+app.protocol: "https://"
+
+test.widget.protocol: "https://"
+test.widget.domain: "qa-ecc-cors%s.spcph.test"
+test.widget.uri: "/mock/cors/ss/widget.html"
+
+context.ecc.admin: eccAdmin
+context.ecc.rnv: repairValuation
+context.ecc: "webapp/ScalePoint"
+context.selfservice: self-service
+
+wiremock.urlPathPrefix: "/mock"
+wiremock.port: 443
+
+wiremock.host: "dev-ecc-tool03.spcph.local"
+
+#mongoDb
+mongoDbConnectionString: "mongodb://ecc:NAl4EPRDtlT(8k8#@ecc-tools.spcph.local:27017"
+mongoVoucherPredictionCollectionName: VoucherPrediction

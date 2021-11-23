@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
     private boolean healthCheckFailed = false;
-    List<Suite> includedSuites = Arrays.asList(Suite.REGRESSION, Suite.QUNIT);
+    List<Suite> includedSuites = Arrays.asList(Suite.REGRESSION, Suite.QUNIT, Suite.SCALEPOINT_ID);
 
     @Override
     public void onStart(ISuite iSuite) {}
@@ -147,6 +147,7 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
         HEALTH_CHECK("HealthCheck"),
         REGRESSION("allTestsExceptRnV"),
         QUNIT("qunit"),
+        SCALEPOINT_ID ("scalepointId"),
         ALL("All");
 
         private final String suiteName;

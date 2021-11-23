@@ -4,13 +4,13 @@ import com.scalepoint.automation.services.externalapi.EventDatabaseApi;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
-@Configuration
+@TestConfiguration
 @EnableAutoConfiguration
 public class EventApiDatabaseConfig {
 

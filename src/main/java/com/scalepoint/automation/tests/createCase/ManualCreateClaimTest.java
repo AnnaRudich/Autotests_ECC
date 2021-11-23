@@ -24,7 +24,7 @@ public class ManualCreateClaimTest extends BaseTest {
     private static final String CREATE_CLAIM_USING_COPY_PASTE_ON_CREATE_CLAIM_PAGE_DATA_PROVIDER = "createClaimUsingCopyPasteOnCreateClaimPageDataProvider";
     private static final String CREATE_CLAIM_USING_COPY_PASTE_ON_CREATE_CLAIM_PAGE_EMPTY_TEXT_AREA_DATA_PROVIDER = "createClaimUsingCopyPasteOnCreateClaimPageEmptyTextAreaDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toNewCustomerPage(Object[] objects){
 
         List parameters = Arrays.asList(objects);

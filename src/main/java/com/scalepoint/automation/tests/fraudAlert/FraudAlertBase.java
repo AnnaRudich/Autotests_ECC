@@ -23,7 +23,7 @@ public class FraudAlertBase extends BaseTest {
     static final String COUNTRY = "dk";
     FraudAlertStubs fraudAlertStubs;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void startWireMock() throws IOException {
 
         fraudAlertStubs = fraudAlertMock.addStub(TENANT);

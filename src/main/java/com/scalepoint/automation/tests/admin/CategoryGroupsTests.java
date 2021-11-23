@@ -31,7 +31,7 @@ public class CategoryGroupsTests extends BaseTest {
     public static final String UPDATE_NEW_PS_CAT_MODE_DATA_PROVIDER = "updateNewPsCatModelDataProvider";
     public static final String REMOVE_NEW_PS_CAT_MODEL_DATA_PROVIDER = "removeNewPsCatModelDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toAdminPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

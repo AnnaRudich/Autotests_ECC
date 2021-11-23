@@ -35,7 +35,7 @@ public class SendingToEventApiTests extends BaseApiTest {
     private SettlementClaimService settlementClaimService;
     private EccSettlement eccSettlementSummaryService;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     private void prepareClaimRequest(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

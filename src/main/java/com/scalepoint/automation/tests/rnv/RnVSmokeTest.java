@@ -33,7 +33,7 @@ public class RnVSmokeTest extends RnVBase {
 
     private static final String TEST_MESSAGE = "Test message";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toSettlementPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

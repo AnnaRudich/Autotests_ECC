@@ -19,7 +19,7 @@ import static com.scalepoint.automation.services.usersmanagement.UsersManager.ge
 public class InsCompanyTest extends BaseTest {
 
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toInsCompaniesPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

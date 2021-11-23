@@ -22,14 +22,14 @@ public class FnolBaseTest extends BaseApiTest {
     protected String authOrigin;
     protected String nonAuthOrigin;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setOrigins(){
 
         authOrigin = Configuration.getTestWidgetProtocol() + String.format(Configuration.getDomainTestWidget(), "01");
         nonAuthOrigin = Configuration.getTestWidgetProtocol() + String.format(Configuration.getDomainTestWidget(), "02");
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     protected void getSSToken(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

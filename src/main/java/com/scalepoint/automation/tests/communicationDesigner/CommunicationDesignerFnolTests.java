@@ -31,7 +31,7 @@ public class CommunicationDesignerFnolTests extends CommunicationDesignerBaseTes
 
     private static final String AUTOMATIC_CUSTOMER_WELCOME_DATA_PROVIDER = "automaticCustomerWelcomeDataProvider";
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void toSettlementPage(Object[] objects) {
 
         List parameters = Arrays.asList(objects);

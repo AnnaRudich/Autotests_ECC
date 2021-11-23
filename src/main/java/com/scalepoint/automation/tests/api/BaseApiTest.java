@@ -7,6 +7,9 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CaseSettlementDataService;
 import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.spring.Application;
+import com.scalepoint.automation.spring.BeansConfiguration;
+import com.scalepoint.automation.spring.EventApiDatabaseConfig;
+import com.scalepoint.automation.spring.WireMockConfig;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
@@ -18,6 +21,7 @@ import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
@@ -36,6 +40,7 @@ import static com.scalepoint.automation.services.externalapi.OauthTestAccountsAp
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class})
 public class BaseApiTest extends AbstractTestNGSpringContextTests {
 
     protected Logger log = LogManager.getLogger(BaseApiTest.class);
@@ -64,7 +69,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
     @Value("${subscription.fraud_status.id}")
     protected String fraudStatusSubscriptionId;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUpData(Method method, Object[] objects) {
 
         Thread.currentThread().setName("Thread " + method.getName());
@@ -73,7 +78,7 @@ public class BaseApiTest extends AbstractTestNGSpringContextTests {
         ServiceData.init(databaseApi);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void cleanup(Method method) {
         log.info("Clean up after: {}", method.toString());
         CurrentUser.cleanUp();

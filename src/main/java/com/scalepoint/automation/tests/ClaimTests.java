@@ -58,7 +58,7 @@ public class ClaimTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void reopenSavedClaimScalepointIdTest(User user, Claim claim) {
+    public void reopenSavedClaimScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) {
         reopenSavedClaimTest(user, claim);
     }
     /**
@@ -83,7 +83,7 @@ public class ClaimTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
-    public void cancelSavedClaimScalepointIdTest(User user, Claim claim) throws Exception {
+    public void cancelSavedClaimScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) throws Exception {
         cancelSavedClaimTest(user, claim);
     }
 
@@ -108,7 +108,7 @@ public class ClaimTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void completeClaimWithMailScalepointIdTest(User user, Claim claim) {
+    public void completeClaimWithMailScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) {
         completeClaimWithMailTest(user, claim);
     }
 

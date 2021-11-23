@@ -35,7 +35,7 @@ public class PerformanceTest extends BaseApiTest{
         PerformanceUsers.init(this.users);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void releaseUser(Object[] objects){
 
         PerformanceUsers.releaseUser((User) objects[0]);

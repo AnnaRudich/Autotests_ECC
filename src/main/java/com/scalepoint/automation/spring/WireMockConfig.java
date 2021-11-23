@@ -5,10 +5,10 @@ import com.github.tomakehurst.wiremock.client.WireMockBuilder;
 import com.scalepoint.automation.shared.WiremockServer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@TestConfiguration
 @EnableAutoConfiguration
 public class WireMockConfig {
 
