@@ -89,6 +89,12 @@
             <properties>
                 <activatedProperties>qa10</activatedProperties>
             </properties>
+            <activation>
+                <property>
+                    <name>spring.profiles.active</name>
+                    <value>qa10</value>
+                </property>
+            </activation>
         </profile>
         <profile>
             <id>QA11</id>
@@ -170,13 +176,13 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources-filtered</directory>
+                <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </resource>
+<!--            <resource>-->
+<!--                <directory>src/main/resources-filtered</directory>-->
+<!--                <filtering>true</filtering>-->
+<!--            </resource>-->
         </resources>
         <plugins>
             <plugin>
@@ -213,6 +219,7 @@
                         -Djava.library.path=${basedir}/src/main/resources/dll
                         -Xmx2048m
                         -XX:-UseGCOverheadLimit
+                        -Dspring.profiles.active=${activatedProperties}
                     </argLine>
 
                     <properties>

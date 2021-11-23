@@ -1,5 +1,5 @@
 # suppress inspection "SpringBootApplicationProperties" for whole file
-spring.profiles.active: qa14
+#spring.profiles.active: $(spring.profiles.active)
 spring.output.ansi.enabled: ALWAYS
 
 #selenium hub
