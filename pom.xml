@@ -213,6 +213,7 @@
                         -Djava.library.path=${basedir}/src/main/resources/dll
                         -Xmx2048m
                         -XX:-UseGCOverheadLimit
+                        -Dspring.profiles.active=${activatedProperties}
                     </argLine>
 
                     <properties>
