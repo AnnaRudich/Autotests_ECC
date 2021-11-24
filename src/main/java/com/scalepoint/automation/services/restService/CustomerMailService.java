@@ -27,6 +27,7 @@ public class CustomerMailService extends BaseService {
     }
 
     public CustomerMailService(Data data){
+
         super();
         this.data = data;
     }

@@ -89,12 +89,6 @@
             <properties>
                 <activatedProperties>qa10</activatedProperties>
             </properties>
-            <activation>
-                <property>
-                    <name>spring.profiles.active</name>
-                    <value>qa10</value>
-                </property>
-            </activation>
         </profile>
         <profile>
             <id>QA11</id>
@@ -437,18 +431,6 @@
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.logging.log4j</groupId>-->
-<!--            <artifactId>log4j-api</artifactId>-->
-<!--            <version>${log4j.version}</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.logging.log4j</groupId>-->
-<!--            <artifactId>log4j-core</artifactId>-->
-<!--            <version>${log4j.version}</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>ru.yandex.qatools.htmlelements</groupId>

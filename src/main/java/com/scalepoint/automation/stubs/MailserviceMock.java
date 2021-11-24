@@ -239,7 +239,5 @@ public class MailserviceMock extends EccMock {
             return mail;
         }
     }
-
-
 }
 

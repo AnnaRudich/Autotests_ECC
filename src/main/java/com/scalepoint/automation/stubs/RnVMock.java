@@ -115,8 +115,6 @@ public class RnVMock extends EccMock{
                             , is(notNullValue()));
         }
 
-
-
         private ServiceTasksExport loggedRequestToServiceTasksExport(LoggedRequest loggedRequest){
 
             log.info("Mock request: {}", loggedRequest);

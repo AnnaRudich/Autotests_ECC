@@ -32,8 +32,6 @@ public class FraudAlertBase extends BaseTest {
         new EventApiService().scheduleSubscription(fraudStatusSubscriptionId);
     }
 
-
-
     String excelImportPath = new File("src\\main\\resources\\excelImport\\DK_NYT ARK(3)(a).xls").getAbsolutePath();
 
     void fraudStatus(ClaimLineChanged event, String caseNumber, EventApiService.FraudStatus fraudStatus){
