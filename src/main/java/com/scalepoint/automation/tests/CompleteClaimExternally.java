@@ -22,6 +22,7 @@ public class CompleteClaimExternally extends BaseTest {
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
                     "Possible to Complete claim Externally from Base info page. Completed externally claim is added to the latest claims list with Closed Externally status")
     public void charlie515_completeClaimExternallyFromBaseInfoPage(User user, Claim claim) {
+
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -30,9 +31,10 @@ public class CompleteClaimExternally extends BaseTest {
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
+
     }
 
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)
@@ -49,7 +51,7 @@ public class CompleteClaimExternally extends BaseTest {
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }

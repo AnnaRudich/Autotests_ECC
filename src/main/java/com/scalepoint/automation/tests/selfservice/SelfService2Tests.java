@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.selfservice;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.pageobjects.dialogs.SelfServicePasswordDialog;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -8,7 +7,6 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.LoginSelfService
 import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
-import com.scalepoint.automation.stubs.MailserviceMock;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.testGroups.UserCompanyGroups;
 import com.scalepoint.automation.tests.BaseTest;
@@ -21,7 +19,6 @@ import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.Translations;
 import com.scalepoint.ecc.thirdparty.integrations.model.enums.LossType;
 import org.apache.http.HttpStatus;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -36,26 +33,13 @@ public class SelfService2Tests extends BaseTest {
 
     private String description;
     private String newPasswordToSelfService;
-    MailserviceMock mailserviceMock;
-
-    @BeforeClass(alwaysRun = true)
-    public void startWireMock() {
-
-        WireMock.configureFor(wireMock);
-        wireMock.resetMappings();
-        mailserviceMock = new MailserviceMock(wireMock, databaseApi);
-        mailserviceMock.addStub();
-        wireMock.allStubMappings()
-                .getMappings()
-                .stream()
-                .forEach(m -> log.info(String.format("Registered stubs: %s",m.getRequest())));
-    }
 
     @BeforeMethod(alwaysRun = true)
     void init() {
         description = null;
         newPasswordToSelfService = null;
     }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-735")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -68,7 +52,7 @@ public class SelfService2Tests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -114,7 +98,7 @@ public class SelfService2Tests extends BaseTest {
                 .newSelfServicePassword()
                 .apply(SelfServicePasswordDialog.class, p -> newPasswordToSelfService = p.getNewPasswordToSelfService())
                 .closeSelfServicePasswordDialog()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(newPasswordToSelfService)
@@ -136,7 +120,7 @@ public class SelfService2Tests extends BaseTest {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -174,7 +158,7 @@ public class SelfService2Tests extends BaseTest {
                 .reopenClaim()
                 .requestSelfServiceWithEnabledNewPassword(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -218,7 +202,7 @@ public class SelfService2Tests extends BaseTest {
 
     private void sendSMSandVerifyResponse(User user, Claim claim, int httpStatus){
 
-        claim.setCellNumber(mailserviceMock.getTestMobileNumberForStatusCode(httpStatus));
+        claim.setCellNumber(mailserviceStub.getTestMobileNumberForStatusCode(httpStatus));
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD);
 

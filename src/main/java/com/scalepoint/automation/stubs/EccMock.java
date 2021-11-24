@@ -10,6 +10,7 @@ public class EccMock {
     protected WireMock wireMock;
 
     public EccMock(WireMock wireMock) {
+
         this.wireMock = wireMock;
     }
 
