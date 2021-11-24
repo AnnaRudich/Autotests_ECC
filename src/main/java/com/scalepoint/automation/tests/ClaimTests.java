@@ -90,13 +90,14 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailTest(User user, Claim claim) {
+
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
     }
 
@@ -120,7 +121,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
                 .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
                 .doAssert(mailViewDialog -> mailViewDialog.isTextVisible(claim.getAgentEmail()));
@@ -137,7 +138,7 @@ public class ClaimTests extends BaseTest {
                 .completeWithEmail(claim, databaseApi, true)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .doAssert(mail -> mail.isMailExist(SETTLEMENT_NOTIFICATION_TO_IC))
                 .viewMail(SETTLEMENT_NOTIFICATION_TO_IC)
                 .doAssert(mailViewDialog -> mailViewDialog.isTextInvisible(claim.getAgentEmail()));
@@ -180,7 +181,8 @@ public class ClaimTests extends BaseTest {
                 .completeWithoutEmail()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
-                .openRecentClaim().toEmptyMailsPage()
+                .openRecentClaim()
+                .toEmptyMailsPage(mailserviceStub)
                 .doAssert(mail -> {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
@@ -194,7 +196,7 @@ public class ClaimTests extends BaseTest {
     public void loginToSelfService2_0(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD);
@@ -221,7 +223,7 @@ public class ClaimTests extends BaseTest {
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -322,7 +324,7 @@ public class ClaimTests extends BaseTest {
         String claimLineDescription = claimItem.getSetDialogTextMatch();
         loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
@@ -357,7 +359,7 @@ public class ClaimTests extends BaseTest {
                 });
 
         to(MyPage.class).openActiveRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
 
                 .doAssert(mail -> {
                     mail.isMailExist(ITEMIZATION_CUSTOMER_MAIL);

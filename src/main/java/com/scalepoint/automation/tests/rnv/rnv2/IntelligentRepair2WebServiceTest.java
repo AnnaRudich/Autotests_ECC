@@ -100,7 +100,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
         Page.to(MyPage.class)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
                 .openRecentClaim()
-                .toMailsPage()
+                .toMailsPage(mailserviceStub)
                 .doAssert(mail -> {
                     mail.isMailExist(CUSTOMER_WELCOME);
                 });
@@ -153,7 +153,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
         Page.to(MyPage.class)
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
-                .openRecentClaim().toMailsPage();
+                .openRecentClaim().toMailsPage(mailserviceStub);
 
         new CustomerDetailsPage().toRepairValuationProjectsPage()
                 .getAssertion()
@@ -248,6 +248,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
                 .assertTaskHasCompletedStatus(agreement)
                 .assertEvaluateTaskButtonIsDisabled();
     }
+
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)

@@ -28,7 +28,6 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class SelfServiceService extends BaseService {
@@ -109,7 +108,7 @@ public class SelfServiceService extends BaseService {
                 .pathParam("emailToken", selfServiceEmailToken)
                 .contentType("application/json")
                 .get(CUSTOMER_MAIL_CONTENT)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -162,7 +161,7 @@ public class SelfServiceService extends BaseService {
                 .formParam("username", username)
                 .formParam("password", password)
                 .post(SELF_SERVICE_LOGIN)
-                .then()
+                .then().log().all()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .extract().response();
 
