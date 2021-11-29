@@ -171,7 +171,7 @@ public class Configuration {
     }
 
     public static String getWidgetUrl(){
-        return getTestWidgetProtocol() + SLASH + getDomainTestWidget() + getUrlTestWidget();
+        return getTestWidgetProtocol() + getDomainTestWidget() + getUrlTestWidget();
     }
 
     public Configuration setProtocol(String protocol) {
