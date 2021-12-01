@@ -18,9 +18,7 @@ public abstract class BaseClaimPage extends Page {
         return claimNavigationMenu.toNotesPage();
     }
 
-    public MailsPage toMailsPage(MailserviceMock.MailserviceStub mailserviceStub) {
-
-        mailserviceStub.findSentEmails(CurrentUser.getClaimId());
+    public MailsPage toMailsPage() {
 
         Wait.waitForAjaxCompletedAndJsRecalculation();
         return claimNavigationMenu.toMailsPage();

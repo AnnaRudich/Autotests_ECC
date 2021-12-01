@@ -60,9 +60,16 @@ public class WireMockStubsConfig {
     }
 
     @Bean
-    public MailserviceMock.MailserviceStub mailserviceStub() throws IOException {
+    public MailserviceMock.MailserviceStub mailserviceStub() {
 
         return new MailserviceMock(wireMock, databaseApi)
                 .addStub();
+    }
+
+    @Bean
+    public OldMappingsMock oldMappingsMock() {
+
+        return new OldMappingsMock(wireMock)
+                .registerStubs();
     }
 }

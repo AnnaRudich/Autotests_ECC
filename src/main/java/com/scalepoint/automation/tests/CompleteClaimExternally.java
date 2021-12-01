@@ -31,7 +31,7 @@ public class CompleteClaimExternally extends BaseTest {
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
 
@@ -51,7 +51,7 @@ public class CompleteClaimExternally extends BaseTest {
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
                 )
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .doAssert(mail ->
                         mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
     }

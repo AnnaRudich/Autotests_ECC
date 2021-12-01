@@ -21,12 +21,13 @@ public class OldMappingsMock extends EccMock{
         ecbTenantsInfo();
         healthCheck();
         ip2();
-        mailServiceProxyHealthCheck();
-        mailServiceProxyMail();
+//        mailServiceProxyHealthCheck();
+//        mailServiceProxyMail();
         rnvFeedbackApprove();
         rnvFeedbackManual();
         rnvFeedbackReject();
         sms();
+        testCorsSSWidget();
 
         return this;
     }
@@ -97,7 +98,7 @@ public class OldMappingsMock extends EccMock{
                 any(urlMatching("/mailservice.asmx"))
                         .atPriority(10)
                         .willReturn(aResponse()
-                                .proxiedFrom("https://qa-shr-ms.spcph.local")));
+                                .proxiedFrom("https://ecc-qa11.spcph.local")));
     }
 
     private void mailServiceProxyMail(){
@@ -106,7 +107,7 @@ public class OldMappingsMock extends EccMock{
                 any(urlMatching("/api/v1/email.*"))
                         .atPriority(10)
                         .willReturn(aResponse()
-                                .proxiedFrom("https://qa-shr-ms.spcph.local")));
+                                .proxiedFrom("https://ecc-qa11.spcph.local")));
     }
 
     private void rnvFeedbackApprove(){
@@ -148,5 +149,16 @@ public class OldMappingsMock extends EccMock{
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withBody("TOKEN:".concat(UUID.randomUUID().toString()))));
+    }
+
+    private void testCorsSSWidget(){
+
+        wireMock.stubFor(
+                get(urlMatching("/cors/ss/widget.html"))
+                        .atPriority(9)
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withHeader("Content-Type", "text/html")
+                                .withBodyFile("ss-test-widget-cors.html")));
     }
 }

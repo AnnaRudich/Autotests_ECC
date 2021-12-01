@@ -129,7 +129,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(title)
@@ -157,7 +157,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(title)
@@ -217,7 +217,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME, title)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(title)
@@ -277,7 +277,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         new CreateOrderService().createOrderForProductExtraPay
                 (voucherInfo, claim.getClaimNumber(), claim.getPhoneNumber(), claim.getEmail(), isEvoucher);
 
-        new CustomerDetailsPage().toMailsPage(mailserviceStub)
+        new CustomerDetailsPage().toMailsPage()
                 .viewMail(MailsPage.MailType.ORDER_CONFIRMATION, orderConfirmationTitle)
                 .doAssert(mailViewDialog ->
                         mailViewDialog.isTextVisible(orderConfirmationTitle));

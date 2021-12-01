@@ -31,6 +31,7 @@ public class MailserviceMock extends EccMock {
     DatabaseApi databaseApi;
 
     public MailserviceMock(WireMock wireMock, DatabaseApi databaseApi){
+
         super(wireMock);
         log = LogManager.getLogger(MailserviceMock.class);
         testMobileNumber = databaseApi.findTestMobileNumbers();
@@ -86,7 +87,7 @@ public class MailserviceMock extends EccMock {
                             .atPriority(1)
                             .willReturn(aResponse()
                                     .withStatus(200)
-                                    .withBody("TOKEN:{{randomValue type='UUID'}}STATUS:OK")));
+                                    .withTransformers("mailServiceTransformer")));
 
             return this;
         }
@@ -95,8 +96,8 @@ public class MailserviceMock extends EccMock {
 
             wireMock.stubFor(
                     any(urlMatching(SMS_URL))
-                            .withRequestBody(containing(getTestMobileNumberForStatusCode(responseCode)))
                             .atPriority(1)
+                            .withRequestBody(containing(getTestMobileNumberForStatusCode(responseCode)))
                             .willReturn(aResponse().withStatus(responseCode).withBody(String.format(response, responseCode))));
             return this;
         }
@@ -127,7 +128,7 @@ public class MailserviceMock extends EccMock {
 
             wireMock.stubFor(
                     get(urlMatching("/api/v1/email/forCase/".concat(userToken.toLowerCase())))
-                            .atPriority(3)
+                            .atPriority(1)
                             .willReturn(aResponse()
                                     .withHeader("Content-Type", "application/json;charset=utf-8")
                                     .withStatus(200)
@@ -156,17 +157,20 @@ public class MailserviceMock extends EccMock {
                     .type(mail.getMailType())
                     .addresses(null)
                     .build();
+
             String body =  null;
             try
             {
+
                 body = new ObjectMapper().writeValueAsString(mailContent);
             } catch (JsonProcessingException e) {
+
                 e.printStackTrace();
             }
 
             wireMock.stubFor(
                     get(urlMatching("/api/v1/email/".concat(token)))
-                            .atPriority(3)
+                            .atPriority(1)
                             .willReturn(aResponse()
                                     .withHeader("Content-Type", "application/json;charset=utf-8")
                                     .withStatus(200)

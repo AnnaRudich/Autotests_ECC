@@ -63,7 +63,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
                 .to(MyPage.class)
                 .doAssert(MyPage.Asserts::assertClaimCompleted)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub);
+                .toMailsPage();
     }
 
     protected void sendSelfServiceCustomerWelcomeEmail(Claim claim, String companyCode, String password,
@@ -74,7 +74,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         MailsPage mailsPage = Page.at(SettlementPage.class)
                 .requestSelfService(claim, password)
-                .toMailsPage(mailserviceStub);
+                .toMailsPage();
 
         mailsPage
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME, title)
@@ -99,7 +99,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
 
         Page.at(SettlementPage.class)
                 .requestSelfServiceWithEnabledAutoClose(claim, password)
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(password)
@@ -115,7 +115,7 @@ public class CommunicationDesignerBaseTests extends BaseTest {
                 .sendResponseToEcc();
 
         to(MyPage.class).openActiveRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .doAssert(mail -> {
                     mail.isMailExist(MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL);
                     mail.isMailExist(MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL);

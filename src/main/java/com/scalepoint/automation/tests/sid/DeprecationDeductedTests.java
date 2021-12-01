@@ -108,7 +108,7 @@ public class DeprecationDeductedTests extends BaseTest {
                 .fillClaimFormWithPassword(claim)
                 .completeWithEmail(claim, databaseApi, true)
                 .openRecentClaim()
-                .toMailsPage(mailserviceStub)
+                .toMailsPage()
                 .viewMail(MailsPage.MailType.CUSTOMER_WELCOME);
 
         login(user).openRecentClaim()
