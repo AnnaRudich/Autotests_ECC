@@ -75,7 +75,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      *
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = FEEDBACK_CLAIM_AUTO_COMPLETED_DATA_PROVIDER,
             description = "Feedback(with invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackWithInvoiceApprovedClaimAutoCompletedTest(User user, Claim claim, ServiceAgreement agreement,
@@ -129,7 +129,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: InvoiceTab/InvoiceDialog is opened without errors
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = FEEDBACK_CLAIM_AUTO_COMPLETED_DATA_PROVIDER,
             description = "Feedback(no invoice) evaluation status: Approved. Claim auto-completed")
     public void feedbackNoInvoiceApprovedClaimAutoCompleted(User user, Claim claim, ServiceAgreement agreement,
@@ -175,7 +175,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: evaluateTaskButton is disabled when task is auto completed by Rejection
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = FEEDBACK_REJECTED_DATA_PROVIDER,
             description = "Feedback evaluation status: Reject")
     public void feedbackRejectedTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
@@ -213,7 +213,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: task is Completed, evaluateTaskButton is disabled
      */
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE, enabled = false)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = FEEDBACK_MANUAL_DATA_PROVIDER,
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE}, dataProvider = FEEDBACK_MANUAL_DATA_PROVIDER,
             description = "Feedback evaluation status: Manual")
     public void feedbackManualTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
                                    String lineDescription, BigDecimal repairPrice) {
@@ -251,7 +251,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = DAMAGE_TYPE_EDITED_IN_RNV_DATA_PROVIDER,
             description = "damageType is actualized in SID when it was changed in RnV wizard")
     public void damageTypeEditedInRnvTest(User user, Claim claim, ServiceAgreement agreement, Translations translations,
@@ -281,7 +281,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
      * Assert: the error is displayed while sending
      * Assert: the task has 'fail' status on projects page in RnV Wizard
      */
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = SEND_LINE_TO_RNV_FAILS_ON_SERVICE_PARTNER_SIDE_DATA_PROVIDER,
             description = "RnV1. SendLine to RnV, send Service Partner feedback")
     public void sendLineToRnvFailsOnServicePartnerSideTest(User user, Claim claim, ServiceAgreement agreement,
@@ -307,7 +307,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = ON_LINE_SENT_TO_RNV_TASK_LINE_DATA_PROVIDER,
             description = "One line is set as repair type in RnV")
     public void onLineSentToRnVTaskLineTest(User user, Claim claim, ServiceAgreement agreement,
@@ -354,7 +354,7 @@ public class IntelligentRepair2WebServiceTest extends BaseTest {
 
     @RequiredSetting(type = SHOW_DAMAGE_TYPE_CONTROLS_IN_SID)
     @RequiredSetting(type = FTSetting.ENABLE_DAMAGE_TYPE)
-    @Test(groups = {TestGroups.RNV, TestGroups.RNV2, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
+    @Test(groups = {TestGroups.RNV, TestGroups.INTELLIGENT_REPAIR, TestGroups.INTELLIGENT_REPAIR2_WEB_SERVICE},
             dataProvider = MULTIPLE_LINES_SENT_TO_RNV_TASK_LINE_DATA_PROVIDER,
             description = "Two lines are set as repair type in RnV")
     public void multipleLinesSentToRnVTaskLineTest(User user, Claim claim, ServiceAgreement agreement,

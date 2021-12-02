@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FraudAlertSystemTest extends FraudAlertBase {
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
     public void productSearchFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
@@ -38,7 +38,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
     public void productSearchNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
@@ -47,7 +47,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
     public void manualClaimHandlingAddFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimRequest claimRequest, ClaimItem claimItem) throws IOException {
 
@@ -56,7 +56,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Add")
     public void manualClaimHandlingAddNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
@@ -65,7 +65,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Remove")
     public void manualClaimHandlingRemoveFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
@@ -74,7 +74,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Remove")
     public void manualClaimHandlingRemoveNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
@@ -83,7 +83,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Edit")
     public void manualClaimHandlingEditFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
@@ -92,7 +92,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Edit")
     public void manualClaimHandlingEditNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
@@ -101,7 +101,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
     public void selfServiceAddFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
@@ -110,7 +110,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "SelfService")
     public void selfServiceAddNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim, ClaimRequest claimRequest) throws IOException {
 
@@ -121,7 +121,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
                     " drop-down for choosing reason is enabled")
     public void importExcelNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user,
@@ -132,7 +132,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "CHARLIE-508 Verify that after importing excel with discretionary valuation" +
                     " drop-down for choosing reason is enabled")
     public void importExcelFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user,
@@ -143,7 +143,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
     public void fnolFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim) throws IOException {
 
@@ -152,7 +152,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.UNI_REQUIRED, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "FNOL")
     public void fnolNoFraudSystemTest(@UserAttributes(company = TOPDANMARK) User user, Claim claim) throws IOException {
 
