@@ -199,7 +199,6 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <systemPropertyVariables>
                         <buildInfo>${buildInfo}</buildInfo>
-                        <usedTestSuite>${suiteXmlFile}</usedTestSuite>
                         <tests.performance.enabledPerformanceTests>${tests.performance.enabledPerformanceTests}</tests.performance.enabledPerformanceTests>
                         <tests.performance.limit>${tests.performance.limit}</tests.performance.limit>
                         <tests.performance.testTime>${tests.performance.testTime}</tests.performance.testTime>
@@ -214,7 +213,6 @@
                         <value>methods</value>
                     </property>
                     </properties>
-<!--                    <parallel>methods</parallel>-->
 
                     <threadCount>6</threadCount>
                     <argLine>

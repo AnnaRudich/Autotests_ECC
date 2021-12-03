@@ -2,13 +2,6 @@
 <suite name="allTestsExceptRnV" configfailurepolicy="continue" parallel="methods">
 
     <test verbose="1" name="allTestsExceptApiAndRnV" group-by-instances="false" enabled="true" preserve-order="true" thread-count="6">
-
-        <groups>
-            <run>
-                <exclude name="scalepointID"/>
-            </run>
-        </groups>
-
         <packages>
             <package name="com.scalepoint.automation.tests.suppliermanager"/>
             <package name="com.scalepoint.automation.tests.admin.ReductionRulesTest"/>

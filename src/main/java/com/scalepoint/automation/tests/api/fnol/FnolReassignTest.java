@@ -83,7 +83,7 @@ public class FnolReassignTest extends BaseTest {
                 .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), firstCreateClaimRequest);
     }
 
-    @Test(groups = {TestGroups.UNI_REQUIRED,
+    @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
             TestGroups.FNOL_REASSIGNE},
@@ -108,7 +108,7 @@ public class FnolReassignTest extends BaseTest {
                         .assertThatDraftIsEmpty());
     }
 
-    @Test(groups = {TestGroups.UNI_REQUIRED,
+    @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
             TestGroups.FNOL_REASSIGNE},
@@ -135,7 +135,7 @@ public class FnolReassignTest extends BaseTest {
                 .doAssert(lossItem -> lossItem.assertProduct(fnolReassignTestData.getDescription()));
     }
 
-    @Test(groups = {TestGroups.UNI_REQUIRED,
+    @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
             TestGroups.FNOL_REASSIGNE},
@@ -165,7 +165,7 @@ public class FnolReassignTest extends BaseTest {
                 .doAssert(lossItem -> lossItem.assertProduct(fnolReassignTestData.getDescription()));
     }
 
-    @Test(groups = {TestGroups.UNI_REQUIRED,
+    @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
             TestGroups.FNOL_REASSIGNE},
@@ -195,7 +195,7 @@ public class FnolReassignTest extends BaseTest {
                         .assertThatDraftIsEmpty());
     }
 
-    @Test(groups = {TestGroups.UNI_REQUIRED,
+    @Test(groups = {TestGroups.UNI,
             TestGroups.BACKEND,
             TestGroups.FNOL,
             TestGroups.FNOL_REASSIGNE},

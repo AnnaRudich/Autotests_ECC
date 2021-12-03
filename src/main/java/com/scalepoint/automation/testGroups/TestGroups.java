@@ -4,17 +4,16 @@ public interface TestGroups {
 
     String HEALTH_CHECK = "healthCheck";
     String PERFORMANCE = "performance";
-    String UNI_REQUIRED = "uni";
+    String UNI = "uni";
     String ECC = "ecc";
     String HEADERS = "headers";
     String SID_QUNIT = "sidQunit";
     String SCALEPOINT_ID = "scalepointID";
-    String SMOKE = "smoke";
     String BACKEND = "backend";
     String ADMIN = "admin";
     String UNIFIEDPAYMENTS = "unifiedPayments";
-    String V1 = "v1";
-    String V3 = "v3";
+    String UNIFIED_PAYMENTS_V1 = "unifiedPayments.v1";
+    String UNIFIED_PAYMENTS_V3 = "unifiedPayments.v3";
     String COMMUNICATION_DESIGNER = "communicationDesigner";
     String CREATE_CASE = "createCase";
     String DND2 = "dnd2";
@@ -25,14 +24,13 @@ public interface TestGroups {
     String RNV = "rnv";
     String INTELLIGENT_REPAIR = "intelligentRepair";
     String SEARCH = "search";
+    String CLAIM_SEARCH = "search.claim";
+    String TEXT_SEARCH = "search.text";
     String SELF_SERVICE = "selfService";
     String SHOP = "shop";
     String SID = "sid";
     String CATEGORY_BULK_UPDATE = "categoryBulkUpdate";
     String SUPPLIER_MANAGER = "supplierManager";
-    String FNOL = "FNOL";
-    String WIDGET = "widget";
-
     String CATEGORY_GROUPS = "categoryGroup";
     String EDIT_REASON = "editReason";
     String FUNC_TEMPLATES = "funcTemplates";
@@ -43,13 +41,6 @@ public interface TestGroups {
     String USER_ROLES = "userRoles";
     String CASE_SETTLEMENT_DATA = "caseSettlementData";
     String SENDING_TO_EVENT_API = "sendingToEventAPI";
-    String CASE1 = "case1";
-    String CASE2_1 = "case2_1";
-    String CASE2_2 = "case2_2";
-    String CASE2_3 = "case2_3";
-    String CASE2_4 = "case2_4";
-    String CASE2_5 = "case2_5";
-    String CASE3 = "case3";
     String CLAIM_INTEGRATION = "claimIntegration";
     String MANUAL_CREATE_CLAIM = "manualCreateClaim";
     String COLUMNS_AND_CALCULATIONS = "columnsAndCalculations";
@@ -57,8 +48,6 @@ public interface TestGroups {
     String MARKET_PRICE_LOGIC = "marketPriceLogic";
     String INTELLIGENT_REPAIR2_WEB_SERVICE = "intelligentRepair2WebService";
     String RNV_SMOKE = "rnvSmoke";
-    String CLAIM_SEARCH = "claimSearch";
-    String TEXT_SEARCH = "textSearch";
     String UCOMMERCE_SHOP = "uCommerceShop";
     String MANULA_LINES_WITH_RR = "manualLinesWithRR";
     String DEPRECATION_DEDUCTED = "deprecationDeducted";
@@ -97,7 +86,9 @@ public interface TestGroups {
     String REPLACEMENT_DIALOG = "replacementDialog";
     String SELF_SERVICE2 = "selfService2";
     String VOUCHER_PREDICTION = "voucherPrediction";
-    String FNOL_REASSIGNE = "fnolReassign";
-    String FNOL_CORS_GET = "fnolCorsGet";
-    String FNOL_CORS_WIDGET = "fnolCorsWidget";
+    String FNOL = "fnol";
+    String FNOL_REASSIGNE = "fnol.Reassign";
+    String FNOL_CORS_GET = "fnol.CorsGet";
+    String FNOL_CORS_WIDGET = "fnol.CorsWidget";
+    String WIDGET = "widget";
 }

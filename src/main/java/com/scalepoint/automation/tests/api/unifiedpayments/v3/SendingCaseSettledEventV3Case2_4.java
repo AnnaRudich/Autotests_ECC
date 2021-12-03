@@ -15,10 +15,8 @@ import static com.scalepoint.automation.tests.api.unifiedpayments.v3.UnifiedPaym
 
 public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3Case2Base {
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
-            TestGroups.BACKEND,
-            TestGroups.V3,
-            TestGroups.CASE2_4},
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V3,
+            TestGroups.BACKEND},
             dataProvider = CLOSE_SENDING_CASE_SETTLED_EVENT_V3_CASE2_DATA_PROVIDER)
     public void closeWithMailSendingCaseSettledEventV3Case2_4(User user, ClaimRequest claimRequest,
                                                               InsertSettlementItem item1, InsertSettlementItem item2,
@@ -28,10 +26,8 @@ public class SendingCaseSettledEventV3Case2_4 extends SendingCaseSettledEventV3C
         close(user, claimRequest, item1, item2, item3, closeCaseReason);
     }
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
-            TestGroups.BACKEND,
-            TestGroups.V3,
-            TestGroups.CASE2_4},
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V3,
+            TestGroups.BACKEND},
             dataProvider = CLOSE_EXTERNALLY_SENDING_CASE_SETTLED_EVENT_V3_CASE2_DATA_PROVIDER)
     public void closeExternallySendingCaseSettledEventV3Case2_4(User user, ClaimRequest claimRequest,
                                                                 InsertSettlementItem item1, InsertSettlementItem item2,

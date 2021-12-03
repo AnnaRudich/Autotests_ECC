@@ -35,9 +35,8 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
     private String status = "settlementDetails.status";
     private String settlementType = "settlementDetails.settlementType";
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
-            TestGroups.V1,
             TestGroups.CASE_SETTLEMENT_DATA},
             dataProvider = GET_CASE_REVISION_BY_TOKEN_DATA_PROVIDER)
     public void getCaseRevisionByTokenTest(User user, ClaimRequest claimRequest, InsertSettlementItem item, Body body) {
@@ -46,9 +45,8 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
         getSettlementData(claimRequest, body);
     }
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
-            TestGroups.V1,
             TestGroups.CASE_SETTLEMENT_DATA},
             dataProvider = GET_CASE_REVISION_FOR_INVALID_REVISION_DATA_PROVIDER)
     public void getCaseRevisionForInvalidRevisionTest(String settlementData) {
@@ -59,9 +57,8 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
-            TestGroups.V1,
             TestGroups.CASE_SETTLEMENT_DATA},
             dataProvider = GET_CASE_REVISION_FOR_INVALID_TENANT_DATA_PROVIDER)
     public void getCaseRevisionForInvalidTenantTest(User user, ClaimRequest claimRequest, InsertSettlementItem item,
@@ -75,9 +72,8 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V1,
             TestGroups.BACKEND,
-            TestGroups.V1,
             TestGroups.CASE_SETTLEMENT_DATA},
             dataProvider = GET_CASE_REVISION_BY_TOKEN_FOR_CANCELED_CLAIM_DATA_PROVIDER)
     public void getCaseRevisionByTokenForCanceledClaim(User user, ClaimRequest claimRequest, InsertSettlementItem item,
@@ -191,28 +187,26 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
         };
     }
 
-    class Status{
-
-        public static final String CANCELLED = "CANCELLED";
-        public static final String SETTLED = "SETTLED";
-        public static final String CLOSED_EXTERNAL = "CLOSED_EXTERNAL";
+    enum Status{
+        CANCELLED,
+        SETTLED,
+        CLOSED_EXTERNAL;
     }
 
-    class SettlementType{
-
-        public static final String CANCELLED = "CANCELLED";
-        public static final String SETTLED_FOR_REPLACEMENT = "SETTLED_FOR_REPLACEMENT";
-        public static final String SETTLED_WITHOUT_EMAIL = "SETTLED_WITHOUT_EMAIL";
-        public static final String SETTLED_WITH_EMAIL = "SETTLED_WITH_EMAIL";
-        public static final String SETTLED_EXTERNALLY = "SETTLED_EXTERNALLY";
+    enum SettlementType{
+        CANCELLED,
+        SETTLED_FOR_REPLACEMENT,
+        SETTLED_WITHOUT_EMAIL,
+        SETTLED_WITH_EMAIL,
+        SETTLED_EXTERNALLY;
     }
 
     @Data
     @Builder
     static class Body{
 
-        private String status;
-        private String settlementType;
+        private CaseSettlementDataApiTests.Status status;
+        private CaseSettlementDataApiTests.SettlementType settlementType;
         private String schema;
         private SettlementClaimService.CloseCaseReason closeCaseReason;
     }
