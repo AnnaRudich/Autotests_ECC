@@ -161,8 +161,7 @@ public class CommunicationDesignerMock extends EccMock{
                     .withQueryParam("contextType", matching(".*"))
                     .withQueryParam("modelSchemaKey", matching(".*"))
                     .willReturn(aResponse()
-                            .withHeader("Content-Type", CONTENT_TYPE)
-                            .withBody(new FindTemplate().getBody())
+                            .withTransformers("findTemplateTransformer")
                             .withStatus(200)));
 
             return this;
@@ -172,8 +171,7 @@ public class CommunicationDesignerMock extends EccMock{
 
             stubFor(post(urlPathEqualTo(templatesGenerate))
                     .willReturn(aResponse()
-                            .withHeader("Content-Type", CONTENT_TYPE)
-                            .withBody(new OMTemplates().getBody())
+                            .withTransformers("omMailTemplateTransformer")
                             .withStatus(200)));
 
             return this;
