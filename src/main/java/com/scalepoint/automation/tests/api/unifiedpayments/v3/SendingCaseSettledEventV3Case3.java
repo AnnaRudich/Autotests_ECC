@@ -45,10 +45,8 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
                 insertSettlementItemList.get(2));
     }
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
-            TestGroups.BACKEND,
-            TestGroups.V3,
-            TestGroups.CASE3},
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V3,
+            TestGroups.BACKEND},
             dataProvider = CLOSE_SENDING_CASE_SETTLED_EVENT_V3_CASE3_DATA_PROVIDER)
     public void closeWithMailSendingCaseSettledEventV3Case3(User user, ClaimRequest claimRequest,
                                                             InsertSettlementItem item1, InsertSettlementItem item2,
@@ -58,10 +56,8 @@ public class SendingCaseSettledEventV3Case3 extends BaseUnifiedPaymentsApiTest {
         close(user, claimRequest, item1, item2, item3, closeCaseReason);
     }
 
-    @Test(groups = {TestGroups.UNIFIEDPAYMENTS,
-            TestGroups.BACKEND,
-            TestGroups.V3,
-            TestGroups.CASE3},
+    @Test(groups = {TestGroups.UNIFIED_PAYMENTS_V3,
+            TestGroups.BACKEND},
             dataProvider =CLOSE_EXTERNALLY_SENDING_CASE_SETTLED_EVENT_V3_CASE3_DATA_PROVIDER)
     public void closeExternallySendingCaseSettledEventV3Case3(User user, ClaimRequest claimRequest,
                                                               InsertSettlementItem item1, InsertSettlementItem item2,

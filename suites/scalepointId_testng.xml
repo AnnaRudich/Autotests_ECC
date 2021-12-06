@@ -3,17 +3,12 @@
     <parameter name="FeatureToggleSetting" value="SCALEPOINTID_LOGIN_ENABLED"/>
 
     <test verbose="1" name="ScalepointIdSmokeTest" group-by-instances="false" enabled="true" preserve-order="true"  thread-count="4">
-        <groups>
-            <run>
-                <include name="scalepointID"/>
-            </run>
-        </groups>
         <classes>
-            <class name="com.scalepoint.automation.tests.ClaimTests">
+            <class name="com.scalepoint.automation.tests.sid.SidManualItemsForScalepointIdTests">
             </class>
-            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+            <class name="com.scalepoint.automation.tests.ClaimTestsForScalepointId">
             </class>
-            <class name="com.scalepoint.automation.tests.sid.SidManualItemsTests">
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternallyForScalepointId">
             </class>
         </classes>
     </test>
