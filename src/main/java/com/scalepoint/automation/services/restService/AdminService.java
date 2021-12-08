@@ -19,7 +19,7 @@ public class AdminService extends LoginProcessService {
         return this;
     }
 
-    public AdminService reqouestOutputManagement() {
+    public AdminService requestOutputManagementStatus() {
 
         getRequest("/rest/om-admin/status");
 
@@ -40,9 +40,16 @@ public class AdminService extends LoginProcessService {
         return this;
     }
 
-    public AdminService getListOfInsuranceCompaniesTest() {
+    public AdminService requestListOfInsuranceCompanies() {
 
         getRequest("/rest/admin/reductionRules/companies");
+
+        return this;
+    }
+
+    public AdminService requestVouchersData() {
+
+        getRequest("/rest/voucherData/collect.json");
 
         return this;
     }
