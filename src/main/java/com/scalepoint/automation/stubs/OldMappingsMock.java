@@ -21,8 +21,8 @@ public class OldMappingsMock extends EccMock{
         ecbTenantsInfo();
         healthCheck();
         ip2();
-//        mailServiceProxyHealthCheck();
-//        mailServiceProxyMail();
+        mailServiceProxyHealthCheck();
+        mailServiceProxyMail();
         rnvFeedbackApprove();
         rnvFeedbackManual();
         rnvFeedbackReject();

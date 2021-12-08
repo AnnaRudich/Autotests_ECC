@@ -6,14 +6,11 @@ import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.scalepoint.automation.utils.JsonUtils;
-import com.scalepoint.automation.utils.data.TestData;
-import com.scalepoint.automation.utils.data.entity.communicationDesignerEmailTemplates.EmailTemplate;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -49,84 +46,6 @@ public class CommunicationDesignerMock extends EccMock{
         }
 
         return stubs.get(tenant);
-    }
-
-    abstract class Template{
-
-        protected String format;
-        Iterator<EmailTemplate> iterator = TestData.
-                getCommunicationDesignerEmialTemplates()
-                .getEmailTemplates()
-                .iterator();
-
-        protected abstract String format(String template, EmailTemplate emailTemplate, String next);
-        public abstract String getBody() throws IOException;
-
-        public String formatTemplate(){
-
-            return iterate(format);
-        }
-
-        String iterate(String template){
-
-            EmailTemplate emailTemplate = iterator.next();
-
-            if(!iterator.hasNext()){
-
-                return format(template, emailTemplate, "");
-            }
-
-            return iterate(format(template, emailTemplate, format));
-        }
-    }
-
-    class FindTemplate extends Template{
-
-        FindTemplate(){
-
-            format = "{{#eq  request.requestLine.query.templateName.[0] \"%s\"}}%d{{else}}%s{{/eq}}";
-        }
-
-        @Override
-        public String format(String template, EmailTemplate emailTemplate, String next) {
-
-            return String.format(template, emailTemplate.getTemplateName(), emailTemplate.getTemplateId(), next);
-        }
-
-        @Override
-        public String getBody() throws IOException {
-
-            String templateFormat = formatTemplate();
-
-            return String.format(JsonUtils.getJSONasString("__files/communicationDesignerMock/findTemplateResponse.json"),
-                    templateFormat,
-                    templateFormat,
-                    templateFormat);
-        }
-    }
-
-    class OMTemplates extends Template{
-
-        OMTemplates(){
-
-            format = "{{#eq  (jsonPath request.body '$.templateId') %d}}%s{{else}}%s{{/eq}}";
-        }
-
-        @Override
-        public String format(String template, EmailTemplate emailTemplate, String next) {
-
-            return String.format(template, emailTemplate.getTemplateId(), emailTemplate.getTitle(), next);
-        }
-
-        @Override
-        public String getBody() throws IOException {
-
-            String templateFormat = formatTemplate();
-
-            return String.format(JsonUtils.getJSONasString("__files/communicationDesignerMock/omMailTemplate.json"),
-                    templateFormat,
-                    templateFormat);
-        }
     }
 
     public class CommunicationDesignerStub {

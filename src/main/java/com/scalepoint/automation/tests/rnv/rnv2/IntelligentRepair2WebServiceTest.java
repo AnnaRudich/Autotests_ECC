@@ -1,3 +1,4 @@
+
 package com.scalepoint.automation.tests.rnv.rnv2;
 
 import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
