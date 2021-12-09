@@ -11,43 +11,43 @@ import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AdminService extends LoginProcessService {
+public class SecurityService extends LoginProcessService {
 
-    public AdminService login(User user) {
+    public SecurityService login(User user) {
 
         super.login(user);
         return this;
     }
 
-    public AdminService requestOutputManagementStatus() {
+    public SecurityService requestOutputManagementStatus() {
 
         getRequest("/rest/om-admin/status");
 
         return this;
     }
 
-    public AdminService requestInsuranceCompanies() {
+    public SecurityService requestInsuranceCompanies() {
 
         getRequest("/rest/ExternalClaimOperation/getInsuranceCompanies.json");
 
         return this;
     }
 
-    public AdminService requestOutstandingAmounts() {
+    public SecurityService requestOutstandingAmounts() {
 
         getRequest("/admin/outstanding-amounts/list.json");
 
         return this;
     }
 
-    public AdminService requestListOfInsuranceCompanies() {
+    public SecurityService requestListOfInsuranceCompanies() {
 
         getRequest("/rest/admin/reductionRules/companies");
 
         return this;
     }
 
-    public AdminService requestVouchersData() {
+    public SecurityService requestVouchersData() {
 
         getRequest("/rest/voucherData/collect.json");
 
@@ -74,10 +74,10 @@ public class AdminService extends LoginProcessService {
                 .extract().response();
     }
 
-    public AdminService doAssert(Consumer<Asserts> assertsFunc) {
+    public SecurityService doAssert(Consumer<Asserts> assertsFunc) {
 
         assertsFunc.accept(new Asserts());
-        return AdminService.this;
+        return SecurityService.this;
     }
 
     public class Asserts {

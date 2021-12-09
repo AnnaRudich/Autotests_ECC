@@ -1,4 +1,4 @@
-package com.scalepoint.automation.tests.headers;
+package com.scalepoint.automation.tests.security;
 
 import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
 import com.scalepoint.automation.services.restService.CreateClaimService;

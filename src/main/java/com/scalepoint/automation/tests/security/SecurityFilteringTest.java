@@ -1,17 +1,18 @@
-package com.scalepoint.automation.tests;
+package com.scalepoint.automation.tests.security;
 
-import com.scalepoint.automation.services.restService.AdminService;
+import com.scalepoint.automation.services.restService.SecurityService;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import org.testng.annotations.Test;
 
-public class AdminSecurityFilteringTest extends BaseApiTest {
+public class SecurityFilteringTest extends BaseApiTest {
 
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void outputManagementStatusAuthorizedTest(User user){
 
-        new AdminService()
+        new SecurityService()
                 .login(user)
                 .requestOutputManagementStatus()
                 .doAssert(adminService -> adminService.assertAuthorized());
@@ -20,7 +21,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void outputManagementStatusUnauthorizedTest(){
 
-        new AdminService()
+        new SecurityService()
                 .requestOutputManagementStatus()
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
@@ -28,7 +29,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void getInsuranceCompaniesAuthorizedTest(User user){
 
-        new AdminService()
+        new SecurityService()
                 .login(user)
                 .requestInsuranceCompanies()
                 .doAssert(adminService -> adminService.assertAuthorized());
@@ -37,7 +38,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void insuranceCompaniesUnauthorized(){
 
-        new AdminService()
+        new SecurityService()
                 .requestInsuranceCompanies()
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
@@ -45,7 +46,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void requestOutstandingAmountsAuthorizedTest(User user){
 
-        new AdminService()
+        new SecurityService()
                 .login(user)
                 .requestOutstandingAmounts()
                 .doAssert(adminService -> adminService.assertAuthorized());
@@ -54,14 +55,14 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void requestOutstandingAmountsUnauthorizedTest(){
 
-        new AdminService()
+        new SecurityService()
                 .requestOutstandingAmounts()
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void getListOfInsuranceCompaniesAuthorizedTest(User user){
 
-        new AdminService()
+        new SecurityService()
                 .login(user)
                 .requestListOfInsuranceCompanies()
                 .doAssert(adminService -> adminService.assertAuthorized());
@@ -70,7 +71,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void getListOfInsuranceCompaniesUnauthorizedTest(){
 
-        new AdminService()
+        new SecurityService()
                 .requestListOfInsuranceCompanies()
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
@@ -78,7 +79,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void getVouchersDataAuthorizedTest(User user){
 
-        new AdminService()
+        new SecurityService()
                 .login(user)
                 .requestVouchersData()
                 .doAssert(adminService -> adminService.assertAuthorized());
@@ -87,7 +88,7 @@ public class AdminSecurityFilteringTest extends BaseApiTest {
     @Test(groups = {TestGroups.SECURITY}, dataProviderClass = BaseTest.class, dataProvider = BaseTest.TEST_DATA_PROVIDER)
     public void getVouchersDataUnauthorizedTest(){
 
-        new AdminService()
+        new SecurityService()
                 .requestVouchersData()
                 .doAssert(adminService -> adminService.assertUnauthorized());
     }
