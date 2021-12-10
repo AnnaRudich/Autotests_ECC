@@ -5,6 +5,7 @@ import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.api.BaseApiTest;
 import io.restassured.response.Response;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,14 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HealthCheckTest extends BaseApiTest {
 
     @Test(groups = {TestGroups.HEALTH_CHECK})
-    public void eccHealthCheckTest() {
+    @Parameters({"excludedHealthChecks"})
+    public void eccHealthCheckTest(String excludedHealthChecks) {
 
-        Response response = new HealthCheckService()
+       new HealthCheckService(excludedHealthChecks)
                 .healthCheckStatus()
-                .getResponse();
+                .doAssert(asserts -> asserts.assertHealthChecks());
 
-        String status = response.jsonPath().get("status");
-        assertThat(status).isEqualTo("OK");
     }
 
     @Test(groups = {TestGroups.HEALTH_CHECK})

@@ -162,6 +162,7 @@
         <buildInfo/>
         <activatedProperties/>
         <included/>
+        <excludedHealthChecks/>
         <tests.performance.enabledPerformanceTests>loginUser</tests.performance.enabledPerformanceTests>
         <tests.performance.limit>800</tests.performance.limit>
         <tests.performance.testTime>1</tests.performance.testTime>
@@ -199,6 +200,7 @@
                     <testFailureIgnore>false</testFailureIgnore>
                     <systemPropertyVariables>
                         <buildInfo>${buildInfo}</buildInfo>
+                        <excludedHealthChecks>${excludedHealthChecks}</excludedHealthChecks>
                         <tests.performance.enabledPerformanceTests>${tests.performance.enabledPerformanceTests}</tests.performance.enabledPerformanceTests>
                         <tests.performance.limit>${tests.performance.limit}</tests.performance.limit>
                         <tests.performance.testTime>${tests.performance.testTime}</tests.performance.testTime>
