@@ -27,10 +27,7 @@ import com.scalepoint.automation.services.restService.common.ServiceData;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
 import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
-import com.scalepoint.automation.spring.Application;
-import com.scalepoint.automation.spring.BeansConfiguration;
-import com.scalepoint.automation.spring.EventApiDatabaseConfig;
-import com.scalepoint.automation.spring.WireMockConfig;
+import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.JavascriptHelper;
@@ -55,6 +52,7 @@ import com.scalepoint.automation.utils.listeners.SuiteListener;
 import com.scalepoint.automation.utils.threadlocal.Browser;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import com.scalepoint.automation.utils.threadlocal.Window;
+import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -101,7 +99,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
@@ -161,6 +159,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected FraudAlertMock fraudAlertMock;
+
+    @Autowired
+    protected MailserviceMock.MailserviceStub mailserviceStub;
 
     @BeforeClass(alwaysRun = true)
     public void updateFeatureToggle(ITestContext context){
@@ -359,7 +360,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
         Token token = new OauthTestAccountsApi().sendRequest().getToken();
-        return new CreateClaimService(token).addClaim(claimRequest).getResponse().jsonPath().get("token");
+
+        Response response = new CreateClaimService(token).addClaim(claimRequest).getResponse();
+
+        CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
+
+        return response.jsonPath().get("token");
     }
 
     protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
@@ -373,7 +379,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         String test = unifiedIntegrationService.createItemizationCaseFNOL(createClaimRequest.getCountry(), createClaimRequest.getTenant(), itemizationRequest);
         createClaimRequest.setItemizationCaseReference(test);
         createClaimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        return unifiedIntegrationService.createClaimFNOL(createClaimRequest);
+        return unifiedIntegrationService.createClaimFNOL(createClaimRequest, databaseApi);
     }
 
     protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {

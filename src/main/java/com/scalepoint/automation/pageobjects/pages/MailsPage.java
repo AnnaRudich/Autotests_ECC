@@ -1,27 +1,27 @@
 package com.scalepoint.automation.pageobjects.pages;
 
-        import com.codeborne.selenide.Condition;
-        import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
-        import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
-        import com.scalepoint.automation.utils.Wait;
-        import com.scalepoint.automation.utils.annotations.page.EccPage;
-        import com.scalepoint.automation.utils.types.SortType;
-        import org.apache.logging.log4j.LogManager;
-        import org.apache.logging.log4j.Logger;
-        import org.openqa.selenium.By;
-        import org.openqa.selenium.WebElement;
-        import org.openqa.selenium.support.FindBy;
+import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.MailViewDialog;
+import com.scalepoint.automation.utils.Wait;
+import com.scalepoint.automation.utils.annotations.page.EccPage;
+import com.scalepoint.automation.utils.types.SortType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
-        import java.time.LocalDateTime;
-        import java.time.format.DateTimeFormatter;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.function.Consumer;
-        import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-        import static com.codeborne.selenide.Selenide.$;
-        import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
-        import static org.assertj.core.api.Assertions.assertThat;
+import static com.codeborne.selenide.Selenide.$;
+import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @EccPage
 public class MailsPage extends BaseClaimPage {
@@ -80,6 +80,7 @@ public class MailsPage extends BaseClaimPage {
     }
 
     public MailViewDialog viewMail(MailType mailType) {
+
         return parseMails().findMailByType(mailType).viewMail();
     }
 

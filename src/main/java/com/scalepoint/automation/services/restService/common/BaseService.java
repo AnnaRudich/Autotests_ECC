@@ -1,7 +1,10 @@
 package com.scalepoint.automation.services.restService.common;
 
 import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
-import com.scalepoint.automation.services.restService.*;
+import com.scalepoint.automation.services.restService.ClaimSettlementItemsService;
+import com.scalepoint.automation.services.restService.CreateClaimService;
+import com.scalepoint.automation.services.restService.ImportExcelService;
+import com.scalepoint.automation.services.restService.LoginProcessService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.data.request.InsertSettlementItem;
@@ -68,7 +71,6 @@ public class BaseService {
     public static LoginProcessService setEccSessionId(String eccSessionId){
         return new LoginProcessService(eccSessionId);
     }
-
 
     public ImportExcelService importExcel() throws IOException {
 

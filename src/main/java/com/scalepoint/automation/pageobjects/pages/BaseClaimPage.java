@@ -17,11 +17,14 @@ public abstract class BaseClaimPage extends Page {
     }
 
     public MailsPage toMailsPage() {
+
         Wait.waitForAjaxCompletedAndJsRecalculation();
         return claimNavigationMenu.toMailsPage();
     }
 
     public MailsPage toEmptyMailsPage() {
+
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return claimNavigationMenu.toEmptyMailsPage();
     }
 
@@ -42,7 +45,6 @@ public abstract class BaseClaimPage extends Page {
         mainMenu.openClaimSearch();
         return at(ClaimSearchPage.class);
     }
-
 
     public ProjectsPage toRepairValuationProjectsPage() {
         return claimNavigationMenu.toRepairValuationProjectsPage();

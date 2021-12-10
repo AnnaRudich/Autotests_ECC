@@ -162,7 +162,7 @@ public class WidgetTest extends BaseTest {
         claimRequest.setItemizationCaseReference(token);
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
 
-        token = unifiedIntegrationService.createClaimFNOL(claimRequest);
+        token = unifiedIntegrationService.createClaimFNOL(claimRequest, databaseApi);
 
         return loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
                 .doAssert(settlementPage -> settlementPage.assertItemIsPresent(descriptionWidget));

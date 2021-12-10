@@ -76,6 +76,7 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailTest(User user, Claim claim) {
+
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -157,7 +158,8 @@ public class ClaimTests extends BaseTest {
                 .completeWithoutEmail()
                 .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
 
-                .openRecentClaim().toEmptyMailsPage()
+                .openRecentClaim()
+                .toEmptyMailsPage()
                 .doAssert(mail -> {
                     mail.noOtherMailsOnThePage(Arrays.asList(new MailsPage.MailType[]{SETTLEMENT_NOTIFICATION_TO_IC}));
                 });
@@ -169,6 +171,7 @@ public class ClaimTests extends BaseTest {
     @RequiredSetting(type = FTSetting.ENABLE_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.ENABLE_REGISTRATION_LINE_SELF_SERVICE)
     public void loginToSelfService2_0(User user, Claim claim) {
+
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()

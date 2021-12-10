@@ -28,7 +28,6 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class SelfServiceService extends BaseService {
@@ -102,14 +101,14 @@ public class SelfServiceService extends BaseService {
 
     public String getLinkToSS(String selfServiceEmailToken){
 
-        this.response = given().log().all()
+        this.response = given()
                 .baseUri(getEccUrl())
                 .sessionId(data.getEccSessionId())
                 .pathParam("userId", data.getUserId())
                 .pathParam("emailToken", selfServiceEmailToken)
                 .contentType("application/json")
                 .get(CUSTOMER_MAIL_CONTENT)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -125,7 +124,7 @@ public class SelfServiceService extends BaseService {
 
     public SelfServiceService getCaseWidget(String caseToken, String ssoToken) {
 
-        this.response = given().log().all()
+        this.response = given()
                 .baseUri(getServerUrl())
                 .header("Referer", Configuration.getTestWidgetProtocol().concat(String.format(Configuration.getDomainTestWidget(), "01")))
                 .pathParam("caseToken", caseToken)
@@ -134,7 +133,7 @@ public class SelfServiceService extends BaseService {
                 .param("target", "scalepoint_widget_id")
                 .contentType("application/json")
                 .get(SELF_SERVICE_CASE_WIDGET)
-                .then().log().all()
+                .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract().response();
 
@@ -225,7 +224,7 @@ public class SelfServiceService extends BaseService {
 
     public SelfServiceService addLossItem(SelfServiceLossItems selfServiceLossItems, String origin){
 
-        this.response = given().log().all()
+        this.response = given()
                 .baseUri(getEnvironmentUrl())
                 .header("Access-Token", data.getSelfServiceAccessToken())
                 .header("Origin", origin)
@@ -275,7 +274,7 @@ public class SelfServiceService extends BaseService {
                         .config()
                         .encoderConfig(
                                 encoderConfig()
-                                        .encodeContentTypeAs("multipart/form-data", ContentType.TEXT))).log().all()
+                                        .encodeContentTypeAs("multipart/form-data", ContentType.TEXT)))
                 .baseUri(getEnvironmentUrl())
                 .queryParam("Access-Token", data.getSelfServiceAccessToken())
                 .multiPart("itemId", selfServiceLossItems.getId())
@@ -283,7 +282,7 @@ public class SelfServiceService extends BaseService {
                 .header("Accept-Encoding", "gzip, deflate, br")
                 .header("Origin", origin)
                 .contentType("multipart/form-data; boundary=----WebKitFormBoundaryHMB5yt4LyGtoxUjZ")
-                .post(SELF_SERVICE_FILES_UPLOAD).then().log().all().extract().response();
+                .post(SELF_SERVICE_FILES_UPLOAD).then().extract().response();
 
         return this;
     }
