@@ -18,7 +18,10 @@ import org.testng.annotations.Test;
 import java.lang.reflect.Method;
 
 import static com.scalepoint.automation.services.externalapi.OauthTestAccountsApi.Scope.PLATFORM_CASE_READ;
-import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.*;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_EXTERNAL;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITHOUT_MAIL;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.CLOSE_WITH_MAIL;
+import static com.scalepoint.automation.services.restService.SettlementClaimService.CloseCaseReason.REPLACEMENT;
 import static com.scalepoint.automation.services.restService.common.BaseService.loginAndOpenClaimWithItems;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.is;
@@ -187,26 +190,26 @@ public class CaseSettlementDataApiTests extends BaseApiTest {
         };
     }
 
-    enum Status{
-        CANCELLED,
-        SETTLED,
-        CLOSED_EXTERNAL;
+    class Status{
+        public static final String CANCELLED = "CANCELLED";
+        public static final String SETTLED = "SETTLED";
+        public static final String CLOSED_EXTERNAL = "CLOSED_EXTERNAL";
     }
 
-    enum SettlementType{
-        CANCELLED,
-        SETTLED_FOR_REPLACEMENT,
-        SETTLED_WITHOUT_EMAIL,
-        SETTLED_WITH_EMAIL,
-        SETTLED_EXTERNALLY;
+    class SettlementType{
+        public static final String CANCELLED = "CANCELLED";
+        public static final String SETTLED_FOR_REPLACEMENT = "SETTLED_FOR_REPLACEMENT";
+        public static final String SETTLED_WITHOUT_EMAIL = "SETTLED_WITHOUT_EMAIL";
+        public static final String SETTLED_WITH_EMAIL = "SETTLED_WITH_EMAIL";
+        public static final String SETTLED_EXTERNALLY = "SETTLED_EXTERNALLY";
     }
 
     @Data
     @Builder
     static class Body{
 
-        private CaseSettlementDataApiTests.Status status;
-        private CaseSettlementDataApiTests.SettlementType settlementType;
+        private String status;
+        private String settlementType;
         private String schema;
         private SettlementClaimService.CloseCaseReason closeCaseReason;
     }
