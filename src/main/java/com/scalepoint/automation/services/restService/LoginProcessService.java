@@ -17,7 +17,7 @@ import static io.restassured.RestAssured.given;
 
 public class LoginProcessService extends BaseService {
 
-    private Response response;
+    protected Response response;
 
     public Response getResponse() {
         return response;

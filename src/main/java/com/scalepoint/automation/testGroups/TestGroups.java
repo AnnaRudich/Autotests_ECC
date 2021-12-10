@@ -10,6 +10,7 @@ public interface TestGroups {
     String SID_QUNIT = "sidQunit";
     String SCALEPOINT_ID = "scalepointID";
     String BACKEND = "backend";
+    String SECURITY = "security";
     String ADMIN = "admin";
     String UNIFIEDPAYMENTS = "unifiedPayments";
     String UNIFIED_PAYMENTS_V1 = "unifiedPayments.v1";

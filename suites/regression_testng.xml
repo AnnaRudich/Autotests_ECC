@@ -17,6 +17,7 @@
                 <exclude name="com.scalepoint.automation.tests.filesService.performance" />
                 <exclude name="com.scalepoint.automation.tests.fraudAlertPerformance" />
                 <exclude name="com.scalepoint.automation.tests.performance"/>
+                <exclude name="com.scalepoint.automation.tests.security"/>
             </package>
         </packages>
 
@@ -47,9 +48,9 @@
         </packages>
     </test>
 
-    <test verbose="1" name="SecurityHeaders" enabled="true" preserve-order="true" thread-count="1">
+    <test verbose="1" name="Security" enabled="true" preserve-order="true" thread-count="1">
         <packages>
-            <package name="com.scalepoint.automation.tests.headers"/>
+            <package name="com.scalepoint.automation.tests.security"/>
         </packages>
     </test>
 
