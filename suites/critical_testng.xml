@@ -1,5 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="HealthCheck" configfailurepolicy="continue">
+    <parameter name="excludedHealthChecks" value="${excludedHealthChecks}" />
     <test name="HealthCheckTest">
         <classes>
             <class name="com.scalepoint.automation.tests.api.healthCheck.HealthCheckTest"/>
