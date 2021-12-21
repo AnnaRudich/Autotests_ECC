@@ -2,6 +2,7 @@ package com.scalepoint.automation.tests;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.tests.sharedTests.CompleteClaimExternallySharedTests;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
@@ -10,7 +11,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL;
 
-public class CompleteClaimExternally extends BaseTest {
+public class CompleteClaimExternallyTests extends CompleteClaimExternallySharedTests {
 
     @RequiredSetting(type = FTSetting.SETTLE_EXTERNALLY)
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-515")
@@ -41,15 +42,7 @@ public class CompleteClaimExternally extends BaseTest {
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
                     "Possible to Complete claim Externally from Settlement page")
     public void completeClaimExternallyFromSettlementPageTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
-                .completeClaimWithoutMail(claim)
-                .doAssert(myPage ->
-                        myPage.assertClaimHasStatus(claim.getStatusClosedExternally())
-                )
-                .openRecentClaim()
-                .toMailsPage()
-                .doAssert(mail ->
-                        mail.isMailExist(SETTLEMENT_NOTIFICATION_CLOSED_EXTERNAL));
+        completeClaimExternallyFromSettlementPageTest(user, claim);
     }
 }
 

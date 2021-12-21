@@ -1,8 +1,9 @@
-package com.scalepoint.automation.tests;
+package com.scalepoint.automation.tests.scalepointId;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.tests.sharedTests.CompleteClaimExternallySharedTests;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.ftoggle.FeatureToggleSetting;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
@@ -12,7 +13,7 @@ import org.testng.annotations.Test;
 
 import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 
-public class CompleteClaimExternallyForScalepointId extends CompleteClaimExternally {
+public class CompleteClaimExternallyForScalepointIdTests extends CompleteClaimExternallySharedTests {
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
     @RequiredSetting(type = FTSetting.ENABLE_SETTLE_EXTERNALLY_BUTTON_IN_SETTLEMENT_PAGE)

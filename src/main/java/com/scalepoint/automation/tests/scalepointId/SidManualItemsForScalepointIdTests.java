@@ -1,8 +1,9 @@
-package com.scalepoint.automation.tests.sid;
+package com.scalepoint.automation.tests.scalepointId;
 
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.tests.sharedTests.SidManualItemsSharedTests;
 import com.scalepoint.automation.utils.annotations.Bug;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -17,9 +18,8 @@ import static com.scalepoint.automation.services.externalapi.ftemplates.FTSettin
 import static com.scalepoint.automation.services.externalapi.ftemplates.FTSetting.REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM;
 import static com.scalepoint.automation.services.externalapi.ftoggle.FeatureIds.SCALEPOINTID_LOGIN_ENABLED;
 
-
 @RequiredSetting(type = FTSetting.SHOW_NOT_CHEAPEST_CHOICE_POPUP, enabled = false)
-public class SidManualItemsForScalepointIdTests extends SidManualItemsTests {
+public class SidManualItemsForScalepointIdTests extends SidManualItemsSharedTests {
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
     @Test(dataProvider = "testDataProvider",
@@ -196,7 +196,7 @@ public class SidManualItemsForScalepointIdTests extends SidManualItemsTests {
             groups = {TestGroups.SCALEPOINT_ID},
             description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialogs (user selects 4th type)")
     public void addNewValuationPriceInAddValuationDialog2ScalepointIdTest(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, Claim claim, ClaimItem claimItem) {
-        addNewValuationPriceInAddValuationDialogTest(user, claim, claimItem);
+        addNewValuationPriceInAddValuationDialog2Test(user, claim, claimItem);
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
