@@ -31,7 +31,7 @@ public class SelfService2Tests extends BaseTest {
     private static final String CLAIM_NOTE = "Claim Note";
     private static final String ITEM_CUSTOMER_NOTE = "Item Customer Note";
 
-    private String description;
+    private String[] description;
     private String newPasswordToSelfService;
 
     @BeforeMethod(alwaysRun = true)
@@ -49,6 +49,8 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
     public void Charlie735_addLineWithDocumentation(User user, Claim claim, Translations translations) {
 
+        description = new String[1];
+
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
@@ -57,7 +59,7 @@ public class SelfService2Tests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription(IPHONE)
-                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
                 .selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
                 .addNewPrice(Constants.PRICE_500)
@@ -74,13 +76,13 @@ public class SelfService2Tests extends BaseTest {
 //                .doAssert(asserts -> asserts.assertLineIsNotPresent(description))
 
                 .undoDelete()
-                .doAssert(asserts -> asserts.assertLineIsPresent(description))
+                .doAssert(asserts -> asserts.assertLineIsPresent(description[0]))
 
                 .sendResponseToEcc()
                 //add confirmation page
                 .backToSavePoint(SettlementPage.class)
-                .doAssert(asserts -> asserts.assertItemIsPresent(description))
-                .findClaimLine(description)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]))
+                .findClaimLine(description[0])
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
         //assert Acquired in not implemented on Settlement page
     }
@@ -108,6 +110,156 @@ public class SelfService2Tests extends BaseTest {
         new SelfService2Page().doAssert(SelfService2Page.Asserts::assertLogOutIsNotDisplayed);
     }
 
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
+    @Test(groups = {TestGroups.SELF_SERVICE2, UserCompanyGroups.TOPDANMARK}, dataProvider = "testDataProvider",
+            description = "Loss Item Import add case")
+    public void addLossItemTest(User user, Claim claim) {
+
+        description = new String[1];
+
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .savePoint(LoginSelfService2Page.class)
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription("sony")
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
+                .selectAge("2")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .doAssert(selfService2Page -> selfService2Page.assertLineIsPresent(description[0]))
+                .sendResponseToEcc()
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]))
+                .backToSavePoint(LoginSelfService2Page.class)
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription(IPHONE)
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
+                .selectAge("1")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .doAssert(selfService2Page -> selfService2Page.assertLineIsPresent(description[0]))
+                .sendResponseToEcc()
+                .backToSavePoint(SettlementPage.class)
+                .openImportSelfServiceDialog()
+                .selectFirstSelfServiceResponse()
+                .confirmSelfServiceImport()
+                .updateAll()
+                .confirmImportAfterErrorsWereFixed()
+                .confirmImportSummary()
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]));
+    }
+
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
+    @Test(groups = {TestGroups.SELF_SERVICE2, UserCompanyGroups.TOPDANMARK}, dataProvider = "testDataProvider",
+            description = "Loss Item Import delete case")
+    public void deleteLossItemTest(User user, Claim claim) {
+
+        description = new String[2];
+
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .savePoint(LoginSelfService2Page.class)
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription("sony")
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
+                .selectAge("2")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .doAssert(selfService2Page -> selfService2Page.assertLineIsPresent(description[0]))
+                .sendResponseToEcc()
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]))
+                .backToSavePoint(LoginSelfService2Page.class)
+                .login(Constants.DEFAULT_PASSWORD)
+                .deleteItem()
+                .addDescription("samsung")
+                .apply(SelfService2Page.class, p -> description[1] = p.getProductMatchDescription())
+                .selectAge("1")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .doAssert(selfService2Page -> selfService2Page
+                        .assertLineIsPresent(description[1])
+                        .assertLineIsNotPresent(description[0]))
+                .sendResponseToEcc()
+                .backToSavePoint(SettlementPage.class)
+                .openImportSelfServiceDialog()
+                .selectFirstSelfServiceResponse()
+                .confirmSelfServiceImport()
+                .updateAll()
+                .confirmImportAfterErrorsWereFixed()
+                .confirmImportSummary()
+                .doAssert(asserts -> asserts
+                        .assertItemIsPresent(description[1])
+                        .assertItemNotPresent(description[0]));
+    }
+
+    @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
+    @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
+    @RequiredSetting(type = FTSetting.SELF_SERVICE_2_DEFINE_AGE_BY_YEAR_AND_MONTH, enabled = false)
+    @Test(groups = {TestGroups.SELF_SERVICE2, UserCompanyGroups.TOPDANMARK}, dataProvider = "testDataProvider",
+            description = "Loss Item Import update case")
+    public void updateLossItemUpdate(User user, Claim claim) {
+
+        description = new String[1];
+
+        loginAndCreateClaim(user, claim)
+                .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
+                .savePoint(SettlementPage.class)
+                .toMailsPage()
+                .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
+                .findSelfServiceNewLinkAndOpenIt()
+                .savePoint(LoginSelfService2Page.class)
+                .login(Constants.DEFAULT_PASSWORD)
+                .addDescription("sony")
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
+                .selectAge("2")
+                .addNewPrice(Constants.PRICE_500)
+                .addCustomerDemandPrice(Constants.PRICE_50)
+                .saveItem()
+                .doAssert(selfService2Page -> selfService2Page.assertLineIsPresent(description[0]))
+                .sendResponseToEcc()
+                .backToSavePoint(SettlementPage.class)
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]))
+                .backToSavePoint(LoginSelfService2Page.class)
+                .login(Constants.DEFAULT_PASSWORD)
+                .startEditItem()
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
+                .addNewPrice(Constants.PRICE_100)
+                .addCustomerDemandPrice(Constants.PRICE_30)
+                .finishEditItem()
+                .doAssert(selfService2Page -> selfService2Page
+                        .assertLineIsPresent(description[0]))
+                .sendResponseToEcc()
+                .backToSavePoint(SettlementPage.class)
+                .openImportSelfServiceDialog()
+                .selectFirstSelfServiceResponse()
+                .confirmSelfServiceImportNoErrors()
+                .doAssert(asserts -> asserts
+                        .assertItemIsPresent(description[0]));
+    }
+
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-503")
     @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
     @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -117,6 +269,9 @@ public class SelfService2Tests extends BaseTest {
     @Test(groups = {TestGroups.SELF_SERVICE2, UserCompanyGroups.TOPDANMARK}, dataProvider = "testDataProvider",
             description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
     public void Charlie735_addLine_ageAsSingleValue_notes(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, Claim claim) {
+
+        description = new String[1];
+
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
@@ -125,7 +280,7 @@ public class SelfService2Tests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription("sony")
-                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
                 .selectAge("2")
                 .addNewPrice(Constants.PRICE_500)
                 .addCustomerDemandPrice(Constants.PRICE_50)
@@ -135,7 +290,7 @@ public class SelfService2Tests extends BaseTest {
                 .saveItem()
                 .sendResponseToEcc()
                 .backToSavePoint(SettlementPage.class)
-                .doAssert(asserts -> asserts.assertItemIsPresent(description))
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]))
                 .doAssert(asserts -> asserts.assertItemNoteIsPresent(ITEM_CUSTOMER_NOTE))
                 .toNotesPage()
                 .doAssert(asserts -> asserts.assertInternalNotePresent(CLAIM_NOTE));
@@ -149,6 +304,9 @@ public class SelfService2Tests extends BaseTest {
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
             description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService", enabled = false)
     public void submitRepairLine(User user, Claim claim) {
+
+        description = new String[1];
+
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
@@ -163,7 +321,7 @@ public class SelfService2Tests extends BaseTest {
                 .findSelfServiceNewLinkAndOpenIt()
                 .login(Constants.DEFAULT_PASSWORD)
                 .addDescription(CYKLER)
-                .apply(SelfService2Page.class, p -> description = p.getProductMatchDescription())
+                .apply(SelfService2Page.class, p -> description[0] = p.getProductMatchDescription())
                 .selectPurchaseYear("2017")
                 .selectPurchaseMonth("Jan")
 
@@ -176,7 +334,7 @@ public class SelfService2Tests extends BaseTest {
                 .sendResponseToEcc()
 
                 .backToSavePoint(SettlementPage.class)
-                .doAssert(asserts -> asserts.assertItemIsPresent(description));
+                .doAssert(asserts -> asserts.assertItemIsPresent(description[0]));
     }
 
     @Test(groups = {TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",

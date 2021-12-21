@@ -1,8 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import com.scalepoint.automation.pageobjects.pages.Page;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxDivBoundList;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.Wait;
 import org.openqa.selenium.By;
@@ -23,6 +22,9 @@ public class LossImportDialog extends BaseDialog {
     @FindBy(id = "excel-import-button")
     private WebElement excelImportButton;
 
+    @FindBy(id = "loss-import-combo")
+    private ExtComboBoxDivBoundList lossImportCombobox;
+
     @Override
     protected void ensureWeAreAt() {
         waitForAjaxCompletedAndJsRecalculation();
@@ -32,16 +34,18 @@ public class LossImportDialog extends BaseDialog {
      * SelfService
      */
     public LossImportDialog selectFirstSelfServiceResponse() {
-        SelenideElement selfServiceResponsesCombo = $(By.id("loss-import-combo"));
-        selfServiceResponsesCombo.selectOption(1);
-        Wait.waitForAjaxCompleted();
-
+        lossImportCombobox.select(0);
         return this;
     }
 
-    public SettlementPage confirmSelfServiceImport() {
+    public LossLineImportDialog confirmSelfServiceImport() {
         selfServiceImportButton.click();
-        return Page.at(SettlementPage.class);
+        return BaseDialog.at(LossLineImportDialog.class);
+    }
+
+    public SettlementPage confirmSelfServiceImportNoErrors() {
+        selfServiceImportButton.click();
+        return new ExcelImportSummaryDialog().confirmImportSummary();
     }
     /*
      * ExcelImportCategoriesAndValuationsSelectionTest

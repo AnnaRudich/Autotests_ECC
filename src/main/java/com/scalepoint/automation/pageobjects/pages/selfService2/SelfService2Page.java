@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.File;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -285,6 +286,31 @@ public class SelfService2Page extends Page {
     public SelfService2Page doAssert(Consumer<SelfService2Page.Asserts> assertFunc) {
         assertFunc.accept(new Asserts());
         return this;
+    }
+
+    public Item getItem(int index){
+
+        List<Item> list = getItemList();
+        return list.get(index);
+    }
+
+    private List<Item> getItemList(){
+
+        return $$("[class*='list-item-panel']").stream()
+                .map(Item::new)
+                .collect(Collectors.toList());
+    }
+
+    public class Item{
+
+        private String description;
+        private String info;
+
+        public Item(SelenideElement element){
+
+            description = element.find("[class*='list-item-info-description']  span").getText();
+            info = element.find("span[class*='item-info'] ").getText();
+        }
     }
 
     public class Asserts {
