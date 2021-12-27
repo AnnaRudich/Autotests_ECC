@@ -31,12 +31,10 @@ public class SelfService2Tests extends BaseTest {
     private static final String CLAIM_NOTE = "Claim Note";
     private static final String ITEM_CUSTOMER_NOTE = "Item Customer Note";
 
-    private String[] description;
     private String newPasswordToSelfService;
 
     @BeforeMethod(alwaysRun = true)
     void init() {
-        description = null;
         newPasswordToSelfService = null;
     }
 
@@ -49,7 +47,7 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: Category auto match. Auto import")
     public void Charlie735_addLineWithDocumentation(User user, Claim claim, Translations translations) {
 
-        description = new String[1];
+        String[] description = new String[1];
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -119,7 +117,7 @@ public class SelfService2Tests extends BaseTest {
             description = "Loss Item Import add case")
     public void addLossItemTest(User user, Claim claim) {
 
-        description = new String[1];
+        String[] description = new String[1];
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -168,7 +166,7 @@ public class SelfService2Tests extends BaseTest {
             description = "Loss Item Import delete case")
     public void deleteLossItemTest(User user, Claim claim) {
 
-        description = new String[2];
+        String[] description = new String[2];
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -222,7 +220,7 @@ public class SelfService2Tests extends BaseTest {
             description = "Loss Item Import update case")
     public void updateLossItemUpdate(User user, Claim claim) {
 
-        description = new String[1];
+        String[] description = new String[1];
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -270,7 +268,7 @@ public class SelfService2Tests extends BaseTest {
             description = "CHARLIE-735 SelfService_2.0: ageAsSingleValue + notes")
     public void Charlie735_addLine_ageAsSingleValue_notes(@UserAttributes(company = CompanyCode.TOPDANMARK) User user, Claim claim) {
 
-        description = new String[1];
+        String[] description = new String[1];
 
         loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
@@ -305,7 +303,7 @@ public class SelfService2Tests extends BaseTest {
             description = "IntelligentRepair1_submitRepairLine_checkGUI_in_SelfService", enabled = false)
     public void submitRepairLine(User user, Claim claim) {
 
-        description = new String[1];
+        String[] description = new String[1];
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
