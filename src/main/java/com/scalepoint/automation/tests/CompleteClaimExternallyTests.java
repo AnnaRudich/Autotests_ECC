@@ -41,7 +41,7 @@ public class CompleteClaimExternallyTests extends CompleteClaimExternallySharedT
     @Test(groups = {TestGroups.COMPLETE_CLAIM_EXTERNALLY}, dataProvider = "testDataProvider",
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
                     "Possible to Complete claim Externally from Settlement page")
-    public void completeClaimExternallyFromSettlementPageSharedTest(User user, Claim claim) {
+    public void completeClaimExternallyFromSettlementPageTest(User user, Claim claim) {
         completeClaimExternallyFromSettlementPageSharedTest(user, claim);
     }
 }

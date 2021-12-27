@@ -57,7 +57,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
-    public void cancelSavedClaimSharedTest(User user, Claim claim) throws Exception {
+    public void cancelSavedClaimTest(User user, Claim claim) throws Exception {
         cancelSavedClaimSharedTest(user,claim);
     }
 
@@ -65,7 +65,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void completeClaimWithMailSharedTest(User user, Claim claim) {
+    public void completeClaimWithMailTest(User user, Claim claim) {
         completeClaimWithMailSharedTest(user, claim);
     }
 
