@@ -12,7 +12,7 @@ public class ClaimSharedTests extends BaseTest {
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
 
-    public void reopenSavedClaimTest(User user, Claim claim) {
+    public void reopenSavedClaimSharedTest(User user, Claim claim) {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
@@ -26,7 +26,7 @@ public class ClaimSharedTests extends BaseTest {
      * WHEN: User cancels C1
      * THEN: "Cancelled" is the status of C1
      */
-    public void cancelSavedClaimTest(User user, Claim claim) throws Exception {
+    public void cancelSavedClaimSharedTest(User user, Claim claim) throws Exception {
         loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
@@ -35,7 +35,7 @@ public class ClaimSharedTests extends BaseTest {
                 .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
     }
 
-    public void completeClaimWithMailTest(User user, Claim claim) {
+    public void completeClaimWithMailSharedTest(User user, Claim claim) {
 
         loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()

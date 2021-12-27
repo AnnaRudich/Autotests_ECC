@@ -44,8 +44,8 @@ public class ClaimTests extends ClaimSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void reopenSavedClaimTest(User user, Claim claim) {
-        reopenSavedClaimTest(user, claim);
+    public void reopenSavedClaimSharedTest(User user, Claim claim) {
+        reopenSavedClaimSharedTest(user, claim);
     }
 
     /**
@@ -57,16 +57,16 @@ public class ClaimTests extends ClaimSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
-    public void cancelSavedClaimTest(User user, Claim claim) throws Exception {
-        cancelSavedClaimTest(user,claim);
+    public void cancelSavedClaimSharedTest(User user, Claim claim) throws Exception {
+        cancelSavedClaimSharedTest(user,claim);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
-    public void completeClaimWithMailTest(User user, Claim claim) {
-        completeClaimWithMailTest(user, claim);
+    public void completeClaimWithMailSharedTest(User user, Claim claim) {
+        completeClaimWithMailSharedTest(user, claim);
     }
 
     @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)

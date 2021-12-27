@@ -28,7 +28,7 @@ public class ClaimTestsForScalepointId extends ClaimSharedTests {
             groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID},
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
     public void reopenSavedClaimScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) {
-        reopenSavedClaimTest(user, claim);
+        reopenSavedClaimSharedTest(user, claim);
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
@@ -37,7 +37,7 @@ public class ClaimTestsForScalepointId extends ClaimSharedTests {
             groups = {TestGroups.CLAIM_MISCELLANEOUS, TestGroups.SCALEPOINT_ID},
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void cancelSavedClaimScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) throws Exception {
-        cancelSavedClaimTest(user, claim);
+        cancelSavedClaimSharedTest(user, claim);
     }
 
     @FeatureToggleSetting(type = SCALEPOINTID_LOGIN_ENABLED)
@@ -47,6 +47,6 @@ public class ClaimTestsForScalepointId extends ClaimSharedTests {
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) {
-        completeClaimWithMailTest(user, claim);
+        completeClaimWithMailSharedTest(user, claim);
     }
 }

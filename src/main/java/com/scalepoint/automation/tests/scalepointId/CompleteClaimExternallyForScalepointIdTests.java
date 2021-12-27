@@ -23,7 +23,7 @@ public class CompleteClaimExternallyForScalepointIdTests extends CompleteClaimEx
             description = "CHARLIE-515 Completing of claim Externally (External email)" +
                     "Possible to Complete claim Externally from Settlement page")
     public void completeClaimExternallyFromSettlementPageScalepointIdTest(@UserAttributes(type = User.UserType.SCALEPOINT_ID, company = CompanyCode.FUTURE) User user, Claim claim) {
-        completeClaimExternallyFromSettlementPageTest(user, claim);
+        completeClaimExternallyFromSettlementPageSharedTest(user, claim);
     }
 }
 

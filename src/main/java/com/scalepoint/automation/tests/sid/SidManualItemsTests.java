@@ -40,8 +40,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Include in claim option is ON")
-    public void setIncludeInClaimCheckboxTest(User user, Claim claim, ClaimItem claimItem) {
-        setIncludeInClaimCheckboxTest(user, claim, claimItem);
+    public void setIncludeInClaimCheckboxSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        setIncludeInClaimCheckboxSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -79,8 +79,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to input Customer demand")
-    public void inputCustomDemandTest(User user, Claim claim, ClaimItem claimItem) {
-        inputCustomDemandTest(user, claim, claimItem);
+    public void inputCustomDemandSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        inputCustomDemandSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -90,8 +90,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-536")
     @Test( dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to input New price")
-    public void inputNewPriceTest(User user, Claim claim, ClaimItem claimItem) {
-        inputNewPriceTest(user, claim, claimItem);
+    public void inputNewPriceSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        inputNewPriceSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -140,8 +140,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION)
-    public void depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest(User user, Claim claim, ClaimItem claimItem) {
-        depreciationFromSuggestionShouldBeNotUpdatedAfterChangingTest(user, claim, claimItem);
+    public void depreciationFromSuggestionShouldBeNotUpdatedAfterChangingSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        depreciationFromSuggestionShouldBeNotUpdatedAfterChangingSharedTest(user, claim, claimItem);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-532")
@@ -149,8 +149,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "ECC-3953 .doAssert(sid -> sid.assertDepreciationPercentageIs(\"10\"))")
     @RequiredSetting(type = FTSetting.SHOW_DEPRECIATION_AUTOMATICALLY_UPDATED)
     @RequiredSetting(type = FTSetting.SHOW_SUGGESTED_DEPRECIATION_SECTION, enabled = false)
-    public void depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest(User user, Claim claim, ClaimItem claimItem) {
-        depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidTest(user, claim, claimItem);
+    public void depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        depreciationEnteredManuallyShouldBeNotUpdatedAfterActionsInSidSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -163,8 +163,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to Save all results entered")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void saveAllEnteredResultsTest(User user, Claim claim, ClaimItem claimItem) {
-        saveAllEnteredResultsTest(user, claim, claimItem);
+    public void saveAllEnteredResultsSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        saveAllEnteredResultsSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -180,8 +180,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify clicking Cancel doesn't save entered info")
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void cancelEnteredResultsTest(User user, Claim claim, ClaimItem claimItem) {
-        cancelEnteredResultsTest(user, claim, claimItem);
+    public void cancelEnteredResultsSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        cancelEnteredResultsSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -195,8 +195,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "ECC-3144 Verify it is possible to add new valuation")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = FTSetting.ENABLE_DEPRECIATION_COLUMN)
-    public void addNewValuationTest(User user, Claim claim, ClaimItem claimItem) {
-        addNewValuationTest(user, claim, claimItem);
+    public void addNewValuationSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -211,8 +211,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "ECC-3144 Verify Claim line description is displayed in blue if the options \"Include in claim\" disabled" +
                     "- Claim line value is not added to Total claims sum")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
-    public void disableIncludeInClaimTest(User user, Claim claim, ClaimItem claimItem) {
-        disableIncludeInClaimTest(user, claim, claimItem);
+    public void disableIncludeInClaimSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        disableIncludeInClaimSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -227,8 +227,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "ECC-3144 Verify that second claim line value is not added to Total claims sum if the options " +
                     "'Include in claim' and 'Reviewed' enabled")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
-    public void enableIncludeInClaimSecondClaimTest(User user, Claim claim, ClaimItem claimItem) {
-        enableIncludeInClaimSecondClaimTest(user,claim, claimItem);
+    public void enableIncludeInClaimSecondClaimSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        enableIncludeInClaimSecondClaimSharedTest(user,claim, claimItem);
     }
 
     /**
@@ -242,8 +242,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Claim line description is displayed in pink if the options 'Include in claim'  " +
                     "and 'Reviewed' disabled")
-    public void disableIncludeInClaimAndReviewedTest(User user, Claim claim, ClaimItem claimItem) {
-        disableIncludeInClaimAndReviewedTest(user, claim, claimItem);
+    public void disableIncludeInClaimAndReviewedSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        disableIncludeInClaimAndReviewedSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -256,8 +256,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify 'Complete claim' is enable if 'Reviewed' is disabled in SID")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
-    public void completeClaimIsEnabledTest(User user, Claim claim, ClaimItem claimItem) {
-        completeClaimIsEnabledTest(user, claim, claimItem);
+    public void completeClaimIsEnabledSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        completeClaimIsEnabledSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -270,8 +270,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "ECC-3144 Verify 'Reviewed' box is not displayed")
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM, enabled = false)
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED, enabled = false)
-    public void reviewedBoxNotDisplayedTest(User user, Claim claim) {
-        reviewedBoxNotDisplayedTest(user, claim);
+    public void reviewedBoxNotDisplayedSharedTest(User user, Claim claim) {
+        reviewedBoxNotDisplayedSharedTest(user, claim);
     }
 
     /**
@@ -284,8 +284,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "ECC-3144 Verify 'Complete claim' is enabled if 'Reviewed' is disabled in SID")
     @RequiredSetting(type = ALLOW_USERS_TO_MARK_SETTLEMENT_REVIEWED)
     @RequiredSetting(type = REVIEW_ALL_CLAIM_TO_COMPLETE_CLAIM)
-    public void completeClaimIsEnabled2Test(User user, Claim claim, ClaimItem claimItem) {
-        completeClaimIsEnabled2Test(user, claim, claimItem);
+    public void completeClaimIsEnabled2SharedTest(User user, Claim claim, ClaimItem claimItem) {
+        completeClaimIsEnabled2SharedTest(user, claim, claimItem);
     }
 
     /**
@@ -295,8 +295,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify cancelled claim line is not added to the claim")
-    public void cancelledClaimNotAddedTest(User user, Claim claim, ClaimItem claimItem) {
-        cancelledClaimNotAddedTest(user, claim, claimItem);
+    public void cancelledClaimNotAddedSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        cancelledClaimNotAddedSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -307,8 +307,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
 
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify Cash compensation CC is equal to V1")
-    public void cashCompensationEqualV1Test(User user, Claim claim, ClaimItem claimItem) {
-        cashCompensationEqualV1Test(user, claim, claimItem);
+    public void cashCompensationEqualV1SharedTest(User user, Claim claim, ClaimItem claimItem) {
+        cashCompensationEqualV1SharedTest(user, claim, claimItem);
     }
 
     /**
@@ -320,8 +320,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to open Add Valuation dialogs in SID")
-    public void openAddValuationDialogInSIDTest(User user, Claim claim, ClaimItem claimItem) {
-        openAddValuationDialogInSIDTest(user, claim, claimItem);
+    public void openAddValuationDialogInSidSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        openAddValuationDialogInSidSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -338,8 +338,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add new valuation price in add " +
                     "valuation dialogs (user selects 3d type)")
-    public void addNewValuationPriceInAddValuationDialogTest(User user, Claim claim, ClaimItem claimItem) {
-        addNewValuationPriceInAddValuationDialogTest(user, claim, claimItem);
+    public void addNewValuationPriceInAddValuationDialogSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationPriceInAddValuationDialogSharedTest(user, claim, claimItem);
     }
 
     /**
@@ -355,8 +355,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add new valuation price in add valuation dialogs (user selects 4th type)")
-    public void addNewValuationPriceInAddValuationDialog2Test(User user, Claim claim, ClaimItem claimItem) {
-        addNewValuationPriceInAddValuationDialog2Test(user, claim, claimItem);
+    public void addNewValuationPriceInAddValuationDialog2SharedTest(User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationPriceInAddValuationDialog2SharedTest(user, claim, claimItem);
     }
 
     /**
@@ -373,8 +373,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add new valuation price in " +
                     "add valuation dialogs (user selects 5th type)")
-    public void addNewValuationPriceInAddValuationDialog3Test(User user, Claim claim, ClaimItem claimItem) {
-        addNewValuationPriceInAddValuationDialog3Test(user, claim, claimItem);
+    public void addNewValuationPriceInAddValuationDialog3SharedTest(User user, Claim claim, ClaimItem claimItem) {
+        addNewValuationPriceInAddValuationDialog3SharedTest(user, claim, claimItem);
     }
 
     /**
@@ -385,8 +385,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to enable age option")
-    public void enableAgeOptionTest(User user, Claim claim, ClaimItem claimItem) {
-        enableAgeOptionTest(user, claim, claimItem);
+    public void enableAgeOptionSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        enableAgeOptionSharedTest(user, claim, claimItem);
 
     }
 
@@ -403,8 +403,8 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
      */
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to add years & month and save set")
-    public void addYearsAndMonthAndSaveTest(User user, Claim claim, ClaimItem claimItem) {
-        addYearsAndMonthAndSaveTest(user, claim, claimItem);
+    public void addYearsAndMonthAndSaveSharedTest(User user, Claim claim, ClaimItem claimItem) {
+        addYearsAndMonthAndSaveSharedTest(user, claim, claimItem);
     }
 
     /**
