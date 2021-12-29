@@ -57,7 +57,7 @@ public class FraudAlertTest extends FraudAlertBase {
                 .doAssert(settlementSummary -> settlementSummary.assertNotFraudulent());
     }
 
-    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.ECC, UserCompanyGroups.TOPDANMARK},
+    @Test(groups = {TestGroups.FRAUD_ALERT, TestGroups.ECC, UserCompanyGroups.TOPDANMARK}, dataProvider = "topdanmarkDataProvider",
             description = "Remove")
     public void manualClaimHandlingRemoveFraudTest(@UserAttributes(company = TOPDANMARK) User user, ClaimItem claimItem, ClaimRequest claimRequest) throws IOException {
 
