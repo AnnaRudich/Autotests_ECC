@@ -10,14 +10,14 @@ hub.local.zalenium: "http://localhost:4444/wd/hub"
 app.locale: "dk"
 app.protocol: "https://"
 
-test.widget.protocol: "https://"
-test.widget.domain: "qa-ecc-cors%s.spcph.test"
-test.widget.uri: "/mock/cors/ss/widget.html"
-
 context.ecc.admin: eccAdmin
 context.ecc.rnv: repairValuation
 context.ecc: "webapp/ScalePoint"
 context.selfservice: self-service
+
+test.widget.protocol: "https://"
+test.widget.domain: "wiremock-widget.scalepoint.dev"
+test.widget.uri: "/cors/ss/widget.html"
 
 wiremock.urlPathPrefix: ""
 wiremock.port: 443

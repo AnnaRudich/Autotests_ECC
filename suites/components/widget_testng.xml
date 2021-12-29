@@ -3,6 +3,7 @@
     <test verbose="1" name="Widget" group-by-instances="false" enabled="true" preserve-order="true">
         <packages>
             <package name="com.scalepoint.automation.tests.widget" />
+            <package name="com.scalepoint.automation.tests.api.fnol" />
         </packages>
     </test>
 

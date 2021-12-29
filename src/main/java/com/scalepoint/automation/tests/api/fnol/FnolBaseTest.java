@@ -25,8 +25,8 @@ public class FnolBaseTest extends BaseApiTest {
     @BeforeClass(alwaysRun = true)
     public void setOrigins(){
 
-        authOrigin = Configuration.getTestWidgetProtocol() + String.format(Configuration.getDomainTestWidget(), "01");
-        nonAuthOrigin = Configuration.getTestWidgetProtocol() + String.format(Configuration.getDomainTestWidget(), "02");
+        authOrigin = Configuration.getTestWidgetProtocol() + Configuration.getDomainTestWidget();
+        nonAuthOrigin = Configuration.getTestWidgetProtocol() + Configuration.getWiremockHost();
     }
 
     @BeforeMethod(alwaysRun = true)
