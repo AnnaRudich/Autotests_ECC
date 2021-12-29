@@ -2,6 +2,7 @@ package com.scalepoint.automation.pageobjects.pages;
 
 import com.scalepoint.automation.Actions;
 import com.scalepoint.automation.pageobjects.RequiresJavascriptHelpers;
+import com.scalepoint.automation.pageobjects.dialogs.LossLineImportDialog;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.Wait;
@@ -22,6 +23,7 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsRecalculation;
@@ -175,7 +177,7 @@ public abstract class Page implements Actions {
     public static class PagesCache {
 
         private static ThreadLocal<Map<Class<? extends Page>, Page>> holder = new ThreadLocal<>();
-        private static ThreadLocal<String> savePointPageUrl = new ThreadLocal<>();
+        private static ThreadLocal<Map<Class,String>> savePointPageUrl = new ThreadLocal<>();
 
         public static <T extends Page> T get(Class<T> pageClass) {
             Map<Class<? extends Page>, Page> classPageMap = holder.get();
@@ -198,13 +200,19 @@ public abstract class Page implements Actions {
             innerLogger.info("PageCache cleaned");
         }
 
-        static void setSavePointUrl(String url) {
-            savePointPageUrl.set(url);
+        static void setSavePointUrl(Class currentPageClass, String url) {
+
+            Map<Class,String> map = Optional.ofNullable(savePointPageUrl.get())
+                    .orElse(new HashMap<>());
+            map.put(currentPageClass, url);
+
+            savePointPageUrl.set(map);
         }
 
-        static String getSavePointUrl() {
-            String url = savePointPageUrl.get();
-            savePointPageUrl.remove();
+        static String getSavePointUrl(Class pointPageClass) {
+
+            Map<Class, String> map = savePointPageUrl.get();
+            String url = map.get(pointPageClass);
             return url;
         }
     }
@@ -214,12 +222,12 @@ public abstract class Page implements Actions {
     }
 
     public <T extends Page> T savePoint(Class<T> currentPageClass) {
-        PagesCache.setSavePointUrl(Browser.driver().getCurrentUrl());
+        PagesCache.setSavePointUrl(currentPageClass, Browser.driver().getCurrentUrl());
         return at(currentPageClass);
     }
 
     public <T extends Page> T backToSavePoint(Class<T> pointPageClass) {
-        Browser.driver().get(PagesCache.getSavePointUrl());
+        Browser.driver().get(PagesCache.getSavePointUrl(pointPageClass));
         return at(pointPageClass);
     }
 
