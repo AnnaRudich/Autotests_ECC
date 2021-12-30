@@ -25,8 +25,8 @@ DECLARE @SUADDR NVARCHAR(50) = '489-499 Avebury Boulevard'
 DECLARE @SUADDR2 NVARCHAR(50) = 'Milton Keynes, MK9 2NW'
 DECLARE @suCulture INT = (SELECT LCID FROM Culture c JOIN FormattingProperties f ON c.Culture = f.VALUE WHERE f.[KEY] = 'scalepoint_culture_code')
 DECLARE @City NVARCHAR(30) = 'Copenhagen'
-DECLARE @rvStatusMessageWebServiceUrl NVARCHAR(100) = 'https://' + @MockUrl + '/mock/rnv/rvStatusMessageWebServiceUrl'
-DECLARE @rvFreeTextMessageWebServiceUrl NVARCHAR(100) = 'https://' + @MockUrl + '/mock/rnv/rvFreeTextMessageWebServiceUrl'
+DECLARE @rvStatusMessageWebServiceUrl NVARCHAR(100) = 'https://' + @MockUrl + '/rnv/rvStatusMessageWebServiceUrl'
+DECLARE @rvFreeTextMessageWebServiceUrl NVARCHAR(100) = 'https://' + @MockUrl + '/rnv/rvFreeTextMessageWebServiceUrl'
 
 IF EXISTS(SELECT * FROM dbo.SUPPLIER s WHERE s.SUNAME = @SUNAME)
 BEGIN

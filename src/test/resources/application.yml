@@ -19,7 +19,7 @@ context.ecc.rnv: repairValuation
 context.ecc: "webapp/ScalePoint"
 context.selfservice: self-service
 
-wiremock.urlPathPrefix: "/mock"
+wiremock.urlPathPrefix: ""
 wiremock.port: 443
 
 wiremock.host: "dev-ecc-tool03.spcph.local"

@@ -2,7 +2,6 @@ package com.scalepoint.automation.spring;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.client.WireMockBuilder;
-import com.scalepoint.automation.shared.WiremockServer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -26,7 +25,7 @@ public class WireMockConfig {
 
         WireMock wireMock =  new WireMockBuilder()
                 .https()
-                .host(WiremockServer.findByDomain(host).getIpAddress())
+                .host(host)
                 .urlPathPrefix(urlPathPrefix)
                 .port(Integer.valueOf(port))
                 .build();
