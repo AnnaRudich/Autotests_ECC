@@ -440,12 +440,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected GenerateWidgetPage openGenerateWidgetPage(){
 
-        Browser.open(String.format(com.scalepoint.automation.utils.Configuration.getWidgetUrl(), "01"));
+        Browser.open(com.scalepoint.automation.utils.Configuration.getWidgetUrl());
         return Page.at(GenerateWidgetPage.class);
     }
 
     protected GenerateWidgetPage openGenerateWidgetPageNonAuth(){
-        Browser.open(String.format(com.scalepoint.automation.utils.Configuration.getWidgetUrl(), "02"));
+        Browser.open(com.scalepoint.automation.utils.Configuration.getNonAuthWidgetUrl());
         return Page.at(GenerateWidgetPage.class);
     }
 

@@ -27,6 +27,7 @@ public class Configuration {
     public static final String KEY_TEST_WIDGET_PROTOCOL = "test.widget.protocol";
     public static final String KEY_URL_TEST_WIDGET_URI = "test.widget.uri";
     public static final String KEY_URL_TEST_WIDGET_DOMAIN = "test.widget.domain";
+    public static final String KEY_WIREMOCK_HOST = "wiremock.host";
 
     private static final String ff4jFeaturesApiUrl = "ff4j-console/api/features/";
     private static final String ff4jToggleAdminUrl = "ff4j-console/features";
@@ -59,6 +60,8 @@ public class Configuration {
     private static String urlTestWidget;
     @Getter
     private static String domainTestWidget;
+    @Getter
+    private static String wiremockHost;
 
     private static Configuration instance;
 
@@ -174,6 +177,10 @@ public class Configuration {
         return getTestWidgetProtocol() + getDomainTestWidget() + getUrlTestWidget();
     }
 
+    public static String getNonAuthWidgetUrl(){
+        return getTestWidgetProtocol() + getWiremockHost() + getUrlTestWidget();
+    }
+
     public Configuration setProtocol(String protocol) {
         Assert.notNull(protocol, errorMessage(KEY_PROTOCOL));
         Configuration.protocol = protocol;
@@ -248,6 +255,11 @@ public class Configuration {
 
     public Configuration setDomainTestWidget(String domainTestWidget) {
         Configuration.domainTestWidget = domainTestWidget;
+        return this;
+    }
+
+    public Configuration setWiremockHost(String wiremockHost) {
+        Configuration.wiremockHost = wiremockHost;
         return this;
     }
 
