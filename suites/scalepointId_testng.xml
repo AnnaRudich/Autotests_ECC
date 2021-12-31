@@ -2,15 +2,10 @@
 <suite name="scalepointId" configfailurepolicy="continue" parallel="methods">
     <parameter name="FeatureToggleSetting" value="SCALEPOINTID_LOGIN_ENABLED"/>
 
-    <test verbose="1" name="ScalepointIdSmokeTest" group-by-instances="false" enabled="true" preserve-order="true"  thread-count="4">
-        <classes>
-            <class name="com.scalepoint.automation.tests.sid.SidManualItemsForScalepointIdTests">
-            </class>
-            <class name="com.scalepoint.automation.tests.ClaimTestsForScalepointId">
-            </class>
-            <class name="com.scalepoint.automation.tests.CompleteClaimExternallyForScalepointId">
-            </class>
-        </classes>
+    <test verbose="1" name="ScalepointId" group-by-instances="false" enabled="true" preserve-order="true"  thread-count="1" >
+        <packages>
+            <package name="com.scalepoint.automation.tests.scalepointId"/>
+        </packages>
     </test>
 
 

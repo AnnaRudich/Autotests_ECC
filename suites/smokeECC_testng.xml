@@ -12,7 +12,7 @@
                     <include name="charlie544_completeSimpleClaimWithShopExistingDat"/>
                 </methods>
             </class>
-            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternallyTests">
                 <methods>
                     <include name="completeClaimExternallyFromSettlementPageTest"/>
                 </methods>

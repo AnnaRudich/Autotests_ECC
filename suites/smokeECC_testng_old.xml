@@ -14,7 +14,7 @@
                 </methods>
             </class>
 
-            <class name="com.scalepoint.automation.tests.CompleteClaimExternally">
+            <class name="com.scalepoint.automation.tests.CompleteClaimExternallyTests">
                 <methods>
                     <include name="charlie515_completeClaimExternallyFromSettlementPage"/>
                 </methods>

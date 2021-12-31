@@ -10,6 +10,7 @@ import com.scalepoint.automation.pageobjects.pages.admin.InsCompaniesPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
+import com.scalepoint.automation.tests.sharedTests.ClaimSharedTests;
 import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.annotations.Jira;
 import com.scalepoint.automation.utils.annotations.UserAttributes;
@@ -24,7 +25,6 @@ import java.time.Year;
 import java.util.Arrays;
 
 import static com.scalepoint.automation.grid.ValuationGrid.Valuation.CATALOG_PRICE;
-import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.CUSTOMER_WELCOME;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CONFIRMATION_IC_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.ITEMIZATION_CUSTOMER_MAIL;
 import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SETTLEMENT_NOTIFICATION_TO_IC;
@@ -36,7 +36,7 @@ import static com.scalepoint.automation.utils.Constants.JANUARY;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @RequiredSetting(type = FTSetting.USE_UCOMMERCE_SHOP, enabled = false)
-public class ClaimTests extends BaseTest {
+public class ClaimTests extends ClaimSharedTests {
 
     private final String POLICY_TYPE = "testPolicy ÆæØøÅåß";
     private final String EMPTY = "";
@@ -44,13 +44,8 @@ public class ClaimTests extends BaseTest {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void reopenSavedClaimTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
-                .saveClaim(claim)
-                .openRecentClaim()
-                .startReopenClaimWhenViewModeIsEnabled()
-                .reopenClaim()
-                .doAssert(settlementPage -> settlementPage.assertSettlementPagePresent("Settlement page is not loaded"));
+    public void reopenSavedClaimSharedTest(User user, Claim claim) {
+        reopenSavedClaimSharedTest(user, claim);
     }
 
     /**
@@ -63,12 +58,7 @@ public class ClaimTests extends BaseTest {
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to cancel saved claim. Cancelled claim  has status Cancelled")
     public void cancelSavedClaimTest(User user, Claim claim) throws Exception {
-        loginAndCreateClaim(user, claim)
-                .saveClaim(claim)
-                .openRecentClaim()
-                .cancelClaim()
-                .to(MyPage.class)
-                .doAssert(MyPage.Asserts::assertRecentClaimCancelled);
+        cancelSavedClaimSharedTest(user,claim);
     }
 
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
@@ -76,15 +66,7 @@ public class ClaimTests extends BaseTest {
             description = "CHARLIE-544, ECC-2629 It's possible to complete claim with mail. " +
                     "Completed claim is added to the latest claims list with Completed status")
     public void completeClaimWithMailTest(User user, Claim claim) {
-
-        loginAndCreateClaim(user, claim)
-                .toCompleteClaimPage()
-                .fillClaimForm(claim)
-                .completeWithEmail(claim, databaseApi, true)
-                .doAssert(myPage -> myPage.assertClaimHasStatus(claim.getStatusCompleted()))
-                .openRecentClaim()
-                .toMailsPage()
-                .doAssert(mail -> mail.isMailExist(CUSTOMER_WELCOME));
+        completeClaimWithMailSharedTest(user, claim);
     }
 
     @RequiredSetting(type = FTSetting.INCLUDE_AGENT_DATA)

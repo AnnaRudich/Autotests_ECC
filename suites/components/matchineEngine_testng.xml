@@ -12,7 +12,7 @@
             <package name="com.scalepoint.automation.tests.OrderDetailsTests"/>
             <package name="com.scalepoint.automation.tests.CatalogPricesTests"/>
             <package name="com.scalepoint.automation.tests.ClaimTests"/>
-            <package name="com.scalepoint.automation.tests.CompleteClaimExternally"/>
+            <package name="com.scalepoint.automation.tests.CompleteClaimExternallyTests"/>
 
             <package name="com.scalepoint.automation.tests.admin.GenericItemsTests"/>
 
