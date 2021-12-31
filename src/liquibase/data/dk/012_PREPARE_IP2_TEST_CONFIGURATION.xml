@@ -14,7 +14,7 @@
             DECLARE @MockHost nvarchar(256) =  '${wiremock.host}'
             DECLARE @MockPath nvarchar(256) = '/externalIntegration/testic'
             DECLARE @MockUrl nvarchar(256) = ''
-            SET @MockUrl = 'https://' + @MockHost + '/mock' + @MockPath
+            SET @MockUrl = 'https://' + @MockHost + @MockPath
             DECLARE @companyIdFuture70 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE70')
             DECLARE @companyIdFuture71 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE71')
             DECLARE @companyIdFuture72 bigint = (SELECT ICRFNBR FROM [dbo].[INSCOMP] WHERE CompanyCode = 'FUTURE72')

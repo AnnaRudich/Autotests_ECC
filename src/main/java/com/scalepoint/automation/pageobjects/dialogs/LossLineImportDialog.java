@@ -35,6 +35,11 @@ public class LossLineImportDialog extends BaseDialog {
         return Page.at(SettlementPage.class);
     }
 
+    public LossLineImportDialog updateAll(){
+        $("input[onclick='ConvertAllToMatchImportLine(true)']").click();
+        return this;
+    }
+
     private void pickItemFromSelect(SelenideElement select, String valueToSelect) {
         select.selectOption(valueToSelect);
     }

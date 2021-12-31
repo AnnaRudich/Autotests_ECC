@@ -5,6 +5,7 @@ import com.mongodb.MongoClientURI;
 import com.scalepoint.automation.services.externalapi.DatabaseApi;
 import com.scalepoint.automation.services.externalapi.MongoDbApi;
 import com.scalepoint.automation.services.usersmanagement.UsersManager;
+import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.data.TestData;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
@@ -67,6 +68,8 @@ public class BeansConfiguration {
     private String urlTestWidget;
     @Value("${" + com.scalepoint.automation.utils.Configuration.KEY_URL_TEST_WIDGET_DOMAIN + "}")
     private String domainTestWidget;
+    @Value("${" + Configuration.KEY_WIREMOCK_HOST + "}")
+    private String wiremockHost;
 
 
 
@@ -90,7 +93,8 @@ public class BeansConfiguration {
                 .setHubRemoteZalenium(hubRemoteZaleniumUrl)
                 .setUrlTestWidget(urlTestWidget)
                 .setTestWidgetProtocol(testWidgetProtocol)
-                .setDomainTestWidget(domainTestWidget);
+                .setDomainTestWidget(domainTestWidget)
+                .setWiremockHost(wiremockHost);
 
         UsersManager.initManager(TestData.getSystemUsers());
 
