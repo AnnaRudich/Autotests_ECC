@@ -1,12 +1,15 @@
 package com.scalepoint.automation.utils.testng;
 
-import org.testng.*;
+import org.testng.IMethodInstance;
+import org.testng.IMethodInterceptor;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
+import org.testng.ITestContext;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
@@ -35,16 +38,6 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
 
             return new LinkedList<>();
         }
-
-        try {
-
-            list = validateIncluded(list, iTestContext);
-        } catch (IncorrectIncludeSyntax incorrectIncludeSyntax) {
-
-            incorrectIncludeSyntax.printStackTrace();
-            throw new RuntimeException(incorrectIncludeSyntax);
-        }
-
         return list;
     }
 
@@ -59,87 +52,6 @@ public class HealthCheckListener implements ISuiteListener, IMethodInterceptor {
                 .getTestContext()
                 .getFailedTests()
                 .size() == 0;
-    }
-
-    private List validateIncluded(List<IMethodInstance> list, ITestContext iTestContext) throws IncorrectIncludeSyntax {
-
-        String included = iTestContext.getSuite().getParameter("included");
-
-        if (!included.equals("")) {
-
-            IncludeGroups includeGroups = new IncludeGroups(included);
-            if(includeGroups.matches()){
-
-                return includeGroups.matcher(list);
-            }
-            IncludeMethods includeMethods = new IncludeMethods(included);
-            if(includeMethods.matches()){
-
-                return includeMethods.matcher(list);
-            }
-
-            throw new IncorrectIncludeSyntax(String.format("Following syntax is incorrect: %s",included));
-        }
-
-        return list;
-    }
-
-    abstract class Include {
-
-        protected Matcher matcher;
-
-        protected abstract Stream<IMethodInstance> filter(List<IMethodInstance> filteredList, String filter);
-        protected boolean matches(){
-            return matcher.matches();
-        }
-        protected List<IMethodInstance> matcher(List<IMethodInstance> list) {
-
-            if (matches()) {
-
-                List<String> includedList = Arrays.asList(matcher.group(2).split(";"));
-
-                List<IMethodInstance> filteredList = new ArrayList<>();
-
-                for (String f : includedList) {
-
-                    filteredList.addAll(filter(list, f).collect(Collectors.toList()));
-                }
-
-                return filteredList;
-            }
-
-            return list;
-        }
-    }
-
-    class IncludeGroups extends HealthCheckListener.Include {
-
-        IncludeGroups(String included){
-
-            matcher = Pattern.compile("(RetestGroups:)((\\w+;)+)").matcher(included);
-        }
-
-        protected Stream<IMethodInstance> filter(List<IMethodInstance> filteredList, String filter) {
-
-            return filteredList
-                    .stream()
-                    .filter(method -> Arrays.stream(method.getMethod().getGroups()).anyMatch(g -> g.equals(filter)));
-        }
-    }
-
-    class IncludeMethods extends HealthCheckListener.Include {
-
-        IncludeMethods(String included){
-
-            matcher = Pattern.compile("(RetestMethods:)((\\w+;)+)").matcher(included);
-        }
-
-        protected Stream<IMethodInstance> filter(List<IMethodInstance> filteredList, String filter){
-
-            return filteredList
-                    .stream()
-                    .filter(m -> m.getMethod().getMethodName().equals(filter));
-        }
     }
 
     public enum Suite{
