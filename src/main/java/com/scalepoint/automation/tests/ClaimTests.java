@@ -44,7 +44,7 @@ public class ClaimTests extends ClaimSharedTests {
     @Jira("https://jira.scalepoint.com/browse/CHARLIE-544")
     @Test(groups = {TestGroups.CLAIM_MISCELLANEOUS}, dataProvider = "testDataProvider",
             description = "CHARLIE-544 It's possible to reopen saved claim. Settlement is displayed for reopened claim")
-    public void reopenSavedClaimSharedTest(User user, Claim claim) {
+    public void reopenSavedClaimTest(User user, Claim claim) {
         reopenSavedClaimSharedTest(user, claim);
     }
 
