@@ -161,7 +161,6 @@
         <suiteXmlFile>suites/allTests.xml</suiteXmlFile>
         <buildInfo/>
         <activatedProperties/>
-        <included/>
         <excludedHealthChecks/>
         <tests.performance.enabledPerformanceTests>loginUser</tests.performance.enabledPerformanceTests>
         <tests.performance.limit>800</tests.performance.limit>
