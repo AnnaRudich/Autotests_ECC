@@ -48,7 +48,7 @@ public class LossSheetTemplatesTests extends BaseTest {
         verifyLossAdjusterSheet(user, claim, claimSheetDKExcel2003v1TemplateName);
     }
 
-    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.LOSS_SHEET_TEMPLATES}, dataProvider = "testDataProvider",
             description = "Verifies multiple templates available for company")
     public void multipleTemplatesTest(User user, Claim claim1, Claim claim2, LossSheetTemplates lossSheetTemplates) {
 
@@ -85,7 +85,7 @@ public class LossSheetTemplatesTests extends BaseTest {
         verifyLossAdjusterSheet(user, claim2, claimSheetDKExcel2003v11TemplateName);
     }
 
-    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.SUPPLIER}, dataProvider = "testDataProvider",
+    @Test(groups = {TestGroups.SUPPLIER_MANAGER, TestGroups.LOSS_SHEET_TEMPLATES}, dataProvider = "testDataProvider",
             description = "Verifies multiple templates shared across many companies")
     public void sharedTemplatesTest(User user1, User user2, Claim claim1, Claim claim2, LossSheetTemplates lossSheetTemplates) {
 
