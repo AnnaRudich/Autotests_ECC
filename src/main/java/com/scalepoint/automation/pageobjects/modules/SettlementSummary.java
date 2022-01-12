@@ -2,11 +2,9 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
-import com.scalepoint.automation.utils.Constants;
 import com.scalepoint.automation.utils.OperationalUtils;
 import lombok.Getter;
 import org.openqa.selenium.By;
@@ -17,6 +15,7 @@ import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
@@ -50,7 +49,7 @@ public class SettlementSummary extends Module {
     @FindBy(id="sendToAuditBtn-btnInnerEl")
     private WebElement sentToAudit;
 
-    @FindBy(xpath = "//div[contains(@class, 'x-tool-expand-top')]")
+    @FindBy(css = "#appContainer-body .x-region-collapsed-placeholder .x-tool-expand-top")
     private WebElement expand;
 
     @FindBy(id = "total_indemnity_replacement_amount-inputEl")
@@ -78,134 +77,132 @@ public class SettlementSummary extends Module {
     private WebElement closeClaimViewMode;
 
     public void cancel() {
+
         hoverAndClick($(cancel));
     }
 
     public void saveClaim() {
-        SelenideElement element = $(saveClaim);
-        if (!element.isDisplayed()) {
-            expand();
-        }
-        element.click();
+
+        expand();
+        hoverAndClick($(saveClaim));
+    }
+
+    private boolean isExpanded(){
+
+        return $("[aria-label='Collapse panel']")
+                .has(visible);
     }
 
     public SettlementPage reopenClaimFromViewMode(){
-        SelenideElement element = $(reopenClaimViewMode);
-        if (!element.isDisplayed()) {
-            expand();
-        }
-        element.click();
+
+        expand();
+        $(reopenClaimViewMode).click();
         getAlertTextAndAccept();
         return Page.at(SettlementPage.class);
     }
 
     public CustomerDetailsPage closeClaimFromViewMode(){
-        SelenideElement element = $(closeClaimViewMode);
-        if (!element.isDisplayed()) {
-            expand();
-        }
-        element.click();
+
+        expand();
+        hoverAndClick($(closeClaimViewMode));
         return Page.at(CustomerDetailsPage.class);
 
     }
 
     public void completeClaim() {
-        if (!completeClaim.isDisplayed() & !sentToAudit.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         jsIfClickDoesNotWork($(completeClaim));
     }
 
     public void completeClaimWithoutMail() {
-        if (!completeClaimExternally.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         hoverAndClick($(completeClaimExternally));
     }
 
     private void expand() {
-        $(expand).waitUntil(Condition.visible, Constants.WAIT_UNTIL_MS).click();
+
+        if (!isExpanded()) {
+
+            $(expand)
+                    .should(Condition.visible)
+                    .click();
+        }
     }
 
     private String getClaimSumValue() {
-        if (!claimSumValue.isDisplayed()) {
-            expand();
-        }
-        $(claimSumValue).waitUntil(not(exactText("")), Constants.WAIT_UNTIL_MS);
+
+        expand();
+        $(claimSumValue).should(not(exactText("")));
         return claimSumValue.getText();
     }
 
     private String getSubtotalSumValue() {
-        if (!subtotalValue.isDisplayed()) {
-            expand();
-        }
-        $(subtotalValue).waitUntil(not(exactText("")), Constants.WAIT_UNTIL_MS);
+
+        expand();
+        $(subtotalValue).should(not(exactText("")));
         return subtotalValue.getText();
     }
 
     private boolean isCompleteClaimEnabled() {
-        if (!completeClaim.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         return completeClaim.isEnabled();
     }
 
     public RepairPanel getRepairPanel(){
-        if (RepairPanel.isDisplayed()) {
-            expand();
-        }
+
+        expand();
         return new RepairPanel();
     }
 
     private boolean isFraudulent(){
 
-        String text = "CentralScore ej ok";
-        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
-            expand();
-        }
-        return $(fraudStatus)
-                .waitUntil(Condition.text(text), FRAUD_ALERT_WAIT_TIMEOUT_MS).getText().equals(text);
+        expand();
+        return verifyFraudStatus("CentralScore ej ok");
     }
 
     private boolean isNotFraudulent(){
 
-        String text = "CentralScore ok";
-        if($(settlementSummaryTotalsPanel).is(not(Condition.visible))){
-            expand();
-        }
+        expand();
+        return verifyFraudStatus("CentralScore ok");
+    }
+
+    private boolean verifyFraudStatus(String text){
 
         return $(fraudStatus)
-                .waitUntil(Condition.text(text), FRAUD_ALERT_WAIT_TIMEOUT_MS).getText().equals(text);
+                .should(Condition.text(text), Duration.ofMillis(FRAUD_ALERT_WAIT_TIMEOUT_MS))
+                .has(Condition.exactText(text));
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
+
         expand();
         verifyElementVisible($(auditInfoPanel));
         return this;
     }
 
     public SettlementSummary checkStatusFromAudit(String status) {
+
         ExpectedConditions.textToBePresentInElement(auditStatus, status);
         return this;
     }
 
     public SettlementPage editSelfRisk(String newValue){
-        if($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")).is(not(visible))){
-            expand();
-        }
 
-        $(By.xpath("//a[contains(text(), 'Selvrisiko:')]"))
-                .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
-                .click();
+        expand();
+        hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
 
         $(By.xpath("//input[@role='textbox']"))
-                .waitUntil(Condition.visible, TIME_OUT_IN_MILISECONDS)
+                .should(Condition.visible)
                 .setValue(newValue);
 
-        $(By.xpath("//span[contains(text(), 'OK')]/parent::span")).click();
+        hoverAndClick($(By.xpath("//span[contains(text(), 'OK')]/parent::span")));
         waitForLoaded();
         return at(SettlementPage.class);
     }
+
     @Getter
     static public class RepairPanel{
 

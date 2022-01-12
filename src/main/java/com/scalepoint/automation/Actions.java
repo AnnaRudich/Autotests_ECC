@@ -118,7 +118,7 @@ public interface Actions {
     default SelenideElement hoverAndClick(SelenideElement element){
 
         element
-                .waitUntil(and("can be clickable", visible, enabled), TIME_OUT_IN_MILISECONDS)
+                .should(and("can be clickable", visible, enabled))
                 .hover()
                 .click();
         waitForAjaxCompletedAndJsRecalculation();
