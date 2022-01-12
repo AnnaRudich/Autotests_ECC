@@ -101,6 +101,10 @@ public class TestData {
         return (AttachmentFiles) getData(Data.ATTFILES);
     }
 
+    public static LossSheetTemplates getLossSheetTemplates() {
+        return (LossSheetTemplates) getData(Data.LOSS_SHEET_TEMPLATES);
+    }
+
     public static BankAccount getBankAccount() {
         return (BankAccount) getData(Data.BANK_ACCOUNT);
     }
@@ -300,6 +304,7 @@ public class TestData {
         CLGROUP("input/ClaimLineGroup.xml", ClaimLineGroup.class),
         PAYMENTS("input/Payments.xml", Payments.class),
         ATTFILES("input/AttachmentFiles.xml", AttachmentFiles.class),
+        LOSS_SHEET_TEMPLATES("input/LossSheetTemplates.xml", LossSheetTemplates.class),
         BANK_ACCOUNT("input/BankAccount.xml", BankAccount.class),
         CWA_CLAIM("request/Claim/ClaimRequest.json", ClaimRequest.class),
         FRAUD_ALERT_CLAIM("request/Claim/fraudAlert/ClaimRequestFraudAlert.json", ClaimRequest.class),

@@ -200,7 +200,8 @@ public class MailsPage extends BaseClaimPage {
         REMINDER_MAIL("Påmindelse vedr. lukning af adgang"),
         BLOCKED_ACCOUNT("Lukning af adgang"),
         ITEMIZATION_CUSTOMER_MAIL("Kundemail (fnol)"),
-        ITEMIZATION_CONFIRMATION_IC_MAIL("Selskabsmail (fnol)");
+        ITEMIZATION_CONFIRMATION_IC_MAIL("Selskabsmail (fnol)"),
+        LOSS_ADJUSTER_SHEET("Loss adjuster sheet mail");
 
         private String typeText;
 

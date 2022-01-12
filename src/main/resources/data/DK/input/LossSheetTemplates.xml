@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<lossSheetTemplates>
+    <claimSheetDKExcel2003v1>excelImport/templates/Claim_Sheet_DK_(Excel_2003)_v1.xls</claimSheetDKExcel2003v1>
+    <claimSheetDKExcel2007v11>excelImport/templates/Claim_Sheet_DK_(Excel_2007)_v1_1.xlsx</claimSheetDKExcel2007v11>
+    <claimSheetDKExcel2007v12>excelImport/templates/Claim_Sheet_DK_(Excel_2007)_v_1_2.xlsx</claimSheetDKExcel2007v12>
+    <excel400DK>excelImport/templates/Excel_4_0_0_DK.xlsx</excel400DK>
+</lossSheetTemplates>
