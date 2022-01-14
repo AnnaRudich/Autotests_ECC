@@ -2,6 +2,8 @@ package com.scalepoint.automation.pageobjects.modules;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.scalepoint.automation.pageobjects.dialogs.BaseDialog;
+import com.scalepoint.automation.pageobjects.dialogs.SelfRiskDialog;
 import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
@@ -11,7 +13,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 import ru.yandex.qatools.htmlelements.element.Table;
 
 import java.math.BigDecimal;
@@ -20,15 +21,15 @@ import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.scalepoint.automation.pageobjects.pages.Page.at;
 import static com.scalepoint.automation.utils.NumberFormatUtils.formatDoubleToHaveTwoDigits;
 import static com.scalepoint.automation.utils.OperationalUtils.toNumber;
 import static com.scalepoint.automation.utils.Wait.verifyElementVisible;
-import static com.scalepoint.automation.utils.Wait.waitForLoaded;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class SettlementSummary extends Module {
 
+    private static final String FRAUDULENT_TEXT = "CentralScore ej ok";
+    private static final String NOT_FRAUDULENT_TEXT = "CentralScore ok";
     private static final int FRAUD_ALERT_WAIT_TIMEOUT_MS = 30000;
 
     @FindBy(xpath = "//div[@id='settlementSummaryTotalTable-targetEl']//table")
@@ -159,21 +160,10 @@ public class SettlementSummary extends Module {
 
     private boolean isFraudulent(){
 
-        expand();
-        return verifyFraudStatus("CentralScore ej ok");
-    }
-
-    private boolean isNotFraudulent(){
-
-        expand();
-        return verifyFraudStatus("CentralScore ok");
-    }
-
-    private boolean verifyFraudStatus(String text){
-
         return $(fraudStatus)
-                .should(Condition.text(text), Duration.ofMillis(FRAUD_ALERT_WAIT_TIMEOUT_MS))
-                .has(Condition.exactText(text));
+                .should(Condition.or("fraudStatus", Condition.text(FRAUDULENT_TEXT), Condition.text(NOT_FRAUDULENT_TEXT)),
+                        Duration.ofMillis(FRAUD_ALERT_WAIT_TIMEOUT_MS))
+                .has(Condition.exactText(FRAUDULENT_TEXT));
     }
 
     public SettlementSummary ensureAuditInfoPanelVisible() {
@@ -189,18 +179,11 @@ public class SettlementSummary extends Module {
         return this;
     }
 
-    public SettlementPage editSelfRisk(String newValue){
+    public SelfRiskDialog editSelfRisk(){
 
         expand();
         hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
-
-        $(By.xpath("//input[@role='textbox']"))
-                .should(Condition.visible)
-                .setValue(newValue);
-
-        hoverAndClick($(By.xpath("//span[contains(text(), 'OK')]/parent::span")));
-        waitForLoaded();
-        return at(SettlementPage.class);
+        return BaseDialog.at(SelfRiskDialog.class);
     }
 
     @Getter
@@ -295,27 +278,41 @@ public class SettlementSummary extends Module {
     public class Asserts {
         public Asserts assertClaimSumValueIs(double value) {
 
-            Assert.assertEquals(toNumber(getClaimSumValue()), formatDoubleToHaveTwoDigits(value), "Claim sum must be: " + value);
+            assertThat(toNumber(getClaimSumValue()))
+                    .as("Claim sum must be: " + value)
+                    .isEqualTo(formatDoubleToHaveTwoDigits(value));
             return this;
         }
 
         public Asserts assertSubtotalSumValueIs(double value) {
-            Assert.assertEquals(toNumber(getSubtotalSumValue()), formatDoubleToHaveTwoDigits(value), "Subtotal sum must be: " + value);
+
+            assertThat(toNumber(getSubtotalSumValue()))
+                    .as("Subtotal sum must be: " + value)
+                    .isEqualTo(formatDoubleToHaveTwoDigits(value));
             return this;
         }
 
         public Asserts assertCompleteClaimEnabled() {
-            Assert.assertTrue(isCompleteClaimEnabled(), "Complete Claim button is disabled");
+
+            assertThat(isCompleteClaimEnabled())
+                    .as("Complete Claim button is disabled")
+                    .isTrue();
             return this;
         }
 
         public Asserts assertFraudulent(){
-            Assert.assertTrue(isFraudulent(), "Claim is not fraudulent");
+
+            assertThat(isFraudulent())
+                    .as("Claim is not fraudulent")
+                    .isTrue();
             return this;
         }
 
         public Asserts assertNotFraudulent(){
-            Assert.assertTrue(isNotFraudulent(), "Claim is fraudulent");
+
+            assertThat(isFraudulent())
+                    .as("Claim is fraudulent")
+                    .isFalse();
             return this;
         }
 
