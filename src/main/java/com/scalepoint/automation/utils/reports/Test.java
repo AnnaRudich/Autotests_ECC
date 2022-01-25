@@ -7,8 +7,6 @@ import org.testng.ITestContext;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -60,7 +58,6 @@ public class Test {
         getMemoryUsage();
         getThreads();
         getGCMetrics();
-        getConnections();
 
         return this;
     }
@@ -93,7 +90,7 @@ public class Test {
                     .findFirst()
                     .orElseGet(() -> addNode(nodeName));
 
-            return node.setTestResults();
+            return node;
         }
     }
 
@@ -336,7 +333,7 @@ public class Test {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private Node addNode(String nodeName){
+    public Node addNode(String nodeName){
 
         Node node = new Node(extentTest.createNode(nodeName), iTestContext);
         nodes.add(node);
@@ -412,15 +409,15 @@ public class Test {
 
             String href = String.format(
                     "?q=%s" +
-                    "&rangetype=%s" +
-                    "&from=%s" +
-                    "&to=%s",
+                            "&rangetype=%s" +
+                            "&from=%s" +
+                            "&to=%s",
                     URLEncoder.encode(source),
                     URLEncoder.encode(rangeType),
                     URLEncoder.encode(DateTimeFormatter.ISO_INSTANT.format(from.toInstant())),
                     URLEncoder.encode(DateTimeFormatter.ISO_INSTANT.format(to.toInstant())));
 
-                return String.format("<a href=https://dev-graylog.spcph.local/search%s>Graylog</a>", href);
+            return String.format("<a href=https://dev-graylog.spcph.local/search%s>Graylog</a>", href);
         }
     }
 }

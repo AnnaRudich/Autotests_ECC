@@ -4,6 +4,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Test;
 import lombok.AllArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -16,7 +17,6 @@ import org.jfree.data.KeyToGroupMap;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,7 +34,6 @@ public class Chart {
     private static final double ITEM_MARGIN = 0.0;
 
     private ExtentTest extentTest;
-    private File file;
     private DefaultCategoryDataset dataset;
     private GroupedStackedBarRenderer renderer;
     private SubCategoryAxis domainAxis;
@@ -44,7 +43,6 @@ public class Chart {
     public Chart(ExtentTest extentTest){
 
         this.extentTest = extentTest;
-        file = new File(extentTest.getModel().getName().concat(FILE_EXTENSION));
         dataset = new DefaultCategoryDataset();
         renderer = new GroupedStackedBarRenderer();
         domainAxis = new SubCategoryAxis(SUB_CATEGORY_AXIS_LABEL);
@@ -78,8 +76,10 @@ public class Chart {
         configureRenderer();
         configureCategoryPlot();
 
-        ChartUtilities.saveChartAsJPEG(file, histogram, WIDTH,HEIGHT);
-        extentTest.addScreenCaptureFromPath(file.getPath());
+        byte[] imageData = ChartUtilities.encodeAsPNG(histogram.createBufferedImage(WIDTH, HEIGHT));
+        String base64 = Base64.encodeBase64String(imageData);
+        base64 = "data:image/png;base64," + base64;
+        extentTest.addScreenCaptureFromBase64String(base64);
     }
 
     private KeyToGroupMap getKeyToGroupMap(List<String> methods){
