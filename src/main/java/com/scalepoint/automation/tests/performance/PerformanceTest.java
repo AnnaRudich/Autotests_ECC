@@ -47,6 +47,16 @@ public class PerformanceTest extends BaseApiTest{
         BaseService.loginUser(user);
     }
 
+    @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_LOGIN_AND_CREATE_CLAIM}, dataProvider = "usersDataProvider")
+    public void loginAndCreateClaimTest(User user) {
+
+        ClaimRequest claimRequest = TestData.getClaimRequest();
+        claimRequest.setTenant(user.getCompanyName().toLowerCase());
+        claimRequest.setCompany(user.getCompanyName().toLowerCase());
+
+        BaseService.loginAndCreateClaim(user, claimRequest);
+    }
+
     @Test(groups = {TestGroups.PERFORMANCE, PerformanceTestConfig.TEST_LOGIN_AND_OPEN_CLAIM}, dataProvider = "usersDataProvider")
     public void loginAndOpenClaimTest(User user) {
 
