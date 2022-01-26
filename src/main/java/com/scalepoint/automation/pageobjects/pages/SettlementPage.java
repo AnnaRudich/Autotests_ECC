@@ -183,7 +183,8 @@ public class SettlementPage extends BaseClaimPage {
     }
 
     public SettlementSummary getSettlementSummary() {
-        return settlementSummary;
+
+        return settlementSummary.expand();
     }
 
     public TextSearchPage toTextSearchPage() {

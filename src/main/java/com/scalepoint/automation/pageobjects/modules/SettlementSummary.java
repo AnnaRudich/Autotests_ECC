@@ -122,7 +122,7 @@ public class SettlementSummary extends Module {
         hoverAndClick($(completeClaimExternally));
     }
 
-    private void expand() {
+    public SettlementSummary expand() {
 
         if (!isExpanded()) {
 
@@ -130,6 +130,7 @@ public class SettlementSummary extends Module {
                     .should(Condition.visible)
                     .click();
         }
+        return this;
     }
 
     private String getClaimSumValue() {
