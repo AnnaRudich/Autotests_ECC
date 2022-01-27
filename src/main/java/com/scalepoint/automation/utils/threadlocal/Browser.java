@@ -7,6 +7,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -26,8 +27,8 @@ public class Browser {
     }
 
     public static Map<String, String> cookies(){
-
-        return driver().manage().getCookies().stream().collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
+        
+        return driver().manage().getCookies().stream().collect(Collectors.toMap(Cookie::getName, Cookie::getValue, (x1, x2) -> x1));
     }
 
     public static boolean hasDriver() {
