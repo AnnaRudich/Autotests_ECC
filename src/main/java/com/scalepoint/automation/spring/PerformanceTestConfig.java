@@ -7,6 +7,7 @@ public class PerformanceTestConfig{
 
     public static final String TEST_LOGIN_USER = "loginUser";
     public static final String TEST_LOGIN_AND_OPEN_CLAIM = "loginAndOpenClaim";
+    public static final String TEST_LOGIN_AND_CREATE_CLAIM = "loginAndCreateClaim";
     public static final String TEST_SELFSERVICE = "selfService";
     public static final String TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS = "loginAndOpenClaimWithItems";
     public static final String TEST_CLOSE_WITH_EMAIL = "closeWithEmail";
@@ -19,6 +20,7 @@ public class PerformanceTestConfig{
 
         LOGIN_USER(TEST_LOGIN_USER),
         LOGIN_AND_OPEN_CLAIM(TEST_LOGIN_AND_OPEN_CLAIM),
+        LOGIN_AND_CREATE_CLAIM(TEST_LOGIN_AND_CREATE_CLAIM),
         SELFSERVICE(TEST_SELFSERVICE),
         LOGIN_AND_OPEN_CLAIM_WITH_ITEMS(TEST_LOGIN_AND_OPEN_CLAIM_WITH_ITEMS),
         CLOSE_WITH_EMAIL(TEST_CLOSE_WITH_EMAIL),

@@ -60,7 +60,6 @@ public class Test {
         getMemoryUsage();
         getThreads();
         getGCMetrics();
-        getConnections();
 
         return this;
     }

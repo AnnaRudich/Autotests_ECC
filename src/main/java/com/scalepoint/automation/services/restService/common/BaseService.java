@@ -63,6 +63,13 @@ public class BaseService {
                 .openClaim();
     }
 
+    public static CreateClaimService loginAndCreateClaim(User user, ClaimRequest claimRequest){
+        return new LoginProcessService()
+                .login(user)
+                .createClaim(new OauthTestAccountsApi().sendRequest().getToken())
+                .addClaim(claimRequest);
+    }
+
     public static LoginProcessService loginUser(User user) {
         return new LoginProcessService()
                 .login(user);

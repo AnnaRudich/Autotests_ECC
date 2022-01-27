@@ -162,8 +162,8 @@
         <buildInfo/>
         <activatedProperties/>
         <excludedHealthChecks/>
-        <tests.performance.enabledPerformanceTests>loginUser</tests.performance.enabledPerformanceTests>
-        <tests.performance.limit>800</tests.performance.limit>
+        <tests.performance.enabledPerformanceTests>loginAndOpenClaim</tests.performance.enabledPerformanceTests>
+        <tests.performance.limit>500</tests.performance.limit>
         <tests.performance.testTime>1</tests.performance.testTime>
     </properties>
 
