@@ -103,7 +103,9 @@ public class RnVBase extends BaseTest {
 
         loginAndCreateClaim(user, claim)
                 .getSettlementSummary()
-                .editSelfRisk(selfRisk)
+                .editSelfRisk()
+                .setSelfRisk(selfRisk)
+                .clickOkButton()
                 .openSid()
                 .fill(lineDescription, agreement.getLineCategory(), agreement.getLineSubCategory(), RnVMock.OK_PRICE)
                 .closeSidWithOk()

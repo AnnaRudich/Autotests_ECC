@@ -213,7 +213,9 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
                 .reopenClaim();
 
         new SettlementSummary()
-                .editSelfRisk(selfRisk)
+                .editSelfRisk()
+                .setSelfRisk(selfRisk)
+                .clickOkButton()
                 .toCompleteClaimPage()
                 .completeWithEmail(claim, databaseApi, false)
                 .openRecentClaim()
