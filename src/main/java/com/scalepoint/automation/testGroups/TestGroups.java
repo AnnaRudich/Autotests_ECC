@@ -74,6 +74,7 @@ public interface TestGroups {
     String SID_MISCELLANEOUS = "sidMiscellaneous";
     String VOUCHER_AGREEMENT_SHARED_EXCLUSIVE = "voucherAgreementSharedExclusive";
     String SUPPLIER = "supplier";
+    String LOSS_SHEET_TEMPLATES = "lossSheetTemplates";
     String VOUCHER_AGREEMENT = "voucherAgreement";
     String BULK_UPDATE_CATEGORY = "bulkUpdateCategory";
     String CATALOG_PRICES = "catalogPrices";

@@ -3,6 +3,7 @@ package com.scalepoint.automation.pageobjects.dialogs;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.scalepoint.automation.pageobjects.extjs.ExtCheckboxTypeDiv;
+import com.scalepoint.automation.pageobjects.extjs.ExtComboBoxDivBoundList;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
@@ -69,7 +70,7 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
                 .disableSendSms();
     }
 
-    private SendSelfServiceRequestDialog enterEmail(String email) {
+    public SendSelfServiceRequestDialog enterEmail(String email) {
         $(this.email).setValue(email);
         return this;
     }
@@ -81,6 +82,13 @@ public class SendSelfServiceRequestDialog extends BaseDialog {
 
     private SendSelfServiceRequestDialog enterMobileNumber(String mobileNumber) {
         $(this.mobileNumber).setValue(mobileNumber);
+        return this;
+    }
+
+    public SendSelfServiceRequestDialog setSendLossAdjusterSheet(String name){
+
+        $("#excel-send-type-radio").click();
+        new ExtComboBoxDivBoundList($("#self-service-template-combo")).select(name);
         return this;
     }
 
