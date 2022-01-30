@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
+import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -200,12 +201,12 @@ public class SettlementSummary extends Module {
 
         RepairPanel(){
             ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
-            repairPrice = OperationalUtils.toBigDecimal(repairPanelItems.get(0).getText());
-            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(repairPanelItems.get(1).getText());
-            subtractedFromStatement = OperationalUtils.toBigDecimal(repairPanelItems.get(2).getText());
-            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(repairPanelItems.get(3).getText());
-            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(4).getText());
-            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(5).getText());
+            repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(0)).getText());
+            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(1)).getText());
+            subtractedFromStatement = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(2)).getText());
+            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(3)).getText());
+            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(4)).getText());
+            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(5)).getText());
         }
 
         static boolean isDisplayed(){
