@@ -182,7 +182,6 @@ public class SettlementSummary extends Module {
 
     public SelfRiskDialog editSelfRisk(){
 
-        expand();
         hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
         return BaseDialog.at(SelfRiskDialog.class);
     }
