@@ -155,7 +155,6 @@ public class SettlementSummary extends Module {
 
     public RepairPanel getRepairPanel(){
 
-        expand();
         return new RepairPanel();
     }
 
