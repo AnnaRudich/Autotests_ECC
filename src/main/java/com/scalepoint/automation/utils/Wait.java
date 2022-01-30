@@ -108,7 +108,7 @@ public class Wait {
         }
     }
 
-    public static SelenideElement waitNumberParsable(SelenideElement element){
+    public static SelenideElement waitNumberParseable(SelenideElement element){
 
         return element.should(Condition.not(Condition.exactText("")));
     }

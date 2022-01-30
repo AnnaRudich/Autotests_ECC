@@ -201,12 +201,12 @@ public class SettlementSummary extends Module {
 
         RepairPanel(){
             ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
-            repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(0)).getText());
-            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(1)).getText());
-            subtractedFromStatement = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(2)).getText());
-            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(3)).getText());
-            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(4)).getText());
-            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParsable(repairPanelItems.get(5)).getText());
+            repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(0)).getText());
+            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(1)).getText());
+            subtractedFromStatement = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(2)).getText());
+            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(3)).getText());
+            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(4)).getText());
+            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(5)).getText());
         }
 
         static boolean isDisplayed(){
