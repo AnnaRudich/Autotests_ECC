@@ -40,6 +40,7 @@ public class NewTemplateDialog extends BaseDialog {
     public LossSheetTemplatesPage clickUploadButton(){
 
         buttons.find(Condition.exactText("Upload")).click();
+        Wait.waitForSpinnerToDisappear();
         Wait.waitForAjaxCompletedAndJsRecalculation();
         return Page.at(LossSheetTemplatesPage.class);
     }

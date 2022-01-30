@@ -115,7 +115,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
 
         public TemplateRow(SelenideElement element){
 
-            this.element = element.should(Condition.exist);
+            this.element = element;
             id = Integer.parseInt(element.find("#lossSheetGridId-body tbody tr [role=gridcell]:nth-of-type(1)").getText());
             templateName = element.find("#lossSheetGridId-body tbody tr [role=gridcell]:nth-of-type(2)").getText();
             active = element.find("#lossSheetGridId-body tbody tr [role=gridcell]:nth-of-type(3)").has(Condition.cssClass("tick"));
