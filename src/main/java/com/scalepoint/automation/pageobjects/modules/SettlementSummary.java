@@ -131,6 +131,8 @@ public class SettlementSummary extends Module {
                     .should(Condition.visible)
                     .click();
         }
+
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
