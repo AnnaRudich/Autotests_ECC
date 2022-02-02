@@ -125,6 +125,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
         public TemplateRow selectTemplate(){
 
             element.click();
+            Wait.waitForSpinnerToDisappear();
             Wait.waitForAjaxCompletedAndJsRecalculation();
             return TemplateRow.this;
         }
