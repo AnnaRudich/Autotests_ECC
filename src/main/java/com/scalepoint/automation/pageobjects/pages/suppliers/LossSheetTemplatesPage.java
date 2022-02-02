@@ -77,7 +77,7 @@ public class LossSheetTemplatesPage extends BaseSupplierAdminNavigation {
         return BaseDialog.at(CompaniesMappingDialog.class);
     }
 
-    public TemplateRow reasignTemplate(String companyName, String templateName){
+    public TemplateRow reassignTemplate(String companyName, String templateName){
 
         return reassignTemplate()
                 .getCompanyByName(companyName)
