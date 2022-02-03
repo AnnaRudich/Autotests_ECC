@@ -29,6 +29,7 @@ import com.scalepoint.automation.shared.VoucherInfo;
 import com.scalepoint.automation.shared.XpriceInfo;
 import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.*;
+import com.scalepoint.automation.tests.widget.LoginFlow;
 import com.scalepoint.automation.utils.GridInfoUtils;
 import com.scalepoint.automation.utils.JavascriptHelper;
 import com.scalepoint.automation.utils.SystemUtils;
@@ -99,7 +100,7 @@ import static com.scalepoint.automation.utils.listeners.DefaultFTOperations.getD
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
 @Listeners({SuiteListener.class, OrderRandomizer.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class, LoginFlow.class})
 public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected static final String TEST_LINE_DESCRIPTION = "Test description line åæéø";
@@ -162,6 +163,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     protected MailserviceMock.MailserviceStub mailserviceStub;
+
+    @Autowired
+    protected LoginFlow loginFlow;
 
     @BeforeClass(alwaysRun = true)
     public void updateFeatureToggle(ITestContext context){
@@ -327,115 +331,62 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
 
-        LoginPage loginPage = Page.to(LoginPage.class);
-
-        if(user.getType().equals(SCALEPOINT_ID))
-        {
-
-            loginPage
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword());
-
-            ClaimApi.createClaim(claim, 1);
-            return Page.to(SettlementPage.class);
-
-        }else {
-
-            ClaimApi claimApi = new ClaimApi(user);
-            claimApi.createClaim(claim, policyType);
-            return redirectToSettlementPage(user);
-        }
-
-
+        return loginFlow.loginAndCreateClaim(user, claim, policyType);
     }
 
     protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
-        return loginAndCreateClaim(user, claim, null);
+
+        return loginFlow.loginAndCreateClaim(user, claim);
     }
 
     protected EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
-        loginAndCreateClaim(user, claim, null);
-        return BaseDialog.at(EditPolicyTypeDialog.class);
+
+        return loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim);
     }
 
     protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
-        Token token = new OauthTestAccountsApi().sendRequest().getToken();
 
-        Response response = new CreateClaimService(token).addClaim(claimRequest).getResponse();
-
-        CurrentUser.setClaimId(String.valueOf(databaseApi.getUserIdByClaimNumber(claimRequest.getCaseNumber())));
-
-        return response.jsonPath().get("token");
+        return loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
     }
 
     protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
-        Token token = new OauthTestAccountsApi().sendRequest().getToken();
-        return new CreateClaimService(token).addClaim(claimRequest);
+
+        return loginFlow.createCwaClaim(claimRequest);
     }
 
     protected String createFNOLClaimAndGetClaimToken(ClaimRequest itemizationRequest, ClaimRequest createClaimRequest){
-        itemizationRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
-        String test = unifiedIntegrationService.createItemizationCaseFNOL(createClaimRequest.getCountry(), createClaimRequest.getTenant(), itemizationRequest);
-        createClaimRequest.setItemizationCaseReference(test);
-        createClaimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        return unifiedIntegrationService.createClaimFNOL(createClaimRequest, databaseApi);
+
+        return loginFlow.createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
     }
 
     protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
 
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            Page.to(LoginPage.class)
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword(), MyPage.class);
-
-        }else {
-
-            login(user, null);
-        }
-
-        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
-
-        return new SettlementPage();
+        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken);
     }
 
     protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
 
-        if(user.getType().equals(SCALEPOINT_ID)){
-
-            Page.to(LoginPage.class)
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword(), MyPage.class);
-        }else {
-
-            login(user, null);
-        }
-
-        Browser.open(getEccUrl() + "Integration/Open?token=" + claimToken);
-
-        return Page.at(returnPageClass);
+        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken, returnPageClass);
     }
 
     protected MyPage login(User user) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, MyPage.class);
+
+        return loginFlow.login(user);
     }
 
     protected <T extends Page> T login(User user, Class<T> returnPageClass) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass);
+
+        return loginFlow.login(user, returnPageClass);
     }
 
     protected <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass, parameters);
+
+        return loginFlow.login(user, returnPageClass, parameters);
     }
 
     protected SuppliersPage loginToEccAdmin(User user) {
-        return login(user)
-                .getMainMenu()
-                .toEccAdminPage();
+
+        return loginFlow.loginToEccAdmin(user);
     }
 
     protected GenerateWidgetPage openGenerateWidgetPage(){
@@ -450,19 +401,17 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     }
 
     protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
-        return openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false);
+
+        return loginFlow.openEditReasonPage(insuranceCompany, showDisabled);
     }
 
     protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
-        return login(getSystemUser(), AdminPage.class)
-                .to(EditReasonsPage.class)
-                .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
-                .assertEditReasonsFormVisible();
+
+        return loginFlow.openEditReasonPage(insuranceCompany, reasonType, showDisabled);
     }
     protected SettlementPage redirectToSettlementPage(User user){
 
-        return login(user)
-                .to(SettlementPage.class);
+        return loginFlow.redirectToSettlementPage(user);
     }
 
     public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {
