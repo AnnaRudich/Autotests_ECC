@@ -86,6 +86,7 @@ public class CompaniesMappingDialog extends BaseDialog {
     public LossSheetTemplatesPage clickSaveButton(){
 
         buttons.find(Condition.exactText("Save")).click();
+        Wait.waitForSpinnerToDisappear();
         Wait.waitForAjaxCompletedAndJsRecalculation();
         return Page.at(LossSheetTemplatesPage.class);
     }

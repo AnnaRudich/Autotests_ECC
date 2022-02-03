@@ -8,6 +8,7 @@ import com.scalepoint.automation.pageobjects.pages.CustomerDetailsPage;
 import com.scalepoint.automation.pageobjects.pages.Page;
 import com.scalepoint.automation.pageobjects.pages.SettlementPage;
 import com.scalepoint.automation.utils.OperationalUtils;
+import com.scalepoint.automation.utils.Wait;
 import lombok.Getter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -130,6 +131,8 @@ public class SettlementSummary extends Module {
                     .should(Condition.visible)
                     .click();
         }
+
+        Wait.waitForAjaxCompletedAndJsRecalculation();
         return this;
     }
 
@@ -155,7 +158,6 @@ public class SettlementSummary extends Module {
 
     public RepairPanel getRepairPanel(){
 
-        expand();
         return new RepairPanel();
     }
 
@@ -182,7 +184,6 @@ public class SettlementSummary extends Module {
 
     public SelfRiskDialog editSelfRisk(){
 
-        expand();
         hoverAndClick($(By.xpath("//a[contains(text(), 'Selvrisiko:')]")));
         return BaseDialog.at(SelfRiskDialog.class);
     }
@@ -202,12 +203,12 @@ public class SettlementSummary extends Module {
 
         RepairPanel(){
             ElementsCollection  repairPanelItems = $(repairPanelPath).findAll(repairPanelItemsPath);
-            repairPrice = OperationalUtils.toBigDecimal(repairPanelItems.get(0).getText());
-            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(repairPanelItems.get(1).getText());
-            subtractedFromStatement = OperationalUtils.toBigDecimal(repairPanelItems.get(2).getText());
-            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(repairPanelItems.get(3).getText());
-            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(4).getText());
-            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(repairPanelItems.get(5).getText());
+            repairPrice = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(0)).getText());
+            selfRiskTakenByServicePartner = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(1)).getText());
+            subtractedFromStatement = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(2)).getText());
+            payBackOverCollectedDeductible = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(3)).getText());
+            selfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(4)).getText());
+            outstandingSelfRiskTakenByInsureanceCompany = OperationalUtils.toBigDecimal(Wait.waitNumberParseable(repairPanelItems.get(5)).getText());
         }
 
         static boolean isDisplayed(){

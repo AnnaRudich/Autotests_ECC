@@ -1,6 +1,5 @@
 package com.scalepoint.automation.tests.suppliermanager;
 
-import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.scalepoint.automation.pageobjects.pages.MailsPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.testGroups.TestGroups;
@@ -13,10 +12,6 @@ import com.scalepoint.automation.utils.data.entity.input.LossSheetTemplates;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.util.List;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 
 @RequiredSetting(type = FTSetting.SELF_SERVICE_EXCEL_CHOICE)
 public class LossSheetTemplatesTests extends BaseTest {
@@ -40,7 +35,7 @@ public class LossSheetTemplatesTests extends BaseTest {
                 .selectTemplate()
                 .doAssert(lossSheetTemplatesPage ->
                         lossSheetTemplatesPage.assertActive())
-                .reasignTemplate(user.getCompanyName(), claimSheetDKExcel2003v1TemplateName)
+                .reassignTemplate(user.getCompanyName(), claimSheetDKExcel2003v1TemplateName)
                 .doAssert(lossSheetTemplatesPage ->
                         lossSheetTemplatesPage.assertInUse())
                 .logout();
@@ -69,14 +64,14 @@ public class LossSheetTemplatesTests extends BaseTest {
                 .selectTemplate()
                 .doAssert(lstPage ->
                         lstPage.assertActive())
-                .reasignTemplate(user.getCompanyName(), claimSheetDKExcel2003v1TemplateName)
+                .reassignTemplate(user.getCompanyName(), claimSheetDKExcel2003v1TemplateName)
                 .doAssert(lstPage ->
                         lstPage.assertInUse())
                 .getTemplateRowByName(claimSheetDKExcel2003v11TemplateName)
                 .selectTemplate()
                 .doAssert(lstPage ->
                         lstPage.assertActive())
-                .reasignTemplate(user.getCompanyName(), claimSheetDKExcel2003v11TemplateName)
+                .reassignTemplate(user.getCompanyName(), claimSheetDKExcel2003v11TemplateName)
                 .doAssert(lstPage ->
                         lstPage.assertInUse())
                 .logout();
@@ -192,8 +187,5 @@ public class LossSheetTemplatesTests extends BaseTest {
                 .send()
                 .toMailsPage()
                 .doAssert(mailsPage -> mailsPage.isMailExist(MailsPage.MailType.LOSS_ADJUSTER_SHEET));
-
-        List<LoggedRequest> testing = wireMock.find(postRequestedFor(urlPathEqualTo("/api/v1/email")));
-        System.out.println();
     }
 }
