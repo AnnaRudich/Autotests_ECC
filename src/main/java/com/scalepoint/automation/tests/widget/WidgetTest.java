@@ -6,16 +6,20 @@ import com.scalepoint.automation.pageobjects.pages.selfService2.SelfService2Page
 import com.scalepoint.automation.pageobjects.pages.testWidget.TestWidgetPage;
 import com.scalepoint.automation.services.externalapi.ftemplates.FTSetting;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
+import com.scalepoint.automation.services.usersmanagement.CompanyCode;
 import com.scalepoint.automation.testGroups.TestGroups;
 import com.scalepoint.automation.tests.BaseTest;
 import com.scalepoint.automation.utils.Configuration;
 import com.scalepoint.automation.utils.Constants;
+import com.scalepoint.automation.utils.annotations.UserAttributes;
 import com.scalepoint.automation.utils.annotations.functemplate.RequiredSetting;
 import com.scalepoint.automation.utils.data.TestData;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.ClaimItem;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
+import io.restassured.http.ContentType;
+import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -27,6 +31,7 @@ import java.util.regex.Pattern;
 import static com.scalepoint.automation.utils.Constants.JANUARY;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
+import static io.restassured.RestAssured.given;
 
 @RequiredSetting(type = FTSetting.USE_SELF_SERVICE2)
 @RequiredSetting(type = FTSetting.INCLUDE_NEW_PRICE_COLUMN_IN_SELF_SERVICE)
@@ -126,6 +131,50 @@ public class WidgetTest extends BaseTest {
                 .doAssert(ss2Page -> ss2Page.assertAlertIsDisplayed());
     }
 
+
+    @Test(groups = {TestGroups.WIDGET, TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
+            description = "Verify flow when acceptance text and checkbox for widget is enabled")
+    public void test(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, ClaimItem claimItem, Claim claim) {
+
+
+        loginFlow.loginSPID(user);
+
+//        given().log().all()
+//                .when()
+//                .formParam("username", "f0a@future50.scalepoint.com")
+//                .formParam("password", "1234QWER#")
+//                .formParam("loginType", "LoginPage")
+//                .post("https://test-accounts.scalepoint.com/login")
+//                .then().log().all()
+//                .extract().header("Location");
+
+//                .then()
+//                .statusCode(HttpStatus.SC_OK)
+//                .extract().response()
+//                .getBody().print();
+//        String tenant = user.getCompanyName().toLowerCase();
+//
+//        ClaimRequest itemizationRequest = setTenantAndCompanyCode(TestData.getClaimRequestItemizationCaseTopdanmarkFNOL(), tenant);
+//        ClaimRequest createClaimRequest = setTenantAndCompanyCode(TestData.getClaimRequestCreateClaimTopdanmarkFNOL(), tenant);
+//
+//        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
+//        String token = unifiedIntegrationService
+//                .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), itemizationRequest);
+//
+//        createItemWidget(itemizationRequest, claimItem, token)
+//                .doAssert(selfService2Page -> selfService2Page.assertSendButtonDisabled())
+//                .acceptStatement()
+//                .doAssert(selfService2Page -> selfService2Page.assertSendButtonEnabled())
+//                .sendResponseToEcc();
+//
+//        createAndVerifyClaimWidget(user, unifiedIntegrationService, createClaimRequest, token);
+//
+//        createItemSelfService(user, claim, claimItem)
+//                .sendResponseToEcc();
+//
+//        createAndVerifyClaimSelfService(user);
+    }
+
     private TestWidgetPage createItemWidget(ClaimRequest itemizationRequest, ClaimItem claimItem, String token){
 
         return openGenerateWidgetPage()
@@ -143,7 +192,7 @@ public class WidgetTest extends BaseTest {
 
     private SelfService2Page createItemSelfService(User user, Claim claim, ClaimItem claimItem){
 
-        return loginAndCreateClaim(user, claim)
+        return loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -164,13 +213,13 @@ public class WidgetTest extends BaseTest {
 
         token = unifiedIntegrationService.createClaimFNOL(claimRequest, databaseApi);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
+        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token, SettlementPage.class)
                 .doAssert(settlementPage -> settlementPage.assertItemIsPresent(descriptionWidget));
     }
 
     private SettlementPage createAndVerifyClaimSelfService(User user){
 
-        return login(user)
+        return loginFlow.login(user)
                 .openActiveRecentClaim()
                 .doAssert(settlementPage -> settlementPage.assertItemIsPresent(descriptionSelfService));
 

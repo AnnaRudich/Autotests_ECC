@@ -137,7 +137,7 @@ public class FillCalcDepr2RulesAndDepreciationTests extends BaseTest {
     }
 
     private SettlementDialog createClaimAndPrepareSid(User user, Claim claim, ClaimItem claimItem) {
-        return loginAndCreateClaim(user, claim).
+        return loginFlow.loginAndCreateClaim(user, claim).
                 openSid().
                 setDescription(claimItem.getTextFieldSP()).
                 setCustomerDemand(Constants.PRICE_100_000).

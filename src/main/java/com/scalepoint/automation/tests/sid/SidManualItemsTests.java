@@ -53,7 +53,7 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it is possible to select categories")
     public void ecc3144_2_selectCategory(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
 
         String currentUrl = Browser.driver().getCurrentUrl();
 
@@ -110,7 +110,7 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     public void ecc3144_5_manualDepreciation(User user, Claim claim, ClaimItem claimItem, Voucher voucher) {
         PseudoCategory pseudoCategory = new VoucherAgreementApi(user).createVoucher(voucher);
 
-        SettlementDialog dialog = loginAndCreateClaim(user, claim)
+        SettlementDialog dialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(pseudoCategory, sid -> {
                     sid.withText(claimItem.getTextFieldSP())
                             .withCustomerDemandPrice(Constants.PRICE_500)
@@ -417,7 +417,7 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
     @Test(enabled = false, dataProvider = "testDataProvider",
             description = "ECC-3144 Verify it's possible to disable age checkbox")
     public void ecc3144_24_disableAgeAndSave(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .enableAge()
@@ -440,7 +440,7 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "possible to add one manual line when SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM FeatureToggle is ON")
     public void addOneManualLineWhenMultipleAddIsOn(User user, Claim claim, ClaimItem claimItem){
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .setValuation(NEW_PRICE)
@@ -463,7 +463,7 @@ public class SidManualItemsTests extends SidManualItemsSharedTests {
             description = "possible to add one manual line when SID_ADD_BUTTON_ON_NEW_MANUAL_ITEM FeatureToggle is ON")
     public void E2E_addButtonOnNewManualItem(User user, Claim claim, ClaimItem claimItem1, ClaimItem claimItem2){
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem1)
                 .setValuation(NEW_PRICE)

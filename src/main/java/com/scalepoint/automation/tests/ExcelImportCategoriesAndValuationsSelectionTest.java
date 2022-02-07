@@ -23,7 +23,7 @@ public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
     public void autoCategorizationInExcelImport(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = "iphone";
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPathWithoutCatAuto())
                 .findClaimLine(claimLineDescription)
                 .doAssert(claimLine -> claimLine.assertCategory(claimItem.getCategoryMobilePhones().getGroupName(), claimItem.getCategoryMobilePhones().getCategoryName()));
@@ -40,7 +40,7 @@ public class ExcelImportCategoriesAndValuationsSelectionTest extends BaseTest {
     public void selectCategoryManuallyInExcelImportDialog(User user, Claim claim, ClaimItem claimItem) {
         String claimLineDescription = "abrakadabra1";
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .startImportExcelFile(claimItem.getExcelPathWithoutCatNoAuto())
                 .selectCategoryAndSubcategoryForTheErrorLine(claimItem.getCategoryBicycles().getGroupName(),
                         claimItem.getCategoryBicycles().getCategoryName(), claimLineDescription)

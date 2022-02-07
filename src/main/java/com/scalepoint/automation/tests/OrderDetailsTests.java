@@ -47,7 +47,7 @@ public class OrderDetailsTests extends BaseTest {
     public void charlie540_ordersPageIsEmpty(User user, Claim claim, Translations translations) {
         String companyName = user.getCompanyName();
 
-        OrderDetailsPage ordersPage = loginAndCreateClaim(user, claim).
+        OrderDetailsPage ordersPage = loginFlow.loginAndCreateClaim(user, claim).
                 toOrdersDetailsPage();
 
         OrderDetails orderDetails = translations.getOrderDetails();
@@ -98,7 +98,7 @@ public class OrderDetailsTests extends BaseTest {
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Cancel order")
     public void charlie540_6_ordersPageWhenWeCancelOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimItem.getSetDialogTextMatch())
                 .chooseCategory(claimItem.getCategoryMobilePhones())
@@ -142,7 +142,7 @@ public class OrderDetailsTests extends BaseTest {
     @Test(groups = {TestGroups.ORDER_DETAILS}, dataProvider = "testDataProvider",
             description = "CHARLIE-540 ME: Order page; Recomplete claim")
     public void charlie540_ordersPageWhenWeRecompleteAfterOrder(User user, Claim claim, ClaimItem claimItem, Translations translations) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimItem.getSetDialogTextMatch())
                 .chooseCategory(claimItem.getCategoryMobilePhones())
@@ -186,7 +186,7 @@ public class OrderDetailsTests extends BaseTest {
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -215,7 +215,7 @@ public class OrderDetailsTests extends BaseTest {
         Boolean isEvoucher = false;
         VoucherInfo voucherInfo = getVoucherInfo(isEvoucher);
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSid()
                 .setBaseData(claimItem)
                 .closeSidWithOk()
@@ -311,7 +311,7 @@ public class OrderDetailsTests extends BaseTest {
                                                           BigDecimal secondItemUnitPrice){
         String existingVoucher = voucher.getExistingVoucherForDistances();
 
-        return loginAndCreateClaim(user, claim)
+        return loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchByProductName(claimItem.getSetDialogTextMatch())
                 .chooseCategory(claimItem.getCategoryMobilePhones())

@@ -51,7 +51,7 @@ public class CommunicationDesignerTests extends CommunicationDesignerBaseTests {
         User user = getLisOfObjectByClass(parameters, User.class).get(0);
         Claim claim = getLisOfObjectByClass(parameters, Claim.class).get(0);
 
-        loginAndCreateClaim(user, claim);
+        loginFlow.loginAndCreateClaim(user, claim);
     }
 
     @CommunicationDesignerCleanUp

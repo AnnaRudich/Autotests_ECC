@@ -136,7 +136,7 @@ public class FraudAlertTest extends FraudAlertBase {
     private SettlementPage productSearch(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .toTextSearchPage()
                 .searchByProductName(SONY_HDR_CX450)
                 .chooseCategory(claimItem.getCategoryVideoCamera())
@@ -155,7 +155,7 @@ public class FraudAlertTest extends FraudAlertBase {
     private SettlementPage manualClaimHandlingAdd(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -172,7 +172,7 @@ public class FraudAlertTest extends FraudAlertBase {
     private SettlementPage manualClaimHandlingRemove(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -191,7 +191,7 @@ public class FraudAlertTest extends FraudAlertBase {
     private SettlementPage manualClaimHandlingEdit(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -213,7 +213,7 @@ public class FraudAlertTest extends FraudAlertBase {
     private SettlementPage selfService(ClaimRequest claimRequest, User user, Claim claim, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -232,13 +232,13 @@ public class FraudAlertTest extends FraudAlertBase {
 
         fraudStatus(events.get(0), claimRequest.getCaseNumber(),fraudStatus);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token);
+        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token);
     }
 
     private SettlementPage importExcel(ClaimRequest claimRequest, User user, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .importExcelFile(excelImportPath);
 
         List<ClaimLineChanged> events = fraudAlertStubs

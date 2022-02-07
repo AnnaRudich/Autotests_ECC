@@ -26,7 +26,7 @@ public class InsCompanyTest extends BaseTest {
 
         InsuranceCompany insuranceCompany = getLisOfObjectByClass(parameters, InsuranceCompany.class).get(0);
 
-        login(getSystemUser())
+        loginFlow.login(getSystemUser())
                 .to(InsCompaniesPage.class)
                 .toAddNewCompanyPage()
                 .createCompany(insuranceCompany);

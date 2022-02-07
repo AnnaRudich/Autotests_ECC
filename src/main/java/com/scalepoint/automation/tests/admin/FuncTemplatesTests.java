@@ -96,7 +96,7 @@ public class FuncTemplatesTests extends BaseTest {
     }
 
     private FunctionalTemplatesPage createNewTemplate(String ftName) {
-        return login(getSystemUser()).
+        return loginFlow.login(getSystemUser()).
                 to(FunctionalTemplatesPage.class).
                 copyTemplate(DEFAULT_COPY_TEMPLATE).
                 setName(ftName).

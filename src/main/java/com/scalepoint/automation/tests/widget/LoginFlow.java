@@ -16,6 +16,7 @@ import com.scalepoint.automation.services.externalapi.OauthTestAccountsApi;
 import com.scalepoint.automation.services.restService.CreateClaimService;
 import com.scalepoint.automation.services.restService.UnifiedIntegrationService;
 import com.scalepoint.automation.utils.data.entity.credentials.User;
+import com.scalepoint.automation.utils.data.entity.eventsApiEntity.settled.Settlement;
 import com.scalepoint.automation.utils.data.entity.input.Claim;
 import com.scalepoint.automation.utils.data.entity.input.InsuranceCompany;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
@@ -27,12 +28,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.scalepoint.automation.services.usersmanagement.UsersManager.getSystemUser;
 import static com.scalepoint.automation.utils.Configuration.getEccUrl;
 import static com.scalepoint.automation.utils.DateUtils.ISO8601;
 import static com.scalepoint.automation.utils.DateUtils.format;
 import static com.scalepoint.automation.utils.data.entity.credentials.User.UserType.SCALEPOINT_ID;
+import static io.restassured.RestAssured.given;
 
 
 @Component
@@ -43,24 +48,21 @@ public class LoginFlow {
 
     public SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
 
-        LoginPage loginPage = Page.to(LoginPage.class);
+        MyPage myPage;
 
         if(user.getType().equals(SCALEPOINT_ID))
         {
 
-            loginPage
-                    .loginViaScalepointId()
-                    .login(user.getLogin(), user.getPassword());
-
+            myPage = loginSPID(user);
             ClaimApi.createClaim(claim, 1);
-            return Page.to(SettlementPage.class);
-
         }else {
 
+            myPage =  login(user);
             ClaimApi claimApi = new ClaimApi(user);
             claimApi.createClaim(claim, policyType);
-            return redirectToSettlementPage(user);
         }
+
+        return myPage.to(SettlementPage.class);
     }
 
     public SettlementPage loginAndCreateClaim(User user, Claim claim) {
@@ -142,6 +144,15 @@ public class LoginFlow {
         return AuthenticationApi.createServerApi().login(user, MyPage.class);
     }
 
+    public MyPage loginSPID(User user) {
+
+        Page.to(LoginPage.class)
+                .loginViaScalepointId()
+                .login(user);
+
+        return Page.to(MyPage.class);
+    }
+
     public  <T extends Page> T login(User user, Class<T> returnPageClass) {
 
         Page.to(LoginPage.class);
@@ -166,12 +177,6 @@ public class LoginFlow {
                 .to(EditReasonsPage.class)
                 .applyFilters(insuranceCompany.getFtTrygHolding(), reasonType, showDisabled)
                 .assertEditReasonsFormVisible();
-    }
-
-    public SettlementPage redirectToSettlementPage(User user){
-
-        return login(user)
-                .to(SettlementPage.class);
     }
 
     public EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {

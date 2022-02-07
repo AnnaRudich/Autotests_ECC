@@ -9,7 +9,7 @@ import static com.scalepoint.automation.pageobjects.pages.MailsPage.MailType.SET
 public class CompleteClaimExternallySharedTests extends BaseTest {
 
     public void completeClaimExternallyFromSettlementPageSharedTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .completeClaimWithoutMail(claim)
                 .doAssert(myPage ->
                         myPage.assertClaimHasStatus(claim.getStatusClosedExternally())

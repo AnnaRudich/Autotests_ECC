@@ -39,7 +39,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
                     " drop-down for choosing reason is enabled")
     public void charlie508_1_ImportExcelWithDiscretionaryValuation(@UserAttributes(company = TRYGFORSIKRING) User trygUser,
                                                                    Claim claim) {
-        loginAndCreateClaim(trygUser, claim)
+        loginFlow.loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
                 .findClaimLine("test1")
                 .editLine()
@@ -65,7 +65,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
         String claimLineDescription = "APPLE iphone 1";
         String maxCoverageReason = translations.getDiscretionaryReason().getMaxCoverage();
 
-        loginAndCreateClaim(trygUser, claim)
+        loginFlow.loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
                 .editLine()
@@ -101,7 +101,7 @@ public class ImportExcelDiscretionaryReasonTests extends BaseTest {
         String claimLineDescription = "APPLE iphone 2";
         String maxCoverageReason = translations.getDiscretionaryReason().getMaxCoverage();
 
-        loginAndCreateClaim(trygUser, claim)
+        loginFlow.loginAndCreateClaim(trygUser, claim)
                 .importExcelFile(excelImportPath)
                 .findClaimLine(claimLineDescription)
                 .editLine()

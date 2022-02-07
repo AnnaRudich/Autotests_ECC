@@ -13,7 +13,7 @@ public class ClaimSharedTests extends BaseTest {
     private final String EMPTY = "";
 
     public void reopenSavedClaimSharedTest(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
                 .startReopenClaimWhenViewModeIsEnabled()
@@ -27,7 +27,7 @@ public class ClaimSharedTests extends BaseTest {
      * THEN: "Cancelled" is the status of C1
      */
     public void cancelSavedClaimSharedTest(User user, Claim claim) throws Exception {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .saveClaim(claim)
                 .openRecentClaim()
                 .cancelClaim()
@@ -37,7 +37,7 @@ public class ClaimSharedTests extends BaseTest {
 
     public void completeClaimWithMailSharedTest(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeWithEmail(claim, databaseApi, true)

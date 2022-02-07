@@ -26,7 +26,7 @@ public class VoucherPredictionTest extends BaseTest {
             description = "MIKE-41 - call Improved voucher match service is SID, manual line")
     public void mike41_improvedVoucherMatchForManualLines(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(sid -> sid
                         .withText(lineDescription)
                         .withCategory(claimItem.getCategoryBicycles())
@@ -44,7 +44,7 @@ public class VoucherPredictionTest extends BaseTest {
             description = "MIKE-42 - call Improved voucher match service in SelfService")
     public void mike41_improvedVoucherMatchForSelfService(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .savePoint(SettlementPage.class)
                 .toMailsPage()
@@ -73,7 +73,7 @@ public class VoucherPredictionTest extends BaseTest {
             description = "MIKE-17 - call Improved voucher match service in excel")
     public void mike41_improvedVoucherMatchForExcelImport(User user, Claim claim, ClaimItem claimItem) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .importExcelFile(claimItem.getExcelPathVoucherPrediction())
                 .doAssert(sid -> sid.assertItemIsPresent(lineDescription))
                 .findClaimLine(lineDescription)

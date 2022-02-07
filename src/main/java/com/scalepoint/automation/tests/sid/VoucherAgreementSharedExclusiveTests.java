@@ -86,7 +86,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
 
         loginAndCheckVoucherPresence(trygUser, claim, claimItem, claim.getPolicyTypeTrygUser(), voucherName, true);
 
-        loginToEccAdmin(trygUser)
+        loginFlow.loginToEccAdmin(trygUser)
                 .editSupplier(supplier.getSupplierName())
                 .selectAgreementsTab()
                 .doWithAgreement(voucherName, AgreementsTab.ActionType.LEAVE)
@@ -101,7 +101,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
     }
 
     private void createVoucherAgreement(User user, Supplier supplier, Voucher voucher, PseudoCategory pseudoCategory) {
-        SuppliersPage suppliersPage = loginToEccAdmin(user);
+        SuppliersPage suppliersPage = loginFlow.loginToEccAdmin(user);
 
         SharedEccAdminFlows.createVoucherAgreement(SharedEccAdminFlows.createSupplier(suppliersPage, supplier),
                 SharedEccAdminFlows.VoucherAgreementData
@@ -113,7 +113,7 @@ public class VoucherAgreementSharedExclusiveTests extends BaseTest {
     }
 
     private void loginAndCheckVoucherPresence(User userToLogin, Claim claim, ClaimItem claimItem, String policy, String voucherName, boolean mustBePresent) {
-        loginAndCreateClaim(userToLogin, claim, policy)
+        loginFlow.loginAndCreateClaim(userToLogin, claim, policy)
                 .openSidAndFill(sid -> sid.withCategory(claimItem.getCategoryBabyItems()))
                 .doAssert(sid -> {
                     if (mustBePresent) {

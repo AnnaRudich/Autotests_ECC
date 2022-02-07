@@ -20,7 +20,7 @@ public class CompleteClaimExternallyTests extends CompleteClaimExternallySharedT
                     "Possible to Complete claim Externally from Base info page. Completed externally claim is added to the latest claims list with Closed Externally status")
     public void charlie515_completeClaimExternallyFromBaseInfoPage(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toCompleteClaimPage()
                 .fillClaimForm(claim)
                 .completeExternally(claim, databaseApi)

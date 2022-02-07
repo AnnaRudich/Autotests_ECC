@@ -31,7 +31,7 @@ public class SelfServiceTest extends BaseTest {
     @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Add line. Required fields only. Category auto match")
     public void charlie504_addSSLineWithoutDocsAndNotes(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -66,7 +66,7 @@ public class SelfServiceTest extends BaseTest {
     @Test(groups = {TestGroups.SELF_SERVICE}, dataProvider = "testDataProvider",
             description = "CHARLIE-504 Self Service sending. Reloaded data saved")
     public void charlie504_reloadedDataSaved(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -106,7 +106,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_USED_NEW_COLUMN_IN_SELF_SERVICE)
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_deleteLine(User user, Claim claim) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -137,7 +137,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_submitLine_autoImport(User user, Claim claim) {
 
-        String description = loginAndCreateClaim(user, claim)
+        String description = loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -158,7 +158,7 @@ public class SelfServiceTest extends BaseTest {
 
         new SelfServicePage().selectSubmitOption();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim()
                 .parseFirstClaimLine();
 
@@ -176,7 +176,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_saveSelfService(User user, Claim claim) {
 
-        SelfServiceGridRow selfServiceGridRow = loginAndCreateClaim(user, claim)
+        SelfServiceGridRow selfServiceGridRow = loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -200,7 +200,7 @@ public class SelfServiceTest extends BaseTest {
                 .selfServicePage()
                 .selectCloseOption();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim();
 
         new SettlementPage().doAssert(asserts -> {
@@ -217,7 +217,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_requiredFieldsValidation(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -251,7 +251,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_addLineWithDocumentsUploaded(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -270,7 +270,7 @@ public class SelfServiceTest extends BaseTest {
                 .selfServicePage()
                 .selectSubmitOption();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim()
                 .parseFirstClaimLine()
                 .doAssert(SettlementPage.ClaimLine.Asserts::assertAttachmentsIconIsDisplayed);
@@ -285,7 +285,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_addLineWithCustomerComment(User user, Claim claim) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -304,7 +304,7 @@ public class SelfServiceTest extends BaseTest {
                 .selfServicePage()
                 .selectSubmitOption();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim()
                 .toNotesPage()
 
@@ -323,7 +323,7 @@ public class SelfServiceTest extends BaseTest {
     @RequiredSetting(type = FTSetting.INCLUDE_CUSTOMER_DEMAND_COLUMN_IN_SELF_SERVICE)
     public void charlie504_addLineWithCustomerLineNote(User user, Claim claim) {
 
-        SelfServiceGridRow selfServiceGridRow = loginAndCreateClaim(user, claim)
+        SelfServiceGridRow selfServiceGridRow = loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -346,7 +346,7 @@ public class SelfServiceTest extends BaseTest {
                 .addCustomerNote("customer note")
                 .selectSubmitOption();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim()
                 .parseFirstClaimLine();
 

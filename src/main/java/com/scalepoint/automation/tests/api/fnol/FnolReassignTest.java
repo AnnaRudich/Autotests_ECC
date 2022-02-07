@@ -95,7 +95,7 @@ public class FnolReassignTest extends BaseTest {
         new UnifiedIntegrationService()
                 .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), secondCreateClaimRequest);
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2
@@ -121,7 +121,7 @@ public class FnolReassignTest extends BaseTest {
         new UnifiedIntegrationService()
                 .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), secondCreateClaimRequest);
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2
@@ -145,7 +145,7 @@ public class FnolReassignTest extends BaseTest {
                                          ClaimRequest firstCreateClaimRequest, ClaimRequest secondCreateClaimRequest,
                                          FnolReassignTestData fnolReassignTestData) {
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .cancelClaim();
 
@@ -175,7 +175,7 @@ public class FnolReassignTest extends BaseTest {
                                          ClaimRequest firstCreateClaimRequest, ClaimRequest secondCreateClaimRequest,
                                          FnolReassignTestData fnolReassignTestData) {
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2
@@ -205,7 +205,7 @@ public class FnolReassignTest extends BaseTest {
                                         ClaimRequest firstCreateClaimRequest, ClaimRequest secondCreateClaimRequest,
                                         FnolReassignTestData fnolReassignTestData) {
 
-        CustomerDetailsPage2 customerDetailsPage2 = login(user)
+        CustomerDetailsPage2 customerDetailsPage2 = loginFlow.login(user)
                 .to(CustomerDetailsPage2.class, databaseApi.getUserIdByClaimNumber(firstCreateClaimRequest.getCaseNumber()))
                 .doAssert(customerDetailsPage -> customerDetailsPage.assertClaimNumber(firstCreateClaimRequest.getCaseNumber()));
         customerDetailsPage2

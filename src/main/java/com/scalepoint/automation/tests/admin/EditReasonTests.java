@@ -256,7 +256,7 @@ public class EditReasonTests extends BaseTest {
                 .assertReasonDisabled(reason)
                 .logout();
 
-        login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
+        loginFlow.login(trygUser, CustomerDetailsPage.class, CurrentUser.getClaimId())
                 .startReopenClaimWhenViewModeIsEnabled()
                 .reopenClaim()
                 .findClaimLine(reason)
@@ -374,7 +374,7 @@ public class EditReasonTests extends BaseTest {
     private void addReasonToClaimAndLogout(User trygUser, Claim claim, ClaimItem claimItem, String reason,
                                            String description, Double customerDemandPrice, String month, int depreciation,
                                            Double discretionaryReasonPrice, Double newPrice) {
-        loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
+        loginFlow.loginAndCreateClaimToEditPolicyDialog(trygUser, claim)
                 .cancel()
                 .openSid()
                 .setDescription(description)

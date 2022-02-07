@@ -31,6 +31,11 @@ public class Browser {
         return driver().manage().getCookies().stream().collect(Collectors.toMap(Cookie::getName, Cookie::getValue, (x1, x2) -> x1));
     }
 
+    public static String getUrl(){
+
+        return driver().getCurrentUrl();
+    }
+
     public static boolean hasDriver() {
         return holder.get() != null;
     }

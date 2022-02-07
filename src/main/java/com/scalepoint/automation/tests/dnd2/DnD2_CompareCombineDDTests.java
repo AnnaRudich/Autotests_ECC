@@ -59,7 +59,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(priceConditions));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
@@ -91,7 +91,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     public void addFromCatalogWhereProductPriceIsEqualMarketPriceAndHaveOnlyVoucherReplacementTest(User user, Claim claim, int deprecationValue) {
         ProductInfo productInfo = SolrApi.findProduct(getXpricesForConditions(ORDERABLE, PRODUCT_AS_VOUCHER_ONLY, INVOICE_PRICE_EQUALS_MARKET_PRICE));
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .toTextSearchPage()
                 .searchBySku(productInfo.getSku())
                 .sortOrderableFirst()
@@ -114,7 +114,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
             description = "Add claim item manually and check if new price, customer demand are discounted")
     public void charlie586_addManually(User user, Claim claim, ClaimItem claimItem, int deprecationValue) {
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems())
                         .withNewPrice(claimItem.getTrygNewPrice())
                         .withCustomerDemandPrice(claimItem.getCustomerDemand())
@@ -147,7 +147,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
 
         Double initialCustomerDemand = claimItem.getCustomerDemand();
 
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setCustomerDemand(initialCustomerDemand)
@@ -170,7 +170,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
             description = "Add items manually and check if depreciation is lower than voucher discount correct item is selected")
     public void charlie586_addManuallyWithVoucherAndDepreciationLowerThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems()));
         SettlementPage settlementPage = settlementDialog.setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP())
@@ -194,7 +194,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
             description = "Add items manually and check if depreciation is bigger than voucher discount correct item is selected")
     public void charlie586_addManuallyWithVoucherAndDepreciationHigherThanVoucherDiscount(User user, Claim claim, ClaimItem claimItem) {
 
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(cat -> cat.withCategory(claimItem.getCategoryBabyItems()))
                 .setNewPrice(claimItem.getTrygNewPrice())
                 .setDescription(claimItem.getTextFieldSP());
@@ -214,7 +214,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, dataProvider = "testDataProvider",
             description = "Add item manually with comparision of dd disabled, check if both are depreciated and lower price is selected")
     public void charlie586_addManuallyWithComparisionOfDiscountAndDeprecationDisabled(User user, Claim claim, ClaimItem claimItem) {
-        SettlementDialog settlementDialog = loginAndCreateClaim(user, claim)
+        SettlementDialog settlementDialog = loginFlow.loginAndCreateClaim(user, claim)
                 .openSidAndFill(
                         cat -> cat.withCategory(claimItem.getCategoryBabyItems())
                                 .withNewPrice(claimItem.getTrygNewPrice())
@@ -237,7 +237,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
     @Test(groups = {TestGroups.DND2, TestGroups.COMPARE_COMBINE_DD}, enabled = false, dataProvider = "testDataProvider",
             description = "Add item from self service with reduction rule and check if depreciation is applied")
     public void charlie586_addFromSelfServiceWithRedRule(User user, Claim claim, ClaimItem claimItem) {
-        loginAndCreateClaim(user, claim)
+        loginFlow.loginAndCreateClaim(user, claim)
                 .requestSelfServiceWithEnabledAutoClose(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -251,7 +251,7 @@ public class DnD2_CompareCombineDDTests extends BaseTest {
                 .saveItem()
                 .sendResponseToEcc();
 
-        login(user)
+        loginFlow.login(user)
                 .openActiveRecentClaim();
         new SettlementSummary().ensureAuditInfoPanelVisible()
                 .checkStatusFromAudit("APPROVED");

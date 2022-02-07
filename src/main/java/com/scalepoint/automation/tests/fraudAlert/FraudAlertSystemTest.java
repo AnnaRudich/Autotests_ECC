@@ -167,7 +167,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     private SettlementPage productSearch(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .toTextSearchPage()
                 .searchByProductName(SONY_HDR_CX450)
                 .chooseCategory(claimItem.getCategoryVideoCamera())
@@ -200,7 +200,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     private SettlementPage manualClaimHandlingAdd(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -231,7 +231,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     private SettlementPage manualClaimHandlingRemove(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -260,7 +260,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     private SettlementPage manualClaimHandlingEdit(ClaimRequest claimRequest, User user, ClaimItem claimItem, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .openSid()
                 .setBaseData(claimItem)
                 .disableAge()
@@ -296,7 +296,7 @@ public class FraudAlertSystemTest extends FraudAlertBase {
     private  <T extends Page> T selfService(ClaimRequest claimRequest, User user, Claim claim, EventApiService.FraudStatus fraudStatus, Class<T> returnPageClass) throws IOException {
 
         String token = getToken(claimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -327,13 +327,13 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
         fraudStatus(events.get(0), claimRequest.getCaseNumber(),fraudStatus);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token, returnPageClass);
+        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token, returnPageClass);
     }
 
     private SettlementPage importExcel(ClaimRequest claimRequest, User user, EventApiService.FraudStatus fraudStatus) throws IOException {
 
         String token = getToken(claimRequest);
-        SettlementPage settlementPage = loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        SettlementPage settlementPage = loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .importExcelFile(excelImportPath);
 
         List<ClaimLineChanged> events = fraudAlertStubs
@@ -358,8 +358,8 @@ public class FraudAlertSystemTest extends FraudAlertBase {
         ClaimRequest itemizationRequest = TestData.getClaimRequestItemizationCaseTopdanmarkFNOL();
         ClaimRequest createClaimRequest = TestData.getClaimRequestCreateClaimTopdanmarkFNOL();
 
-        String token = createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
-        loginAndOpenUnifiedIntegrationClaimByToken(user, token)
+        String token = loginFlow.createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
+        loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token)
                 .requestSelfService(claim, Constants.DEFAULT_PASSWORD)
                 .toMailsPage()
                 .viewMail(MailsPage.MailType.SELFSERVICE_CUSTOMER_WELCOME)
@@ -390,6 +390,6 @@ public class FraudAlertSystemTest extends FraudAlertBase {
 
         fraudStatus(events.get(0), createClaimRequest.getCaseNumber(),fraudStatus);
 
-        return loginAndOpenUnifiedIntegrationClaimByToken(user, token);
+        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, token);
     }
 }

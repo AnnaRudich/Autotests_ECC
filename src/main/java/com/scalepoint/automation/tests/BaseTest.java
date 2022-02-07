@@ -329,66 +329,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return functionalTemplatesApi.updateTemplate(user, returnPageClass, operations);
     }
 
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
-
-        return loginFlow.loginAndCreateClaim(user, claim, policyType);
-    }
-
-    protected SettlementPage loginAndCreateClaim(User user, Claim claim) {
-
-        return loginFlow.loginAndCreateClaim(user, claim);
-    }
-
-    protected EditPolicyTypeDialog loginAndCreateClaimToEditPolicyDialog(User user, Claim claim) {
-
-        return loginFlow.loginAndCreateClaimToEditPolicyDialog(user, claim);
-    }
-
-    protected String createCwaClaimAndGetClaimToken(ClaimRequest claimRequest) {
-
-        return loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
-    }
-
-    protected CreateClaimService createCwaClaim(ClaimRequest claimRequest) {
-
-        return loginFlow.createCwaClaim(claimRequest);
-    }
-
-    protected String createFNOLClaimAndGetClaimToken(ClaimRequest itemizationRequest, ClaimRequest createClaimRequest){
-
-        return loginFlow.createFNOLClaimAndGetClaimToken(itemizationRequest, createClaimRequest);
-    }
-
-    protected SettlementPage loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken) {
-
-        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken);
-    }
-
-    protected <T extends Page> T loginAndOpenUnifiedIntegrationClaimByToken(User user, String claimToken, Class<T> returnPageClass) {
-
-        return loginFlow.loginAndOpenUnifiedIntegrationClaimByToken(user, claimToken, returnPageClass);
-    }
-
-    protected MyPage login(User user) {
-
-        return loginFlow.login(user);
-    }
-
-    protected <T extends Page> T login(User user, Class<T> returnPageClass) {
-
-        return loginFlow.login(user, returnPageClass);
-    }
-
-    protected <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
-
-        return loginFlow.login(user, returnPageClass, parameters);
-    }
-
-    protected SuppliersPage loginToEccAdmin(User user) {
-
-        return loginFlow.loginToEccAdmin(user);
-    }
-
     protected GenerateWidgetPage openGenerateWidgetPage(){
 
         Browser.open(com.scalepoint.automation.utils.Configuration.getWidgetUrl());
@@ -408,10 +348,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
     protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
 
         return loginFlow.openEditReasonPage(insuranceCompany, reasonType, showDisabled);
-    }
-    protected SettlementPage redirectToSettlementPage(User user){
-
-        return loginFlow.redirectToSettlementPage(user);
     }
 
     public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {

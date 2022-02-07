@@ -43,6 +43,6 @@ public class FraudAlertBase extends BaseTest {
     String getToken(ClaimRequest claimRequest){
 
         claimRequest.setAccidentDate(format(LocalDateTime.now().minusDays(2L), ISO8601));
-        return createCwaClaimAndGetClaimToken(claimRequest);
+        return loginFlow.createCwaClaimAndGetClaimToken(claimRequest);
     }
 }
