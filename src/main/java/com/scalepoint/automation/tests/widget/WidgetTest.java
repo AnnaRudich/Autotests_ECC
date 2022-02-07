@@ -130,51 +130,7 @@ public class WidgetTest extends BaseTest {
                 .generateWidget()
                 .doAssert(ss2Page -> ss2Page.assertAlertIsDisplayed());
     }
-
-
-    @Test(groups = {TestGroups.WIDGET, TestGroups.SELF_SERVICE2}, dataProvider = "testDataProvider",
-            description = "Verify flow when acceptance text and checkbox for widget is enabled")
-    public void test(@UserAttributes(company = CompanyCode.FUTURE, type = User.UserType.SCALEPOINT_ID) User user, ClaimItem claimItem, Claim claim) {
-
-
-        loginFlow.loginSPID(user);
-
-//        given().log().all()
-//                .when()
-//                .formParam("username", "f0a@future50.scalepoint.com")
-//                .formParam("password", "1234QWER#")
-//                .formParam("loginType", "LoginPage")
-//                .post("https://test-accounts.scalepoint.com/login")
-//                .then().log().all()
-//                .extract().header("Location");
-
-//                .then()
-//                .statusCode(HttpStatus.SC_OK)
-//                .extract().response()
-//                .getBody().print();
-//        String tenant = user.getCompanyName().toLowerCase();
-//
-//        ClaimRequest itemizationRequest = setTenantAndCompanyCode(TestData.getClaimRequestItemizationCaseTopdanmarkFNOL(), tenant);
-//        ClaimRequest createClaimRequest = setTenantAndCompanyCode(TestData.getClaimRequestCreateClaimTopdanmarkFNOL(), tenant);
-//
-//        UnifiedIntegrationService unifiedIntegrationService = new UnifiedIntegrationService();
-//        String token = unifiedIntegrationService
-//                .createItemizationCaseFNOL(itemizationRequest.getCountry(), itemizationRequest.getTenant(), itemizationRequest);
-//
-//        createItemWidget(itemizationRequest, claimItem, token)
-//                .doAssert(selfService2Page -> selfService2Page.assertSendButtonDisabled())
-//                .acceptStatement()
-//                .doAssert(selfService2Page -> selfService2Page.assertSendButtonEnabled())
-//                .sendResponseToEcc();
-//
-//        createAndVerifyClaimWidget(user, unifiedIntegrationService, createClaimRequest, token);
-//
-//        createItemSelfService(user, claim, claimItem)
-//                .sendResponseToEcc();
-//
-//        createAndVerifyClaimSelfService(user);
-    }
-
+    
     private TestWidgetPage createItemWidget(ClaimRequest itemizationRequest, ClaimItem claimItem, String token){
 
         return openGenerateWidgetPage()

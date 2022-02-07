@@ -48,16 +48,13 @@ public class LoginFlow {
 
     public SettlementPage loginAndCreateClaim(User user, Claim claim, String policyType) {
 
-        MyPage myPage;
-
+        MyPage myPage = login(user);
         if(user.getType().equals(SCALEPOINT_ID))
         {
 
-            myPage = loginSPID(user);
             ClaimApi.createClaim(claim, 1);
         }else {
 
-            myPage =  login(user);
             ClaimApi claimApi = new ClaimApi(user);
             claimApi.createClaim(claim, policyType);
         }
@@ -140,23 +137,35 @@ public class LoginFlow {
 
     public MyPage login(User user) {
 
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, MyPage.class);
-    }
+        MyPage myPage;
 
-    public MyPage loginSPID(User user) {
+        if(user.getType().equals(SCALEPOINT_ID)){
 
-        Page.to(LoginPage.class)
-                .loginViaScalepointId()
-                .login(user);
+            myPage = Page.to(LoginPage.class)
+                    .loginViaScalepointId()
+                    .login(user);
+        } else{
 
-        return Page.to(MyPage.class);
+            myPage = AuthenticationApi.createServerApi().login(user, MyPage.class);
+        }
+
+        return myPage;
     }
 
     public  <T extends Page> T login(User user, Class<T> returnPageClass) {
+        Page page;
 
-        Page.to(LoginPage.class);
-        return AuthenticationApi.createServerApi().login(user, returnPageClass);
+        if(user.getType().equals(SCALEPOINT_ID)){
+
+            page = Page.to(LoginPage.class)
+                    .loginViaScalepointId()
+                    .login(user.getLogin(), user.getPassword(), returnPageClass);
+        } else{
+
+            page = AuthenticationApi.createServerApi().login(user, returnPageClass);
+        }
+
+        return (T) page;
     }
 
     public  <T extends Page> T login(User user, Class<T> returnPageClass, String parameters) {
