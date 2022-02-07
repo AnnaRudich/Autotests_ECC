@@ -279,7 +279,6 @@ INSERT INTO [INSCOMP]
        ,[Tenant]
        ,[UnifiedCompanyCode]
        ,[selfriskByInsuranceCompany]
-       ,[invoicePaymentByInsuranceCompany]
        ,[reminderDays]
        ,[autoApproveDays]
        ,[icReceiveCancelClaimNotification]
@@ -322,7 +321,6 @@ INSERT INTO [INSCOMP]
 		   ,lower(@ICNAME)
 		   ,lower(@ICNAME)
 		   ,1
-		   ,0
 		   ,5
 		   ,2
 		   ,1
