@@ -1,6 +1,7 @@
 package com.scalepoint.automation.pageobjects.dialogs;
 
 import com.codeborne.selenide.Condition;
+import com.scalepoint.automation.pageobjects.extjs.ExtText;
 import com.scalepoint.automation.utils.OperationalUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -14,10 +15,10 @@ import static com.scalepoint.automation.utils.Wait.waitForAjaxCompletedAndJsReca
 public class EditDiscountDistributionDialog extends BaseDialog {
 
     @FindBy(xpath = "//input[@data-componentid='distribution-voucher-to-company-input']")
-    private WebElement companyPercentageInput;
+    private ExtText companyPercentageInput;
 
     @FindBy(xpath = "//input[@data-componentid='distribution-voucher-to-customer-input']")
-    private WebElement customerPercentageInput;
+    private ExtText customerPercentageInput;
 
     @FindBy(id = "distribution-voucher-face-value-display")
     private WebElement faceValueText;
@@ -40,10 +41,10 @@ public class EditDiscountDistributionDialog extends BaseDialog {
 
     public EditDiscountDistributionDialog updatePercentage(EditVoucherValuationDialog.DistributeTo distributeTo, Integer percentage) {
         if (EditVoucherValuationDialog.DistributeTo.COMPANY.equals(distributeTo)) {
-            companyPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+            companyPercentageInput.enter(percentage.toString());
             companyPercentageInput.sendKeys(Keys.TAB);
         } else {
-            customerPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+            customerPercentageInput.enter(percentage.toString());
             companyPercentageInput.sendKeys(Keys.TAB);
         }
         return this;

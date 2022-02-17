@@ -40,10 +40,10 @@ public class EditVoucherValuationDialog extends BaseDialog {
     private ExtText voucherCashValue;
 
     @FindBy(id = "edit-voucher-to-company-input-inputEl")
-    private WebElement companyPercentageInput;
+    private ExtText companyPercentageInput;
 
     @FindBy(id = "edit-voucher-to-customer-input-inputEl")
-    private WebElement customerPercentageInput;
+    private ExtText customerPercentageInput;
 
     @FindBy(id = "edit-voucher-rebate-display-inputEl")
     private WebElement voucherRebate;
@@ -62,7 +62,7 @@ public class EditVoucherValuationDialog extends BaseDialog {
         if (DistributeTo.COMPANY.equals(distributeTo)) {
             companyPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
         } else {
-            customerPercentageInput.sendKeys(Keys.HOME, Keys.chord(Keys.SHIFT, Keys.END), percentage.toString());
+            customerPercentageInput.enter(percentage.toString());
         }
         return this;
     }
