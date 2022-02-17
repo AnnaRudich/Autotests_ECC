@@ -249,7 +249,7 @@ public class EditReasonTests extends BaseTest {
         addReasonToClaimAndLogout(trygUser, claim, claimItem, reason, description, customerDemandPrice, month,
                 depreciation, discretionaryReasonPrice, newPrice);
 
-        openEditReasonPage(insuranceCompany, true)
+        loginFlow.openEditReasonPage(insuranceCompany, true)
                 .findReason(reason)
                 .disable()
                 .applyFilters(insuranceCompany.getFtTrygHolding(), EditReasonsPage.ReasonType.DISCRETIONARY, false)
@@ -395,7 +395,7 @@ public class EditReasonTests extends BaseTest {
     }
 
     private EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany) {
-        return openEditReasonPage(insuranceCompany, false);
+        return loginFlow.openEditReasonPage(insuranceCompany, false);
     }
 
 }

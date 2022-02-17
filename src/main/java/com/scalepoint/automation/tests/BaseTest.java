@@ -340,16 +340,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests {
         return Page.at(GenerateWidgetPage.class);
     }
 
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, boolean showDisabled) {
-
-        return loginFlow.openEditReasonPage(insuranceCompany, showDisabled);
-    }
-
-    protected EditReasonsPage openEditReasonPage(InsuranceCompany insuranceCompany, EditReasonsPage.ReasonType reasonType, boolean showDisabled) {
-
-        return loginFlow.openEditReasonPage(insuranceCompany, reasonType, showDisabled);
-    }
-
     public static EccIntegrationService createClaimUsingEccIntegration(User user, EccIntegration eccIntegration) {
         new LoginProcessService().login(user);
         return new EccIntegrationService().createAndOpenClaim(eccIntegration);

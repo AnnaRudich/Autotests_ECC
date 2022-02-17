@@ -57,7 +57,7 @@ public class RejectReasonTests extends BaseTest {
         String location = createClaimAndLineUsingEccIntegration(user, eccIntegration).getResponse().extract().header("Location");
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
@@ -83,7 +83,7 @@ public class RejectReasonTests extends BaseTest {
                                           ClaimItem claimItem, InsuranceCompany insuranceCompany, Claim claim) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
@@ -102,7 +102,7 @@ public class RejectReasonTests extends BaseTest {
                 .getMainMenu()
                 .logOut();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, true)
                 .findReason(reason)
                 .disable()
                 .assertReasonDisabled(reason)
@@ -128,7 +128,7 @@ public class RejectReasonTests extends BaseTest {
                                                       Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
@@ -168,7 +168,7 @@ public class RejectReasonTests extends BaseTest {
                                                                       Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reason = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reason)
                 .findReason(reason)
                 .getPage()
@@ -225,7 +225,7 @@ public class RejectReasonTests extends BaseTest {
                                                                                  Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
@@ -256,7 +256,7 @@ public class RejectReasonTests extends BaseTest {
                                                                                               Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
@@ -307,7 +307,7 @@ public class RejectReasonTests extends BaseTest {
                                                                                         Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
@@ -339,7 +339,7 @@ public class RejectReasonTests extends BaseTest {
                                                                                                      Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
@@ -412,7 +412,7 @@ public class RejectReasonTests extends BaseTest {
                                                                                   Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
@@ -444,7 +444,7 @@ public class RejectReasonTests extends BaseTest {
                                                                                          Claim claim, ClaimItem claimItem, InsuranceCompany insuranceCompany) {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
@@ -471,13 +471,13 @@ public class RejectReasonTests extends BaseTest {
         String reasonD = "Discretionary reason åæéø " + System.currentTimeMillis();
         String reasonR = "Reject reason åæéø " + System.currentTimeMillis();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.REJECT, false)
                 .addReason(reasonR)
                 .findReason(reasonR)
                 .getPage()
                 .logout();
 
-        openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
+        loginFlow.openEditReasonPage(insuranceCompany, EditReasonsPage.ReasonType.DISCRETIONARY, false)
                 .addReason(reasonD)
                 .findReason(reasonD)
                 .getPage()
