@@ -6,14 +6,13 @@ import com.scalepoint.automation.utils.threadlocal.Browser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.page;
 
 public abstract class BaseDialog implements Actions {
 
@@ -23,8 +22,8 @@ public abstract class BaseDialog implements Actions {
     protected WebDriver driver;
 
     public BaseDialog() {
+
         this.driver = Browser.driver();
-        HtmlElementLoader.populatePageObject(this, this.driver);
     }
 
     protected abstract void ensureWeAreAt();
@@ -35,26 +34,32 @@ public abstract class BaseDialog implements Actions {
 
     public static <T extends BaseDialog> boolean isOn(Class<T> baseDialogClass) {
         try {
-            T t = baseDialogClass.newInstance();
+
+            T t = page(baseDialogClass);
             return t.areWeAt();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
         }
     }
 
     public static <T extends BaseDialog> T at(Class<T> baseDialogClass) {
+
         long start = System.currentTimeMillis();
         try {
-            T t = baseDialogClass.getDeclaredConstructor().newInstance();
+
+            T t = page(baseDialogClass);
             t.ensureWeAreAt();
             innerLogger.info("At {} -> {} ms.", baseDialogClass.getSimpleName(), (System.currentTimeMillis() - start));
             return t;
-        } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+        } catch (Exception e) {
+
             throw new RuntimeException("Can't instantiate page cause: " + e.getMessage(), e);
         }
     }
 
     public <T extends BaseDialog> T apply(Class<T> currentClass, Consumer<T> func) {
+
         func.accept((T) this);
         return at(currentClass);
     }
