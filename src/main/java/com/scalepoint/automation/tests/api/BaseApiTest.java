@@ -10,6 +10,7 @@ import com.scalepoint.automation.spring.*;
 import com.scalepoint.automation.stubs.FraudAlertMock;
 import com.scalepoint.automation.stubs.RnVMock;
 import com.scalepoint.automation.tests.BaseTest;
+import com.scalepoint.automation.tests.widget.LoginFlow;
 import com.scalepoint.automation.utils.data.request.ClaimRequest;
 import com.scalepoint.automation.utils.threadlocal.CurrentUser;
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +38,7 @@ import static com.scalepoint.automation.services.externalapi.OauthTestAccountsAp
 @TestExecutionListeners(inheritListeners = false, listeners = {
         DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class})
-@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class})
+@Import({BeansConfiguration.class, EventApiDatabaseConfig.class, WireMockConfig.class, WireMockStubsConfig.class, LoginFlow.class})
 public class BaseApiTest extends AbstractTestNGSpringContextTests {
 
     protected Logger log = LogManager.getLogger(BaseApiTest.class);
